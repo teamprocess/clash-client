@@ -1,11 +1,17 @@
 {
-  "name": "clash",
-  "productName": "Clash",
+  "name": "clash-client",
+  "productName": "Process Clash",
   "version": "0.0.1",
   "description": "학습 기록을 통한 경쟁 애플리케이션, Clash",
+  "private": true,
+  "license": "SEE LICENSE IN LICENSE",
   "main": "./out/main/index.js",
   "author": "PROCESS",
   "homepage": "https://github.com/TeamProcess",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/TeamProcess/clash-client.git"
+  },
   "scripts": {
     "format": "prettier --write .",
     "lint": "eslint --cache .",
