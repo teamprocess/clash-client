@@ -1,36 +1,76 @@
-# clash-client
+# Clash Client
 
-An Electron application with React and TypeScript
+학습 기록을 통한 경쟁 애플리케이션, Clash
 
-## Recommended IDE Setup
+## 프로젝트 구조
 
-- [VSCode](https://code.visualstudio.com/) + [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint) + [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode)
+**FSD** 아키텍처를 따릅니다.
 
-## Project Setup
-
-### Install
-
-```bash
-$ pnpm install
+```
+src/
+├── main/              # Electron 프로세스
+├── preload/           # IPC 브릿지
+└── renderer/src/      # React 앱
+    ├── app/
+    ├── pages/
+    ├── widgets/
+    ├── features/
+    ├── entities/
+    └── shared/
 ```
 
-### Development
+## 기술 스택
+
+Electron, React, TypeScript, styled-components
+
+## 시작하기
 
 ```bash
-$ pnpm dev
+# 설치
+pnpm install
+
+# 개발 서버
+pnpm dev
+
+# 빌드
+pnpm build:win    # Windows
+pnpm build:mac    # macOS
 ```
 
-### Build
+### 테마 사용법
 
-```bash
-# For windows
-$ pnpm build:win
+```typescript
+import styled from 'styled-components'
 
-# For macOS
-$ pnpm build:mac
-
-# For Linux
-$ pnpm build:linux
+const Button = styled.button`
+  color: ${({ theme }) => theme.label.normal};
+  background: ${({ theme }) => theme.fill.normal};
+  border: 1px solid ${({ theme }) => theme.line.normal};
+`
 ```
 
-# Test
+### Palette 사용법
+
+```typescript
+import { palette } from '@/shared/config/theme/palette'
+
+const Brand = styled.div`
+  background: ${palette.blue.50};
+  color: ${palette.neutral.99};
+`
+```
+
+### 폰트 사용법
+
+```typescript
+import styled from 'styled-components'
+import { Font } from '@/shared/config/font'
+
+const Title = styled.h1`
+  ${Font(Font.title1.bold)}
+`
+
+const Body = styled.p`
+  ${Font(Font.body.regular)}
+`
+```
