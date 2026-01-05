@@ -1,4 +1,6 @@
 import { createGlobalStyle } from 'styled-components'
+import { Font } from '@/shared/config/font'
+import 'pretendard/dist/web/static/pretendard.css'
 
 export const GlobalStyle = createGlobalStyle`
   * {
@@ -33,10 +35,10 @@ export const GlobalStyle = createGlobalStyle`
   }
 
   body {
-    line-height: 1;
+    ${Font(Font.body.regular)}
     background-color: ${({ theme }) => theme.background.normal};
     color: ${({ theme }) => theme.label.normal};
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
     transition: background-color 0.2s, color 0.2s;
   }
 
