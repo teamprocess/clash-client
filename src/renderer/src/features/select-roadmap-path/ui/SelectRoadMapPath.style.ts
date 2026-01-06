@@ -10,7 +10,7 @@ export const ChoiceWrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 3.25rem;
+  gap: 3rem;
   width: 26rem;
   height: 13rem;
 `;
@@ -25,8 +25,8 @@ export const ChoiceBox = styled.div<{ $isSelected: boolean }>`
   border-radius: 0.75rem;
   box-shadow: 0 0 6px 0
     ${({ $isSelected, theme }) => ($isSelected ? theme.primary.normal : theme.line.normal)};
-  width: 11.625rem;
-  height: 13rem;
+  width: 11rem;
+  height: 12.5rem;
   cursor: pointer;
 `;
 
@@ -44,8 +44,8 @@ export const CheckedIcon = styled(Check)`
   top: 0.75rem;
   right: 0.75rem;
   border-radius: 50%;
-  width: 1.75rem;
-  height: 1.75rem;
+  width: 1.5rem;
+  height: 1.5rem;
 `;
 
 export const NotCheckedIcon = styled(NotCheck)`
@@ -53,8 +53,8 @@ export const NotCheckedIcon = styled(NotCheck)`
   top: 0.75rem;
   right: 0.75rem;
   border-radius: 50%;
-  width: 1.75rem;
-  height: 1.75rem;
+  width: 1.5rem;
+  height: 1.5rem;
 `;
 
 export const TestIcon = styled(Test)``;
