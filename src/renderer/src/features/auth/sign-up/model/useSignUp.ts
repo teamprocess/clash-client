@@ -1,6 +1,6 @@
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { z } from "zod";
 
 // Step1 Schema
@@ -32,7 +32,7 @@ export const useSignUp = () => {
   const [step1Data, setStep1Data] = useState<Step1FormData | null>(null);
 
   // Step1 상태
-  const [idChecked, setIdChecked] = useState(false);
+  const [checkedId, setCheckedId] = useState<string>("");
   const [idAvailable, setIdAvailable] = useState(false);
   const [emailSent, setEmailSent] = useState(false);
   const [emailVerified, setEmailVerified] = useState(false);
@@ -42,23 +42,24 @@ export const useSignUp = () => {
     resolver: zodResolver(step1Schema),
   });
 
-  const id = step1Form.watch("id");
+  const id = useWatch({
+    control: step1Form.control,
+    name: "id",
+  });
 
   // Step2 Form
   const step2Form = useForm<Step2FormData>({
     resolver: zodResolver(step2Schema),
   });
 
-  // 아이디 변경 시 중복 확인 상태 리셋
-  useEffect(() => {
-    setIdChecked(false);
-    setIdAvailable(false);
-  }, [id]);
+  // id가 변경되면 자동으로 false
+  const idChecked = checkedId === id && checkedId !== "";
 
   // 아이디 중복 확인 API
   const handleIdCheck = async () => {
-    const isAvailable = Math.random() > 0.5;
-    setIdChecked(true);
+    const currentId = step1Form.getValues("id");
+    const isAvailable = Math.random() > 0.8; // 임시 랜덤 아이디 중복 확인
+    setCheckedId(currentId);
     setIdAvailable(isAvailable);
   };
 
