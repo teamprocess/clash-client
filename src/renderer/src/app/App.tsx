@@ -1,25 +1,35 @@
-import { ThemeProvider } from 'styled-components'
-import { useTheme } from '@/shared/lib/useTheme'
-import { GlobalStyle } from './styles/GlobalStyle'
-import styled from 'styled-components'
-import { Font } from '@/shared/config/font'
-
-const Title = styled.h1`
-  ${Font(Font.title1.bold)}
-`
+import { ThemeProvider } from "styled-components";
+import { HashRouter, Routes, Route } from "react-router-dom";
+import { useTheme } from "@/shared/lib/useTheme";
+import { GlobalStyle } from "./styles/GlobalStyle";
+import { MainLayout } from "./layouts/MainLayout";
+import { HomePage } from "@/pages/home";
+import { CompetitionPage } from "@/pages/competition";
+import { RecordPage } from "@/pages/record";
+import { GroupPage } from "@/pages/group";
+import { ShopPage } from "@/pages/shop";
+import { RoadMapPage } from "@/pages/roadmap";
 
 function App() {
-  const { theme, toggleTheme } = useTheme()
+  const { theme } = useTheme();
 
   return (
     <ThemeProvider theme={theme}>
       <GlobalStyle />
-      <div>
-        <Title>Clash</Title>
-        <button onClick={toggleTheme}>테마 전환</button>
-      </div>
+      <HashRouter>
+        <Routes>
+          <Route element={<MainLayout />}>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/competition" element={<CompetitionPage />} />
+            <Route path="/record" element={<RecordPage />} />
+            <Route path="/group" element={<GroupPage />} />
+            <Route path="/shop" element={<ShopPage />} />
+            <Route path="/roadmap" element={<RoadMapPage />} />
+          </Route>
+        </Routes>
+      </HashRouter>
     </ThemeProvider>
-  )
+  );
 }
 
-export default App
+export default App;
