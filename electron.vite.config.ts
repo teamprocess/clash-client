@@ -1,6 +1,7 @@
-import { resolve } from 'path'
-import { defineConfig } from 'electron-vite'
-import react from '@vitejs/plugin-react'
+import { resolve } from "path";
+import { defineConfig } from "electron-vite";
+import react from "@vitejs/plugin-react";
+import svgr from "vite-plugin-svgr";
 
 export default defineConfig({
   main: {},
@@ -8,9 +9,20 @@ export default defineConfig({
   renderer: {
     resolve: {
       alias: {
-        '@': resolve('src/renderer/src')
-      }
+        "@": resolve("src/renderer/src"),
+      },
     },
-    plugins: [react()]
-  }
-})
+    plugins: [
+      react(),
+      svgr({
+        svgrOptions: {
+          exportType: "default",
+          ref: true,
+          svgo: false,
+          titleProp: true,
+        },
+        include: "**/*.svg",
+      }),
+    ],
+  },
+});
