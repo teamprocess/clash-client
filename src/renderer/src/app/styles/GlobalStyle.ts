@@ -1,6 +1,6 @@
-import { createGlobalStyle } from 'styled-components'
-import { Font } from '@/shared/config/font'
-import 'pretendard/dist/web/static/pretendard.css'
+import { createGlobalStyle } from "styled-components";
+import { font } from "@/shared/config/font";
+import "pretendard/dist/web/static/pretendard.css";
 
 export const GlobalStyle = createGlobalStyle`
   * {
@@ -35,7 +35,7 @@ export const GlobalStyle = createGlobalStyle`
   }
 
   body {
-    ${Font(Font.body.regular)}
+    ${font.body.regular}
     background-color: ${({ theme }) => theme.background.normal};
     color: ${({ theme }) => theme.label.normal};
     font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
@@ -75,4 +75,4 @@ export const GlobalStyle = createGlobalStyle`
     text-decoration: none;
     color: inherit;
   }
-`
+`;

@@ -40,13 +40,13 @@ pnpm build:mac    # macOS
 ### 테마 사용법
 
 ```typescript
-import styled from 'styled-components'
+import styled from "styled-components";
 
 const Button = styled.button`
   color: ${({ theme }) => theme.label.normal};
   background: ${({ theme }) => theme.fill.normal};
   border: 1px solid ${({ theme }) => theme.line.normal};
-`
+`;
 ```
 
 ### Palette 사용법
@@ -63,14 +63,14 @@ const Brand = styled.div`
 ### 폰트 사용법
 
 ```typescript
-import styled from 'styled-components'
-import { Font } from '@/shared/config/font'
+import styled from "styled-components";
+import { font } from "@/shared/config/font";
 
 const Title = styled.h1`
-  ${Font(Font.title1.bold)}
-`
+  ${font.title1.bold}
+`;
 
 const Body = styled.p`
-  ${Font(Font.body.regular)}
-`
+  ${font.body.regular}
+`;
 ```
