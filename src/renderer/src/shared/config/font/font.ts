@@ -1,59 +1,187 @@
-import { css } from 'styled-components'
-import { fontCommon, Font as FontType } from './types'
+import { css } from "styled-components";
+import { fontCommon } from "./types";
 
-const fontData: FontType = {
+export const font = {
   display1: {
-    bold: { fontSize: '2.25rem', fontWeight: 700 },
-    medium: { fontSize: '2.25rem', fontWeight: 500 },
-    regular: { fontSize: '2.25rem', fontWeight: 400 }
+    bold: css`
+      font-size: 2.25rem;
+      font-weight: 700;
+      line-height: ${fontCommon.lineHeight};
+      letter-spacing: ${fontCommon.letterSpacing};
+    `,
+    medium: css`
+      font-size: 2.25rem;
+      font-weight: 500;
+      line-height: ${fontCommon.lineHeight};
+      letter-spacing: ${fontCommon.letterSpacing};
+    `,
+    regular: css`
+      font-size: 2.25rem;
+      font-weight: 400;
+      line-height: ${fontCommon.lineHeight};
+      letter-spacing: ${fontCommon.letterSpacing};
+    `,
   },
   display2: {
-    bold: { fontSize: '2rem', fontWeight: 700 },
-    medium: { fontSize: '2rem', fontWeight: 500 },
-    regular: { fontSize: '2rem', fontWeight: 400 }
+    bold: css`
+      font-size: 2rem;
+      font-weight: 600;
+      line-height: ${fontCommon.lineHeight};
+      letter-spacing: ${fontCommon.letterSpacing};
+    `,
+    medium: css`
+      font-size: 2rem;
+      font-weight: 500;
+      line-height: ${fontCommon.lineHeight};
+      letter-spacing: ${fontCommon.letterSpacing};
+    `,
+    regular: css`
+      font-size: 2rem;
+      font-weight: 400;
+      line-height: ${fontCommon.lineHeight};
+      letter-spacing: ${fontCommon.letterSpacing};
+    `,
   },
   title1: {
-    bold: { fontSize: '1.75rem', fontWeight: 700 },
-    medium: { fontSize: '1.75rem', fontWeight: 500 },
-    regular: { fontSize: '1.75rem', fontWeight: 400 }
+    bold: css`
+      font-size: 1.75rem;
+      font-weight: 600;
+      line-height: ${fontCommon.lineHeight};
+      letter-spacing: ${fontCommon.letterSpacing};
+    `,
+    medium: css`
+      font-size: 1.75rem;
+      font-weight: 500;
+      line-height: ${fontCommon.lineHeight};
+      letter-spacing: ${fontCommon.letterSpacing};
+    `,
+    regular: css`
+      font-size: 1.75rem;
+      font-weight: 400;
+      line-height: ${fontCommon.lineHeight};
+      letter-spacing: ${fontCommon.letterSpacing};
+    `,
   },
   title2: {
-    bold: { fontSize: '1.5rem', fontWeight: 700 },
-    medium: { fontSize: '1.5rem', fontWeight: 500 },
-    regular: { fontSize: '1.5rem', fontWeight: 400 }
+    bold: css`
+      font-size: 1.5rem;
+      font-weight: 600;
+      line-height: ${fontCommon.lineHeight};
+      letter-spacing: ${fontCommon.letterSpacing};
+    `,
+    medium: css`
+      font-size: 1.5rem;
+      font-weight: 500;
+      line-height: ${fontCommon.lineHeight};
+      letter-spacing: ${fontCommon.letterSpacing};
+    `,
+    regular: css`
+      font-size: 1.5rem;
+      font-weight: 400;
+      line-height: ${fontCommon.lineHeight};
+      letter-spacing: ${fontCommon.letterSpacing};
+    `,
   },
   headline1: {
-    bold: { fontSize: '1.25rem', fontWeight: 700 },
-    medium: { fontSize: '1.25rem', fontWeight: 500 },
-    regular: { fontSize: '1.25rem', fontWeight: 400 }
+    bold: css`
+      font-size: 1.25rem;
+      font-weight: 600;
+      line-height: ${fontCommon.lineHeight};
+      letter-spacing: ${fontCommon.letterSpacing};
+    `,
+    medium: css`
+      font-size: 1.25rem;
+      font-weight: 500;
+      line-height: ${fontCommon.lineHeight};
+      letter-spacing: ${fontCommon.letterSpacing};
+    `,
+    regular: css`
+      font-size: 1.25rem;
+      font-weight: 400;
+      line-height: ${fontCommon.lineHeight};
+      letter-spacing: ${fontCommon.letterSpacing};
+    `,
   },
   headline2: {
-    bold: { fontSize: '1.125rem', fontWeight: 700 },
-    medium: { fontSize: '1.125rem', fontWeight: 500 },
-    regular: { fontSize: '1.125rem', fontWeight: 400 }
+    bold: css`
+      font-size: 1.125rem;
+      font-weight: 600;
+      line-height: ${fontCommon.lineHeight};
+      letter-spacing: ${fontCommon.letterSpacing};
+    `,
+    medium: css`
+      font-size: 1.125rem;
+      font-weight: 500;
+      line-height: ${fontCommon.lineHeight};
+      letter-spacing: ${fontCommon.letterSpacing};
+    `,
+    regular: css`
+      font-size: 1.125rem;
+      font-weight: 400;
+      line-height: ${fontCommon.lineHeight};
+      letter-spacing: ${fontCommon.letterSpacing};
+    `,
   },
   body: {
-    bold: { fontSize: '1rem', fontWeight: 700 },
-    medium: { fontSize: '1rem', fontWeight: 500 },
-    regular: { fontSize: '1rem', fontWeight: 400 }
+    bold: css`
+      font-size: 1rem;
+      font-weight: 600;
+      line-height: ${fontCommon.lineHeight};
+      letter-spacing: ${fontCommon.letterSpacing};
+    `,
+    medium: css`
+      font-size: 1rem;
+      font-weight: 500;
+      line-height: ${fontCommon.lineHeight};
+      letter-spacing: ${fontCommon.letterSpacing};
+    `,
+    regular: css`
+      font-size: 1rem;
+      font-weight: 400;
+      line-height: ${fontCommon.lineHeight};
+      letter-spacing: ${fontCommon.letterSpacing};
+    `,
   },
   label: {
-    bold: { fontSize: '0.875rem', fontWeight: 700 },
-    medium: { fontSize: '0.875rem', fontWeight: 500 },
-    regular: { fontSize: '0.875rem', fontWeight: 400 }
+    bold: css`
+      font-size: 0.875rem;
+      font-weight: 600;
+      line-height: ${fontCommon.lineHeight};
+      letter-spacing: ${fontCommon.letterSpacing};
+    `,
+    medium: css`
+      font-size: 0.85rem;
+      font-weight: 500;
+      line-height: ${fontCommon.lineHeight};
+      letter-spacing: ${fontCommon.letterSpacing};
+    `,
+    regular: css`
+      font-size: 0.875rem;
+      font-weight: 400;
+      line-height: ${fontCommon.lineHeight};
+      letter-spacing: ${fontCommon.letterSpacing};
+    `,
   },
   caption: {
-    bold: { fontSize: '0.75rem', fontWeight: 700 },
-    medium: { fontSize: '0.75rem', fontWeight: 500 },
-    regular: { fontSize: '0.75rem', fontWeight: 400 }
-  }
-}
+    bold: css`
+      font-size: 0.75rem;
+      font-weight: 600;
+      line-height: ${fontCommon.lineHeight};
+      letter-spacing: ${fontCommon.letterSpacing};
+    `,
+    medium: css`
+      font-size: 0.75rem;
+      font-weight: 500;
+      line-height: ${fontCommon.lineHeight};
+      letter-spacing: ${fontCommon.letterSpacing};
+    `,
+    regular: css`
+      font-size: 0.75rem;
+      font-weight: 400;
+      line-height: ${fontCommon.lineHeight};
+      letter-spacing: ${fontCommon.letterSpacing};
+    `,
+  },
+};
 
-const fontHelper = (style: { fontSize: string; fontWeight: number }) => css`
-  font-size: ${style.fontSize};
-  font-weight: ${style.fontWeight};
-  line-height: ${fontCommon.lineHeight};
-  letter-spacing: ${fontCommon.letterSpacing};
-`
-
-export const Font = Object.assign(fontHelper, fontData)
+export type Font = typeof font;
