@@ -64,7 +64,6 @@ export const GlobalStyle = createGlobalStyle`
     font-family: inherit;
     border: none;
     background: none;
-    cursor: pointer;
   }
 
   input, textarea {
