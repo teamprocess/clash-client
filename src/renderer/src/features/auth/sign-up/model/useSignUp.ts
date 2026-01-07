@@ -5,7 +5,7 @@ import { z } from "zod";
 
 // Step1 Schema
 const step1Schema = z.object({
-  id: z.string().min(1, "아이디를 입력하세요.").min(4, "아이디는 최소 4자 이상이어야 합니다."),
+  id: z.string().min(4, "아이디는 최소 4자 이상이어야 합니다."),
   name: z.string().min(1, "이름을 입력하세요."),
   email: z.email("유효한 이메일 주소를 입력하세요."),
   emailCode: z.string("유효한 이메일 확인 코드를 입력하세요."),
