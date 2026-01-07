@@ -55,6 +55,7 @@ export class AppMonitor {
   private intervalId: NodeJS.Timeout | null = null;
   private mainWindow: BrowserWindow | null = null;
   private lastSentAppName: string | null = null; // 마지막으로 전송한 앱 이름
+  private isChecking = false; // 비동기 체크 중복 방지
 
   constructor(mainWindow: BrowserWindow) {
     this.mainWindow = mainWindow;
@@ -71,8 +72,16 @@ export class AppMonitor {
   async start() {
     if (this.intervalId) return;
 
-    this.intervalId = setInterval(() => {
-      this.checkActiveApp();
+    // 현재 실행중인 앱 비동기 체크
+    // 체크 중이면 건너뛰기
+    this.intervalId = setInterval(async () => {
+      if (this.isChecking) return;
+      this.isChecking = true;
+      try {
+        await this.checkActiveApp();
+      } finally {
+        this.isChecking = false;
+      }
     }, 2000);
 
     await this.checkActiveApp();
@@ -90,6 +99,7 @@ export class AppMonitor {
     }
     this.activeApps.clear();
     this.lastSentAppName = null;
+    this.isChecking = false;
   }
 
   private async checkActiveApp() {
@@ -190,6 +200,10 @@ export class AppMonitor {
     };
 
     this.sessions.push(session);
+    // 최근 100개 셰션만 사용하여 메모리 누수 방지
+    if (this.sessions.length > 100) {
+      this.sessions.shift();
+    }
     this.mainWindow?.webContents.send("app-monitor:session-updated", session);
   }
 
