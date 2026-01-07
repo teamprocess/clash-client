@@ -2,13 +2,15 @@ import { ThemeProvider } from "styled-components";
 import { HashRouter, Routes, Route } from "react-router-dom";
 import { useTheme } from "@/shared/lib/useTheme";
 import { GlobalStyle } from "./styles/GlobalStyle";
-import { MainLayout } from "./layouts/MainLayout";
+import { MainLayout } from "./layouts/main";
 import { HomePage } from "@/pages/home";
 import { CompetitionPage } from "@/pages/competition";
 import { RecordPage } from "@/pages/record";
 import { GroupPage } from "@/pages/group";
 import { ShopPage } from "@/pages/shop";
 import { RoadMapPage } from "@/pages/roadmap";
+import { AuthLayout } from "@/app/layouts/auth";
+import { SignInPage, SignUpPage } from "@/pages/auth";
 
 function App() {
   const { theme } = useTheme();
@@ -25,6 +27,11 @@ function App() {
             <Route path="/group" element={<GroupPage />} />
             <Route path="/shop" element={<ShopPage />} />
             <Route path="/roadmap" element={<RoadMapPage />} />
+          </Route>
+
+          <Route element={<AuthLayout />}>
+            <Route path="/sign-in" element={<SignInPage />} />
+            <Route path="/sign-up" element={<SignUpPage />} />
           </Route>
         </Routes>
       </HashRouter>
