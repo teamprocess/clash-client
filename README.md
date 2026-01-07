@@ -52,12 +52,12 @@ const Button = styled.button`
 ### Palette 사용법
 
 ```typescript
-import { palette } from '@/shared/config/theme/palette'
+import { palette } from "@/shared/config/theme/palette";
 
 const Brand = styled.div`
-  background: ${palette.blue.50};
-  color: ${palette.neutral.99};
-`
+  background: ${palette.blue[50]};
+  color: ${palette.neutral[99]};
+`;
 ```
 
 ### 폰트 사용법
