@@ -14,6 +14,8 @@ import { SignInPage, SignUpPage } from "@/pages/auth";
 import { NotFoundPage } from "@/pages/not-found/NotFoundPage";
 import { ChoicePage } from "@/pages/roadmap/choice/ChoicePage";
 import { TestPage } from "@/pages/roadmap/test";
+import { ChoicePage } from "@/pages/roadmap/choice/ChoicePage";
+import { TestPage } from "@/pages/roadmap/test";
 
 function App() {
   const { theme } = useTheme();
