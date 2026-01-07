@@ -10,6 +10,7 @@ import { GroupPage } from "@/pages/group";
 import { ShopPage } from "@/pages/shop";
 import { RoadMapPage } from "@/pages/roadmap";
 import { ChoicePage } from "@/pages/roadmap/choice/ChoicePage";
+import { TestPage } from "@/pages/roadmap/test";
 
 function App() {
   const { theme } = useTheme();
@@ -27,6 +28,7 @@ function App() {
             <Route path="/shop" element={<ShopPage />} />
             <Route path="/roadmap" element={<RoadMapPage />} />
             <Route path="/roadmap/choice" element={<ChoicePage />} />
+            <Route path="/roadmap/test" element={<TestPage />} />
           </Route>
         </Routes>
       </HashRouter>
