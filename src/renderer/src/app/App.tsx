@@ -12,6 +12,8 @@ import { RoadMapPage } from "@/pages/roadmap";
 import { AuthLayout } from "@/app/layouts/auth";
 import { SignInPage, SignUpPage } from "@/pages/auth";
 import { NotFoundPage } from "@/pages/not-found/NotFoundPage";
+import { ChoicePage } from "@/pages/roadmap/choice/ChoicePage";
+import { TestPage } from "@/pages/roadmap/test";
 
 function App() {
   const { theme } = useTheme();
@@ -29,6 +31,7 @@ function App() {
             <Route path="/shop" element={<ShopPage />} />
             <Route path="/roadmap" element={<RoadMapPage />} />
             <Route path="/roadmap/choice" element={<ChoicePage />} />
+            <Route path="/roadmap/test" element={<TestPage />} />
           </Route>
 
           <Route element={<AuthLayout />}>
