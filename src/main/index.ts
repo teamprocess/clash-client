@@ -2,10 +2,14 @@ import { app, shell, BrowserWindow, ipcMain } from "electron";
 import { join } from "path";
 import { electronApp, optimizer, is } from "@electron-toolkit/utils";
 import ClashIcon from "../../resources/clash-icon.png?asset";
+import { AppMonitor } from "./services/AppMonitor";
 
+let mainWindow: BrowserWindow | null = null;
+let appMonitor: AppMonitor | null = null;
+
+// 브라우저 윈도우 생성
 function createWindow(): void {
-  // Create the browser window.
-  const mainWindow = new BrowserWindow({
+  mainWindow = new BrowserWindow({
     width: 900,
     height: 670,
     show: false,
@@ -17,9 +21,10 @@ function createWindow(): void {
     },
   });
 
+  // 화면을 보여줄 준비가 되면 전체 화면 사이즈로 창 모드 show
   mainWindow.on("ready-to-show", () => {
-    mainWindow.maximize();
-    mainWindow.show();
+    mainWindow!.maximize();
+    mainWindow!.show();
   });
 
   mainWindow.webContents.setWindowOpenHandler(details => {
@@ -34,6 +39,30 @@ function createWindow(): void {
   } else {
     mainWindow.loadFile(join(__dirname, "../renderer/index.html"));
   }
+
+  // AppMonitor 초기화
+  appMonitor = new AppMonitor(mainWindow);
+  setupAppMonitorHandlers();
+}
+
+function setupAppMonitorHandlers() {
+  // 모니터링 시작/중지
+  ipcMain.handle("app-monitor:start", async () => {
+    await appMonitor?.start();
+  });
+
+  ipcMain.handle("app-monitor:stop", () => {
+    appMonitor?.stop();
+  });
+
+  // 현재 상태 조회
+  ipcMain.handle("app-monitor:get-active", () => {
+    return appMonitor?.getActiveApp() ?? null;
+  });
+
+  ipcMain.handle("app-monitor:get-sessions", () => {
+    return appMonitor?.getSessions() ?? [];
+  });
 }
 
 // This method will be called when Electron has finished
@@ -66,9 +95,14 @@ app.whenReady().then(() => {
 // for applications and their menu bar to stay active until the user quits
 // explicitly with Cmd + Q.
 app.on("window-all-closed", () => {
+  appMonitor?.stop();
   if (process.platform !== "darwin") {
     app.quit();
   }
+});
+
+app.on("before-quit", () => {
+  appMonitor?.stop();
 });
 
 // In this file you can include the rest of your app's specific main process
