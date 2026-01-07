@@ -11,6 +11,7 @@ import { ShopPage } from "@/pages/shop";
 import { RoadMapPage } from "@/pages/roadmap";
 import { AuthLayout } from "@/app/layouts/auth";
 import { SignInPage, SignUpPage } from "@/pages/auth";
+import { NotFoundPage } from "@/pages/not-found/NotFoundPage";
 
 function App() {
   const { theme } = useTheme();
@@ -33,6 +34,8 @@ function App() {
             <Route path="/sign-in" element={<SignInPage />} />
             <Route path="/sign-up" element={<SignUpPage />} />
           </Route>
+
+          <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </HashRouter>
     </ThemeProvider>
