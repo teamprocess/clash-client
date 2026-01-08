@@ -2,7 +2,7 @@ import { ThemeProvider } from "styled-components";
 import { HashRouter, Routes, Route } from "react-router-dom";
 import { useTheme } from "@/shared/lib/useTheme";
 import { GlobalStyle } from "./styles/GlobalStyle";
-import { MainLayout } from "./layouts/main";
+import { MainLayout } from "./layouts/main/MainLayout";
 import { HomePage } from "@/pages/home";
 import { CompetitionPage } from "@/pages/competition";
 import { RecordPage } from "@/pages/record";

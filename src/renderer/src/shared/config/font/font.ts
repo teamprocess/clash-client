@@ -25,7 +25,7 @@ export const font = {
   display2: {
     bold: css`
       font-size: 2rem;
-      font-weight: 600;
+      font-weight: 700;
       line-height: ${fontCommon.lineHeight};
       letter-spacing: ${fontCommon.letterSpacing};
     `,
@@ -45,7 +45,7 @@ export const font = {
   title1: {
     bold: css`
       font-size: 1.75rem;
-      font-weight: 600;
+      font-weight: 700;
       line-height: ${fontCommon.lineHeight};
       letter-spacing: ${fontCommon.letterSpacing};
     `,
@@ -65,7 +65,7 @@ export const font = {
   title2: {
     bold: css`
       font-size: 1.5rem;
-      font-weight: 600;
+      font-weight: 700;
       line-height: ${fontCommon.lineHeight};
       letter-spacing: ${fontCommon.letterSpacing};
     `,
@@ -85,7 +85,7 @@ export const font = {
   headline1: {
     bold: css`
       font-size: 1.25rem;
-      font-weight: 600;
+      font-weight: 700;
       line-height: ${fontCommon.lineHeight};
       letter-spacing: ${fontCommon.letterSpacing};
     `,
@@ -105,7 +105,7 @@ export const font = {
   headline2: {
     bold: css`
       font-size: 1.125rem;
-      font-weight: 600;
+      font-weight: 700;
       line-height: ${fontCommon.lineHeight};
       letter-spacing: ${fontCommon.letterSpacing};
     `,
@@ -125,7 +125,7 @@ export const font = {
   body: {
     bold: css`
       font-size: 1rem;
-      font-weight: 600;
+      font-weight: 700;
       line-height: ${fontCommon.lineHeight};
       letter-spacing: ${fontCommon.letterSpacing};
     `,
@@ -145,7 +145,7 @@ export const font = {
   label: {
     bold: css`
       font-size: 0.875rem;
-      font-weight: 600;
+      font-weight: 700;
       line-height: ${fontCommon.lineHeight};
       letter-spacing: ${fontCommon.letterSpacing};
     `,
@@ -165,7 +165,7 @@ export const font = {
   caption: {
     bold: css`
       font-size: 0.75rem;
-      font-weight: 600;
+      font-weight: 700;
       line-height: ${fontCommon.lineHeight};
       letter-spacing: ${fontCommon.letterSpacing};
     `,
