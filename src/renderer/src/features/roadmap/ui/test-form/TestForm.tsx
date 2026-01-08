@@ -1,5 +1,5 @@
 import * as S from "./TestForm.style";
-import { useTest } from "@/features/roadmap/test-roadmap/model/useTest";
+import { useRoadMap } from "@/features/roadmap/model/useRoadMap";
 
 const answerBoxData = [
   { id: 1, content: "매우 그렇지 않다", size: "Large" },
@@ -10,7 +10,9 @@ const answerBoxData = [
 ];
 
 export const TestForm = () => {
-  const { answers, isAllAnswered, handleSelect, handleComplete, getTestQuestion } = useTest();
+  const {
+    test: { answers, isAllAnswered, handleSelect, handleComplete, getTestQuestion },
+  } = useRoadMap();
 
   const questionData = getTestQuestion();
 
