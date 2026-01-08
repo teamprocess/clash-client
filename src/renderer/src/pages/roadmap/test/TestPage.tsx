@@ -1,5 +1,5 @@
 import * as S from "./TestPage.style";
-import { TestForm } from "@/features/test-roadmap";
+import { TestForm } from "@/features/roadmap/test-roadmap";
 
 export const TestPage = () => {
   return (

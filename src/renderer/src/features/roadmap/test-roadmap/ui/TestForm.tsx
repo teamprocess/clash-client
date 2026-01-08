@@ -1,5 +1,5 @@
 import * as S from "./TestForm.style";
-import { useTest } from "@/features/test-roadmap/model/useTest";
+import { useTest } from "@/features/roadmap/test-roadmap/model/useTest";
 
 const answerBoxData = [
   { id: 1, content: "매우 그렇지 않다", size: "Large" },

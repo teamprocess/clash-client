@@ -1,18 +1,21 @@
 import styled from "styled-components";
-import Test from "../assets/test.svg";
-import Choice from "../assets/choice.svg";
-import Check from "../assets/check.svg";
-import NotCheck from "../assets/notCheck.svg";
 import { palette } from "@/shared/config/theme";
 import { font } from "@/shared/config/font";
+import Web from "../../assets/web.svg";
+import App from "../../assets/app.svg";
+import Server from "../../assets/server.svg";
+import Ai from "../../assets/ai.svg";
+import Game from "../../assets/game.svg";
+import Check from "../../assets/check.svg";
+import NotCheck from "../../assets/notCheck.svg";
 
 export const ChoiceWrapper = styled.div`
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 3rem;
+  gap: 1.75rem;
   width: 26rem;
-  height: 13rem;
 `;
 
 export const ChoiceBox = styled.div<{ $isSelected: boolean }>`
@@ -25,8 +28,8 @@ export const ChoiceBox = styled.div<{ $isSelected: boolean }>`
   border-radius: 0.75rem;
   box-shadow: 0 0 6px 0
     ${({ $isSelected, theme }) => ($isSelected ? theme.primary.normal : theme.line.normal)};
-  width: 11rem;
-  height: 12.5rem;
+  width: 9.75rem;
+  height: 9.5rem;
   cursor: pointer;
 `;
 
@@ -35,7 +38,7 @@ export const ChoiceItem = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 1rem;
+  gap: 0.375rem;
   width: 7.375rem;
 `;
 
@@ -57,9 +60,25 @@ export const NotCheckedIcon = styled(NotCheck)`
   height: 1.5rem;
 `;
 
-export const TestIcon = styled(Test)``;
+export const WebIcon = styled(Web)`
+  width: 5rem;
+`;
 
-export const ChoiceIcon = styled(Choice)``;
+export const AppIcon = styled(App)`
+  height: 5rem;
+`;
+
+export const ServerIcon = styled(Server)`
+  width: 5rem;
+`;
+
+export const AiIcon = styled(Ai)`
+  width: 5rem;
+`;
+
+export const GameIcon = styled(Game)`
+  width: 5rem;
+`;
 
 export const ChoiceText = styled.span`
   ${font.headline1.medium};
@@ -78,4 +97,18 @@ export const RoadMapButton = styled.button<{ disabled: boolean }>`
   color: ${palette.neutral["97"]};
   border-radius: 1rem;
   cursor: ${({ disabled }) => (disabled ? "default" : "pointer")};
+`;
+
+export const ChoiceTop = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 3rem;
+`;
+
+export const ChoiceBottom = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 3rem;
 `;
