@@ -12,7 +12,6 @@ export const TransitionContainer = styled.div`
 
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
 `;
 
 export const Title = styled.div`
@@ -24,14 +23,27 @@ export const SubTitle = styled.div`
   padding: 0 0.75rem;
 `;
 
+export const ContentContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+  flex: 1;
+`;
+
 export const ContentBox = styled.div`
   display: flex;
   flex-direction: row;
+  align-items: flex-start;
+  justify-content: center;
 `;
 
 export const Content = styled.div`
   width: 100%;
-  height: 15rem;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 20%;
 `;
 
 export const InfoBox = styled.div`
@@ -63,6 +75,13 @@ export const Line = styled.div`
   background-color: ${({ theme }) => theme.line.normal};
 `;
 
+// 활동시간, commit 수 간의 세로선
+export const VerticalLine = styled.div`
+  height: 116%;
+  width: 2px;
+  background-color: ${({ theme }) => theme.line.neutral};
+`;
+
 export const GraphBox = styled.div`
   display: flex;
   flex-direction: row;
@@ -72,9 +91,9 @@ export const GraphBox = styled.div`
 `;
 
 export const Bars = styled.div`
-  position: relative; /* ← 기준점 */
+  position: relative;
   width: 100%;
-  height: ${MAX_BAR_HEIGHT}rem; /* ← 그래프 최대 높이 */
+  height: ${MAX_BAR_HEIGHT}rem;
 
   display: flex;
   flex-direction: column;
@@ -103,7 +122,7 @@ export const Value = styled.p<BarProps>`
 
 export const Bar = styled.div<BarProps>`
   width: 2.5rem;
-  height: 100%; /* ← 기준은 Bars */
+  height: 100%;
   border-radius: 0.25rem;
   background-color: ${({ theme }) => theme.primary.normal};
 
