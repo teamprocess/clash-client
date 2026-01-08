@@ -134,7 +134,10 @@ export const useRoadMap = () => {
     const resultMajorKey = Object.entries(scores).reduce((a, b) => (a[1] > b[1] ? a : b))[0];
     const finalMajor = majorNames[resultMajorKey];
     setAnalyzedMajor(finalMajor as MajorItem);
-    setStep("RESULT");
+    setStep("LOADING");
+    setTimeout(() => {
+      setStep("RESULT");
+    }, 2000);
   };
 
   const getTestQuestion = () => {
