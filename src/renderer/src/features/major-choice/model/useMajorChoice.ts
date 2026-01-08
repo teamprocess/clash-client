@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 export type FeatureItem = "TEST" | "CHOICE" | null;
 export type MajorItem = "WEB" | "APP" | "SERVER" | "AI" | "GAME" | null;
+export type StepType = "FEATURE" | "TEST" | "LOADING" | "RESULT" | "CHOICE";
 
 export const questionData = [
   {
@@ -86,14 +87,18 @@ const majorNames: Record<string, string> = {
 
 export const useMajorChoice = () => {
   // 로드맵 페이지 컴포넌트 step useState
-  const [step, setStep] = useState("FEATURE");
+  const [step, setStep] = useState<StepType>("FEATURE");
 
   // Feature Choice 컴포넌트
   const [selected, setSelected] = useState<FeatureItem>(null);
   const select = (path: FeatureItem) => setSelected(path);
 
+  // 전공이 없을 경우 전공 성향 검사 및 전공 선택 중 선택하고 결과를 전달하는 함수
   const handleFeatureChoiceSubmit = () => {
-    setStep(selected as string);
+    if (selected === null) {
+      return;
+    }
+    setStep(selected);
     setSelected(null);
   };
 
@@ -104,21 +109,20 @@ export const useMajorChoice = () => {
 
   const selectedMajor = (path: MajorItem) => setMajor(path);
 
-  const submit = () => {
-    setStep("FEATURE");
-  };
-
   // Test 컴포넌트
   const [answers, setAnswers] = useState<(number | null)[]>(Array(questionData.length).fill(null));
   const [analyzedMajor, setAnalyzedMajor] = useState<MajorItem>(null);
   const isAllAnswered = !answers.includes(null);
 
+  // 전공 성향 검사에서 답을 선택받는 함수
   const handleSelect = (questionId: number, answerId: number) => {
     const newAnswers = [...answers];
     newAnswers[questionId] = answerId;
     setAnswers(newAnswers);
   };
 
+  // 전공 성향 검사 테스트 제출 시 점수 계산 및 결과 도출 함수
+  // 결과를 서버에 보내는 API 연동 예정
   const handleComplete = () => {
     if (answers.includes(null)) return;
 
@@ -135,15 +139,22 @@ export const useMajorChoice = () => {
     });
 
     const resultMajorKey = Object.entries(scores).reduce((a, b) => (a[1] > b[1] ? a : b))[0];
+
     const finalMajor = majorNames[resultMajorKey];
+
     setAnalyzedMajor(finalMajor as MajorItem);
+
+    // 임시로 2초 로딩
     setStep("LOADING");
     setTimeout(() => {
       setStep("RESULT");
     }, 2000);
+
     setAnswers(Array(questionData.length).fill(null));
   };
 
+  // 질문 객체를 return 해주는 함수
+  // 질문 객체를 서버에서 받는 API 연동 예정
   const getTestQuestion = () => {
     return questionData;
   };
@@ -162,9 +173,9 @@ export const useMajorChoice = () => {
     major: {
       selectedMajor,
       isValid: major !== null,
-      submit,
       major,
       username: "조상철",
+      setStep,
     },
     test: {
       answers,
