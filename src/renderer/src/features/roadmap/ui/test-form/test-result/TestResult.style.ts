@@ -1,12 +1,11 @@
 import styled from "styled-components";
 import { font } from "@/shared/config/font";
-import Web from "./assets/web.svg";
-import App from "./assets/app.svg";
-import Server from "./assets/server.svg";
-import Ai from "./assets/ai.svg";
-import Game from "./assets/game.svg";
-
 import { palette } from "@/shared/config/theme";
+import Web from "../../../assets/web.svg";
+import App from "../../../assets/app.svg";
+import Server from "../../../assets/server.svg";
+import Ai from "../../../assets/ai.svg";
+import Game from "../../../assets/game.svg";
 
 export const ResultContainer = styled.div`
   display: flex;

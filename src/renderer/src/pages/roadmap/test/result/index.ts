@@ -1,1 +1,0 @@
-export { TestResultPage } from "./TestResultPage";

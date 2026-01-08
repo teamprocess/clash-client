@@ -107,6 +107,7 @@ export const useRoadMap = () => {
 
   // Test 컴포넌트
   const [answers, setAnswers] = useState<(number | null)[]>(Array(questionData.length).fill(null));
+  const [analyzedMajor, setAnalyzedMajor] = useState<MajorItem>(null);
   const isAllAnswered = !answers.includes(null);
 
   const handleSelect = (questionId: number, answerId: number) => {
@@ -132,8 +133,8 @@ export const useRoadMap = () => {
 
     const resultMajorKey = Object.entries(scores).reduce((a, b) => (a[1] > b[1] ? a : b))[0];
     const finalMajor = majorNames[resultMajorKey];
-
-    navigate("/roadmap/test/result", { state: { major: finalMajor } });
+    setAnalyzedMajor(finalMajor as MajorItem);
+    setStep("RESULT");
   };
 
   const getTestQuestion = () => {
@@ -146,6 +147,7 @@ export const useRoadMap = () => {
       select,
       username: "조상철",
       isValid: selected !== null,
+      setStep,
     },
     step,
     setStep,
@@ -154,6 +156,7 @@ export const useRoadMap = () => {
       isValid: major !== null,
       submit,
       major,
+      username: "조상철",
     },
     test: {
       answers,
@@ -164,5 +167,17 @@ export const useRoadMap = () => {
       handleComplete,
       getTestQuestion,
     },
+    result: {
+      analyzedMajor,
+      username: "조상철",
+      setStep,
+    },
   };
 };
+
+// 타입 불일치 방지 & 코드 중복 제거를 위해 ReturnType을 활용한 타입 추출
+export type UseRoadMapReturn = ReturnType<typeof useRoadMap>;
+export type FeatureProps = UseRoadMapReturn["feature"];
+export type MajorProps = UseRoadMapReturn["major"];
+export type TestProps = UseRoadMapReturn["test"];
+export type ResultProps = UseRoadMapReturn["result"];
