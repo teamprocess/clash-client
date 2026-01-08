@@ -1,16 +1,15 @@
-import { FeatureChoice } from "@/features/roadmap";
 import { useRoadMap } from "@/features/roadmap/model/useRoadMap";
-import { ChoicePage } from "@/pages/roadmap/choice";
-import { TestPage } from "@/pages/roadmap/test";
+import { FeatureChoice, Test, TestResult, MajorChoice } from "@/features/roadmap";
 
 export const RoadMapPage = () => {
-  const { step, setStep, feature } = useRoadMap();
+  const { step, setStep, feature, major, test, result } = useRoadMap();
 
   return (
     <>
       {step === "FEATURE" && <FeatureChoice {...feature} setStep={setStep} />}
-      {step === "TEST" && <TestPage />}
-      {step === "CHOICE" && <ChoicePage />}
+      {step === "TEST" && <Test {...test} />}
+      {step === "RESULT" && <TestResult {...result} />}
+      {step === "CHOICE" && <MajorChoice {...major} />}
     </>
   );
 };

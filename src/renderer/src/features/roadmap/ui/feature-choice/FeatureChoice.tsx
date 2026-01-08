@@ -1,22 +1,7 @@
 import * as S from "./FeatureChoice.style";
-import { FeatureItem } from "@/features/roadmap/model/useRoadMap";
-import { Dispatch, SetStateAction } from "react";
+import { FeatureProps } from "@/features/roadmap/model/useRoadMap";
 
-interface FeatureChoiceProps {
-  selected: FeatureItem;
-  username: string;
-  isValid: boolean;
-  setStep: Dispatch<SetStateAction<string>>;
-  select: (path: FeatureItem) => void;
-}
-
-export const FeatureChoice = ({
-  selected,
-  select,
-  username,
-  isValid,
-  setStep,
-}: FeatureChoiceProps) => {
+export const FeatureChoice = ({ selected, select, username, isValid, setStep }: FeatureProps) => {
   return (
     <S.RoadMapContainer>
       <S.RoadMapContents>

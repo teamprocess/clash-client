@@ -2,6 +2,25 @@ import styled from "styled-components";
 import { font } from "@/shared/config/font";
 import { palette } from "@/shared/config/theme";
 
+export const TestContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5rem;
+  min-height: 100%;
+  background-color: ${({ theme }) => theme.background.normal};
+  border-radius: 1rem;
+  padding: 6rem 11rem;
+`;
+
+export const QuestionWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 9rem;
+`;
+
 export const QuestionBox = styled.div`
   display: flex;
   flex-direction: column;
