@@ -92,6 +92,11 @@ export const useMajorChoice = () => {
   const [selected, setSelected] = useState<FeatureItem>(null);
   const select = (path: FeatureItem) => setSelected(path);
 
+  const handleFeatureChoiceSubmit = () => {
+    setStep(selected as string);
+    setSelected(null);
+  };
+
   // Major Choice 컴포넌트
   const navigate = useNavigate();
 
@@ -150,6 +155,7 @@ export const useMajorChoice = () => {
       username: "조상철",
       isValid: selected !== null,
       setStep,
+      handleFeatureChoiceSubmit,
     },
     step,
     setStep,
