@@ -8,10 +8,11 @@ import { CompetitionPage } from "@/pages/competition";
 import { RecordPage } from "@/pages/record";
 import { GroupPage } from "@/pages/group";
 import { ShopPage } from "@/pages/shop";
-import { RoadMapPage } from "@/pages/roadmap";
+import { RoadmapMajorChoicePage } from "@/pages/roadmap/major-choice";
 import { AuthLayout } from "@/app/layouts/auth";
 import { SignInPage, SignUpPage } from "@/pages/auth";
 import { NotFoundPage } from "@/pages/not-found/NotFoundPage";
+import { Roadmap } from "@/pages/roadmap/RoadmapPage";
 
 function App() {
   const { theme } = useTheme();
@@ -27,7 +28,8 @@ function App() {
             <Route path="/record" element={<RecordPage />} />
             <Route path="/group" element={<GroupPage />} />
             <Route path="/shop" element={<ShopPage />} />
-            <Route path="/roadmap" element={<RoadMapPage />} />
+            <Route path="/roadmap" element={<Roadmap />} />
+            <Route path="/roadmap/major-choice" element={<RoadmapMajorChoicePage />} />
           </Route>
 
           <Route element={<AuthLayout />}>
