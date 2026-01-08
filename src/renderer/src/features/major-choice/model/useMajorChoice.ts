@@ -47,7 +47,6 @@ export const questionData = [
     weights: { web: 1, app: 2, server: 1, ai: 7, game: 1 },
   },
 
-  // 👉 앱/웹 은근 분리 1문항
   {
     id: 7,
     title: "무언가를 쓸 때 스마트폰으로 하는 것이 컴퓨터로 하는 것보다 더 편하나요?",
@@ -55,7 +54,6 @@ export const questionData = [
     weights: { web: 3, app: 6, server: 1, ai: 0, game: 2 },
   },
 
-  // 👉 앱/웹 은근 분리 2문항
   {
     id: 8,
     title: "여러 화면을 동시에 보는 활동은 컴퓨터가 더 쉽다고 느끼나요?",
@@ -86,7 +84,7 @@ const majorNames: Record<string, string> = {
   game: "Game",
 };
 
-export const useRoadMap = () => {
+export const useMajorChoice = () => {
   // 로드맵 페이지 컴포넌트 step useState
   const [step, setStep] = useState("FEATURE");
 
@@ -138,6 +136,7 @@ export const useRoadMap = () => {
     setTimeout(() => {
       setStep("RESULT");
     }, 2000);
+    setAnswers(Array(questionData.length).fill(null));
   };
 
   const getTestQuestion = () => {
@@ -179,7 +178,7 @@ export const useRoadMap = () => {
 };
 
 // 타입 불일치 방지 & 코드 중복 제거를 위해 ReturnType을 활용한 타입 추출
-export type UseRoadMapReturn = ReturnType<typeof useRoadMap>;
+export type UseRoadMapReturn = ReturnType<typeof useMajorChoice>;
 export type FeatureProps = UseRoadMapReturn["feature"];
 export type MajorProps = UseRoadMapReturn["major"];
 export type TestProps = UseRoadMapReturn["test"];

@@ -1,5 +1,5 @@
 import * as S from "./MajorChoice.style";
-import { MajorProps } from "@/features/roadmap/model/useRoadMap";
+import { MajorProps } from "@/features/major-choice/model/useMajorChoice";
 
 export const MajorChoice = ({ selectedMajor, submit, major, isValid, username }: MajorProps) => {
   return (

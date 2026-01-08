@@ -1,5 +1,5 @@
 import * as S from "./FeatureChoice.style";
-import { FeatureProps } from "@/features/roadmap/model/useRoadMap";
+import { FeatureProps } from "@/features/major-choice/model/useMajorChoice";
 
 export const FeatureChoice = ({ selected, select, username, isValid, setStep }: FeatureProps) => {
   return (

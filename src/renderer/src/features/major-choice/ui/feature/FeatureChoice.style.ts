@@ -1,8 +1,8 @@
 import styled from "styled-components";
-import Test from "@/features/roadmap/assets/test.svg";
-import Choice from "@/features/roadmap/assets/choice.svg";
-import Check from "@/features/roadmap/assets/check.svg";
-import NotCheck from "@/features/roadmap/assets/not-check.svg";
+import Test from "@/features/major-choice/assets/test.svg";
+import Choice from "@/features/major-choice/assets/choice.svg";
+import Check from "@/features/major-choice/assets/check.svg";
+import NotCheck from "@/features/major-choice/assets/not-check.svg";
 import { palette } from "@/shared/config/theme";
 import { font } from "@/shared/config/font";
 

@@ -1,5 +1,5 @@
 import * as S from "./Test.style";
-import { TestProps } from "@/features/roadmap/model/useRoadMap";
+import { TestProps } from "@/features/major-choice/model/useMajorChoice";
 
 const answerBoxData = [
   { id: 1, content: "매우 그렇지 않다", size: "Large" },

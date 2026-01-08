@@ -1,5 +1,5 @@
 import * as S from "./TestResult.style";
-import { ResultProps } from "@/features/roadmap/model/useRoadMap";
+import { ResultProps } from "@/features/major-choice/model/useMajorChoice";
 
 const majorIcons = {
   Web: S.WebIcon,
