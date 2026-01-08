@@ -1,46 +1,48 @@
-import * as S from "./ChoiceRoadMap.style";
-import { useChoiceRoadMap } from "@/features/choice-roadmap/model/useChoiceRoadMap";
+import * as S from "./MajorChoice.style";
+import { useRoadMap } from "@/features/roadmap/model/useRoadMap";
 
-export const ChoiceRoadMap = () => {
-  const { selected, select, submit, isValid } = useChoiceRoadMap();
+export const MajorChoice = () => {
+  const {
+    major: { selectedMajor, submit, major, isValid },
+  } = useRoadMap();
 
   return (
     <>
       <S.ChoiceWrapper>
         <S.ChoiceTop>
-          <S.ChoiceBox onClick={() => select("WEB")} $isSelected={selected === "WEB"}>
+          <S.ChoiceBox onClick={() => selectedMajor("WEB")} $isSelected={major === "WEB"}>
             <S.ChoiceItem>
-              {selected === "WEB" ? <S.CheckedIcon /> : <S.NotCheckedIcon />}
+              {major === "WEB" ? <S.CheckedIcon /> : <S.NotCheckedIcon />}
               <S.WebIcon />
               <S.ChoiceText>웹</S.ChoiceText>
             </S.ChoiceItem>
           </S.ChoiceBox>
-          <S.ChoiceBox onClick={() => select("APP")} $isSelected={selected === "APP"}>
+          <S.ChoiceBox onClick={() => selectedMajor("APP")} $isSelected={major === "APP"}>
             <S.ChoiceItem>
-              {selected === "APP" ? <S.CheckedIcon /> : <S.NotCheckedIcon />}
+              {major === "APP" ? <S.CheckedIcon /> : <S.NotCheckedIcon />}
               <S.AppIcon />
               <S.ChoiceText>앱</S.ChoiceText>
             </S.ChoiceItem>
           </S.ChoiceBox>
-          <S.ChoiceBox onClick={() => select("SERVER")} $isSelected={selected === "SERVER"}>
+          <S.ChoiceBox onClick={() => selectedMajor("SERVER")} $isSelected={major === "SERVER"}>
             <S.ChoiceItem>
-              {selected === "SERVER" ? <S.CheckedIcon /> : <S.NotCheckedIcon />}
+              {major === "SERVER" ? <S.CheckedIcon /> : <S.NotCheckedIcon />}
               <S.ServerIcon />
               <S.ChoiceText>서버</S.ChoiceText>
             </S.ChoiceItem>
           </S.ChoiceBox>
         </S.ChoiceTop>
         <S.ChoiceBottom>
-          <S.ChoiceBox onClick={() => select("AI")} $isSelected={selected === "AI"}>
+          <S.ChoiceBox onClick={() => selectedMajor("AI")} $isSelected={major === "AI"}>
             <S.ChoiceItem>
-              {selected === "AI" ? <S.CheckedIcon /> : <S.NotCheckedIcon />}
+              {major === "AI" ? <S.CheckedIcon /> : <S.NotCheckedIcon />}
               <S.AiIcon />
               <S.ChoiceText>Ai</S.ChoiceText>
             </S.ChoiceItem>
           </S.ChoiceBox>
-          <S.ChoiceBox onClick={() => select("GAME")} $isSelected={selected === "GAME"}>
+          <S.ChoiceBox onClick={() => selectedMajor("GAME")} $isSelected={major === "GAME"}>
             <S.ChoiceItem>
-              {selected === "GAME" ? <S.CheckedIcon /> : <S.NotCheckedIcon />}
+              {major === "GAME" ? <S.CheckedIcon /> : <S.NotCheckedIcon />}
               <S.GameIcon />
               <S.ChoiceText>게임</S.ChoiceText>
             </S.ChoiceItem>
