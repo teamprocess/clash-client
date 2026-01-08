@@ -1,8 +1,8 @@
-import { useRoadMap } from "@/features/roadmap/model/useRoadMap";
-import { FeatureChoice, Test, TestResult, MajorChoice, Loading } from "@/features/roadmap";
+import { useMajorChoice } from "@/features/major-choice/model/useMajorChoice";
+import { FeatureChoice, Test, TestResult, MajorChoice, Loading } from "@/features/major-choice";
 
 export const RoadMapPage = () => {
-  const { step, setStep, feature, major, test, result } = useRoadMap();
+  const { step, setStep, feature, major, test, result } = useMajorChoice();
 
   return (
     <>
