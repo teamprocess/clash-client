@@ -1,7 +1,13 @@
 import * as S from "./FeatureChoice.style";
 import { FeatureProps } from "@/features/major-choice/model/useMajorChoice";
 
-export const FeatureChoice = ({ selected, select, username, isValid, setStep }: FeatureProps) => {
+export const FeatureChoice = ({
+  selected,
+  select,
+  username,
+  isValid,
+  handleFeatureChoiceSubmit,
+}: FeatureProps) => {
   return (
     <S.RoadMapContainer>
       <S.RoadMapContents>
@@ -31,7 +37,7 @@ export const FeatureChoice = ({ selected, select, username, isValid, setStep }: 
             </S.ChoiceItem>
           </S.ChoiceBox>
         </S.ChoiceWrapper>
-        <S.RoadMapButton disabled={!isValid} onClick={() => setStep(selected as string)}>
+        <S.RoadMapButton disabled={!isValid} onClick={() => handleFeatureChoiceSubmit()}>
           선택 완료하기
         </S.RoadMapButton>
       </S.RoadMapContents>
