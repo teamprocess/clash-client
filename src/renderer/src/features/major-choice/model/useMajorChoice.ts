@@ -105,7 +105,7 @@ export const useMajorChoice = () => {
   const selectedMajor = (path: MajorItem) => setMajor(path);
 
   const submit = () => {
-    navigate("/");
+    setStep("FEATURE");
   };
 
   // Test 컴포넌트
