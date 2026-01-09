@@ -99,28 +99,38 @@ const sectionMock = {
   categories: ["javascript", "react", "typescript", "nextjs", "react-native", "electron"],
 };
 
-const userList = [
-  { id: 1, ranking: 1, username: "김민준", completedChapterCount: 100 },
-  { id: 2, ranking: 2, username: "이서연", completedChapterCount: 98 },
-  { id: 3, ranking: 3, username: "박지훈", completedChapterCount: 96 },
-  { id: 4, ranking: 4, username: "최유진", completedChapterCount: 94 },
-  { id: 5, ranking: 5, username: "정도현", completedChapterCount: 92 },
-  { id: 6, ranking: 6, username: "한예린", completedChapterCount: 90 },
-  { id: 7, ranking: 7, username: "오세훈", completedChapterCount: 88 },
-  { id: 8, ranking: 8, username: "윤지우", completedChapterCount: 86 },
-  { id: 9, ranking: 9, username: "장민수", completedChapterCount: 84 },
-  { id: 10, ranking: 10, username: "서하늘", completedChapterCount: 82 },
-  { id: 11, ranking: 11, username: "문준혁", completedChapterCount: 80 },
-  { id: 12, ranking: 12, username: "배수아", completedChapterCount: 78 },
-  { id: 13, ranking: 13, username: "신도윤", completedChapterCount: 76 },
-  { id: 14, ranking: 14, username: "김예은", completedChapterCount: 74 },
-  { id: 15, ranking: 15, username: "류현우", completedChapterCount: 72 },
-  { id: 16, ranking: 16, username: "조하린", completedChapterCount: 70 },
-  { id: 17, ranking: 17, username: "임재원", completedChapterCount: 68 },
-  { id: 18, ranking: 18, username: "노아린", completedChapterCount: 66 },
-  { id: 19, ranking: 19, username: "강도윤", completedChapterCount: 64 },
-  { id: 20, ranking: 20, username: "백지민", completedChapterCount: 62 },
-];
+const rankingResponse = {
+  data: {
+    myRanking: {
+      rank: 12,
+      id: 12,
+      name: "배수아",
+      completedChapterCount: 78,
+    },
+    allRankers: [
+      { rank: 1, id: 1, name: "김민준", completedChapterCount: 100 },
+      { rank: 2, id: 2, name: "이서연", completedChapterCount: 98 },
+      { rank: 3, id: 3, name: "박지훈", completedChapterCount: 96 },
+      { rank: 4, id: 4, name: "최유진", completedChapterCount: 94 },
+      { rank: 5, id: 5, name: "정도현", completedChapterCount: 92 },
+      { rank: 6, id: 6, name: "한예린", completedChapterCount: 90 },
+      { rank: 7, id: 7, name: "오세훈", completedChapterCount: 88 },
+      { rank: 8, id: 8, name: "윤지우", completedChapterCount: 86 },
+      { rank: 9, id: 9, name: "장민수", completedChapterCount: 84 },
+      { rank: 10, id: 10, name: "서하늘", completedChapterCount: 82 },
+      { rank: 11, id: 11, name: "문준혁", completedChapterCount: 80 },
+      { rank: 12, id: 12, name: "배수아", completedChapterCount: 78 },
+      { rank: 13, id: 13, name: "신도윤", completedChapterCount: 76 },
+      { rank: 14, id: 14, name: "김예은", completedChapterCount: 74 },
+      { rank: 15, id: 15, name: "류현우", completedChapterCount: 72 },
+      { rank: 16, id: 16, name: "조하린", completedChapterCount: 70 },
+      { rank: 17, id: 17, name: "임재원", completedChapterCount: 68 },
+      { rank: 18, id: 18, name: "노아린", completedChapterCount: 66 },
+      { rank: 19, id: 19, name: "강도윤", completedChapterCount: 64 },
+      { rank: 20, id: 20, name: "백지민", completedChapterCount: 62 },
+    ],
+  },
+};
 
 export const Roadmap = () => {
   return (
@@ -136,6 +146,7 @@ export const Roadmap = () => {
                     <S.SectionIconWrapper>
                       <S.SectionIcon src={item.imgUrl} />
                       {item.completed && <S.SectionComplete />}
+                      {item.locked && <S.SectionLock />}
                     </S.SectionIconWrapper>
                     <S.SectionTitle>{item.title}</S.SectionTitle>
                   </S.SectionItem>
@@ -147,22 +158,22 @@ export const Roadmap = () => {
           <S.RankingLabel>챕터 랭킹</S.RankingLabel>
           <S.RankingBox>
             <S.RankingTop3Box>
-              {userList
-                .filter(user => user.ranking <= 3)
+              {rankingResponse.data.allRankers
+                .filter(user => user.rank <= 3)
                 .map(user => (
-                  <S.RankingUser key={user.id}>{user.username}</S.RankingUser>
+                  <S.RankingUser key={user.id}>{user.name}</S.RankingUser>
                 ))}
             </S.RankingTop3Box>
             <S.RankingList>
-              {userList
-                .filter(user => user.ranking > 3)
+              {rankingResponse.data.allRankers
+                .filter(user => user.rank > 3)
                 .map(user => (
                   <S.RankingItem key={user.id}>
                     <S.ItemLeft>
-                      <S.Ranking>{user.ranking}</S.Ranking>
+                      <S.Ranking>{user.rank}</S.Ranking>
                       <S.UserBox>
                         <S.RankingUserProfile src={Profile} />
-                        <S.RankingUsername>{user.username}</S.RankingUsername>
+                        <S.RankingUsername>{user.name}</S.RankingUsername>
                       </S.UserBox>
                     </S.ItemLeft>
                     <S.ItemRight>
@@ -170,6 +181,21 @@ export const Roadmap = () => {
                     </S.ItemRight>
                   </S.RankingItem>
                 ))}
+              <S.MyRankingItem>
+                <S.ItemLeft>
+                  <S.Ranking>{rankingResponse.data.myRanking.rank}</S.Ranking>
+                  <S.UserBox>
+                    <S.RankingUserProfile src={Profile} />
+                    <S.RankingUsername>{rankingResponse.data.myRanking.name}</S.RankingUsername>
+                  </S.UserBox>
+                </S.ItemLeft>
+                <S.ItemRight>
+                  <S.RankingChapter>
+                    {rankingResponse.data.myRanking.completedChapterCount}
+                  </S.RankingChapter>
+                  개 완료
+                </S.ItemRight>
+              </S.MyRankingItem>
             </S.RankingList>
           </S.RankingBox>
         </S.RankingContainer>

@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { font } from "@/shared/config/font";
 import CompleteIcon from "../assets/complete.svg";
+import Lock from "../assets/lock.svg";
 import Roadmap from "../assets/roadmap.svg";
 
 export const RoadmapContainer = styled.div`
@@ -62,6 +63,12 @@ export const SectionIconWrapper = styled.div`
 export const SectionIcon = styled.img``;
 
 export const SectionComplete = styled(CompleteIcon)`
+  position: absolute;
+  right: 0.5rem;
+  bottom: 0.5rem;
+`;
+
+export const SectionLock = styled(Lock)`
   position: absolute;
   right: 0.5rem;
   bottom: 0.5rem;
@@ -140,9 +147,9 @@ export const RankingItem = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 100%;
+  width: 94%;
   height: 3rem;
-  padding: 0.25rem 1rem;
+  padding: 0 1rem;
 `;
 
 export const ItemLeft = styled.div`
@@ -188,6 +195,20 @@ export const ItemRight = styled.div`
   ${font.caption.regular};
   color: ${({ theme }) => theme.label.assistive};
   text-align: center;
+`;
+
+export const MyRankingItem = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 94%;
+  height: 3rem;
+  padding: 0.25rem 1rem;
+  position: absolute;
+  bottom: 1rem;
+  z-index: 110;
+  background: ${({ theme }) => theme.fill.neutral};
+  border-radius: 0.5rem;
 `;
 
 export const SectionProgressContainer = styled.div`
