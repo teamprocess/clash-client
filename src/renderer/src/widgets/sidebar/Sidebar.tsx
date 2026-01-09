@@ -12,7 +12,7 @@ const menuItems = [
   { icon: <S.RecordIcon />, label: "기록", to: "/record" },
   { icon: <S.GroupIcon />, label: "그룹", to: "/group" },
   { icon: <S.ShopIcon />, label: "상점", to: "/shop" },
-  { icon: <S.RoadMapIcon />, label: "로드맵", to: "/major-choice" },
+  { icon: <S.RoadMapIcon />, label: "로드맵", to: "/roadmap" },
 ];
 
 export const Sidebar = ({ isOpen }: SidebarProps) => {

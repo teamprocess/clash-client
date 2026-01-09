@@ -12,7 +12,7 @@ import { RoadmapMajorChoicePage } from "@/pages/roadmap/major-choice";
 import { AuthLayout } from "@/app/layouts/auth";
 import { SignInPage, SignUpPage } from "@/pages/auth";
 import { NotFoundPage } from "@/pages/not-found/NotFoundPage";
-import { Roadmap } from "@/pages/roadmap/RoadmapPage";
+import { Roadmap } from "@/features/roadmap";
 
 function App() {
   const { theme } = useTheme();
