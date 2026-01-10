@@ -1,18 +1,18 @@
 import { useState, useRef, useEffect } from "react";
 
 // Transition
-interface transition_data {
+interface transitionData {
   yesterday: number;
   today: number;
 }
 
-const activeTransitionData: transition_data = {
+const activeTransitionData: transitionData = {
   // 초단위 ~> 시간단위표기 함수사용 예정
   yesterday: 21522,
   today: 53608,
 };
 
-const commitTransitionData: transition_data = {
+const commitTransitionData: transitionData = {
   yesterday: 27,
   today: 34,
 };

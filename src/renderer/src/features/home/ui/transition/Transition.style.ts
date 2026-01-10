@@ -10,7 +10,6 @@ export const TransitionContainer = styled.div`
   height: 100%;
   border-radius: 1rem;
   background-color: ${({ theme }) => theme.background.normal};
-
   display: flex;
   flex-direction: column;
 `;
@@ -30,7 +29,6 @@ export const Title = styled.div`
 export const ArrowBox = styled.div`
   ${font.label.medium}
   color: ${({ theme }) => theme.label.alternative};
-
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -118,7 +116,6 @@ export const Bars = styled.div`
   position: relative;
   width: 100%;
   height: ${MAX_BAR_HEIGHT}rem;
-
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -132,14 +129,11 @@ type BarProps = {
 
 export const Value = styled.p<BarProps>`
   ${font.body.medium}
-
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
-
   bottom: ${({ value, max }) =>
     max <= 0 ? "0rem" : `calc(${(value / max) * MAX_BAR_HEIGHT}rem + 0.4rem)`};
-
   transition: bottom 0.4s ease;
   white-space: nowrap;
 `;
@@ -149,13 +143,11 @@ export const Bar = styled.div<BarProps>`
   height: 100%;
   border-radius: 0.25rem;
   background-color: ${({ theme }) => theme.primary.normal};
-
   transform-origin: bottom;
   transform: ${({ value, max }) => {
     if (max <= 0) return "scaleY(0)";
     const ratio = Math.min(Math.max(value / max, 0), 1);
     return `scaleY(${ratio})`;
   }};
-
   transition: transform 0.4s ease;
 `;
