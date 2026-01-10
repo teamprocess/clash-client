@@ -27,7 +27,7 @@ export const Title = styled.div`
 `;
 
 // 드랍다운
-export const DropDownBox = styled.div`
+export const DropDown = styled.div`
   width: 15rem;
   height: 100%;
   gap: 0.5rem;
