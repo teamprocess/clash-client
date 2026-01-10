@@ -95,6 +95,7 @@ export const UserWrapper = styled.div`
   display: flex;
   flex-direction: column;
   overflow-y: scroll;
+  scrollbar-width: none;
 `;
 
 export const UserContainer = styled.div<{ $sticky?: boolean }>`

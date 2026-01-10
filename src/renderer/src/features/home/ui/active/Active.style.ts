@@ -1,7 +1,6 @@
 import styled from "styled-components";
 import { font } from "@/shared/config/font";
 import Arrow from "../../assets/arrow.svg";
-import { palette } from "@/shared/config/theme";
 
 export const ActiveContainer = styled.div`
   display: flex;
@@ -104,6 +103,7 @@ export const StreakTitle = styled.p`
 export const GrassBox = styled.div`
   min-width: 100%;
   overflow-x: auto;
+  scrollbar-width: none;
 `;
 
 export const Grid = styled.div`
@@ -122,13 +122,13 @@ export const Grass = styled.div<{ $level: number }>`
   background-color: ${({ $level, theme }) => {
     switch ($level) {
       case 4:
-        return palette.green[60];
+        return "#3DCD5FFF";
       case 3:
-        return palette.green[40];
+        return "#3DCD5FBF";
       case 2:
-        return palette.green[20];
+        return "#3DCD5F80";
       case 1:
-        return palette.green[10];
+        return "#3DCD5F40";
       default:
         return theme.fill.neutral;
     }
