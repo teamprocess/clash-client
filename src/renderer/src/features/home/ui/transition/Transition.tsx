@@ -3,9 +3,9 @@ import { TransitionProps } from "@/features/home/model/useHome";
 import { Link } from "react-router-dom";
 
 export const Transition = ({
-  activeTransdata,
-  commitTransdata,
-  TransitionmaxCommit,
+  activeTransitionData,
+  commitTransitionData,
+  transitionMaxCommit,
   maxActive,
 }: TransitionProps) => {
   return (
@@ -26,16 +26,16 @@ export const Transition = ({
             <S.InfoBox>
               <S.GraphBox>
                 <S.Bars>
-                  <S.Value value={activeTransdata.yesterday} max={maxActive}>
-                    {activeTransdata.yesterday}
+                  <S.Value value={activeTransitionData.yesterday} max={maxActive}>
+                    {activeTransitionData.yesterday}
                   </S.Value>
-                  <S.Bar value={activeTransdata.yesterday} max={maxActive} />
+                  <S.Bar value={activeTransitionData.yesterday} max={maxActive} />
                 </S.Bars>
                 <S.Bars>
-                  <S.Value value={activeTransdata.today} max={maxActive}>
-                    {activeTransdata.today}
+                  <S.Value value={activeTransitionData.today} max={maxActive}>
+                    {activeTransitionData.today}
                   </S.Value>
-                  <S.Bar value={activeTransdata.today} max={maxActive} />
+                  <S.Bar value={activeTransitionData.today} max={maxActive} />
                 </S.Bars>
               </S.GraphBox>
               <S.Line />
@@ -51,16 +51,16 @@ export const Transition = ({
             <S.InfoBox>
               <S.GraphBox>
                 <S.Bars>
-                  <S.Value value={commitTransdata.yesterday} max={TransitionmaxCommit}>
-                    {commitTransdata.yesterday}
+                  <S.Value value={commitTransitionData.yesterday} max={transitionMaxCommit}>
+                    {commitTransitionData.yesterday}
                   </S.Value>
-                  <S.Bar value={commitTransdata.yesterday} max={TransitionmaxCommit} />
+                  <S.Bar value={commitTransitionData.yesterday} max={transitionMaxCommit} />
                 </S.Bars>
                 <S.Bars>
-                  <S.Value value={commitTransdata.today} max={TransitionmaxCommit}>
-                    {commitTransdata.today}
+                  <S.Value value={commitTransitionData.today} max={transitionMaxCommit}>
+                    {commitTransitionData.today}
                   </S.Value>
-                  <S.Bar value={commitTransdata.today} max={TransitionmaxCommit} />
+                  <S.Bar value={commitTransitionData.today} max={transitionMaxCommit} />
                 </S.Bars>
               </S.GraphBox>
               <S.Line />
