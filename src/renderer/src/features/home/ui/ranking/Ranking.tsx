@@ -5,10 +5,10 @@ import { forwardRef } from "react";
 
 export const Ranking = ({
   CURRENT_USER_ID,
-  RankingselectedSort,
-  RankingsetSelectedSort,
-  RankingselectedPeriod,
-  RankingsetSelectedPeriod,
+  selectedDropdownRanking,
+  setSelectedDropdownRanking,
+  selectedPeriodDropdownRanking,
+  setSelectedPeriodDropdownRanking,
   wrapperRef,
   currentUserRef,
   userList,
@@ -23,8 +23,8 @@ export const Ranking = ({
         <S.DropDownBox>
           <S.SelectWrapper>
             <S.Select
-              value={RankingselectedSort}
-              onChange={e => RankingsetSelectedSort(e.target.value)}
+              value={selectedDropdownRanking}
+              onChange={e => setSelectedDropdownRanking(e.target.value)}
             >
               {["EXP", "Github", "solved.ac", "총 학습 시간"].map(option => (
                 <option key={option} value={option}>
@@ -36,8 +36,8 @@ export const Ranking = ({
           </S.SelectWrapper>
           <S.SelectWrapper>
             <S.Select
-              value={RankingselectedPeriod}
-              onChange={e => RankingsetSelectedPeriod(e.target.value)}
+              value={selectedPeriodDropdownRanking}
+              onChange={e => setSelectedPeriodDropdownRanking(e.target.value)}
             >
               {["이번주", "이번달", "이번 시즌"].map(option => (
                 <option key={option} value={option}>

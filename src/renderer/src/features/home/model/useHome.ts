@@ -1,18 +1,18 @@
 import { useState, useRef, useEffect } from "react";
 
 // Transition
-interface GETTransitionData {
+interface transition_data {
   yesterday: number;
   today: number;
 }
 
-const activeTransdata: GETTransitionData = {
+const activeTransitionData: transition_data = {
   // 초단위 ~> 시간단위표기 함수사용 예정
   yesterday: 21522,
   today: 53608,
 };
 
-const commitTransdata: GETTransitionData = {
+const commitTransitionData: transition_data = {
   yesterday: 27,
   today: 34,
 };
@@ -30,23 +30,23 @@ const commitDays: CommitDay[] = Array.from({ length: 365 }, (_, i) => ({
   count: Math.floor(Math.random() * 10),
 }));
 
-const months: { id: number; commitCount: number }[] = [
-  { id: 1, commitCount: 31 },
-  { id: 2, commitCount: 41 },
-  { id: 3, commitCount: 23 },
-  { id: 4, commitCount: 12 },
-  { id: 5, commitCount: 25 },
-  { id: 6, commitCount: 7 },
-  { id: 7, commitCount: 12 },
-  { id: 8, commitCount: 9 },
-  { id: 9, commitCount: 11 },
-  { id: 10, commitCount: 12 },
-  { id: 11, commitCount: 19 },
-  { id: 12, commitCount: 21 },
+const months: { id: number; commit_count: number }[] = [
+  { id: 1, commit_count: 31 },
+  { id: 2, commit_count: 41 },
+  { id: 3, commit_count: 23 },
+  { id: 4, commit_count: 12 },
+  { id: 5, commit_count: 25 },
+  { id: 6, commit_count: 7 },
+  { id: 7, commit_count: 12 },
+  { id: 8, commit_count: 9 },
+  { id: 9, commit_count: 11 },
+  { id: 10, commit_count: 12 },
+  { id: 11, commit_count: 19 },
+  { id: 12, commit_count: 21 },
 ];
 
 // Rival
-export interface RivalUser {
+interface RivalUser {
   name: string;
   username: string;
   profile_image: string;
@@ -55,7 +55,7 @@ export interface RivalUser {
   status: UserStatus;
 }
 
-export interface RivalsResponse {
+interface RivalsResponse {
   data: {
     total_count: number;
     my_rivals: RivalUser[];
@@ -148,8 +148,8 @@ const userList: User[] = [
 
 export const useHome = () => {
   // Transition
-  const TransitionmaxCommit = Math.max(commitTransdata.yesterday, commitTransdata.today);
-  const maxActive = Math.max(activeTransdata.yesterday, activeTransdata.today);
+  const transitionMaxCommit = Math.max(commitTransitionData.yesterday, commitTransitionData.today);
+  const maxActive = Math.max(activeTransitionData.yesterday, activeTransitionData.today);
 
   const getStatus = (status: UserStatus) => {
     switch (status) {
@@ -165,9 +165,9 @@ export const useHome = () => {
   };
 
   // Active
-  const ActivemaxCommit = Math.max(...months.map(m => m.commitCount));
+  const activeMaxCommit = Math.max(...months.map(m => m.commit_count));
 
-  const [selectedSort, setSelectedSort] = useState("Github");
+  const [selectedDropdownActive, setSelectedDropdownActive] = useState("Github");
 
   const MaxCommit = Math.max(...commitDays.map(d => d.count));
 
@@ -186,8 +186,8 @@ export const useHome = () => {
   };
 
   // Ranking
-  const [RankingselectedSort, RankingsetSelectedSort] = useState("EXP");
-  const [RankingselectedPeriod, RankingsetSelectedPeriod] = useState("이번주");
+  const [selectedDropdownRanking, setSelectedDropdownRanking] = useState("EXP");
+  const [selectedPeriodDropdownRanking, setSelectedPeriodDropdownRanking] = useState("이번주");
 
   const wrapperRef = useRef<HTMLDivElement>(null);
   const currentUserRef = useRef<HTMLDivElement>(null);
@@ -225,9 +225,9 @@ export const useHome = () => {
 
   return {
     transition: {
-      activeTransdata,
-      commitTransdata,
-      TransitionmaxCommit,
+      activeTransitionData,
+      commitTransitionData,
+      transitionMaxCommit,
       maxActive,
     },
     rival: {
@@ -237,17 +237,17 @@ export const useHome = () => {
     active: {
       commitDays,
       months,
-      ActivemaxCommit,
-      selectedSort,
-      setSelectedSort,
+      activeMaxCommit,
+      selectedDropdownActive,
+      setSelectedDropdownActive,
       getLevel,
     },
     ranking: {
       CURRENT_USER_ID,
-      RankingselectedSort,
-      RankingsetSelectedSort,
-      RankingselectedPeriod,
-      RankingsetSelectedPeriod,
+      selectedDropdownRanking,
+      setSelectedDropdownRanking,
+      selectedPeriodDropdownRanking,
+      setSelectedPeriodDropdownRanking,
       wrapperRef,
       currentUserRef,
       userList,

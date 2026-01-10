@@ -4,9 +4,9 @@ import { ActiveProps } from "@/features/home/model/useHome";
 export const Active = ({
   commitDays,
   months,
-  ActivemaxCommit,
-  selectedSort,
-  setSelectedSort,
+  activeMaxCommit,
+  selectedDropdownActive,
+  setSelectedDropdownActive,
   getLevel,
 }: ActiveProps) => {
   return (
@@ -14,7 +14,10 @@ export const Active = ({
       <S.TitleBox>
         <S.Title>내 활동 분석</S.Title>
         <S.SelectWrapper>
-          <S.Select value={selectedSort} onChange={e => setSelectedSort(e.target.value)}>
+          <S.Select
+            value={selectedDropdownActive}
+            onChange={e => setSelectedDropdownActive(e.target.value)}
+          >
             {["Github", "solved.ac"].map(option => (
               <S.Option key={option} value={option}>
                 {option}
@@ -40,11 +43,11 @@ export const Active = ({
           <S.StreakTitle>Contributes 변화 추이</S.StreakTitle>
           <S.GraphBox>
             <S.Bars>
-              {months.map(({ id, commitCount }) => (
+              {months.map(({ id, commit_count }) => (
                 <S.BarWrapper key={id}>
-                  <S.BarValue>{commitCount}</S.BarValue>
+                  <S.BarValue>{commit_count}</S.BarValue>
 
-                  <S.Bar $ratio={commitCount / ActivemaxCommit} />
+                  <S.Bar $ratio={commit_count / activeMaxCommit} />
 
                   <S.BarLabel>{id}월</S.BarLabel>
                 </S.BarWrapper>
