@@ -6,7 +6,6 @@ export const ActiveContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-
   padding: 1.5rem;
   width: 100%;
   height: 100%;
@@ -56,19 +55,15 @@ export const Select = styled.select`
   height: 2rem;
   padding: 0 0.75rem;
   border-radius: 0.5rem;
-
   background-color: ${({ theme }) => theme.fill.neutral};
   color: ${({ theme }) => theme.label.normal};
   border: none;
-
   appearance: none;
   cursor: pointer;
-
   background-image: url(${ArrowIcon});
   background-repeat: no-repeat;
   background-position: right 0.5rem center;
   background-size: 0.75rem;
-
   &:focus {
     outline: none;
   }
@@ -86,7 +81,6 @@ export const StreakContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-around;
-  //gap: 1rem;
 `;
 
 // 잔디수-Streak
@@ -111,7 +105,6 @@ export const Grid = styled.div`
   grid-template-rows: repeat(7, 12px);
   grid-auto-flow: column;
   grid-auto-columns: 12px;
-
   gap: 4px;
 `;
 
@@ -168,13 +161,10 @@ export const Bar = styled.div<{ $ratio: number }>`
 export const BarValue = styled.p`
   ${font.caption.bold}
   color: ${({ theme }) => theme.background.alternative};
-
   width: 1.5rem;
   height: 1rem;
-
   display: flex;
   justify-content: center;
-
   background-color: ${({ theme }) => theme.label.neutral};
   border-radius: 999px;
 `;

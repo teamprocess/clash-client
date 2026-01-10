@@ -1,7 +1,6 @@
 import * as S from "./Ranking.style";
 import { RankingProps } from "@/features/home/model/useHome";
-import { UserRankingProps } from "@/features/home/model/useHome";
-import { forwardRef } from "react";
+import { UserRanking } from "@/features/home/ui/ranking/user/UserRanking";
 
 export const Ranking = ({
   CURRENT_USER_ID,
@@ -71,28 +70,3 @@ export const Ranking = ({
     </S.RankingContainer>
   );
 };
-
-export const UserRanking = forwardRef<HTMLDivElement, UserRankingProps>(
-  ({ user, rank, isSticky }, ref) => {
-    return (
-      <S.UserContainer ref={ref} $sticky={isSticky}>
-        <S.Content>
-          <S.Rank $rank={rank}>{rank}</S.Rank>
-
-          <S.ProfileContent>
-            <S.ProfileIcon />
-            <S.NameBox>
-              <S.ProfileName>{user.name}</S.ProfileName>
-              <S.ProfileMention>(@{user.mention})</S.ProfileMention>
-            </S.NameBox>
-            {rank <= 3 && <S.RivalMention>RIVAL</S.RivalMention>}
-          </S.ProfileContent>
-        </S.Content>
-
-        <S.Point>{user.point.toLocaleString()} 포인트</S.Point>
-      </S.UserContainer>
-    );
-  }
-);
-
-UserRanking.displayName = "UserRanking";

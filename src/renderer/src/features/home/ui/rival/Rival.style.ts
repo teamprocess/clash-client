@@ -5,6 +5,7 @@ import DetailArrow from "../../assets/front.svg";
 import { palette } from "@/shared/config/theme";
 import VSCode from "../../assets/vscode.svg";
 
+// Rival styles
 export const RivalContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -31,7 +32,6 @@ export const Title = styled.div`
 export const ArrowBox = styled.div`
   ${font.label.medium}
   color: ${({ theme }) => theme.label.alternative};
-
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -51,6 +51,7 @@ export const RivalBox = styled.div`
   gap: 1rem;
 `;
 
+// MyRivalUsers styles
 export const ProfileContainer = styled.div`
   width: 100%;
   height: 100%;
@@ -107,13 +108,10 @@ type StatusProps = {
 
 export const Status = styled.div<StatusProps>`
   ${font.caption.bold};
-
   display: flex;
   justify-content: center;
   align-items: center;
-
   padding: 0.125rem 0.5rem;
-
   border-radius: 0.5rem;
   color: ${palette.neutral[5]};
   background-color: ${({ $status, theme }) => {
@@ -135,7 +133,6 @@ export const UsingAppContainer = styled.div`
   flex-direction: row;
   align-items: center;
   justify-content: center;
-
   gap: 0.25rem;
   width: 100%;
   flex: 1;
