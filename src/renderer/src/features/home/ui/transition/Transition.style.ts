@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { font } from "@/shared/config/font";
+import DetailArrow from "../../assets/front.svg";
 
 const MAX_BAR_HEIGHT = 8;
 
@@ -14,8 +15,31 @@ export const TransitionContainer = styled.div`
   flex-direction: column;
 `;
 
+export const TitleBox = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+`;
+
 export const Title = styled.div`
   ${font.title2.bold}
+`;
+
+export const ArrowBox = styled.div`
+  ${font.label.medium}
+  color: ${({ theme }) => theme.label.alternative};
+
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.25rem;
+`;
+
+export const DetailArrowIcon = styled(DetailArrow)`
+  width: 0.5rem;
+  height: 1rem;
 `;
 
 export const SubTitle = styled.div`

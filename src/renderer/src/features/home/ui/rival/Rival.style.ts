@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { font } from "@/shared/config/font";
 import Profile from "../../assets/profile.svg";
+import DetailArrow from "../../assets/front.svg";
 import { palette } from "@/shared/config/theme";
 import VSCode from "../../assets/vscode.svg";
 
@@ -8,14 +9,38 @@ export const RivalContainer = styled.div`
   display: flex;
   flex-direction: column;
   padding: 1.5rem;
+  gap: 1rem;
   width: 100%;
   height: 100%;
   border-radius: 1rem;
   background-color: ${({ theme }) => theme.background.normal};
 `;
 
+export const TitleBox = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+`;
+
 export const Title = styled.div`
   ${font.title2.bold}
+`;
+
+export const ArrowBox = styled.div`
+  ${font.label.medium}
+  color: ${({ theme }) => theme.label.alternative};
+
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.25rem;
+`;
+
+export const DetailArrowIcon = styled(DetailArrow)`
+  width: 0.5rem;
+  height: 1rem;
 `;
 
 export const RivalBox = styled.div`
