@@ -5,8 +5,8 @@ export const Active = ({
   commitDays,
   months,
   activeMaxCommit,
-  selectedDropdownActive,
-  setSelectedDropdownActive,
+  ActiveDropdown,
+  setActiveDropdown,
   getLevel,
 }: ActiveProps) => {
   return (
@@ -14,10 +14,7 @@ export const Active = ({
       <S.TitleBox>
         <S.Title>내 활동 분석</S.Title>
         <S.SelectWrapper>
-          <S.Select
-            value={selectedDropdownActive}
-            onChange={e => setSelectedDropdownActive(e.target.value)}
-          >
+          <S.Select value={ActiveDropdown} onChange={e => setActiveDropdown(e.target.value)}>
             {["Github", "solved.ac"].map(option => (
               <S.Option key={option} value={option}>
                 {option}

@@ -4,10 +4,10 @@ import { UserRanking } from "@/features/home/ui/ranking/user/UserRanking";
 
 export const Ranking = ({
   CURRENT_USER_ID,
-  selectedDropdownRanking,
-  setSelectedDropdownRanking,
-  selectedPeriodDropdownRanking,
-  setSelectedPeriodDropdownRanking,
+  RankingDropdown,
+  setRankingDropdown,
+  RankingPeriodDropdown,
+  setRankingPeriodDropdown,
   wrapperRef,
   currentUserRef,
   userList,
@@ -19,12 +19,9 @@ export const Ranking = ({
     <S.RankingContainer>
       <S.TitleBox>
         <S.Title>우리 학교 랭킹</S.Title>
-        <S.DropDownBox>
+        <S.DropDown>
           <S.SelectWrapper>
-            <S.Select
-              value={selectedDropdownRanking}
-              onChange={e => setSelectedDropdownRanking(e.target.value)}
-            >
+            <S.Select value={RankingDropdown} onChange={e => setRankingDropdown(e.target.value)}>
               {["EXP", "Github", "solved.ac", "총 학습 시간"].map(option => (
                 <option key={option} value={option}>
                   {option}
@@ -35,8 +32,8 @@ export const Ranking = ({
           </S.SelectWrapper>
           <S.SelectWrapper>
             <S.Select
-              value={selectedPeriodDropdownRanking}
-              onChange={e => setSelectedPeriodDropdownRanking(e.target.value)}
+              value={RankingPeriodDropdown}
+              onChange={e => setRankingPeriodDropdown(e.target.value)}
             >
               {["이번주", "이번달", "이번 시즌"].map(option => (
                 <option key={option} value={option}>
@@ -46,7 +43,7 @@ export const Ranking = ({
             </S.Select>
             <S.ArrowIcon />
           </S.SelectWrapper>
-        </S.DropDownBox>
+        </S.DropDown>
       </S.TitleBox>
 
       <S.Line />

@@ -167,7 +167,7 @@ export const useHome = () => {
   // Active
   const activeMaxCommit = Math.max(...months.map(m => m.commit_count));
 
-  const [selectedDropdownActive, setSelectedDropdownActive] = useState("Github");
+  const [ActiveDropdown, setActiveDropdown] = useState("Github");
 
   const MaxCommit = Math.max(...commitDays.map(d => d.count));
 
@@ -186,8 +186,8 @@ export const useHome = () => {
   };
 
   // Ranking
-  const [selectedDropdownRanking, setSelectedDropdownRanking] = useState("EXP");
-  const [selectedPeriodDropdownRanking, setSelectedPeriodDropdownRanking] = useState("이번주");
+  const [RankingDropdown, setRankingDropdown] = useState("EXP");
+  const [RankingPeriodDropdown, setRankingPeriodDropdown] = useState("이번주");
 
   const wrapperRef = useRef<HTMLDivElement>(null);
   const currentUserRef = useRef<HTMLDivElement>(null);
@@ -238,16 +238,16 @@ export const useHome = () => {
       commitDays,
       months,
       activeMaxCommit,
-      selectedDropdownActive,
-      setSelectedDropdownActive,
+      ActiveDropdown,
+      setActiveDropdown,
       getLevel,
     },
     ranking: {
       CURRENT_USER_ID,
-      selectedDropdownRanking,
-      setSelectedDropdownRanking,
-      selectedPeriodDropdownRanking,
-      setSelectedPeriodDropdownRanking,
+      RankingDropdown,
+      setRankingDropdown,
+      RankingPeriodDropdown,
+      setRankingPeriodDropdown,
       wrapperRef,
       currentUserRef,
       userList,
