@@ -10,10 +10,10 @@ export const HomePage = () => {
 
   return (
     <S.HomeContainer>
-      <Transition {...transition}></Transition>
-      <Rival {...rival}></Rival>
-      <Active {...active}></Active>
-      <Ranking {...ranking}></Ranking>
+      <Transition {...transition} />
+      <Rival {...rival} />
+      <Active {...active} />
+      <Ranking {...ranking} />
     </S.HomeContainer>
   );
 };

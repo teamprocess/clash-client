@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { font } from "@/shared/config/font";
-import DetailArrow from "../../assets/front.svg";
+import DetailArrow from "../../assets/home/front.svg";
 
 const MAX_BAR_HEIGHT = 8;
 
