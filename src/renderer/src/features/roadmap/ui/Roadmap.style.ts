@@ -3,6 +3,10 @@ import { font } from "@/shared/config/font";
 import CompleteIcon from "../assets/complete.svg";
 import Lock from "../assets/lock.svg";
 import Roadmap from "../assets/roadmap.svg";
+import FirstFrameIcon from "../assets/first-frame.svg";
+import SecondFrameIcon from "../assets/second-frame.svg";
+import ThirdFrameIcon from "../assets/third-frame.svg";
+import { palette } from "@/shared/config/theme";
 
 export const RoadmapContainer = styled.div`
   width: 100%;
@@ -93,7 +97,7 @@ export const RankingContainer = styled.div`
   top: 3rem;
   left: 3rem;
   width: 16rem;
-  height: 36rem;
+  height: 37rem;
   z-index: 100;
 `;
 
@@ -111,7 +115,7 @@ export const RankingBox = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 3rem;
+  gap: 2rem;
   width: 100%;
 `;
 
@@ -119,17 +123,88 @@ export const RankingTop3Box = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 1.5rem;
-  width: 100%;
-  height: 6rem;
+  gap: 0.5rem;
 `;
 
-export const RankingUser = styled.div`
+export const Top3RankerCard = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 0.2rem;
+  height: 8.5rem;
+  position: relative;
+`;
+
+export const RankFrameWrapper = styled.div`
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 4rem;
+  height: 5rem;
+`;
+
+export const FirstFrame = styled(FirstFrameIcon)`
+  position: absolute;
+  width: 100%;
+  z-index: 200;
+`;
+
+export const SecondFrame = styled(SecondFrameIcon)`
+  position: absolute;
+  width: 100%;
+  z-index: 200;
+`;
+
+export const ThirdFrame = styled(ThirdFrameIcon)`
+  position: absolute;
+  width: 100%;
+  z-index: 200;
+`;
+export const Top3ProfileImage = styled.img<{ $isFirst: boolean }>`
+  width: 100%;
+  height: ${({ $isFirst }) => ($isFirst ? "3.5rem" : "58%")};
+  border-radius: 50%;
+  position: absolute;
+  top: ${({ $isFirst }) => ($isFirst ? "0.5rem" : "0.8rem")};
+  z-index: 150;
+`;
+
+export const RankerName = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   gap: 1rem;
+  ${font.label.bold}
+  color: ${({ theme }) => theme.label.normal};
+`;
+
+export const RankerUserChapterLabel = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.1rem;
+  ${font.caption.regular};
+  color: ${({ theme }) => theme.label.assistive};
+`;
+
+export const CompletedChapterCount = styled.span<{ $countColor }>`
+  ${font.label.bold};
+  color: ${({ $countColor }) =>
+    $countColor === 1
+      ? palette.yellow["50"]
+      : $countColor === 2
+        ? palette.blue["80"]
+        : $countColor === 3
+          ? palette.red["70"]
+          : "red"};
+`;
+
+export const RankerUserProfile = styled.img`
+  width: 100%;
+  z-index: 1000;
 `;
 
 export const RankingList = styled.div`
@@ -137,19 +212,21 @@ export const RankingList = styled.div`
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
-  gap: 1rem;
   width: 100%;
   max-height: 22rem;
   overflow-y: auto;
 `;
 
-export const RankingItem = styled.div`
+export const RankingItem = styled.div<{ $isMe?: boolean }>`
   display: flex;
   justify-content: space-between;
   align-items: center;
   width: 94%;
   height: 3rem;
   padding: 0 1rem;
+  flex-shrink: 0;
+  background-color: ${({ $isMe, theme }) => ($isMe ? theme.fill.neutral : "transparent")};
+  border-radius: ${({ $isMe }) => ($isMe ? "0.5rem" : "0")};
 `;
 
 export const ItemLeft = styled.div`
@@ -197,18 +274,30 @@ export const ItemRight = styled.div`
   text-align: center;
 `;
 
-export const MyRankingItem = styled.div`
+export const MyRankingItem = styled.div<{ $position: "top" | "bottom" }>`
   display: flex;
   justify-content: space-between;
   align-items: center;
   width: 94%;
   height: 3rem;
   padding: 0.25rem 1rem;
+
   position: absolute;
-  bottom: 1rem;
-  z-index: 110;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 120;
+
+  /* 상단이면 위쪽에, 하단이면 아래쪽에 붙임 */
+  ${
+    ({ $position }) =>
+      $position === "top"
+        ? `top: 13.8rem;` // RankingTop3Box 아래 적당한 위치
+        : `bottom: 0.3rem;` // 리스트 최하단
+  }
+
   background: ${({ theme }) => theme.fill.neutral};
   border-radius: 0.5rem;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.15); /* 떠있는 느낌을 위해 추가 */
 `;
 
 export const SectionProgressContainer = styled.div`

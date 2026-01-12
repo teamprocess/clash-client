@@ -4,6 +4,7 @@ import TSIcon from "../assets/ts.svg?url";
 import ReactIcon from "../assets/react.svg?url";
 import NextIcon from "../assets/next.svg?url";
 import Profile from "../assets/profile.svg?url";
+import React, { useEffect, useRef, useState } from "react";
 
 const sectionMock = {
   data: [
@@ -36,7 +37,7 @@ const sectionMock = {
       category: "react",
       title: "리액트 중급",
       imgUrl: ReactIcon,
-      completed: true,
+      completed: false,
       locked: false,
     },
     {
@@ -44,7 +45,7 @@ const sectionMock = {
       category: "react",
       title: "리액트 초급",
       imgUrl: ReactIcon,
-      completed: false,
+      completed: true,
       locked: false,
     },
     {
@@ -133,6 +134,41 @@ const rankingResponse = {
 };
 
 export const Roadmap = () => {
+  const [isMyRankVisible, setIsMyRankVisible] = React.useState(true);
+  const [stickyPosition, setStickyPosition] = useState<"top" | "bottom">("bottom");
+  const myRankRef = useRef<HTMLDivElement>(null);
+  const listRef = useRef<HTMLDivElement>(null); // 리스트 컨테이너 참조
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsMyRankVisible(entry.isIntersecting);
+
+        if (entry.rootBounds) {
+          const entryCenter = entry.boundingClientRect.top + entry.boundingClientRect.height / 2;
+          const rootCenter = entry.rootBounds.top + entry.rootBounds.height / 2;
+
+          if (entryCenter < rootCenter) {
+            setStickyPosition("top");
+          } else {
+            setStickyPosition("bottom");
+          }
+        }
+      },
+      {
+        root: listRef.current,
+        threshold: 1,
+      }
+    );
+
+    if (myRankRef.current) {
+      observer.observe(myRankRef.current);
+    }
+    return () => observer.disconnect();
+  }, []);
+
+  const myData = rankingResponse.data.myRanking;
+
   return (
     <S.RoadmapContainer>
       <S.RoadmapScrollable>
@@ -160,42 +196,62 @@ export const Roadmap = () => {
             <S.RankingTop3Box>
               {rankingResponse.data.allRankers
                 .filter(user => user.rank <= 3)
+                .sort((a, b) => {
+                  const order = { 2: 0, 1: 1, 3: 2 };
+                  return order[a.rank] - order[b.rank];
+                })
                 .map(user => (
-                  <S.RankingUser key={user.id}>{user.name}</S.RankingUser>
+                  <S.Top3RankerCard key={user.id}>
+                    <S.RankFrameWrapper>
+                      {user.rank === 1 && <S.FirstFrame />}
+                      {user.rank === 2 && <S.SecondFrame />}
+                      {user.rank === 3 && <S.ThirdFrame />}
+                      <S.Top3ProfileImage src={Profile} $isFirst={user.rank === 1} />
+                    </S.RankFrameWrapper>
+                    <S.RankerName>{user.name}</S.RankerName>
+                    <S.RankerUserChapterLabel>
+                      <S.CompletedChapterCount $countColor={user.rank}>
+                        {user.completedChapterCount}
+                      </S.CompletedChapterCount>
+                      개 완료
+                    </S.RankerUserChapterLabel>
+                  </S.Top3RankerCard>
                 ))}
             </S.RankingTop3Box>
-            <S.RankingList>
+            <S.RankingList className="ranking-list-root" ref={listRef}>
               {rankingResponse.data.allRankers
                 .filter(user => user.rank > 3)
-                .map(user => (
-                  <S.RankingItem key={user.id}>
-                    <S.ItemLeft>
-                      <S.Ranking>{user.rank}</S.Ranking>
-                      <S.UserBox>
-                        <S.RankingUserProfile src={Profile} />
-                        <S.RankingUsername>{user.name}</S.RankingUsername>
-                      </S.UserBox>
-                    </S.ItemLeft>
-                    <S.ItemRight>
-                      <S.RankingChapter>{user.completedChapterCount}</S.RankingChapter>개 완료
-                    </S.ItemRight>
-                  </S.RankingItem>
-                ))}
-              <S.MyRankingItem>
-                <S.ItemLeft>
-                  <S.Ranking>{rankingResponse.data.myRanking.rank}</S.Ranking>
-                  <S.UserBox>
-                    <S.RankingUserProfile src={Profile} />
-                    <S.RankingUsername>{rankingResponse.data.myRanking.name}</S.RankingUsername>
-                  </S.UserBox>
-                </S.ItemLeft>
-                <S.ItemRight>
-                  <S.RankingChapter>
-                    {rankingResponse.data.myRanking.completedChapterCount}
-                  </S.RankingChapter>
-                  개 완료
-                </S.ItemRight>
-              </S.MyRankingItem>
+                .map(user => {
+                  const isMe = user.id === myData.id;
+                  return (
+                    <S.RankingItem key={user.id} ref={isMe ? myRankRef : null} $isMe={isMe}>
+                      <S.ItemLeft>
+                        <S.Ranking>{user.rank}</S.Ranking>
+                        <S.UserBox>
+                          <S.RankingUserProfile src={Profile} />
+                          <S.RankingUsername>{user.name}</S.RankingUsername>
+                        </S.UserBox>
+                      </S.ItemLeft>
+                      <S.ItemRight>
+                        <S.RankingChapter>{user.completedChapterCount}</S.RankingChapter>개 완료
+                      </S.ItemRight>
+                    </S.RankingItem>
+                  );
+                })}
+              {!isMyRankVisible && (
+                <S.MyRankingItem $position={stickyPosition}>
+                  <S.ItemLeft>
+                    <S.Ranking>{myData.rank}</S.Ranking>
+                    <S.UserBox>
+                      <S.RankingUserProfile src={Profile} />
+                      <S.RankingUsername>{myData.name}</S.RankingUsername>
+                    </S.UserBox>
+                  </S.ItemLeft>
+                  <S.ItemRight>
+                    <S.RankingChapter>{myData.completedChapterCount}</S.RankingChapter>개 완료
+                  </S.ItemRight>
+                </S.MyRankingItem>
+              )}
             </S.RankingList>
           </S.RankingBox>
         </S.RankingContainer>
