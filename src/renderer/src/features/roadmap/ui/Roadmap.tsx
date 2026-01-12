@@ -202,7 +202,7 @@ export const Roadmap = () => {
                 })
                 .map(user => (
                   <S.Top3RankerCard key={user.id}>
-                    <S.RankFrameWrapper>
+                    <S.RankFrameWrapper $rank={user.rank}>
                       {user.rank === 1 && <S.FirstFrame />}
                       {user.rank === 2 && <S.SecondFrame />}
                       {user.rank === 3 && <S.ThirdFrame />}

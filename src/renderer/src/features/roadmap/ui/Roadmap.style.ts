@@ -122,7 +122,7 @@ export const RankingBox = styled.div`
 export const RankingTop3Box = styled.div`
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-end;
   gap: 0.5rem;
 `;
 
@@ -136,13 +136,14 @@ export const Top3RankerCard = styled.div`
   position: relative;
 `;
 
-export const RankFrameWrapper = styled.div`
+export const RankFrameWrapper = styled.div<{ $rank: number }>`
   position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
   width: 4rem;
   height: 5rem;
+  margin-bottom: ${({ $rank }) => ($rank === 1 ? "0.5rem" : "0")};
 `;
 
 export const FirstFrame = styled(FirstFrameIcon)`
@@ -287,17 +288,11 @@ export const MyRankingItem = styled.div<{ $position: "top" | "bottom" }>`
   transform: translateX(-50%);
   z-index: 120;
 
-  /* 상단이면 위쪽에, 하단이면 아래쪽에 붙임 */
-  ${
-    ({ $position }) =>
-      $position === "top"
-        ? `top: 13.8rem;` // RankingTop3Box 아래 적당한 위치
-        : `bottom: 0.3rem;` // 리스트 최하단
-  }
+  ${({ $position }) => ($position === "top" ? `top: 13.8rem;` : `bottom: 0.3rem;`)}
 
   background: ${({ theme }) => theme.fill.neutral};
   border-radius: 0.5rem;
-  box-shadow: 0 0 8px rgba(0, 0, 0, 0.15); /* 떠있는 느낌을 위해 추가 */
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.15);
 `;
 
 export const SectionProgressContainer = styled.div`
