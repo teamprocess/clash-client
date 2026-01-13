@@ -1,5 +1,6 @@
-// import * as S from "@/features/home/ui/compare/solvedac/CompareSolvedAc.style";
-// import { GrowthRate } from "@/features/home/ui/compare/growthrate/GrowthRate";
+// 현재 사용을 안하여 작동시키면 오류가 발생해 주석을 달았습니다.
+// import * as S from "@/features/home/ui/compare/solved-ac/CompareSolvedAc.style";
+// import { GrowthRate } from "@/features/home/ui/compare/growth-rate/GrowthRate";
 // import { SolvedAcProps } from "@/features/home/model/useCompare";
 //
 // export const SolvedAc = ({ statsData }: SolvedAcProps) => {

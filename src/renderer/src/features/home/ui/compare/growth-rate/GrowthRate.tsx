@@ -1,4 +1,4 @@
-import * as S from "@/features/home/ui/compare/growthrate/GrowRate.style";
+import * as S from "@/features/home/ui/compare/growth-rate/GrowRate.style";
 import { getGrowthInfo, GrowthRateProps } from "@/features/home/model/useCompare";
 
 export const GrowthRate = ({ yesterday, today }: GrowthRateProps) => {
@@ -10,10 +10,10 @@ export const GrowthRate = ({ yesterday, today }: GrowthRateProps) => {
         {status === "same" ? (
           value
         ) : (
-          <>
+          <S.GrowthRateIconWrapper>
             <S.GrowthRateArrowIcon $deg={deg ?? 0} />
             {value}
-          </>
+          </S.GrowthRateIconWrapper>
         )}
       </S.GrowthValue>
     </S.GrowthWrapper>
