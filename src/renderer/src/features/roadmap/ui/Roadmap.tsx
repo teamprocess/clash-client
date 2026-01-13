@@ -208,13 +208,15 @@ export const Roadmap = () => {
                       {user.rank === 3 && <S.ThirdFrame />}
                       <S.Top3ProfileImage src={Profile} $isFirst={user.rank === 1} />
                     </S.RankFrameWrapper>
-                    <S.RankerName>{user.name}</S.RankerName>
-                    <S.RankerUserChapterLabel>
-                      <S.CompletedChapterCount $countColor={user.rank}>
-                        {user.completedChapterCount}
-                      </S.CompletedChapterCount>
-                      개 완료
-                    </S.RankerUserChapterLabel>
+                    <S.RankerBottom>
+                      <S.RankerName>{user.name}</S.RankerName>
+                      <S.RankerUserChapterLabel>
+                        <S.CompletedChapterCount $countColor={user.rank}>
+                          {user.completedChapterCount}
+                        </S.CompletedChapterCount>
+                        개 완료
+                      </S.RankerUserChapterLabel>
+                    </S.RankerBottom>
                   </S.Top3RankerCard>
                 ))}
             </S.RankingTop3Box>
