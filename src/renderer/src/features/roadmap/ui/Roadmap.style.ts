@@ -25,6 +25,19 @@ export const RoadmapScrollable = styled.div`
   border-radius: 1rem;
   overflow-x: auto;
   overflow-y: hidden;
+  &::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent; /* 스크롤바 배경(길) */
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: ${({ theme }) => theme.line.normal}; /* 스크롤바 핸들 */
+    border-radius: 10px;
+  }
 `;
 
 export const SectionItemWrapper = styled.div`
@@ -33,7 +46,7 @@ export const SectionItemWrapper = styled.div`
   align-items: center;
   gap: 3rem;
   height: 35rem;
-  margin-left: 30rem;
+  margin-left: 36rem;
 `;
 
 export const SectionItemBox = styled.div`
@@ -91,13 +104,13 @@ export const RankingContainer = styled.div`
   align-items: center;
   gap: 1rem;
   background: ${({ theme }) => theme.background.normal};
-  box-shadow: 0 0 7px 0 ${({ theme }) => theme.line.normal};
+  box-shadow: 0 0 7px 0 ${({ theme }) => theme.line.neutral};
   border-radius: 1.25rem;
   position: absolute;
   top: 3rem;
   left: 3rem;
   width: 16rem;
-  height: 37rem;
+  height: 39rem;
   z-index: 100;
 `;
 
@@ -215,7 +228,20 @@ export const RankingList = styled.div`
   align-items: center;
   width: 100%;
   max-height: 22rem;
-  overflow-y: auto;
+  overflow-y: overlay;
+  &::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent; /* 스크롤바 배경(길) */
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: ${({ theme }) => theme.line.normal}; /* 스크롤바 핸들 */
+    border-radius: 10px;
+  }
 `;
 
 export const RankingItem = styled.div<{ $isMe?: boolean }>`
@@ -288,7 +314,7 @@ export const MyRankingItem = styled.div<{ $position: "top" | "bottom" }>`
   transform: translateX(-50%);
   z-index: 120;
 
-  ${({ $position }) => ($position === "top" ? `top: 13.8rem;` : `bottom: 0.3rem;`)}
+  ${({ $position }) => ($position === "top" ? `top: 13.8rem;` : `bottom: 0.75rem;`)}
 
   background: ${({ theme }) => theme.fill.neutral};
   border-radius: 0.5rem;
@@ -305,7 +331,7 @@ export const SectionProgressContainer = styled.div`
   background-color: ${({ theme }) => theme.background.alternative};
   border-radius: 0.5rem;
   position: absolute;
-  bottom: 1rem;
+  bottom: 2rem;
   left: 3rem;
   z-index: 110;
 `;
