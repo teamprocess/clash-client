@@ -28,10 +28,11 @@ function App() {
             <Route path="/competition" element={<CompetitionPage />} />
             <Route path="/record" element={<RecordPage />} />
             <Route path="/group" element={<GroupPage />} />
-            <Route path="/shop" element={<ShopPage />} />
             <Route path="/roadmap" element={<RoadMapPage />} />
           </Route>
-
+          <Route element={<MainLayout isScrollAble={true} />}>
+            <Route path="/shop" element={<ShopPage />} />
+          </Route>
           <Route element={<AuthLayout />}>
             <Route path="/sign-in" element={<SignInPage />} />
             <Route path="/sign-up" element={<SignUpPage />} />
