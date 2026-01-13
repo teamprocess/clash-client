@@ -2,7 +2,6 @@ import styled from "styled-components";
 import { font } from "@/shared/config/font";
 import { palette } from "@/shared/config/theme";
 import Arrow from "@/features/home/assets/home/arrow.svg";
-import { ArrowDegProps } from "@/features/home/model/useCompare";
 
 export const GrowthWrapper = styled.div`
   display: flex;
@@ -12,11 +11,7 @@ export const GrowthWrapper = styled.div`
 
 export const GrowthValue = styled.span<{ $status: "up" | "down" | "same" }>`
   ${font.label.bold};
-  display: flex;
-  flex-direction: row;
   padding: 0.15rem 0.75rem;
-  gap: 0.25rem;
-  align-items: center;
   color: ${palette.neutral[99]};
   background-color: ${({ $status }) => {
     if ($status === "up") return palette.green[40];
@@ -26,11 +21,16 @@ export const GrowthValue = styled.span<{ $status: "up" | "down" | "same" }>`
   border-radius: 999px;
 `;
 
-export const GrowthRateArrowIcon = styled(Arrow)<ArrowDegProps>`
+export const GrowthRateIconWrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+  gap: 0.25rem;
+  align-items: center;
+  color: ${palette.neutral[99]};
+`;
+
+export const GrowthRateArrowIcon = styled(Arrow)<{ $deg: number }>`
   width: 1rem;
   height: 1rem;
   transform: rotate(${({ $deg }) => $deg || 0}deg);
-  path {
-    fill: ${palette.neutral[99]};
-  }
 `;

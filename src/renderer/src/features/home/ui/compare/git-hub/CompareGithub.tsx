@@ -1,6 +1,6 @@
-import * as S from "@/features/home/ui/compare/github/CompareGithub.style";
+import * as S from "./CompareGithub.style";
 import { GithubProps } from "@/features/home/model/useCompare";
-import { GrowthRate } from "@/features/home/ui/compare/growthrate/GrowthRate";
+import { GrowthRate } from "@/features/home/ui/compare/growth-rate/GrowthRate";
 
 export const Github = ({ yesterday, today }: GithubProps) => {
   return (

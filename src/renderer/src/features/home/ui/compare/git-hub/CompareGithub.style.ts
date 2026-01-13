@@ -11,7 +11,6 @@ import GitIssue from "@/features/home/assets/home/git-issue.svg";
 import { font } from "@/shared/config/font";
 import { palette } from "@/shared/config/theme";
 import { Line } from "@/features/home/ui/active/Active.style";
-import { LineProps } from "@/features/home/model/useCompare";
 
 export const TitleBox = styled.div`
   display: flex;
@@ -99,7 +98,6 @@ export const GithubInfoBox = styled(TitleBox)`
   align-items: center;
   width: 100%;
   height: 100%;
-  //min-height: 8rem;
 `;
 
 export const InfoSubtitleBox = styled.div`
@@ -234,7 +232,7 @@ export const CodeIcon = styled(Code)``;
 export const TimeIcon = styled(Time)``;
 export const GitPRIcon = styled(GitPR)``;
 export const StatusIcon = styled(Status)``;
-export const ReviewIcon = styled(Review)<LineProps>`
+export const ReviewIcon = styled(Review)<{ $width: number }>`
   width: ${({ $width }) => ($width ? `${$width}rem` : "1rem")};
   height: ${({ $width }) => ($width ? `${$width}rem` : "1rem")};
 `;

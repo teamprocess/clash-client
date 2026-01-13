@@ -1,14 +1,5 @@
 import { useState } from "react";
 
-// 단독 타입 정의
-export interface LineProps {
-  $width: number;
-}
-
-export interface ArrowDegProps {
-  $deg?: number;
-}
-
 // ComparePage 데이터 GET
 export const statsData = {
   data: {
@@ -98,7 +89,7 @@ export const useCompare = () => {
       yesterday: statsData.data.yesterday,
       today: statsData.data.today,
     },
-    // solvedac: {
+    // solved-ac: {
     //   statsData: statsData.data,
     // },
   };
@@ -107,4 +98,4 @@ export const useCompare = () => {
 export type CompareReturn = ReturnType<typeof useCompare>;
 export type CompareProps = CompareReturn["compare"];
 export type GithubProps = CompareReturn["github"];
-// export type SolvedAcProps = CompareReturn["solvedac"];
+// export type SolvedAcProps = CompareReturn["solved-ac"];

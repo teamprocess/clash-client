@@ -51,7 +51,6 @@ export const SelectWrapper = styled.div`
   position: relative;
 `;
 
-//드랍다운
 export const Select = styled.select`
   ${font.body.regular};
   width: 7.5rem;
