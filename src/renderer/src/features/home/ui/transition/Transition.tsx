@@ -12,7 +12,7 @@ export const Transition = ({
     <S.TransitionContainer>
       <S.TitleBox>
         <S.Title>어제와 비교</S.Title>
-        <Link to="">
+        <Link to="/home/transition">
           <S.ArrowBox>
             자세히보기
             <S.DetailArrowIcon />

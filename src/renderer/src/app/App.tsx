@@ -2,7 +2,7 @@ import { ThemeProvider } from "styled-components";
 import { HashRouter, Routes, Route } from "react-router-dom";
 import { useTheme } from "@/shared/lib/useTheme";
 import { GlobalStyle } from "./styles/GlobalStyle";
-import { MainLayout } from "./layouts/main/MainLayout";
+import { MainLayout } from "@/app/layouts/main";
 import { HomePage } from "@/pages/home";
 import { CompetitionPage } from "@/pages/competition";
 import { RecordPage } from "@/pages/record";
@@ -12,6 +12,7 @@ import { RoadMapPage } from "@/pages/roadmap";
 import { AuthLayout } from "@/app/layouts/auth";
 import { SignInPage, SignUpPage } from "@/pages/auth";
 import { NotFoundPage } from "@/pages/not-found/NotFoundPage";
+import { ComparePage } from "@/pages/home/compare/ComparePage";
 
 function App() {
   const { theme } = useTheme();
@@ -23,6 +24,7 @@ function App() {
         <Routes>
           <Route element={<MainLayout />}>
             <Route path="/" element={<HomePage />} />
+            <Route path="/home/transition" element={<ComparePage />} />
             <Route path="/competition" element={<CompetitionPage />} />
             <Route path="/record" element={<RecordPage />} />
             <Route path="/group" element={<GroupPage />} />

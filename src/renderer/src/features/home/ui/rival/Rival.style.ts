@@ -1,9 +1,9 @@
 import styled from "styled-components";
 import { font } from "@/shared/config/font";
-import Profile from "../../assets/profile.svg";
-import DetailArrow from "../../assets/front.svg";
+import Profile from "../../assets/home/profile.svg";
+import DetailArrow from "../../assets/home/front.svg";
 import { palette } from "@/shared/config/theme";
-import VSCode from "../../assets/vscode.svg";
+import VSCode from "../../assets/home/vscode.svg";
 
 // Rival styles
 export const RivalContainer = styled.div`
