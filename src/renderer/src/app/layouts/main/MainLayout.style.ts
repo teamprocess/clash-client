@@ -12,9 +12,9 @@ export const ContentWrapper = styled.div`
   flex: 1;
 `;
 
-export const MainContent = styled.main`
+export const MainContent = styled.main<{ $isScrollAble: boolean }>`
   flex: 1;
-  padding: 2.5rem;
+  padding: ${({ $isScrollAble }) => ($isScrollAble ? "2.5rem 2.5rem 0 2.5rem" : "2.5rem")};
   overflow: auto;
   background-color: ${({ theme }) => theme.background.alternative};
 
