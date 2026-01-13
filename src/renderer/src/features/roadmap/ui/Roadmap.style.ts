@@ -26,8 +26,7 @@ export const RoadmapScrollable = styled.div`
   overflow-x: auto;
   overflow-y: hidden;
   &::-webkit-scrollbar {
-    width: 10px;
-    height: 10px;
+    height: 8px;
   }
 
   &::-webkit-scrollbar-track {
@@ -100,9 +99,9 @@ export const SectionTitle = styled.span`
 export const RankingContainer = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
-  gap: 1rem;
+  gap: 1.8rem;
   background: ${({ theme }) => theme.background.normal};
   box-shadow: 0 0 7px 0 ${({ theme }) => theme.line.neutral};
   border-radius: 1.25rem;
@@ -112,6 +111,7 @@ export const RankingContainer = styled.div`
   width: 16rem;
   height: 39rem;
   z-index: 100;
+  padding: 1.6rem 0 0.8rem;
 `;
 
 export const RankingLabel = styled.span`
@@ -137,6 +137,13 @@ export const RankingTop3Box = styled.div`
   justify-content: center;
   align-items: flex-end;
   gap: 0.5rem;
+`;
+
+export const RankerBottom = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 `;
 
 export const Top3RankerCard = styled.div`
@@ -228,14 +235,16 @@ export const RankingList = styled.div`
   align-items: center;
   width: 100%;
   max-height: 22rem;
-  overflow-y: overlay;
+  overflow-y: auto;
+  padding-left: 8px;
+  scrollbar-gutter: stable;
+
   &::-webkit-scrollbar {
-    width: 10px;
-    height: 10px;
+    width: 8px;
   }
 
-  &::-webkit-scrollbar-track {
-    background: transparent; /* 스크롤바 배경(길) */
+  ::-webkit-scrollbar-track {
+    background: transparent;
   }
 
   &::-webkit-scrollbar-thumb {
@@ -248,7 +257,7 @@ export const RankingItem = styled.div<{ $isMe?: boolean }>`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 94%;
+  width: 100%;
   height: 3rem;
   padding: 0 1rem;
   flex-shrink: 0;
@@ -305,7 +314,7 @@ export const MyRankingItem = styled.div<{ $position: "top" | "bottom" }>`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 94%;
+  width: calc(100% - 16px);
   height: 3rem;
   padding: 0.25rem 1rem;
 
@@ -314,7 +323,7 @@ export const MyRankingItem = styled.div<{ $position: "top" | "bottom" }>`
   transform: translateX(-50%);
   z-index: 120;
 
-  ${({ $position }) => ($position === "top" ? `top: 13.8rem;` : `bottom: 0.75rem;`)}
+  ${({ $position }) => ($position === "top" ? `top: 15rem;` : `bottom: 1.45rem;`)}
 
   background: ${({ theme }) => theme.fill.neutral};
   border-radius: 0.5rem;
