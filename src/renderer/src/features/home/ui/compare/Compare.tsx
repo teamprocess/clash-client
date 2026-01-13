@@ -1,6 +1,6 @@
 import * as S from "./Compare.style";
 import { Link } from "react-router-dom";
-import { Github } from "@/features/home/ui/compare/git-hub/CompareGithub";
+import { Github } from "@/features/home/ui/compare/github/CompareGithub";
 // import { SolvedAc } from "@/features/home/ui/compare/solved-ac/CompareSolvedAc";
 import { CompareProps } from "@/features/home/model/useCompare";
 
