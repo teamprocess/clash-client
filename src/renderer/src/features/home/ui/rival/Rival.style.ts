@@ -1,9 +1,11 @@
 import styled from "styled-components";
 import { font } from "@/shared/config/font";
-import Profile from "../../assets/home/profile.svg";
 import DetailArrow from "../../assets/home/front.svg";
 import { palette } from "@/shared/config/theme";
 import VSCode from "../../assets/home/vscode.svg";
+import Profile from "../../assets/home/profile.svg";
+import Plus from "../../assets/home/plus.svg";
+import Search from "../../assets/home/search.svg";
 
 // Rival styles
 export const RivalContainer = styled.div`
@@ -163,4 +165,80 @@ export const ActiveTime = styled.p<StatusProps>`
         return theme.label.assistive;
     }
   }};
+`;
+
+// Modal
+export const AddRivalBox = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  flex: 1;
+  gap: 0.75rem;
+`;
+
+export const AddRivalText = styled.p`
+  ${font.caption.regular};
+  color: ${({ theme }) => theme.label.neutral};
+`;
+
+export const SearchBox = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  position: relative;
+  margin-top: 1rem;
+`;
+
+export const SearchUsers = styled.input`
+  width: 100%;
+  height: 3.5rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.75rem;
+  border: none;
+  background-color: ${({ theme }) => theme.fill.alternative};
+  ${font.body.medium}
+  color: ${({ theme }) => theme.label.neutral};
+  &::placeholder {
+    color: ${({ theme }) => theme.label.assistive};
+  }
+  &:focus {
+    outline: none;
+  }
+`;
+
+export const PlusIcon = styled(Plus)``;
+export const SearchIconBox = styled.div`
+  color: ${({ theme }) => theme.label.neutral};
+`;
+
+export const SearchIcon = styled(Search)`
+  position: absolute;
+  right: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 1.85rem;
+  height: 1.85rem;
+  pointer-events: none;
+`;
+
+export const UserChoiceContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 16rem;
+  overflow-y: scroll;
+  scrollbar-width: none;
+`;
+
+export const UserChoiceBox = styled.div<{ $isSelected: boolean }>`
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  padding: 0.5rem;
+  border-bottom: 1px solid ${({ theme }) => theme.line.alternative};
+  cursor: pointer;
+  background-color: ${({ $isSelected, theme }) =>
+    $isSelected ? theme.fill.alternative : "transparent"};
 `;
