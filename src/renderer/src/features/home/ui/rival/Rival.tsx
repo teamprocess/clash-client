@@ -2,7 +2,6 @@ import * as S from "./Rival.style";
 import { RivalProps } from "@/features/home/model/useHome"; // 전체 props
 import { MyRivalUsers } from "@/features/home/ui/rival/myrival-users/MyRivalUsers";
 import { Modal } from "@/shared/ui/modal/Modal";
-import { useState } from "react";
 
 export const Rival = ({
   RivalsData,
@@ -11,9 +10,9 @@ export const Rival = ({
   handleOpen,
   handleClose,
   userList,
+  rivalSelectedId,
+  setRvalSelectedId,
 }: RivalProps) => {
-  const [rivalSelectedId, setRvalSelectedId] = useState<string | null>(null);
-
   return (
     <S.RivalContainer>
       <S.TitleBox>

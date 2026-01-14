@@ -168,6 +168,8 @@ export const useHome = () => {
   const handleOpen = () => setModalOpen(true);
   const handleClose = () => setModalOpen(false);
 
+  const [rivalSelectedId, setRvalSelectedId] = useState<string | null>(null);
+
   // Active
   const activeMaxCommit = Math.max(...months.map(m => m.commit_count));
 
@@ -242,6 +244,8 @@ export const useHome = () => {
       handleOpen,
       handleClose,
       userList,
+      rivalSelectedId,
+      setRvalSelectedId,
     },
     active: {
       commitDays,
