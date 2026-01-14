@@ -1,5 +1,6 @@
 import * as S from "./Topbat.style";
 import { useState } from "react";
+import { Explain } from "./Topbat.style";
 
 interface TopbarProps {
   onToggleSidebar: () => void;
@@ -8,23 +9,22 @@ interface TopbarProps {
 interface AlamProps {
   name: string;
   mention: string;
+  message: string;
 }
 
-const alamInfo: AlamProps[] = [
-  { name: "멧돼지", mention: "seunga_418" },
-  { name: "채근영", mention: "chaeyn" },
-  { name: "한승환", mention: "h.7xn" },
-  { name: "권대형", mention: "gorani" },
+const alarmInfo: AlamProps[] = [
+  { name: "멧돼지", mention: "seunga_418", message: "상대방이 라이벌을 신청했어요." },
+  { name: "채근영", mention: "chaeyn", message: "상대방이 라이벌을 신청했어요." },
+  { name: "한승환", mention: "h.7xn", message: "상대방이 라이벌을 신청했어요." },
+  { name: "권대형", mention: "gorani", message: "상대방이 라이벌을 신청했어요." },
 ];
 
 export const Topbar = ({ onToggleSidebar }: TopbarProps) => {
-  const alamCnt = alamInfo.length;
+  const alarmCnt = alarmInfo.length;
   const [isAlamOpen, setIsAlamOpen] = useState(false);
 
   const handleOpen = () => {
-    if (alamCnt > 0) {
-      return setIsAlamOpen(prev => !prev);
-    }
+    setIsAlamOpen(prev => !prev);
   };
 
   return (
@@ -39,9 +39,9 @@ export const Topbar = ({ onToggleSidebar }: TopbarProps) => {
       </S.LeftMenu>
       <S.RightMenu>
         <S.AlamDoor onClick={handleOpen}>
-          {alamCnt > 0 ? <S.AlarmOnIcon /> : <S.AlarmIcon />}
+          {alarmCnt > 0 ? <S.AlarmOnIcon /> : <S.AlarmIcon />}
         </S.AlamDoor>
-        {isAlamOpen ? (
+        {isAlamOpen && alarmCnt > 0 ? (
           <S.ModalOverlay>
             <S.ModalContainer>
               <S.ModalHeader>
@@ -56,6 +56,31 @@ export const Topbar = ({ onToggleSidebar }: TopbarProps) => {
                   <S.SearchIcon />
                 </S.SearchIconBox>
               </S.SearchBox>
+              <S.AlarmContainer>
+                {alarmInfo.map(alarm => (
+                  <S.AlarmBox key={alarm.mention || alarm.name || alarm.message}>
+                    <S.ProfileIcon />
+                    <div>
+                      <S.NameDiv>
+                        <S.AlarmName>{alarm.name}</S.AlarmName>
+                        <S.Mention>@{alarm.mention}</S.Mention>
+                      </S.NameDiv>
+                      <Explain>{alarm.message}</Explain>
+                    </div>
+                  </S.AlarmBox>
+                ))}
+              </S.AlarmContainer>
+            </S.ModalContainer>
+          </S.ModalOverlay>
+        ) : isAlamOpen && alarmCnt === 0 ? (
+          <S.ModalOverlay>
+            <S.ModalContainer>
+              <S.ModalHeader>
+                <S.ModalTitle>알림</S.ModalTitle>
+                <S.CloseButton onClick={handleOpen}>
+                  <S.CloseIcon />
+                </S.CloseButton>
+              </S.ModalHeader>
             </S.ModalContainer>
           </S.ModalOverlay>
         ) : null}
