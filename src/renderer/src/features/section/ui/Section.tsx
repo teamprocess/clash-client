@@ -1,4 +1,4 @@
-import * as S from "./Roadmap.style";
+import * as S from "./Section.style";
 import JSIcon from "../assets/js.svg?url";
 import TSIcon from "../assets/ts.svg?url";
 import ReactIcon from "../assets/react.svg?url";
@@ -99,7 +99,7 @@ const sectionMock = {
   categories: ["javascript", "react", "typescript", "nextjs", "react-native", "electron"],
 };
 
-export const Roadmap = () => {
+export const Section = () => {
   return (
     <S.RoadmapContainer>
       <S.RoadmapScrollable>
@@ -122,20 +122,6 @@ export const Roadmap = () => {
           ))}
         </S.SectionItemWrapper>
         <ChapterRanking />
-        <S.SectionProgressContainer>
-          <S.ProgressInfoBox>
-            <S.RoadmapIcon />
-            <S.StepCount>
-              <span style={{ color: "red" }}>3</span> / 50
-            </S.StepCount>
-          </S.ProgressInfoBox>
-          <S.ProgressBarWrapper>
-            <S.BarBackground>
-              <S.BarActive $fill={40} />
-            </S.BarBackground>
-            <S.PercentText>40%</S.PercentText>
-          </S.ProgressBarWrapper>
-        </S.SectionProgressContainer>
       </S.RoadmapScrollable>
     </S.RoadmapContainer>
   );

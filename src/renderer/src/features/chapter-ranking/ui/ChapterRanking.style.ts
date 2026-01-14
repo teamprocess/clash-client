@@ -132,11 +132,6 @@ export const CompletedChapterCount = styled.span<{ $countColor }>`
           : "red"};
 `;
 
-export const RankerUserProfile = styled.img`
-  width: 100%;
-  z-index: 1000;
-`;
-
 export const RankingList = styled.div`
   display: flex;
   flex-direction: column;
