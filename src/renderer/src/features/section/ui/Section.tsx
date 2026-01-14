@@ -121,7 +121,7 @@ export const Section = () => {
             </S.SectionItemBox>
           ))}
         </S.SectionItemWrapper>
-        <ChapterRanking />
+        <ChapterRanking page={"section"} />
       </S.RoadmapScrollable>
     </S.RoadmapContainer>
   );
