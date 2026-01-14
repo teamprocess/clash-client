@@ -12,7 +12,7 @@ export const Rival = ({
   handleClose,
   userList,
 }: RivalProps) => {
-  const [rivalSelectedId, setRvalSelectedId] = useState<number | null>(null);
+  const [rivalSelectedId, setRvalSelectedId] = useState<string | null>(null);
 
   return (
     <S.RivalContainer>
@@ -58,9 +58,20 @@ export const Rival = ({
                 key={user.name}
                 $isSelected={rivalSelectedId === user.name}
                 onClick={() => setRvalSelectedId(user.name)}
-              ></S.UserChoiceBox>
+              >
+                <S.ProfileContent style={{ height: "3.75rem" }}>
+                  <S.ProfileName>{user.name}</S.ProfileName>
+                  <S.ProfileMention>@{user.mention}</S.ProfileMention>
+                </S.ProfileContent>
+              </S.UserChoiceBox>
             ))}
           </S.UserChoiceContainer>
+          <S.BottomBox>
+            <S.ButtonBox>
+              <S.CloseButton>취소</S.CloseButton>
+              <S.CheckButton>확인</S.CheckButton>
+            </S.ButtonBox>
+          </S.BottomBox>
         </Modal>
       )}
     </S.RivalContainer>

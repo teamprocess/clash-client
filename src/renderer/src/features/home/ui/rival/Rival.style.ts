@@ -189,6 +189,7 @@ export const SearchBox = styled.div`
   width: 100%;
   position: relative;
   margin-top: 1rem;
+  gap: 0.75rem;
 `;
 
 export const SearchUsers = styled.input`
@@ -241,4 +242,37 @@ export const UserChoiceBox = styled.div<{ $isSelected: boolean }>`
   cursor: pointer;
   background-color: ${({ $isSelected, theme }) =>
     $isSelected ? theme.fill.alternative : "transparent"};
+`;
+
+export const BottomBox = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+`;
+
+export const ButtonBox = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  gap: 0.75rem;
+`;
+
+export const CloseButton = styled.button`
+  width: 4.25rem;
+  border-radius: 0.75rem;
+  color: ${palette.neutral[97]};
+  padding: 0.5rem 0.5rem;
+  background: ${({ theme }) => theme.line.normal};
+  cursor: pointer;
+`;
+
+export const CheckButton = styled.button`
+  width: 4.25rem;
+  border-radius: 0.75rem;
+  color: ${palette.neutral[97]};
+  padding: 0.5rem 0.5rem;
+  background: ${({ theme }) => theme.primary.normal};
+  cursor: pointer;
 `;
