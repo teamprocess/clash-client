@@ -169,3 +169,41 @@ export const SearchIcon = styled(Search)`
   height: 1.85rem;
   pointer-events: none;
 `;
+
+export const ProfileDiv = styled.div``;
+
+export const AlarmBox = styled.div`
+  display: flex;
+  flex-direction: row;
+  gap: 0.75rem;
+`;
+
+export const NameDiv = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.25rem;
+`;
+
+export const Explain = styled.p`
+  ${font.label.medium}
+  color: ${({ theme }) => theme.label.normal};
+`;
+
+export const AlarmName = styled.p`
+  ${font.headline2.medium}
+`;
+
+export const Mention = styled.p`
+  ${font.label.regular};
+  color: ${({ theme }) => theme.label.assistive};
+`;
+
+export const AlarmContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 1rem;
+  overflow-y: auto;
+  margin-top: 0.75rem;
+`;
