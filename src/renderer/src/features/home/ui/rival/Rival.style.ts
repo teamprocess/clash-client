@@ -6,6 +6,7 @@ import VSCode from "../../assets/home/vscode.svg";
 import Profile from "../../assets/home/profile.svg";
 import Plus from "../../assets/home/plus.svg";
 import Search from "../../assets/home/search.svg";
+import Checked from "../../assets/home/check-box.svg";
 
 // Rival styles
 export const RivalContainer = styled.div`
@@ -236,6 +237,8 @@ export const UserChoiceContainer = styled.div`
 export const UserChoiceBox = styled.div<{ $isSelected: boolean }>`
   display: flex;
   flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
   width: 100%;
   padding: 0.5rem;
   border-bottom: 1px solid ${({ theme }) => theme.line.alternative};
@@ -246,34 +249,43 @@ export const UserChoiceBox = styled.div<{ $isSelected: boolean }>`
 
 export const BottomBox = styled.div`
   margin-top: 0.9rem;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-end;
 `;
 
 export const ButtonBox = styled.div`
   width: 100%;
   display: flex;
   flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
   gap: 0.75rem;
 `;
 
 export const CloseButton = styled.button`
   width: 4.25rem;
-  border-radius: 0.75rem;
+  border-radius: 0.625rem;
   color: ${palette.neutral[97]};
-  padding: 0.5rem 0.5rem;
+  padding: 0.4rem 0.5rem;
   background: ${({ theme }) => theme.line.normal};
   cursor: pointer;
 `;
 
-export const CheckButton = styled.button`
+export const OkayButton = styled.button`
   width: 4.25rem;
-  border-radius: 0.75rem;
+  border-radius: 0.625rem;
   color: ${palette.neutral[97]};
-  padding: 0.5rem 0.5rem;
+  padding: 0.4rem 0.5rem;
   background: ${({ theme }) => theme.primary.normal};
   cursor: pointer;
+`;
+
+export const CheckedIcon = styled(Checked)``;
+
+export const UncheckedBox = styled.div`
+  appearance: none;
+  width: 1.25rem;
+  height: 1.25rem;
+  border: 2px solid ${({ theme }) => theme.line.normal};
+  border-radius: 0.25rem;
+  cursor: pointer;
+  background-color: ${({ theme }) => theme.fill.normal};
 `;
