@@ -4,7 +4,10 @@ import { Link } from "react-router-dom";
 import ClashLogo from "@/widgets/topbar/assets/clash-logo.svg";
 import Menu from "@/widgets/topbar/assets/menu.svg";
 import Alarm from "@/widgets/topbar/assets/alarm.svg";
+import AlarmOn from "@/widgets/topbar/assets/alarm-on.svg";
 import Profile from "@/widgets/topbar/assets/profile.svg";
+import Close from "@/features/home/assets/home/no.svg";
+import Search from "@/features/home/assets/home/search.svg";
 
 export const TopbarContainer = styled.header`
   display: flex;
@@ -56,6 +59,14 @@ export const AlarmIcon = styled(Alarm)`
   cursor: pointer;
 `;
 
+export const AlarmOnIcon = styled(AlarmOn)`
+  width: 1.5rem;
+  height: 1.5rem;
+  cursor: pointer;
+`;
+
+export const AlamDoor = styled.div``;
+
 export const ProfileIcon = styled(Profile)``;
 
 export const ProfileBox = styled(Link)`
@@ -78,4 +89,83 @@ export const Name = styled.span`
 export const Username = styled.span`
   ${font.caption.medium}
   color: ${({ theme }) => theme.label.assistive};
+`;
+
+export const ModalOverlay = styled.div`
+  position: relative;
+  top: 3.25rem;
+  left: 7.25rem;
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-start;
+  z-index: 1000;
+  width: 0;
+  height: 0;
+`;
+
+export const ModalContainer = styled.div`
+  position: absolute;
+  padding: 1.25rem;
+  border-radius: 1.25rem;
+  width: 21.5rem;
+  height: 29rem;
+  background-color: ${({ theme }) => theme.label.disable};
+`;
+
+export const ModalHeader = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+`;
+
+export const ModalTitle = styled.p`
+  ${font.title2.medium}
+`;
+
+export const CloseIcon = styled(Close)``;
+
+export const CloseButton = styled.div`
+  cursor: pointer;
+`;
+
+export const SearchBox = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  position: relative;
+  margin-top: 1rem;
+  gap: 0.75rem;
+`;
+
+export const SearchUsers = styled.input`
+  width: 100%;
+  height: 3.5rem;
+  padding: 0.5rem 3.5rem 0.5rem 1rem;
+  border-radius: 0.75rem;
+  border: none;
+  background-color: ${({ theme }) => theme.fill.alternative};
+  ${font.body.medium}
+  color: ${({ theme }) => theme.label.neutral};
+  &::placeholder {
+    color: ${({ theme }) => theme.label.assistive};
+  }
+  &:focus {
+    outline: none;
+  }
+`;
+
+export const SearchIconBox = styled.div`
+  color: ${({ theme }) => theme.label.neutral};
+`;
+
+export const SearchIcon = styled(Search)`
+  position: absolute;
+  right: 1rem;
+  top: 43%;
+  transform: translateY(-50%);
+  width: 1.85rem;
+  height: 1.85rem;
+  pointer-events: none;
 `;
