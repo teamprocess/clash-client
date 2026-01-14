@@ -43,7 +43,7 @@ export const ChapterPage = () => {
           ))}
         <S.RoadmapWrapper />
       </S.ChapterScrollable>
-      <ChapterRanking />
+      <ChapterRanking page={"chapter"} />
       <SectionProgress />
     </S.ChapterContainer>
   );

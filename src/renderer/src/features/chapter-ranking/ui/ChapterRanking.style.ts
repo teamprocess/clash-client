@@ -5,7 +5,10 @@ import SecondFrameIcon from "../assets/second-frame.svg";
 import ThirdFrameIcon from "../assets/third-frame.svg";
 import { palette } from "@/shared/config/theme";
 
-export const RankingContainer = styled.div`
+export type RankingPageEnum = "section" | "chapter";
+export type RankingPositionEnum = "top" | "bottom";
+
+export const RankingContainer = styled.div<{ $page: RankingPageEnum }>`
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -15,10 +18,10 @@ export const RankingContainer = styled.div`
   box-shadow: 0 0 7px 0 ${({ theme }) => theme.line.neutral};
   border-radius: 1.25rem;
   position: absolute;
-  top: 3rem;
+  top: ${({ $page }) => ($page === "section" ? "3rem" : $page === "chapter" ? "5rem" : 0)};
   left: 3rem;
   width: 16rem;
-  height: 39rem;
+  height: ${({ $page }) => ($page === "section" ? "39rem" : $page === "chapter" ? "37rem" : 0)};
   z-index: 100;
   padding: 1.6rem 0 0.8rem;
 `;
@@ -132,13 +135,13 @@ export const CompletedChapterCount = styled.span<{ $countColor }>`
           : "red"};
 `;
 
-export const RankingList = styled.div`
+export const RankingList = styled.div<{ $page: RankingPageEnum }>`
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
   width: 100%;
-  max-height: 22rem;
+  max-height: ${({ $page }) => ($page === "section" ? "22rem" : $page === "chapter" ? "20rem" : 0)};
   overflow-y: auto;
   padding-left: 8px;
   scrollbar-gutter: stable;
@@ -214,7 +217,7 @@ export const ItemRight = styled.div`
   text-align: center;
 `;
 
-export const MyRankingItem = styled.div<{ $position: "top" | "bottom" }>`
+export const MyRankingItem = styled.div<{ $position: RankingPositionEnum; $page: RankingPageEnum }>`
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -226,8 +229,14 @@ export const MyRankingItem = styled.div<{ $position: "top" | "bottom" }>`
   left: 50%;
   transform: translateX(-50%);
   z-index: 120;
-
-  ${({ $position }) => ($position === "top" ? `top: 15rem;` : `bottom: 1.45rem;`)}
+  ${({ $position, $page }) =>
+    $position === "top"
+      ? `
+        top: ${$page === "section" ? "15rem" : "15.53rem"};
+      `
+      : `
+        bottom: 1.45rem;
+      `}
 
   background: ${({ theme }) => theme.fill.neutral};
   border-radius: 0.5rem;

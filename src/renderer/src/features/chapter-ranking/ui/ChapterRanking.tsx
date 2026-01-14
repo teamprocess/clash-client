@@ -1,12 +1,13 @@
 import * as S from "./ChapterRanking.style";
 import Profile from "../assets/profile.svg?url";
 import { useChapterRanking } from "@/features/chapter-ranking/model/useChapterRanking";
+import { RankingPageEnum } from "./ChapterRanking.style";
 
-export const ChapterRanking = () => {
+export const ChapterRanking = ({ page }: { page: RankingPageEnum }) => {
   const { isMyRankVisible, stickyPosition, listRef, myData, rankingResponse, myRankRef } =
     useChapterRanking();
   return (
-    <S.RankingContainer>
+    <S.RankingContainer $page={page}>
       <S.RankingLabel>챕터 랭킹</S.RankingLabel>
       <S.RankingBox>
         <S.RankingTop3Box>
@@ -36,7 +37,7 @@ export const ChapterRanking = () => {
               </S.Top3RankerCard>
             ))}
         </S.RankingTop3Box>
-        <S.RankingList className="ranking-list-root" ref={listRef}>
+        <S.RankingList className="ranking-list-root" $page={page} ref={listRef}>
           {rankingResponse.data.allRankers
             .filter(user => user.rank > 3)
             .map(user => {
@@ -57,7 +58,7 @@ export const ChapterRanking = () => {
               );
             })}
           {!isMyRankVisible && (
-            <S.MyRankingItem $position={stickyPosition}>
+            <S.MyRankingItem $position={stickyPosition} $page={page}>
               <S.ItemLeft>
                 <S.Ranking>{myData.rank}</S.Ranking>
                 <S.UserBox>
