@@ -46,6 +46,7 @@ const months: { id: number; commit_count: number }[] = [
 ];
 
 // Rival
+
 interface RivalUser {
   name: string;
   username: string;
@@ -55,22 +56,19 @@ interface RivalUser {
   status: UserStatus;
 }
 
-interface RivalsResponse {
-  data: {
-    total_count: number;
-    my_rivals: RivalUser[];
-  };
-}
-
 export interface RivalsProps {
   user: RivalUser;
   getStatus: (status: UserStatus) => string;
 }
 
-// Rival
+export interface RivalsResponse {
+  data: {
+    my_rivals: RivalUser[];
+  };
+}
+
 const RivalsData: RivalsResponse = {
   data: {
-    total_count: 4,
     my_rivals: [
       {
         name: "멧돼지",
@@ -96,14 +94,14 @@ const RivalsData: RivalsResponse = {
         using_app: "Chrome",
         status: "OFFLINE",
       },
-      {
-        name: "권대형",
-        username: "gorani",
-        profile_image: "https://example.com/profile/gorani.png",
-        active_time: 14380,
-        using_app: "Notion",
-        status: "ONLINE",
-      },
+      // {
+      //   name: "권대형",
+      //   username: "gorani",
+      //   profile_image: "https://example.com/profile/gorani.png",
+      //   active_time: 14380,
+      //   using_app: "Notion",
+      //   status: "ONLINE",
+      // },
     ],
   },
 };
@@ -151,6 +149,7 @@ export const useHome = () => {
   const transitionMaxCommit = Math.max(commitTransitionData.yesterday, commitTransitionData.today);
   const maxActive = Math.max(activeTransitionData.yesterday, activeTransitionData.today);
 
+  // Rival
   const getStatus = (status: UserStatus) => {
     switch (status) {
       case "ONLINE":
@@ -163,6 +162,11 @@ export const useHome = () => {
         return "";
     }
   };
+
+  const [modalOpen, setModalOpen] = useState(false);
+
+  const handleOpen = () => setModalOpen(true);
+  const handleClose = () => setModalOpen(false);
 
   // Active
   const activeMaxCommit = Math.max(...months.map(m => m.commit_count));
@@ -233,6 +237,11 @@ export const useHome = () => {
     rival: {
       RivalsData,
       getStatus,
+      modalOpen,
+      setModalOpen,
+      handleOpen,
+      handleClose,
+      userList,
     },
     active: {
       commitDays,
