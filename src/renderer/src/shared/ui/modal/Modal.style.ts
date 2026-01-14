@@ -21,7 +21,7 @@ export const ModalContainer = styled.div<{ $width: number; $height: number }>`
   width: ${({ $width }) => $width}rem;
   height: ${({ $height }) => $height}rem;
   background-color: ${({ theme }) => theme.label.disable};
-  box-shadow: 0 0 7px 0 ${({ theme }) => theme.line.normal};
+  //box-shadow: 0 0 7px 0 ${({ theme }) => theme.line.normal};
 `;
 
 export const ModalHeader = styled.div`

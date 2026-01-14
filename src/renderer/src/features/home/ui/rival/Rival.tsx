@@ -46,26 +46,30 @@ export const Rival = ({
           isOpen={modalOpen}
           onClose={handleClose}
         >
-          <S.SearchBox>
-            <S.SearchUsers placeholder={"이름 또는 아이디 검색"} />
-            <S.SearchIconBox>
-              <S.SearchIcon />
-            </S.SearchIconBox>
-          </S.SearchBox>
-          <S.UserChoiceContainer>
-            {userList.map(user => (
-              <S.UserChoiceBox
-                key={user.name}
-                $isSelected={rivalSelectedId === user.name}
-                onClick={() => setRvalSelectedId(user.name)}
-              >
-                <S.ProfileContent style={{ height: "3.75rem" }}>
-                  <S.ProfileName>{user.name}</S.ProfileName>
-                  <S.ProfileMention>@{user.mention}</S.ProfileMention>
-                </S.ProfileContent>
-              </S.UserChoiceBox>
-            ))}
-          </S.UserChoiceContainer>
+          <div style={{ display: "flex", flexDirection: "column" }}>
+            <div>
+              <S.SearchBox>
+                <S.SearchUsers placeholder={"이름 또는 아이디 검색"} />
+                <S.SearchIconBox>
+                  <S.SearchIcon />
+                </S.SearchIconBox>
+              </S.SearchBox>
+              <S.UserChoiceContainer>
+                {userList.map(user => (
+                  <S.UserChoiceBox
+                    key={user.name}
+                    $isSelected={rivalSelectedId === user.name}
+                    onClick={() => setRvalSelectedId(user.name)}
+                  >
+                    <S.ProfileContent style={{ height: "3rem" }}>
+                      <S.ProfileName>{user.name}</S.ProfileName>
+                      <S.ProfileMention>@{user.mention}</S.ProfileMention>
+                    </S.ProfileContent>
+                  </S.UserChoiceBox>
+                ))}
+              </S.UserChoiceContainer>
+            </div>
+          </div>
           <S.BottomBox>
             <S.ButtonBox>
               <S.CloseButton>취소</S.CloseButton>

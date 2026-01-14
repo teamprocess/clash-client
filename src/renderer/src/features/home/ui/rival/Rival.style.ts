@@ -195,7 +195,7 @@ export const SearchBox = styled.div`
 export const SearchUsers = styled.input`
   width: 100%;
   height: 3.5rem;
-  padding: 0.5rem 0.75rem;
+  padding: 0.5rem 3.5rem 0.5rem 1rem;
   border-radius: 0.75rem;
   border: none;
   background-color: ${({ theme }) => theme.fill.alternative};
@@ -216,8 +216,8 @@ export const SearchIconBox = styled.div`
 
 export const SearchIcon = styled(Search)`
   position: absolute;
-  right: 0.75rem;
-  top: 50%;
+  right: 1rem;
+  top: 43%;
   transform: translateY(-50%);
   width: 1.85rem;
   height: 1.85rem;
@@ -228,8 +228,8 @@ export const UserChoiceContainer = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
-  height: 16rem;
-  overflow-y: scroll;
+  height: 12rem;
+  overflow-y: auto;
   scrollbar-width: none;
 `;
 
@@ -245,9 +245,10 @@ export const UserChoiceBox = styled.div<{ $isSelected: boolean }>`
 `;
 
 export const BottomBox = styled.div`
+  margin-top: 0.9rem;
   width: 100%;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   align-items: center;
   justify-content: flex-end;
 `;
