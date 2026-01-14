@@ -65,6 +65,8 @@ export const Rival = ({
                       <S.ProfileName>{user.name}</S.ProfileName>
                       <S.ProfileMention>@{user.mention}</S.ProfileMention>
                     </S.ProfileContent>
+
+                    {rivalSelectedId === user.name ? <S.CheckedIcon /> : <S.UncheckedBox />}
                   </S.UserChoiceBox>
                 ))}
               </S.UserChoiceContainer>
@@ -73,7 +75,7 @@ export const Rival = ({
           <S.BottomBox>
             <S.ButtonBox>
               <S.CloseButton>취소</S.CloseButton>
-              <S.CheckButton>확인</S.CheckButton>
+              <S.OkayButton>확인</S.OkayButton>
             </S.ButtonBox>
           </S.BottomBox>
         </Modal>
