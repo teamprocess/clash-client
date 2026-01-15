@@ -4,6 +4,7 @@ import Previous from "./assets/previous.svg";
 import Arrow from "./assets/arrow.svg";
 import Completed from "./assets/completed.svg";
 import NotCompleted from "./assets/not-completed.svg";
+import { palette } from "@/shared/config/theme";
 
 export const ChapterContainer = styled.div`
   width: 100%;
@@ -237,4 +238,45 @@ export const QuestionTitle = styled.span`
 export const QuestionPrefix = styled.span`
   ${font.headline1.medium}
   color: ${({ theme }) => theme.primary.normal};
+`;
+
+export const ModalBody = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+`;
+
+export const ButtonGroup = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 17rem;
+  gap: 0.75rem;
+`;
+
+export const AnswerOption = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 3.5rem;
+  background-color: ${palette.neutral["99"]};
+  ${font.headline1.medium}
+  color: ${palette.neutral["30"]};
+  border-radius: 0.75rem;
+`;
+
+export const ConfirmButton = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 3.5rem;
+  background-color: ${({ theme }) => theme.primary.normal};
+  ${font.label.medium};
+  color: ${palette.neutral["97"]};
+  border-radius: 0.75rem;
 `;

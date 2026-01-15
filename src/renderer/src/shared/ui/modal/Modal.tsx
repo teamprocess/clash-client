@@ -8,14 +8,23 @@ interface ModalProps {
   isOpen: boolean;
   onClose?: () => void;
   children?: ReactNode;
+  gap?: number;
 }
 
-export const Modal = ({ modalTitle, onClose, isOpen, $width, $height, children }: ModalProps) => {
+export const Modal = ({
+  modalTitle,
+  onClose,
+  isOpen,
+  $width,
+  $height,
+  children,
+  gap = 0,
+}: ModalProps) => {
   if (!isOpen) return null;
   return (
     <S.ModalOverlay>
-      <S.ModalContainer $width={$width} $height={$height}>
-        <S.ModalHeader>{modalTitle && <S.ModalTitle>{modalTitle}</S.ModalTitle>}</S.ModalHeader>
+      <S.ModalContainer $width={$width} $height={$height} $gap={gap}>
+        {modalTitle && <S.ModalTitle>{modalTitle}</S.ModalTitle>}
         {onClose && (
           <S.CloseButton onClick={onClose}>
             <S.CloseIcon />
