@@ -19,7 +19,7 @@ export const MainContainer = styled.div`
   flex-direction: column;
   align-items: center;
   width: 74.5rem;
-  height: 44.25rem;
+  height: 50rem;
   border-radius: 0.75rem;
   background-color: ${({ theme }) => theme.background.normal};
   overflow: hidden;
@@ -27,7 +27,6 @@ export const MainContainer = styled.div`
 
 export const FilterContainer = styled.div`
   flex-shrink: 0;
-
   display: flex;
   justify-content: space-between;
   padding: 1rem 1.5rem;
@@ -110,6 +109,8 @@ interface LayoutProps {
 export const ContentWrapper = styled.div<LayoutProps>`
   display: flex;
   width: 100%;
+  flex: 1;
+  min-height: 0;
   height: 100%;
 `;
 
@@ -119,15 +120,12 @@ export const CardContainer = styled.div<LayoutProps>`
   align-content: start;
   gap: 1rem;
   padding: 1.5rem;
-  margin: 0;
   width: ${({ $isPanelOpen }) => ($isPanelOpen ? "60%" : "100%")};
   height: 100%;
-  max-height: 50rem;
+  overflow-y: auto;
   transition:
     width 0.3s ease,
     grid-template-columns 0.3s ease;
-  box-sizing: border-box;
-  overflow-y: auto;
   &::after {
     content: "";
     display: block;
@@ -156,10 +154,9 @@ export const DetailPanel = styled.div`
   display: flex;
   flex-direction: column;
   width: 40%;
-  height: 44rem;
+  height: 100%;
   border-left: 1px solid ${({ theme }) => theme.line.neutral};
-  padding: 1.5rem;
-  padding-bottom: 5.25rem;
+  padding: 1.5rem 1.5rem 5.25rem 1.5rem;
   justify-content: space-between;
   align-items: flex-start;
   animation: slideIn 0.3s ease-out;

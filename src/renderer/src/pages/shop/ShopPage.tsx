@@ -1,25 +1,22 @@
 import * as S from "./ShopPage.style";
-import { useState } from "react";
 import { MainProducts } from "@/features/shop/ui/main/MainProducts";
-import { AllProducts } from "@/features/shop/ui/all/AllProducts";
-
-type ActiveTab = "MAIN" | "ALL";
+import { useNavigate } from "react-router-dom";
 
 export const ShopPage = () => {
-  const [activeTab, setActiveTab] = useState<ActiveTab>("MAIN");
+  const navigate = useNavigate();
+  const handleGoProducts = () => {
+    navigate("/shop/products");
+  };
 
   return (
     <S.ShopContainer>
       <S.MenuBox>
-        <S.MenuButton $isActive={activeTab === "MAIN"} onClick={() => setActiveTab("MAIN")}>
-          메인
-        </S.MenuButton>
-        <S.MenuButton $isActive={activeTab === "ALL"} onClick={() => setActiveTab("ALL")}>
+        <S.MenuButton $isActive={true}>메인</S.MenuButton>
+        <S.MenuButton $isActive={false} onClick={() => handleGoProducts()}>
           전체 상품 목록
         </S.MenuButton>
       </S.MenuBox>
-      {activeTab === "MAIN" && <MainProducts />}
-      {activeTab === "ALL" && <AllProducts />}
+      <MainProducts />
     </S.ShopContainer>
   );
 };
