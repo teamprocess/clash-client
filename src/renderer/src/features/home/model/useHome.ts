@@ -188,6 +188,11 @@ export const useHome = () => {
     });
   };
 
+  const handleModalClose = () => {
+    setRivalSelectedId([]); // 선택된 리스트 비우기
+    handleClose(); // 기존 모달 닫기 로직 실행
+  };
+
   // Active
   const activeMaxCommit = Math.max(...months.map(m => m.commit_count));
 
@@ -264,6 +269,7 @@ export const useHome = () => {
       userList,
       rivalSelectedId,
       handleUserSelect,
+      handleModalClose,
       // selectedCount: rivalSelectedId.length,
       // maxSelectableCount: 4 - RivalsData.data.my_rivals.length,
     },
