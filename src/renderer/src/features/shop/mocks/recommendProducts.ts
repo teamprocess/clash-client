@@ -1,4 +1,6 @@
-export const recommendProducts = {
+import { ProductListResponse } from "@/features/shop/mocks/popularityProducts";
+
+export const recommendProductsMock: ProductListResponse = {
   data: {
     products: [
       {
