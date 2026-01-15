@@ -86,14 +86,14 @@ const RivalsData: RivalsResponse = {
         using_app: "IntelliJ",
         status: "AWAY",
       },
-      {
-        name: "한승환",
-        username: "h.7xn",
-        profile_image: "https://example.com/profile/h7xn.png",
-        active_time: 9720,
-        using_app: "Chrome",
-        status: "OFFLINE",
-      },
+      // {
+      //   name: "한승환",
+      //   username: "h.7xn",
+      //   profile_image: "https://example.com/profile/h7xn.png",
+      //   active_time: 9720,
+      //   using_app: "Chrome",
+      //   status: "OFFLINE",
+      // },
       // {
       //   name: "권대형",
       //   username: "gorani",
@@ -168,7 +168,25 @@ export const useHome = () => {
   const handleOpen = () => setModalOpen(true);
   const handleClose = () => setModalOpen(false);
 
-  const [rivalSelectedId, setRvalSelectedId] = useState<string | null>(null);
+  const [rivalSelectedId, setRivalSelectedId] = useState<string[]>([]);
+
+  const handleUserSelect = (name: string) => {
+    const currentRivalCount = RivalsData.data.my_rivals.length;
+
+    const maxAvailableSlots = 4 - currentRivalCount;
+
+    setRivalSelectedId(prev => {
+      if (prev.includes(name)) {
+        return prev.filter(item => item !== name);
+      }
+
+      if (prev.length < maxAvailableSlots) {
+        return [...prev, name];
+      } else {
+        return prev;
+      }
+    });
+  };
 
   // Active
   const activeMaxCommit = Math.max(...months.map(m => m.commit_count));
@@ -245,7 +263,9 @@ export const useHome = () => {
       handleClose,
       userList,
       rivalSelectedId,
-      setRvalSelectedId,
+      handleUserSelect,
+      // selectedCount: rivalSelectedId.length,
+      // maxSelectableCount: 4 - RivalsData.data.my_rivals.length,
     },
     active: {
       commitDays,

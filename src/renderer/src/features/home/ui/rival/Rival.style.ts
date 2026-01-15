@@ -72,7 +72,14 @@ export const ProfileContent = styled.div`
   flex-direction: row;
   align-items: center;
   justify-content: flex-start;
-  gap: 0.5rem;
+  gap: 0.75rem;
+`;
+
+export const ProfileTagBox = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.125rem;
 `;
 
 export const ProfileIcon = styled(Profile)`
