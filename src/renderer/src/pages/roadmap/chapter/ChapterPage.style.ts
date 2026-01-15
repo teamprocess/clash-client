@@ -155,11 +155,13 @@ export const MissionBox = styled.div`
 export const CompletedLogo = styled(Completed)`
   width: 1.5rem;
   height: 1.5rem;
+  cursor: pointer;
 `;
 
 export const NotCompletedLogo = styled(NotCompleted)`
   width: 1.5rem;
   height: 1.5rem;
+  cursor: pointer;
 `;
 
 export const MissionLabel = styled.span`
