@@ -5,6 +5,7 @@ import { SectionProgress } from "@/features/section-progress";
 import { Link } from "react-router-dom";
 import { Roadmap } from "@/features/chapter/components/Roadmap";
 import { Stage, stagesData } from "@/features/chapter/mocks/missionData";
+import { Modal } from "@/shared/ui/modal/Modal";
 
 const User = {
   currentSection: "리액트 초급",
@@ -12,7 +13,7 @@ const User = {
 export const ChapterPage = () => {
   const chapterRef = useRef<HTMLDivElement>(null);
   const [currentStage, setCurrentStage] = useState<Stage>(stagesData[0]);
-  console.log(currentStage);
+  const [modalOpen, setModalOpen] = useState(true);
 
   const handleScroll = () => {
     if (!chapterRef.current) return;
@@ -40,6 +41,10 @@ export const ChapterPage = () => {
       chapter.removeEventListener("scroll", handleScroll);
     };
   }, []);
+
+  const closeModal = () => {
+    setModalOpen(false);
+  };
 
   return (
     <S.ChapterContainer>
@@ -83,6 +88,13 @@ export const ChapterPage = () => {
           ))}
         </S.MissionList>
       </S.MissionContainer>
+      <Modal
+        modalTitle={" "}
+        $width={24}
+        $height={32}
+        isOpen={modalOpen}
+        onClose={closeModal}
+      ></Modal>
     </S.ChapterContainer>
   );
 };
