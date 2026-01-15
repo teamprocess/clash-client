@@ -9,10 +9,10 @@ export interface Node {
 }
 
 export const roadmapNodes: Node[] = [
-  { id: 1, x: 130, y: 940, status: "completed", stars: 2 },
-  { id: 2, x: 400, y: 920, status: "completed", stars: 3 },
-  { id: 3, x: 660, y: 910, status: "completed", stars: 1 },
-  { id: 4, x: 850, y: 740, status: "current" },
+  { id: 1, x: 130, y: 940, status: "current" },
+  { id: 2, x: 400, y: 920, status: "locked" },
+  { id: 3, x: 660, y: 910, status: "locked" },
+  { id: 4, x: 850, y: 740, status: "locked" },
   { id: 5, x: 740, y: 540, status: "locked" },
   { id: 6, x: 500, y: 490, status: "locked" },
   { id: 7, x: 260, y: 460, status: "locked" },
