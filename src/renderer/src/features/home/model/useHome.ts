@@ -192,8 +192,14 @@ export const useHome = () => {
   };
 
   const handleModalClose = () => {
-    setRivalSelectedId([]); // 선택된 리스트 비우기
-    handleClose(); // 기존 모달 닫기 로직 실행
+    setRivalSelectedId([]);
+    handleClose();
+  };
+
+  // TODO: 확인 버튼 누를 시, POST할 데이터배열에 삽입 시키는 버튼
+  const handleRivalCreate = () => {
+    setRivalSelectedId([]);
+    handleClose();
   };
 
   // Active
@@ -273,6 +279,10 @@ export const useHome = () => {
       rivalSelectedId,
       handleUserSelect,
       handleModalClose,
+      handleRivalCreate,
+
+      // 나중에 업데이트 시 추가할 인원의 수와 목록을 보여주는 시스템으로 개선하기 위해 놔둔
+      // 총 선택한 명수, 남은 선택 가능 수에 대한 데이터
       // selectedCount: rivalSelectedId.length,
       // maxSelectableCount: 4 - RivalsData.data.my_rivals.length,
     },
