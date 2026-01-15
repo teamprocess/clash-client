@@ -19,10 +19,6 @@ interface IconProps {
 export const NodeGroup = styled.g`
   cursor: pointer;
   transition: transform 0.2s;
-
-  &:hover {
-    transform: scale(1.1);
-  }
 `;
 
 export const NodeCircle = styled.circle<NodeCircleProps>`
@@ -43,23 +39,11 @@ export const NodeCircle = styled.circle<NodeCircleProps>`
   stroke-width: 5;
 `;
 
-export const CheckMark = styled.text`
-  font-size: 28px;
-  font-weight: bold;
-  fill: white;
-  user-select: none;
-  pointer-events: none;
-`;
-
 export const NodeNumber = styled.text`
   ${font.display1.medium};
   fill: ${palette.neutral["97"]};
   user-select: none;
   pointer-events: none;
-`;
-
-export const Star = styled.text`
-  font-size: 20px;
 `;
 
 export const CheckIcon = styled(CheckImg).attrs((props: IconProps) => ({

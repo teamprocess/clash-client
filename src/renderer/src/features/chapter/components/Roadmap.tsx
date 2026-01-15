@@ -2,14 +2,23 @@ import { roadmapNodes } from "../roadmapData";
 import { generatePath } from "../utils/pathGenerator";
 import { RoadmapNode } from "../components/RoadmapNode";
 import * as S from "./Roadmap.style";
+import { Dispatch, SetStateAction } from "react";
+import { Stage, stagesData } from "@/features/chapter/mocks/missionData";
 
-export const Roadmap = () => {
+interface RoadmapProps {
+  stageSetFn: Dispatch<SetStateAction<Stage>>;
+}
+
+export const Roadmap = ({ stageSetFn }: RoadmapProps) => {
   const allPath = generatePath(roadmapNodes);
   const completedNodes = roadmapNodes.filter(n => n.status === "completed");
   const completedPath = generatePath(completedNodes);
 
   const handleNodeClick = (nodeId: number) => {
-    console.log("Node clicked:", nodeId);
+    if (roadmapNodes.find(node => node.id === nodeId)?.status === "locked") return;
+    const selectedStage = stagesData.find(s => s.id == nodeId);
+    if (!selectedStage) return;
+    stageSetFn(selectedStage);
   };
 
   return (
