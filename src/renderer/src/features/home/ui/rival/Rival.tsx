@@ -11,7 +11,7 @@ export const Rival = ({
   handleClose,
   userList,
   rivalSelectedId,
-  setRvalSelectedId,
+  handleUserSelect,
 }: RivalProps) => {
   return (
     <S.RivalContainer>
@@ -57,15 +57,18 @@ export const Rival = ({
                 {userList.map(user => (
                   <S.UserChoiceBox
                     key={user.name}
-                    $isSelected={rivalSelectedId === user.name}
-                    onClick={() => setRvalSelectedId(user.name)}
+                    $isSelected={rivalSelectedId.includes(user.name)}
+                    onClick={() => handleUserSelect(user.name)}
                   >
                     <S.ProfileContent style={{ height: "3rem" }}>
-                      <S.ProfileName>{user.name}</S.ProfileName>
-                      <S.ProfileMention>@{user.mention}</S.ProfileMention>
+                      <S.ProfileIcon />
+                      <S.ProfileTagBox>
+                        <S.ProfileName>{user.name}</S.ProfileName>
+                        <S.ProfileMention>@{user.mention}</S.ProfileMention>
+                      </S.ProfileTagBox>
                     </S.ProfileContent>
 
-                    {rivalSelectedId === user.name ? <S.CheckedIcon /> : <S.UncheckedBox />}
+                    {rivalSelectedId.includes(user.name) ? <S.CheckedIcon /> : <S.UncheckedBox />}
                   </S.UserChoiceBox>
                 ))}
               </S.UserChoiceContainer>
