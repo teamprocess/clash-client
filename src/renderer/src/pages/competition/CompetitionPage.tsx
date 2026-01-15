@@ -1,7 +1,19 @@
 import * as S from "./CompetitionPage.style";
 import { useState } from "react";
+import { GrowthRate } from "@/features/home/ui/compare/growth-rate/GrowthRate";
 
 type CompeteTab = "ME" | "RIVAL";
+
+interface CompareDataProps {
+  earned_exp: number;
+  study_time: number;
+  github_attributor: number;
+}
+
+interface TotalCompareData {
+  beforeMyCompareData: CompareDataProps[];
+  nowMyCompareData: CompareDataProps[];
+}
 
 const data: { date: number; growth_rate: number }[] = [
   { date: 1, growth_rate: 31 },
@@ -18,10 +30,29 @@ const data: { date: number; growth_rate: number }[] = [
   { date: 12, growth_rate: 21 },
 ];
 
+const allData: TotalCompareData = {
+  beforeMyCompareData: [
+    {
+      earned_exp: 120.5,
+      study_time: 4.5,
+      github_attributor: 15,
+    },
+  ],
+  nowMyCompareData: [
+    {
+      earned_exp: 140.2,
+      study_time: 5.2,
+      github_attributor: 12,
+    },
+  ],
+};
+
 const activeMaxCommit = Math.max(...data.map(m => m.growth_rate));
 
 export const CompetitionPage = () => {
   const [activeTab, setActiveTab] = useState<CompeteTab>("ME");
+
+  const [ActiveDropdown, setActiveDropdown] = useState("어제");
 
   return (
     <S.Wrapper>
@@ -72,7 +103,7 @@ export const CompetitionPage = () => {
                         <S.EXPIcon />
                         <S.ExplainText>총 획득 EXP</S.ExplainText>
                       </S.ImpressiveBox>
-                      <S.DataText>412.9 EXP</S.DataText>
+                      <S.DataText>{allData.nowMyCompareData[0].earned_exp} EXP</S.DataText>
                     </S.DataBoxing>
                   </S.GridBox>
                   <S.GridBox>
@@ -81,7 +112,7 @@ export const CompetitionPage = () => {
                         <S.RecordIcon />
                         <S.ExplainText>학습시간</S.ExplainText>
                       </S.ImpressiveBox>
-                      <S.DataText>4.2시간</S.DataText>
+                      <S.DataText>{allData.nowMyCompareData[0].study_time} 시간</S.DataText>
                     </S.DataBoxing>
                   </S.GridBox>
                   <S.GridBox>
@@ -94,7 +125,7 @@ export const CompetitionPage = () => {
                           문제 해결 수
                         </S.ExplainText>
                       </S.ImpressiveBox>
-                      <S.DataText>2.3 문제</S.DataText>
+                      <S.DataText>0 문제</S.DataText>
                     </S.DataBoxing>
                   </S.GridBox>
                   <S.GridBox>
@@ -107,7 +138,7 @@ export const CompetitionPage = () => {
                           기여수
                         </S.ExplainText>
                       </S.ImpressiveBox>
-                      <S.DataText>24.2</S.DataText>
+                      <S.DataText>{allData.nowMyCompareData[0].github_attributor}</S.DataText>
                     </S.DataBoxing>
                   </S.GridBox>
                 </S.GridContainer>
@@ -115,7 +146,19 @@ export const CompetitionPage = () => {
               <S.CompareBox>
                 <S.TextBox>
                   <S.CompareBoxTitle>비교2</S.CompareBoxTitle>
-                  <S.DateText>오늘</S.DateText>
+                  <S.SelectWrapper>
+                    <S.Select
+                      value={ActiveDropdown}
+                      onChange={e => setActiveDropdown(e.target.value)}
+                    >
+                      {["어제", "일주일 전", "한달 전", "전 시즌"].map(option => (
+                        <S.Option key={option} value={option}>
+                          {option}
+                        </S.Option>
+                      ))}
+                    </S.Select>
+                    <S.ArrowIcon />
+                  </S.SelectWrapper>
                 </S.TextBox>
                 <S.GridContainer>
                   <S.GridBox>
@@ -124,7 +167,13 @@ export const CompetitionPage = () => {
                         <S.EXPIcon />
                         <S.ExplainText>총 획득 EXP</S.ExplainText>
                       </S.ImpressiveBox>
-                      <S.DataText>412.9 EXP</S.DataText>
+                      <S.GrowthRateBox>
+                        <S.DataText>{allData.beforeMyCompareData[0].earned_exp} EXP</S.DataText>
+                        <GrowthRate
+                          yesterday={allData.nowMyCompareData[0].earned_exp}
+                          today={allData.beforeMyCompareData[0].earned_exp}
+                        />
+                      </S.GrowthRateBox>
                     </S.DataBoxing>
                   </S.GridBox>
                   <S.GridBox>
@@ -133,7 +182,13 @@ export const CompetitionPage = () => {
                         <S.RecordIcon />
                         <S.ExplainText>학습시간</S.ExplainText>
                       </S.ImpressiveBox>
-                      <S.DataText>4.2시간</S.DataText>
+                      <S.GrowthRateBox>
+                        <S.DataText>{allData.beforeMyCompareData[0].study_time} 시간</S.DataText>
+                        <GrowthRate
+                          yesterday={allData.nowMyCompareData[0].study_time}
+                          today={allData.beforeMyCompareData[0].study_time}
+                        />
+                      </S.GrowthRateBox>
                     </S.DataBoxing>
                   </S.GridBox>
                   <S.GridBox>
@@ -146,7 +201,7 @@ export const CompetitionPage = () => {
                           문제 해결 수
                         </S.ExplainText>
                       </S.ImpressiveBox>
-                      <S.DataText>2.3 문제</S.DataText>
+                      <S.DataText>0 문제</S.DataText>
                     </S.DataBoxing>
                   </S.GridBox>
                   <S.GridBox>
@@ -159,7 +214,13 @@ export const CompetitionPage = () => {
                           기여수
                         </S.ExplainText>
                       </S.ImpressiveBox>
-                      <S.DataText>24.2</S.DataText>
+                      <S.GrowthRateBox>
+                        <S.DataText>{allData.beforeMyCompareData[0].github_attributor}</S.DataText>
+                        <GrowthRate
+                          yesterday={allData.nowMyCompareData[0].github_attributor}
+                          today={allData.beforeMyCompareData[0].github_attributor}
+                        />
+                      </S.GrowthRateBox>
                     </S.DataBoxing>
                   </S.GridBox>
                 </S.GridContainer>
