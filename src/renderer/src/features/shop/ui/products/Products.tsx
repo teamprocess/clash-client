@@ -1,30 +1,13 @@
-import { useState, useEffect } from "react";
-import * as S from "./AllProducts.style";
-import { MajorInfoWrapper, ProductCategoryText, ProductTitleDetail } from "./AllProducts.style";
-import { allProducts } from "@/features/shop/mocks/allProducts";
+import * as S from "./Products.style";
+import { calculateDiscountedPrice } from "@/features/shop/lib/calculateDiscountedPrice";
+import { UseProducts } from "@/features/shop/model/useProducts";
 
-export const AllProducts = () => {
-  const [selectedId, setSelectedId] = useState<number | null>(null);
-
-  const handleCardClick = (id: number) => {
-    setSelectedId(selectedId === id ? null : id);
-  };
-
-  const selectedProduct = allProducts.data.products.find(product => product.id === selectedId);
-
-  const isPanelOpen = selectedId !== null;
-
-  useEffect(() => {
-    if (isPanelOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "unset";
-    }
-    return () => {
-      document.body.style.overflow = "unset";
-    };
-  }, [isPanelOpen]);
-
+export const Products = ({
+  isPanelOpen,
+  handleCardClick,
+  selectedProduct,
+  allProducts,
+}: UseProducts) => {
   return (
     <S.MainContainer>
       <S.FilterContainer>
@@ -64,7 +47,7 @@ export const AllProducts = () => {
                 <S.PriceBox>
                   {product.type === "TOKEN" ? <S.TokenIcon /> : <S.CookieIcon />}
                   <S.PriceText>
-                    {(product.price * (1 - product.discount * 0.01)).toLocaleString()}
+                    {calculateDiscountedPrice(product.price, product.discount)}
                   </S.PriceText>
                   {product.discount !== 0 && (
                     <S.DiscountText>{`(-${product.discount}%)`}</S.DiscountText>
@@ -78,18 +61,15 @@ export const AllProducts = () => {
           <S.DetailPanel>
             <S.InfoContainer>
               <S.ProductImg $imgUrl={selectedProduct.image} />
-              <MajorInfoWrapper>
-                <ProductTitleDetail>{selectedProduct.title}</ProductTitleDetail>
-                <ProductCategoryText>
+              <S.MajorInfoWrapper>
+                <S.ProductTitleDetail>{selectedProduct.title}</S.ProductTitleDetail>
+                <S.ProductCategoryText>
                   {`유형 : ${selectedProduct.category === "INSIGNIA" ? "휘장" : selectedProduct.category === "NAMEPLATE" ? "이름표" : "배너"}`}
-                </ProductCategoryText>
+                </S.ProductCategoryText>
                 <S.PriceBoxDetail>
                   {selectedProduct.type === "TOKEN" ? <S.TokenIcon /> : <S.CookieIcon />}
                   <S.PriceTextDetail>
-                    {(
-                      selectedProduct.price *
-                      (1 - selectedProduct.discount * 0.01)
-                    ).toLocaleString()}
+                    {calculateDiscountedPrice(selectedProduct.price, selectedProduct.discount)}
                   </S.PriceTextDetail>
                   {selectedProduct.discount !== 0 && (
                     <S.DiscountTextDetail>{`(-${selectedProduct.discount}%)`}</S.DiscountTextDetail>
@@ -99,11 +79,11 @@ export const AllProducts = () => {
                   <S.DescriptionTitle>설명</S.DescriptionTitle>
                   {selectedProduct.description}
                 </S.DescriptionBox>
-              </MajorInfoWrapper>
+              </S.MajorInfoWrapper>
             </S.InfoContainer>
             <S.PurchaseBtn>
               {selectedProduct.type === "TOKEN" ? <S.TokenIcon /> : <S.CookieIcon />}
-              {`${(selectedProduct.price * (1 - selectedProduct.discount * 0.01)).toLocaleString()}에 구매하기`}
+              {`${calculateDiscountedPrice(selectedProduct.price, selectedProduct.discount)}에 구매하기`}
             </S.PurchaseBtn>
           </S.DetailPanel>
         )}

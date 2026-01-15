@@ -1,4 +1,29 @@
-export const popularityProducts = {
+export type ProductCategory = "INSIGNIA" | "NAMEPLATE" | "BANNER";
+export type ProductCurrency = "TOKEN" | "COOKIE";
+
+export interface Product {
+  id: number;
+  title: string;
+  category: ProductCategory;
+  image: string;
+  type: ProductCurrency;
+  price: number;
+  discount: number;
+  popularity: number;
+  season: string | null; // null이 들어올 수 있으므로 허용
+  is_seasonal: boolean;
+  created_at: string;
+}
+
+export interface ProductListResponse {
+  data: {
+    products: Product[];
+  };
+  message: string;
+  success: boolean;
+}
+
+export const popularityProductsMock: ProductListResponse = {
   data: {
     products: [
       {
