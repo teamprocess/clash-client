@@ -15,20 +15,15 @@ export const ModalOverlay = styled.div`
   background: rgba(0, 0, 0, 0.5);
 `;
 
-export const ModalContainer = styled.div<{ $width: number; $height: number }>`
+export const ModalContainer = styled.div<{ $width: number; $height: number; $gap: number }>`
   padding: 1.25rem;
   border-radius: 1.25rem;
   width: ${({ $width }) => $width}rem;
   height: ${({ $height }) => $height}rem;
   background-color: ${({ theme }) => theme.label.disable};
   position: relative;
-`;
-
-export const ModalHeader = styled.div`
   display: flex;
-  flex-direction: row;
-  align-items: center;
-  width: 100%;
+  gap: ${({ $gap }) => $gap}rem;
 `;
 
 export const ModalTitle = styled.p`

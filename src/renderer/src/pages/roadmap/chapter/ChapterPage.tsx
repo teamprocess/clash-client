@@ -6,14 +6,18 @@ import { Link } from "react-router-dom";
 import { Roadmap } from "@/features/chapter/components/Roadmap";
 import { Stage, stagesData } from "@/features/chapter/mocks/missionData";
 import { Modal } from "@/shared/ui/modal/Modal";
+import { questionData } from "@/features/chapter/mocks/questionData";
 
 const User = {
   currentSection: "리액트 초급",
 };
+
 export const ChapterPage = () => {
   const chapterRef = useRef<HTMLDivElement>(null);
   const [currentStage, setCurrentStage] = useState<Stage>(stagesData[0]);
   const [modalOpen, setModalOpen] = useState(true);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const currentQuestion = questionData[currentIndex];
 
   const handleScroll = () => {
     if (!chapterRef.current) return;
@@ -88,23 +92,45 @@ export const ChapterPage = () => {
           ))}
         </S.MissionList>
       </S.MissionContainer>
-      <Modal $width={24} $height={32} isOpen={modalOpen} onClose={closeModal}>
+      <Modal $width={24} $height={32} isOpen={modalOpen} onClose={closeModal} gap={40}>
         <S.ModalTop>
           <S.ProgressBarWrapper>
             <S.BarBackground>
-              <S.BarActive $fill={20} />
+              <S.BarActive $fill={((currentIndex + 1) / questionData.length) * 100} />
             </S.BarBackground>
             <S.ProgressLabelBox>
-              <S.CurrentProgress>1</S.CurrentProgress>/<S.TotalQuestions>5</S.TotalQuestions>
+              <S.CurrentProgress>{currentIndex + 1}</S.CurrentProgress>/
+              <S.TotalQuestions>{questionData.length}</S.TotalQuestions>
             </S.ProgressLabelBox>
           </S.ProgressBarWrapper>
+
           <S.QuestionWrapper>
             <S.QuestionTitle>
               <S.QuestionPrefix>Q. </S.QuestionPrefix>
-              React에서 함수형 컴포넌트의 상태를 관리하기 위해 사용하는 훅의 이름은?
+              {currentQuestion.title}
             </S.QuestionTitle>
           </S.QuestionWrapper>
         </S.ModalTop>
+
+        <S.ModalBody>
+          <S.ButtonGroup>
+            {currentQuestion.choices.map(choice => (
+              <S.AnswerOption key={choice.id}>{choice.text}</S.AnswerOption>
+            ))}
+
+            <S.ConfirmButton
+              onClick={() => {
+                if (currentIndex < questionData.length - 1) {
+                  setCurrentIndex(prev => prev + 1);
+                } else {
+                  closeModal();
+                }
+              }}
+            >
+              다음
+            </S.ConfirmButton>
+          </S.ButtonGroup>
+        </S.ModalBody>
       </Modal>
     </S.ChapterContainer>
   );
