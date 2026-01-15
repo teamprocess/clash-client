@@ -19,6 +19,16 @@ export const ChapterPage = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const currentQuestion = questionData[currentIndex];
 
+  const [answers, setAnswers] = useState<Record<number, number>>({});
+  const selectedChoiceId = answers[currentIndex];
+
+  const handleSelectChoice = (choiceId: number) => {
+    setAnswers(prev => ({
+      ...prev,
+      [currentIndex]: choiceId,
+    }));
+  };
+
   const handleScroll = () => {
     if (!chapterRef.current) return;
     const child = chapterRef.current.childNodes.item(0) as HTMLDivElement;
@@ -115,11 +125,19 @@ export const ChapterPage = () => {
         <S.ModalBody>
           <S.ButtonGroup>
             {currentQuestion.choices.map(choice => (
-              <S.AnswerOption key={choice.id}>{choice.text}</S.AnswerOption>
+              <S.AnswerOption
+                key={choice.id}
+                $selected={selectedChoiceId === choice.id}
+                onClick={() => handleSelectChoice(choice.id)}
+              >
+                {choice.text}
+              </S.AnswerOption>
             ))}
 
             <S.ConfirmButton
               onClick={() => {
+                if (selectedChoiceId == null) return;
+
                 if (currentIndex < questionData.length - 1) {
                   setCurrentIndex(prev => prev + 1);
                 } else {
@@ -127,7 +145,7 @@ export const ChapterPage = () => {
                 }
               }}
             >
-              다음
+              선택 완료하기
             </S.ConfirmButton>
           </S.ButtonGroup>
         </S.ModalBody>

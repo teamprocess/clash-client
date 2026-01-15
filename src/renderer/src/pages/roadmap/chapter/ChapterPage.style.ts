@@ -254,20 +254,21 @@ export const ButtonGroup = styled.div`
   justify-content: center;
   align-items: center;
   width: 16.25rem;
-  gap: 0.75rem;
+  gap: 0.5rem;
 `;
 
-export const AnswerOption = styled.div`
+export const AnswerOption = styled.div<{ $selected: boolean }>`
   display: flex;
   align-items: center;
   justify-content: center;
   width: 100%;
-  height: 3.25rem;
+  height: 3.4rem;
   background-color: ${palette.neutral["99"]};
   ${font.headline1.medium}
   color: ${palette.neutral["30"]};
   border-radius: 0.75rem;
   cursor: pointer;
+  border: 3px solid ${({ $selected, theme }) => ($selected ? theme.primary.normal : "transparent")};
 `;
 
 export const ConfirmButton = styled.div`
@@ -275,7 +276,7 @@ export const ConfirmButton = styled.div`
   align-items: center;
   justify-content: center;
   width: 100%;
-  height: 3.25rem;
+  height: 3.4rem;
   background-color: ${({ theme }) => theme.primary.normal};
   ${font.label.medium};
   color: ${palette.neutral["97"]};
