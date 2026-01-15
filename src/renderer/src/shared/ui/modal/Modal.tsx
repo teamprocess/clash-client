@@ -23,14 +23,14 @@ export const Modal = ({
   if (!isOpen) return null;
   return (
     <S.ModalOverlay>
-      <S.ModalContainer $width={$width} $height={$height} $gap={gap}>
+      <S.ModalContainer $width={$width} $height={$height}>
         {modalTitle && <S.ModalTitle>{modalTitle}</S.ModalTitle>}
         {onClose && (
           <S.CloseButton onClick={onClose}>
             <S.CloseIcon />
           </S.CloseButton>
         )}
-        <S.ModalContent>{children}</S.ModalContent>
+        <S.ModalContent $gap={gap}>{children}</S.ModalContent>
       </S.ModalContainer>
     </S.ModalOverlay>
   );
