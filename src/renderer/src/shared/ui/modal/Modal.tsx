@@ -15,14 +15,12 @@ export const Modal = ({ modalTitle, onClose, isOpen, $width, $height, children }
   return (
     <S.ModalOverlay>
       <S.ModalContainer $width={$width} $height={$height}>
-        <S.ModalHeader>
-          {modalTitle && <S.ModalTitle>{modalTitle}</S.ModalTitle>}
-          {onClose && (
-            <S.CloseButton onClick={onClose}>
-              <S.CloseIcon />
-            </S.CloseButton>
-          )}
-        </S.ModalHeader>
+        <S.ModalHeader>{modalTitle && <S.ModalTitle>{modalTitle}</S.ModalTitle>}</S.ModalHeader>
+        {onClose && (
+          <S.CloseButton onClick={onClose}>
+            <S.CloseIcon />
+          </S.CloseButton>
+        )}
         <S.ModalContent>{children}</S.ModalContent>
       </S.ModalContainer>
     </S.ModalOverlay>

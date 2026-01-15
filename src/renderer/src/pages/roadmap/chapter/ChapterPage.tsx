@@ -88,13 +88,7 @@ export const ChapterPage = () => {
           ))}
         </S.MissionList>
       </S.MissionContainer>
-      <Modal
-        modalTitle={" "}
-        $width={24}
-        $height={32}
-        isOpen={modalOpen}
-        onClose={closeModal}
-      ></Modal>
+      <Modal $width={24} $height={32} isOpen={modalOpen} onClose={closeModal}></Modal>
     </S.ChapterContainer>
   );
 };
