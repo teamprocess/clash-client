@@ -13,6 +13,7 @@ export const Rival = ({
   rivalSelectedId,
   handleUserSelect,
   handleModalClose,
+  handleRivalCreate,
 }: RivalProps) => {
   return (
     <S.RivalContainer>
@@ -78,7 +79,7 @@ export const Rival = ({
           <S.BottomBox>
             <S.ButtonBox>
               <S.CloseButton onClick={handleModalClose}>취소</S.CloseButton>
-              <S.OkayButton onClick={handleModalClose}>확인</S.OkayButton>
+              <S.OkayButton onClick={handleRivalCreate}>확인</S.OkayButton>
             </S.ButtonBox>
           </S.BottomBox>
         </Modal>
