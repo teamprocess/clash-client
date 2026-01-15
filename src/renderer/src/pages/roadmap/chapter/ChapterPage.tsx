@@ -92,7 +92,7 @@ export const ChapterPage = () => {
           ))}
         </S.MissionList>
       </S.MissionContainer>
-      <Modal $width={24} $height={32} isOpen={modalOpen} onClose={closeModal} gap={2}>
+      <Modal $width={25} $height={34} isOpen={modalOpen} onClose={closeModal} gap={3}>
         <S.ModalTop>
           <S.ProgressBarWrapper>
             <S.BarBackground>
