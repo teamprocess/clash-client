@@ -1,9 +1,11 @@
-// RoadmapNode.style.tsx
 import styled from "styled-components";
-import CheckImg from "../assets/check.svg";
-import LockImg from "../assets/lock.svg";
 import { font } from "@/shared/config/font";
 import { palette } from "@/shared/config/theme";
+import CheckImg from "../assets/check.svg";
+import LockImg from "../assets/lock.svg";
+import Star1Img from "../assets/star1.svg";
+import Star2Img from "../assets/star2.svg";
+import Star3Img from "../assets/star3.svg";
 
 interface NodeCircleProps {
   $status: "completed" | "current" | "locked";
@@ -68,6 +70,27 @@ export const CheckIcon = styled(CheckImg).attrs((props: IconProps) => ({
 `;
 
 export const LockIcon = styled(LockImg).attrs((props: IconProps) => ({
+  width: props.$width,
+  height: props.$height,
+}))<IconProps>`
+  pointer-events: none;
+`;
+
+export const Star1Icon = styled(Star1Img).attrs((props: IconProps) => ({
+  width: props.$width,
+  height: props.$height,
+}))<IconProps>`
+  pointer-events: none;
+`;
+
+export const Star2Icon = styled(Star2Img).attrs((props: IconProps) => ({
+  width: props.$width,
+  height: props.$height,
+}))<IconProps>`
+  pointer-events: none;
+`;
+
+export const Star3Icon = styled(Star3Img).attrs((props: IconProps) => ({
   width: props.$width,
   height: props.$height,
 }))<IconProps>`

@@ -5,7 +5,7 @@ export const RoadmapSvg = styled.svg`
   height: 100%;
 `;
 
-export const PathLine = styled.path<{ $isCompleted: boolean }>`
+export const PathLine = styled.path`
   fill: none;
   stroke: ${({ theme }) => theme.fill.alternative};
   stroke-width: 12;

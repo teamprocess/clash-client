@@ -232,11 +232,11 @@ export const MyRankingItem = styled.div<{ $position: RankingPositionEnum; $page:
   ${({ $position, $page }) => {
     if ($position === "top") {
       return `
-      top: ${$page === "section" ? "15rem" : "14.8rem"};
+      top: ${$page === "section" ? "15.5rem" : "14.8rem"};
     `;
     }
     return `
-    bottom: ${$page === "section" ? "1.45rem" : "1rem"};
+    bottom: ${$page === "section" ? "0.8rem" : "1rem"};
   `;
   }}
 
