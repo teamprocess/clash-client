@@ -46,6 +46,7 @@ const months: { id: number; commit_count: number }[] = [
 ];
 
 // Rival
+
 interface RivalUser {
   name: string;
   username: string;
@@ -55,22 +56,19 @@ interface RivalUser {
   status: UserStatus;
 }
 
-interface RivalsResponse {
-  data: {
-    total_count: number;
-    my_rivals: RivalUser[];
-  };
-}
-
 export interface RivalsProps {
   user: RivalUser;
   getStatus: (status: UserStatus) => string;
 }
 
-// Rival
+export interface RivalsResponse {
+  data: {
+    my_rivals: RivalUser[];
+  };
+}
+
 const RivalsData: RivalsResponse = {
   data: {
-    total_count: 4,
     my_rivals: [
       {
         name: "멧돼지",
@@ -88,22 +86,22 @@ const RivalsData: RivalsResponse = {
         using_app: "IntelliJ",
         status: "AWAY",
       },
-      {
-        name: "한승환",
-        username: "h.7xn",
-        profile_image: "https://example.com/profile/h7xn.png",
-        active_time: 9720,
-        using_app: "Chrome",
-        status: "OFFLINE",
-      },
-      {
-        name: "권대형",
-        username: "gorani",
-        profile_image: "https://example.com/profile/gorani.png",
-        active_time: 14380,
-        using_app: "Notion",
-        status: "ONLINE",
-      },
+      // {
+      //   name: "한승환",
+      //   username: "h.7xn",
+      //   profile_image: "https://example.com/profile/h7xn.png",
+      //   active_time: 9720,
+      //   using_app: "Chrome",
+      //   status: "OFFLINE",
+      // },
+      // {
+      //   name: "권대형",
+      //   username: "gorani",
+      //   profile_image: "https://example.com/profile/gorani.png",
+      //   active_time: 14380,
+      //   using_app: "Notion",
+      //   status: "ONLINE",
+      // },
     ],
   },
 };
@@ -151,6 +149,7 @@ export const useHome = () => {
   const transitionMaxCommit = Math.max(commitTransitionData.yesterday, commitTransitionData.today);
   const maxActive = Math.max(activeTransitionData.yesterday, activeTransitionData.today);
 
+  // Rival
   const getStatus = (status: UserStatus) => {
     switch (status) {
       case "ONLINE":
@@ -162,6 +161,45 @@ export const useHome = () => {
       default:
         return "";
     }
+  };
+
+  const [modalOpen, setModalOpen] = useState(false);
+
+  const handleOpen = () => setModalOpen(true);
+  const handleClose = () => {
+    setModalOpen(false);
+    setRivalSelectedId([]);
+  };
+
+  const [rivalSelectedId, setRivalSelectedId] = useState<string[]>([]);
+
+  const handleUserSelect = (name: string) => {
+    const currentRivalCount = RivalsData.data.my_rivals.length;
+
+    const maxAvailableSlots = 4 - currentRivalCount;
+
+    setRivalSelectedId(prev => {
+      if (prev.includes(name)) {
+        return prev.filter(item => item !== name);
+      }
+
+      if (prev.length < maxAvailableSlots) {
+        return [...prev, name];
+      } else {
+        return prev;
+      }
+    });
+  };
+
+  const handleModalClose = () => {
+    setRivalSelectedId([]);
+    handleClose();
+  };
+
+  // TODO: 확인 버튼 누를 시, POST할 데이터배열에 삽입 시키는 버튼
+  const handleRivalCreate = () => {
+    setRivalSelectedId([]);
+    handleClose();
   };
 
   // Active
@@ -233,6 +271,20 @@ export const useHome = () => {
     rival: {
       RivalsData,
       getStatus,
+      modalOpen,
+      setModalOpen,
+      handleOpen,
+      handleClose,
+      userList,
+      rivalSelectedId,
+      handleUserSelect,
+      handleModalClose,
+      handleRivalCreate,
+
+      // 나중에 업데이트 시 추가할 인원의 수와 목록을 보여주는 시스템으로 개선하기 위해 놔둔
+      // 총 선택한 명수, 남은 선택 가능 수에 대한 데이터
+      // selectedCount: rivalSelectedId.length,
+      // maxSelectableCount: 4 - RivalsData.data.my_rivals.length,
     },
     active: {
       commitDays,
