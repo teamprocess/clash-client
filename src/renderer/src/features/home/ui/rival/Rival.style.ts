@@ -1,9 +1,12 @@
 import styled from "styled-components";
 import { font } from "@/shared/config/font";
-import Profile from "../../assets/home/profile.svg";
 import DetailArrow from "../../assets/home/front.svg";
 import { palette } from "@/shared/config/theme";
 import VSCode from "../../assets/home/vscode.svg";
+import Profile from "../../assets/home/profile.svg";
+import Plus from "../../assets/home/plus.svg";
+import Search from "../../assets/home/search.svg";
+import Checked from "../../assets/home/check-box.svg";
 
 // Rival styles
 export const RivalContainer = styled.div`
@@ -69,7 +72,14 @@ export const ProfileContent = styled.div`
   flex-direction: row;
   align-items: center;
   justify-content: flex-start;
-  gap: 0.5rem;
+  gap: 0.75rem;
+`;
+
+export const ProfileTagBox = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.125rem;
 `;
 
 export const ProfileIcon = styled(Profile)`
@@ -163,4 +173,126 @@ export const ActiveTime = styled.p<StatusProps>`
         return theme.label.assistive;
     }
   }};
+`;
+
+// Modal
+export const AddRivalBox = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  flex: 1;
+  gap: 0.75rem;
+`;
+
+export const AddRivalText = styled.p`
+  ${font.caption.regular};
+  color: ${({ theme }) => theme.label.neutral};
+`;
+
+export const SearchBox = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  position: relative;
+  margin-top: 1rem;
+  gap: 0.75rem;
+`;
+
+export const SearchUsers = styled.input`
+  width: 100%;
+  height: 3.5rem;
+  padding: 0.5rem 3.5rem 0.5rem 1rem;
+  border-radius: 0.75rem;
+  border: none;
+  background-color: ${({ theme }) => theme.fill.alternative};
+  ${font.body.medium}
+  color: ${({ theme }) => theme.label.neutral};
+  &::placeholder {
+    color: ${({ theme }) => theme.label.assistive};
+  }
+  &:focus {
+    outline: none;
+  }
+`;
+
+export const PlusIcon = styled(Plus)``;
+export const SearchIconBox = styled.div`
+  color: ${({ theme }) => theme.label.neutral};
+`;
+
+export const SearchIcon = styled(Search)`
+  position: absolute;
+  right: 1rem;
+  top: 43%;
+  transform: translateY(-50%);
+  width: 1.85rem;
+  height: 1.85rem;
+  pointer-events: none;
+`;
+
+export const UserChoiceContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 12rem;
+  overflow-y: auto;
+  scrollbar-width: none;
+`;
+
+export const UserChoiceBox = styled.div<{ $isSelected: boolean }>`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0.5rem;
+  border-bottom: 1px solid ${({ theme }) => theme.line.alternative};
+  cursor: pointer;
+  background-color: ${({ $isSelected, theme }) =>
+    $isSelected ? theme.fill.alternative : "transparent"};
+`;
+
+export const BottomBox = styled.div`
+  margin-top: 0.9rem;
+`;
+
+export const ButtonBox = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.75rem;
+`;
+
+export const CloseButton = styled.button`
+  width: 4.25rem;
+  border-radius: 0.625rem;
+  color: ${palette.neutral[97]};
+  padding: 0.4rem 0.5rem;
+  background: ${({ theme }) => theme.line.normal};
+  cursor: pointer;
+`;
+
+export const OkayButton = styled.button`
+  width: 4.25rem;
+  border-radius: 0.625rem;
+  color: ${palette.neutral[97]};
+  padding: 0.4rem 0.5rem;
+  background: ${({ theme }) => theme.primary.normal};
+  cursor: pointer;
+`;
+
+export const CheckedIcon = styled(Checked)``;
+
+export const UncheckedBox = styled.div`
+  appearance: none;
+  width: 1.25rem;
+  height: 1.25rem;
+  border: 2px solid ${({ theme }) => theme.line.normal};
+  border-radius: 0.25rem;
+  cursor: pointer;
+  background-color: ${({ theme }) => theme.fill.normal};
 `;
