@@ -1,0 +1,80 @@
+import * as S from "./QuizModal.style";
+import { Modal } from "@/shared/ui/modal/Modal";
+import { Stage } from "@/features/chapter/mocks/missionData";
+import { useState } from "react";
+
+interface QuizModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  currentStage: Stage;
+}
+
+export const QuizModal = ({ isOpen, onClose, currentStage }: QuizModalProps) => {
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [answers, setAnswers] = useState<Record<number, number>>({});
+
+  const currentQuestion = currentStage.questions[currentIndex];
+  const selectedChoiceId = answers[currentIndex];
+
+  const handleSelectChoice = (choiceId: number) => {
+    setAnswers(prev => ({
+      ...prev,
+      [currentIndex]: choiceId,
+    }));
+  };
+
+  const handleConfirm = () => {
+    if (selectedChoiceId == null) return;
+
+    if (currentIndex < currentStage.questions.length - 1) {
+      setCurrentIndex(prev => prev + 1);
+    } else {
+      handleClose();
+    }
+  };
+
+  const handleClose = () => {
+    setCurrentIndex(0);
+    setAnswers({});
+    onClose();
+  };
+
+  return (
+    <Modal $width={25} $height={32} isOpen={isOpen} onClose={handleClose} gap={3}>
+      <S.ModalTop>
+        <S.ProgressBarWrapper>
+          <S.BarBackground>
+            <S.BarActive $fill={((currentIndex + 1) / currentStage.questions.length) * 100} />
+          </S.BarBackground>
+          <S.ProgressLabelBox>
+            <S.CurrentProgress>{currentIndex + 1}</S.CurrentProgress>/
+            <S.TotalQuestions>{currentStage.questions.length}</S.TotalQuestions>
+          </S.ProgressLabelBox>
+        </S.ProgressBarWrapper>
+
+        <S.QuestionWrapper>
+          <S.QuestionTitle>
+            <S.QuestionPrefix>Q. </S.QuestionPrefix>
+            {currentQuestion.title}
+          </S.QuestionTitle>
+        </S.QuestionWrapper>
+      </S.ModalTop>
+
+      <S.ModalBody>
+        <S.ButtonGroup>
+          {currentQuestion.choices.map(choice => (
+            <S.AnswerOption
+              key={choice.id}
+              $selected={selectedChoiceId === choice.id}
+              onClick={() => handleSelectChoice(choice.id)}
+            >
+              {choice.text}
+            </S.AnswerOption>
+          ))}
+
+          <S.ConfirmButton onClick={handleConfirm}>선택 완료하기</S.ConfirmButton>
+        </S.ButtonGroup>
+      </S.ModalBody>
+    </Modal>
+  );
+};

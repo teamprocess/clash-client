@@ -5,7 +5,7 @@ import { SectionProgress } from "@/features/section-progress";
 import { Link } from "react-router-dom";
 import { Roadmap } from "@/features/chapter/components/Roadmap";
 import { Stage, stagesData } from "@/features/chapter/mocks/missionData";
-import { Modal } from "@/shared/ui/modal/Modal";
+import { QuizModal } from "@/features/chapter/components/QuizModal";
 
 const User = {
   currentSection: "리액트 초급",
@@ -15,23 +15,9 @@ export const ChapterPage = () => {
   const chapterRef = useRef<HTMLDivElement>(null);
   const [currentStage, setCurrentStage] = useState<Stage>(stagesData[0]);
   const [modalOpen, setModalOpen] = useState(false);
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [answers, setAnswers] = useState<Record<number, number>>({});
-
-  const currentQuestion = currentStage.questions[currentIndex];
-  const selectedChoiceId = answers[currentIndex];
-
-  const handleSelectChoice = (choiceId: number) => {
-    setAnswers(prev => ({
-      ...prev,
-      [currentIndex]: choiceId,
-    }));
-  };
 
   const handleMissionClick = (completed: boolean) => {
     if (completed) return;
-    setCurrentIndex(0);
-    setAnswers({});
     setModalOpen(true);
   };
 
@@ -110,60 +96,11 @@ export const ChapterPage = () => {
         </S.MissionList>
       </S.MissionContainer>
 
-      <Modal
-        $width={25}
-        $height={34}
+      <QuizModal
         isOpen={modalOpen}
         onClose={() => setModalOpen(false)}
-        gap={3}
-      >
-        <S.ModalTop>
-          <S.ProgressBarWrapper>
-            <S.BarBackground>
-              <S.BarActive $fill={((currentIndex + 1) / currentStage.questions.length) * 100} />
-            </S.BarBackground>
-            <S.ProgressLabelBox>
-              <S.CurrentProgress>{currentIndex + 1}</S.CurrentProgress>/
-              <S.TotalQuestions>{currentStage.questions.length}</S.TotalQuestions>
-            </S.ProgressLabelBox>
-          </S.ProgressBarWrapper>
-
-          <S.QuestionWrapper>
-            <S.QuestionTitle>
-              <S.QuestionPrefix>Q. </S.QuestionPrefix>
-              {currentQuestion.title}
-            </S.QuestionTitle>
-          </S.QuestionWrapper>
-        </S.ModalTop>
-
-        <S.ModalBody>
-          <S.ButtonGroup>
-            {currentQuestion.choices.map(choice => (
-              <S.AnswerOption
-                key={choice.id}
-                $selected={selectedChoiceId === choice.id}
-                onClick={() => handleSelectChoice(choice.id)}
-              >
-                {choice.text}
-              </S.AnswerOption>
-            ))}
-
-            <S.ConfirmButton
-              onClick={() => {
-                if (selectedChoiceId == null) return;
-
-                if (currentIndex < currentStage.questions.length - 1) {
-                  setCurrentIndex(prev => prev + 1);
-                } else {
-                  setModalOpen(false);
-                }
-              }}
-            >
-              선택 완료하기
-            </S.ConfirmButton>
-          </S.ButtonGroup>
-        </S.ModalBody>
-      </Modal>
+        currentStage={currentStage}
+      />
     </S.ChapterContainer>
   );
 };
