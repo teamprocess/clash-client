@@ -88,7 +88,24 @@ export const ChapterPage = () => {
           ))}
         </S.MissionList>
       </S.MissionContainer>
-      <Modal $width={24} $height={32} isOpen={modalOpen} onClose={closeModal}></Modal>
+      <Modal $width={24} $height={32} isOpen={modalOpen} onClose={closeModal}>
+        <S.ModalTop>
+          <S.ProgressBarWrapper>
+            <S.BarBackground>
+              <S.BarActive $fill={20} />
+            </S.BarBackground>
+            <S.ProgressLabelBox>
+              <S.CurrentProgress>1</S.CurrentProgress>/<S.TotalQuestions>5</S.TotalQuestions>
+            </S.ProgressLabelBox>
+          </S.ProgressBarWrapper>
+          <S.QuestionWrapper>
+            <S.QuestionTitle>
+              <S.QuestionPrefix>Q. </S.QuestionPrefix>
+              React에서 함수형 컴포넌트의 상태를 관리하기 위해 사용하는 훅의 이름은?
+            </S.QuestionTitle>
+          </S.QuestionWrapper>
+        </S.ModalTop>
+      </Modal>
     </S.ChapterContainer>
   );
 };
