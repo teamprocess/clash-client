@@ -4,7 +4,13 @@ import { Topbar } from "@/widgets/topbar";
 import { Sidebar } from "@/widgets/sidebar";
 import * as S from "./MainLayout.style";
 
-export const MainLayout = ({ isScrollAble = false }: { isScrollAble?: boolean }) => {
+export const MainLayout = ({
+  isScrollAble = false,
+  isFixed = false,
+}: {
+  isScrollAble?: boolean;
+  isFixed?: boolean;
+}) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
   const toggleSidebar = () => {
@@ -16,7 +22,7 @@ export const MainLayout = ({ isScrollAble = false }: { isScrollAble?: boolean })
       <Topbar onToggleSidebar={toggleSidebar} />
       <S.ContentWrapper>
         <Sidebar isOpen={isSidebarOpen} />
-        <S.MainContent $isScrollAble={isScrollAble}>
+        <S.MainContent $isFixed={isFixed} $isScrollAble={isScrollAble}>
           <Outlet />
         </S.MainContent>
       </S.ContentWrapper>

@@ -12,10 +12,11 @@ export const ContentWrapper = styled.div`
   flex: 1;
 `;
 
-export const MainContent = styled.main<{ $isScrollAble: boolean }>`
+export const MainContent = styled.main<{ $isScrollAble: boolean; $isFixed: boolean }>`
   flex: 1;
-  padding: ${({ $isScrollAble }) => ($isScrollAble ? "2.5rem 2.5rem 0 2.5rem" : "2.5rem")};
-  overflow: auto;
+  padding: ${({ $isScrollAble, $isFixed }) =>
+    $isScrollAble || $isFixed ? "2.5rem 2.5rem 0 2.5rem" : "2.5rem"};
+  overflow: ${({ $isFixed }) => ($isFixed ? "hidden" : "auto")};
   background-color: ${({ theme }) => theme.background.alternative};
 
   &::-webkit-scrollbar {
