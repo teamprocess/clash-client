@@ -4,6 +4,8 @@ import TSIcon from "../assets/ts.svg?url";
 import ReactIcon from "../assets/react.svg?url";
 import NextIcon from "../assets/next.svg?url";
 import { ChapterRanking } from "@/features/chapter-ranking";
+import { Link } from "react-router-dom";
+import { SectionProgress } from "@/features/section-progress";
 
 const sectionMock = {
   data: [
@@ -109,19 +111,22 @@ export const Section = () => {
               {sectionMock.data
                 .filter(item => item.category === category)
                 .map(item => (
-                  <S.SectionItem key={item.id}>
-                    <S.SectionIconWrapper>
-                      <S.SectionIcon src={item.imgUrl} />
-                      {item.completed && <S.SectionComplete />}
-                      {item.locked && <S.SectionLock />}
-                    </S.SectionIconWrapper>
-                    <S.SectionTitle>{item.title}</S.SectionTitle>
-                  </S.SectionItem>
+                  <Link to={`/roadmap/${item.id}`} key={item.id}>
+                    <S.SectionItem>
+                      <S.SectionIconWrapper>
+                        <S.SectionIcon src={item.imgUrl} />
+                        {item.completed && <S.SectionComplete />}
+                        {item.locked && <S.SectionLock />}
+                      </S.SectionIconWrapper>
+                      <S.SectionTitle>{item.title}</S.SectionTitle>
+                    </S.SectionItem>
+                  </Link>
                 ))}
             </S.SectionItemBox>
           ))}
         </S.SectionItemWrapper>
         <ChapterRanking page={"section"} />
+        <SectionProgress />
       </S.RoadmapScrollable>
     </S.RoadmapContainer>
   );

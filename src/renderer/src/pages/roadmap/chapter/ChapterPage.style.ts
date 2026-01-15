@@ -1,4 +1,6 @@
 import styled from "styled-components";
+import { font } from "@/shared/config/font";
+import Previous from "./assets/previous.svg";
 
 export const ChapterContainer = styled.div`
   width: 100%;
@@ -41,10 +43,27 @@ export const Square = styled.div`
   background-color: ${({ theme }) => theme.background.normal};
 `;
 
+export const PreviousBox = styled.div`
+  display: flex;
+  gap: 0.75rem;
+  position: absolute;
+  top: 1.8rem;
+  left: 2.5rem;
+  cursor: pointer;
+`;
+
+export const PreviousIcon = styled(Previous)``;
+
+export const PreviousLabel = styled.span`
+  ${font.title2.medium}
+  color: ${({ theme }) => theme.label.neutral};
+`;
+
 export const RoadmapWrapper = styled.div`
   width: 48rem;
-  height: 72rem;
+  height: 68rem;
   position: absolute;
-  top: 10rem;
-  right: 6rem;
+  top: 6rem;
+  right: 5rem;
+  pointer-events: none;
 `;
