@@ -12,6 +12,8 @@ interface QuizModalProps {
 export const QuizModal = ({ isOpen, onClose, currentStage }: QuizModalProps) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [answers, setAnswers] = useState<Record<number, number>>({});
+  const [showResult, setShowResult] = useState(false);
+  const [isCorrect, setIsCorrect] = useState(false);
 
   const currentQuestion = currentStage.questions[currentIndex];
   const selectedChoiceId = answers[currentIndex];
@@ -26,6 +28,14 @@ export const QuizModal = ({ isOpen, onClose, currentStage }: QuizModalProps) => 
   const handleConfirm = () => {
     if (selectedChoiceId == null) return;
 
+    const correct = selectedChoiceId === currentQuestion.answerId;
+    setIsCorrect(correct);
+    setShowResult(true);
+  };
+
+  const handleNextOrClose = () => {
+    setShowResult(false);
+
     if (currentIndex < currentStage.questions.length - 1) {
       setCurrentIndex(prev => prev + 1);
     } else {
@@ -36,11 +46,21 @@ export const QuizModal = ({ isOpen, onClose, currentStage }: QuizModalProps) => 
   const handleClose = () => {
     setCurrentIndex(0);
     setAnswers({});
+    setShowResult(false);
     onClose();
   };
 
+  if (showResult) {
+    return (
+      <Modal $width={25} $height={34} isOpen={isOpen} onClose={handleClose} gap={3}>
+        <div>{isCorrect ? <div>이부분은 정답입니다.</div> : <div>이부분은 오답입니다.</div>}</div>
+        <S.ConfirmButton onClick={handleNextOrClose}>다음</S.ConfirmButton>
+      </Modal>
+    );
+  }
+
   return (
-    <Modal $width={25} $height={32} isOpen={isOpen} onClose={handleClose} gap={3}>
+    <Modal $width={25} $height={34} isOpen={isOpen} onClose={handleClose} gap={3}>
       <S.ModalTop>
         <S.ProgressBarWrapper>
           <S.BarBackground>

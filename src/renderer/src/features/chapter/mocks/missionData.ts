@@ -29,12 +29,12 @@ export const stagesData: Stage[] = [
   {
     id: 1,
     title: "1단계 미션",
-    currentProgress: 3,
+    currentProgress: 0,
     totalMissions: 3,
     missions: [
-      { id: 1, title: "React 기본 개념 이해하기", completed: true },
-      { id: 2, title: "JSX 문법 익히기", completed: true },
-      { id: 3, title: "컴포넌트 만들어보기", completed: true },
+      { id: 1, title: "React 기본 개념 이해하기", completed: false },
+      { id: 2, title: "JSX 문법 익히기", completed: false },
+      { id: 3, title: "컴포넌트 만들어보기", completed: false },
     ],
     questions: [
       {
@@ -65,11 +65,11 @@ export const stagesData: Stage[] = [
   {
     id: 2,
     title: "2단계 미션",
-    currentProgress: 2,
+    currentProgress: 0,
     totalMissions: 3,
     missions: [
-      { id: 4, title: "Props 전달하기", completed: true },
-      { id: 5, title: "State 관리하기", completed: true },
+      { id: 4, title: "Props 전달하기", completed: false },
+      { id: 5, title: "State 관리하기", completed: false },
       { id: 6, title: "이벤트 핸들링 구현하기", completed: false },
     ],
     questions: [
@@ -101,10 +101,10 @@ export const stagesData: Stage[] = [
   {
     id: 3,
     title: "3단계 미션",
-    currentProgress: 1,
+    currentProgress: 0,
     totalMissions: 3,
     missions: [
-      { id: 7, title: "함수형 컴포넌트 만들기", completed: true },
+      { id: 7, title: "함수형 컴포넌트 만들기", completed: false },
       { id: 8, title: "useState 사용하기", completed: false },
       { id: 9, title: "useEffect 이해하기", completed: false },
     ],
