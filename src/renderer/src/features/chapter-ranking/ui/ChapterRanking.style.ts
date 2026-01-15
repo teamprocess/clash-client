@@ -13,17 +13,17 @@ export const RankingContainer = styled.div<{ $page: RankingPageEnum }>`
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
-  gap: 1.8rem;
+  gap: ${({ $page }) => ($page === "section" ? "1.8rem" : $page === "chapter" ? "1.4rem" : 0)};
   background: ${({ theme }) => theme.background.normal};
   box-shadow: 0 0 7px 0 ${({ theme }) => theme.line.neutral};
   border-radius: 1.25rem;
   position: absolute;
-  top: ${({ $page }) => ($page === "section" ? "3rem" : $page === "chapter" ? "5rem" : 0)};
+  top: ${({ $page }) => ($page === "section" ? "3rem" : $page === "chapter" ? "5.45rem" : 0)};
   left: 3rem;
   width: 16rem;
-  height: ${({ $page }) => ($page === "section" ? "39rem" : $page === "chapter" ? "37rem" : 0)};
+  // height: ${({ $page }) => ($page === "section" ? "39rem" : $page === "chapter" ? "36rem" : 0)};
   z-index: 100;
-  padding: 1.6rem 0 0.8rem;
+  padding: 1.6rem 0 1rem;
 `;
 
 export const RankingLabel = styled.span`
@@ -123,7 +123,7 @@ export const RankerUserChapterLabel = styled.div`
   color: ${({ theme }) => theme.label.assistive};
 `;
 
-export const CompletedChapterCount = styled.span<{ $countColor }>`
+export const CompletedChapterCount = styled.span<{ $countColor: number }>`
   ${font.label.bold};
   color: ${({ $countColor }) =>
     $countColor === 1
@@ -229,14 +229,16 @@ export const MyRankingItem = styled.div<{ $position: RankingPositionEnum; $page:
   left: 50%;
   transform: translateX(-50%);
   z-index: 120;
-  ${({ $position, $page }) =>
-    $position === "top"
-      ? `
-        top: ${$page === "section" ? "15rem" : "15.53rem"};
-      `
-      : `
-        bottom: 1.45rem;
-      `}
+  ${({ $position, $page }) => {
+    if ($position === "top") {
+      return `
+      top: ${$page === "section" ? "15rem" : "14.8rem"};
+    `;
+    }
+    return `
+    bottom: ${$page === "section" ? "1.45rem" : "1rem"};
+  `;
+  }}
 
   background: ${({ theme }) => theme.fill.neutral};
   border-radius: 0.5rem;
