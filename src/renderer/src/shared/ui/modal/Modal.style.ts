@@ -15,7 +15,7 @@ export const ModalOverlay = styled.div`
   background: rgba(0, 0, 0, 0.5);
 `;
 
-export const ModalContainer = styled.div<{ $width: number; $height: number; $gap: number }>`
+export const ModalContainer = styled.div<{ $width: number; $height: number }>`
   padding: 1.25rem;
   border-radius: 1.25rem;
   width: ${({ $width }) => $width}rem;
@@ -23,7 +23,6 @@ export const ModalContainer = styled.div<{ $width: number; $height: number; $gap
   background-color: ${({ theme }) => theme.label.disable};
   position: relative;
   display: flex;
-  gap: ${({ $gap }) => $gap}rem;
 `;
 
 export const ModalTitle = styled.p`
@@ -39,9 +38,10 @@ export const CloseButton = styled.div`
   cursor: pointer;
 `;
 
-export const ModalContent = styled.div`
+export const ModalContent = styled.div<{ $gap: number }>`
   display: flex;
   flex-direction: column;
   width: 100%;
   height: 100%;
+  gap: ${({ $gap }) => $gap}rem;
 `;
