@@ -166,7 +166,10 @@ export const useHome = () => {
   const [modalOpen, setModalOpen] = useState(false);
 
   const handleOpen = () => setModalOpen(true);
-  const handleClose = () => setModalOpen(false);
+  const handleClose = () => {
+    setModalOpen(false);
+    setRivalSelectedId([]);
+  };
 
   const [rivalSelectedId, setRivalSelectedId] = useState<string[]>([]);
 
