@@ -8,6 +8,10 @@ import AlarmOn from "@/widgets/topbar/assets/alarm-on.svg";
 import Profile from "@/widgets/topbar/assets/profile.svg";
 import Close from "@/features/home/assets/home/no.svg";
 import Search from "@/features/home/assets/home/search.svg";
+import Cry from "@/widgets/sidebar/assets/cry-emoji.svg";
+import Confirm from "@/widgets/topbar/assets/confirm.svg";
+import Deny from "@/widgets//topbar/assets/deny.svg";
+import Trash from "@/widgets/topbar/assets/delete.svg";
 
 export const TopbarContainer = styled.header`
   display: flex;
@@ -170,11 +174,10 @@ export const SearchIcon = styled(Search)`
   pointer-events: none;
 `;
 
-export const ProfileDiv = styled.div``;
-
 export const AlarmBox = styled.div`
   display: flex;
   flex-direction: row;
+  align-items: center;
   gap: 0.75rem;
 `;
 
@@ -207,3 +210,38 @@ export const AlarmContainer = styled.div`
   overflow-y: auto;
   margin-top: 0.75rem;
 `;
+
+export const CryIcon = styled(Cry)`
+  width: 12rem;
+`;
+
+export const NoneAlarm = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 80%;
+  gap: 0.75rem;
+  color: ${({ theme }) => theme.label.assistive};
+`;
+
+export const ChoiceBox = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+  height: 100%;
+  flex: 1;
+  gap: 0.75rem;
+`;
+
+export const ChoiceButton = styled.div`
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+`;
+
+export const ConfirmIcon = styled(Confirm)``;
+export const DenyIcon = styled(Deny)``;
+export const TrashIcon = styled(Trash)``;
