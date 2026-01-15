@@ -10,6 +10,17 @@ export const RoadmapNode = ({ node, onClick }: RoadmapNodeProps) => {
   const R = 35;
   const CHECK_SIZE = R * 1.9;
   const LOCK_SIZE = R * 0.8;
+  const STAR_WIDTH = R * 2;
+  const STAR_HEIGHT = R;
+
+  const StarIcon =
+    node.stars === 1
+      ? S.Star1Icon
+      : node.stars === 2
+        ? S.Star2Icon
+        : node.stars === 3
+          ? S.Star3Icon
+          : null;
 
   return (
     <S.NodeGroup onClick={onClick}>
@@ -33,14 +44,10 @@ export const RoadmapNode = ({ node, onClick }: RoadmapNodeProps) => {
         </g>
       )}
 
-      {node.stars && node.stars > 0 && (
-        <>
-          {Array.from({ length: node.stars }).map((_, i) => (
-            <S.Star key={i} x={node.x - 20 + i * 20} y={node.y - 50}>
-              ⭐
-            </S.Star>
-          ))}
-        </>
+      {node.stars && node.stars > 0 && StarIcon && (
+        <g transform={`translate(${node.x - STAR_WIDTH / 2}, ${node.y - R - STAR_HEIGHT - 10})`}>
+          <StarIcon $width={STAR_WIDTH} $height={STAR_HEIGHT} />
+        </g>
       )}
     </S.NodeGroup>
   );
