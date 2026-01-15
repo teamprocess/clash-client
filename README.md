@@ -40,7 +40,7 @@ pnpm build:mac    # macOS
 ### 테마 사용법
 
 ```typescript
-import styled from "styled-components";
+import styled from "styled-ui";
 
 const Button = styled.button`
   color: ${({ theme }) => theme.label.normal};
@@ -63,7 +63,7 @@ const Brand = styled.div`
 ### 폰트 사용법
 
 ```typescript
-import styled from "styled-components";
+import styled from "styled-ui";
 import { font } from "@/shared/config/font";
 
 const Title = styled.h1`
