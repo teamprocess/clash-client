@@ -54,6 +54,14 @@ export const RightMenu = styled.div`
   display: flex;
   align-items: center;
   gap: 1.25rem;
+  position: relative;
+`;
+
+export const AlarmTextWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 11rem;
 `;
 
 export const AlarmIcon = styled(Alarm)`
@@ -96,24 +104,23 @@ export const Username = styled.span`
 `;
 
 export const ModalOverlay = styled.div`
-  position: relative;
-  top: 3.25rem;
+  position: absolute;
+  top: 4.75rem;
   left: 7.25rem;
+  right: 0;
   display: flex;
   justify-content: flex-end;
   align-items: flex-start;
   z-index: 1000;
-  width: 0;
-  height: 0;
 `;
 
 export const ModalContainer = styled.div`
-  position: absolute;
   padding: 1.25rem;
   border-radius: 1.25rem;
-  width: 21.5rem;
-  height: 29rem;
+  min-height: 13rem;
+  max-height: 30rem;
   background-color: ${({ theme }) => theme.label.disable};
+  box-shadow: 0 0 7px 0 ${({ theme }) => theme.line.normal};
 `;
 
 export const ModalHeader = styled.div`
@@ -178,6 +185,7 @@ export const AlarmBox = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
+  width: 100%;
   gap: 0.75rem;
 `;
 

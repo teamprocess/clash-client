@@ -74,13 +74,13 @@ export const Topbar = ({ onToggleSidebar }: TopbarProps) => {
                 {alarmInfo.map(alarm => (
                   <S.AlarmBox key={alarm.mention || alarm.name || alarm.message}>
                     <S.ProfileIcon />
-                    <div>
+                    <S.AlarmTextWrapper>
                       <S.NameDiv>
                         <S.AlarmName>{alarm.name}</S.AlarmName>
                         <S.Mention>@{alarm.mention}</S.Mention>
                       </S.NameDiv>
                       <Explain>{alarm.message}</Explain>
-                    </div>
+                    </S.AlarmTextWrapper>
                     {alarm.answer === "YET" ? (
                       <S.ChoiceBox>
                         <S.ChoiceButton onClick={handleConfirm}>
