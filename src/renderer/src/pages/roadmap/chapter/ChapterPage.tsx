@@ -1,16 +1,18 @@
 import * as S from "./ChapterPage.style";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ChapterRanking } from "@/features/chapter-ranking";
 import { SectionProgress } from "@/features/section-progress";
 import { Link } from "react-router-dom";
 import { Roadmap } from "@/features/chapter/components/Roadmap";
+import { Stage, stagesData } from "@/features/chapter/mocks/missionData";
 
 const User = {
   currentSection: "리액트 초급",
 };
-
 export const ChapterPage = () => {
   const chapterRef = useRef<HTMLDivElement>(null);
+  const [currentStage, setCurrentStage] = useState<Stage>(stagesData[0]);
+  console.log(currentStage);
 
   const handleScroll = () => {
     if (!chapterRef.current) return;
@@ -48,7 +50,7 @@ export const ChapterPage = () => {
             <S.Square key={idx}></S.Square>
           ))}
         <S.RoadmapWrapper>
-          <Roadmap />
+          <Roadmap stageSetFn={setCurrentStage} />
         </S.RoadmapWrapper>
       </S.ChapterScrollable>
       <ChapterRanking page={"chapter"} />
@@ -64,6 +66,23 @@ export const ChapterPage = () => {
         <S.CurrentSectionLabel>{User.currentSection}</S.CurrentSectionLabel>
         <S.ArrowIcon $direction={"right"} />
       </S.CurrentSectionBox>
+      <S.MissionContainer>
+        <S.MissionBoxTop>
+          <S.MissionTitle>{currentStage.title}</S.MissionTitle>
+          <S.MissionProgress>
+            <S.MissionCurrentProgress>{currentStage.currentProgress}</S.MissionCurrentProgress>/
+            <S.MissionTotalMissions>{currentStage.totalMissions}</S.MissionTotalMissions>
+          </S.MissionProgress>
+        </S.MissionBoxTop>
+        <S.MissionList>
+          {currentStage.missions.map(mission => (
+            <S.MissionBox key={mission.id}>
+              {mission.completed ? <S.CompletedLogo /> : <S.NotCompletedLogo />}
+              <S.MissionLabel>{mission.title}</S.MissionLabel>
+            </S.MissionBox>
+          ))}
+        </S.MissionList>
+      </S.MissionContainer>
     </S.ChapterContainer>
   );
 };
