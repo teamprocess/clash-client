@@ -5,6 +5,10 @@ import { SectionProgress } from "@/features/section-progress";
 import { Link } from "react-router-dom";
 import { Roadmap } from "@/features/chapter/components/Roadmap";
 
+const User = {
+  currentSection: "리액트 초급",
+};
+
 export const ChapterPage = () => {
   const chapterRef = useRef<HTMLDivElement>(null);
 
@@ -55,6 +59,11 @@ export const ChapterPage = () => {
           <S.PreviousLabel>이전으로</S.PreviousLabel>
         </S.PreviousBox>
       </Link>
+      <S.CurrentSectionBox>
+        <S.ArrowIcon $direction={"left"} />
+        <S.CurrentSectionLabel>{User.currentSection}</S.CurrentSectionLabel>
+        <S.ArrowIcon $direction={"right"} />
+      </S.CurrentSectionBox>
     </S.ChapterContainer>
   );
 };
