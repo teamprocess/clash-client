@@ -21,13 +21,13 @@ export const ModalContainer = styled.div<{ $width: number; $height: number }>`
   width: ${({ $width }) => $width}rem;
   height: ${({ $height }) => $height}rem;
   background-color: ${({ theme }) => theme.label.disable};
+  position: relative;
 `;
 
 export const ModalHeader = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: space-between;
   width: 100%;
 `;
 
@@ -38,6 +38,9 @@ export const ModalTitle = styled.p`
 export const CloseIcon = styled(Close)``;
 
 export const CloseButton = styled.div`
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
   cursor: pointer;
 `;
 
