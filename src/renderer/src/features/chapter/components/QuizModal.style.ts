@@ -1,3 +1,7 @@
+import styled from "styled-components";
+import { font } from "@/shared/config/font";
+import { palette } from "@/shared/config/theme";
+
 export const ModalTop = styled.div`
   display: flex;
   flex-direction: column;
@@ -81,7 +85,7 @@ export const ButtonGroup = styled.div`
   justify-content: center;
   align-items: center;
   width: 16.25rem;
-  gap: 0.5rem;
+  gap: 0.75rem;
 `;
 
 export const AnswerOption = styled.div<{ $selected: boolean }>`
@@ -89,7 +93,7 @@ export const AnswerOption = styled.div<{ $selected: boolean }>`
   align-items: center;
   justify-content: center;
   width: 100%;
-  height: 3.4rem;
+  height: 3.1rem;
   background-color: ${palette.neutral["99"]};
   ${font.headline1.medium}
   color: ${palette.neutral["30"]};
@@ -103,7 +107,7 @@ export const ConfirmButton = styled.div`
   align-items: center;
   justify-content: center;
   width: 100%;
-  height: 3.4rem;
+  height: 2.75rem;
   background-color: ${({ theme }) => theme.primary.normal};
   ${font.label.medium};
   color: ${palette.neutral["97"]};
