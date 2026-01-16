@@ -91,19 +91,28 @@ export const BarWrapper = styled.div`
   height: 100%;
   gap: 0.5rem;
   flex: 1;
-  position: relative;
 `;
 
 export const Bar = styled.div<{ $ratio: number }>`
+  display: flex;
+  justify-content: center;
   width: 1.5rem;
   height: ${({ $ratio }) => `calc(${$ratio * 90}%)`};
   min-height: 4px;
   border-radius: 0.25rem 0.25rem 0 0;
-  &:has(${() => BallValue}:hover) + ${() => BarValue} {
+  &:hover ${() => BarValue} {
     opacity: 1;
     visibility: visible;
-    transform: translateY(0);
+    transform: translate(0, -50%);
   }
+`;
+
+export const ValueHoveringBox = styled.div`
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
 `;
 
 export const BallValue = styled.div`
@@ -121,11 +130,14 @@ export const BarValue = styled.p`
   background-color: ${({ theme }) => theme.fill.alternative};
   padding: 0.125rem 0.4rem;
   border-radius: 0.25rem;
-  transition: all 0.2s ease;
   z-index: 1000;
   white-space: nowrap;
+  margin-top: 1.75rem;
+  position: absolute;
   visibility: hidden;
-  transform: translateY(5px);
+  opacity: 0;
+  transform: translate(-0.25rem, 50%);
+  pointer-events: none;
 `;
 
 export const BarLabel = styled.p`
