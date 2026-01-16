@@ -74,9 +74,11 @@ export const CompetitionPage = () => {
                 {data.map(({ date, growth_rate }) => (
                   <S.BarWrapper key={date}>
                     <S.Bar $ratio={growth_rate / activeMaxCommit}>
-                      <S.BallValue />
+                      <S.ValueHoveringBox>
+                        <S.BallValue />
+                        <S.BarValue>{growth_rate}%</S.BarValue>
+                      </S.ValueHoveringBox>
                     </S.Bar>
-                    <S.BarValue>{growth_rate}%</S.BarValue>
 
                     <S.BarLabel>{date}월</S.BarLabel>
                   </S.BarWrapper>
