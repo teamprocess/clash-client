@@ -1,6 +1,8 @@
 import styled from "styled-components";
 import { font } from "@/shared/config/font";
 import { palette } from "@/shared/config/theme";
+import Correct from "../assets/correct.svg";
+import InCorrect from "../assets/in-correct.svg";
 
 export const ModalTop = styled.div`
   display: flex;
@@ -76,7 +78,9 @@ export const ModalBody = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: 100%;
+  align-self: center;
+  width: 20rem;
+  gap: 3rem;
 `;
 
 export const ButtonGroup = styled.div`
@@ -113,4 +117,34 @@ export const ConfirmButton = styled.div`
   color: ${palette.neutral["97"]};
   border-radius: 0.75rem;
   cursor: pointer;
+`;
+
+export const ResultWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1.75rem;
+  width: 100%;
+`;
+
+export const ResultTitle = styled.span`
+  ${font.title2.medium}
+  color: ${({ theme }) => theme.label.normal};
+  width: 13rem;
+  display: flex;
+  flex-wrap: wrap;
+`;
+
+export const CorrectIcon = styled(Correct)``;
+
+export const IncorrectIcon = styled(InCorrect)``;
+
+export const CommentaryBox = styled.div`
+  text-align: center;
+  width: 100%;
+  background-color: ${({ theme }) => theme.background.normal};
+  ${font.headline2.regular}
+  color: ${({ theme }) => theme.label.normal};
+  padding: 1.5rem 2rem;
+  border-radius: 0.75rem;
 `;
