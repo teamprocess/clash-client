@@ -65,6 +65,7 @@ export const QuestionTitle = styled.span`
   color: ${({ theme }) => theme.label.normal};
   text-overflow: ellipsis;
   text-align: center;
+  width: 16.25rem;
 `;
 
 export const QuestionPrefix = styled.span`
@@ -102,7 +103,6 @@ export const AnswerOption = styled.div<{ $selected: boolean }>`
   color: ${palette.neutral["30"]};
   border-radius: 0.75rem;
   cursor: pointer;
-  cursor: pointer;
   border: 3px solid ${({ $selected, theme }) => ($selected ? theme.primary.normal : "transparent")};
 `;
 
@@ -110,7 +110,7 @@ export const ConfirmButton = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 16rem;
+  width: 16.25rem;
   height: 2.75rem;
   background-color: ${({ theme }) => theme.primary.normal};
   ${font.label.medium};
