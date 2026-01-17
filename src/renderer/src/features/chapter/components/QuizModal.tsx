@@ -13,7 +13,9 @@ interface QuizModalProps {
 export const QuizModal = ({ isOpen, onClose, currentStage }: QuizModalProps) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [answers, setAnswers] = useState<Record<number, number>>({});
+  const [correctCount, setCorrectCount] = useState(0);
   const [showResult, setShowResult] = useState(false);
+  const [showFinalResult, setShowFinalResult] = useState(false);
   const [isCorrect, setIsCorrect] = useState(false);
 
   const currentQuestion = currentStage.questions[currentIndex];
@@ -31,6 +33,11 @@ export const QuizModal = ({ isOpen, onClose, currentStage }: QuizModalProps) => 
 
     const correct = selectedChoiceId === currentQuestion.answerId;
     setIsCorrect(correct);
+
+    if (correct) {
+      setCorrectCount(prev => prev + 1);
+    }
+
     setShowResult(true);
   };
 
@@ -40,21 +47,37 @@ export const QuizModal = ({ isOpen, onClose, currentStage }: QuizModalProps) => 
     if (currentIndex < currentStage.questions.length - 1) {
       setCurrentIndex(prev => prev + 1);
     } else {
-      handleClose();
+      setShowFinalResult(true);
     }
   };
 
   const handleClose = () => {
     setCurrentIndex(0);
     setAnswers({});
+    setCorrectCount(0);
     setShowResult(false);
+    setShowFinalResult(false);
     onClose();
   };
+
+  if (showFinalResult) {
+    return (
+      <Modal $width={25} $height={34} isOpen={isOpen} onClose={handleClose} gap={6.5}>
+        <QuizResult
+          isFinal={true}
+          correctCount={correctCount}
+          total={currentStage.questions.length}
+          onNext={handleClose}
+        />
+      </Modal>
+    );
+  }
 
   if (showResult) {
     return (
       <Modal $width={25} $height={34} isOpen={isOpen} onClose={handleClose} gap={3}>
         <QuizResult
+          isFinal={false}
           isCorrect={isCorrect}
           currentIndex={currentIndex}
           total={currentStage.questions.length}

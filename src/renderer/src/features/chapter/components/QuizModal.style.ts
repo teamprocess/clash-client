@@ -3,6 +3,7 @@ import { font } from "@/shared/config/font";
 import { palette } from "@/shared/config/theme";
 import Correct from "../assets/correct.svg";
 import InCorrect from "../assets/in-correct.svg";
+import Clear from "../assets/clear.svg";
 
 export const ModalTop = styled.div`
   display: flex;
@@ -147,4 +148,22 @@ export const CommentaryBox = styled.div`
   color: ${({ theme }) => theme.label.normal};
   padding: 1.5rem 2rem;
   border-radius: 0.75rem;
+`;
+
+export const LastResultWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+  align-items: center;
+  gap: 1.75rem;
+  width: 100%;
+`;
+
+export const ClearIcon = styled(Clear)``;
+
+export const ModalBottom = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
