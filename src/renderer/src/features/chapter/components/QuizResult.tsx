@@ -1,29 +1,64 @@
 import * as S from "./QuizModal.style";
 
 interface QuizResultProps {
-  isCorrect: boolean;
-  currentIndex: number;
+  isFinal: boolean;
+  isCorrect?: boolean;
+  currentIndex?: number;
   total: number;
-  explanation: string;
+  explanation?: string;
+  correctCount?: number;
   onNext: () => void;
 }
 
 export const QuizResult = ({
+  isFinal,
   isCorrect,
   currentIndex,
   total,
   explanation,
+  correctCount,
   onNext,
 }: QuizResultProps) => {
+  if (isFinal) {
+    return (
+      <>
+        <S.ModalTop>
+          <S.ProgressBarWrapper>
+            <S.BarBackground>
+              <S.BarActive $fill={((currentIndex! + 1) / total) * 100} />
+            </S.BarBackground>
+            <S.ProgressLabelBox>
+              <S.CurrentProgress>{currentIndex! + 1}</S.CurrentProgress>/
+              <S.TotalQuestions>{total}</S.TotalQuestions>
+            </S.ProgressLabelBox>
+          </S.ProgressBarWrapper>
+        </S.ModalTop>
+
+        <S.ModalBody>
+          <S.LastResultWrapper>
+            <S.ClearIcon />
+            <S.ResultTitle>
+              {total}문제 중 {correctCount}문제를 맞추어 미션 클리어하셨습니다!
+            </S.ResultTitle>
+          </S.LastResultWrapper>
+        </S.ModalBody>
+
+        <S.ModalBottom>
+          <S.ConfirmButton onClick={onNext}>확인</S.ConfirmButton>
+        </S.ModalBottom>
+      </>
+    );
+  }
+
   return (
     <>
       <S.ModalTop>
         <S.ProgressBarWrapper>
           <S.BarBackground>
-            <S.BarActive $fill={((currentIndex + 1) / total) * 100} />
+            <S.BarActive $fill={((currentIndex! + 1) / total) * 100} />
           </S.BarBackground>
           <S.ProgressLabelBox>
-            <S.CurrentProgress>{currentIndex + 1}</S.CurrentProgress>/
+            <S.CurrentProgress>{currentIndex! + 1}</S.CurrentProgress>/
             <S.TotalQuestions>{total}</S.TotalQuestions>
           </S.ProgressLabelBox>
         </S.ProgressBarWrapper>
