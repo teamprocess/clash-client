@@ -1,1 +1,1 @@
-export { CompetitionPage } from "./CompetitionPage";
+export { CompetitionPage } from "./ui/CompetitionPage";
