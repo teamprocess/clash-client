@@ -5,6 +5,10 @@ import Correct from "../assets/correct.svg";
 import InCorrect from "../assets/in-correct.svg";
 import Clear from "../assets/clear.svg";
 
+interface ResultButtonType {
+  $buttonType: "restart" | "finish";
+}
+
 export const ModalTop = styled.div`
   display: flex;
   flex-direction: column;
@@ -166,4 +170,45 @@ export const ModalBottom = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+`;
+
+export const LastResultTitle = styled.span`
+  ${font.title2.medium}
+  color: ${({ theme }) => theme.label.normal};
+  width: 15rem;
+  display: flex;
+  flex-wrap: wrap;
+`;
+
+export const ResultButtonGroup = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.75rem;
+`;
+
+export const ResultButton = styled.div<ResultButtonType>`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  ${font.label.medium}
+  background-color: ${({ theme, $buttonType }) =>
+    $buttonType === "restart" ? theme.line.normal : theme.primary.normal};
+  border-radius: 0.75rem;
+  width: 8rem;
+  height: 3rem;
+  cursor: pointer;
+`;
+
+export const ResultLabelGroup = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+`;
+
+export const LastResultSubTitle = styled.span`
+  ${font.caption.regular}
+  color: ${({ theme }) => theme.label.neutral};
 `;
