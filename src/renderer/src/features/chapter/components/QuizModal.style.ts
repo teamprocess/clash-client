@@ -63,7 +63,6 @@ export const QuestionWrapper = styled.div`
 export const QuestionTitle = styled.span`
   ${font.headline1.medium}
   color: ${({ theme }) => theme.label.normal};
-  width: 16.25rem;
   text-overflow: ellipsis;
   text-align: center;
 `;
@@ -99,9 +98,10 @@ export const AnswerOption = styled.div<{ $selected: boolean }>`
   width: 100%;
   height: 3.1rem;
   background-color: ${palette.neutral["99"]};
-  ${font.headline1.medium}
+  ${font.headline2.medium}
   color: ${palette.neutral["30"]};
   border-radius: 0.75rem;
+  cursor: pointer;
   cursor: pointer;
   border: 3px solid ${({ $selected, theme }) => ($selected ? theme.primary.normal : "transparent")};
 `;
@@ -110,7 +110,7 @@ export const ConfirmButton = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 100%;
+  width: 16rem;
   height: 2.75rem;
   background-color: ${({ theme }) => theme.primary.normal};
   ${font.label.medium};
