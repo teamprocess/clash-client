@@ -1,59 +1,16 @@
 import * as S from "./CompetitionPage.style";
-import { useState } from "react";
 import { GrowthRate } from "@/features/home/ui/compare/growth-rate/GrowthRate";
+import { CompetitionProps } from "@/pages/competition/model/useCompetition";
 
-type CompeteTab = "ME" | "RIVAL";
-
-interface CompareDataProps {
-  earned_exp: number;
-  study_time: number;
-  github_attributor: number;
-}
-
-interface TotalCompareData {
-  beforeMyCompareData: CompareDataProps[];
-  nowMyCompareData: CompareDataProps[];
-}
-
-const data: { date: number; growth_rate: number }[] = [
-  { date: 1, growth_rate: 31 },
-  { date: 2, growth_rate: 41 },
-  { date: 3, growth_rate: 23 },
-  { date: 4, growth_rate: 12 },
-  { date: 5, growth_rate: 25 },
-  { date: 6, growth_rate: 7 },
-  { date: 7, growth_rate: 12 },
-  { date: 8, growth_rate: 9 },
-  { date: 9, growth_rate: 11 },
-  { date: 10, growth_rate: 12 },
-  { date: 11, growth_rate: 19 },
-  { date: 12, growth_rate: 21 },
-];
-
-const allData: TotalCompareData = {
-  beforeMyCompareData: [
-    {
-      earned_exp: 120.5,
-      study_time: 4.5,
-      github_attributor: 15,
-    },
-  ],
-  nowMyCompareData: [
-    {
-      earned_exp: 140.2,
-      study_time: 5.2,
-      github_attributor: 12,
-    },
-  ],
-};
-
-const activeMaxCommit = Math.max(...data.map(m => m.growth_rate));
-
-export const CompetitionPage = () => {
-  const [activeTab, setActiveTab] = useState<CompeteTab>("ME");
-
-  const [ActiveDropdown, setActiveDropdown] = useState("어제");
-
+export const CompetitionPage = ({
+  allData,
+  data,
+  activeTab,
+  setActiveTab,
+  ActiveDropdown,
+  setActiveDropdown,
+  activeMaxCommit,
+}: CompetitionProps) => {
   return (
     <S.Wrapper>
       <S.CompetitionTopBar>
