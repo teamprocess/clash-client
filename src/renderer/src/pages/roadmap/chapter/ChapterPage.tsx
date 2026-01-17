@@ -4,7 +4,7 @@ import { ChapterRanking } from "@/features/chapter-ranking";
 import { SectionProgress } from "@/features/section-progress";
 import { Link } from "react-router-dom";
 import { Roadmap } from "@/features/chapter/components/Roadmap";
-import { Stage, stagesData } from "@/features/chapter/mocks/missionData";
+import { Stage, Mission, stagesData } from "@/features/chapter/mocks/missionData";
 import { QuizModal } from "@/features/chapter/components/QuizModal";
 
 const User = {
@@ -14,19 +14,31 @@ const User = {
 export const ChapterPage = () => {
   const chapterRef = useRef<HTMLDivElement>(null);
   const [currentStage, setCurrentStage] = useState<Stage>(stagesData[0]);
+  const [currentMission, setCurrentMission] = useState<Mission | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
 
-  const handleMissionClick = (completed: boolean) => {
-    if (completed) return;
+  const handleMissionClick = (mission: Mission) => {
+    if (mission.completed) return;
+    setCurrentMission(mission);
     setModalOpen(true);
+  };
+
+  const handleMissionComplete = (missionId: number) => {
+    setCurrentStage(prev => ({
+      ...prev,
+      missions: prev.missions.map(m => (m.id === missionId ? { ...m, completed: true } : m)),
+      currentProgress: prev.missions.filter(m => (m.id === missionId ? true : m.completed)).length,
+    }));
   };
 
   const handleScroll = () => {
     if (!chapterRef.current) return;
+
     const child = chapterRef.current.childNodes.item(0) as HTMLDivElement;
     const scrolledSize = chapterRef.current.scrollTop + chapterRef.current.offsetHeight;
 
     const canScroll = scrolledSize <= chapterRef.current.scrollHeight - child.offsetWidth;
+
     if (!canScroll)
       chapterRef.current.scrollTo(
         chapterRef.current.scrollWidth,
@@ -56,6 +68,7 @@ export const ChapterPage = () => {
           .map((_, idx) => (
             <S.Square key={idx} />
           ))}
+
         <S.RoadmapWrapper>
           <Roadmap stageSetFn={setCurrentStage} />
         </S.RoadmapWrapper>
@@ -88,7 +101,7 @@ export const ChapterPage = () => {
 
         <S.MissionList>
           {currentStage.missions.map(mission => (
-            <S.MissionBox key={mission.id} onClick={() => handleMissionClick(mission.completed)}>
+            <S.MissionBox key={mission.id} onClick={() => handleMissionClick(mission)}>
               {mission.completed ? <S.CompletedLogo /> : <S.NotCompletedLogo />}
               <S.MissionLabel>{mission.title}</S.MissionLabel>
             </S.MissionBox>
@@ -96,11 +109,14 @@ export const ChapterPage = () => {
         </S.MissionList>
       </S.MissionContainer>
 
-      <QuizModal
-        isOpen={modalOpen}
-        onClose={() => setModalOpen(false)}
-        currentStage={currentStage}
-      />
+      {currentMission && (
+        <QuizModal
+          isOpen={modalOpen}
+          onClose={() => setModalOpen(false)}
+          currentMission={currentMission}
+          onMissionComplete={handleMissionComplete}
+        />
+      )}
     </S.ChapterContainer>
   );
 };
