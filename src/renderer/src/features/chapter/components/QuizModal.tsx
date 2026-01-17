@@ -58,6 +58,7 @@ export const QuizModal = ({ isOpen, onClose, currentStage }: QuizModalProps) => 
           isCorrect={isCorrect}
           currentIndex={currentIndex}
           total={currentStage.questions.length}
+          explanation={currentQuestion.explanation}
           onNext={handleNextOrClose}
         />
       </Modal>
