@@ -62,7 +62,7 @@ export const QuizModal = ({ isOpen, onClose, currentStage }: QuizModalProps) => 
 
   if (showFinalResult) {
     return (
-      <Modal $width={25} $height={34} isOpen={isOpen} onClose={handleClose} gap={6.5}>
+      <Modal $width={25} $height={34} isOpen={isOpen} onClose={handleClose} gap={7.5}>
         <QuizResult
           isFinal={true}
           correctCount={correctCount}

@@ -37,14 +37,22 @@ export const QuizResult = ({
         <S.ModalBody>
           <S.LastResultWrapper>
             <S.ClearIcon />
-            <S.ResultTitle>
-              {total}문제 중 {correctCount}문제를 맞추어 미션 클리어하셨습니다!
-            </S.ResultTitle>
+            <S.ResultLabelGroup>
+              <S.LastResultTitle>
+                {total}문제 중 {correctCount}문제를 맞추어 미션 클리어하셨습니다!
+              </S.LastResultTitle>
+              <S.LastResultSubTitle>
+                ※ 4문제이상 맞추었을 시에 미션 클리어됩니다
+              </S.LastResultSubTitle>
+            </S.ResultLabelGroup>
           </S.LastResultWrapper>
         </S.ModalBody>
 
         <S.ModalBottom>
-          <S.ConfirmButton onClick={onNext}>확인</S.ConfirmButton>
+          <S.ResultButtonGroup>
+            <S.ResultButton $buttonType={"restart"}>다시하기</S.ResultButton>
+            <S.ResultButton $buttonType={"finish"}>끝내기</S.ResultButton>
+          </S.ResultButtonGroup>
         </S.ModalBottom>
       </>
     );
