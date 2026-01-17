@@ -2,22 +2,28 @@ import * as S from "./QuizModal.style";
 
 interface QuizResultProps {
   isFinal: boolean;
+  isPassed?: boolean;
   isCorrect?: boolean;
   currentIndex?: number;
   total: number;
   explanation?: string;
   correctCount?: number;
-  onNext: () => void;
+  onNext?: () => void;
+  onRestart?: () => void;
+  onClose?: () => void;
 }
 
 export const QuizResult = ({
   isFinal,
+  isPassed,
   isCorrect,
   currentIndex,
   total,
   explanation,
   correctCount,
   onNext,
+  onRestart,
+  onClose,
 }: QuizResultProps) => {
   if (isFinal) {
     return (
@@ -25,10 +31,10 @@ export const QuizResult = ({
         <S.ModalTop>
           <S.ProgressBarWrapper>
             <S.BarBackground>
-              <S.BarActive $fill={((currentIndex! + 1) / total) * 100} />
+              <S.BarActive $fill={100} />
             </S.BarBackground>
             <S.ProgressLabelBox>
-              <S.CurrentProgress>{currentIndex! + 1}</S.CurrentProgress>/
+              <S.CurrentProgress>{total}</S.CurrentProgress>/
               <S.TotalQuestions>{total}</S.TotalQuestions>
             </S.ProgressLabelBox>
           </S.ProgressBarWrapper>
@@ -36,13 +42,15 @@ export const QuizResult = ({
 
         <S.ModalBody>
           <S.LastResultWrapper>
-            <S.ClearIcon />
+            {isPassed ? <S.ClearIcon /> : <S.FailIcon />}
             <S.ResultLabelGroup>
               <S.LastResultTitle>
-                {total}문제 중 {correctCount}문제를 맞추어 미션 클리어하셨습니다!
+                {isPassed
+                  ? `${total}문제 중 ${correctCount}문제를 맞추어 미션 클리어하셨습니다!`
+                  : `${total}문제 중 ${correctCount}문제를 맞추어 미션을 클리어하지 못했습니다`}
               </S.LastResultTitle>
               <S.LastResultSubTitle>
-                ※ 4문제이상 맞추었을 시에 미션 클리어됩니다
+                ※ 4문제 이상 맞추었을 시에 미션 클리어됩니다
               </S.LastResultSubTitle>
             </S.ResultLabelGroup>
           </S.LastResultWrapper>
@@ -50,8 +58,12 @@ export const QuizResult = ({
 
         <S.ModalBottom>
           <S.ResultButtonGroup>
-            <S.ResultButton $buttonType={"restart"}>다시하기</S.ResultButton>
-            <S.ResultButton $buttonType={"finish"}>끝내기</S.ResultButton>
+            <S.ResultButton $buttonType="restart" onClick={onRestart}>
+              다시하기
+            </S.ResultButton>
+            <S.ResultButton $buttonType="finish" onClick={onClose}>
+              끝내기
+            </S.ResultButton>
           </S.ResultButtonGroup>
         </S.ModalBottom>
       </>

@@ -4,6 +4,7 @@ import { palette } from "@/shared/config/theme";
 import Correct from "../assets/correct.svg";
 import InCorrect from "../assets/in-correct.svg";
 import Clear from "../assets/clear.svg";
+import Fail from "../assets/fail.svg";
 
 interface ResultButtonType {
   $buttonType: "restart" | "finish";
@@ -166,6 +167,8 @@ export const LastResultWrapper = styled.div`
 
 export const ClearIcon = styled(Clear)``;
 
+export const FailIcon = styled(Fail)``;
+
 export const ModalBottom = styled.div`
   display: flex;
   justify-content: center;
@@ -175,7 +178,7 @@ export const ModalBottom = styled.div`
 export const LastResultTitle = styled.span`
   ${font.title2.medium}
   color: ${({ theme }) => theme.label.normal};
-  width: 15rem;
+  width: 19rem;
   display: flex;
   flex-wrap: wrap;
 `;

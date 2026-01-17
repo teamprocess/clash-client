@@ -51,6 +51,14 @@ export const QuizModal = ({ isOpen, onClose, currentStage }: QuizModalProps) => 
     }
   };
 
+  const handleRestart = () => {
+    setCurrentIndex(0);
+    setAnswers({});
+    setCorrectCount(0);
+    setShowResult(false);
+    setShowFinalResult(false);
+  };
+
   const handleClose = () => {
     setCurrentIndex(0);
     setAnswers({});
@@ -61,13 +69,17 @@ export const QuizModal = ({ isOpen, onClose, currentStage }: QuizModalProps) => 
   };
 
   if (showFinalResult) {
+    const isPassed = correctCount >= 4;
+
     return (
       <Modal $width={25} $height={33} isOpen={isOpen} onClose={handleClose} gap={6.5}>
         <QuizResult
           isFinal={true}
+          isPassed={isPassed}
           correctCount={correctCount}
           total={currentStage.questions.length}
-          onNext={handleClose}
+          onRestart={handleRestart}
+          onClose={handleClose}
         />
       </Modal>
     );
