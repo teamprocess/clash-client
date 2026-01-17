@@ -53,8 +53,35 @@ export const QuizModal = ({ isOpen, onClose, currentStage }: QuizModalProps) => 
   if (showResult) {
     return (
       <Modal $width={25} $height={34} isOpen={isOpen} onClose={handleClose} gap={3}>
-        <div>{isCorrect ? <div>이부분은 정답입니다.</div> : <div>이부분은 오답입니다.</div>}</div>
-        <S.ConfirmButton onClick={handleNextOrClose}>다음</S.ConfirmButton>
+        {isCorrect ? (
+          <>
+            <S.ModalTop>
+              <S.ProgressBarWrapper>
+                <S.BarBackground>
+                  <S.BarActive $fill={((currentIndex + 1) / currentStage.questions.length) * 100} />
+                </S.BarBackground>
+                <S.ProgressLabelBox>
+                  <S.CurrentProgress>{currentIndex + 1}</S.CurrentProgress>/
+                  <S.TotalQuestions>{currentStage.questions.length}</S.TotalQuestions>
+                </S.ProgressLabelBox>
+              </S.ProgressBarWrapper>
+            </S.ModalTop>
+
+            <S.ModalBody>
+              <S.ResultWrapper>
+                <S.CorrectIcon />
+                <S.ResultTitle>짝짝짝! 정답이에요. 해설을 확인해볼까요?</S.ResultTitle>
+              </S.ResultWrapper>
+              <S.CommentaryBox>
+                함수형 컴포넌트는 this.state를 쓸 수 없어서, 상태를 만들고 변경해 리렌더링에
+                반영하려면 useState 훅을 사용합니다.
+              </S.CommentaryBox>
+              <S.ConfirmButton onClick={handleNextOrClose}>다음</S.ConfirmButton>
+            </S.ModalBody>
+          </>
+        ) : (
+          <div>이부분은 오답입니다.</div>
+        )}
       </Modal>
     );
   }
