@@ -1,36 +1,36 @@
 import * as S from "./CompetitionPage.style";
 import { GrowthRate } from "@/features/home/ui/compare/growth-rate/GrowthRate";
-import { CompetitionProps } from "@/pages/competition/model/useCompetition";
+import { useCompetition } from "@/pages/competition/model/useCompetition";
 
-export const CompetitionPage = ({
-  allData,
-  data,
-  activeTab,
-  setActiveTab,
-  ActiveDropdown,
-  setActiveDropdown,
-  activeMaxCommit,
-}: CompetitionProps) => {
+export const CompetitionPage = () => {
+  const { withMyCompetition } = useCompetition();
+
   return (
     <S.Wrapper>
       <S.CompetitionTopBar>
-        <S.WitchCompete $isActive={activeTab === "ME"} onClick={() => setActiveTab("ME")}>
+        <S.WitchCompete
+          $isActive={withMyCompetition.activeTab === "ME"}
+          onClick={() => withMyCompetition.setActiveTab("ME")}
+        >
           나와의 경쟁
         </S.WitchCompete>
 
-        <S.WitchCompete $isActive={activeTab === "RIVAL"} onClick={() => setActiveTab("RIVAL")}>
+        <S.WitchCompete
+          $isActive={withMyCompetition.activeTab === "RIVAL"}
+          onClick={() => withMyCompetition.setActiveTab("RIVAL")}
+        >
           라이벌과의 경쟁
         </S.WitchCompete>
       </S.CompetitionTopBar>
-      {activeTab === "ME" ? (
+      {withMyCompetition.activeTab === "ME" ? (
         <S.ContentArea>
           <S.GraphWrapper>
             <S.AnalyzeTitle>내 성장도 분석</S.AnalyzeTitle>
             <S.GraphBox>
               <S.Bars>
-                {data.map(({ date, growth_rate }) => (
+                {withMyCompetition.data.map(({ date, growth_rate }) => (
                   <S.BarWrapper key={date}>
-                    <S.Bar $ratio={growth_rate / activeMaxCommit}>
+                    <S.Bar $ratio={growth_rate / withMyCompetition.activeMaxCommit}>
                       <S.ValueHoveringBox>
                         <S.BallValue />
                         <S.BarValue>{growth_rate}%</S.BarValue>
@@ -62,7 +62,9 @@ export const CompetitionPage = ({
                         <S.EXPIcon />
                         <S.ExplainText>총 획득 EXP</S.ExplainText>
                       </S.ImpressiveBox>
-                      <S.DataText>{allData.nowMyCompareData[0].earned_exp} EXP</S.DataText>
+                      <S.DataText>
+                        {withMyCompetition.allData.nowMyCompareData[0].earned_exp} EXP
+                      </S.DataText>
                     </S.DataBoxing>
                   </S.GridBox>
                   <S.GridBox>
@@ -71,7 +73,9 @@ export const CompetitionPage = ({
                         <S.RecordIcon />
                         <S.ExplainText>학습시간</S.ExplainText>
                       </S.ImpressiveBox>
-                      <S.DataText>{allData.nowMyCompareData[0].study_time} 시간</S.DataText>
+                      <S.DataText>
+                        {withMyCompetition.allData.nowMyCompareData[0].study_time} 시간
+                      </S.DataText>
                     </S.DataBoxing>
                   </S.GridBox>
                   <S.GridBox>
@@ -97,7 +101,9 @@ export const CompetitionPage = ({
                           기여수
                         </S.ExplainText>
                       </S.ImpressiveBox>
-                      <S.DataText>{allData.nowMyCompareData[0].github_attributor}</S.DataText>
+                      <S.DataText>
+                        {withMyCompetition.allData.nowMyCompareData[0].github_attributor}
+                      </S.DataText>
                     </S.DataBoxing>
                   </S.GridBox>
                 </S.GridContainer>
@@ -107,8 +113,8 @@ export const CompetitionPage = ({
                   <S.CompareBoxTitle>비교2</S.CompareBoxTitle>
                   <S.SelectWrapper>
                     <S.Select
-                      value={ActiveDropdown}
-                      onChange={e => setActiveDropdown(e.target.value)}
+                      value={withMyCompetition.ActiveDropdown}
+                      onChange={e => withMyCompetition.setActiveDropdown(e.target.value)}
                     >
                       {["어제", "일주일 전", "한달 전", "전 시즌"].map(option => (
                         <S.Option key={option} value={option}>
@@ -127,10 +133,12 @@ export const CompetitionPage = ({
                         <S.ExplainText>총 획득 EXP</S.ExplainText>
                       </S.ImpressiveBox>
                       <S.GrowthRateBox>
-                        <S.DataText>{allData.beforeMyCompareData[0].earned_exp} EXP</S.DataText>
+                        <S.DataText>
+                          {withMyCompetition.allData.beforeMyCompareData[0].earned_exp} EXP
+                        </S.DataText>
                         <GrowthRate
-                          yesterday={allData.nowMyCompareData[0].earned_exp}
-                          today={allData.beforeMyCompareData[0].earned_exp}
+                          yesterday={withMyCompetition.allData.nowMyCompareData[0].earned_exp}
+                          today={withMyCompetition.allData.beforeMyCompareData[0].earned_exp}
                         />
                       </S.GrowthRateBox>
                     </S.DataBoxing>
@@ -142,10 +150,12 @@ export const CompetitionPage = ({
                         <S.ExplainText>학습시간</S.ExplainText>
                       </S.ImpressiveBox>
                       <S.GrowthRateBox>
-                        <S.DataText>{allData.beforeMyCompareData[0].study_time} 시간</S.DataText>
+                        <S.DataText>
+                          {withMyCompetition.allData.beforeMyCompareData[0].study_time} 시간
+                        </S.DataText>
                         <GrowthRate
-                          yesterday={allData.nowMyCompareData[0].study_time}
-                          today={allData.beforeMyCompareData[0].study_time}
+                          yesterday={withMyCompetition.allData.nowMyCompareData[0].study_time}
+                          today={withMyCompetition.allData.beforeMyCompareData[0].study_time}
                         />
                       </S.GrowthRateBox>
                     </S.DataBoxing>
@@ -174,10 +184,14 @@ export const CompetitionPage = ({
                         </S.ExplainText>
                       </S.ImpressiveBox>
                       <S.GrowthRateBox>
-                        <S.DataText>{allData.beforeMyCompareData[0].github_attributor}</S.DataText>
+                        <S.DataText>
+                          {withMyCompetition.allData.beforeMyCompareData[0].github_attributor}
+                        </S.DataText>
                         <GrowthRate
-                          yesterday={allData.nowMyCompareData[0].github_attributor}
-                          today={allData.beforeMyCompareData[0].github_attributor}
+                          yesterday={
+                            withMyCompetition.allData.nowMyCompareData[0].github_attributor
+                          }
+                          today={withMyCompetition.allData.beforeMyCompareData[0].github_attributor}
                         />
                       </S.GrowthRateBox>
                     </S.DataBoxing>
