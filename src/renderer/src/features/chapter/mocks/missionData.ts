@@ -64,6 +64,42 @@ export const stagesData: Stage[] = [
         explanation:
           "JSX는 JavaScript의 확장 문법으로, UI 구조를 코드로 선언적으로 표현할 수 있게 해줍니다.",
       },
+      {
+        id: 3,
+        title: "React 컴포넌트의 올바른 반환값은?",
+        choices: [
+          { id: 1, text: "문자열" },
+          { id: 2, text: "숫자" },
+          { id: 3, text: "JSX 요소" },
+          { id: 4, text: "배열만" },
+        ],
+        answerId: 3,
+        explanation: "React 컴포넌트는 JSX 요소를 반환해야 하며, 이는 UI를 나타냅니다.",
+      },
+      {
+        id: 4,
+        title: "React에서 key prop의 용도는?",
+        choices: [
+          { id: 1, text: "스타일 지정" },
+          { id: 2, text: "요소 식별" },
+          { id: 3, text: "이벤트 처리" },
+          { id: 4, text: "데이터 저장" },
+        ],
+        answerId: 2,
+        explanation: "key prop은 React가 리스트의 각 요소를 고유하게 식별하는 데 사용됩니다.",
+      },
+      {
+        id: 5,
+        title: "Virtual DOM의 장점은?",
+        choices: [
+          { id: 1, text: "메모리 절약" },
+          { id: 2, text: "렌더링 최적화" },
+          { id: 3, text: "코드 압축" },
+          { id: 4, text: "보안 강화" },
+        ],
+        answerId: 2,
+        explanation: "Virtual DOM은 실제 DOM 조작을 최소화하여 렌더링 성능을 최적화합니다.",
+      },
     ],
   },
 
@@ -79,7 +115,7 @@ export const stagesData: Stage[] = [
     ],
     questions: [
       {
-        id: 3,
+        id: 6,
         title: "부모에서 자식으로 데이터를 전달할 때 사용하는 것은?",
         choices: [
           { id: 1, text: "state" },
@@ -92,7 +128,7 @@ export const stagesData: Stage[] = [
           "props는 부모 컴포넌트가 자식 컴포넌트로 데이터를 전달할 때 사용하는 속성입니다.",
       },
       {
-        id: 4,
+        id: 7,
         title: "이벤트 핸들러로 올바른 것은?",
         choices: [
           { id: 1, text: "onclick()" },
@@ -102,6 +138,43 @@ export const stagesData: Stage[] = [
         ],
         answerId: 2,
         explanation: "React에서는 이벤트 핸들러를 camelCase로 작성하고 함수 자체를 전달합니다.",
+      },
+      {
+        id: 8,
+        title: "Props의 특징은?",
+        choices: [
+          { id: 1, text: "자식이 수정 가능" },
+          { id: 2, text: "읽기 전용" },
+          { id: 3, text: "전역 변수" },
+          { id: 4, text: "상태 관리용" },
+        ],
+        answerId: 2,
+        explanation: "Props는 읽기 전용(read-only)이며 자식 컴포넌트에서 직접 수정할 수 없습니다.",
+      },
+      {
+        id: 9,
+        title: "State 변경 시 사용하는 것은?",
+        choices: [
+          { id: 1, text: "직접 할당" },
+          { id: 2, text: "setState 함수" },
+          { id: 3, text: "변수 재선언" },
+          { id: 4, text: "props 수정" },
+        ],
+        answerId: 2,
+        explanation:
+          "State는 반드시 setState 함수를 통해서만 변경해야 React가 변경을 감지하고 리렌더링합니다.",
+      },
+      {
+        id: 10,
+        title: "합성 이벤트(Synthetic Event)의 장점은?",
+        choices: [
+          { id: 1, text: "크로스 브라우징" },
+          { id: 2, text: "메모리 절약" },
+          { id: 3, text: "속도 향상" },
+          { id: 4, text: "코드 간소화" },
+        ],
+        answerId: 1,
+        explanation: "React의 합성 이벤트는 모든 브라우저에서 동일하게 동작하도록 보장합니다.",
       },
     ],
   },
@@ -118,7 +191,7 @@ export const stagesData: Stage[] = [
     ],
     questions: [
       {
-        id: 5,
+        id: 11,
         title: "useState의 반환값은?",
         choices: [
           { id: 1, text: "값 하나" },
@@ -130,7 +203,7 @@ export const stagesData: Stage[] = [
         explanation: "useState는 [state, setState] 형태의 배열을 반환합니다.",
       },
       {
-        id: 6,
+        id: 12,
         title: "useEffect는 언제 실행되는가?",
         choices: [
           { id: 1, text: "컴파일 시" },
@@ -140,6 +213,44 @@ export const stagesData: Stage[] = [
         ],
         answerId: 2,
         explanation: "useEffect는 컴포넌트가 렌더링된 이후에 실행됩니다.",
+      },
+      {
+        id: 13,
+        title: "useEffect의 의존성 배열이 빈 배열일 때는?",
+        choices: [
+          { id: 1, text: "매 렌더링마다 실행" },
+          { id: 2, text: "최초 1회만 실행" },
+          { id: 3, text: "실행 안됨" },
+          { id: 4, text: "언마운트 시만 실행" },
+        ],
+        answerId: 2,
+        explanation: "의존성 배열이 빈 배열이면 컴포넌트가 마운트될 때 최초 1회만 실행됩니다.",
+      },
+      {
+        id: 14,
+        title: "Hook의 규칙으로 올바른 것은?",
+        choices: [
+          { id: 1, text: "조건문 안에서 호출 가능" },
+          { id: 2, text: "최상위에서만 호출" },
+          { id: 3, text: "반복문 안에서 호출 가능" },
+          { id: 4, text: "어디서든 호출 가능" },
+        ],
+        answerId: 2,
+        explanation:
+          "Hook은 항상 컴포넌트의 최상위에서 호출해야 하며, 조건문이나 반복문 안에서는 호출할 수 없습니다.",
+      },
+      {
+        id: 15,
+        title: "useEffect의 cleanup 함수는 언제 실행되는가?",
+        choices: [
+          { id: 1, text: "마운트 시" },
+          { id: 2, text: "렌더링 시" },
+          { id: 3, text: "언마운트 시" },
+          { id: 4, text: "에러 발생 시" },
+        ],
+        answerId: 3,
+        explanation:
+          "cleanup 함수는 컴포넌트가 언마운트될 때 또는 다음 effect가 실행되기 전에 실행됩니다.",
       },
     ],
   },
@@ -156,7 +267,7 @@ export const stagesData: Stage[] = [
     ],
     questions: [
       {
-        id: 7,
+        id: 16,
         title: "커스텀 훅의 이름 규칙은?",
         choices: [
           { id: 1, text: "hook으로 시작" },
@@ -168,7 +279,7 @@ export const stagesData: Stage[] = [
         explanation: "React 훅은 반드시 use로 시작해야 훅 규칙을 정상적으로 적용받을 수 있습니다.",
       },
       {
-        id: 8,
+        id: 17,
         title: "useContext의 목적은?",
         choices: [
           { id: 1, text: "DOM 접근" },
@@ -178,6 +289,43 @@ export const stagesData: Stage[] = [
         ],
         answerId: 2,
         explanation: "useContext는 props drilling 없이 전역 데이터를 공유하기 위해 사용됩니다.",
+      },
+      {
+        id: 18,
+        title: "Context를 생성하는 함수는?",
+        choices: [
+          { id: 1, text: "useState" },
+          { id: 2, text: "createContext" },
+          { id: 3, text: "useContext" },
+          { id: 4, text: "makeContext" },
+        ],
+        answerId: 2,
+        explanation: "React.createContext()를 사용하여 새로운 Context 객체를 생성합니다.",
+      },
+      {
+        id: 19,
+        title: "useReducer의 장점은?",
+        choices: [
+          { id: 1, text: "간단한 상태 관리" },
+          { id: 2, text: "복잡한 상태 로직 관리" },
+          { id: 3, text: "성능 향상" },
+          { id: 4, text: "메모리 절약" },
+        ],
+        answerId: 2,
+        explanation: "useReducer는 복잡한 상태 로직을 더 예측 가능하고 관리하기 쉽게 만들어줍니다.",
+      },
+      {
+        id: 20,
+        title: "useMemo의 용도는?",
+        choices: [
+          { id: 1, text: "상태 관리" },
+          { id: 2, text: "값 메모이제이션" },
+          { id: 3, text: "이벤트 처리" },
+          { id: 4, text: "라우팅" },
+        ],
+        answerId: 2,
+        explanation:
+          "useMemo는 계산 비용이 높은 값을 메모이제이션하여 불필요한 재계산을 방지합니다.",
       },
     ],
   },
@@ -195,7 +343,7 @@ export const stagesData: Stage[] = [
     ],
     questions: [
       {
-        id: 9,
+        id: 21,
         title: "페이지 이동에 사용하는 컴포넌트는?",
         choices: [
           { id: 1, text: "a" },
@@ -207,7 +355,7 @@ export const stagesData: Stage[] = [
         explanation: "React Router에서는 페이지 이동 시 Link 컴포넌트를 사용합니다.",
       },
       {
-        id: 10,
+        id: 22,
         title: "URL 파라미터를 읽는 훅은?",
         choices: [
           { id: 1, text: "useParams" },
@@ -217,6 +365,43 @@ export const stagesData: Stage[] = [
         ],
         answerId: 1,
         explanation: "useParams 훅을 사용하면 URL에 포함된 파라미터 값을 읽을 수 있습니다.",
+      },
+      {
+        id: 23,
+        title: "프로그래매틱 네비게이션에 사용하는 훅은?",
+        choices: [
+          { id: 1, text: "useHistory" },
+          { id: 2, text: "useNavigate" },
+          { id: 3, text: "useRoute" },
+          { id: 4, text: "useLink" },
+        ],
+        answerId: 2,
+        explanation:
+          "useNavigate 훅을 사용하면 코드 내에서 프로그래매틱하게 페이지를 이동할 수 있습니다.",
+      },
+      {
+        id: 24,
+        title: "중첩 라우팅을 위한 컴포넌트는?",
+        choices: [
+          { id: 1, text: "Nested" },
+          { id: 2, text: "Outlet" },
+          { id: 3, text: "Children" },
+          { id: 4, text: "SubRoute" },
+        ],
+        answerId: 2,
+        explanation: "Outlet 컴포넌트는 중첩된 라우트의 자식 요소를 렌더링할 위치를 지정합니다.",
+      },
+      {
+        id: 25,
+        title: "현재 위치 정보를 가져오는 훅은?",
+        choices: [
+          { id: 1, text: "useLocation" },
+          { id: 2, text: "usePosition" },
+          { id: 3, text: "usePath" },
+          { id: 4, text: "useRoute" },
+        ],
+        answerId: 1,
+        explanation: "useLocation 훅은 현재 URL의 pathname, search, hash 등의 정보를 제공합니다.",
       },
     ],
   },
