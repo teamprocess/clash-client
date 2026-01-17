@@ -65,7 +65,7 @@ export const QuizModal = ({ isOpen, onClose, currentStage }: QuizModalProps) => 
   }
 
   return (
-    <Modal $width={25} $height={34} isOpen={isOpen} onClose={handleClose} gap={3}>
+    <Modal $width={25} $height={33} isOpen={isOpen} onClose={handleClose} gap={3}>
       <S.ModalTop>
         <S.ProgressBarWrapper>
           <S.BarBackground>
