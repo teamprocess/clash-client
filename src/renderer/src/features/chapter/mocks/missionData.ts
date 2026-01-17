@@ -18,6 +18,7 @@ export interface Question {
   title: string;
   choices: Choice[];
   answerId: number;
+  explanation: string;
 }
 
 export interface Choice {
@@ -47,6 +48,8 @@ export const stagesData: Stage[] = [
           { id: 4, text: "useMemo" },
         ],
         answerId: 2,
+        explanation:
+          "함수형 컴포넌트에서는 this.state를 사용할 수 없기 때문에 상태를 관리하려면 useState 훅을 사용해야 합니다.",
       },
       {
         id: 2,
@@ -58,6 +61,8 @@ export const stagesData: Stage[] = [
           { id: 4, text: "브라우저에서 직접 실행된다" },
         ],
         answerId: 3,
+        explanation:
+          "JSX는 JavaScript의 확장 문법으로, UI 구조를 코드로 선언적으로 표현할 수 있게 해줍니다.",
       },
     ],
   },
@@ -83,6 +88,8 @@ export const stagesData: Stage[] = [
           { id: 4, text: "ref" },
         ],
         answerId: 2,
+        explanation:
+          "props는 부모 컴포넌트가 자식 컴포넌트로 데이터를 전달할 때 사용하는 속성입니다.",
       },
       {
         id: 4,
@@ -94,6 +101,7 @@ export const stagesData: Stage[] = [
           { id: 4, text: "click={handleClick}" },
         ],
         answerId: 2,
+        explanation: "React에서는 이벤트 핸들러를 camelCase로 작성하고 함수 자체를 전달합니다.",
       },
     ],
   },
@@ -119,6 +127,7 @@ export const stagesData: Stage[] = [
           { id: 4, text: "함수" },
         ],
         answerId: 3,
+        explanation: "useState는 [state, setState] 형태의 배열을 반환합니다.",
       },
       {
         id: 6,
@@ -130,6 +139,7 @@ export const stagesData: Stage[] = [
           { id: 4, text: "언마운트 시만" },
         ],
         answerId: 2,
+        explanation: "useEffect는 컴포넌트가 렌더링된 이후에 실행됩니다.",
       },
     ],
   },
@@ -155,6 +165,7 @@ export const stagesData: Stage[] = [
           { id: 4, text: "자유" },
         ],
         answerId: 2,
+        explanation: "React 훅은 반드시 use로 시작해야 훅 규칙을 정상적으로 적용받을 수 있습니다.",
       },
       {
         id: 8,
@@ -166,6 +177,7 @@ export const stagesData: Stage[] = [
           { id: 4, text: "비동기 처리" },
         ],
         answerId: 2,
+        explanation: "useContext는 props drilling 없이 전역 데이터를 공유하기 위해 사용됩니다.",
       },
     ],
   },
@@ -192,6 +204,7 @@ export const stagesData: Stage[] = [
           { id: 4, text: "Switch" },
         ],
         answerId: 2,
+        explanation: "React Router에서는 페이지 이동 시 Link 컴포넌트를 사용합니다.",
       },
       {
         id: 10,
@@ -203,6 +216,7 @@ export const stagesData: Stage[] = [
           { id: 4, text: "useNavigate" },
         ],
         answerId: 1,
+        explanation: "useParams 훅을 사용하면 URL에 포함된 파라미터 값을 읽을 수 있습니다.",
       },
     ],
   },
