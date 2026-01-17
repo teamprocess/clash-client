@@ -42,11 +42,11 @@ export const QuizResult = ({
 
         <S.ModalBody>
           <S.LastResultWrapper>
-            {isPassed ? <S.ClearIcon /> : <S.FailIcon />}
+            {isPassed ? <S.CorrectIcon /> : <S.IncorrectIcon />}
             <S.ResultLabelGroup>
               <S.LastResultTitle>
                 {isPassed
-                  ? `${total}문제 중 ${correctCount}문제를 맞추어 미션 클리어하셨습니다!`
+                  ? `${total}문제 중 ${correctCount}문제를 맞추어 미션을 클리어하셨습니다!`
                   : `${total}문제 중 ${correctCount}문제를 맞추어 미션을 클리어하지 못했습니다`}
               </S.LastResultTitle>
               <S.LastResultSubTitle>
