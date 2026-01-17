@@ -13,11 +13,9 @@ import { AuthLayout } from "@/app/layouts/auth";
 import { SignInPage, SignUpPage } from "@/pages/auth";
 import { NotFoundPage } from "@/pages/not-found/NotFoundPage";
 import { ComparePage } from "@/pages/home/compare/ComparePage";
-import { useCompetition } from "@/pages/competition/model/useCompetition";
 
 function App() {
   const { theme } = useTheme();
-  const { withMyCompetition } = useCompetition();
 
   return (
     <ThemeProvider theme={theme}>
@@ -27,7 +25,7 @@ function App() {
           <Route element={<MainLayout />}>
             <Route path="/" element={<HomePage />} />
             <Route path="/home/transition" element={<ComparePage />} />
-            <Route path="/competition" element={<CompetitionPage {...withMyCompetition} />} />
+            <Route path="/competition" element={<CompetitionPage />} />
             <Route path="/record" element={<RecordPage />} />
             <Route path="/group" element={<GroupPage />} />
             <Route path="/roadmap" element={<RoadMapPage />} />
