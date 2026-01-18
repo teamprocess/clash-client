@@ -3,8 +3,8 @@ import * as S from "./Filter.style";
 const sortOptions = [
   { label: "최신 순", value: "latest" },
   { label: "인기 순", value: "popular" },
-  { label: "가격 높은 순", value: "priceDesc" },
-  { label: "가격 낮은 순", value: "priceAsc" },
+  { label: "가격 높은 순", value: "expensive" },
+  { label: "가격 낮은 순", value: "cheapest" },
 ];
 
 const categoryOptions = [
