@@ -21,7 +21,6 @@ export const RankingContainer = styled.div<{ $page: RankingPageEnum }>`
   top: ${({ $page }) => ($page === "section" ? "3rem" : $page === "chapter" ? "5.45rem" : 0)};
   left: 3rem;
   width: 16rem;
-  // height: ${({ $page }) => ($page === "section" ? "39rem" : $page === "chapter" ? "36rem" : 0)};
   z-index: 100;
   padding: 1.6rem 0 1rem;
 `;
