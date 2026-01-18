@@ -18,6 +18,8 @@ export const QuizModal = ({
   onMissionComplete,
 }: QuizModalProps) => {
   const [currentIndex, setCurrentIndex] = useState(0);
+  // { 문제번호: 선택한 보기ID } 형태로 저장
+  // 예) { 0: 2, 1: 4 }
   const [answers, setAnswers] = useState<Record<number, number>>({});
   const [correctCount, setCorrectCount] = useState(0);
   const [showResult, setShowResult] = useState(false);
@@ -29,6 +31,8 @@ export const QuizModal = ({
   const selectedChoiceId = answers[currentIndex];
 
   const handleSelectChoice = (choiceId: number) => {
+    // 기존 답변을 유지하면서
+    // 현재 문제 번호에 대한 답만 갱신
     setAnswers(prev => ({
       ...prev,
       [currentIndex]: choiceId,
@@ -36,28 +40,34 @@ export const QuizModal = ({
   };
 
   const handleConfirm = () => {
+    // 선택 안 했는지 확인
     if (selectedChoiceId == null) return;
-
+    // 선택한 답과 정답 ID 비교
     const correct = selectedChoiceId === currentQuestion.answerId;
+    // 현재 문제의 정답 여부 저장 (결과 화면용)
     setIsCorrect(correct);
-
+    // 정답이면 전체 맞힌 개수 증가
     if (correct) {
       setCorrectCount(prev => prev + 1);
     }
-
+    // 문제 결과 화면 표시
     setShowResult(true);
   };
 
   const handleNextOrClose = () => {
+    // 결과 화면 닫기
     setShowResult(false);
-
+    // 문제가 남아 있는지 확인
     if (currentIndex < questions.length - 1) {
+      // 다음 문제로 이동
       setCurrentIndex(prev => prev + 1);
     } else {
+      // 마지막 문제였다면 최종 결과 화면 표시
       setShowFinalResult(true);
     }
   };
 
+  // 퀴즈 재시작을 위한 리셋 함수
   const resetState = () => {
     setCurrentIndex(0);
     setAnswers({});
