@@ -1,17 +1,10 @@
 import { generatePath } from "../utils/pathGenerator";
 import { RoadmapNode } from "../components/RoadmapNode";
 import * as S from "./Roadmap.style";
-
-type RoadmapNodeType = {
-  id: number;
-  x: number;
-  y: number;
-  status: "locked" | "current" | "completed";
-  label: string;
-};
+import type { Node } from "../roadmapData";
 
 interface RoadmapProps {
-  nodes: RoadmapNodeType[];
+  nodes: Node[];
   onSelectStage: (stageId: number) => void;
 }
 
