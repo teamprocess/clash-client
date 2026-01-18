@@ -51,10 +51,10 @@ export const useCompetition = () => {
   };
 
   const dropDownValue = [
-    { key: "yesterday", label: "어제" },
-    { key: "lastWeek", label: "일주일 전" },
-    { key: "lastMonth", label: "한달 전" },
-    { key: "lastSeason", label: "전 시즌" },
+    { key: "YesterDay", label: "어제" },
+    { key: "LastWeek", label: "일주일 전" },
+    { key: "LastMonth", label: "한달 전" },
+    { key: "LastSeason", label: "전 시즌" },
   ];
 
   const activeMaxCommit = Math.max(...data.map(m => m.growth_rate));
