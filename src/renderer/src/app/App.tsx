@@ -7,8 +7,8 @@ import { HomePage } from "@/pages/home";
 import { CompetitionPage } from "@/pages/competition";
 import { RecordPage } from "@/pages/record";
 import { GroupPage } from "@/pages/group";
-import { ShopPage } from "@/pages/shop";
 import { ChapterPage, RoadmapMajorChoicePage } from "@/pages/roadmap";
+import { ProductsPage, ShopPage } from "@/pages/shop";
 import { AuthLayout } from "@/app/layouts/auth";
 import { SignInPage, SignUpPage } from "@/pages/auth";
 import { NotFoundPage } from "@/pages/not-found/NotFoundPage";
@@ -34,7 +34,12 @@ function App() {
             <Route path="/roadmap/major-choice" element={<RoadmapMajorChoicePage />} />
             <Route path="/roadmap/:chapter-id" element={<ChapterPage />} />
           </Route>
-
+          <Route element={<MainLayout isScrollAble />}>
+            <Route path="/shop" element={<ShopPage />} />
+          </Route>
+          <Route element={<MainLayout isFixed />}>
+            <Route path="/shop/products" element={<ProductsPage />} />
+          </Route>
           <Route element={<AuthLayout />}>
             <Route path="/sign-in" element={<SignInPage />} />
             <Route path="/sign-up" element={<SignUpPage />} />
