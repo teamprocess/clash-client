@@ -100,6 +100,7 @@ export const Bar = styled.div<{ $ratio: number }>`
   height: ${({ $ratio }) => `calc(${$ratio * 90}%)`};
   min-height: 4px;
   border-radius: 0.25rem 0.25rem 0 0;
+  position: relative;
   &:hover ${() => BarValue} {
     opacity: 1;
     visibility: visible;
@@ -107,7 +108,7 @@ export const Bar = styled.div<{ $ratio: number }>`
   }
 `;
 
-export const ValueHoveringBox = styled.div`
+export const ValueHoverBox = styled.div`
   position: relative;
   display: flex;
   flex-direction: column;
@@ -133,6 +134,7 @@ export const BarValue = styled.p`
   z-index: 1000;
   white-space: nowrap;
   margin-top: 1.75rem;
+
   position: absolute;
   visibility: hidden;
   opacity: 0;
@@ -143,7 +145,6 @@ export const BarValue = styled.p`
 export const BarLabel = styled.p`
   ${font.caption.medium}
   color: ${({ theme }) => theme.label.normal};
-  position: absolute;
 `;
 
 export const Line = styled.div`
@@ -152,7 +153,7 @@ export const Line = styled.div`
   background: ${({ theme }) => theme.line.neutral};
 `;
 
-export const TtitleBox = styled.div`
+export const TitleBox = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;

@@ -14,9 +14,9 @@ interface TotalCompareData {
 }
 
 export const useCompetition = () => {
-  const [activeTab, setActiveTab] = useState<CompeteTab>("ME");
+  const [competitionTab, setCompetitionTab] = useState<CompeteTab>("ME");
 
-  const [ActiveDropdown, setActiveDropdown] = useState("어제");
+  const [competitionDropdown, setCompetitionDropdown] = useState("어제");
 
   const data: { date: number; growth_rate: number }[] = [
     { date: 1, growth_rate: 31 },
@@ -50,17 +50,25 @@ export const useCompetition = () => {
     ],
   };
 
+  const dropDownValue = [
+    { key: "yesterday", label: "어제" },
+    { key: "lastWeek", label: "일주일 전" },
+    { key: "lastMonth", label: "한달 전" },
+    { key: "lastSeason", label: "전 시즌" },
+  ];
+
   const activeMaxCommit = Math.max(...data.map(m => m.growth_rate));
 
   return {
     withMyCompetition: {
       allData,
       data,
-      activeTab,
-      setActiveTab,
-      ActiveDropdown,
-      setActiveDropdown,
+      competitionTab,
+      setCompetitionTab,
+      competitionDropdown,
+      setCompetitionDropdown,
       activeMaxCommit,
+      dropDownValue,
     },
   };
 };
