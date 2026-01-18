@@ -71,8 +71,8 @@ export interface GrowthRateProps {
 export const getGrowthInfo = (yesterday: number, today: number) => {
   const diff = today - yesterday;
 
-  if (diff > 0) return { status: "up", deg: 180, value: diff };
-  if (diff < 0) return { status: "down", deg: 0, value: Math.abs(diff) };
+  if (diff > 0) return { status: "up", deg: 180, value: Math.round(diff * 10) / 10 };
+  if (diff < 0) return { status: "down", deg: 0, value: Math.abs(Math.round(diff * 10) / 10) };
   return { status: "same", deg: null, value: "-" };
 };
 
@@ -89,6 +89,8 @@ export const useCompare = () => {
       yesterday: statsData.data.yesterday,
       today: statsData.data.today,
     },
+
+    // 차후 추가될 데이터 내용
     // solved-ac: {
     //   statsData: statsData.data,
     // },
