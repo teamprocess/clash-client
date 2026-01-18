@@ -9,20 +9,20 @@ export const CompetitionPage = () => {
     <S.Wrapper>
       <S.CompetitionTopBar>
         <S.WitchCompete
-          $isActive={withMyCompetition.activeTab === "ME"}
-          onClick={() => withMyCompetition.setActiveTab("ME")}
+          $isActive={withMyCompetition.competitionTab === "ME"}
+          onClick={() => withMyCompetition.setCompetitionTab("ME")}
         >
           나와의 경쟁
         </S.WitchCompete>
 
         <S.WitchCompete
-          $isActive={withMyCompetition.activeTab === "RIVAL"}
-          onClick={() => withMyCompetition.setActiveTab("RIVAL")}
+          $isActive={withMyCompetition.competitionTab === "RIVAL"}
+          onClick={() => withMyCompetition.setCompetitionTab("RIVAL")}
         >
           라이벌과의 경쟁
         </S.WitchCompete>
       </S.CompetitionTopBar>
-      {withMyCompetition.activeTab === "ME" ? (
+      {withMyCompetition.competitionTab === "ME" ? (
         <S.ContentArea>
           <S.GraphWrapper>
             <S.AnalyzeTitle>내 성장도 분석</S.AnalyzeTitle>
@@ -31,10 +31,10 @@ export const CompetitionPage = () => {
                 {withMyCompetition.data.map(({ date, growth_rate }) => (
                   <S.BarWrapper key={date}>
                     <S.Bar $ratio={growth_rate / withMyCompetition.activeMaxCommit}>
-                      <S.ValueHoveringBox>
+                      <S.ValueHoverBox>
                         <S.BallValue />
                         <S.BarValue>{growth_rate}%</S.BarValue>
-                      </S.ValueHoveringBox>
+                      </S.ValueHoverBox>
                     </S.Bar>
 
                     <S.BarLabel>{date}월</S.BarLabel>
@@ -45,10 +45,10 @@ export const CompetitionPage = () => {
           </S.GraphWrapper>
           <S.Line />
           <S.GraphWrapper>
-            <S.TtitleBox>
+            <S.TitleBox>
               <S.AnalyzeTitle>내 기록 비교</S.AnalyzeTitle>
               <S.SubText>각 기간 동안 기록한 스탯의 평균을 비교합니다.</S.SubText>
-            </S.TtitleBox>
+            </S.TitleBox>
             <S.CompareContainer>
               <S.CompareBox>
                 <S.TextBox>
@@ -113,12 +113,12 @@ export const CompetitionPage = () => {
                   <S.CompareBoxTitle>비교2</S.CompareBoxTitle>
                   <S.SelectWrapper>
                     <S.Select
-                      value={withMyCompetition.ActiveDropdown}
-                      onChange={e => withMyCompetition.setActiveDropdown(e.target.value)}
+                      value={withMyCompetition.competitionDropdown}
+                      onChange={e => withMyCompetition.setCompetitionDropdown(e.target.value)}
                     >
-                      {["어제", "일주일 전", "한달 전", "전 시즌"].map(option => (
-                        <S.Option key={option} value={option}>
-                          {option}
+                      {withMyCompetition.dropDownValue.map(option => (
+                        <S.Option key={option.key} value={option.key}>
+                          {option.label}
                         </S.Option>
                       ))}
                     </S.Select>
