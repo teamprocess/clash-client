@@ -1,9 +1,12 @@
+export type StageStatus = "locked" | "current" | "completed";
+
 export interface Stage {
   id: number;
   title: string;
   currentProgress: number;
   totalMissions: number;
   missions: Mission[];
+  status: StageStatus;
 }
 
 export interface Mission {
@@ -32,6 +35,7 @@ export const stagesData: Stage[] = [
     title: "1단계 미션",
     currentProgress: 0,
     totalMissions: 3,
+    status: "current",
     missions: [
       {
         id: 1,
@@ -249,6 +253,7 @@ export const stagesData: Stage[] = [
     title: "2단계 미션",
     currentProgress: 0,
     totalMissions: 3,
+    status: "locked",
     missions: [
       {
         id: 4,
@@ -466,6 +471,7 @@ export const stagesData: Stage[] = [
     title: "3단계 미션",
     currentProgress: 0,
     totalMissions: 3,
+    status: "locked",
     missions: [
       {
         id: 7,

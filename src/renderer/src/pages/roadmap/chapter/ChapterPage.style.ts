@@ -80,7 +80,7 @@ export const CurrentSectionBox = styled.div`
   transform: translateX(-50%);
 `;
 
-export const ArrowIcon = styled(Arrow)<{ $direction }>`
+export const ArrowIcon = styled(Arrow)<{ $direction: "left" | "right" }>`
   rotate: ${({ $direction }) => ($direction === "left" ? "0deg" : "180deg")};
 `;
 
@@ -133,7 +133,7 @@ export const MissionCurrentProgress = styled.span`
 
 export const MissionTotalMissions = styled.span`
   ${font.headline1.medium}
-  color: ${({ theme }) => theme.label.neutral};}
+  color: ${({ theme }) => theme.label.neutral};
 `;
 
 export const MissionList = styled.div`
