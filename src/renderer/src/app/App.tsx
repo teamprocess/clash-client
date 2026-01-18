@@ -7,11 +7,12 @@ import { HomePage } from "@/pages/home";
 import { CompetitionPage } from "@/pages/competition";
 import { RecordPage } from "@/pages/record";
 import { GroupPage } from "@/pages/group";
+import { ChapterPage, RoadmapMajorChoicePage } from "@/pages/roadmap";
 import { ProductsPage, ShopPage } from "@/pages/shop";
-import { RoadMapPage } from "@/pages/roadmap";
 import { AuthLayout } from "@/app/layouts/auth";
 import { SignInPage, SignUpPage } from "@/pages/auth";
 import { NotFoundPage } from "@/pages/not-found/NotFoundPage";
+import { RoadmapPage } from "@/pages/roadmap/section/RoadmapPage";
 import { ComparePage } from "@/pages/home/compare/ComparePage";
 
 function App() {
@@ -28,7 +29,10 @@ function App() {
             <Route path="/competition" element={<CompetitionPage />} />
             <Route path="/record" element={<RecordPage />} />
             <Route path="/group" element={<GroupPage />} />
-            <Route path="/roadmap" element={<RoadMapPage />} />
+            <Route path="/shop" element={<ShopPage />} />
+            <Route path="/roadmap" element={<RoadmapPage />} />
+            <Route path="/roadmap/major-choice" element={<RoadmapMajorChoicePage />} />
+            <Route path="/roadmap/:chapter-id" element={<ChapterPage />} />
           </Route>
           <Route element={<MainLayout isScrollAble />}>
             <Route path="/shop" element={<ShopPage />} />
