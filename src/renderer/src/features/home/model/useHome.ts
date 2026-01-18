@@ -230,6 +230,20 @@ export const useHome = () => {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const currentUserRef = useRef<HTMLDivElement>(null);
 
+  const rankingDropDownValue = [
+    { key: "Github", label: "Github" },
+    { key: "SolvedAc", label: "solved.ac" },
+    { key: "EXP", label: "EXP" },
+    { key: "AllTimeLearning", label: "총 학습 시간" },
+  ];
+
+  const rankingPeriodDropDownValue = [
+    { key: "YesterDay", label: "어제" },
+    { key: "ThisWeek", label: "이번 주" },
+    { key: "ThisMonth", label: "이번 달" },
+    { key: "ThisSeason", label: "이번 시즌" },
+  ];
+
   // Ranking - Sticky
   const [stickyState, setStickyState] = useState<"top" | "bottom" | "none">("none");
 
@@ -300,6 +314,8 @@ export const useHome = () => {
       setRankingDropdown,
       RankingPeriodDropdown,
       setRankingPeriodDropdown,
+      rankingDropDownValue,
+      rankingPeriodDropDownValue,
       wrapperRef,
       currentUserRef,
       userList,
