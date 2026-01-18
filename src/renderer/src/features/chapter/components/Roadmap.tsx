@@ -1,33 +1,38 @@
-import { roadmapNodes } from "../roadmapData";
 import { generatePath } from "../utils/pathGenerator";
 import { RoadmapNode } from "../components/RoadmapNode";
 import * as S from "./Roadmap.style";
-import { Dispatch, SetStateAction } from "react";
-import { Stage, stagesData } from "@/features/chapter/mocks/missionData";
+
+type RoadmapNodeType = {
+  id: number;
+  x: number;
+  y: number;
+  status: "locked" | "current" | "completed";
+  label: string;
+};
 
 interface RoadmapProps {
-  stageSetFn: Dispatch<SetStateAction<Stage>>;
+  nodes: RoadmapNodeType[];
+  onSelectStage: (stageId: number) => void;
 }
 
-export const Roadmap = ({ stageSetFn }: RoadmapProps) => {
-  const allPath = generatePath(roadmapNodes);
-  const completedNodes = roadmapNodes.filter(n => n.status === "completed");
+export const Roadmap = ({ nodes, onSelectStage }: RoadmapProps) => {
+  const allPath = generatePath(nodes);
+  const completedNodes = nodes.filter(n => n.status === "completed");
   const completedPath = generatePath(completedNodes);
 
   const handleNodeClick = (nodeId: number) => {
-    if (roadmapNodes.find(node => node.id === nodeId)?.status === "locked") return;
-    const selectedStage = stagesData.find(s => s.id == nodeId);
-    if (!selectedStage) return;
-    stageSetFn(selectedStage);
+    const node = nodes.find(n => n.id === nodeId);
+    if (!node || node.status === "locked") return;
+
+    onSelectStage(nodeId);
   };
 
   return (
     <S.RoadmapSvg viewBox="0 0 900 700">
       <S.PathLine d={allPath} />
-
       {completedNodes.length > 1 && <S.PathGlow d={completedPath} />}
 
-      {roadmapNodes.map(node => (
+      {nodes.map(node => (
         <RoadmapNode key={node.id} node={node} onClick={() => handleNodeClick(node.id)} />
       ))}
     </S.RoadmapSvg>
