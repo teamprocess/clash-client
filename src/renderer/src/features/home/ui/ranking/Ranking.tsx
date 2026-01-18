@@ -8,6 +8,8 @@ export const Ranking = ({
   setRankingDropdown,
   RankingPeriodDropdown,
   setRankingPeriodDropdown,
+  rankingDropDownValue,
+  rankingPeriodDropDownValue,
   wrapperRef,
   currentUserRef,
   userList,
@@ -22,9 +24,9 @@ export const Ranking = ({
         <S.DropDown>
           <S.SelectWrapper>
             <S.Select value={RankingDropdown} onChange={e => setRankingDropdown(e.target.value)}>
-              {["EXP", "Github", "solved.ac", "총 학습 시간"].map(option => (
-                <option key={option} value={option}>
-                  {option}
+              {rankingDropDownValue.map(option => (
+                <option key={option.key} value={option.key}>
+                  {option.label}
                 </option>
               ))}
             </S.Select>
@@ -35,9 +37,9 @@ export const Ranking = ({
               value={RankingPeriodDropdown}
               onChange={e => setRankingPeriodDropdown(e.target.value)}
             >
-              {["이번주", "이번달", "이번 시즌"].map(option => (
-                <option key={option} value={option}>
-                  {option}
+              {rankingPeriodDropDownValue.map(option => (
+                <option key={option.key} value={option.key}>
+                  {option.label}
                 </option>
               ))}
             </S.Select>
