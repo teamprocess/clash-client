@@ -1,6 +1,8 @@
 import * as S from "./Products.style";
 import { calculateDiscountedPrice } from "@/features/shop/lib/calculateDiscountedPrice";
 import { UseProducts } from "@/features/shop/model/useProducts";
+import { ProductCard } from "@/features/shop/ui/card/ProductCard";
+import { Filter } from "@/features/shop/ui/filter/Filter";
 
 export const Products = ({
   isPanelOpen,
@@ -10,51 +12,18 @@ export const Products = ({
 }: UseProducts) => {
   return (
     <S.MainContainer>
-      <S.FilterContainer>
-        <S.FilterBox>
-          <S.SelectWrapper>
-            <S.Select>
-              {["최신 순", "인기 순", "가격 높은 순", "가격 낮은 순"].map(option => (
-                <option key={option} value={option}>
-                  {option}
-                </option>
-              ))}
-            </S.Select>
-            <S.ArrowIcon />
-          </S.SelectWrapper>
-          <S.SelectWrapper>
-            <S.Select>
-              {["배너", "이름표", "휘장"].map(option => (
-                <option key={option} value={option}>
-                  {option}
-                </option>
-              ))}
-            </S.Select>
-            <S.ArrowIcon />
-          </S.SelectWrapper>
-        </S.FilterBox>
-        <S.SearchBox>
-          <S.SearchInput placeholder="상품명으로 검색" />
-          <S.SearchIcon />
-        </S.SearchBox>
-      </S.FilterContainer>
+      <Filter />
       <S.ContentWrapper $isPanelOpen={isPanelOpen}>
         <S.CardContainer $isPanelOpen={isPanelOpen}>
           {allProducts.data.products.map(product => (
-            <S.ProductCard key={product.id} onClick={() => handleCardClick(product.id)}>
-              <S.ProductInfoBox>
-                <S.ProductTitle>{product.title}</S.ProductTitle>
-                <S.PriceBox>
-                  {product.type === "TOKEN" ? <S.TokenIcon /> : <S.CookieIcon />}
-                  <S.PriceText>
-                    {calculateDiscountedPrice(product.price, product.discount)}
-                  </S.PriceText>
-                  {product.discount !== 0 && (
-                    <S.DiscountText>{`(-${product.discount}%)`}</S.DiscountText>
-                  )}
-                </S.PriceBox>
-              </S.ProductInfoBox>
-            </S.ProductCard>
+            <ProductCard
+              key={product.id}
+              title={product.title}
+              price={product.price}
+              discount={product.discount}
+              type={product.type}
+              onClick={() => handleCardClick(product.id)}
+            />
           ))}
         </S.CardContainer>
         {isPanelOpen && selectedProduct && (
