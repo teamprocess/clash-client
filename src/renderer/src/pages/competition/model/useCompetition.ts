@@ -50,28 +50,28 @@ export const useCompetition = () => {
     ],
   };
 
-  const dropDownValue = [
+  const competitionDropDownValue = [
     { key: "YesterDay", label: "어제" },
     { key: "LastWeek", label: "일주일 전" },
     { key: "LastMonth", label: "한달 전" },
     { key: "LastSeason", label: "전 시즌" },
   ];
 
-  const activeMaxCommit = Math.max(...data.map(m => m.growth_rate));
+  const myCompetitionMaxCommit = Math.max(...data.map(m => m.growth_rate));
 
   return {
-    withMyCompetition: {
-      allData,
-      data,
+    competition: {
       competitionTab,
       setCompetitionTab,
+    },
+    myCompetition: {
+      allData,
+      data,
       competitionDropdown,
       setCompetitionDropdown,
-      activeMaxCommit,
-      dropDownValue,
+      myCompetitionMaxCommit,
+      competitionDropDownValue,
     },
+    rivalCompetition: {},
   };
 };
-
-export type UseCompetitionReturn = ReturnType<typeof useCompetition>;
-export type CompetitionProps = UseCompetitionReturn["withMyCompetition"];
