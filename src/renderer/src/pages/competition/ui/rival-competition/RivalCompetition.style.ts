@@ -214,17 +214,20 @@ export const DropDownBox = styled.div`
 
 export const GraphBox = styled.div`
   padding: 1rem 1rem;
-  max-height: 18rem;
-  max-width: 33.75rem;
+  height: 18rem;
+  width: 100%;
   display: flex;
   align-items: flex-end;
   background-color: ${({ theme }) => theme.background.alternative};
   border-radius: 0.5rem;
+  position: relative;
 `;
 
 export const Svg = styled.svg`
   width: 100%;
   height: 100%;
+  position: absolute;
+  inset: 0;
 `;
 
 export const LineGroup = styled.g``;
@@ -239,4 +242,17 @@ export const LinePath = styled.path<{ $isMe?: boolean }>`
 export const Dot = styled.circle<{ $isMe?: boolean }>`
   r: ${({ $isMe }) => ($isMe ? 2 : 2)};
   cursor: pointer;
+`;
+
+export const ScrollArea = styled.div`
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+`;
+
+export const GraphInner = styled.div`
+  width: max-content;
+  min-width: 100%;
+  padding-bottom: 0.5rem;
 `;
