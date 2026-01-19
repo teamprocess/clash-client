@@ -61,6 +61,7 @@ export const TutorialModalAction = styled.div`
   background-color: ${({ theme }) => theme.primary.normal};
   border-radius: 0.25rem;
   padding: 0.5rem 2.5rem;
+  cursor: pointer;
 `;
 
 export const SectionDivider = styled.div<{ $type: string }>`
@@ -113,7 +114,7 @@ export const RoadmapBox = styled.div`
   padding: 2rem;
   gap: 2.5rem;
   width: 42rem;
-  height: 25rem;
+  height: 26rem;
   background-color: ${({ theme }) => theme.background.normal};
   border-radius: 1.25rem;
   box-shadow: 0 0 7px 0 ${({ theme }) => theme.line.normal};
@@ -125,11 +126,11 @@ export const TargetBox = styled.div`
   justify-content: flex-start;
   align-items: center;
   width: 17rem;
-  height: 25rem;
+  height: 26rem;
   background-color: ${({ theme }) => theme.line.neutral};
   border-radius: 1.25rem;
   padding: 1.5rem;
-  gap: 2rem;
+  gap: 2.5rem;
 `;
 
 export const RoadmapTop = styled.div`
@@ -145,7 +146,7 @@ export const RoadmapBottom = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 3rem;
+  gap: 2.5rem;
   width: 100%;
 `;
 
