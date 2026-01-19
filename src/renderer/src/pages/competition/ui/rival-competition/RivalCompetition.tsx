@@ -5,6 +5,11 @@ import { useCompetition } from "@/pages/competition/model/useCompetition";
 export const RivalCompetition = () => {
   const { rivalCompetition } = useCompetition();
 
+  const allGrowthRates = rivalCompetition.rivalsTransCompareData.flatMap(user =>
+    user.rate.map(r => r.growth_rate)
+  );
+  const maxValue = Math.max(...allGrowthRates);
+
   return (
     <S.Container>
       <S.CompareContentBox>
@@ -78,7 +83,7 @@ export const RivalCompetition = () => {
                 {rivalCompetition.rivalsTransCompareData.map(rival =>
                   rival.rate.map(({ date, growth_rate }) => (
                     <S.BarWrapper key={`${rival.username}-${date}`}>
-                      <S.Bar $ratio={growth_rate / rivalCompetition.rivalCompetitionMaxCommit}>
+                      <S.Bar $ratio={growth_rate / maxValue}>
                         <S.ValueHoverBox>
                           <S.BallValue />
                           <S.BarValue>{growth_rate}%</S.BarValue>
