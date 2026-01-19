@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { RivalsResponse } from "@/features/home/model/useHome";
 
 type CompeteTab = "ME" | "RIVAL";
 
@@ -14,9 +15,12 @@ interface TotalCompareData {
 }
 
 export const useCompetition = () => {
+  //myCompetition
   const [competitionTab, setCompetitionTab] = useState<CompeteTab>("ME");
 
   const [competitionDropdown, setCompetitionDropdown] = useState("어제");
+
+  const [competitionPeriodDropDown, setCompetitionPeriodDropDown] = useState("EXP");
 
   const data: { date: number; growth_rate: number }[] = [
     { date: 1, growth_rate: 31 },
@@ -57,7 +61,53 @@ export const useCompetition = () => {
     { key: "LastSeason", label: "전 시즌" },
   ];
 
+  const competitionPeriodDropDownValue = [
+    { key: "EXP", label: "EXP" },
+    { key: "Github", label: "Github" },
+    { key: "Solved.Ac", label: "solved.ac" },
+    { key: "StudyTime", label: "총 학습 시간" },
+  ];
+
   const myCompetitionMaxCommit = Math.max(...data.map(m => m.growth_rate));
+
+  const RivalsData: RivalsResponse = {
+    data: {
+      my_rivals: [
+        {
+          name: "멧돼지",
+          username: "seunga_418",
+          profile_image: "https://example.com/profile/seunga_418.png",
+          active_time: 21522,
+          using_app: "Visual Studio Code",
+          status: "ONLINE",
+        },
+        {
+          name: "채근영",
+          username: "chaeyn",
+          profile_image: "https://example.com/profile/chaeyn.png",
+          active_time: 18340,
+          using_app: "IntelliJ",
+          status: "AWAY",
+        },
+        {
+          name: "한승환",
+          username: "h.7xn",
+          profile_image: "https://example.com/profile/h7xn.png",
+          active_time: 9720,
+          using_app: "Chrome",
+          status: "OFFLINE",
+        },
+        {
+          name: "권대형",
+          username: "gorani",
+          profile_image: "https://example.com/profile/gorani.png",
+          active_time: 14380,
+          using_app: "Notion",
+          status: "ONLINE",
+        },
+      ],
+    },
+  };
 
   return {
     competition: {
@@ -72,6 +122,14 @@ export const useCompetition = () => {
       myCompetitionMaxCommit,
       competitionDropDownValue,
     },
-    rivalCompetition: {},
+    rivalCompetition: {
+      RivalsData,
+      competitionDropdown,
+      setCompetitionDropdown,
+      competitionDropDownValue,
+      competitionPeriodDropDown,
+      setCompetitionPeriodDropDown,
+      competitionPeriodDropDownValue,
+    },
   };
 };
