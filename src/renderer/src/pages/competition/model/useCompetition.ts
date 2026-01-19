@@ -124,8 +124,8 @@ export const useCompetition = () => {
   // 멀티차트라인
   const CHART_PADDING_LEFT = 10;
   const CHART_PADDING_RIGHT = 10;
-  const CHART_PADDING_TOP = 10;
-  const CHART_PADDING_BOTTOM = 10;
+  const CHART_PADDING_TOP = 12;
+  const CHART_PADDING_BOTTOM = 12;
   const CHART_HEIGHT = 100;
   const POINT_GAP = 20;
 
