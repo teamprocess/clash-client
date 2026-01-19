@@ -11,7 +11,7 @@ export const WithMyCompetition = () => {
         <S.AnalyzeTitle>내 성장도 분석</S.AnalyzeTitle>
         <S.GraphBox>
           <S.Bars>
-            {myCompetition.data.map(({ date, growth_rate }) => (
+            {myCompetition.myData.map(({ date, growth_rate }) => (
               <S.BarWrapper key={date}>
                 <S.Bar $ratio={growth_rate / myCompetition.myCompetitionMaxCommit}>
                   <S.ValueHoverBox>
