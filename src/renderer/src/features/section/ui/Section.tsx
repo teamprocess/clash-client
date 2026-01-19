@@ -106,9 +106,11 @@ const sectionMock = {
 export const Section = () => {
   const navigate = useNavigate();
   const [isLockedModalOpen, setIsLockedModalOpen] = useState(false);
+  const [lockedTitle, setLockedTitle] = useState<string>("");
 
   const handleClick = (item: (typeof sectionMock.data)[number]) => {
     if (item.locked) {
+      setLockedTitle(item.title);
       setIsLockedModalOpen(true);
       return;
     }
@@ -149,7 +151,11 @@ export const Section = () => {
         <SectionProgress />
       </S.RoadmapScrollable>
 
-      <LockedModal isOpen={isLockedModalOpen} onClose={() => setIsLockedModalOpen(false)} />
+      <LockedModal
+        isOpen={isLockedModalOpen}
+        onClose={() => setIsLockedModalOpen(false)}
+        roadmapName={lockedTitle}
+      />
     </S.RoadmapContainer>
   );
 };
