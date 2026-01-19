@@ -5,48 +5,20 @@ import { palette } from "@/shared/config/theme";
 export const LockedModalWrapper = styled.div`
   display: flex;
   flex-direction: column;
+  align-items: center;
   width: 100%;
   height: 100%;
-  padding: 3rem 5rem;
+  padding: 1.5rem 1.5rem 0.4rem;
+  gap: 3rem;
 `;
 
-export const LockedModalTop = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 1.5rem;
+export const LockedModalLabel = styled.span`
+  ${font.headline2.medium}
+  color: ${({ theme }) => theme.label.neutral};
+  text-align: center;
 `;
 
-export const LockedModalIntro = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 2rem;
-  width: 100%;
-`;
-
-export const LockedModalTitle = styled.span`
-  ${font.display1.bold}
-  color: ${({ theme }) => theme.label.normal};
-  width: 100%;
-  text-align: start;
-`;
-
-export const LockedModalInfo = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
-`;
-
-export const LockedModalDescription = styled.p`
-  ${font.body.medium}
-  color: ${({ theme }) => theme.label.assistive};
-`;
-
-export const LockedModalAction = styled.div`
+export const LockedModalButton = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -54,11 +26,7 @@ export const LockedModalAction = styled.div`
   color: ${palette.neutral["99"]};
   background-color: ${({ theme }) => theme.primary.normal};
   border-radius: 0.25rem;
-  padding: 0.5rem 2.5rem;
-`;
-
-export const SectionDivider = styled.div`
-  background-color: ${({ theme }) => theme.line.neutral};
-  width: 100%;
-  height: 0.1rem;
+  width: 8rem;
+  height: 2rem;
+  cursor: pointer;
 `;
