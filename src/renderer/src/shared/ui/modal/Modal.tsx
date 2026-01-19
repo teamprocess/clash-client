@@ -9,6 +9,7 @@ interface ModalProps {
   onClose?: () => void;
   children?: ReactNode;
   gap?: number;
+  bgColor?: string;
 }
 
 export const Modal = ({
@@ -19,11 +20,12 @@ export const Modal = ({
   $height,
   children,
   gap = 0,
+  bgColor = "label.disable",
 }: ModalProps) => {
   if (!isOpen) return null;
   return (
     <S.ModalOverlay>
-      <S.ModalContainer $width={$width} $height={$height}>
+      <S.ModalContainer $width={$width} $height={$height} $bgColor={bgColor}>
         {modalTitle && <S.ModalTitle>{modalTitle}</S.ModalTitle>}
         {onClose && (
           <S.CloseButton onClick={onClose}>
