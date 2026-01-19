@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 import { SectionProgress } from "@/features/section-progress";
 import { useState } from "react";
 import { LockedModal } from "@/features/section/components/LockedModal";
+import { TutorialModal } from "@/features/section/components/TutorialModal";
 
 const sectionMock = {
   data: [
@@ -106,16 +107,21 @@ const sectionMock = {
 export const Section = () => {
   const navigate = useNavigate();
   const [isLockedModalOpen, setIsLockedModalOpen] = useState(false);
-  const [lockedTitle, setLockedTitle] = useState<string>("");
+  const [sectionTitle, setSectionTitle] = useState<string>("");
+
+  const [isTutorialModalOpen, setIsTutorialModalOpen] = useState(false);
+  const [selectedSectionId, setSelectedSectionId] = useState<number | null>(null);
 
   const handleClick = (item: (typeof sectionMock.data)[number]) => {
     if (item.locked) {
-      setLockedTitle(item.title);
+      setSectionTitle(item.title);
       setIsLockedModalOpen(true);
       return;
     }
 
-    navigate(`/roadmap/${item.id}`);
+    setSectionTitle(item.title);
+    setSelectedSectionId(item.id);
+    setIsTutorialModalOpen(true);
   };
 
   return (
@@ -154,7 +160,18 @@ export const Section = () => {
       <LockedModal
         isOpen={isLockedModalOpen}
         onClose={() => setIsLockedModalOpen(false)}
-        roadmapName={lockedTitle}
+        roadmapName={sectionTitle}
+      />
+
+      <TutorialModal
+        isOpen={isTutorialModalOpen}
+        onClose={() => setIsTutorialModalOpen(false)}
+        onStart={() => {
+          if (selectedSectionId !== null) {
+            navigate(`/roadmap/${selectedSectionId}`);
+          }
+        }}
+        title={sectionTitle}
       />
     </S.RoadmapContainer>
   );
