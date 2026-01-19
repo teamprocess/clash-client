@@ -4,43 +4,6 @@ import { useCompetition } from "@/pages/competition/model/useCompetition";
 
 export const RivalCompetition = () => {
   const { rivalCompetition } = useCompetition();
-  const CHART_PADDING_TOP = 10;
-  const CHART_PADDING_BOTTOM = 10;
-  const CHART_HEIGHT = 100;
-  const CHART_WIDTH = 100;
-
-  const COLORS: Record<string, string> = {
-    seunga_418: "#2F80ED",
-    king_of_code: "#27AE60",
-    jandi_lover: "#EB5757",
-    algo_master: "#F2C94C",
-    me: "#FFFFFF",
-  };
-
-  const getMaxValue = (data: typeof rivalCompetition.rivalsTransCompareData) =>
-    Math.max(...data.flatMap(r => r.rate.map(v => v.growth_rate)));
-
-  const getX = (index: number, total: number) => {
-    const gap = CHART_WIDTH / (total - 1);
-    return index * gap;
-  };
-
-  const getY = (value: number, max: number) => {
-    const usableHeight = CHART_HEIGHT - CHART_PADDING_TOP - CHART_PADDING_BOTTOM;
-
-    return CHART_HEIGHT - CHART_PADDING_BOTTOM - (value / max) * usableHeight;
-  };
-
-  const makeLinePath = (rates: { growth_rate: number }[], max: number) =>
-    rates
-      .map((r, i) => {
-        const x = getX(i, rates.length);
-        const y = getY(r.growth_rate, max);
-        return `${i === 0 ? "M" : "L"} ${x} ${y}`;
-      })
-      .join(" ");
-
-  const maxValue = getMaxValue(rivalCompetition.rivalsTransCompareData);
 
   return (
     <S.Container>
@@ -111,29 +74,41 @@ export const RivalCompetition = () => {
             </S.Title>
             <S.Line />
             <S.GraphBox>
-              <S.Svg viewBox="0 0 100 100" preserveAspectRatio="none">
-                {rivalCompetition.rivalsTransCompareData.map(rival => {
-                  const isMe = rival.username === "me";
-                  return (
-                    <S.LineGroup key={rival.username}>
-                      <S.LinePath
-                        d={makeLinePath(rival.rate, maxValue)}
-                        stroke={COLORS[rival.username]}
-                        $isMe={isMe}
-                      />
-                      {rival.rate.map((point, idx) => (
-                        <S.Dot
-                          key={point.date}
-                          cx={getX(idx, rival.rate.length)}
-                          cy={getY(point.growth_rate, maxValue)}
-                          fill={COLORS[rival.username]}
-                          $isMe={isMe}
-                        />
-                      ))}
-                    </S.LineGroup>
-                  );
-                })}
-              </S.Svg>
+              <S.ScrollArea>
+                <S.GraphInner style={{ width: "100%" }}>
+                  <S.Svg
+                    width={rivalCompetition.chartWidth}
+                    height="100%"
+                    viewBox={`0 0 ${rivalCompetition.chartWidth} ${rivalCompetition.CHART_HEIGHT + 10}`}
+                    preserveAspectRatio="none"
+                  >
+                    {rivalCompetition.rivalsTransCompareData.map(rival => {
+                      const isMe = rival.username === "me";
+                      return (
+                        <S.LineGroup key={rival.username}>
+                          <S.LinePath
+                            d={rivalCompetition.makeLinePath(rival.rate, rivalCompetition.maxValue)}
+                            stroke={rivalCompetition.COLORS[rival.username]}
+                            $isMe={isMe}
+                          />
+                          {rival.rate.map((point, idx) => (
+                            <S.Dot
+                              key={point.date}
+                              cx={rivalCompetition.getX(idx)}
+                              cy={rivalCompetition.getY(
+                                point.growth_rate,
+                                rivalCompetition.maxValue
+                              )}
+                              fill={rivalCompetition.COLORS[rival.username]}
+                              $isMe={isMe}
+                            />
+                          ))}
+                        </S.LineGroup>
+                      );
+                    })}
+                  </S.Svg>
+                </S.GraphInner>
+              </S.ScrollArea>
             </S.GraphBox>
           </S.RivalCompareWrapper>
         </S.Content>
