@@ -7,7 +7,7 @@ import { ChapterRanking } from "@/features/chapter-ranking";
 import { useNavigate } from "react-router-dom";
 import { SectionProgress } from "@/features/section-progress";
 import { useState } from "react";
-import { Modal } from "@/shared/ui/modal/Modal";
+import { LockedModal } from "@/features/section/components/LockedModal";
 
 const sectionMock = {
   data: [
@@ -149,12 +149,7 @@ export const Section = () => {
         <SectionProgress />
       </S.RoadmapScrollable>
 
-      <Modal
-        $width={40}
-        $height={50}
-        isOpen={isLockedModalOpen}
-        onClose={() => setIsLockedModalOpen(false)}
-      ></Modal>
+      <LockedModal isOpen={isLockedModalOpen} onClose={() => setIsLockedModalOpen(false)} />
     </S.RoadmapContainer>
   );
 };
