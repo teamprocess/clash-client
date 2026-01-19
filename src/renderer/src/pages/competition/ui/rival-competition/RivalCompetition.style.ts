@@ -61,7 +61,7 @@ export const RivalList = styled.div`
   gap: 0.75rem;
 `;
 
-export const Title = styled.div`
+export const TitleBox = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -69,7 +69,7 @@ export const Title = styled.div`
   width: 100%;
 `;
 
-export const TitleText = styled.p`
+export const Title = styled.p`
   ${font.title2.bold}
   color: ${({ theme }) => theme.label.normal};
 `;

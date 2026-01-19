@@ -10,9 +10,9 @@ export const RivalCompetition = () => {
       <S.CompareContentBox>
         <S.ListContent id={"content-1"}>
           <S.RivalList>
-            <S.Title>
-              <S.TitleText>내 라이벌</S.TitleText>
-            </S.Title>
+            <S.TitleBox>
+              <S.Title>내 라이벌</S.Title>
+            </S.TitleBox>
             <S.Line />
             <S.ProfileWrapper>
               {rivalCompetition.RivalsData.data.my_rivals.map(user => (
@@ -41,8 +41,8 @@ export const RivalCompetition = () => {
         </S.ListContent>
         <S.Content id={"content-2"}>
           <S.RivalCompareWrapper>
-            <S.Title>
-              <S.TitleText>라이벌과 비교</S.TitleText>
+            <S.TitleBox>
+              <S.Title>라이벌과 비교</S.Title>
               <S.DropDownBox>
                 <S.SelectWrapper>
                   <S.Select
@@ -71,7 +71,7 @@ export const RivalCompetition = () => {
                   <S.ArrowIcon />
                 </S.SelectWrapper>
               </S.DropDownBox>
-            </S.Title>
+            </S.TitleBox>
             <S.Line />
             <S.GraphBox>
               <S.ScrollArea>
