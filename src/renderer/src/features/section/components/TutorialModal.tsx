@@ -1,7 +1,7 @@
-import { useState } from "react";
 import * as S from "./TutorialModal.style";
 import { Modal } from "@/shared/ui/modal/Modal";
 import { tutorialData, TutorialData } from "../mocks/tutorialData";
+import { useTutorial } from "../model/useTutorial";
 
 interface TutorialModalProps {
   isOpen: boolean;
@@ -16,22 +16,7 @@ export const TutorialModal = ({
   onStart,
   tutorial = tutorialData[0],
 }: TutorialModalProps) => {
-  const [currentStep, setCurrentStep] = useState(1);
-
-  const activeStep = tutorial.steps.find(step => step.id === currentStep);
-  const totalSteps = tutorial.steps.length;
-
-  const handlePrev = () => {
-    if (currentStep > 1) {
-      setCurrentStep(prev => prev - 1);
-    }
-  };
-
-  const handleNext = () => {
-    if (currentStep < totalSteps) {
-      setCurrentStep(prev => prev + 1);
-    }
-  };
+  const { currentStep, activeStep, totalSteps, handlePrev, handleNext } = useTutorial(tutorial);
 
   return (
     <Modal $width={74} $height={48} isOpen={isOpen} onClose={onClose} bgColor="background.normal">
