@@ -4,8 +4,11 @@ import TSIcon from "../assets/ts.svg?url";
 import ReactIcon from "../assets/react.svg?url";
 import NextIcon from "../assets/next.svg?url";
 import { ChapterRanking } from "@/features/chapter-ranking";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { SectionProgress } from "@/features/section-progress";
+import { useState } from "react";
+import { LockedModal } from "@/features/section/components/LockedModal";
+import { TutorialModal } from "@/features/section/components/TutorialModal";
 
 const sectionMock = {
   data: [
@@ -102,6 +105,25 @@ const sectionMock = {
 };
 
 export const Section = () => {
+  const navigate = useNavigate();
+  const [isLockedModalOpen, setIsLockedModalOpen] = useState(false);
+  const [sectionTitle, setSectionTitle] = useState<string>("");
+
+  const [isTutorialModalOpen, setIsTutorialModalOpen] = useState(false);
+  const [selectedSectionId, setSelectedSectionId] = useState<number | null>(null);
+
+  const handleClick = (item: (typeof sectionMock.data)[number]) => {
+    if (item.locked) {
+      setSectionTitle(item.title);
+      setIsLockedModalOpen(true);
+      return;
+    }
+
+    setSectionTitle(item.title);
+    setSelectedSectionId(item.id);
+    setIsTutorialModalOpen(true);
+  };
+
   return (
     <S.RoadmapContainer>
       <S.RoadmapScrollable>
@@ -111,23 +133,46 @@ export const Section = () => {
               {sectionMock.data
                 .filter(item => item.category === category)
                 .map(item => (
-                  <Link to={`/roadmap/${item.id}`} key={item.id}>
-                    <S.SectionItem>
-                      <S.SectionIconWrapper>
-                        <S.SectionIcon src={item.imgUrl} />
-                        {item.completed && <S.SectionComplete />}
-                        {item.locked && <S.SectionLock />}
-                      </S.SectionIconWrapper>
-                      <S.SectionTitle>{item.title}</S.SectionTitle>
-                    </S.SectionItem>
-                  </Link>
+                  <S.SectionItem
+                    key={item.id}
+                    onClick={() => handleClick(item)}
+                    style={{
+                      cursor: item.locked ? "not-allowed" : "pointer",
+                      opacity: item.locked ? 0.5 : 1,
+                    }}
+                  >
+                    <S.SectionIconWrapper>
+                      <S.SectionIcon src={item.imgUrl} />
+                      {item.completed && <S.SectionComplete />}
+                      {item.locked && <S.SectionLock />}
+                    </S.SectionIconWrapper>
+                    <S.SectionTitle>{item.title}</S.SectionTitle>
+                  </S.SectionItem>
                 ))}
             </S.SectionItemBox>
           ))}
         </S.SectionItemWrapper>
-        <ChapterRanking page={"section"} />
+
+        <ChapterRanking page="section" />
         <SectionProgress />
       </S.RoadmapScrollable>
+
+      <LockedModal
+        isOpen={isLockedModalOpen}
+        onClose={() => setIsLockedModalOpen(false)}
+        roadmapName={sectionTitle}
+      />
+
+      <TutorialModal
+        isOpen={isTutorialModalOpen}
+        onClose={() => setIsTutorialModalOpen(false)}
+        onStart={() => {
+          if (selectedSectionId !== null) {
+            navigate(`/roadmap/${selectedSectionId}`);
+          }
+        }}
+        title={sectionTitle}
+      />
     </S.RoadmapContainer>
   );
 };
