@@ -22,7 +22,7 @@ export const useCompetition = () => {
 
   const [competitionPeriodDropDown, setCompetitionPeriodDropDown] = useState("EXP");
 
-  const data: { date: number; growth_rate: number }[] = [
+  const myData: { date: number; growth_rate: number }[] = [
     { date: 1, growth_rate: 31 },
     { date: 2, growth_rate: 41 },
     { date: 3, growth_rate: 23 },
@@ -36,6 +36,101 @@ export const useCompetition = () => {
     { date: 11, growth_rate: 19 },
     { date: 12, growth_rate: 21 },
   ];
+
+  const rivalsTransCompareData = [
+    {
+      name: "멧돼지",
+      username: "seunga_418",
+      rate: [
+        { date: 1, growth_rate: 31 },
+        { date: 2, growth_rate: 41 },
+        { date: 3, growth_rate: 23 },
+        { date: 4, growth_rate: 12 },
+        { date: 5, growth_rate: 25 },
+        { date: 6, growth_rate: 7 },
+        { date: 7, growth_rate: 12 },
+        { date: 8, growth_rate: 9 },
+        { date: 9, growth_rate: 11 },
+        { date: 10, growth_rate: 12 },
+        { date: 11, growth_rate: 19 },
+        { date: 12, growth_rate: 21 },
+      ],
+    },
+    {
+      name: "코딩왕자",
+      username: "king_of_code",
+      rate: [
+        { date: 1, growth_rate: 10 },
+        { date: 2, growth_rate: 15 },
+        { date: 3, growth_rate: 20 },
+        { date: 4, growth_rate: 25 },
+        { date: 5, growth_rate: 30 },
+        { date: 6, growth_rate: 45 },
+        { date: 7, growth_rate: 60 },
+        { date: 8, growth_rate: 75 },
+        { date: 9, growth_rate: 80 },
+        { date: 10, growth_rate: 85 },
+        { date: 11, growth_rate: 90 },
+        { date: 12, growth_rate: 95 },
+      ],
+    },
+    {
+      name: "잔디인형",
+      username: "jandi_lover",
+      rate: [
+        { date: 1, growth_rate: 50 },
+        { date: 2, growth_rate: 48 },
+        { date: 3, growth_rate: 52 },
+        { date: 4, growth_rate: 45 },
+        { date: 5, growth_rate: 55 },
+        { date: 6, growth_rate: 40 },
+        { date: 7, growth_rate: 60 },
+        { date: 8, growth_rate: 58 },
+        { date: 9, growth_rate: 62 },
+        { date: 10, growth_rate: 55 },
+        { date: 11, growth_rate: 50 },
+        { date: 12, growth_rate: 53 },
+      ],
+    },
+    {
+      name: "알고리즘킬러",
+      username: "algo_master",
+      rate: [
+        { date: 1, growth_rate: 5 },
+        { date: 2, growth_rate: 8 },
+        { date: 3, growth_rate: 12 },
+        { date: 4, growth_rate: 60 },
+        { date: 5, growth_rate: 65 },
+        { date: 6, growth_rate: 10 },
+        { date: 7, growth_rate: 15 },
+        { date: 8, growth_rate: 70 },
+        { date: 9, growth_rate: 75 },
+        { date: 10, growth_rate: 20 },
+        { date: 11, growth_rate: 25 },
+        { date: 12, growth_rate: 85 },
+      ],
+    },
+    {
+      name: "나",
+      username: "me",
+      rate: [
+        { date: 1, growth_rate: 31 },
+        { date: 2, growth_rate: 41 },
+        { date: 3, growth_rate: 23 },
+        { date: 4, growth_rate: 12 },
+        { date: 5, growth_rate: 25 },
+        { date: 6, growth_rate: 7 },
+        { date: 7, growth_rate: 12 },
+        { date: 8, growth_rate: 9 },
+        { date: 9, growth_rate: 11 },
+        { date: 10, growth_rate: 12 },
+        { date: 11, growth_rate: 19 },
+        { date: 12, growth_rate: 21 },
+      ],
+    },
+  ];
+
+  const rivalCompetitionMaxCommit = Math.max(...myData.map(m => m.growth_rate));
 
   const allData: TotalCompareData = {
     beforeMyCompareData: [
@@ -68,7 +163,7 @@ export const useCompetition = () => {
     { key: "StudyTime", label: "총 학습 시간" },
   ];
 
-  const myCompetitionMaxCommit = Math.max(...data.map(m => m.growth_rate));
+  const myCompetitionMaxCommit = Math.max(...myData.map(m => m.growth_rate));
 
   const RivalsData: RivalsResponse = {
     data: {
@@ -116,7 +211,7 @@ export const useCompetition = () => {
     },
     myCompetition: {
       allData,
-      data,
+      myData,
       competitionDropdown,
       setCompetitionDropdown,
       myCompetitionMaxCommit,
@@ -130,6 +225,8 @@ export const useCompetition = () => {
       competitionPeriodDropDown,
       setCompetitionPeriodDropDown,
       competitionPeriodDropDownValue,
+      rivalsTransCompareData,
+      rivalCompetitionMaxCommit,
     },
   };
 };

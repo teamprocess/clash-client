@@ -73,6 +73,23 @@ export const RivalCompetition = () => {
               </S.DropDownBox>
             </S.Title>
             <S.Line />
+            <S.GraphBox>
+              <S.Bars>
+                {rivalCompetition.rivalsTransCompareData.map(rival =>
+                  rival.rate.map(({ date, growth_rate }) => (
+                    <S.BarWrapper key={`${rival.username}-${date}`}>
+                      <S.Bar $ratio={growth_rate / rivalCompetition.rivalCompetitionMaxCommit}>
+                        <S.ValueHoverBox>
+                          <S.BallValue />
+                          <S.BarValue>{growth_rate}%</S.BarValue>
+                        </S.ValueHoverBox>
+                      </S.Bar>
+                      <S.BarLabel>{date}월</S.BarLabel>
+                    </S.BarWrapper>
+                  ))
+                )}
+              </S.Bars>
+            </S.GraphBox>
           </S.RivalCompareWrapper>
         </S.Content>
       </S.CompareContentBox>
