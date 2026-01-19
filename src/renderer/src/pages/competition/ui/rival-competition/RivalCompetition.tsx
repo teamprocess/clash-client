@@ -10,31 +10,31 @@ export const RivalCompetition = () => {
       <S.CompareContentBox>
         <S.ListContent id={"content-1"}>
           <S.RivalList>
-            <S.Title>내 라이벌</S.Title>
+            <S.Title>
+              <S.TitleText>내 라이벌</S.TitleText>
+            </S.Title>
             <S.Line />
             <S.ProfileWrapper>
               {rivalCompetition.RivalsData.data.my_rivals.map(user => (
-                <>
-                  <S.ProfileContainer key={user.username}>
-                    <S.ProfileContent>
-                      <S.ProfileIcon />
-                      <S.NameBox>
-                        <S.ProfileName>{user.name}</S.ProfileName>
-                        <S.ProfileMention>@{user.username}</S.ProfileMention>
-                      </S.NameBox>
-                      <S.Status $status={user.status}>{getStatus(user.status)}</S.Status>
-                    </S.ProfileContent>
-                    <S.PlayTime>
-                      {getStatus(user.status) === "온라인" && (
-                        <>
-                          <S.UsingAppText>{user.using_app}</S.UsingAppText>
-                          <S.Point>·</S.Point>
-                        </>
-                      )}
-                      {user.active_time}
-                    </S.PlayTime>
-                  </S.ProfileContainer>
-                </>
+                <S.ProfileContainer key={user.username}>
+                  <S.ProfileContent>
+                    <S.ProfileIcon />
+                    <S.NameBox>
+                      <S.ProfileName>{user.name}</S.ProfileName>
+                      <S.ProfileMention>@{user.username}</S.ProfileMention>
+                    </S.NameBox>
+                    <S.Status $status={user.status}>{getStatus(user.status)}</S.Status>
+                  </S.ProfileContent>
+                  <S.PlayTime>
+                    {getStatus(user.status) === "온라인" && (
+                      <>
+                        <S.UsingAppText>{user.using_app}</S.UsingAppText>
+                        <S.Point>·</S.Point>
+                      </>
+                    )}
+                    {user.active_time}
+                  </S.PlayTime>
+                </S.ProfileContainer>
               ))}
             </S.ProfileWrapper>
           </S.RivalList>
@@ -42,7 +42,7 @@ export const RivalCompetition = () => {
         <S.Content id={"content-2"}>
           <S.RivalCompareWrapper>
             <S.Title>
-              <p>라이벌과 비교</p>
+              <S.TitleText>라이벌과 비교</S.TitleText>
               <S.DropDownBox>
                 <S.SelectWrapper>
                   <S.Select
