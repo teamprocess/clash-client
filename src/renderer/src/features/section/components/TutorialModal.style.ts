@@ -358,3 +358,17 @@ export const TargetItemText = styled.span`
   ${font.headline2.medium}
   color: ${({ theme }) => theme.label.assistive};
 `;
+
+export const ArrowButton = styled.div<{ $disabled: boolean }>`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: ${({ $disabled }) => ($disabled ? 0.3 : 1)};
+  cursor: ${({ $disabled }) => ($disabled ? "not-allowed" : "pointer")};
+  pointer-events: ${({ $disabled }) => ($disabled ? "none" : "auto")};
+  transition: opacity 0.2s ease;
+
+  &:hover:not([disabled]) {
+    opacity: 0.8;
+  }
+`;
