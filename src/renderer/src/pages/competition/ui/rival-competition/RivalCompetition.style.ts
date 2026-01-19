@@ -61,12 +61,15 @@ export const RivalList = styled.div`
   gap: 0.75rem;
 `;
 
-export const Title = styled.p`
+export const Title = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
   width: 100%;
+`;
+
+export const TitleText = styled.p`
   ${font.title2.bold}
   color: ${({ theme }) => theme.label.normal};
 `;
@@ -106,12 +109,12 @@ export const NameBox = styled.div`
   gap: 0.125rem;
 `;
 
-export const ProfileName = styled.p`
+export const ProfileName = styled.span`
   ${font.headline2.medium}
   color: ${({ theme }) => theme.label.normal};
 `;
 
-export const ProfileMention = styled.p`
+export const ProfileMention = styled.span`
   ${font.label.regular}
   color: ${({ theme }) => theme.label.alternative};
 `;
@@ -147,7 +150,7 @@ export const UsingAppText = styled.p`
   color: ${({ theme }) => theme.label.alternative};
 `;
 
-export const PlayTime = styled.p`
+export const PlayTime = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
