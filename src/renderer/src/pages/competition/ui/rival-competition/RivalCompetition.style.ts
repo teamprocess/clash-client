@@ -1,8 +1,10 @@
 import styled from "styled-components";
 import { font } from "@/shared/config/font";
-import Profile from "@/features/home/assets/home/profile.svg";
 import { palette } from "@/shared/config/theme";
+import Profile from "@/features/home/assets/home/profile.svg";
 import Arrow from "@/features/home/assets/home/arrow.svg";
+import Date from "@/features/home/assets/home/date.svg";
+import BackArrow from "@/features/home/assets/home/back.svg";
 
 export const Line = styled.div`
   width: 100%;
@@ -87,6 +89,8 @@ export const ProfileContainer = styled.div`
   flex-direction: row;
   padding: 0.75rem;
   border-bottom: 1px solid ${({ theme }) => theme.line.alternative};
+  &:hover {
+  }
 `;
 
 export const ProfileContent = styled.div`
@@ -243,7 +247,7 @@ export const LinePath = styled.path<{ $isMe?: boolean }>`
 `;
 
 export const Dot = styled.circle<{ $isMe?: boolean }>`
-  r: ${({ $isMe }) => ($isMe ? 2 : 2)};
+  r: ${({ $isMe }) => ($isMe ? 2.5 : 2.5)};
   cursor: pointer;
 `;
 
@@ -258,4 +262,152 @@ export const GraphInner = styled.div`
   width: max-content;
   min-width: 100%;
   padding-bottom: 0.5rem;
+`;
+
+export const BattleWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  width: 100%;
+  height: 100%;
+`;
+
+export const BattleTextBox = styled.div`
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+  align-items: center;
+`;
+
+export const MakeBattle = styled.div`
+  ${font.body.medium}
+  color: ${({ theme }) => theme.label.normal};
+  background-color: ${({ theme }) => theme.primary.normal};
+  padding: 0.25rem 1.5rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+`;
+
+export const BattleListContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+export const BattleProfileBox = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-direction: row;
+  padding: 0.8rem 0.5rem;
+  border-bottom: 1px solid ${({ theme }) => theme.line.alternative};
+  cursor: pointer;
+  background-color: transparent;
+  &:hover {
+    background-color: ${({ theme }) => theme.background.alternative};
+  }
+`;
+
+export const BattleName = styled.p`
+  ${font.headline1.medium};
+`;
+
+export const DateBox = styled.div`
+  display: flex;
+  flex-direction: row;
+  gap: 0.25rem;
+`;
+
+export const DateIcon = styled(Date)``;
+
+export const DateText = styled.span`
+  ${font.label.medium};
+  color: ${({ theme }) => theme.label.assistive};
+`;
+
+export const DetailBox = styled.div`
+  display: flex;
+  flex-direction: row;
+  gap: 0.25rem;
+  align-items: center;
+`;
+
+export const DetailButton = styled.div`
+  ${font.label.medium};
+  color: ${({ theme }) => theme.label.alternative};
+`;
+
+export const BackArrowIcon = styled(BackArrow)`
+  width: 0.625rem;
+  transform: rotate(180deg);
+  color: ${({ theme }) => theme.label.alternative};
+`;
+
+export const SubText = styled.p`
+  ${font.caption.regular}
+  color: ${({ theme }) => theme.label.assistive};
+`;
+
+export const DetailWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem;
+  gap: 1rem;
+  border-radius: 0.5rem;
+  width: 100%;
+  height: 100%;
+  background-color: ${({ theme }) => theme.background.alternative};
+`;
+
+export const UpperHandContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+`;
+
+export const UpperHandProfile = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  justify-content: center;
+  align-items: center;
+`;
+
+export const UpperHandBox = styled.div``;
+
+export const UpperHandProfileIcon = styled(Profile)`
+  width: 4rem;
+  height: 4rem;
+`;
+
+export const UpperHandName = styled.p`
+  ${font.headline2.bold}
+  color: ${({ theme }) => theme.label.normal};
+`;
+
+export const TransitionBox = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 0.5rem;
+`;
+
+export const UpperHandTransition = styled.div`
+  flex: 1;
+  height: 2rem;
+  background-color: ${({ theme }) => theme.fill.normal};
+  border-radius: 0.75rem;
+  display: flex;
+  overflow: hidden;
+  margin: 0 1rem;
+`;
+
+export const UpperHandBar = styled.div<{ $width: number; $isRival: boolean }>`
+  width: ${({ $width }) => $width}%;
+  height: 100%;
+  background-color: ${({ $isRival, theme }) =>
+    $isRival ? theme.primary.normal : theme.background.normal};
+  transition: width 0.5s ease-in-out;
 `;
