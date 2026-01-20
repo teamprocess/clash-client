@@ -469,6 +469,7 @@ export const AnalyzeContent = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-around;
+  width: 2.5rem;
   height: 70%;
 `;
 
