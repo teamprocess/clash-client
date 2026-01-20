@@ -19,7 +19,7 @@ export const TutorialModal = ({
   const { currentStep, activeStep, totalSteps, handlePrev, handleNext } = useTutorial(tutorial);
 
   return (
-    <Modal $width={74} $height={48} isOpen={isOpen} onClose={onClose} bgColor="background.normal">
+    <Modal width={74} height={48} isOpen={isOpen} onClose={onClose}>
       <S.TutorialModalWrapper>
         <S.TutorialModalTop>
           <S.TutorialModalIntro>

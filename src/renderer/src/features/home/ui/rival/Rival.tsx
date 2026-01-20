@@ -42,8 +42,8 @@ export const Rival = ({
       {modalOpen && (
         <Modal
           modalTitle={"라이벌 추가"}
-          $width={21.625}
-          $height={25.175}
+          width={21.625}
+          height={25.175}
           isOpen={modalOpen}
           onClose={handleClose}
         >
