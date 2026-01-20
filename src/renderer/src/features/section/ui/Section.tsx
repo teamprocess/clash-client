@@ -171,7 +171,6 @@ export const Section = () => {
             navigate(`/roadmap/${selectedSectionId}`);
           }
         }}
-        title={sectionTitle}
       />
     </S.RoadmapContainer>
   );
