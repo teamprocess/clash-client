@@ -1,14 +1,14 @@
-import { Step1 } from "@/features/auth/sign-up/ui/step/Step1";
-import { Step2 } from "@/features/auth/sign-up/ui/step/Step2";
+import { EmailVerify } from "@/features/auth/sign-up/ui/step/EmailVerify";
 import { useSignUp } from "../model/useSignUp";
+import { SignUp } from "@/features/auth/sign-up/ui/step/SignUp";
 
 export const SignUpForm = () => {
-  const { step, step1, step2 } = useSignUp();
+  const { step, signUp, emailVerify } = useSignUp();
 
   return (
     <>
-      {step === 1 && <Step1 {...step1} />}
-      {step === 2 && <Step2 {...step2} />}
+      {step === "SIGNUP" && <SignUp {...signUp} />}
+      {step === "EMAIL_VERIFY" && <EmailVerify {...emailVerify} />}
     </>
   );
 };
