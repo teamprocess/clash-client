@@ -185,7 +185,9 @@ export const RivalCompetition = () => {
                       </S.UpperHandProfile>
                       <S.TransitionBox>
                         <S.UpperHandTransition>
-                          <S.UpperHandBar $width={rivalPercent} $isRival />
+                          <S.UpperHandBar $width={rivalPercent} $isRival>
+                            {rivalPercent}%
+                          </S.UpperHandBar>
                           <S.UpperHandBar $width={myPercent} $isRival={false} />
                         </S.UpperHandTransition>
                       </S.TransitionBox>
