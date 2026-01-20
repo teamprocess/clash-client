@@ -6,9 +6,15 @@ import Arrow from "@/features/home/assets/home/arrow.svg";
 import Date from "@/features/home/assets/home/date.svg";
 import BackArrow from "@/features/home/assets/home/back.svg";
 
-export const Line = styled.div`
+export const GaroLine = styled.div`
   width: 100%;
   height: 1px;
+  background-color: ${({ theme }) => theme.line.neutral};
+`;
+
+export const SeroLine = styled.div`
+  width: 1px;
+  height: 70%;
   background-color: ${({ theme }) => theme.line.neutral};
 `;
 
@@ -373,8 +379,6 @@ export const UpperHandProfile = styled.div`
   align-items: center;
 `;
 
-export const UpperHandBox = styled.div``;
-
 export const UpperHandProfileIcon = styled(Profile)`
   width: 4rem;
   height: 4rem;
@@ -413,7 +417,6 @@ export const UpperHandBar = styled.div<{
   width: ${({ $width }) => `${$width}%`};
   height: 100%;
   transition: width 0.4s ease;
-
   ${({ $isRival, theme }) =>
     $isRival
       ? `
@@ -429,9 +432,64 @@ export const UpperHandBar = styled.div<{
 export const PercentText = styled.p`
   ${font.title2.bold}
   ${palette.neutral[99]}
+  z-index: 1000;
 `;
 
 export const WarPeriodText = styled.p`
   ${font.body.medium}
   color: ${({ theme }) => theme.label.normal};
+`;
+
+export const DetailAnalyzeContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  padding: 0.75rem 1rem;
+  width: 100%;
+  height: 100%;
+  border-radius: 0.75rem;
+  background-color: ${({ theme }) => theme.fill.normal};
+`;
+
+export const AnalyzeText = styled.p`
+  ${font.body.bold}
+  color: ${({ theme }) => theme.label.normal};
+`;
+
+export const AnalyzeBox = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 2rem;
+  width: 100%;
+  height: 100%;
+`;
+
+export const AnalyzeContent = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  height: 70%;
+`;
+
+export const AnalyzeName = styled.p`
+  ${font.caption.bold}
+  color: ${({ theme }) => theme.label.normal};
+`;
+
+export const AnalyzeBar = styled.div<{ $width: number; $isRival: boolean }>`
+  display: flex;
+  ${font.label.bold}
+  padding: 0.5rem;
+  width: ${({ $width }) => `${$width}%`};
+  ${({ $isRival, theme }) =>
+    $isRival
+      ? `
+        background-color: ${theme.primary.normal};
+      `
+      : `
+        background-color: ${palette.blue[50]};
+      `};
+
+  border-radius: 0.625rem;
 `;

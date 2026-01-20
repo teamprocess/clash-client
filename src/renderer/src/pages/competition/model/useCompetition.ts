@@ -32,7 +32,7 @@ export const useCompetition = () => {
     {
       name: "멧돼지",
       username: "seunga_418",
-      totalRate: 55,
+      totalRate: 2017,
       rate: [
         { date: 1, growth_rate: 51 },
         { date: 2, growth_rate: 41 },
@@ -46,7 +46,7 @@ export const useCompetition = () => {
     {
       name: "코딩왕자",
       username: "king_of_code",
-      totalRate: 96,
+      totalRate: 4920,
       rate: [
         { date: 1, growth_rate: 60 },
         { date: 2, growth_rate: 15 },
@@ -60,7 +60,7 @@ export const useCompetition = () => {
     {
       name: "잔디인형",
       username: "jandi_lover",
-      totalRate: 26,
+      totalRate: 152,
       rate: [
         { date: 1, growth_rate: 10 },
         { date: 2, growth_rate: 48 },
@@ -74,7 +74,7 @@ export const useCompetition = () => {
     {
       name: "알고리즘킬러",
       username: "algo_master",
-      totalRate: 41,
+      totalRate: 3201,
       rate: [
         { date: 1, growth_rate: 5 },
         { date: 2, growth_rate: 8 },
@@ -88,7 +88,7 @@ export const useCompetition = () => {
     {
       name: "나",
       username: "me",
-      totalRate: 50,
+      totalRate: 3450,
       rate: [
         { date: 1, growth_rate: 70 },
         { date: 2, growth_rate: 41 },
@@ -141,6 +141,18 @@ export const useCompetition = () => {
 
   const totalPoints = rivalsTransCompareData[0].rate.length;
   const chartWidth = CHART_PADDING_LEFT + (totalPoints - 1) * POINT_GAP + CHART_PADDING_RIGHT;
+
+  const handleMakeBattle = () => {
+    console.log("배틀 생성하기");
+  };
+
+  const [battleTargetIndex, setBattleTargetIndex] = useState<string | null>(null);
+
+  const handleOpenDetail = (battleTargetIndex: string) => {
+    setBattleTargetIndex(battleTargetIndex);
+  };
+
+  const battleRivals = rivalsTransCompareData.filter(rival => rival.username !== "me");
 
   // 드랍다운
   const competitionDropDownValue = [
@@ -260,6 +272,10 @@ export const useCompetition = () => {
       maxValue,
       chartWidth,
       COLORS,
+      handleMakeBattle,
+      battleTargetIndex,
+      handleOpenDetail,
+      battleRivals,
     },
   };
 };
