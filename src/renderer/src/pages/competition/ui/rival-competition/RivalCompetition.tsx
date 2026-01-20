@@ -6,13 +6,6 @@ import { WarPeriodText } from "./RivalCompetition.style";
 export const RivalCompetition = () => {
   const { rivalCompetition } = useCompetition();
 
-  const analyzeRival = rivalCompetition.rivalsTransCompareData[0].totalRate;
-  const analyzeMe = rivalCompetition.rivalsTransCompareData[0].totalRate;
-  const analyzeTotal = analyzeRival + analyzeMe;
-
-  const analyzeRivalPercent = analyzeTotal === 0 ? 50 : (analyzeRival / analyzeTotal) * 100;
-  const analyzeMyPercent = 100 - analyzeRivalPercent;
-
   return (
     <S.Container>
       <S.CompareContentBox>
@@ -179,26 +172,22 @@ export const RivalCompetition = () => {
                       <S.TransitionBox>
                         <S.UpperHandTransition>
                           <S.UpperHandBar
-                            style={{
-                              display: "flex",
-                              justifyContent: "flex-start",
-                            }}
                             $width={rivalPercent}
                             $isRival
+                            style={{ justifyContent: "flex-start" }}
                           >
                             <S.PercentText>{Math.floor(rivalPercent)}%</S.PercentText>
                           </S.UpperHandBar>
+
                           <S.UpperHandBar
-                            style={{
-                              display: "flex",
-                              justifyContent: "flex-end",
-                            }}
                             $width={myPercent}
                             $isRival={false}
+                            style={{ justifyContent: "flex-end" }}
                           >
                             <S.PercentText>{Math.floor(myPercent)}%</S.PercentText>
                           </S.UpperHandBar>
                         </S.UpperHandTransition>
+
                         <WarPeriodText>종료 2026년 1월 13일 · 3일 남음</WarPeriodText>
                       </S.TransitionBox>
                       <S.UpperHandProfile>
@@ -240,20 +229,16 @@ export const RivalCompetition = () => {
                       }}
                     >
                       <S.AnalyzeContent>
-                        <S.AnalyzeName>
-                          {rivalCompetition.rivalsTransCompareData[0].name}
-                        </S.AnalyzeName>
-                        <S.AnalyzeName>
-                          {rivalCompetition.rivalsTransCompareData[4].name}
-                        </S.AnalyzeName>
+                        <S.AnalyzeName>{rivalCompetition.selectedRival?.name}</S.AnalyzeName>
+                        <S.AnalyzeName>나</S.AnalyzeName>
                       </S.AnalyzeContent>
                       <S.SeroLine />
                       <S.AnalyzeContent style={{ width: "100%" }}>
-                        <S.AnalyzeBar $width={analyzeRivalPercent} $isRival>
-                          {rivalCompetition.rivalsTransCompareData[0].totalRate} EXP
+                        <S.AnalyzeBar $width={rivalCompetition.rivalPercent} $isRival>
+                          {rivalCompetition.rivalValue.toLocaleString()} EXP
                         </S.AnalyzeBar>
-                        <S.AnalyzeBar $width={analyzeMyPercent} $isRival={false}>
-                          {rivalCompetition.rivalsTransCompareData[4].totalRate} EXP
+                        <S.AnalyzeBar $width={rivalCompetition.myPercent} $isRival={false}>
+                          {rivalCompetition.myValue.toLocaleString()} EXP
                         </S.AnalyzeBar>
                       </S.AnalyzeContent>
                     </div>

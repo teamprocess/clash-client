@@ -154,6 +154,18 @@ export const useCompetition = () => {
 
   const battleRivals = rivalsTransCompareData.filter(rival => rival.username !== "me");
 
+  const selectedRival = rivalsTransCompareData.find(d => d.username === battleTargetIndex);
+
+  const me = rivalsTransCompareData.find(d => d.username === "me");
+
+  const rivalValue = selectedRival?.totalRate ?? 0;
+  const myValue = me?.totalRate ?? 0;
+
+  const total = rivalValue + myValue;
+
+  const rivalPercent = total === 0 ? 50 : (rivalValue / total) * 100;
+  const myPercent = 100 - rivalPercent;
+
   // 드랍다운
   const competitionDropDownValue = [
     { key: "YesterDay", label: "어제" },
@@ -276,6 +288,11 @@ export const useCompetition = () => {
       battleTargetIndex,
       handleOpenDetail,
       battleRivals,
+      selectedRival,
+      rivalPercent,
+      myPercent,
+      rivalValue,
+      myValue,
     },
   };
 };
