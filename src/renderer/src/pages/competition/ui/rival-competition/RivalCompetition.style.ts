@@ -507,6 +507,7 @@ export const AnalyzeBar = styled.div<{ $width: number; $isRival: boolean }>`
       `};
 
   border-radius: 0.625rem;
+  transition: width 0.4s ease;
 `;
 
 export const DefaultBattleBox = styled.div`
