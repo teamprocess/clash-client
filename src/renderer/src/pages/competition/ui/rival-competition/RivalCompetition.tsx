@@ -248,7 +248,16 @@ export const RivalCompetition = () => {
                   </S.AnalyzeBox>
                 </S.DetailAnalyzeContainer>
               </S.DetailWrapper>
-            ) : null}
+            ) : (
+              <S.DetailWrapper>
+                <S.DefaultBattleBox>
+                  <S.FireIcon />
+                  <S.DefaultBattleText>
+                    위 배틀을 선택하여 배틀의 상세 내용을 확인해보세요!
+                  </S.DefaultBattleText>
+                </S.DefaultBattleBox>
+              </S.DetailWrapper>
+            )}
           </S.BattleWrapper>
         </S.Content>
       </S.ContentBox>

@@ -5,6 +5,7 @@ import Profile from "@/features/home/assets/home/profile.svg";
 import Arrow from "@/features/home/assets/home/arrow.svg";
 import Date from "@/features/home/assets/home/date.svg";
 import BackArrow from "@/features/home/assets/home/back.svg";
+import Fire from "@/features/home/assets/home/fire.svg";
 
 export const GaroLine = styled.div`
   width: 100%;
@@ -301,8 +302,12 @@ export const BattleListContainer = styled.div`
 
 export const UpperHandJudge = styled.div<{ $type: string }>`
   padding: 0.25rem 0.625rem;
-  background-color: ${({ $type }) =>
-    $type === "우세" ? "#1DAEFF" : $type === "열세" ? "#FF3B30" : "#8E8E93"};
+  ${({ $type }) =>
+    $type === "우세"
+      ? `background-color: ${palette.blue[50]}`
+      : $type === "열세"
+        ? `background-color: ${palette.red[50]};`
+        : `background-color: ${palette.neutral[60]}`};
   ${font.caption.bold}
   color: ${({ theme }) => theme.fill.normal};
   border-radius: 0.5rem;
@@ -502,4 +507,24 @@ export const AnalyzeBar = styled.div<{ $width: number; $isRival: boolean }>`
       `};
 
   border-radius: 0.625rem;
+`;
+
+export const DefaultBattleBox = styled.div`
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+`;
+
+export const FireIcon = styled(Fire)`
+  width: 3.25rem;
+  height: 3.25rem;
+  color: ${({ theme }) => theme.line.normal};
+`;
+
+export const DefaultBattleText = styled.p`
+  ${font.label.medium};
+  color: ${({ theme }) => theme.label.assistive};
 `;
