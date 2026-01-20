@@ -176,6 +176,7 @@ export const useMajorChoice = () => {
       major,
       username: "조상철",
       setStep,
+      navigate,
     },
     test: {
       answers,
