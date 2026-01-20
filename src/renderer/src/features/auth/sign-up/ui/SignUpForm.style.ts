@@ -89,7 +89,7 @@ export const SubmitButton = styled.button`
   ${font.headline2.medium};
 `;
 
-export const HelpTextBox = styled.div`
+export const HelpTextContainer = styled.div`
   display: flex;
   gap: 1rem;
 `;

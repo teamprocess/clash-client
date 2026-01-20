@@ -20,6 +20,7 @@ export const SignInForm = () => {
         <S.SubmitButton type="submit" disabled={isSubmitting}>
           {isSubmitting ? "로그인 중..." : "로그인"}
         </S.SubmitButton>
+        {errors.root && <S.ErrorText>{errors.root.message}</S.ErrorText>}
         <S.HelpTextBox>
           <S.HelpText to="/sign-up">회원가입</S.HelpText>
           <S.HelpText to="/forgot-passwrod">비밀번호 찾기</S.HelpText>
