@@ -389,24 +389,27 @@ export const TransitionBox = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: space-around;
   width: 100%;
+  height: 100%;
   padding: 0.5rem;
 `;
 
 export const UpperHandTransition = styled.div`
-  width: 100%;
-  height: 2rem;
+  display: flex;
+  flex-direction: row;
+  width: 90%;
   background-color: ${({ theme }) => theme.fill.normal};
   border-radius: 0.75rem;
   overflow: hidden;
-  margin: 0 1rem;
 `;
 
 export const UpperHandBar = styled.div<{
   $width: number;
   $isRival: boolean;
 }>`
+  display: flex;
+  padding: 0 0.5rem;
   width: ${({ $width }) => `${$width}%`};
   height: 100%;
   transition: width 0.4s ease;
@@ -421,4 +424,14 @@ export const UpperHandBar = styled.div<{
         background-color: ${palette.blue[50]};
         border-radius: 0 0.75rem 0.75rem 0;
       `}
+`;
+
+export const PercentText = styled.p`
+  ${font.title2.bold}
+  ${palette.neutral[99]}
+`;
+
+export const WarPeriodText = styled.p`
+  ${font.body.medium}
+  color: ${({ theme }) => theme.label.normal};
 `;

@@ -2,6 +2,7 @@ import * as S from "./RivalCompetition.style";
 import { getStatus } from "@/features/home/model/useHome";
 import { useCompetition } from "@/pages/competition/model/useCompetition";
 import { useState } from "react";
+import { WarPeriodText } from "./RivalCompetition.style";
 
 export const RivalCompetition = () => {
   const { rivalCompetition } = useCompetition();
@@ -185,11 +186,28 @@ export const RivalCompetition = () => {
                       </S.UpperHandProfile>
                       <S.TransitionBox>
                         <S.UpperHandTransition>
-                          <S.UpperHandBar $width={rivalPercent} $isRival>
-                            {rivalPercent}%
+                          <S.UpperHandBar
+                            style={{
+                              display: "flex",
+                              justifyContent: "flex-start",
+                            }}
+                            $width={rivalPercent}
+                            $isRival
+                          >
+                            <S.PercentText>{Math.floor(rivalPercent)}%</S.PercentText>
                           </S.UpperHandBar>
-                          <S.UpperHandBar $width={myPercent} $isRival={false} />
+                          <S.UpperHandBar
+                            style={{
+                              display: "flex",
+                              justifyContent: "flex-end",
+                            }}
+                            $width={myPercent}
+                            $isRival={false}
+                          >
+                            <S.PercentText>{Math.floor(myPercent)}%</S.PercentText>
+                          </S.UpperHandBar>
                         </S.UpperHandTransition>
+                        <WarPeriodText>종료 2026년 1월 13일 · 3일 남음</WarPeriodText>
                       </S.TransitionBox>
                       <S.UpperHandProfile>
                         <S.UpperHandProfileIcon />
@@ -198,6 +216,7 @@ export const RivalCompetition = () => {
                     </S.UpperHandContainer>
                   );
                 })()}
+                <S.Line />
               </S.DetailWrapper>
             ) : null}
           </S.BattleWrapper>
