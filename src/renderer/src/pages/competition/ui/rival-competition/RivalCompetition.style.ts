@@ -395,19 +395,30 @@ export const TransitionBox = styled.div`
 `;
 
 export const UpperHandTransition = styled.div`
-  flex: 1;
+  width: 100%;
   height: 2rem;
   background-color: ${({ theme }) => theme.fill.normal};
   border-radius: 0.75rem;
-  display: flex;
   overflow: hidden;
   margin: 0 1rem;
 `;
 
-export const UpperHandBar = styled.div<{ $width: number; $isRival: boolean }>`
-  width: ${({ $width }) => $width}%;
+export const UpperHandBar = styled.div<{
+  $width: number;
+  $isRival: boolean;
+}>`
+  width: ${({ $width }) => `${$width}%`};
   height: 100%;
-  background-color: ${({ $isRival, theme }) =>
-    $isRival ? theme.primary.normal : theme.background.normal};
-  transition: width 0.5s ease-in-out;
+  transition: width 0.4s ease;
+
+  ${({ $isRival, theme }) =>
+    $isRival
+      ? `
+        background-color: ${theme.primary.normal};
+        border-radius: 0.75rem 0 0 0.75rem;
+      `
+      : `
+        background-color: ${palette.blue[50]};
+        border-radius: 0 0.75rem 0.75rem 0;
+      `}
 `;
