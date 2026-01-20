@@ -3,31 +3,29 @@ import { ReactNode } from "react";
 
 interface ModalProps {
   modalTitle?: string;
-  $width: number;
-  $height: number;
+  width: number;
+  height: number;
   isOpen: boolean;
   onClose?: () => void;
   showClose?: boolean;
   children?: ReactNode;
   gap?: number;
-  bgColor?: string;
 }
 
 export const Modal = ({
   modalTitle,
   onClose,
   isOpen,
-  $width,
-  $height,
+  width,
+  height,
   children,
   gap = 0,
-  bgColor = "label.disable",
   showClose = true,
 }: ModalProps) => {
   if (!isOpen) return null;
   return (
     <S.ModalOverlay>
-      <S.ModalContainer $width={$width} $height={$height} $bgColor={bgColor}>
+      <S.ModalContainer $width={width} $height={height}>
         {modalTitle && <S.ModalTitle>{modalTitle}</S.ModalTitle>}
         {showClose && onClose && (
           <S.CloseButton onClick={onClose}>

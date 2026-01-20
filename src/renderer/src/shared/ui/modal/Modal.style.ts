@@ -1,7 +1,6 @@
 import styled from "styled-components";
 import Close from "@/features/home/assets/home/no.svg";
 import { font } from "@/shared/config/font";
-import { getThemeColor } from "@/shared/utils/getThemeColor";
 
 export const ModalOverlay = styled.div`
   position: fixed;
@@ -16,12 +15,12 @@ export const ModalOverlay = styled.div`
   background: rgba(0, 0, 0, 0.5);
 `;
 
-export const ModalContainer = styled.div<{ $width: number; $height: number; $bgColor: string }>`
+export const ModalContainer = styled.div<{ $width: number; $height: number }>`
   padding: 1.25rem;
   border-radius: 1.25rem;
   width: ${({ $width }) => $width}rem;
   height: ${({ $height }) => $height}rem;
-  background-color: ${({ theme, $bgColor }) => getThemeColor(theme, $bgColor)};
+  background-color: ${({ theme }) => theme.background.normal};
   position: relative;
   display: flex;
 `;
