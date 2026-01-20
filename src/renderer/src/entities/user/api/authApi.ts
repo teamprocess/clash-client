@@ -29,7 +29,6 @@ export interface SignUpRequest {
 }
 
 export interface EmailVerifyRequest {
-  email: string;
   code: string;
 }
 
@@ -45,9 +44,11 @@ export const authApi = {
 
   // 아이디 중복 검사
   usernameDuplicateCheck: async (data: UsernameDuplicateCheckRequest) => {
-    const result = await api.post<ApiResponse<UsernameDuplicateCheckResponse>>(
+    const result = await api.get<ApiResponse<UsernameDuplicateCheckResponse>>(
       "/auth/username-duplicate-check",
-      data
+      {
+        params: data,
+      }
     );
     return result.data;
   },
