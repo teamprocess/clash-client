@@ -190,6 +190,7 @@ export const useMajorChoice = () => {
       analyzedMajor,
       username: "조상철",
       setStep,
+      navigate,
     },
   };
 };
