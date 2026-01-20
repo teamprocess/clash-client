@@ -299,6 +299,15 @@ export const BattleListContainer = styled.div`
   flex-direction: column;
 `;
 
+export const UpperHandJudge = styled.div<{ $type: string }>`
+  padding: 0.25rem 0.625rem;
+  background-color: ${({ $type }) =>
+    $type === "우세" ? "#1DAEFF" : $type === "열세" ? "#FF3B30" : "#8E8E93"};
+  ${font.caption.bold}
+  color: ${({ theme }) => theme.fill.normal};
+  border-radius: 0.5rem;
+`;
+
 export const BattleProfileBox = styled.div`
   display: flex;
   align-items: center;

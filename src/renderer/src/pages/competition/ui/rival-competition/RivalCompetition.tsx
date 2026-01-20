@@ -133,6 +133,9 @@ export const RivalCompetition = () => {
                 >
                   <S.ProfileContent>
                     <S.NameBox style={{ gap: "0.75rem" }}>
+                      <S.UpperHandJudge $type={rivalCompetition.judgeUpperHand(rival.username)}>
+                        {rivalCompetition.judgeUpperHand(rival.username)}
+                      </S.UpperHandJudge>
                       <S.BattleName>vs {rival.name}</S.BattleName>
                       <S.DateBox>
                         <S.DateIcon />
