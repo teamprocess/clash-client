@@ -3,8 +3,8 @@ import { ReactNode } from "react";
 
 interface ModalProps {
   modalTitle?: string;
-  $width: number;
-  $height: number;
+  width: number;
+  height: number;
   isOpen: boolean;
   onClose?: () => void;
   showClose?: boolean;
@@ -16,8 +16,8 @@ export const Modal = ({
   modalTitle,
   onClose,
   isOpen,
-  $width,
-  $height,
+  width,
+  height,
   children,
   gap = 0,
   showClose = true,
@@ -25,7 +25,7 @@ export const Modal = ({
   if (!isOpen) return null;
   return (
     <S.ModalOverlay>
-      <S.ModalContainer $width={$width} $height={$height}>
+      <S.ModalContainer $width={width} $height={height}>
         {modalTitle && <S.ModalTitle>{modalTitle}</S.ModalTitle>}
         {showClose && onClose && (
           <S.CloseButton onClick={onClose}>
