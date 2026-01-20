@@ -90,7 +90,6 @@ export const Group = () => {
           <CommonS.MoreIcon />
         </S.GroupNameBox>
       </S.GroupHeader>
-      x
       <S.MemberContent>
         {MemberMockData.map(member => (
           <S.MemberBox key={member.id} $isActive={member.isActive}>
