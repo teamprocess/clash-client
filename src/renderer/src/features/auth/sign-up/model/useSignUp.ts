@@ -117,7 +117,6 @@ export const useSignUp = () => {
   const handleEmailVerify = async (data: EmailVerifyFormData) => {
     try {
       const result = await authApi.verifyEmail({
-        email: email,
         code: data.emailCode,
       });
 
