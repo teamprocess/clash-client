@@ -19,9 +19,20 @@ api.interceptors.response.use(
   },
   error => {
     if (error.response) {
+      const publicPaths = [
+        "/auth/sign-in",
+        "/auth/sign-up",
+        "/auth/username-duplicate-check",
+        "/auth/verify-email",
+      ];
+      const isPublicPath = publicPaths.some(path => error.config?.url?.includes(path));
+
       switch (error.response.status) {
         case 401:
-          window.location.href = "#/sign-in";
+          // Auth 관련 API는 리다이렉트 X
+          if (!isPublicPath) {
+            window.location.href = "#/sign-in";
+          }
           break;
         case 403:
           console.error("접근 권한이 없습니다.");
