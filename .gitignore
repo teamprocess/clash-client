@@ -6,3 +6,6 @@ out
 *.log*
 build
 .idea
+.env
+CLAUDE.md
+AGENTS.md
