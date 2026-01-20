@@ -1,9 +1,24 @@
 import * as S from "./RivalCompetition.style";
 import { getStatus } from "@/features/home/model/useHome";
 import { useCompetition } from "@/pages/competition/model/useCompetition";
+import { useState } from "react";
 
 export const RivalCompetition = () => {
   const { rivalCompetition } = useCompetition();
+
+  const handleMakeBattle = () => {
+    console.log("배틀 생성하기");
+  };
+
+  const [battleTargetIndex, setBattleTargetIndex] = useState<string | null>(null);
+
+  const handleOpenDetail = (battleTargetIndex: string) => {
+    setBattleTargetIndex(battleTargetIndex);
+  };
+
+  const battleRivals = rivalCompetition.rivalsTransCompareData.filter(
+    rival => rival.username !== "me"
+  );
 
   return (
     <S.Container>
@@ -114,7 +129,77 @@ export const RivalCompetition = () => {
         </S.Content>
       </S.CompareContentBox>
       <S.ContentBox>
-        <S.Content id={"content-3"}></S.Content>
+        <S.Content id={"content-3"}>
+          <S.BattleWrapper>
+            <S.TitleBox>
+              <S.BattleTextBox>
+                <S.Title>배틀</S.Title>
+                <S.SubText>배틀을 생성해 라이벌과 더 치열하게 경쟁할 수 있습니다.</S.SubText>
+              </S.BattleTextBox>
+              <S.MakeBattle onClick={handleMakeBattle}>배틀 생성하기</S.MakeBattle>
+            </S.TitleBox>
+            <S.Line />
+            <S.BattleListContainer>
+              {battleRivals.map(rival => (
+                <S.BattleProfileBox
+                  key={rival.username}
+                  onClick={() => handleOpenDetail(rival.username)}
+                >
+                  <S.ProfileContent>
+                    <S.NameBox style={{ gap: "0.75rem" }}>
+                      <S.BattleName>vs {rival.name}</S.BattleName>
+                      <S.DateBox>
+                        <S.DateIcon />
+                        <S.DateText>2026년 1월 13일까지</S.DateText>
+                      </S.DateBox>
+                    </S.NameBox>
+                  </S.ProfileContent>
+
+                  <S.DetailBox>
+                    <S.DetailButton>상세내용보기</S.DetailButton>
+                    <S.BackArrowIcon />
+                  </S.DetailBox>
+                </S.BattleProfileBox>
+              ))}
+            </S.BattleListContainer>
+
+            {battleTargetIndex ? (
+              <S.DetailWrapper>
+                {(() => {
+                  const rival = rivalCompetition.rivalsTransCompareData.find(
+                    d => d.username === battleTargetIndex
+                  );
+                  const me = rivalCompetition.rivalsTransCompareData.find(d => d.username === "me");
+
+                  if (!rival || !me) return null;
+
+                  const total = rival.totalRate + me.totalRate;
+                  const rivalPercent = total === 0 ? 50 : (rival.totalRate / total) * 100;
+                  const myPercent = 100 - rivalPercent;
+
+                  return (
+                    <S.UpperHandContainer>
+                      <S.UpperHandProfile>
+                        <S.UpperHandProfileIcon />
+                        <S.UpperHandName>{rival.name}</S.UpperHandName>
+                      </S.UpperHandProfile>
+                      <S.TransitionBox>
+                        <S.UpperHandTransition>
+                          <S.UpperHandBar $width={rivalPercent} $isRival />
+                          <S.UpperHandBar $width={myPercent} $isRival={false} />
+                        </S.UpperHandTransition>
+                      </S.TransitionBox>
+                      <S.UpperHandProfile>
+                        <S.UpperHandProfileIcon />
+                        <S.UpperHandName>나</S.UpperHandName>
+                      </S.UpperHandProfile>
+                    </S.UpperHandContainer>
+                  );
+                })()}
+              </S.DetailWrapper>
+            ) : null}
+          </S.BattleWrapper>
+        </S.Content>
       </S.ContentBox>
     </S.Container>
   );

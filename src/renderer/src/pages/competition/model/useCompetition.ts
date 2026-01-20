@@ -32,6 +32,7 @@ export const useCompetition = () => {
     {
       name: "멧돼지",
       username: "seunga_418",
+      totalRate: 55,
       rate: [
         { date: 1, growth_rate: 51 },
         { date: 2, growth_rate: 41 },
@@ -40,16 +41,12 @@ export const useCompetition = () => {
         { date: 5, growth_rate: 105 },
         { date: 6, growth_rate: 5 },
         { date: 7, growth_rate: 12 },
-        { date: 8, growth_rate: 9 },
-        { date: 9, growth_rate: 11 },
-        { date: 10, growth_rate: 62 },
-        { date: 11, growth_rate: 19 },
-        { date: 12, growth_rate: 11 },
       ],
     },
     {
       name: "코딩왕자",
       username: "king_of_code",
+      totalRate: 96,
       rate: [
         { date: 1, growth_rate: 60 },
         { date: 2, growth_rate: 15 },
@@ -58,16 +55,12 @@ export const useCompetition = () => {
         { date: 5, growth_rate: 30 },
         { date: 6, growth_rate: 45 },
         { date: 7, growth_rate: 60 },
-        { date: 8, growth_rate: 75 },
-        { date: 9, growth_rate: 80 },
-        { date: 10, growth_rate: 85 },
-        { date: 11, growth_rate: 90 },
-        { date: 12, growth_rate: 95 },
       ],
     },
     {
       name: "잔디인형",
       username: "jandi_lover",
+      totalRate: 26,
       rate: [
         { date: 1, growth_rate: 10 },
         { date: 2, growth_rate: 48 },
@@ -76,16 +69,12 @@ export const useCompetition = () => {
         { date: 5, growth_rate: 55 },
         { date: 6, growth_rate: 40 },
         { date: 7, growth_rate: 60 },
-        { date: 8, growth_rate: 58 },
-        { date: 9, growth_rate: 62 },
-        { date: 10, growth_rate: 55 },
-        { date: 11, growth_rate: 50 },
-        { date: 12, growth_rate: 53 },
       ],
     },
     {
       name: "알고리즘킬러",
       username: "algo_master",
+      totalRate: 41,
       rate: [
         { date: 1, growth_rate: 5 },
         { date: 2, growth_rate: 8 },
@@ -94,16 +83,12 @@ export const useCompetition = () => {
         { date: 5, growth_rate: 65 },
         { date: 6, growth_rate: 10 },
         { date: 7, growth_rate: 15 },
-        { date: 8, growth_rate: 70 },
-        { date: 9, growth_rate: 75 },
-        { date: 10, growth_rate: 20 },
-        { date: 11, growth_rate: 25 },
-        { date: 12, growth_rate: 85 },
       ],
     },
     {
       name: "나",
       username: "me",
+      totalRate: 50,
       rate: [
         { date: 1, growth_rate: 70 },
         { date: 2, growth_rate: 41 },
@@ -112,11 +97,6 @@ export const useCompetition = () => {
         { date: 5, growth_rate: 25 },
         { date: 6, growth_rate: 7 },
         { date: 7, growth_rate: 12 },
-        { date: 8, growth_rate: 9 },
-        { date: 9, growth_rate: 11 },
-        { date: 10, growth_rate: 12 },
-        { date: 11, growth_rate: 19 },
-        { date: 12, growth_rate: 21 },
       ],
     },
   ];
@@ -127,7 +107,7 @@ export const useCompetition = () => {
   const CHART_PADDING_TOP = 12;
   const CHART_PADDING_BOTTOM = 12;
   const CHART_HEIGHT = 100;
-  const POINT_GAP = 20;
+  const POINT_GAP = 30;
 
   const COLORS: Record<string, string> = {
     seunga_418: "#2F80ED",
