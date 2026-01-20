@@ -1,3 +1,10 @@
+import * as S from "./RecordPage.style";
+import { Record } from "@/features/record/ui/Record";
+
 export const RecordPage = () => {
-  return <div>기록입니다</div>;
+  return (
+    <S.RecordPageContainer>
+      <Record />
+    </S.RecordPageContainer>
+  );
 };
