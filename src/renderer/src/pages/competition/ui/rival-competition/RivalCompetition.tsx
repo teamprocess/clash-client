@@ -1,25 +1,17 @@
 import * as S from "./RivalCompetition.style";
 import { getStatus } from "@/features/home/model/useHome";
 import { useCompetition } from "@/pages/competition/model/useCompetition";
-import { useState } from "react";
 import { WarPeriodText } from "./RivalCompetition.style";
 
 export const RivalCompetition = () => {
   const { rivalCompetition } = useCompetition();
 
-  const handleMakeBattle = () => {
-    console.log("배틀 생성하기");
-  };
+  const analyzeRival = rivalCompetition.rivalsTransCompareData[0].totalRate;
+  const analyzeMe = rivalCompetition.rivalsTransCompareData[0].totalRate;
+  const analyzeTotal = analyzeRival + analyzeMe;
 
-  const [battleTargetIndex, setBattleTargetIndex] = useState<string | null>(null);
-
-  const handleOpenDetail = (battleTargetIndex: string) => {
-    setBattleTargetIndex(battleTargetIndex);
-  };
-
-  const battleRivals = rivalCompetition.rivalsTransCompareData.filter(
-    rival => rival.username !== "me"
-  );
+  const analyzeRivalPercent = analyzeTotal === 0 ? 50 : (analyzeRival / analyzeTotal) * 100;
+  const analyzeMyPercent = 100 - analyzeRivalPercent;
 
   return (
     <S.Container>
@@ -29,7 +21,7 @@ export const RivalCompetition = () => {
             <S.TitleBox>
               <S.Title>내 라이벌</S.Title>
             </S.TitleBox>
-            <S.Line />
+            <S.GaroLine />
             <S.ProfileWrapper>
               {rivalCompetition.RivalsData.data.my_rivals.map(user => (
                 <S.ProfileContainer key={user.username}>
@@ -88,7 +80,7 @@ export const RivalCompetition = () => {
                 </S.SelectWrapper>
               </S.DropDownBox>
             </S.TitleBox>
-            <S.Line />
+            <S.GaroLine />
             <S.GraphBox>
               <S.ScrollArea>
                 <S.GraphInner style={{ width: "100%" }}>
@@ -137,14 +129,14 @@ export const RivalCompetition = () => {
                 <S.Title>배틀</S.Title>
                 <S.SubText>배틀을 생성해 라이벌과 더 치열하게 경쟁할 수 있습니다.</S.SubText>
               </S.BattleTextBox>
-              <S.MakeBattle onClick={handleMakeBattle}>배틀 생성하기</S.MakeBattle>
+              <S.MakeBattle onClick={rivalCompetition.handleMakeBattle}>배틀 생성하기</S.MakeBattle>
             </S.TitleBox>
-            <S.Line />
+            <S.GaroLine />
             <S.BattleListContainer>
-              {battleRivals.map(rival => (
+              {rivalCompetition.battleRivals.map(rival => (
                 <S.BattleProfileBox
                   key={rival.username}
-                  onClick={() => handleOpenDetail(rival.username)}
+                  onClick={() => rivalCompetition.handleOpenDetail(rival.username)}
                 >
                   <S.ProfileContent>
                     <S.NameBox style={{ gap: "0.75rem" }}>
@@ -164,11 +156,11 @@ export const RivalCompetition = () => {
               ))}
             </S.BattleListContainer>
 
-            {battleTargetIndex ? (
+            {rivalCompetition.battleTargetIndex ? (
               <S.DetailWrapper>
                 {(() => {
                   const rival = rivalCompetition.rivalsTransCompareData.find(
-                    d => d.username === battleTargetIndex
+                    d => d.username === rivalCompetition.battleTargetIndex
                   );
                   const me = rivalCompetition.rivalsTransCompareData.find(d => d.username === "me");
 
@@ -216,7 +208,57 @@ export const RivalCompetition = () => {
                     </S.UpperHandContainer>
                   );
                 })()}
-                <S.Line />
+                <S.GaroLine />
+                <S.DetailAnalyzeContainer>
+                  <S.TitleBox>
+                    <S.AnalyzeText>세부 분석</S.AnalyzeText>
+                    <S.DropDownBox>
+                      <S.SelectWrapper>
+                        <S.Select
+                          value={rivalCompetition.competitionDropdown}
+                          onChange={e => rivalCompetition.setCompetitionDropdown(e.target.value)}
+                        >
+                          {rivalCompetition.competitionDropDownValue.map(option => (
+                            <S.Option key={option.key} value={option.key}>
+                              {option.label}
+                            </S.Option>
+                          ))}
+                        </S.Select>
+                        <S.ArrowIcon />
+                      </S.SelectWrapper>
+                    </S.DropDownBox>
+                  </S.TitleBox>
+                  <S.AnalyzeBox>
+                    <div
+                      style={{
+                        display: "flex",
+                        flexDirection: "row",
+                        alignItems: "center",
+                        gap: "1.5rem",
+                        width: "100%",
+                        height: "100%",
+                      }}
+                    >
+                      <S.AnalyzeContent>
+                        <S.AnalyzeName>
+                          {rivalCompetition.rivalsTransCompareData[0].name}
+                        </S.AnalyzeName>
+                        <S.AnalyzeName>
+                          {rivalCompetition.rivalsTransCompareData[4].name}
+                        </S.AnalyzeName>
+                      </S.AnalyzeContent>
+                      <S.SeroLine />
+                      <S.AnalyzeContent style={{ width: "100%" }}>
+                        <S.AnalyzeBar $width={analyzeRivalPercent} $isRival>
+                          {rivalCompetition.rivalsTransCompareData[0].totalRate} EXP
+                        </S.AnalyzeBar>
+                        <S.AnalyzeBar $width={analyzeMyPercent} $isRival={false}>
+                          {rivalCompetition.rivalsTransCompareData[4].totalRate} EXP
+                        </S.AnalyzeBar>
+                      </S.AnalyzeContent>
+                    </div>
+                  </S.AnalyzeBox>
+                </S.DetailAnalyzeContainer>
               </S.DetailWrapper>
             ) : null}
           </S.BattleWrapper>
