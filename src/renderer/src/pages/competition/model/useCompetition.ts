@@ -2,6 +2,7 @@ import { useState } from "react";
 import { RivalsResponse } from "@/features/home/model/useHome";
 
 type CompeteTab = "ME" | "RIVAL";
+type UpperHand = "우세" | "열세" | "동률";
 
 interface CompareDataProps {
   earned_exp: number;
@@ -166,6 +167,19 @@ export const useCompetition = () => {
   const rivalPercent = total === 0 ? 50 : (rivalValue / total) * 100;
   const myPercent = 100 - rivalPercent;
 
+  const judgeUpperHand = (rivalUsername: string, isFinished?: boolean): UpperHand | "종료" => {
+    if (isFinished) return "종료";
+
+    const rival = rivalsTransCompareData.find(d => d.username === rivalUsername);
+    const me = rivalsTransCompareData.find(d => d.username === "me");
+
+    if (!rival || !me) return "동률";
+
+    if (me.totalRate > rival.totalRate) return "우세";
+    if (me.totalRate < rival.totalRate) return "열세";
+    return "동률";
+  };
+
   // 드랍다운
   const competitionDropDownValue = [
     { key: "YesterDay", label: "어제" },
@@ -293,6 +307,7 @@ export const useCompetition = () => {
       myPercent,
       rivalValue,
       myValue,
+      judgeUpperHand,
     },
   };
 };
