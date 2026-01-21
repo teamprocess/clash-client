@@ -22,13 +22,12 @@ export const Test = ({
     <>
       <S.TestContainer>
         <S.QuestionWrapper>
-          {questionData.map(({ id, title, subTitle }, idx) => (
+          {questionData.map(({ id, content }, idx) => (
             <S.QuestionBox key={id}>
               <S.QuestionTitleBox>
                 <S.QuestionTitle>
-                  {id}. {title}
+                  {id}. {content}
                 </S.QuestionTitle>
-                <S.QuestionSubTitle>{subTitle}</S.QuestionSubTitle>
               </S.QuestionTitleBox>
               <S.AnswerContainer>
                 <S.AnswerBox>

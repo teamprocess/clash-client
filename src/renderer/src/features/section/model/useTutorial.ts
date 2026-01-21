@@ -6,7 +6,7 @@ export const useTutorial = (tutorial: TutorialData) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    navigate("/roadmap/major-choice");
+    navigate("/roadmap");
   }, [navigate]);
 
   const [currentStep, setCurrentStep] = useState(1);
