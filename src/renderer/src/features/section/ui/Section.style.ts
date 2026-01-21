@@ -45,7 +45,7 @@ export const SectionItemWrapper = styled.div`
 
 export const SectionItemBox = styled.div`
   display: flex;
-  flex-direction: column;
+  flex-direction: column-reverse;
   justify-content: center;
   align-items: center;
   gap: 2rem;
