@@ -1,4 +1,4 @@
-import { app, shell, BrowserWindow, ipcMain } from "electron";
+import { app, shell, BrowserWindow, ipcMain, session } from "electron";
 import { join } from "path";
 import { electronApp, optimizer, is } from "@electron-toolkit/utils";
 import ClashIcon from "../../resources/clash-icon.png?asset";
@@ -71,6 +71,21 @@ function setupAppMonitorHandlers() {
 app.whenReady().then(() => {
   // Set app user model id for windows
   electronApp.setAppUserModelId("com.electron");
+
+  // CSP 설정
+  const apiUrl = process.env.VITE_API_URL || "http://localhost:8080";
+  const apiOrigin = new URL(apiUrl).origin;
+
+  session.defaultSession.webRequest.onHeadersReceived((details, callback) => {
+    callback({
+      responseHeaders: {
+        ...details.responseHeaders,
+        "Content-Security-Policy": [
+          `default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self' ${apiOrigin}`,
+        ],
+      },
+    });
+  });
 
   // Default open or close DevTools by F12 in development
   // and ignore CommandOrControl + R in production.

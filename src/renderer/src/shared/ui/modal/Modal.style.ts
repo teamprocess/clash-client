@@ -20,15 +20,9 @@ export const ModalContainer = styled.div<{ $width: number; $height: number }>`
   border-radius: 1.25rem;
   width: ${({ $width }) => $width}rem;
   height: ${({ $height }) => $height}rem;
-  background-color: ${({ theme }) => theme.label.disable};
-`;
-
-export const ModalHeader = styled.div`
+  background-color: ${({ theme }) => theme.background.normal};
+  position: relative;
   display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
 `;
 
 export const ModalTitle = styled.p`
@@ -38,12 +32,16 @@ export const ModalTitle = styled.p`
 export const CloseIcon = styled(Close)``;
 
 export const CloseButton = styled.div`
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
   cursor: pointer;
 `;
 
-export const ModalContent = styled.div`
+export const ModalContent = styled.div<{ $gap: number }>`
   display: flex;
   flex-direction: column;
   width: 100%;
   height: 100%;
+  gap: ${({ $gap }) => $gap}rem;
 `;

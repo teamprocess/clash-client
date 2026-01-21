@@ -52,6 +52,7 @@ export const SubmitButton = styled.button`
   color: ${palette.neutral[97]};
   background-color: ${({ theme }) => theme.primary.normal};
   ${font.headline2.medium};
+  cursor: pointer;
 `;
 
 export const HelpTextBox = styled.div`
