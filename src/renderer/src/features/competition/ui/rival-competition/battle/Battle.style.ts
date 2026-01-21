@@ -106,7 +106,6 @@ export const Select = styled.select`
   border: none;
   appearance: none;
   cursor: pointer;
-  background-image: url(${ArrowIcon});
   background-repeat: no-repeat;
   background-position: right 0.5rem center;
   background-size: 0.75rem;

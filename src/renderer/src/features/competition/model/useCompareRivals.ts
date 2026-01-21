@@ -67,6 +67,7 @@ export const useCompareRival = () => {
 
   const getY = (value: number, max: number) => {
     const usableHeight = CHART_HEIGHT - CHART_PADDING_TOP - CHART_PADDING_BOTTOM;
+    if (max === 0) return CHART_HEIGHT - CHART_PADDING_TOP;
     return CHART_HEIGHT - CHART_PADDING_BOTTOM - (value / max) * usableHeight;
   };
 
