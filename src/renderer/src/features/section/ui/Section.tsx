@@ -5,106 +5,12 @@ import { SectionProgress } from "@/features/section-progress";
 import { useEffect, useState } from "react";
 import { LockedModal } from "@/features/section/components/LockedModal";
 import { TutorialModal } from "@/features/section/components/TutorialModal";
+import { sectionApi } from "@/entities/roadmap/section/api/sectionApi";
 import {
   getAllSectionsResponse,
   MajorEnum,
   section,
-  sectionApi,
-} from "@/entities/roadmap/section/api/sectionApi";
-
-// const sectionMock = {
-//   data: [
-//     {
-//       id: 1,
-//       category: "javascript",
-//       title: "자바스크립트 고급",
-//       imgUrl: JSIcon,
-//       completed: true,
-//       locked: false,
-//     },
-//     {
-//       id: 2,
-//       category: "javascript",
-//       title: "자바스크립트 중급",
-//       imgUrl: JSIcon,
-//       completed: true,
-//       locked: false,
-//     },
-//     {
-//       id: 3,
-//       category: "javascript",
-//       title: "자바스크립트 초급",
-//       imgUrl: JSIcon,
-//       completed: true,
-//       locked: false,
-//     },
-//     {
-//       id: 4,
-//       category: "react",
-//       title: "리액트 중급",
-//       imgUrl: ReactIcon,
-//       completed: false,
-//       locked: false,
-//     },
-//     {
-//       id: 5,
-//       category: "react",
-//       title: "리액트 초급",
-//       imgUrl: ReactIcon,
-//       completed: true,
-//       locked: false,
-//     },
-//     {
-//       id: 6,
-//       category: "typescript",
-//       title: "타입스크립트 고급",
-//       imgUrl: TSIcon,
-//       completed: false,
-//       locked: false,
-//     },
-//     {
-//       id: 7,
-//       category: "typescript",
-//       title: "타입스크립트 중급",
-//       imgUrl: TSIcon,
-//       completed: false,
-//       locked: false,
-//     },
-//     {
-//       id: 8,
-//       category: "typescript",
-//       title: "타입스크립트 초급",
-//       imgUrl: TSIcon,
-//       completed: false,
-//       locked: false,
-//     },
-//     {
-//       id: 9,
-//       category: "nextjs",
-//       title: "넥스트 초급",
-//       imgUrl: NextIcon,
-//       completed: false,
-//       locked: true,
-//     },
-//     {
-//       id: 10,
-//       category: "react-native",
-//       title: "rn 초급",
-//       imgUrl: NextIcon,
-//       completed: false,
-//       locked: true,
-//     },
-//     {
-//       id: 11,
-//       category: "electron",
-//       title: "electron 초급",
-//       imgUrl: NextIcon,
-//       completed: false,
-//       locked: true,
-//     },
-//   ],
-//   categories: ["javascript", "react", "typescript", "nextjs", "react-native", "electron"],
-// };
+} from "@/entities/roadmap/section/model/section.types";
 
 export const Section = () => {
   const navigate = useNavigate();
@@ -146,7 +52,6 @@ export const Section = () => {
       setSectionData(data);
     });
   }, []);
-  console.log(sectionData);
 
   return (
     <S.RoadmapContainer>

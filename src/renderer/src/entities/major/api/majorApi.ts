@@ -1,34 +1,5 @@
 import { api, ApiResponse } from "@/shared/api";
-
-export interface Weight {
-  web: number;
-  app: number;
-  server: number;
-  ai: number;
-  game: number;
-}
-
-export interface MajorQuestion {
-  id: number;
-  content: string;
-  weight: Weight;
-}
-
-export interface MajorQuestionsResponse {
-  majorQuestions: MajorQuestion[];
-}
-
-export enum Major {
-  SERVER = "SERVER",
-  WEB = "WEB",
-  APP = "APP",
-  AI = "AI",
-  GAME = "GAME",
-}
-
-export interface PostMyMajorRequest {
-  major: Major;
-}
+import { MajorQuestionsResponse, PostMyMajorRequest } from "@/entities/major/model/major.types";
 
 export const majorApi = {
   // 전공 질문 조회
