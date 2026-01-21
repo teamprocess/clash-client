@@ -2,123 +2,162 @@ import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { z } from "zod";
+import { authApi } from "@/entities/user";
+import { useNavigate } from "react-router-dom";
 
-// Step1 Schema
-const step1Schema = z.object({
-  id: z.string().min(4, "아이디는 최소 4자 이상이어야 합니다."),
+// SignUp Schema
+const signUpSchema = z.object({
+  username: z.string().min(4, "아이디는 최소 4자 이상이어야 합니다."),
   name: z.string().min(1, "이름을 입력하세요."),
   email: z.email("유효한 이메일 주소를 입력하세요."),
+  password: z.string().min(8, "비밀번호는 최소 8자 이상이어야 합니다."),
+});
+
+export type SignUpFormData = z.infer<typeof signUpSchema>;
+
+// EmailVerify Schema
+const emailVerifySchema = z.object({
   emailCode: z.string("유효한 이메일 확인 코드를 입력하세요."),
 });
 
-export type Step1FormData = z.infer<typeof step1Schema>;
-
-// Step2 Schema
-const step2Schema = z
-  .object({
-    password: z.string().min(8, "비밀번호는 최소 8자 이상이어야 합니다."),
-    passwordConfirm: z.string().min(1, "비밀번호를 다시 한 번 입력하세요."),
-  })
-  .refine(data => data.password === data.passwordConfirm, {
-    message: "비밀번호가 일치하지 않습니다.",
-    path: ["passwordConfirm"],
-  });
-
-export type Step2FormData = z.infer<typeof step2Schema>;
+export type EmailVerifyFormData = z.infer<typeof emailVerifySchema>;
 
 export const useSignUp = () => {
-  // Step 상태
-  const [step, setStep] = useState(1);
-  const [step1Data, setStep1Data] = useState<Step1FormData | null>(null);
+  const navigate = useNavigate();
+  const [step, setStep] = useState<"SIGNUP" | "EMAIL_VERIFY">("SIGNUP");
 
-  // Step1 상태
-  const [checkedId, setCheckedId] = useState<string>("");
-  const [idAvailable, setIdAvailable] = useState(false);
-  const [emailSent, setEmailSent] = useState(false);
-  const [emailVerified, setEmailVerified] = useState(false);
+  // SignUp 상태
+  const [checkedUsername, setCheckedUsername] = useState<string>("");
+  const [usernameAvailable, setUsernameAvailable] = useState(false);
+  const [email, setEmail] = useState<string>("");
 
-  // Step1 Form
-  const step1Form = useForm<Step1FormData>({
-    resolver: zodResolver(step1Schema),
+  const signUpForm = useForm<SignUpFormData>({
+    resolver: zodResolver(signUpSchema),
   });
 
-  const id = useWatch({
-    control: step1Form.control,
-    name: "id",
+  const emailVerifyForm = useForm<EmailVerifyFormData>({
+    resolver: zodResolver(emailVerifySchema),
   });
 
-  // Step2 Form
-  const step2Form = useForm<Step2FormData>({
-    resolver: zodResolver(step2Schema),
+  const username = useWatch({
+    control: signUpForm.control,
+    name: "username",
   });
 
-  // id가 변경되면 자동으로 false
-  const idChecked = checkedId === id && checkedId !== "";
+  // username이 변경되면 자동으로 false
+  const usernameChecked = checkedUsername === username && checkedUsername !== "";
 
   // 아이디 중복 확인 API
-  const handleIdCheck = async () => {
-    const currentId = step1Form.getValues("id");
-    const isAvailable = Math.random() > 0.8; // 임시 랜덤 아이디 중복 확인
-    setCheckedId(currentId);
-    setIdAvailable(isAvailable);
-  };
+  const handleUsernameCheck = async () => {
+    const currentUsername = signUpForm.getValues("username");
 
-  // 이메일 인증 코드 전송 API
-  const handleEmailVerify = async () => {
-    setEmailSent(true);
-  };
-
-  // 이메일 인증 코드 확인 API
-  const handleEmailCodeVerify = async () => {
-    setEmailVerified(true);
-  };
-
-  // Step1 페이지에서 Step2로 가는 다음 버튼
-  const handleStep1Next = (data: Step1FormData) => {
-    setStep1Data(data);
-    setStep(2);
-  };
-
-  // 회원가입 API
-  const handleStep2Submit = async (data: Step2FormData) => {
-    const finalData = {
-      ...step1Data,
-      ...data,
-    };
+    if (!currentUsername) {
+      signUpForm.setError("username", {
+        type: "manual",
+        message: "아이디를 입력하세요.",
+      });
+      return;
+    }
 
     try {
-      console.log("회원가입:", finalData);
-    } catch (error) {
-      console.error("회원가입 실패:", error);
+      const result = await authApi.usernameDuplicateCheck({
+        username: currentUsername,
+      });
+
+      if (result.success && result.data?.duplicated === false) {
+        setUsernameAvailable(true);
+        setCheckedUsername(currentUsername);
+      } else {
+        setUsernameAvailable(false);
+        setCheckedUsername(currentUsername);
+      }
+    } catch (error: unknown) {
+      console.error("사용자 아이디 중복 검증에 실패했습니다.", error);
+      signUpForm.setError("username", {
+        type: "manual",
+        message: "아이디 중복 확인 중 오류가 발생했습니다.",
+      });
+    }
+  };
+
+  // Step1 페이지에서 Step2로 가는 다음 버튼 (회원가입)
+  const handleSignUp = async (data: SignUpFormData) => {
+    // 아이디 중복 확인 검증
+    if (!usernameChecked || !usernameAvailable) {
+      signUpForm.setError("username", {
+        type: "manual",
+        message: "아이디 중복 확인을 완료해주세요.",
+      });
+      return;
+    }
+
+    try {
+      const result = await authApi.signUp({
+        username: data.username,
+        name: data.name,
+        password: data.password,
+        email: data.email,
+      });
+
+      setEmail(data.email);
+
+      if (result.success) {
+        setStep("EMAIL_VERIFY");
+      } else {
+        signUpForm.setError("root", {
+          type: "manual",
+          message: result.message || "회원가입에 실패했습니다.",
+        });
+      }
+    } catch (error: unknown) {
+      console.error("회원가입에 실패했습니다.", error);
+    }
+  };
+
+  const handleEmailVerify = async (data: EmailVerifyFormData) => {
+    try {
+      const result = await authApi.verifyEmail({
+        code: data.emailCode,
+      });
+
+      if (result.success) {
+        navigate("/sign-in");
+      } else {
+        emailVerifyForm.setError("root", {
+          type: "manual",
+          message: result.message || "이메일 인증에 실패했습니다.",
+        });
+      }
+    } catch (error: unknown) {
+      console.error("이메일 인증에 실패했습니다.", error);
     }
   };
 
   return {
     step,
-    step1: {
-      register: step1Form.register,
-      handleSubmit: step1Form.handleSubmit,
-      errors: step1Form.formState.errors,
-      onSubmit: handleStep1Next,
-      idChecked,
-      idAvailable,
-      handleIdCheck,
-      emailSent,
-      handleEmailVerify,
-      emailVerified,
-      handleEmailCodeVerify,
+    signUp: {
+      register: signUpForm.register,
+      handleSubmit: signUpForm.handleSubmit,
+      errors: signUpForm.formState.errors,
+      isSubmitting: signUpForm.formState.isSubmitting,
+      usernameChecked,
+      usernameAvailable,
+      handleUsernameCheck,
+      onSubmit: handleSignUp,
     },
-    step2: {
-      register: step2Form.register,
-      handleSubmit: step2Form.handleSubmit,
-      errors: step2Form.formState.errors,
-      isSubmitting: step2Form.formState.isSubmitting,
-      onSubmit: handleStep2Submit,
+    emailVerify: {
+      register: emailVerifyForm.register,
+      handleSubmit: emailVerifyForm.handleSubmit,
+      setValue: emailVerifyForm.setValue,
+      errors: emailVerifyForm.formState.errors,
+      isSubmitting: emailVerifyForm.formState.isSubmitting,
+      email,
+      onSubmit: handleEmailVerify,
     },
   };
 };
 
 // 타입 불일치 방지 & 코드 중복 제거를 위해 ReturnType을 활용한 타입 추출
 export type UseSignUpReturn = ReturnType<typeof useSignUp>;
-export type Step1Props = UseSignUpReturn["step1"];
-export type Step2Props = UseSignUpReturn["step2"];
+export type SignUpProps = UseSignUpReturn["signUp"];
+export type EmailVerifyProps = UseSignUpReturn["emailVerify"];
