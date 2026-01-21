@@ -8,6 +8,7 @@ interface TutorialModalProps {
   onClose: () => void;
   onStart: () => void;
   tutorial?: TutorialData;
+  title: string;
 }
 
 export const TutorialModal = ({

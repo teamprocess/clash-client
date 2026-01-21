@@ -1,5 +1,12 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { RivalsResponse } from "@/features/home/model/useHome";
+
+interface User {
+  id: number;
+  name: string;
+  mention: string;
+  point: number;
+}
 
 type CompeteTab = "ME" | "RIVAL";
 type UpperHand = "우세" | "열세" | "동률";
@@ -188,6 +195,40 @@ export const useCompetition = () => {
     return "동률";
   };
 
+  const userList: User[] = [
+    { id: 1, name: "멧돼지", mention: "seunga_418", point: 4219 },
+    { id: 2, name: "채근영", mention: "chaeyn", point: 2147483647 },
+    { id: 3, name: "한승환", mention: "h.7xn", point: 3074 },
+    { id: 4, name: "권대형", mention: "gorani", point: 2126 },
+    { id: 5, name: "김민수", mention: "mins_k", point: 1980 },
+    { id: 6, name: "박지훈", mention: "park.jh", point: 1875 },
+    { id: 7, name: "이서연", mention: "seoyeon_lee", point: 1760 },
+    { id: 8, name: "정우진", mention: "wj_jung", point: 1698 },
+    { id: 9, name: "최윤아", mention: "yuna_c", point: 1584 },
+    { id: 10, name: "오현준", mention: "ohj_dev", point: 1490 },
+    { id: 11, name: "강도윤", mention: "doyoon_k", point: 1375 },
+    { id: 12, name: "조상철", mention: "sir0n", point: -2147483648 },
+    { id: 13, name: "문태현", mention: "taehyun_m", point: 1190 },
+    { id: 14, name: "유지호", mention: "jiho_y", point: 1085 },
+    { id: 15, name: "유지호", mention: "jiho_y", point: 1085 },
+    { id: 16, name: "유지호", mention: "jiho_y", point: 1085 },
+    { id: 17, name: "유지호", mention: "jiho_y", point: 1085 },
+    { id: 18, name: "유지호", mention: "jiho_y", point: 1085 },
+    { id: 19, name: "유지호", mention: "jiho_y", point: 1085 },
+  ];
+
+  const [rivalSelectedId, setRivalSelectedId] = React.useState<string | null>(null);
+
+  const handleUserSelect = (name: string) => {
+    // 이미 선택된 사람을 클릭하면 선택 해제
+    if (rivalSelectedId === name) {
+      setRivalSelectedId(null);
+    } else {
+      // 클릭한 사람만 선택
+      setRivalSelectedId(name);
+    }
+  };
+
   // 드랍다운
   const competitionDropDownValue = [
     { key: "YesterDay", label: "어제" },
@@ -319,6 +360,9 @@ export const useCompetition = () => {
       isModalOpen,
       handleModalOpen,
       handleModalClose,
+      handleUserSelect,
+      userList,
+      rivalSelectedId,
     },
   };
 };
