@@ -431,6 +431,7 @@ export const UpperHandBar = styled.div<{
   width: ${({ $width }) => `${$width}%`};
   height: 100%;
   transition: width 0.4s ease;
+  position: relative;
   ${({ $isRival, theme }) =>
     $isRival
       ? `
@@ -446,6 +447,8 @@ export const UpperHandBar = styled.div<{
 export const PercentText = styled.p`
   ${font.title2.bold}
   ${palette.neutral[99]}
+  position: absolute;
+  opacity: 0.6;
   z-index: 1000;
 `;
 
@@ -494,7 +497,6 @@ export const AnalyzeName = styled.p`
 
 export const AnalyzeBar = styled.div<{ $width: number; $isRival: boolean }>`
   display: flex;
-  ${font.label.bold}
   padding: 0.5rem;
   width: ${({ $width }) => `${$width}%`};
   ${({ $isRival, theme }) =>
@@ -517,6 +519,11 @@ export const DefaultBattleBox = styled.div`
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
+`;
+
+export const AnalyzeLabel = styled.p`
+  ${font.label.bold}
+  color: ${palette.neutral[99]};
 `;
 
 export const FireIcon = styled(Fire)`

@@ -238,10 +238,14 @@ export const RivalCompetition = () => {
                       <S.SeroLine />
                       <S.AnalyzeContent style={{ width: "100%" }}>
                         <S.AnalyzeBar $width={rivalCompetition.rivalPercent} $isRival>
-                          {rivalCompetition.rivalValue.toLocaleString()} EXP
+                          <S.AnalyzeLabel>
+                            {rivalCompetition.rivalValue.toLocaleString()} EXP
+                          </S.AnalyzeLabel>
                         </S.AnalyzeBar>
                         <S.AnalyzeBar $width={rivalCompetition.myPercent} $isRival={false}>
-                          {rivalCompetition.myValue.toLocaleString()} EXP
+                          <S.AnalyzeLabel>
+                            {rivalCompetition.myValue.toLocaleString()} EXP
+                          </S.AnalyzeLabel>
                         </S.AnalyzeBar>
                       </S.AnalyzeContent>
                     </div>
