@@ -9,7 +9,7 @@ const majorIcons = {
   Game: S.GameIcon,
 };
 
-export const TestResult = ({ analyzedMajor, username, setStep }: ResultProps) => {
+export const TestResult = ({ analyzedMajor, username, setStep, navigate }: ResultProps) => {
   const MajorIcon = majorIcons[analyzedMajor as keyof typeof majorIcons] || S.WebIcon;
 
   return (
@@ -33,7 +33,7 @@ export const TestResult = ({ analyzedMajor, username, setStep }: ResultProps) =>
           <S.Button $buttonType="retry" onClick={() => setStep("TEST")}>
             다시 검사하기
           </S.Button>
-          <S.Button $buttonType="start" onClick={() => setStep("FEATURE")}>
+          <S.Button $buttonType="start" onClick={() => navigate("/roadmap")}>
             로드맵 시작하기
           </S.Button>
         </S.ButtonGroup>
