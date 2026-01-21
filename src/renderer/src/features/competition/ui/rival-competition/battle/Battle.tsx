@@ -196,9 +196,9 @@ export const Battle = () => {
                 <S.UserChoiceContainer>
                   {battle.battleRivals.map(user => (
                     <S.UserChoiceBox
-                      key={user.name}
-                      $isSelected={battle.rivalSelectedId === user.name}
-                      onClick={() => battle.handleUserSelect(user.name)}
+                      key={user.username}
+                      $isSelected={battle.rivalSelectedId === user.username}
+                      onClick={() => battle.handleUserSelect(user.username)}
                     >
                       <S.ProfileContent style={{ height: "3rem" }}>
                         <S.ProfileIcon />
