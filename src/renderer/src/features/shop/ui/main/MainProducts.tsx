@@ -2,14 +2,19 @@ import DummyImage from "../../assets/dummy-banner.png";
 import { Recommend } from "@/features/shop";
 import * as S from "./MainProducts.style";
 import { Popularity } from "@/features/shop/ui/popularity/Popularity";
-import { UseShop } from "@/features/shop/model/useShop";
+import { Product } from "@/entities/product";
 
-export const MainProducts = ({ recommendedProducts, popularProducts }: UseShop) => {
+interface MainProductsProps {
+  recommendedProducts: Product[];
+  popularProducts: Product[];
+}
+
+export const MainProducts = ({ recommendedProducts, popularProducts }: MainProductsProps) => {
   return (
     <S.MainContainer>
       <S.BannerImage $imgUrl={DummyImage} />
-      <Recommend recommendedProducts={recommendedProducts} />
-      <Popularity popularProducts={popularProducts} />
+      <Recommend products={recommendedProducts} />
+      <Popularity products={popularProducts} />
     </S.MainContainer>
   );
 };
