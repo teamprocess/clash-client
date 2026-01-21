@@ -250,8 +250,9 @@ export const UserChoiceBox = styled.div<{ $isSelected: boolean }>`
   padding: 0.5rem;
   border-bottom: 1px solid ${({ theme }) => theme.line.alternative};
   cursor: pointer;
-  background-color: ${({ $isSelected, theme }) =>
-    $isSelected ? theme.fill.alternative : "transparent"};
+  &:hover {
+    background-color: ${({ theme }) => theme.fill.alternative};
+  }
 `;
 
 export const BottomBox = styled.div`
