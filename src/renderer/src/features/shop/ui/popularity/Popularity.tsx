@@ -1,17 +1,17 @@
 import * as S from "./Popularity.style";
-import { Product } from "@/features/shop/mocks/popularityProducts";
 import { ProductCard } from "@/features/shop/ui/card/ProductCard";
+import { Product } from "@/entities/product";
 
 interface PopularityProps {
-  popularProducts: Product[];
+  products: Product[];
 }
 
-export const Popularity = ({ popularProducts }: PopularityProps) => {
+export const Popularity = ({ products }: PopularityProps) => {
   return (
     <S.CategoryContainer>
       <S.CategoryTitle>인기</S.CategoryTitle>
       <S.CardContainer>
-        {popularProducts.map(product => (
+        {products.map(product => (
           <ProductCard
             key={product.id}
             title={product.title}

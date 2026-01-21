@@ -1,21 +1,49 @@
+import { useState, useEffect } from "react";
 import * as S from "./Products.style";
 import { calculateDiscountedPrice } from "@/features/shop/lib/calculateDiscountedPrice";
-import { UseProducts } from "@/features/shop/model/useProducts";
 import { ProductCard } from "@/features/shop/ui/card/ProductCard";
 import { Filter } from "@/features/shop/ui/filter/Filter";
+import { Product } from "@/entities/product";
 
-export const Products = ({
-  isPanelOpen,
-  handleCardClick,
-  selectedProduct,
-  allProducts,
-}: UseProducts) => {
+interface ProductsProps {
+  products: Product[];
+  isLoading?: boolean;
+}
+
+export const Products = ({ products, isLoading }: ProductsProps) => {
+  const [selectedId, setSelectedId] = useState<number | null>(null);
+
+  const selectedProduct = products.find(product => product.id === selectedId);
+  const isPanelOpen = selectedId !== null;
+
+  const handleCardClick = (id: number) => {
+    setSelectedId(selectedId === id ? null : id);
+  };
+
+  useEffect(() => {
+    document.body.style.overflow = isPanelOpen ? "hidden" : "unset";
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, [isPanelOpen]);
+
+  if (isLoading) {
+    return (
+      <S.MainContainer>
+        <Filter />
+        <S.ContentWrapper $isPanelOpen={false}>
+          <div>로딩 중...</div>
+        </S.ContentWrapper>
+      </S.MainContainer>
+    );
+  }
+
   return (
     <S.MainContainer>
       <Filter />
       <S.ContentWrapper $isPanelOpen={isPanelOpen}>
         <S.CardContainer $isPanelOpen={isPanelOpen}>
-          {allProducts.data.products.map(product => (
+          {products.map(product => (
             <ProductCard
               key={product.id}
               title={product.title}
