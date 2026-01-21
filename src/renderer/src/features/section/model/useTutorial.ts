@@ -1,7 +1,14 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { TutorialData } from "../mocks/tutorialData";
+import { useNavigate } from "react-router-dom";
 
 export const useTutorial = (tutorial: TutorialData) => {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    navigate("/roadmap/major-choice");
+  }, [navigate]);
+
   const [currentStep, setCurrentStep] = useState(1);
 
   const activeStep = tutorial.steps.find(step => step.id === currentStep);

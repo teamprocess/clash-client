@@ -1,7 +1,14 @@
 import * as S from "./MajorChoice.style";
 import { MajorProps } from "@/features/major-choice/model/useMajorChoice";
 
-export const MajorChoice = ({ selectedMajor, major, isValid, username, setStep }: MajorProps) => {
+export const MajorChoice = ({
+  selectedMajor,
+  major,
+  isValid,
+  username,
+  setStep,
+  navigate,
+}: MajorProps) => {
   return (
     <>
       <S.ChoiceContainer>
@@ -59,6 +66,7 @@ export const MajorChoice = ({ selectedMajor, major, isValid, username, setStep }
             disabled={!isValid}
             onClick={() => {
               setStep("FEATURE");
+              navigate("/roadmap");
             }}
           >
             선택 완료하기
