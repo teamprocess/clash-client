@@ -1,9 +1,9 @@
 import * as S from "./MyRivals.style";
 import { getStatus } from "@/features/home/model/useHome";
-import { useCompetition } from "@/pages/competition/model/useCompetition";
+import { useMyRivals } from "@/features/competition/model/useMyRivals";
 
 export const MyRivals = () => {
-  const { rivalCompetition } = useCompetition();
+  const { myRivals } = useMyRivals();
 
   return (
     <S.ListContent>
@@ -13,7 +13,7 @@ export const MyRivals = () => {
         </S.TitleBox>
         <S.GaroLine />
         <S.ProfileWrapper>
-          {rivalCompetition.RivalsData.data.my_rivals.map(user => (
+          {myRivals.RivalsData.data.my_rivals.map(user => (
             <S.ProfileContainer key={user.username}>
               <S.ProfileContent>
                 <S.ProfileIcon />
