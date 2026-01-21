@@ -1,14 +1,7 @@
 import * as S from "./MajorChoice.style";
 import { MajorProps } from "@/features/major-choice/model/useMajorChoice";
 
-export const MajorChoice = ({
-  selectedMajor,
-  major,
-  isValid,
-  username,
-  setStep,
-  navigate,
-}: MajorProps) => {
+export const MajorChoice = ({ selectedMajor, major, isValid, username, onSubmit }: MajorProps) => {
   return (
     <>
       <S.ChoiceContainer>
@@ -62,13 +55,7 @@ export const MajorChoice = ({
               </S.ChoiceBox>
             </S.ChoiceBottom>
           </S.ChoiceWrapper>
-          <S.RoadMapButton
-            disabled={!isValid}
-            onClick={() => {
-              setStep("FEATURE");
-              navigate("/roadmap");
-            }}
-          >
+          <S.RoadMapButton disabled={!isValid} onClick={onSubmit}>
             선택 완료하기
           </S.RoadMapButton>
         </S.ChoiceContents>
