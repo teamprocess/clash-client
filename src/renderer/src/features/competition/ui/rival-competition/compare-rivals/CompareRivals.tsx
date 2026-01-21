@@ -1,8 +1,8 @@
 import * as S from "./CompareRivals.style";
-import { useCompetition } from "@/pages/competition/model/useCompetition";
+import { useCompareRival } from "@/features/competition/model/useCompareRivals";
 
 export const RivalCompare = () => {
-  const { rivalCompetition } = useCompetition();
+  const { compareRivals } = useCompareRival();
 
   return (
     <S.Content>
@@ -12,10 +12,10 @@ export const RivalCompare = () => {
           <S.DropDownBox>
             <S.SelectWrapper>
               <S.Select
-                value={rivalCompetition.competitionPeriodDropDown}
-                onChange={e => rivalCompetition.setCompetitionPeriodDropDown(e.target.value)}
+                value={compareRivals.competitionPeriodDropDown}
+                onChange={e => compareRivals.setCompetitionPeriodDropDown(e.target.value)}
               >
-                {rivalCompetition.competitionPeriodDropDownValue.map(option => (
+                {compareRivals.competitionPeriodDropDownValue.map(option => (
                   <S.Option key={option.key} value={option.key}>
                     {option.label}
                   </S.Option>
@@ -25,10 +25,10 @@ export const RivalCompare = () => {
             </S.SelectWrapper>
             <S.SelectWrapper>
               <S.Select
-                value={rivalCompetition.competitionDropdown}
-                onChange={e => rivalCompetition.setCompetitionDropdown(e.target.value)}
+                value={compareRivals.competitionDropdown}
+                onChange={e => compareRivals.setCompetitionDropdown(e.target.value)}
               >
-                {rivalCompetition.competitionDropDownValue.map(option => (
+                {compareRivals.competitionDropDownValue.map(option => (
                   <S.Option key={option.key} value={option.key}>
                     {option.label}
                   </S.Option>
@@ -43,26 +43,26 @@ export const RivalCompare = () => {
           <S.ScrollArea>
             <S.GraphInner style={{ width: "100%" }}>
               <S.Svg
-                width={rivalCompetition.chartWidth}
+                width={compareRivals.chartWidth}
                 height="100%"
-                viewBox={`0 0 ${rivalCompetition.chartWidth} ${rivalCompetition.CHART_HEIGHT + 10}`}
+                viewBox={`0 0 ${compareRivals.chartWidth} ${compareRivals.CHART_HEIGHT + 10}`}
                 preserveAspectRatio="none"
               >
-                {rivalCompetition.rivalsTransCompareData.map(rival => {
+                {compareRivals.rivalsTransCompareData.map(rival => {
                   const isMe = rival.username === "me";
                   return (
                     <S.LineGroup key={rival.username}>
                       <S.LinePath
-                        d={rivalCompetition.makeLinePath(rival.rate, rivalCompetition.maxValue)}
-                        stroke={rivalCompetition.COLORS[rival.username]}
+                        d={compareRivals.makeLinePath(rival.rate, compareRivals.maxValue)}
+                        stroke={compareRivals.COLORS[rival.username]}
                         $isMe={isMe}
                       />
                       {rival.rate.map((point, idx) => (
                         <S.Dot
                           key={point.date}
-                          cx={rivalCompetition.getX(idx)}
-                          cy={rivalCompetition.getY(point.growth_rate, rivalCompetition.maxValue)}
-                          fill={rivalCompetition.COLORS[rival.username]}
+                          cx={compareRivals.getX(idx)}
+                          cy={compareRivals.getY(point.growth_rate, compareRivals.maxValue)}
+                          fill={compareRivals.COLORS[rival.username]}
                           $isMe={isMe}
                         />
                       ))}

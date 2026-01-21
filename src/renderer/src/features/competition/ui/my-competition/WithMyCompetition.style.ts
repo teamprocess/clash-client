@@ -1,9 +1,9 @@
 import styled from "styled-components";
 import { font } from "@/shared/config/font";
 import { palette } from "@/shared/config/theme";
-import EXP from "../../assets/exp.svg";
-import Record from "../../assets/record.svg";
-import Github from "../../assets/github.svg";
+import EXP from "@/features/competition/assets/exp.svg";
+import Record from "@/features/competition/assets/record.svg";
+import Github from "@/features/competition/assets/github.svg";
 import SolvedAc from "@/features/home/assets/home/solved-logo.svg";
 import Arrow from "@/features/home/assets/home/arrow.svg";
 

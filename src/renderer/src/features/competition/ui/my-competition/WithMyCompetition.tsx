@@ -1,9 +1,9 @@
 import * as S from "./WithMyCompetition.style";
 import { GrowthRate } from "@/features/home/ui/compare/growth-rate/GrowthRate";
-import { useCompetition } from "@/pages/competition/model/useCompetition";
+import { useMyCompetition } from "@/features/competition/model/useMyCompetition";
 
 export const WithMyCompetition = () => {
-  const { myCompetition } = useCompetition();
+  const { myCompetition } = useMyCompetition();
 
   return (
     <S.ContentArea>

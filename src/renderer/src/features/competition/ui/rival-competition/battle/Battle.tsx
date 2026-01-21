@@ -1,9 +1,9 @@
 import * as S from "./Battle.style";
-import { useCompetition } from "@/pages/competition/model/useCompetition";
+import { useBattle } from "@/features/competition/model/useBattle";
 import { Modal } from "@/shared/ui/modal/Modal";
 
 export const Battle = () => {
-  const { rivalCompetition } = useCompetition();
+  const { battle } = useBattle();
 
   return (
     <>
@@ -15,19 +15,19 @@ export const Battle = () => {
                 <S.Title>배틀</S.Title>
                 <S.SubText>배틀을 생성해 라이벌과 더 치열하게 경쟁할 수 있습니다.</S.SubText>
               </S.BattleTextBox>
-              <S.MakeBattle onClick={rivalCompetition.handleMakeBattle}>배틀 생성하기</S.MakeBattle>
+              <S.MakeBattle onClick={battle.openModal}>배틀 생성하기</S.MakeBattle>
             </S.TitleBox>
             <S.GaroLine />
             <S.BattleListContainer>
-              {rivalCompetition.battleRivals.map(rival => (
+              {battle.battleRivals.map(rival => (
                 <S.BattleProfileBox
                   key={rival.username}
-                  onClick={() => rivalCompetition.handleOpenDetail(rival.username)}
+                  onClick={() => battle.selectBattleTarget(rival.username)}
                 >
                   <S.ProfileContent>
                     <S.NameBox style={{ gap: "0.75rem" }}>
-                      <S.UpperHandJudge $type={rivalCompetition.judgeUpperHand(rival.username)}>
-                        {rivalCompetition.judgeUpperHand(rival.username)}
+                      <S.UpperHandJudge $type={battle.judgeUpperHand(rival.username)}>
+                        {battle.judgeUpperHand(rival.username)}
                       </S.UpperHandJudge>
                       <S.BattleName>vs {rival.name}</S.BattleName>
                       <S.DateBox>
@@ -45,13 +45,13 @@ export const Battle = () => {
               ))}
             </S.BattleListContainer>
 
-            {rivalCompetition.battleTargetIndex ? (
+            {battle.battleTargetUsername ? (
               <S.DetailWrapper>
                 {(() => {
-                  const rival = rivalCompetition.rivalsTransCompareData.find(
-                    d => d.username === rivalCompetition.battleTargetIndex
+                  const rival = battle.battleRivals.find(
+                    d => d.username === battle.battleTargetUsername
                   );
-                  const me = rivalCompetition.rivalsTransCompareData.find(d => d.username === "me");
+                  const me = battle.me;
 
                   if (!rival || !me) return null;
 
@@ -100,10 +100,10 @@ export const Battle = () => {
                     <S.DropDownBox>
                       <S.SelectWrapper>
                         <S.Select
-                          value={rivalCompetition.competitionDropdown}
-                          onChange={e => rivalCompetition.setCompetitionDropdown(e.target.value)}
+                          value={battle.competitionDropdown}
+                          onChange={e => battle.setCompetitionDropdown(e.target.value)}
                         >
-                          {rivalCompetition.competitionDropDownValue.map(option => (
+                          {battle.competitionDropDownValue.map(option => (
                             <S.Option key={option.key} value={option.key}>
                               {option.label}
                             </S.Option>
@@ -125,20 +125,16 @@ export const Battle = () => {
                       }}
                     >
                       <S.AnalyzeContent>
-                        <S.AnalyzeName>{rivalCompetition.selectedRival?.name}</S.AnalyzeName>
+                        <S.AnalyzeName>{battle.selectedRival?.name}</S.AnalyzeName>
                         <S.AnalyzeName>나</S.AnalyzeName>
                       </S.AnalyzeContent>
                       <S.SeroLine />
                       <S.AnalyzeContent style={{ width: "100%" }}>
-                        <S.AnalyzeBar $width={rivalCompetition.rivalPercent} $isRival>
-                          <S.AnalyzeLabel>
-                            {rivalCompetition.rivalValue.toLocaleString()} EXP
-                          </S.AnalyzeLabel>
+                        <S.AnalyzeBar $width={battle.rivalPercent} $isRival>
+                          <S.AnalyzeLabel>{battle.rivalValue.toLocaleString()} EXP</S.AnalyzeLabel>
                         </S.AnalyzeBar>
-                        <S.AnalyzeBar $width={rivalCompetition.myPercent} $isRival={false}>
-                          <S.AnalyzeLabel>
-                            {rivalCompetition.myValue.toLocaleString()} EXP
-                          </S.AnalyzeLabel>
+                        <S.AnalyzeBar $width={battle.myPercent} $isRival={false}>
+                          <S.AnalyzeLabel>{battle.myValue.toLocaleString()} EXP</S.AnalyzeLabel>
                         </S.AnalyzeBar>
                       </S.AnalyzeContent>
                     </div>
@@ -158,13 +154,13 @@ export const Battle = () => {
           </S.BattleWrapper>
         </S.Content>
       </S.ContentBox>
-      {rivalCompetition.isModalOpen ? (
+      {battle.isModalOpen ? (
         <Modal
           modalTitle={"배틀 생성하기"}
           width={21.625}
           height={34}
-          isOpen={rivalCompetition.isModalOpen}
-          onClose={rivalCompetition.handleModalClose}
+          isOpen={battle.isModalOpen}
+          onClose={battle.closeModal}
         >
           <div
             style={{
@@ -198,21 +194,20 @@ export const Battle = () => {
                   </S.SearchIconBox>
                 </S.SearchBox>
                 <S.UserChoiceContainer>
-                  {rivalCompetition.userList.map(user => (
+                  {battle.battleRivals.map(user => (
                     <S.UserChoiceBox
                       key={user.name}
-                      $isSelected={rivalCompetition.rivalSelectedId === user.name}
-                      onClick={() => rivalCompetition.handleUserSelect(user.name)}
+                      $isSelected={battle.rivalSelectedId === user.name}
+                      onClick={() => battle.handleUserSelect(user.name)}
                     >
                       <S.ProfileContent style={{ height: "3rem" }}>
                         <S.ProfileIcon />
                         <S.ProfileTagBox>
                           <S.ProfileName>{user.name}</S.ProfileName>
-                          <S.ProfileMention>@{user.mention}</S.ProfileMention>
                         </S.ProfileTagBox>
                       </S.ProfileContent>
 
-                      {rivalCompetition.rivalSelectedId === user.name ? (
+                      {battle.rivalSelectedId === user.name ? (
                         <S.CheckedIcon />
                       ) : (
                         <S.UncheckedBox />
@@ -224,9 +219,9 @@ export const Battle = () => {
             </div>
             <S.BottomBox>
               <S.ButtonBox>
-                <S.CloseButton onClick={rivalCompetition.handleModalClose}>취소</S.CloseButton>
+                <S.CloseButton onClick={battle.closeModal}>취소</S.CloseButton>
                 {/* 임시로 저장해둔 handleModalClose, 추후 createBattle 함수 제작 예정 */}
-                <S.OkayButton onClick={rivalCompetition.handleModalClose}>배틀 신청</S.OkayButton>
+                <S.OkayButton onClick={battle.closeModal}>배틀 신청</S.OkayButton>
               </S.ButtonBox>
             </S.BottomBox>
           </div>

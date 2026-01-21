@@ -1,7 +1,6 @@
 import * as S from "./CompetitionPage.style";
 import { useCompetition } from "@/pages/competition/model/useCompetition";
-import { WithMyCompetition } from "@/pages/competition/ui/my-competition/WithMyCompetition";
-import { RivalCompetition } from "@/pages/competition/ui/rival-competition/RivalCompetition";
+import { WithMyCompetition, RivalCompetition } from "@/features/competition";
 
 export const CompetitionPage = () => {
   const { competition } = useCompetition();
