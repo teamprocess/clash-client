@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { RivalsResponse } from "@/features/home/model/useHome";
 
 interface User {
@@ -217,7 +217,7 @@ export const useCompetition = () => {
     { id: 19, name: "유지호", mention: "jiho_y", point: 1085 },
   ];
 
-  const [rivalSelectedId, setRivalSelectedId] = React.useState<string | null>(null);
+  const [rivalSelectedId, setRivalSelectedId] = useState<string | null>(null);
 
   const handleUserSelect = (name: string) => {
     // 이미 선택된 사람을 클릭하면 선택 해제
