@@ -9,7 +9,7 @@ export const RivalCompetition = () => {
   return (
     <S.Container>
       <S.CompareContentBox>
-        <S.ListContent id={"content-1"}>
+        <S.ListContent id="content-1">
           <S.RivalList>
             <S.TitleBox>
               <S.Title>내 라이벌</S.Title>
@@ -40,7 +40,7 @@ export const RivalCompetition = () => {
             </S.ProfileWrapper>
           </S.RivalList>
         </S.ListContent>
-        <S.Content id={"content-2"}>
+        <S.Content id="content-2">
           <S.RivalCompareWrapper>
             <S.TitleBox>
               <S.Title>라이벌과 비교</S.Title>
@@ -115,7 +115,7 @@ export const RivalCompetition = () => {
         </S.Content>
       </S.CompareContentBox>
       <S.ContentBox>
-        <S.Content id={"content-3"}>
+        <S.Content id="content-3">
           <S.BattleWrapper>
             <S.TitleBox>
               <S.BattleTextBox>
@@ -179,7 +179,7 @@ export const RivalCompetition = () => {
                             $isRival
                             style={{ justifyContent: "flex-start" }}
                           >
-                            <S.PercentText>{Math.floor(rivalPercent)}%</S.PercentText>
+                            <S.PercentText>{Math.round(rivalPercent)}%</S.PercentText>
                           </S.UpperHandBar>
 
                           <S.UpperHandBar
@@ -187,7 +187,7 @@ export const RivalCompetition = () => {
                             $isRival={false}
                             style={{ justifyContent: "flex-end" }}
                           >
-                            <S.PercentText>{Math.floor(myPercent)}%</S.PercentText>
+                            <S.PercentText>{Math.round(myPercent)}%</S.PercentText>
                           </S.UpperHandBar>
                         </S.UpperHandTransition>
 
