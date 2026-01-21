@@ -3,10 +3,7 @@ import { MainProducts } from "@/features/shop/ui/main/MainProducts";
 import { useShop } from "@/features/shop/model/useShop";
 
 export const ShopPage = () => {
-  const {
-    shop: { recommendedProducts, popularProducts },
-    navigateToProducts,
-  } = useShop();
+  const { recommendedProducts, popularProducts, navigateToProducts } = useShop();
 
   return (
     <S.ShopContainer>

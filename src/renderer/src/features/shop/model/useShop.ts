@@ -1,19 +1,23 @@
 import { useState, useEffect } from "react";
-import { popularityProductsMock, Product } from "@/features/shop/mocks/popularityProducts";
-import { recommendProductsMock } from "@/features/shop/mocks/recommendProducts";
 import { useNavigate } from "react-router-dom";
+import { productApi, Product } from "@/entities/product";
 
 export const useShop = () => {
   const [recommendedProducts, setRecommendedProducts] = useState<Product[]>([]);
   const [popularProducts, setPopularProducts] = useState<Product[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const fetchData = () => {
-      const recommendedData = recommendProductsMock;
-      const popularData = popularityProductsMock;
+    const fetchData = async () => {
+      setIsLoading(true);
+      const [recommendedData, popularData] = await Promise.all([
+        productApi.getRecommendedProducts(),
+        productApi.getPopularProducts(),
+      ]);
 
-      setRecommendedProducts(recommendedData.data.products);
-      setPopularProducts(popularData.data.products);
+      setRecommendedProducts(recommendedData.data?.products ?? []);
+      setPopularProducts(popularData.data?.products ?? []);
+      setIsLoading(false);
     };
 
     fetchData();
@@ -25,12 +29,9 @@ export const useShop = () => {
   };
 
   return {
-    shop: {
-      recommendedProducts,
-      popularProducts,
-    },
+    recommendedProducts,
+    popularProducts,
+    isLoading,
     navigateToProducts,
   };
 };
-
-export type UseShop = ReturnType<typeof useShop>["shop"];
