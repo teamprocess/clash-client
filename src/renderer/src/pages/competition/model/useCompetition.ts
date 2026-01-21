@@ -15,10 +15,12 @@ interface TotalCompareData {
   nowMyCompareData: CompareDataProps[];
 }
 
-type CompareRate = {
+interface CompareRate {
   date: number;
   growth_rate: number;
-};
+}
+
+type ModalOpenProps = boolean;
 
 export const useCompetition = () => {
   //Competition
@@ -110,6 +112,7 @@ export const useCompetition = () => {
   const CHART_HEIGHT = 100;
   const POINT_GAP = 30;
 
+  // todo 색 분담 수정 필요
   const COLORS: Record<string, string> = {
     seunga_418: "#2F80ED",
     king_of_code: "#27AE60",
@@ -143,8 +146,13 @@ export const useCompetition = () => {
   const totalPoints = rivalsTransCompareData[0].rate.length;
   const chartWidth = CHART_PADDING_LEFT + (totalPoints - 1) * POINT_GAP + CHART_PADDING_RIGHT;
 
+  const [isModalOpen, setIsModalOpen] = useState<ModalOpenProps>(false);
+
+  const handleModalOpen = () => setIsModalOpen(true);
+  const handleModalClose = () => setIsModalOpen(false);
+
   const handleMakeBattle = () => {
-    console.log("배틀 생성하기");
+    setIsModalOpen(prev => !prev);
   };
 
   const [battleTargetIndex, setBattleTargetIndex] = useState<string | null>(null);
@@ -308,6 +316,9 @@ export const useCompetition = () => {
       rivalValue,
       myValue,
       judgeUpperHand,
+      isModalOpen,
+      handleModalOpen,
+      handleModalClose,
     },
   };
 };
