@@ -7,6 +7,7 @@ interface TutorialModalProps {
   isOpen: boolean;
   onClose: () => void;
   onStart: () => void;
+  isLocked: boolean;
   tutorial?: TutorialData;
 }
 
@@ -14,6 +15,7 @@ export const TutorialModal = ({
   isOpen,
   onClose,
   onStart,
+  isLocked,
   tutorial = tutorialData[0],
 }: TutorialModalProps) => {
   const { currentStep, activeStep, totalSteps, handlePrev, handleNext } = useTutorial(tutorial);
@@ -26,7 +28,9 @@ export const TutorialModal = ({
             <S.TutorialModalTitle>{tutorial.title}</S.TutorialModalTitle>
             <S.TutorialModalInfo>
               <S.TutorialModalDescription>{tutorial.intro}</S.TutorialModalDescription>
-              <S.TutorialModalAction onClick={onStart}>시작하기</S.TutorialModalAction>
+              <S.TutorialModalAction $locked={isLocked} onClick={onStart}>
+                시작하기
+              </S.TutorialModalAction>
             </S.TutorialModalInfo>
           </S.TutorialModalIntro>
           <S.SectionDivider $type="Tutorial" />
