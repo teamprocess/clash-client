@@ -6,6 +6,7 @@ export const Battle = () => {
   const { battle } = useBattle();
 
   console.log("battle", battle.battleData);
+  console.log("battleDetail", battle.battleDetailData);
 
   return (
     <>
