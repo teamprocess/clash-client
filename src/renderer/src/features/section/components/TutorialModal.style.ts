@@ -52,16 +52,20 @@ export const TutorialModalDescription = styled.p`
   color: ${({ theme }) => theme.label.assistive};
 `;
 
-export const TutorialModalAction = styled.div`
+export const TutorialModalAction = styled.div<{ $locked?: boolean }>`
   display: flex;
   justify-content: center;
   align-items: center;
   ${font.label.medium}
-  color: ${palette.neutral["99"]};
-  background-color: ${({ theme }) => theme.primary.normal};
+  color: ${({ $locked }) => ($locked ? palette.neutral["70"] : palette.neutral["99"])};
+  background-color: ${({ theme, $locked }) =>
+    $locked ? theme.line.neutral : theme.primary.normal};
   border-radius: 0.25rem;
   padding: 0.5rem 2.5rem;
-  cursor: pointer;
+  cursor: ${({ $locked }) => ($locked ? "not-allowed" : "pointer")};
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
 `;
 
 export const SectionDivider = styled.div<{ $type: string }>`
