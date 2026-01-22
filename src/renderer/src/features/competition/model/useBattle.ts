@@ -1,6 +1,9 @@
 import { useState, useMemo, useEffect } from "react";
 import { battleApi } from "@/entities/competition/api/rival-competition/battleApi";
-import { BattleData } from "@/entities/competition/model/rival-competition/battle.types";
+import {
+  BattleData,
+  BattleDetailData,
+} from "@/entities/competition/model/rival-competition/battle.types";
 
 type UpperHand = "우세" | "열세" | "동률";
 
@@ -56,6 +59,18 @@ export const useBattle = () => {
     };
 
     fetchBattle();
+  }, []);
+
+  const [battleDetailData, setBattleDetailData] = useState<BattleDetailData | null>(null);
+
+  useEffect(() => {
+    const fetchBattleDetial = async () => {
+      const response = await battleApi.getBattleDetailInfo(5);
+
+      setBattleDetailData(response);
+    };
+
+    fetchBattleDetial();
   }, []);
 
   /** ================== rivals ================== */
@@ -131,6 +146,7 @@ export const useBattle = () => {
       competitionPeriodDropDownValue,
 
       battleData,
+      battleDetailData,
     },
   };
 };

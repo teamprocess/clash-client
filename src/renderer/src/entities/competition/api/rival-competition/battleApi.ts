@@ -12,8 +12,8 @@ export const battleApi = {
   },
 
   // 배틀 상세 정보 조회
-  getBattleDetailInfo: async () => {
-    const result = await api.get<BattleDetailData>("/compete/rivals/battles/{id}", {});
+  getBattleDetailInfo: async (id: number) => {
+    const result = await api.get<BattleDetailData>(`/compete/rivals/battles/${id}`);
     return result.data;
   },
 };
