@@ -5,6 +5,8 @@ import { Modal } from "@/shared/ui/modal/Modal";
 export const Battle = () => {
   const { battle } = useBattle();
 
+  console.log("battle", battle.battleData);
+
   return (
     <>
       <S.ContentBox>
