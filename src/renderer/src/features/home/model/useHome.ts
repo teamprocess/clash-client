@@ -47,7 +47,7 @@ const months: { id: number; commit_count: number }[] = [
 
 // Rival
 
-interface RivalUser {
+export interface RivalUser {
   name: string;
   username: string;
   profile_image: string;
@@ -143,6 +143,19 @@ const userList: User[] = [
   { id: 18, name: "유지호", mention: "jiho_y", point: 1085 },
   { id: 19, name: "유지호", mention: "jiho_y", point: 1085 },
 ];
+
+export const getStatus = (status: UserStatus) => {
+  switch (status) {
+    case "ONLINE":
+      return "온라인";
+    case "AWAY":
+      return "자리비움";
+    case "OFFLINE":
+      return "오프라인";
+    default:
+      return "";
+  }
+};
 
 export const useHome = () => {
   // Transition

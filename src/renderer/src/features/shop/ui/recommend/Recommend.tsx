@@ -1,17 +1,17 @@
 import * as S from "./Recommend.style";
-import { Product } from "@/features/shop/mocks/popularityProducts";
 import { ProductCard } from "@/features/shop/ui/card/ProductCard";
+import { Product } from "@/entities/product";
 
 interface RecommendProps {
-  recommendedProducts: Product[];
+  products: Product[];
 }
 
-export const Recommend = ({ recommendedProducts }: RecommendProps) => {
+export const Recommend = ({ products }: RecommendProps) => {
   return (
     <S.CategoryContainer>
       <S.CategoryTitle>추천</S.CategoryTitle>
       <S.CardContainer>
-        {recommendedProducts.map(product => (
+        {products.map(product => (
           <ProductCard
             key={product.id}
             title={product.title}
