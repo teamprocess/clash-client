@@ -1,30 +1,34 @@
-export type UpperHand = "우세" | "열세" | "동률";
-
-// 전체 배틀 정보 조회
-interface BattlesProps {
-  battleId: number;
-  rivalName: string;
-  rivalUsername: string;
-  rivalProfileImage: string;
-  status: string; // or enumUtil
-  expireDate: string;
+export enum MatchValue {
+  WON = "WON",
+  LOST = "LOST",
+  WINNING = "WINNING",
+  LOSING = "LOSING",
+  DRAW = "DRAW",
+  PENDING = "PENDING",
 }
 
-export interface BattleData {
-  battles: BattlesProps[];
-}
-
-// 배틀 상세 정보 조회
-interface EnemyProps {
+interface Enemy {
   id: number;
   name: string;
-  username: string;
   profileImage: string;
 }
 
-export interface BattleDetailData {
+// 전체 배틀 정보 조회
+interface BattlesRequest {
   id: number;
-  email: EnemyProps[];
+  enemy: Enemy;
+  expireDate: string;
+  result: MatchValue;
+}
+
+export interface BattleResponse {
+  rival: BattlesRequest[];
+}
+
+// 배틀 상세 정보 조회
+export interface BattleDetailResponse {
+  id: number;
+  enemy: Enemy;
   expireDate: string;
   myOverallPercentage: number;
 }
