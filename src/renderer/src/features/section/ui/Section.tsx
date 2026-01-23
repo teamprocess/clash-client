@@ -3,7 +3,7 @@ import { ChapterRanking } from "@/features/chapter-ranking";
 import { useNavigate } from "react-router-dom";
 import { SectionProgress } from "@/features/section-progress";
 import { useEffect, useState } from "react";
-import { TutorialModal } from "@/features/section/components/TutorialModal";
+import { PreviewModal } from "@/features/section/components/PreviewModal";
 import { sectionApi } from "@/entities/roadmap/section/api/sectionApi";
 import {
   getAllSectionsResponse,
@@ -77,7 +77,7 @@ export const Section = () => {
         <SectionProgress />
       </S.RoadmapScrollable>
 
-      <TutorialModal
+      <PreviewModal
         isOpen={isTutorialModalOpen}
         onClose={() => setIsTutorialModalOpen(false)}
         onStart={handleStart}

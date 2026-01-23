@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import { TutorialData } from "../mocks/tutorialData";
+import { PreviewData } from "../mocks/PreviewData";
 import { useNavigate } from "react-router-dom";
 
-export const useTutorial = (tutorial: TutorialData) => {
+export const usePreview = (preview: PreviewData) => {
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -11,8 +11,8 @@ export const useTutorial = (tutorial: TutorialData) => {
 
   const [currentStep, setCurrentStep] = useState(1);
 
-  const activeStep = tutorial.steps.find(step => step.id === currentStep);
-  const totalSteps = tutorial.steps.length;
+  const activeStep = preview.steps.find(step => step.id === currentStep);
+  const totalSteps = preview.steps.length;
 
   const handlePrev = () => {
     if (currentStep > 1) {

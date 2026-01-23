@@ -1,39 +1,39 @@
-import * as S from "./TutorialModal.style";
+import * as S from "./PreviewModal.style";
 import { Modal } from "@/shared/ui/modal/Modal";
-import { tutorialData, TutorialData } from "../mocks/tutorialData";
-import { useTutorial } from "../model/useTutorial";
+import { previewData, PreviewData } from "../mocks/PreviewData";
+import { usePreview } from "../model/usePreview";
 
-interface TutorialModalProps {
+interface PreviewModalProps {
   isOpen: boolean;
   onClose: () => void;
   onStart: () => void;
   isLocked: boolean;
-  tutorial?: TutorialData;
+  preview?: PreviewData;
 }
 
-export const TutorialModal = ({
+export const PreviewModal = ({
   isOpen,
   onClose,
   onStart,
   isLocked,
-  tutorial = tutorialData[0],
-}: TutorialModalProps) => {
-  const { currentStep, activeStep, totalSteps, handlePrev, handleNext } = useTutorial(tutorial);
+  preview = previewData[0],
+}: PreviewModalProps) => {
+  const { currentStep, activeStep, totalSteps, handlePrev, handleNext } = usePreview(preview);
 
   return (
     <Modal width={74} height={48} isOpen={isOpen} onClose={onClose}>
       <S.TutorialModalWrapper>
         <S.TutorialModalTop>
           <S.TutorialModalIntro>
-            <S.TutorialModalTitle>{tutorial.title}</S.TutorialModalTitle>
+            <S.TutorialModalTitle>{preview.title}</S.TutorialModalTitle>
             <S.TutorialModalInfo>
-              <S.TutorialModalDescription>{tutorial.intro}</S.TutorialModalDescription>
+              <S.TutorialModalDescription>{preview.intro}</S.TutorialModalDescription>
               <S.TutorialModalAction $locked={isLocked} onClick={onStart}>
                 시작하기
               </S.TutorialModalAction>
             </S.TutorialModalInfo>
           </S.TutorialModalIntro>
-          <S.SectionDivider $type="Tutorial" />
+          <S.SectionDivider $type="Preview" />
         </S.TutorialModalTop>
 
         <S.TutorialModalBottom>
@@ -54,7 +54,7 @@ export const TutorialModal = ({
 
               <S.RoadmapBottom>
                 <S.RoadmapSteps>
-                  {tutorial.steps.map(step => (
+                  {preview.steps.map(step => (
                     <S.StepWrapper key={step.id}>
                       <S.StepCircle $active={step.id === currentStep}>{step.id}</S.StepCircle>
                       {step.id === currentStep && <S.StepTooltip>{step.tooltip}</S.StepTooltip>}
@@ -92,13 +92,13 @@ export const TutorialModal = ({
               <S.TargetBoxTop>
                 <S.TargetBoxIntro>
                   <S.TargetLabel>로드맵 목표</S.TargetLabel>
-                  <S.TargetTitle>{tutorial.title}</S.TargetTitle>
+                  <S.TargetTitle>{preview.title}</S.TargetTitle>
                 </S.TargetBoxIntro>
                 <S.SectionDivider $type="Target" />
               </S.TargetBoxTop>
 
               <S.TargetBoxList>
-                {tutorial.targets.map((text, idx) => (
+                {preview.targets.map((text, idx) => (
                   <S.TargetItem key={idx}>
                     <S.TargetStarWrapper>
                       <S.TargetStar />
