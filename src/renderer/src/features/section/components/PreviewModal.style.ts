@@ -71,7 +71,7 @@ export const TutorialModalAction = styled.div<{ $locked?: boolean }>`
 export const SectionDivider = styled.div<{ $type: string }>`
   background-color: ${({ theme }) => theme.line.neutral};
   background-color: ${({ theme, $type }) =>
-    $type === "Tutorial" ? theme.line.neutral : theme.line.normal};
+    $type === "Preview" ? theme.line.neutral : theme.line.normal};
   width: 100%;
   height: 0.1rem;
 `;
