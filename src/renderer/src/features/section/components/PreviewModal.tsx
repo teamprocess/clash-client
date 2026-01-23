@@ -22,30 +22,30 @@ export const PreviewModal = ({
 
   return (
     <Modal width={74} height={48} isOpen={isOpen} onClose={onClose}>
-      <S.TutorialModalWrapper>
-        <S.TutorialModalTop>
-          <S.TutorialModalIntro>
-            <S.TutorialModalTitle>{preview.title}</S.TutorialModalTitle>
-            <S.TutorialModalInfo>
-              <S.TutorialModalDescription>{preview.intro}</S.TutorialModalDescription>
-              <S.TutorialModalAction $locked={isLocked} onClick={onStart}>
+      <S.PreviewModalWrapper>
+        <S.PreviewModalTop>
+          <S.PreviewModalIntro>
+            <S.PreviewModalTitle>{preview.title}</S.PreviewModalTitle>
+            <S.PreviewModalInfo>
+              <S.PreviewModalDescription>{preview.intro}</S.PreviewModalDescription>
+              <S.PreviewModalAction $locked={isLocked} onClick={onStart}>
                 시작하기
-              </S.TutorialModalAction>
-            </S.TutorialModalInfo>
-          </S.TutorialModalIntro>
+              </S.PreviewModalAction>
+            </S.PreviewModalInfo>
+          </S.PreviewModalIntro>
           <S.SectionDivider $type="Preview" />
-        </S.TutorialModalTop>
+        </S.PreviewModalTop>
 
-        <S.TutorialModalBottom>
-          <S.TutorialModalHead>
+        <S.PreviewModalBottom>
+          <S.PreviewModalHead>
             <S.CheckIcon />
-            <S.TutorialModalHeadLabel>
+            <S.PreviewModalHeadLabel>
               목표 달성을 위한 전략적 경로를 시각적으로 표현한 계획으로, 스텝을 하나하나 따라가다
               보면 목표에 도달할 수 있어요.
-            </S.TutorialModalHeadLabel>
-          </S.TutorialModalHead>
+            </S.PreviewModalHeadLabel>
+          </S.PreviewModalHead>
 
-          <S.TutorialModalBody>
+          <S.PreviewModalBody>
             <S.RoadmapBox>
               <S.RoadmapTop>
                 <S.RoadmapIcon />
@@ -108,9 +108,9 @@ export const PreviewModal = ({
                 ))}
               </S.TargetBoxList>
             </S.TargetBox>
-          </S.TutorialModalBody>
-        </S.TutorialModalBottom>
-      </S.TutorialModalWrapper>
+          </S.PreviewModalBody>
+        </S.PreviewModalBottom>
+      </S.PreviewModalWrapper>
     </Modal>
   );
 };
