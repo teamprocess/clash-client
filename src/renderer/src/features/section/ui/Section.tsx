@@ -77,12 +77,15 @@ export const Section = () => {
         <SectionProgress />
       </S.RoadmapScrollable>
 
-      <PreviewModal
-        isOpen={isTutorialModalOpen}
-        onClose={() => setIsTutorialModalOpen(false)}
-        onStart={handleStart}
-        isLocked={isSelectedSectionLocked}
-      />
+      {selectedSectionId !== null && (
+        <PreviewModal
+          isOpen={isTutorialModalOpen}
+          onClose={() => setIsTutorialModalOpen(false)}
+          onStart={handleStart}
+          isLocked={isSelectedSectionLocked}
+          sectionId={selectedSectionId}
+        />
+      )}
     </S.RoadmapContainer>
   );
 };

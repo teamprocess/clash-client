@@ -1,6 +1,5 @@
 import * as S from "./PreviewModal.style";
 import { Modal } from "@/shared/ui/modal/Modal";
-import { previewData, PreviewData } from "../mocks/PreviewData";
 import { usePreview } from "../model/usePreview";
 
 interface PreviewModalProps {
@@ -8,7 +7,7 @@ interface PreviewModalProps {
   onClose: () => void;
   onStart: () => void;
   isLocked: boolean;
-  preview?: PreviewData;
+  sectionId: number;
 }
 
 export const PreviewModal = ({
@@ -16,18 +15,47 @@ export const PreviewModal = ({
   onClose,
   onStart,
   isLocked,
-  preview = previewData[0],
+  sectionId,
 }: PreviewModalProps) => {
-  const { currentStep, activeStep, totalSteps, handlePrev, handleNext } = usePreview(preview);
+  const {
+    previewData,
+    loading,
+    error,
+    currentStep,
+    activeStep,
+    totalSteps,
+    handlePrev,
+    handleNext,
+  } = usePreview(sectionId);
+
+  if (loading) {
+    return (
+      <Modal width={74} height={48} isOpen={isOpen} onClose={onClose}>
+        <S.PreviewModalWrapper>
+          <div>로딩 중...</div>
+        </S.PreviewModalWrapper>
+      </Modal>
+    );
+  }
+
+  if (error || !previewData) {
+    return (
+      <Modal width={74} height={48} isOpen={isOpen} onClose={onClose}>
+        <S.PreviewModalWrapper>
+          <div>데이터를 불러올 수 없습니다.</div>
+        </S.PreviewModalWrapper>
+      </Modal>
+    );
+  }
 
   return (
     <Modal width={74} height={48} isOpen={isOpen} onClose={onClose}>
       <S.PreviewModalWrapper>
         <S.PreviewModalTop>
           <S.PreviewModalIntro>
-            <S.PreviewModalTitle>{preview.title}</S.PreviewModalTitle>
+            <S.PreviewModalTitle>{previewData.title}</S.PreviewModalTitle>
             <S.PreviewModalInfo>
-              <S.PreviewModalDescription>{preview.intro}</S.PreviewModalDescription>
+              <S.PreviewModalDescription>{previewData.intro}</S.PreviewModalDescription>
               <S.PreviewModalAction $locked={isLocked} onClick={onStart}>
                 시작하기
               </S.PreviewModalAction>
@@ -54,7 +82,7 @@ export const PreviewModal = ({
 
               <S.RoadmapBottom>
                 <S.RoadmapSteps>
-                  {preview.steps.map(step => (
+                  {previewData.steps.map(step => (
                     <S.StepWrapper key={step.id}>
                       <S.StepCircle $active={step.id === currentStep}>{step.id}</S.StepCircle>
                       {step.id === currentStep && <S.StepTooltip>{step.tooltip}</S.StepTooltip>}
@@ -92,13 +120,13 @@ export const PreviewModal = ({
               <S.TargetBoxTop>
                 <S.TargetBoxIntro>
                   <S.TargetLabel>로드맵 목표</S.TargetLabel>
-                  <S.TargetTitle>{preview.title}</S.TargetTitle>
+                  <S.TargetTitle>{previewData.title}</S.TargetTitle>
                 </S.TargetBoxIntro>
                 <S.SectionDivider $type="Target" />
               </S.TargetBoxTop>
 
               <S.TargetBoxList>
-                {preview.targets.map((text, idx) => (
+                {previewData.targets.map((text, idx) => (
                   <S.TargetItem key={idx}>
                     <S.TargetStarWrapper>
                       <S.TargetStar />
