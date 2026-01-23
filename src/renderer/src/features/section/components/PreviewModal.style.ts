@@ -7,7 +7,7 @@ import Flag from "../assets/flag.svg";
 import Arrow from "../assets/arrow.svg";
 import Star from "../assets/star.svg";
 
-export const TutorialModalWrapper = styled.div`
+export const PreviewModalWrapper = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -16,7 +16,7 @@ export const TutorialModalWrapper = styled.div`
   gap: 2rem;
 `;
 
-export const TutorialModalTop = styled.div`
+export const PreviewModalTop = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -24,7 +24,7 @@ export const TutorialModalTop = styled.div`
   gap: 1.5rem;
 `;
 
-export const TutorialModalIntro = styled.div`
+export const PreviewModalIntro = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -33,26 +33,26 @@ export const TutorialModalIntro = styled.div`
   width: 100%;
 `;
 
-export const TutorialModalTitle = styled.span`
+export const PreviewModalTitle = styled.span`
   ${font.display1.bold}
   color: ${({ theme }) => theme.label.normal};
   width: 100%;
   text-align: start;
 `;
 
-export const TutorialModalInfo = styled.div`
+export const PreviewModalInfo = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
   width: 100%;
 `;
 
-export const TutorialModalDescription = styled.p`
+export const PreviewModalDescription = styled.p`
   ${font.body.medium}
   color: ${({ theme }) => theme.label.assistive};
 `;
 
-export const TutorialModalAction = styled.div<{ $locked?: boolean }>`
+export const PreviewModalAction = styled.div<{ $locked?: boolean }>`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -76,7 +76,7 @@ export const SectionDivider = styled.div<{ $type: string }>`
   height: 0.1rem;
 `;
 
-export const TutorialModalBottom = styled.div`
+export const PreviewModalBottom = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -85,7 +85,7 @@ export const TutorialModalBottom = styled.div`
   gap: 1.6rem;
 `;
 
-export const TutorialModalHead = styled.div`
+export const PreviewModalHead = styled.div`
   display: flex;
   justify-content: flex-start;
   align-items: center;
@@ -98,12 +98,12 @@ export const TutorialModalHead = styled.div`
 
 export const CheckIcon = styled(Check)``;
 
-export const TutorialModalHeadLabel = styled.span`
+export const PreviewModalHeadLabel = styled.span`
   ${font.body.medium}
   color: ${({ theme }) => theme.label.alternative};
 `;
 
-export const TutorialModalBody = styled.div`
+export const PreviewModalBody = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
