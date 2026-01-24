@@ -4,7 +4,6 @@ import Cry from "./assets/cry-emoji.svg";
 import Home from "./assets/home.svg";
 import Competition from "./assets/competition.svg";
 import Record from "./assets/record.svg";
-import Group from "./assets/group.svg";
 import Shop from "./assets/shop.svg";
 import RoadMap from "./assets/roadmap.svg";
 import { Link } from "react-router-dom";
@@ -116,6 +115,5 @@ export const MenuItem = styled(Link)<{ $active?: boolean }>`
 export const HomeIcon = styled(Home)``;
 export const CompetitionIcon = styled(Competition)``;
 export const RecordIcon = styled(Record)``;
-export const GroupIcon = styled(Group)``;
 export const ShopIcon = styled(Shop)``;
 export const RoadMapIcon = styled(RoadMap)``;
