@@ -79,29 +79,31 @@ const MemberMockData = [
 export const Group = () => {
   return (
     <S.GroupContainer>
-      <S.GroupHeader>
-        <S.MemberCountBox>
-          <S.ActiveMemberCount>32</S.ActiveMemberCount>&nbsp;/ 40
-        </S.MemberCountBox>
-        <S.GroupNameBox>
-          <S.ReverseArrowIcon />
-          <S.GroupName>프로세스 그룹</S.GroupName>
-          <S.ArrowIcon />
-          <CommonS.MoreIcon />
-        </S.GroupNameBox>
-      </S.GroupHeader>
-      <S.MemberContent>
-        {MemberMockData.map(member => (
-          <S.MemberBox key={member.id} $isActive={member.isActive}>
-            <S.FireIon />
-            <S.MemberTextBox>
-              <S.MemberName>{member.name}</S.MemberName>
-              <S.MemberStudyTime>{member.studyTime}</S.MemberStudyTime>
-            </S.MemberTextBox>
-          </S.MemberBox>
-        ))}
-        <S.PlusIcon />
-      </S.MemberContent>
+      <S.GroupWrapper>
+        <S.GroupHeader>
+          <S.MemberCountBox>
+            <S.ActiveMemberCount>32</S.ActiveMemberCount>&nbsp;/ 40
+          </S.MemberCountBox>
+          <S.GroupNameBox>
+            <S.ReverseArrowIcon />
+            <S.GroupName>프로세스 그룹</S.GroupName>
+            <S.ArrowIcon />
+            <CommonS.MoreIcon />
+          </S.GroupNameBox>
+        </S.GroupHeader>
+        <S.MemberContent>
+          {MemberMockData.map(member => (
+            <S.MemberBox key={member.id} $isActive={member.isActive}>
+              <S.FireIon />
+              <S.MemberTextBox>
+                <S.MemberName>{member.name}</S.MemberName>
+                <S.MemberStudyTime>{member.studyTime}</S.MemberStudyTime>
+              </S.MemberTextBox>
+            </S.MemberBox>
+          ))}
+          <S.PlusIcon />
+        </S.MemberContent>
+      </S.GroupWrapper>
     </S.GroupContainer>
   );
 };

@@ -7,13 +7,18 @@ import Plus from "../../assets/plus.svg";
 export const GroupContainer = styled.div`
   display: flex;
   flex: 1;
+  border-radius: 1rem;
+`;
+
+export const GroupWrapper = styled.div`
+  display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  gap: 1rem;
   padding: 2rem;
-  border-radius: 1rem;
-  background-color: ${({ theme }) => theme.background.alternative};
+  gap: 1rem;
   position: relative;
+  width: 100%;
+  background-color: ${({ theme }) => theme.background.alternative};
 `;
 
 export const GroupHeader = styled.div`

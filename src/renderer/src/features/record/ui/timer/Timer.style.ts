@@ -36,7 +36,19 @@ export const Time = styled.span`
   ${font.display1.medium};
 `;
 
-export const PauseIcon = styled(Pause)``;
+export const PauseIcon = styled(Pause)`
+  cursor: pointer;
+`;
+
+export const PlayButton = styled.button`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+`;
 
 export const ChangeMode = styled.div`
   display: flex;
