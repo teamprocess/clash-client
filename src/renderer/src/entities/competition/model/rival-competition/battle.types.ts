@@ -22,7 +22,7 @@ interface BattlesRequest {
 }
 
 export interface BattleResponse {
-  rival: BattlesRequest[];
+  battles: BattlesRequest[];
 }
 
 // 배틀 상세 정보 조회
