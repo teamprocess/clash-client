@@ -1,25 +1,10 @@
 import { useState, useMemo, useEffect } from "react";
 import { battleApi } from "@/entities/competition/api/rival-competition/battleApi";
 import {
-  BattleData,
-  BattleDetailData,
+  BattleResponse,
+  BattleDetailResponse,
+  MatchValue,
 } from "@/entities/competition/model/rival-competition/battle.types";
-
-type UpperHand = "우세" | "열세" | "동률";
-
-interface Rival {
-  name: string;
-  username: string;
-  totalRate: number;
-}
-
-/** ================== 더미 데이터 ================== */
-const RIVAL_DUMMY_DATA: Rival[] = [
-  { name: "나", username: "me", totalRate: 120 },
-  { name: "철수", username: "chulsoo", totalRate: 80 },
-  { name: "영희", username: "younghee", totalRate: 150 },
-  { name: "민수", username: "minsoo", totalRate: 100 },
-];
 
 /** ================== 드롭다운 ================== */
 const competitionDropDownValue = [
@@ -43,65 +28,100 @@ export const useBattle = () => {
   const closeModal = () => setIsModalOpen(false);
 
   /** ================== battle target ================== */
-  const [battleTargetUsername, setBattleTargetUsername] = useState<string | null>(null);
+  const [battleTargetId, setBattleTargetId] = useState<number | null>(null);
 
-  const selectBattleTarget = (username: string) => {
-    setBattleTargetUsername(username);
+  const [isBattleSelected, setIsBattleSelected] = useState(false);
+
+  const selectBattleTarget = (id: number) => {
+    setBattleTargetId(id);
+    setIsBattleSelected(true);
   };
 
-  const [battleData, setBattleData] = useState<BattleData | null>(null);
+  /** ================== API Data ================== */
+  const [battleData, setBattleData] = useState<BattleResponse | null>(null);
+  const [battleDetailData, setBattleDetailData] = useState<BattleDetailResponse | null>(null);
 
   useEffect(() => {
     const fetchBattle = async () => {
-      const response = await battleApi.getBattleInfo();
-
-      setBattleData(response);
+      try {
+        const response = await battleApi.getBattleInfo();
+        if (!response.data) return;
+        setBattleData(response.data);
+        console.log("battle", response);
+      } catch (error) {
+        console.error("배틀 정보 조회 실패:", error);
+      }
     };
 
     fetchBattle();
   }, []);
 
-  const [battleDetailData, setBattleDetailData] = useState<BattleDetailData | null>(null);
-
   useEffect(() => {
-    const fetchBattleDetial = async () => {
-      const response = await battleApi.getBattleDetailInfo(5);
+    const fetchBattleDetail = async () => {
+      if (!battleTargetId) {
+        setBattleDetailData(null);
+        return;
+      }
 
-      setBattleDetailData(response);
+      const targetBattle = battleData?.battles.find(battle => battle.id === battleTargetId);
+
+      if (!targetBattle) return;
+
+      try {
+        const response = await battleApi.getBattleDetailInfo(targetBattle.id);
+        if (!response.data) return;
+        setBattleDetailData(response.data);
+        console.log(response);
+      } catch (error) {
+        console.error("배틀 상세 정보 조회 실패:", error);
+      }
     };
 
-    fetchBattleDetial();
-  }, []);
+    fetchBattleDetail();
+  }, [battleTargetId, battleData]);
 
-  /** ================== rivals ================== */
-  const rivals = RIVAL_DUMMY_DATA;
+  /** ================== battles ================== */
+  const battleRivals = useMemo(() => {
+    if (!battleData?.battles) return [];
 
-  const me = useMemo(() => rivals.find(r => r.username === "me"), [rivals]);
+    return battleData?.battles.map(battle => ({
+      name: battle.enemy.name,
+      username: battle.enemy.name,
+      totalRate: 0,
+      profileImage: battle.enemy.profileImage,
+      battleId: battle.id,
+      enemyId: battle.enemy.id,
+      expireDate: battle.expireDate,
+      result: battle.result,
+    }));
+  }, [battleData]);
 
-  const battleRivals = useMemo(() => rivals.filter(r => r.username !== "me"), [rivals]);
+  const me = useMemo(() => {
+    if (!battleDetailData) {
+      return { name: "나", username: "me", totalRate: 0 };
+    }
 
-  const selectedRival = useMemo(
-    () => rivals.find(r => r.username === battleTargetUsername),
-    [rivals, battleTargetUsername]
-  );
+    return {
+      name: "나",
+      username: "me",
+      totalRate: battleDetailData.myOverallPercentage,
+    };
+  }, [battleDetailData]);
 
-  const rivalValue = selectedRival?.totalRate ?? 0;
-  const myValue = me?.totalRate ?? 0;
+  /** ================== compare ================== */
+  const myPercent = battleDetailData?.myOverallPercentage ?? 50;
+  const rivalPercent = 100 - myPercent;
 
-  const total = rivalValue + myValue;
-
-  const rivalPercent = total === 0 ? 50 : (rivalValue / total) * 100;
-  const myPercent = 100 - rivalPercent;
-
-  const judgeUpperHand = (rivalUsername: string): UpperHand => {
-    const rival = rivals.find(r => r.username === rivalUsername);
-    if (!rival || !me) return "동률";
-
-    if (me.totalRate > rival.totalRate) return "우세";
-    if (me.totalRate < rival.totalRate) return "열세";
+  const judgeUpperHand = (result: string) => {
+    if (result == MatchValue.LOSING) return "우세";
+    if (result == MatchValue.WINNING) return "열세";
+    if (result == MatchValue.LOST) return "패배";
+    if (result == MatchValue.WON) return "승리";
+    if (result == MatchValue.DRAW) return "무승부";
     return "동률";
   };
 
+  /** ================== modal select ================== */
   const [rivalSelectedId, setRivalSelectedId] = useState<string | null>(null);
 
   const handleUserSelect = (username: string) => {
@@ -119,21 +139,18 @@ export const useBattle = () => {
       closeModal,
 
       // target
-      battleTargetUsername,
+      battleTargetId,
       selectBattleTarget,
+      isBattleSelected,
 
       // rivals
-      rivals,
       battleRivals,
-      selectedRival,
       me,
 
       // compare
-      rivalValue,
-      myValue,
-      rivalPercent,
-      myPercent,
       judgeUpperHand,
+      myPercent,
+      rivalPercent,
 
       // modal select
       rivalSelectedId,
@@ -145,6 +162,7 @@ export const useBattle = () => {
       competitionDropDownValue,
       competitionPeriodDropDownValue,
 
+      // API data
       battleData,
       battleDetailData,
     },

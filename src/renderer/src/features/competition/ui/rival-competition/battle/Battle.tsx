@@ -1,12 +1,10 @@
 import * as S from "./Battle.style";
 import { useBattle } from "@/features/competition/model/useBattle";
 import { Modal } from "@/shared/ui/modal/Modal";
+import { MatchValue } from "@/entities/competition/model/rival-competition/battle.types";
 
 export const Battle = () => {
   const { battle } = useBattle();
-
-  console.log("battle", battle.battleData);
-  console.log("battleDetail", battle.battleDetailData);
 
   return (
     <>
@@ -22,80 +20,74 @@ export const Battle = () => {
             </S.TitleBox>
             <S.GaroLine />
             <S.BattleListContainer>
-              {battle.battleRivals.map(rival => (
+              {battle.battleData?.battles?.slice(0, 4).map(battleItem => (
                 <S.BattleProfileBox
-                  key={rival.username}
-                  onClick={() => battle.selectBattleTarget(rival.username)}
+                  key={battleItem.id}
+                  onClick={() => battle.selectBattleTarget(battleItem.id)}
                 >
                   <S.ProfileContent>
                     <S.NameBox style={{ gap: "0.75rem" }}>
-                      <S.UpperHandJudge $type={battle.judgeUpperHand(rival.username)}>
-                        {battle.judgeUpperHand(rival.username)}
+                      <S.UpperHandJudge $type={battle.judgeUpperHand(battleItem.result)}>
+                        {battle.judgeUpperHand(battleItem.result)}
                       </S.UpperHandJudge>
-                      <S.BattleName>vs {rival.name}</S.BattleName>
+
+                      <S.BattleName>vs {battleItem.enemy.name}</S.BattleName>
+
                       <S.DateBox>
                         <S.DateIcon />
-                        <S.DateText>2026년 1월 13일까지</S.DateText>
+                        <S.DateText>{battleItem.expireDate}</S.DateText>
                       </S.DateBox>
                     </S.NameBox>
                   </S.ProfileContent>
 
                   <S.DetailBox>
-                    <S.DetailButton>상세내용보기</S.DetailButton>
+                    <S.DetailButton>
+                      {battleItem.result === MatchValue.WON || battleItem.result === MatchValue.LOST
+                        ? "결과 보기"
+                        : "상세 내용 보기"}
+                    </S.DetailButton>
                     <S.BackArrowIcon />
                   </S.DetailBox>
                 </S.BattleProfileBox>
               ))}
             </S.BattleListContainer>
 
-            {battle.battleTargetUsername ? (
+            {battle.isBattleSelected ? (
               <S.DetailWrapper>
-                {(() => {
-                  const rival = battle.battleRivals.find(
-                    d => d.username === battle.battleTargetUsername
-                  );
-                  const me = battle.me;
+                <S.UpperHandContainer>
+                  <S.UpperHandProfile>
+                    <S.UpperHandProfileIcon />
+                    <S.UpperHandName>{battle.battleDetailData?.enemy.name}</S.UpperHandName>
+                  </S.UpperHandProfile>
+                  <S.TransitionBox>
+                    <S.UpperHandTransition>
+                      <S.UpperHandBar
+                        $width={battle.rivalPercent}
+                        $isRival
+                        style={{ justifyContent: "flex-start" }}
+                      >
+                        <S.PercentText>{Math.round(battle.rivalPercent)}%</S.PercentText>
+                      </S.UpperHandBar>
 
-                  if (!rival || !me) return null;
+                      <S.UpperHandBar
+                        $width={battle.myPercent}
+                        $isRival={false}
+                        style={{ justifyContent: "flex-end" }}
+                      >
+                        <S.PercentText>{Math.round(battle.myPercent)}%</S.PercentText>
+                      </S.UpperHandBar>
+                    </S.UpperHandTransition>
 
-                  const total = rival.totalRate + me.totalRate;
-                  const rivalPercent = total === 0 ? 50 : (rival.totalRate / total) * 100;
-                  const myPercent = 100 - rivalPercent;
+                    <S.WarPeriodText>
+                      종료 {battle.battleDetailData?.expireDate} · 3일 남음
+                    </S.WarPeriodText>
+                  </S.TransitionBox>
+                  <S.UpperHandProfile>
+                    <S.UpperHandProfileIcon />
+                    <S.UpperHandName>나</S.UpperHandName>
+                  </S.UpperHandProfile>
+                </S.UpperHandContainer>
 
-                  return (
-                    <S.UpperHandContainer>
-                      <S.UpperHandProfile>
-                        <S.UpperHandProfileIcon />
-                        <S.UpperHandName>{rival.name}</S.UpperHandName>
-                      </S.UpperHandProfile>
-                      <S.TransitionBox>
-                        <S.UpperHandTransition>
-                          <S.UpperHandBar
-                            $width={rivalPercent}
-                            $isRival
-                            style={{ justifyContent: "flex-start" }}
-                          >
-                            <S.PercentText>{Math.round(rivalPercent)}%</S.PercentText>
-                          </S.UpperHandBar>
-
-                          <S.UpperHandBar
-                            $width={myPercent}
-                            $isRival={false}
-                            style={{ justifyContent: "flex-end" }}
-                          >
-                            <S.PercentText>{Math.round(myPercent)}%</S.PercentText>
-                          </S.UpperHandBar>
-                        </S.UpperHandTransition>
-
-                        <S.WarPeriodText>종료 2026년 1월 13일 · 3일 남음</S.WarPeriodText>
-                      </S.TransitionBox>
-                      <S.UpperHandProfile>
-                        <S.UpperHandProfileIcon />
-                        <S.UpperHandName>나</S.UpperHandName>
-                      </S.UpperHandProfile>
-                    </S.UpperHandContainer>
-                  );
-                })()}
                 <S.GaroLine />
                 <S.DetailAnalyzeContainer>
                   <S.TitleBox>
@@ -128,16 +120,16 @@ export const Battle = () => {
                       }}
                     >
                       <S.AnalyzeContent>
-                        <S.AnalyzeName>{battle.selectedRival?.name}</S.AnalyzeName>
+                        <S.AnalyzeName>{battle.battleDetailData?.enemy.name}</S.AnalyzeName>
                         <S.AnalyzeName>나</S.AnalyzeName>
                       </S.AnalyzeContent>
                       <S.SeroLine />
                       <S.AnalyzeContent style={{ width: "100%" }}>
                         <S.AnalyzeBar $width={battle.rivalPercent} $isRival>
-                          <S.AnalyzeLabel>{battle.rivalValue.toLocaleString()} EXP</S.AnalyzeLabel>
+                          <S.AnalyzeLabel>{Math.round(battle.rivalPercent)} EXP</S.AnalyzeLabel>
                         </S.AnalyzeBar>
                         <S.AnalyzeBar $width={battle.myPercent} $isRival={false}>
-                          <S.AnalyzeLabel>{battle.myValue.toLocaleString()} EXP</S.AnalyzeLabel>
+                          <S.AnalyzeLabel>{Math.round(battle.myPercent)} EXP</S.AnalyzeLabel>
                         </S.AnalyzeBar>
                       </S.AnalyzeContent>
                     </div>
@@ -199,7 +191,7 @@ export const Battle = () => {
                 <S.UserChoiceContainer>
                   {battle.battleRivals.map(user => (
                     <S.UserChoiceBox
-                      key={user.username}
+                      key={user.enemyId}
                       $isSelected={battle.rivalSelectedId === user.username}
                       onClick={() => battle.handleUserSelect(user.username)}
                     >
@@ -210,7 +202,7 @@ export const Battle = () => {
                         </S.ProfileTagBox>
                       </S.ProfileContent>
 
-                      {battle.rivalSelectedId === user.name ? (
+                      {battle.rivalSelectedId === user.username ? (
                         <S.CheckedIcon />
                       ) : (
                         <S.UncheckedBox />
