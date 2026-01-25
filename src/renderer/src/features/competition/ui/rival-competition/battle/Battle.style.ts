@@ -6,7 +6,6 @@ import Arrow from "@/features/home/assets/home/arrow.svg";
 import Date from "@/features/home/assets/home/date.svg";
 import BackArrow from "@/features/home/assets/home/back.svg";
 import Fire from "@/features/home/assets/home/fire.svg";
-import Search from "@/features/home/assets/home/search.svg";
 import Checked from "@/features/home/assets/home/check-box.svg";
 
 export const GaroLine = styled.div`
@@ -67,17 +66,13 @@ export const NameBox = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: 0.125rem;
+  justify-content: center;
+  gap: 0.75rem;
 `;
 
 export const ProfileName = styled.span`
   ${font.headline2.medium}
   color: ${({ theme }) => theme.label.normal};
-`;
-
-export const ProfileMention = styled.span`
-  ${font.label.regular}
-  color: ${({ theme }) => theme.label.alternative};
 `;
 
 export const SelectWrapper = styled.div`
@@ -190,6 +185,7 @@ export const BattleName = styled.p`
 export const DateBox = styled.div`
   display: flex;
   flex-direction: row;
+  align-items: center;
   gap: 0.25rem;
 `;
 
@@ -393,51 +389,11 @@ export const DefaultBattleText = styled.p`
   color: ${({ theme }) => theme.label.assistive};
 `;
 
-export const SearchBox = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  position: relative;
-  margin-top: 1rem;
-  gap: 0.75rem;
-`;
-
-export const SearchUsers = styled.input`
-  width: 100%;
-  height: 3.5rem;
-  padding: 0.5rem 3.5rem 0.5rem 1rem;
-  border-radius: 0.75rem;
-  border: none;
-  background-color: ${({ theme }) => theme.fill.alternative};
-  ${font.body.medium}
-  color: ${({ theme }) => theme.label.neutral};
-  &::placeholder {
-    color: ${({ theme }) => theme.label.assistive};
-  }
-  &:focus {
-    outline: none;
-  }
-`;
-
-export const SearchIconBox = styled.div`
-  color: ${({ theme }) => theme.label.neutral};
-`;
-
-export const SearchIcon = styled(Search)`
-  position: absolute;
-  right: 1rem;
-  top: 43%;
-  transform: translateY(-50%);
-  width: 1.85rem;
-  height: 1.85rem;
-  pointer-events: none;
-`;
-
 export const UserChoiceContainer = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
-  height: 12rem;
+  height: 20rem;
   overflow-y: auto;
   scrollbar-width: none;
 `;
@@ -529,6 +485,24 @@ export const ModalContent = styled.div`
   display: flex;
   flex-direction: column;
   height: 100%;
+  padding: 1rem;
   align-items: flex-end;
   justify-content: space-between;
+`;
+
+export const DateChoiceBox = styled.div`
+  padding: 0.5rem 1rem;
+  width: 30%;
+  border-radius: 0.5rem;
+  border: 2px solid ${({ theme }) => theme.line.alternative};
+  background-color: ${({ theme }) => theme.primary.normal};
+  color: ${({ theme }) => theme.label.normal};
+  ${font.headline2.medium}
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  &:hover {
+    background-color: ${palette.red[40]};
+  }
 `;

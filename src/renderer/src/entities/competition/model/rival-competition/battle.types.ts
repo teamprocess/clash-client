@@ -47,3 +47,22 @@ export interface AnalyzeBattleResponse {
   enemyPoint: number;
   myPoint: number;
 }
+
+// 배틀 목록 조회
+interface BattleListRequest {
+  id: number;
+  name: string;
+  profileImage: string;
+}
+
+export interface BattleListResponse {
+  rivals: BattleListRequest[];
+}
+
+// 배틀 신청하기
+export type PeriodDay = 3 | 5 | 7;
+
+export interface PostBattleRequest {
+  id: number | null;
+  duration: number;
+}
