@@ -10,6 +10,7 @@ import Arrow from "@/features/home/assets/home/arrow.svg";
 export const ContentArea = styled.div`
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
   height: 100%;
   border-radius: 1rem;
   padding: 1.5rem;
@@ -21,6 +22,7 @@ export const GraphWrapper = styled.div`
   flex-direction: column;
   padding: 0.75rem;
   gap: 0.625rem;
+  height: 100%;
 `;
 
 export const AnalyzeTitle = styled.p`
@@ -30,7 +32,7 @@ export const AnalyzeTitle = styled.p`
 
 export const GraphBox = styled.div`
   padding: 1rem 1rem;
-  height: 18rem;
+  height: 100%;
   width: 100%;
   display: flex;
   align-items: flex-end;
@@ -135,14 +137,16 @@ export const CompareContainer = styled.div`
   display: flex;
   flex-direction: row;
   gap: 1rem;
+  height: 100%;
 `;
 
 export const CompareBox = styled.div`
   padding: 1rem;
-  height: 18rem;
+  height: 100%;
   width: 100%;
   display: flex;
   flex-direction: column;
+  gap: 1rem;
   justify-content: space-between;
   background-color: ${({ theme }) => theme.background.alternative};
   border-radius: 0.75rem;
@@ -169,7 +173,7 @@ export const GridContainer = styled.div`
   grid-template-columns: repeat(2, 1fr); /* 2 × 2 그리드 */
   grid-template-rows: repeat(2, 1fr);
   grid-gap: 0.75rem;
-  height: 13rem;
+  height: 100%;
   width: 100%;
 `;
 
