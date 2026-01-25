@@ -9,14 +9,21 @@ import { chapterApi } from "@/entities/roadmap/chapter/api/chapterApi";
 import { GetSectionDetailsResponse } from "@/entities/roadmap/chapter/model/chapter.types";
 
 const transformChapterData = (serverData: GetSectionDetailsResponse): Stage[] => {
-  return serverData.chapters.map(chapter => {
+  const isFirstTime = serverData.currentOrderIndex === null;
+
+  return serverData.chapters.map((chapter, index) => {
     let status: StageStatus;
-    if (chapter.orderIndex < serverData.currentOrderIndex) {
-      status = "completed";
-    } else if (chapter.orderIndex === serverData.currentOrderIndex) {
-      status = "current";
+
+    if (isFirstTime) {
+      status = index === 0 ? "current" : "locked";
     } else {
-      status = "locked";
+      if (chapter.orderIndex < serverData.currentOrderIndex!) {
+        status = "completed";
+      } else if (chapter.orderIndex === serverData.currentOrderIndex) {
+        status = "current";
+      } else {
+        status = "locked";
+      }
     }
 
     const missions: Mission[] = Array.from({ length: chapter.totalMissions }, (_, idx) => ({
@@ -60,7 +67,9 @@ export const useChapter = (sectionId: number) => {
           const transformedStages = transformChapterData(response.data);
           setStages(transformedStages);
           setSectionTitle(response.data.sectionTitle);
-          setCurrentStageId(response.data.currentChapterId);
+
+          const currentChapter = transformedStages.find(stage => stage.status === "current");
+          setCurrentStageId(currentChapter?.id ?? transformedStages[0]?.id ?? 1);
 
           setRoadmapNodes(prev =>
             prev.map((node, index) => ({
