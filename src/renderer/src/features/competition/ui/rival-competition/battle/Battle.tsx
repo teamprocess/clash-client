@@ -213,7 +213,14 @@ export const Battle = () => {
             </S.ModalBox>
             <div style={{ display: "flex", width: "100%", justifyContent: "space-between" }}>
               {battle.periodOptions.map(day => (
-                <S.DateChoiceBox key={day} onClick={() => battle.setDuration(day)}>
+                <S.DateChoiceBox
+                  key={day}
+                  onClick={() => {
+                    battle.setSelectedDay(day);
+                    battle.setDuration(day);
+                  }}
+                  $active={battle.selectedDay === day}
+                >
                   {day}일
                 </S.DateChoiceBox>
               ))}
@@ -231,15 +238,7 @@ export const Battle = () => {
             </S.BottomBox>
           </S.ModalContent>
         </Modal>
-      ) : (
-        <Modal
-          modalTitle={`4명이 최대 입니다.`}
-          width={21.625}
-          height={4.5}
-          isOpen={battle.isModalOpen}
-          onClose={battle.closeModal}
-        />
-      )}
+      ) : null}
     </>
   );
 };

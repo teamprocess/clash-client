@@ -182,13 +182,16 @@ export const useBattle = () => {
     postBattle();
   };
 
+  const periodOptions: PeriodDay[] = [3, 5, 7];
+
+  const [selectedDay, setSelectedDay] = useState<number | null>(null);
+
   const closeModal = () => {
     setIsModalOpen(false);
     setRivalSelectedId(null);
     setDuration(3);
+    setSelectedDay(null);
   };
-
-  const periodOptions: PeriodDay[] = [3, 5, 7];
 
   return {
     battle: {
@@ -200,6 +203,8 @@ export const useBattle = () => {
       setDuration,
       periodOptions,
       postBattle,
+      selectedDay,
+      setSelectedDay,
 
       // target
       selectBattleTarget,
