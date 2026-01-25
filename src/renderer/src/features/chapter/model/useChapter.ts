@@ -1,6 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 import { Stage, Mission, StageStatus } from "@/features/chapter/mocks/missionData";
-import { Node, NodeStatus } from "@/features/chapter/roadmapData";
+import {
+  Node,
+  NodeStatus,
+  roadmapNodes as initialRoadmapNodes,
+} from "@/features/chapter/roadmapData";
 import { chapterApi } from "@/entities/roadmap/chapter/api/chapterApi";
 import { GetSectionDetailsResponse } from "@/entities/roadmap/chapter/model/chapter.types";
 
@@ -37,7 +41,7 @@ export const useChapter = (sectionId: number) => {
   const chapterRef = useRef<HTMLDivElement>(null);
 
   const [stages, setStages] = useState<Stage[]>([]);
-  const [roadmapNodes, setRoadmapNodes] = useState<Node[]>([]);
+  const [roadmapNodes, setRoadmapNodes] = useState<Node[]>(initialRoadmapNodes);
   const [currentStageId, setCurrentStageId] = useState<number>(1);
   const [sectionTitle, setSectionTitle] = useState("");
   const [loading, setLoading] = useState(true);
@@ -58,13 +62,12 @@ export const useChapter = (sectionId: number) => {
           setSectionTitle(response.data.sectionTitle);
           setCurrentStageId(response.data.currentChapterId);
 
-          const updatedNodes: Node[] = transformedStages.map((stage, index) => ({
-            id: stage.id,
-            x: 130 + index * 270,
-            y: 940 - index * 100,
-            status: stage.status as NodeStatus,
-          }));
-          setRoadmapNodes(updatedNodes);
+          setRoadmapNodes(prev =>
+            prev.map((node, index) => ({
+              ...node,
+              status: (transformedStages[index]?.status as NodeStatus) || "locked",
+            }))
+          );
         }
       } catch (err) {
         setError(err instanceof Error ? err.message : "Failed to load chapter data");
@@ -110,9 +113,9 @@ export const useChapter = (sectionId: number) => {
   };
 
   useEffect(() => {
-    if (!chapterRef.current) return;
+    if (!chapterRef.current || loading) return;
     chapterRef.current.scrollTo(chapterRef.current.scrollWidth, chapterRef.current.scrollHeight);
-  }, []);
+  }, [loading]);
 
   useEffect(() => {
     if (!chapterRef.current) return;
@@ -122,7 +125,7 @@ export const useChapter = (sectionId: number) => {
     return () => {
       chapter.removeEventListener("scroll", handleScroll);
     };
-  }, []);
+  });
 
   const handleMissionComplete = (missionId: number) => {
     setStages(prevStages => {
