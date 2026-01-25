@@ -145,7 +145,7 @@ export const Battle = () => {
                           </S.AnalyzeLabel>
                         </S.AnalyzeBar>
                         <S.AnalyzeBar
-                          $width={(battle.myAnalyzePercent / battle.AnalyzeRate) * 100}
+                          $width={Math.round((battle.myAnalyzePercent / battle.AnalyzeRate) * 100)}
                           $isRival={false}
                         >
                           <S.AnalyzeLabel>
@@ -155,7 +155,7 @@ export const Battle = () => {
                             </div>
                             {!battle.isRivalHigher && battle.diff > 0 && (
                               <S.CompareDiff>
-                                +{(battle.diff / battle.AnalyzeRate) * 100}%
+                                +{Math.round((battle.diff / battle.AnalyzeRate) * 100)}%
                               </S.CompareDiff>
                             )}
                           </S.AnalyzeLabel>
