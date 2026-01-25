@@ -37,7 +37,8 @@
     "react-hook-form": "^7.70.0",
     "react-router-dom": "^7.11.0",
     "styled-components": "^6.1.19",
-    "zod": "^4.3.5"
+    "zod": "^4.3.5",
+    "zustand": "^5.0.10"
   },
   "devDependencies": {
     "@commitlint/cli": "^20.3.0",

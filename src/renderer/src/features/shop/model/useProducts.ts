@@ -1,34 +1,23 @@
 import { useState, useEffect } from "react";
-import { allProducts } from "@/features/shop/mocks/allProducts";
+import { productApi, ProductPaginationData } from "@/entities/product";
 
 export const useProducts = () => {
-  const [selectedId, setSelectedId] = useState<number | null>(null);
-
-  const handleCardClick = (id: number) => {
-    setSelectedId(selectedId === id ? null : id);
-  };
-
-  const selectedProduct = allProducts.data.products.find(product => product.id === selectedId);
-
-  const isPanelOpen = selectedId !== null;
+  const [products, setProducts] = useState<ProductPaginationData | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    if (isPanelOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "unset";
-    }
-    return () => {
-      document.body.style.overflow = "unset";
+    const fetchData = async () => {
+      setIsLoading(true);
+      const response = await productApi.getProducts({
+        page: 1,
+        size: 10,
+      });
+      setProducts(response.data);
+      setIsLoading(false);
     };
-  }, [isPanelOpen]);
 
-  return {
-    isPanelOpen,
-    handleCardClick,
-    selectedProduct,
-    allProducts,
-  };
+    fetchData();
+  }, []);
+
+  return { products, isLoading };
 };
-
-export type UseProducts = ReturnType<typeof useProducts>;
