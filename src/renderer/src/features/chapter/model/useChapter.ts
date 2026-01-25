@@ -1,18 +1,89 @@
 import { useEffect, useRef, useState } from "react";
 import { Stage, Mission, StageStatus } from "@/features/chapter/mocks/missionData";
-import { roadmapNodes as initialRoadmapNodes } from "@/features/chapter/roadmapData";
+import { Node, NodeStatus } from "@/features/chapter/roadmapData";
+import { chapterApi } from "@/entities/roadmap/chapter/api/chapterApi";
+import { GetSectionDetailsResponse } from "@/entities/roadmap/chapter/model/chapter.types";
 
-export const useChapter = (initialStages: Stage[]) => {
+const transformChapterData = (serverData: GetSectionDetailsResponse): Stage[] => {
+  return serverData.chapters.map(chapter => {
+    let status: StageStatus;
+    if (chapter.orderIndex < serverData.currentOrderIndex) {
+      status = "completed";
+    } else if (chapter.orderIndex === serverData.currentOrderIndex) {
+      status = "current";
+    } else {
+      status = "locked";
+    }
+
+    const missions: Mission[] = Array.from({ length: chapter.totalMissions }, (_, idx) => ({
+      id: idx + 1,
+      title: `미션 ${idx + 1}`,
+      completed: idx < chapter.completedMissions,
+      questions: [],
+    }));
+
+    return {
+      id: chapter.id,
+      title: chapter.title,
+      status,
+      currentProgress: chapter.completedMissions,
+      totalMissions: chapter.totalMissions,
+      missions,
+    };
+  });
+};
+
+export const useChapter = (sectionId: number) => {
   const chapterRef = useRef<HTMLDivElement>(null);
 
-  const [stages, setStages] = useState<Stage[]>(initialStages);
-  const [roadmapNodes, setRoadmapNodes] = useState(initialRoadmapNodes);
+  const [stages, setStages] = useState<Stage[]>([]);
+  const [roadmapNodes, setRoadmapNodes] = useState<Node[]>([]);
   const [currentStageId, setCurrentStageId] = useState<number>(1);
+  const [sectionTitle, setSectionTitle] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   const [currentMission, setCurrentMission] = useState<Mission | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
 
-  const currentStage = stages.find(stage => stage.id === currentStageId)!;
+  useEffect(() => {
+    const fetchChapterData = async () => {
+      try {
+        setLoading(true);
+        const response = await chapterApi.getSectionDetails(sectionId);
+
+        if (response.success && response.data) {
+          const transformedStages = transformChapterData(response.data);
+          setStages(transformedStages);
+          setSectionTitle(response.data.sectionTitle);
+          setCurrentStageId(response.data.currentChapterId);
+
+          const updatedNodes: Node[] = transformedStages.map((stage, index) => ({
+            id: stage.id,
+            x: 130 + index * 270,
+            y: 940 - index * 100,
+            status: stage.status as NodeStatus,
+          }));
+          setRoadmapNodes(updatedNodes);
+        }
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "Failed to load chapter data");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchChapterData();
+  }, [sectionId]);
+
+  const currentStage = stages.find(stage => stage.id === currentStageId) || {
+    id: 0,
+    title: "",
+    status: "locked" as const,
+    currentProgress: 0,
+    totalMissions: 0,
+    missions: [],
+  };
 
   const handleMissionClick = (missionId: number) => {
     const mission = currentStage.missions.find(m => m.id === missionId);
@@ -85,8 +156,8 @@ export const useChapter = (initialStages: Stage[]) => {
         setCurrentStageId(nextStageId);
         setRoadmapNodes(prev =>
           prev.map(node => {
-            if (node.id === currentStageId) return { ...node, status: "completed" as const };
-            if (node.id === nextStageId) return { ...node, status: "current" as const };
+            if (node.id === currentStageId) return { ...node, status: "completed" as NodeStatus };
+            if (node.id === nextStageId) return { ...node, status: "current" as NodeStatus };
             return node;
           })
         );
@@ -111,6 +182,9 @@ export const useChapter = (initialStages: Stage[]) => {
     currentStage,
     currentMission,
     modalOpen,
+    loading,
+    error,
+    sectionTitle,
     setModalOpen,
     setCurrentMission,
     handleMissionClick,
