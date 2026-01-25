@@ -81,17 +81,19 @@ export const PreviewModal = ({
               </S.RoadmapTop>
 
               <S.RoadmapBottom>
-                <S.RoadmapSteps>
-                  {previewData.steps.map(step => (
-                    <S.StepWrapper key={step.id}>
-                      <S.StepCircle $active={step.id === currentStep}>{step.id}</S.StepCircle>
-                      {step.id === currentStep && <S.StepTooltip>{step.tooltip}</S.StepTooltip>}
-                    </S.StepWrapper>
-                  ))}
-                  <S.StepCircle>
-                    <S.StepFlag />
-                  </S.StepCircle>
-                </S.RoadmapSteps>
+                <S.RoadmapStepsContainer>
+                  <S.RoadmapSteps>
+                    {previewData.steps.map(step => (
+                      <S.StepWrapper key={step.id}>
+                        <S.StepCircle $active={step.id === currentStep}>{step.id}</S.StepCircle>
+                        {step.id === currentStep && <S.StepTooltip>{step.tooltip}</S.StepTooltip>}
+                      </S.StepWrapper>
+                    ))}
+                    <S.StepCircle>
+                      <S.StepFlag />
+                    </S.StepCircle>
+                  </S.RoadmapSteps>
+                </S.RoadmapStepsContainer>
 
                 <S.RoadmapDescriptionBox>
                   <S.RoadmapNumberBox>
