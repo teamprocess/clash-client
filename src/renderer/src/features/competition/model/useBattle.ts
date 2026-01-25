@@ -47,7 +47,6 @@ export const useBattle = () => {
         const response = await battleApi.getBattleInfo();
         if (!response.data) return;
         setBattleData(response.data);
-        console.log("battle", response);
       } catch (error) {
         console.error("배틀 정보 조회 실패:", error);
       }
@@ -71,7 +70,6 @@ export const useBattle = () => {
         const response = await battleApi.getBattleDetailInfo(targetBattle.id);
         if (!response.data) return;
         setBattleDetailData(response.data);
-        console.log(response);
       } catch (error) {
         console.error("배틀 상세 정보 조회 실패:", error);
       }
