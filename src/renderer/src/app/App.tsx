@@ -6,7 +6,6 @@ import { MainLayout } from "@/app/layouts/main";
 import { HomePage } from "@/pages/home";
 import { CompetitionPage } from "@/pages/competition";
 import { RecordPage } from "@/pages/record";
-import { GroupPage } from "@/pages/group";
 import { ChapterPage, RoadmapMajorChoicePage } from "@/pages/roadmap";
 import { ProductsPage, ShopPage } from "@/pages/shop";
 import { AuthLayout } from "@/app/layouts/auth";
@@ -28,7 +27,6 @@ function App() {
             <Route path="/home/transition" element={<ComparePage />} />
             <Route path="/competition" element={<CompetitionPage />} />
             <Route path="/record" element={<RecordPage />} />
-            <Route path="/group" element={<GroupPage />} />
             <Route path="/shop" element={<ShopPage />} />
             <Route path="/roadmap" element={<RoadmapPage />} />
             <Route path="/roadmap/major-choice" element={<RoadmapMajorChoicePage />} />

@@ -1,2 +1,2 @@
 export { api } from "./axios";
-export type { ApiResponse, PaginatedResponse, ErrorResponse } from "./types";
+export type { ApiResponse, ErrorResponse, Pagination } from "./types";

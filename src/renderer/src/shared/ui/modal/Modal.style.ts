@@ -21,8 +21,10 @@ export const ModalContainer = styled.div<{ $width: number; $height: number }>`
   width: ${({ $width }) => $width}rem;
   height: ${({ $height }) => $height}rem;
   background-color: ${({ theme }) => theme.background.normal};
+  box-shadow: 0 0 7px 0 ${({ theme }) => theme.line.normal};
   position: relative;
   display: flex;
+  flex-direction: column;
 `;
 
 export const ModalTitle = styled.p`
