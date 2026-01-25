@@ -1,7 +1,10 @@
 import * as S from "./Battle.style";
 import { useBattle } from "@/features/competition/model/useBattle";
 import { Modal } from "@/shared/ui/modal/Modal";
-import { MatchValue } from "@/entities/competition/model/rival-competition/battle.types";
+import {
+  AnalyzeCategory,
+  MatchValue,
+} from "@/entities/competition/model/rival-competition/battle.types";
 
 export const Battle = () => {
   const { battle } = useBattle();
@@ -95,10 +98,10 @@ export const Battle = () => {
                     <S.DropDownBox>
                       <S.SelectWrapper>
                         <S.Select
-                          value={battle.competitionDropdown}
-                          onChange={e => battle.setCompetitionDropdown(e.target.value)}
+                          value={battle.category}
+                          onChange={e => battle.setCategory(e.target.value as AnalyzeCategory)}
                         >
-                          {battle.competitionDropDownValue.map(option => (
+                          {battle.analyzeCategoryOptions.map(option => (
                             <S.Option key={option.key} value={option.key}>
                               {option.label}
                             </S.Option>

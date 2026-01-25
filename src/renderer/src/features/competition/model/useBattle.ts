@@ -4,6 +4,8 @@ import {
   BattleResponse,
   BattleDetailResponse,
   MatchValue,
+  AnalyzeBattleResponse,
+  AnalyzeCategory,
 } from "@/entities/competition/model/rival-competition/battle.types";
 
 /** ================== 드롭다운 ================== */
@@ -14,11 +16,10 @@ const competitionDropDownValue = [
   { key: "LastSeason", label: "전 시즌" },
 ];
 
-const competitionPeriodDropDownValue = [
+const analyzeCategoryOptions = [
   { key: "EXP", label: "EXP" },
-  { key: "Github", label: "Github" },
-  { key: "Solved.Ac", label: "solved.ac" },
-  { key: "StudyTime", label: "총 학습 시간" },
+  { key: "GITHUB", label: "Github" },
+  { key: "ACTIVE_TIME", label: "총 학습 시간" },
 ];
 
 export const useBattle = () => {
@@ -55,6 +56,9 @@ export const useBattle = () => {
     fetchBattle();
   }, []);
 
+  const [analyzeData, setAnalyzeData] = useState<AnalyzeBattleResponse | null>(null);
+  const [category, setCategory] = useState<AnalyzeCategory>("EXP");
+
   useEffect(() => {
     const fetchBattleDetail = async () => {
       if (!battleTargetId) {
@@ -62,12 +66,8 @@ export const useBattle = () => {
         return;
       }
 
-      const targetBattle = battleData?.battles.find(battle => battle.id === battleTargetId);
-
-      if (!targetBattle) return;
-
       try {
-        const response = await battleApi.getBattleDetailInfo(targetBattle.id);
+        const response = await battleApi.getBattleDetailInfo(battleTargetId);
         if (!response.data) return;
         setBattleDetailData(response.data);
       } catch (error) {
@@ -76,7 +76,28 @@ export const useBattle = () => {
     };
 
     fetchBattleDetail();
-  }, [battleTargetId, battleData]);
+  }, [battleTargetId]);
+
+  useEffect(() => {
+    if (!battleDetailData) return;
+
+    const fetchAnalyzeData = async () => {
+      try {
+        const response = await battleApi.getAnalyzeBattleData({
+          id: battleDetailData.id,
+          category,
+        });
+
+        if (!response.data) return;
+
+        setAnalyzeData(response.data);
+      } catch (error) {
+        console.error("배틀 분석 정보 조회 실패:", error);
+      }
+    };
+
+    fetchAnalyzeData();
+  }, [battleDetailData, category]);
 
   /** ================== battles ================== */
   const battleRivals = useMemo(() => {
@@ -119,15 +140,22 @@ export const useBattle = () => {
     return "동률";
   };
 
+  const myAnalyzePercent = useMemo(() => {
+    if (!analyzeData) return 0;
+    return analyzeData.myPoint;
+  }, [analyzeData]);
+
+  const rivalAnalyzePercent = useMemo(() => {
+    if (!analyzeData) return 0;
+    return analyzeData.enemyPoint;
+  }, [analyzeData]);
+
   /** ================== modal select ================== */
   const [rivalSelectedId, setRivalSelectedId] = useState<string | null>(null);
 
   const handleUserSelect = (username: string) => {
     setRivalSelectedId(prev => (prev === username ? null : username));
   };
-
-  /** ================== dropdown ================== */
-  const [competitionDropdown, setCompetitionDropdown] = useState("어제");
 
   return {
     battle: {
@@ -149,16 +177,19 @@ export const useBattle = () => {
       judgeUpperHand,
       myPercent,
       rivalPercent,
+      myAnalyzePercent,
+      rivalAnalyzePercent,
 
       // modal select
       rivalSelectedId,
       handleUserSelect,
 
       // dropdown
-      competitionDropdown,
-      setCompetitionDropdown,
       competitionDropDownValue,
-      competitionPeriodDropDownValue,
+      analyzeCategoryOptions,
+      analyzeData,
+      setCategory,
+      category,
 
       // API data
       battleData,

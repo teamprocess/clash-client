@@ -12,7 +12,6 @@ export const useMyRivals = () => {
     const fetchMyRivalData = async () => {
       try {
         const result = await myRivalsApi.getMyRivals();
-        console.log(result.data);
         setMyRivalsData(result.data);
       } catch (error) {
         console.error("내 라이벌 조회 실패:", error);

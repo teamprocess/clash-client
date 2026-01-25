@@ -32,3 +32,18 @@ export interface BattleDetailResponse {
   expireDate: string;
   myOverallPercentage: number;
 }
+
+// 배틀 정보 분석
+export type AnalyzeCategory = "EXP" | "GITHUB" | "ACTIVE_TIME";
+
+export interface AnalyzeBattleRequest {
+  id: number;
+  category: AnalyzeCategory;
+}
+
+export interface AnalyzeBattleResponse {
+  category: AnalyzeCategory;
+  id: number;
+  enemyPoint: number;
+  myPoint: number;
+}
