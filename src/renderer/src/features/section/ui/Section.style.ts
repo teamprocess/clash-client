@@ -45,7 +45,7 @@ export const SectionItemWrapper = styled.div`
 
 export const SectionItemBox = styled.div`
   display: flex;
-  flex-direction: column;
+  flex-direction: column-reverse;
   justify-content: center;
   align-items: center;
   gap: 2rem;
@@ -58,6 +58,7 @@ export const SectionItem = styled.div`
   justify-content: center;
   align-items: center;
   gap: 0.5rem;
+  cursor: pointer;
 `;
 
 export const SectionIconWrapper = styled.div`
