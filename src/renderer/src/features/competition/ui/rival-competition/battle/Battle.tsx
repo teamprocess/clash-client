@@ -133,8 +133,10 @@ export const Battle = () => {
                           $isRival
                         >
                           <S.AnalyzeLabel>
-                            {Math.round(battle.rivalAnalyzePercent)}{" "}
-                            {battle.detailTextTranslate(battle.category)}
+                            <div>
+                              {Math.round(battle.rivalAnalyzePercent)}{" "}
+                              {battle.detailTextTranslate(battle.category)}
+                            </div>
                             {battle.isRivalHigher && battle.diff > 0 && (
                               <S.CompareDiff>
                                 +{(battle.diff / battle.AnalyzeRate) * 100}%
@@ -147,8 +149,10 @@ export const Battle = () => {
                           $isRival={false}
                         >
                           <S.AnalyzeLabel>
-                            {Math.round(battle.myAnalyzePercent)}{" "}
-                            {battle.detailTextTranslate(battle.category)}
+                            <div>
+                              {Math.round(battle.myAnalyzePercent)}{" "}
+                              {battle.detailTextTranslate(battle.category)}
+                            </div>
                             {!battle.isRivalHigher && battle.diff > 0 && (
                               <S.CompareDiff>
                                 +{(battle.diff / battle.AnalyzeRate) * 100}%
