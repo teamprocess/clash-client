@@ -13,12 +13,12 @@ export const RankingContainer = styled.div<{ $page: RankingPageEnum }>`
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
-  gap: ${({ $page }) => ($page === "section" ? "1.8rem" : $page === "chapter" ? "1.4rem" : 0)};
+  gap: ${({ $page }) => ($page === "section" ? "1.8rem" : $page === "section" ? "1.4rem" : 0)};
   background: ${({ theme }) => theme.background.normal};
   box-shadow: 0 0 7px 0 ${({ theme }) => theme.line.neutral};
   border-radius: 1.25rem;
   position: absolute;
-  top: ${({ $page }) => ($page === "section" ? "3rem" : $page === "chapter" ? "5.45rem" : 0)};
+  top: ${({ $page }) => ($page === "section" ? "3rem" : $page === "section" ? "5.45rem" : 0)};
   left: 3rem;
   width: 16rem;
   z-index: 100;
@@ -140,7 +140,7 @@ export const RankingList = styled.div<{ $page: RankingPageEnum }>`
   justify-content: flex-start;
   align-items: center;
   width: 100%;
-  max-height: ${({ $page }) => ($page === "section" ? "22rem" : $page === "chapter" ? "20rem" : 0)};
+  max-height: ${({ $page }) => ($page === "section" ? "22rem" : $page === "section" ? "20rem" : 0)};
   overflow-y: auto;
   padding-left: 8px;
   scrollbar-gutter: stable;
