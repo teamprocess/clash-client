@@ -128,11 +128,33 @@ export const Battle = () => {
                       </S.AnalyzeContent>
                       <S.SeroLine />
                       <S.AnalyzeContent style={{ width: "100%" }}>
-                        <S.AnalyzeBar $width={battle.rivalPercent} $isRival>
-                          <S.AnalyzeLabel>{Math.round(battle.rivalPercent)} EXP</S.AnalyzeLabel>
+                        <S.AnalyzeBar
+                          $width={(battle.rivalAnalyzePercent / battle.AnalyzeRate) * 100}
+                          $isRival
+                        >
+                          <S.AnalyzeLabel>
+                            {Math.round(battle.rivalAnalyzePercent)}{" "}
+                            {battle.detailTextTranslate(battle.category)}
+                            {battle.isRivalHigher && battle.diff > 0 && (
+                              <S.CompareDiff>
+                                +{(battle.diff / battle.AnalyzeRate) * 100}%
+                              </S.CompareDiff>
+                            )}
+                          </S.AnalyzeLabel>
                         </S.AnalyzeBar>
-                        <S.AnalyzeBar $width={battle.myPercent} $isRival={false}>
-                          <S.AnalyzeLabel>{Math.round(battle.myPercent)} EXP</S.AnalyzeLabel>
+                        <S.AnalyzeBar
+                          $width={(battle.myAnalyzePercent / battle.AnalyzeRate) * 100}
+                          $isRival={false}
+                        >
+                          <S.AnalyzeLabel>
+                            {Math.round(battle.myAnalyzePercent)}{" "}
+                            {battle.detailTextTranslate(battle.category)}
+                            {!battle.isRivalHigher && battle.diff > 0 && (
+                              <S.CompareDiff>
+                                +{(battle.diff / battle.AnalyzeRate) * 100}%
+                              </S.CompareDiff>
+                            )}
+                          </S.AnalyzeLabel>
                         </S.AnalyzeBar>
                       </S.AnalyzeContent>
                     </div>

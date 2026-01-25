@@ -91,6 +91,7 @@ export const useBattle = () => {
         if (!response.data) return;
 
         setAnalyzeData(response.data);
+        console.log(response.data);
       } catch (error) {
         console.error("배틀 분석 정보 조회 실패:", error);
       }
@@ -150,11 +151,22 @@ export const useBattle = () => {
     return analyzeData.enemyPoint;
   }, [analyzeData]);
 
+  const AnalyzeRate = myAnalyzePercent + rivalAnalyzePercent;
+
+  const diff = Math.abs(rivalAnalyzePercent - myAnalyzePercent);
+  const isRivalHigher = rivalPercent > myPercent;
+
   /** ================== modal select ================== */
   const [rivalSelectedId, setRivalSelectedId] = useState<string | null>(null);
 
   const handleUserSelect = (username: string) => {
     setRivalSelectedId(prev => (prev === username ? null : username));
+  };
+
+  const detailTextTranslate = (category: AnalyzeCategory) => {
+    if (category == "GITHUB") return "Contributes";
+    if (category == "ACTIVE_TIME") return;
+    return "EXP";
   };
 
   return {
@@ -179,6 +191,10 @@ export const useBattle = () => {
       rivalPercent,
       myAnalyzePercent,
       rivalAnalyzePercent,
+      AnalyzeRate,
+      diff,
+      isRivalHigher,
+      detailTextTranslate,
 
       // modal select
       rivalSelectedId,
