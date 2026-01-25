@@ -429,7 +429,7 @@ export const ProfileTagBox = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: 0.125rem;
+  gap: 0.5rem;
 `;
 
 export const BottomBox = styled.div`
@@ -490,12 +490,12 @@ export const ModalContent = styled.div`
   justify-content: space-between;
 `;
 
-export const DateChoiceBox = styled.div`
+export const DateChoiceBox = styled.div<{ $active: boolean }>`
   padding: 0.5rem 1rem;
   width: 30%;
   border-radius: 0.5rem;
   border: 2px solid ${({ theme }) => theme.line.alternative};
-  background-color: ${({ theme }) => theme.primary.normal};
+  background-color: ${({ $active, theme }) => ($active ? theme.primary.normal : theme.fill.normal)};
   color: ${({ theme }) => theme.label.normal};
   ${font.headline2.medium}
   cursor: pointer;
