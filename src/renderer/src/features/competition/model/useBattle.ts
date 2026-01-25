@@ -8,14 +8,7 @@ import {
   AnalyzeCategory,
 } from "@/entities/competition/model/rival-competition/battle.types";
 
-/** ================== 드롭다운 ================== */
-const competitionDropDownValue = [
-  { key: "YesterDay", label: "어제" },
-  { key: "LastWeek", label: "일주일 전" },
-  { key: "LastMonth", label: "한달 전" },
-  { key: "LastSeason", label: "전 시즌" },
-];
-
+/** ================== 드롭다운 키밸류 ================== */
 const analyzeCategoryOptions = [
   { key: "EXP", label: "EXP" },
   { key: "GITHUB", label: "Github" },
@@ -116,18 +109,6 @@ export const useBattle = () => {
     }));
   }, [battleData]);
 
-  const me = useMemo(() => {
-    if (!battleDetailData) {
-      return { name: "나", username: "me", totalRate: 0 };
-    }
-
-    return {
-      name: "나",
-      username: "me",
-      totalRate: battleDetailData.myOverallPercentage,
-    };
-  }, [battleDetailData]);
-
   /** ================== compare ================== */
   const myPercent = battleDetailData?.myOverallPercentage ?? 50;
   const rivalPercent = 100 - myPercent;
@@ -154,7 +135,7 @@ export const useBattle = () => {
   const AnalyzeRate = myAnalyzePercent + rivalAnalyzePercent;
 
   const diff = Math.abs(rivalAnalyzePercent - myAnalyzePercent);
-  const isRivalHigher = rivalPercent > myPercent;
+  const isRivalHigher = rivalAnalyzePercent > myAnalyzePercent;
 
   /** ================== modal select ================== */
   const [rivalSelectedId, setRivalSelectedId] = useState<string | null>(null);
@@ -177,13 +158,11 @@ export const useBattle = () => {
       closeModal,
 
       // target
-      battleTargetId,
       selectBattleTarget,
       isBattleSelected,
 
       // rivals
       battleRivals,
-      me,
 
       // compare
       judgeUpperHand,
@@ -201,9 +180,7 @@ export const useBattle = () => {
       handleUserSelect,
 
       // dropdown
-      competitionDropDownValue,
       analyzeCategoryOptions,
-      analyzeData,
       setCategory,
       category,
 
