@@ -517,3 +517,18 @@ export const CompareDiff = styled.span`
   color: ${palette.neutral[99]};
   white-space: nowrap;
 `;
+
+export const ModalBox = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
+export const ModalContent = styled.div`
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  align-items: flex-end;
+  justify-content: space-between;
+`;

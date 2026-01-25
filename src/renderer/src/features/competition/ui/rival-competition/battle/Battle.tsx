@@ -188,31 +188,9 @@ export const Battle = () => {
           isOpen={battle.isModalOpen}
           onClose={battle.closeModal}
         >
-          <div
-            style={{
-              height: "100%",
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "flex-end",
-              justifyContent: "space-between",
-            }}
-          >
-            <div
-              style={{
-                width: "100%",
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-              }}
-            >
-              <div
-                style={{
-                  width: "100%",
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                }}
-              >
+          <S.ModalContent>
+            <S.ModalBox>
+              <S.ModalBox>
                 <S.SearchBox>
                   <S.SearchUsers placeholder={"이름 또는 아이디 검색"} />
                   <S.SearchIconBox>
@@ -220,20 +198,20 @@ export const Battle = () => {
                   </S.SearchIconBox>
                 </S.SearchBox>
                 <S.UserChoiceContainer>
-                  {battle.battleRivals.map(user => (
+                  {battle.battleData?.battles.map(user => (
                     <S.UserChoiceBox
-                      key={user.enemyId}
-                      $isSelected={battle.rivalSelectedId === user.username}
-                      onClick={() => battle.handleUserSelect(user.username)}
+                      key={user.enemy.id}
+                      $isSelected={battle.rivalSelectedId === user.enemy.id}
+                      onClick={() => battle.handleUserSelect(user.enemy.id)}
                     >
                       <S.ProfileContent style={{ height: "3rem" }}>
                         <S.ProfileIcon />
                         <S.ProfileTagBox>
-                          <S.ProfileName>{user.name}</S.ProfileName>
+                          <S.ProfileName>{user.enemy.name}</S.ProfileName>
                         </S.ProfileTagBox>
                       </S.ProfileContent>
 
-                      {battle.rivalSelectedId === user.username ? (
+                      {battle.rivalSelectedId === user.enemy.id ? (
                         <S.CheckedIcon />
                       ) : (
                         <S.UncheckedBox />
@@ -241,8 +219,8 @@ export const Battle = () => {
                     </S.UserChoiceBox>
                   ))}
                 </S.UserChoiceContainer>
-              </div>
-            </div>
+              </S.ModalBox>
+            </S.ModalBox>
             <S.BottomBox>
               <S.ButtonBox>
                 <S.CloseButton onClick={battle.closeModal}>취소</S.CloseButton>
@@ -250,7 +228,7 @@ export const Battle = () => {
                 <S.OkayButton onClick={battle.closeModal}>배틀 신청</S.OkayButton>
               </S.ButtonBox>
             </S.BottomBox>
-          </div>
+          </S.ModalContent>
         </Modal>
       ) : null}
     </>
