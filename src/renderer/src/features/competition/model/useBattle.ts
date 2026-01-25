@@ -100,7 +100,6 @@ export const useBattle = () => {
     return battleData?.battles.map(battle => ({
       name: battle.enemy.name,
       username: battle.enemy.name,
-      totalRate: 0,
       profileImage: battle.enemy.profileImage,
       battleId: battle.id,
       enemyId: battle.enemy.id,
@@ -150,6 +149,19 @@ export const useBattle = () => {
     return "EXP";
   };
 
+  const getRemainDays = targetDate => {
+    const today = new Date();
+    const target = new Date(targetDate);
+
+    today.setHours(0, 0, 0, 0);
+    target.setHours(0, 0, 0, 0);
+
+    const diffTime = target.getTime() - today.getTime();
+    return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+  };
+
+  const remainDays = getRemainDays(battleDetailData?.expireDate);
+
   return {
     battle: {
       // modal
@@ -174,6 +186,7 @@ export const useBattle = () => {
       diff,
       isRivalHigher,
       detailTextTranslate,
+      remainDays,
 
       // modal select
       rivalSelectedId,
