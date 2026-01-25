@@ -82,7 +82,7 @@ export const Battle = () => {
                     </S.UpperHandTransition>
 
                     <S.WarPeriodText>
-                      종료 {battle.battleDetailData?.expireDate} · 3일 남음
+                      종료 {battle.battleDetailData?.expireDate} · {battle.remainDays}일 남음
                     </S.WarPeriodText>
                   </S.TransitionBox>
                   <S.UpperHandProfile>
