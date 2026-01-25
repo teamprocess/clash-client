@@ -4,6 +4,8 @@ import {
   BattleDetailResponse,
   AnalyzeBattleResponse,
   AnalyzeBattleRequest,
+  BattleListResponse,
+  PostBattleRequest,
 } from "@/entities/competition/model/rival-competition/battle.types";
 
 export const battleApi = {
@@ -26,6 +28,18 @@ export const battleApi = {
     const result = await api.get<ApiResponse<AnalyzeBattleResponse>>(
       `/compete/rivals/battles/${id}/analyze/category/${category}`
     );
+    return result.data;
+  },
+
+  // 배틀 후보 목록
+  getBattleList: async () => {
+    const result = await api.get<ApiResponse<BattleListResponse>>("/compete/rivals/battles/rivals");
+    return result.data;
+  },
+
+  // 배틀 신청하기
+  postCreateBattle: async (data: PostBattleRequest) => {
+    const result = await api.post<ApiResponse>(`/compete/rivals/battles/apply`, { ...data });
     return result.data;
   },
 };

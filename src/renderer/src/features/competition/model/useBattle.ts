@@ -6,6 +6,8 @@ import {
   MatchValue,
   AnalyzeBattleResponse,
   AnalyzeCategory,
+  BattleListResponse,
+  PeriodDay,
 } from "@/entities/competition/model/rival-competition/battle.types";
 
 // 드롭다운 키밸류
@@ -16,11 +18,6 @@ const analyzeCategoryOptions = [
 ];
 
 export const useBattle = () => {
-  // modal
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const openModal = () => setIsModalOpen(true);
-  const closeModal = () => setIsModalOpen(false);
-
   // battle target
   const [battleTargetId, setBattleTargetId] = useState<number | null>(null);
 
@@ -147,12 +144,62 @@ export const useBattle = () => {
 
   const remainDays = getRemainDays(battleDetailData?.expireDate);
 
+  // modal
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [battleList, setBattleList] = useState<BattleListResponse | null>(null);
+
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  useEffect(() => {
+    if (!isModalOpen) return;
+
+    const fetchBattleList = async () => {
+      try {
+        const response = await battleApi.getBattleList();
+        if (!response.data) return;
+        setBattleList(response.data);
+      } catch (error) {
+        console.error("배틀 정보 조회 실패:", error);
+      }
+    };
+
+    fetchBattleList();
+  }, [isModalOpen]);
+
+  const [duration, setDuration] = useState<PeriodDay>(3);
+
+  const postBattle = async () => {
+    try {
+      const response = await battleApi.postCreateBattle({ id: rivalSelectedId, duration });
+      if (!response.data) return;
+      closeModal();
+    } catch (error) {
+      console.error("배틀 정보 조회 실패:", error);
+    }
+
+    postBattle();
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setRivalSelectedId(null);
+    setDuration(3);
+  };
+
+  const periodOptions: PeriodDay[] = [3, 5, 7];
+
   return {
     battle: {
       // modal
       isModalOpen,
       openModal,
       closeModal,
+      duration,
+      setDuration,
+      periodOptions,
+      postBattle,
 
       // target
       selectBattleTarget,
@@ -182,6 +229,7 @@ export const useBattle = () => {
       // API data
       battleData,
       battleDetailData,
+      battleList,
     },
   };
 };

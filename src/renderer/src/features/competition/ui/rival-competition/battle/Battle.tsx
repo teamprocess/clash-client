@@ -29,7 +29,7 @@ export const Battle = () => {
                   onClick={() => battle.selectBattleTarget(battleItem.id)}
                 >
                   <S.ProfileContent>
-                    <S.NameBox style={{ gap: "0.75rem" }}>
+                    <S.NameBox>
                       <S.UpperHandJudge $type={battle.judgeUpperHand(battleItem.result)}>
                         {battle.judgeUpperHand(battleItem.result)}
                       </S.UpperHandJudge>
@@ -191,46 +191,55 @@ export const Battle = () => {
           <S.ModalContent>
             <S.ModalBox>
               <S.ModalBox>
-                <S.SearchBox>
-                  <S.SearchUsers placeholder={"이름 또는 아이디 검색"} />
-                  <S.SearchIconBox>
-                    <S.SearchIcon />
-                  </S.SearchIconBox>
-                </S.SearchBox>
                 <S.UserChoiceContainer>
-                  {battle.battleData?.battles.map(user => (
+                  {battle.battleList?.rivals.map(user => (
                     <S.UserChoiceBox
-                      key={user.enemy.id}
-                      $isSelected={battle.rivalSelectedId === user.enemy.id}
-                      onClick={() => battle.handleUserSelect(user.enemy.id)}
+                      key={user.id}
+                      $isSelected={battle.rivalSelectedId === user.id}
+                      onClick={() => battle.handleUserSelect(user.id)}
                     >
                       <S.ProfileContent style={{ height: "3rem" }}>
                         <S.ProfileIcon />
                         <S.ProfileTagBox>
-                          <S.ProfileName>{user.enemy.name}</S.ProfileName>
+                          <S.ProfileName>{user.name}</S.ProfileName>
                         </S.ProfileTagBox>
                       </S.ProfileContent>
 
-                      {battle.rivalSelectedId === user.enemy.id ? (
-                        <S.CheckedIcon />
-                      ) : (
-                        <S.UncheckedBox />
-                      )}
+                      {battle.rivalSelectedId === user.id ? <S.CheckedIcon /> : <S.UncheckedBox />}
                     </S.UserChoiceBox>
                   ))}
                 </S.UserChoiceContainer>
               </S.ModalBox>
             </S.ModalBox>
+            <div style={{ display: "flex", width: "100%", justifyContent: "space-between" }}>
+              {battle.periodOptions.map(day => (
+                <S.DateChoiceBox key={day} onClick={() => battle.setDuration(day)}>
+                  {day}일
+                </S.DateChoiceBox>
+              ))}
+            </div>
             <S.BottomBox>
               <S.ButtonBox>
                 <S.CloseButton onClick={battle.closeModal}>취소</S.CloseButton>
-                {/* 임시로 저장해둔 handleModalClose, 추후 createBattle 함수 제작 예정 */}
-                <S.OkayButton onClick={battle.closeModal}>배틀 신청</S.OkayButton>
+                <S.OkayButton
+                  disabled={!battle.rivalSelectedId || !battle.duration}
+                  onClick={battle.postBattle}
+                >
+                  배틀 신청
+                </S.OkayButton>
               </S.ButtonBox>
             </S.BottomBox>
           </S.ModalContent>
         </Modal>
-      ) : null}
+      ) : (
+        <Modal
+          modalTitle={`4명이 최대 입니다.`}
+          width={21.625}
+          height={4.5}
+          isOpen={battle.isModalOpen}
+          onClose={battle.closeModal}
+        />
+      )}
     </>
   );
 };
