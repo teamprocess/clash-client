@@ -372,9 +372,14 @@ export const DefaultBattleBox = styled.div`
   gap: 0.5rem;
 `;
 
-export const AnalyzeLabel = styled.p`
+export const AnalyzeLabel = styled.div`
   ${font.label.bold}
   color: ${palette.neutral[99]};
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
 `;
 
 export const FireIcon = styled(Fire)`
@@ -505,4 +510,10 @@ export const OkayButton = styled.button`
 export const WarPeriodText = styled.p`
   ${font.body.medium}
   color: ${({ theme }) => theme.label.normal};
+`;
+
+export const CompareDiff = styled.span`
+  ${font.caption.bold}
+  color: ${palette.neutral[99]};
+  white-space: nowrap;
 `;
