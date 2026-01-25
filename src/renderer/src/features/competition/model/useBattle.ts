@@ -8,7 +8,7 @@ import {
   AnalyzeCategory,
 } from "@/entities/competition/model/rival-competition/battle.types";
 
-/** ================== 드롭다운 키밸류 ================== */
+// 드롭다운 키밸류
 const analyzeCategoryOptions = [
   { key: "EXP", label: "EXP" },
   { key: "GITHUB", label: "Github" },
@@ -16,12 +16,12 @@ const analyzeCategoryOptions = [
 ];
 
 export const useBattle = () => {
-  /** ================== modal ================== */
+  // modal
   const [isModalOpen, setIsModalOpen] = useState(false);
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
 
-  /** ================== battle target ================== */
+  // battle target
   const [battleTargetId, setBattleTargetId] = useState<number | null>(null);
 
   const [isBattleSelected, setIsBattleSelected] = useState(false);
@@ -31,7 +31,7 @@ export const useBattle = () => {
     setIsBattleSelected(true);
   };
 
-  /** ================== API Data ================== */
+  // API Data
   const [battleData, setBattleData] = useState<BattleResponse | null>(null);
   const [battleDetailData, setBattleDetailData] = useState<BattleDetailResponse | null>(null);
 
@@ -93,22 +93,7 @@ export const useBattle = () => {
     fetchAnalyzeData();
   }, [battleDetailData, category]);
 
-  /** ================== battles ================== */
-  const battleRivals = useMemo(() => {
-    if (!battleData?.battles) return [];
-
-    return battleData?.battles.map(battle => ({
-      name: battle.enemy.name,
-      username: battle.enemy.name,
-      profileImage: battle.enemy.profileImage,
-      battleId: battle.id,
-      enemyId: battle.enemy.id,
-      expireDate: battle.expireDate,
-      result: battle.result,
-    }));
-  }, [battleData]);
-
-  /** ================== compare ================== */
+  // compare
   const myPercent = battleDetailData?.myOverallPercentage ?? 50;
   const rivalPercent = 100 - myPercent;
 
@@ -136,11 +121,11 @@ export const useBattle = () => {
   const diff = Math.abs(rivalAnalyzePercent - myAnalyzePercent);
   const isRivalHigher = rivalAnalyzePercent > myAnalyzePercent;
 
-  /** ================== modal select ================== */
-  const [rivalSelectedId, setRivalSelectedId] = useState<string | null>(null);
+  // modal select
+  const [rivalSelectedId, setRivalSelectedId] = useState<number | null>(null);
 
-  const handleUserSelect = (username: string) => {
-    setRivalSelectedId(prev => (prev === username ? null : username));
+  const handleUserSelect = (id: number) => {
+    setRivalSelectedId(prev => (prev === id ? null : id));
   };
 
   const detailTextTranslate = (category: AnalyzeCategory) => {
@@ -172,9 +157,6 @@ export const useBattle = () => {
       // target
       selectBattleTarget,
       isBattleSelected,
-
-      // rivals
-      battleRivals,
 
       // compare
       judgeUpperHand,
