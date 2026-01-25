@@ -164,6 +164,32 @@ export const RoadmapTitle = styled.span`
   color: ${({ theme }) => theme.label.assistive};
 `;
 
+export const RoadmapStepsContainer = styled.div`
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: visible;
+  padding: 4rem 2.5rem 2rem 2.5rem;
+  margin: 0 -2rem;
+
+  &::-webkit-scrollbar {
+    height: 0.5rem;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: ${({ theme }) => theme.background.neutral};
+    border-radius: 0.25rem;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: ${({ theme }) => theme.line.normal};
+    border-radius: 0.25rem;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: ${({ theme }) => theme.label.alternative};
+  }
+`;
+
 export const StepCircle = styled.div<{ $active?: boolean }>`
   width: 2.25rem;
   height: 2.25rem;
@@ -176,6 +202,7 @@ export const StepCircle = styled.div<{ $active?: boolean }>`
   align-items: center;
   justify-content: center;
   z-index: 1;
+  flex-shrink: 0;
 `;
 
 export const RoadmapSteps = styled.div`
@@ -183,14 +210,15 @@ export const RoadmapSteps = styled.div`
   display: flex;
   align-items: center;
   gap: 4.5rem;
-  margin-top: 4rem;
+  width: max-content;
+  padding: 0 2rem;
 
   &::before {
     content: "";
     position: absolute;
     top: 50%;
-    left: 0;
-    right: 0;
+    left: 2rem;
+    right: 2rem;
     height: 2px;
     background-color: ${({ theme }) => theme.line.neutral};
     z-index: 0;
