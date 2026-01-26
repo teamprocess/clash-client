@@ -42,7 +42,6 @@ export const useMyCompetition = () => {
           standard: competitionDropdown,
         });
         setMyCompareData(response.data);
-        console.log("호출");
       } catch (error) {
         console.error("성장도 분석 결과 반환 실패", error);
       }
@@ -50,6 +49,9 @@ export const useMyCompetition = () => {
 
     fetchMyCompare();
   }, [competitionDropdown]);
+
+  // 첫번쨰 소수점까지 정리식
+  const oneDecimal = (value?: number | null) => (value == null ? 0 : Math.trunc(value * 10) / 10);
 
   return {
     myCompetition: {
@@ -59,6 +61,7 @@ export const useMyCompetition = () => {
       setCompetitionDropdown,
       myCompetitionMaxCommit,
       competitionDropDownValue,
+      oneDecimal,
     },
   };
 };
