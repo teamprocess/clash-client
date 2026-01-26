@@ -10,7 +10,7 @@ import {
   PeriodDay,
 } from "@/entities/competition/model/rival-competition/battle.types";
 
-// 드롭다운 키밸류
+// category 드롭다운
 const analyzeCategoryOptions = [
   { key: "EXP", label: "EXP" },
   { key: "GITHUB", label: "Github" },
@@ -18,7 +18,6 @@ const analyzeCategoryOptions = [
 ];
 
 export const useBattle = () => {
-  // battle target
   const [battleTargetId, setBattleTargetId] = useState<number | null>(null);
 
   const [isBattleSelected, setIsBattleSelected] = useState(false);
@@ -28,7 +27,6 @@ export const useBattle = () => {
     setIsBattleSelected(true);
   };
 
-  // API Data
   const [battleData, setBattleData] = useState<BattleResponse | null>(null);
   const [battleDetailData, setBattleDetailData] = useState<BattleDetailResponse | null>(null);
 
@@ -90,7 +88,8 @@ export const useBattle = () => {
     fetchAnalyzeData();
   }, [battleDetailData, category]);
 
-  // compare
+  // 나의 성장세 값이 없을 때, 50으로 반환
+  // 전체적인 성장세의 수치값
   const myPercent = battleDetailData?.myOverallPercentage ?? 50;
   const rivalPercent = 100 - myPercent;
 
@@ -103,6 +102,7 @@ export const useBattle = () => {
     return "동률";
   };
 
+  // 각 category별 헤딩하는 성장도 수치
   const myAnalyzePercent = useMemo(() => {
     if (!analyzeData) return 0;
     return analyzeData.myPoint;
@@ -113,12 +113,12 @@ export const useBattle = () => {
     return analyzeData.enemyPoint;
   }, [analyzeData]);
 
-  const AnalyzeRate = myAnalyzePercent + rivalAnalyzePercent;
+  const analyzeRate = myAnalyzePercent + rivalAnalyzePercent;
 
+  // 각 category별 헤딩하는 성장도 수치를 계산해서 나오는 상대(나)와의 차이값
   const diff = Math.abs(rivalAnalyzePercent - myAnalyzePercent);
   const isRivalHigher = rivalAnalyzePercent > myAnalyzePercent;
 
-  // modal select
   const [rivalSelectedId, setRivalSelectedId] = useState<number | null>(null);
 
   const handleUserSelect = (id: number) => {
@@ -131,20 +131,24 @@ export const useBattle = () => {
     return "EXP";
   };
 
+  // 오늘부터 해당날짜까지 몇일 남았는지 표기하는 함수
   const getRemainDays = targetDate => {
     const today = new Date();
     const target = new Date(targetDate);
 
+    // 시간을 00:00:00으로 설정
     today.setHours(0, 0, 0, 0);
     target.setHours(0, 0, 0, 0);
 
+    // 밀리초 단위 차이 계산
     const diffTime = target.getTime() - today.getTime();
+
+    // 밀리초 → 일(day) 단위 변환
     return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
   };
 
   const remainDays = getRemainDays(battleDetailData?.expireDate);
 
-  // modal
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [battleList, setBattleList] = useState<BattleListResponse | null>(null);
 
@@ -216,7 +220,7 @@ export const useBattle = () => {
       rivalPercent,
       myAnalyzePercent,
       rivalAnalyzePercent,
-      AnalyzeRate,
+      analyzeRate,
       diff,
       isRivalHigher,
       detailTextTranslate,

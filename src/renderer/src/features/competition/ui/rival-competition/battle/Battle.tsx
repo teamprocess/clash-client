@@ -131,7 +131,7 @@ export const Battle = () => {
                       <S.SeroLine />
                       <S.AnalyzeContent style={{ width: "100%" }}>
                         <S.AnalyzeBar
-                          $width={(battle.rivalAnalyzePercent / battle.AnalyzeRate) * 100}
+                          $width={(battle.rivalAnalyzePercent / battle.analyzeRate) * 100}
                           $isRival
                         >
                           <S.AnalyzeLabel>
@@ -141,13 +141,13 @@ export const Battle = () => {
                             </div>
                             {battle.isRivalHigher && battle.diff > 0 && (
                               <S.CompareDiff>
-                                +{(battle.diff / battle.AnalyzeRate) * 100}%
+                                +{(battle.diff / battle.analyzeRate) * 100}%
                               </S.CompareDiff>
                             )}
                           </S.AnalyzeLabel>
                         </S.AnalyzeBar>
                         <S.AnalyzeBar
-                          $width={Math.round((battle.myAnalyzePercent / battle.AnalyzeRate) * 100)}
+                          $width={Math.round((battle.myAnalyzePercent / battle.analyzeRate) * 100)}
                           $isRival={false}
                         >
                           <S.AnalyzeLabel>
@@ -157,7 +157,7 @@ export const Battle = () => {
                             </div>
                             {!battle.isRivalHigher && battle.diff > 0 && (
                               <S.CompareDiff>
-                                +{Math.round((battle.diff / battle.AnalyzeRate) * 100)}%
+                                +{Math.round((battle.diff / battle.analyzeRate) * 100)}%
                               </S.CompareDiff>
                             )}
                           </S.AnalyzeLabel>
