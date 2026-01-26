@@ -1,25 +1,20 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import {
+  CompareStandard,
+  MyCompareResponse,
+} from "@/entities/competition/model/my-competition/myCompetition.types";
+import { myCompetitionApi } from "@/entities/competition/api/my-competition/myCompetitionApi";
 
-interface CompareDataProps {
-  earned_exp: number;
-  study_time: number;
-  github_attributor: number;
-}
-
-interface TotalCompareData {
-  beforeMyCompareData: CompareDataProps[];
-  nowMyCompareData: CompareDataProps[];
-}
-
+// 날짜별 다릅다운
 const competitionDropDownValue = [
-  { key: "YesterDay", label: "어제" },
-  { key: "LastWeek", label: "일주일 전" },
-  { key: "LastMonth", label: "한달 전" },
-  { key: "LastSeason", label: "전 시즌" },
-];
+  { key: "TODAY", label: "오늘" },
+  { key: "YESTERDAY", label: "어제" },
+  { key: "LAST_WEEK", label: "일주일 전" },
+  { key: "LAST_MONTH", label: "한달 전" },
+] as const;
 
 export const useMyCompetition = () => {
-  const [competitionDropdown, setCompetitionDropdown] = useState("어제");
+  const [competitionDropdown, setCompetitionDropdown] = useState<CompareStandard>("TODAY");
 
   const myData: { date: number; growth_rate: number }[] = [
     { date: 1, growth_rate: 31 },
@@ -38,26 +33,27 @@ export const useMyCompetition = () => {
 
   const myCompetitionMaxCommit = Math.max(...myData.map(m => m.growth_rate));
 
-  const allData: TotalCompareData = {
-    beforeMyCompareData: [
-      {
-        earned_exp: 120.5,
-        study_time: 4.5,
-        github_attributor: 15,
-      },
-    ],
-    nowMyCompareData: [
-      {
-        earned_exp: 140.2,
-        study_time: 5.2,
-        github_attributor: 12,
-      },
-    ],
-  };
+  const [myCompareData, setMyCompareData] = useState<MyCompareResponse | null>(null);
+
+  useEffect(() => {
+    const fetchMyCompare = async () => {
+      try {
+        const response = await myCompetitionApi.getMyCompare({
+          standard: competitionDropdown,
+        });
+        setMyCompareData(response.data);
+        console.log("호출");
+      } catch (error) {
+        console.error("성장도 분석 결과 반환 실패", error);
+      }
+    };
+
+    fetchMyCompare();
+  }, [competitionDropdown]);
 
   return {
     myCompetition: {
-      allData,
+      myCompareData,
       myData,
       competitionDropdown,
       setCompetitionDropdown,
