@@ -9,21 +9,15 @@ import { chapterApi } from "@/entities/roadmap/chapter/api/chapterApi";
 import { GetSectionDetailsResponse } from "@/entities/roadmap/chapter/model/chapter.types";
 
 const transformChapterData = (serverData: GetSectionDetailsResponse): Stage[] => {
-  const isFirstTime = serverData.currentOrderIndex === null;
-
-  return serverData.chapters.map((chapter, index) => {
+  return serverData.chapters.map(chapter => {
     let status: StageStatus;
 
-    if (isFirstTime) {
-      status = index === 0 ? "current" : "locked";
+    if (chapter.id === serverData.currentChapterId) {
+      status = "current";
+    } else if (chapter.orderIndex < serverData.currentOrderIndex!) {
+      status = "completed";
     } else {
-      if (chapter.orderIndex < serverData.currentOrderIndex!) {
-        status = "completed";
-      } else if (chapter.orderIndex === serverData.currentOrderIndex) {
-        status = "current";
-      } else {
-        status = "locked";
-      }
+      status = "locked";
     }
 
     const missions: Mission[] = Array.from({ length: chapter.totalMissions }, (_, idx) => ({
@@ -34,7 +28,7 @@ const transformChapterData = (serverData: GetSectionDetailsResponse): Stage[] =>
     }));
 
     return {
-      id: chapter.id,
+      id: chapter.orderIndex + 1,
       title: chapter.title,
       status,
       currentProgress: chapter.completedMissions,
@@ -72,10 +66,15 @@ export const useChapter = (sectionId: number) => {
           setCurrentStageId(currentChapter?.id ?? transformedStages[0]?.id ?? 1);
 
           setRoadmapNodes(prev =>
-            prev.map((node, index) => ({
-              ...node,
-              status: (transformedStages[index]?.status as NodeStatus) || "locked",
-            }))
+            prev.map((node, index) => {
+              if (index < transformedStages.length) {
+                return {
+                  ...node,
+                  status: transformedStages[index].status as NodeStatus,
+                };
+              }
+              return node;
+            })
           );
         }
       } catch (err) {
