@@ -1,6 +1,7 @@
 import * as S from "./WithMyCompetition.style";
 import { GrowthRate } from "@/features/home/ui/compare/growth-rate/GrowthRate";
 import { useMyCompetition } from "@/features/competition/model/useMyCompetition";
+import { CompareStandard } from "@/entities/competition/model/my-competition/myCompetition.types";
 
 export const WithMyCompetition = () => {
   const { myCompetition } = useMyCompetition();
@@ -45,9 +46,7 @@ export const WithMyCompetition = () => {
                     <S.EXPIcon />
                     <S.ExplainText>총 획득 EXP</S.ExplainText>
                   </S.ImpressiveBox>
-                  <S.DataText>
-                    {myCompetition.allData.nowMyCompareData[0].earned_exp} EXP
-                  </S.DataText>
+                  <S.DataText>{myCompetition.myCompareData?.earnedExp} EXP</S.DataText>
                 </S.DataBoxing>
               </S.GridBox>
               <S.GridBox>
@@ -56,9 +55,7 @@ export const WithMyCompetition = () => {
                     <S.RecordIcon />
                     <S.ExplainText>학습시간</S.ExplainText>
                   </S.ImpressiveBox>
-                  <S.DataText>
-                    {myCompetition.allData.nowMyCompareData[0].study_time} 시간
-                  </S.DataText>
+                  <S.DataText>{myCompetition.myCompareData?.earnedExp} 시간</S.DataText>
                 </S.DataBoxing>
               </S.GridBox>
               <S.GridBox>
@@ -84,9 +81,7 @@ export const WithMyCompetition = () => {
                       기여수
                     </S.ExplainText>
                   </S.ImpressiveBox>
-                  <S.DataText>
-                    {myCompetition.allData.nowMyCompareData[0].github_attributor}
-                  </S.DataText>
+                  <S.DataText>{myCompetition.myCompareData?.gitHubAttribution}</S.DataText>
                 </S.DataBoxing>
               </S.GridBox>
             </S.GridContainer>
@@ -97,7 +92,9 @@ export const WithMyCompetition = () => {
               <S.SelectWrapper>
                 <S.Select
                   value={myCompetition.competitionDropdown}
-                  onChange={e => myCompetition.setCompetitionDropdown(e.target.value)}
+                  onChange={e =>
+                    myCompetition.setCompetitionDropdown(e.target.value as CompareStandard)
+                  }
                 >
                   {myCompetition.competitionDropDownValue.map(option => (
                     <S.Option key={option.key} value={option.key}>
@@ -116,12 +113,10 @@ export const WithMyCompetition = () => {
                     <S.ExplainText>총 획득 EXP</S.ExplainText>
                   </S.ImpressiveBox>
                   <S.GrowthRateBox>
-                    <S.DataText>
-                      {myCompetition.allData.beforeMyCompareData[0].earned_exp} EXP
-                    </S.DataText>
+                    <S.DataText>{myCompetition.myCompareData?.earnedExp} EXP</S.DataText>
                     <GrowthRate
-                      yesterday={myCompetition.allData.nowMyCompareData[0].earned_exp}
-                      today={myCompetition.allData.beforeMyCompareData[0].earned_exp}
+                      yesterday={myCompetition.myCompareData?.earnedExp}
+                      today={myCompetition.myCompareData?.earnedExp}
                     />
                   </S.GrowthRateBox>
                 </S.DataBoxing>
@@ -133,12 +128,10 @@ export const WithMyCompetition = () => {
                     <S.ExplainText>학습시간</S.ExplainText>
                   </S.ImpressiveBox>
                   <S.GrowthRateBox>
-                    <S.DataText>
-                      {myCompetition.allData.beforeMyCompareData[0].study_time} 시간
-                    </S.DataText>
+                    <S.DataText>{myCompetition.myCompareData?.studyTime} 시간</S.DataText>
                     <GrowthRate
-                      yesterday={myCompetition.allData.nowMyCompareData[0].study_time}
-                      today={myCompetition.allData.beforeMyCompareData[0].study_time}
+                      yesterday={myCompetition.myCompareData?.studyTime}
+                      today={myCompetition.myCompareData?.studyTime}
                     />
                   </S.GrowthRateBox>
                 </S.DataBoxing>
@@ -167,12 +160,10 @@ export const WithMyCompetition = () => {
                     </S.ExplainText>
                   </S.ImpressiveBox>
                   <S.GrowthRateBox>
-                    <S.DataText>
-                      {myCompetition.allData.beforeMyCompareData[0].github_attributor}
-                    </S.DataText>
+                    <S.DataText>{myCompetition.myCompareData?.gitHubAttribution}</S.DataText>
                     <GrowthRate
-                      yesterday={myCompetition.allData.nowMyCompareData[0].github_attributor}
-                      today={myCompetition.allData.beforeMyCompareData[0].github_attributor}
+                      yesterday={myCompetition.myCompareData?.gitHubAttribution}
+                      today={myCompetition.myCompareData?.gitHubAttribution}
                     />
                   </S.GrowthRateBox>
                 </S.DataBoxing>

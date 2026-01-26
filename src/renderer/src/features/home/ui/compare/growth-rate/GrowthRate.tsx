@@ -2,7 +2,7 @@ import * as S from "@/features/home/ui/compare/growth-rate/GrowRate.style";
 import { getGrowthInfo, GrowthRateProps } from "@/features/home/model/useCompare";
 
 export const GrowthRate = ({ yesterday, today }: GrowthRateProps) => {
-  const { status, deg, value } = getGrowthInfo(yesterday, today);
+  const { status, deg, value } = getGrowthInfo(yesterday ?? 0, today ?? 0);
 
   return (
     <S.GrowthWrapper>
