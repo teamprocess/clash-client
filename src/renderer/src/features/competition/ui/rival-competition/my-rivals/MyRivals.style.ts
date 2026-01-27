@@ -2,17 +2,10 @@ import styled from "styled-components";
 import { font } from "@/shared/config/font";
 import { palette } from "@/shared/config/theme";
 import Profile from "@/features/home/assets/home/profile.svg";
-import Arrow from "@/features/home/assets/home/arrow.svg";
 
 export const GaroLine = styled.div`
   width: 100%;
   height: 1px;
-  background-color: ${({ theme }) => theme.line.neutral};
-`;
-
-export const SeroLine = styled.div`
-  width: 1px;
-  height: 70%;
   background-color: ${({ theme }) => theme.line.neutral};
 `;
 
@@ -22,41 +15,9 @@ export const Point = styled.p`
   color: ${({ theme }) => theme.label.alternative};
 `;
 
-export const Container = styled.div`
-  display: flex;
-  flex-direction: row;
-  gap: 1rem;
-  width: 100%;
-  height: 100%;
-`;
-
-export const CompareContentBox = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  height: 100%;
-  gap: 1rem;
-`;
-
-export const ContentBox = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  height: 100%;
-  gap: 1rem;
-`;
-
 export const ListContent = styled.div`
   padding: 1.5rem;
   width: 100%;
-  border-radius: 1rem;
-  background-color: ${({ theme }) => theme.background.normal};
-`;
-
-export const Content = styled.div`
-  padding: 1.5rem;
-  width: 100%;
-  height: 100%;
   border-radius: 1rem;
   background-color: ${({ theme }) => theme.background.normal};
 `;
@@ -127,11 +88,7 @@ export const ProfileMention = styled.span`
   color: ${({ theme }) => theme.label.alternative};
 `;
 
-type StatusProps = {
-  $status: "ONLINE" | "AWAY" | "OFFLINE";
-};
-
-export const Status = styled.div<StatusProps>`
+export const Status = styled.div<{ $status }>`
   ${font.caption.bold};
   display: flex;
   justify-content: center;
@@ -165,32 +122,4 @@ export const PlayTime = styled.div`
   gap: 0.75rem;
   ${font.headline1.bold}
   color: ${({ theme }) => theme.label.normal};
-`;
-
-export const ArrowIcon = styled(Arrow)`
-  position: absolute;
-  top: 32%;
-  right: 1rem;
-  width: 0.75rem;
-  height: 0.75rem;
-`;
-
-//드랍다운
-export const Select = styled.select`
-  ${font.body.regular};
-  width: 7.5rem;
-  height: 2rem;
-  padding: 0 0.75rem;
-  border-radius: 0.5rem;
-  background-color: ${({ theme }) => theme.fill.neutral};
-  color: ${({ theme }) => theme.label.normal};
-  border: none;
-  appearance: none;
-  cursor: pointer;
-  background-repeat: no-repeat;
-  background-position: right 0.5rem center;
-  background-size: 0.75rem;
-  &:focus {
-    outline: none;
-  }
 `;
