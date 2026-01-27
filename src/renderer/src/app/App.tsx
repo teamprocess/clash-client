@@ -30,7 +30,7 @@ function App() {
             <Route path="/shop" element={<ShopPage />} />
             <Route path="/roadmap" element={<RoadmapPage />} />
             <Route path="/roadmap/major-choice" element={<RoadmapMajorChoicePage />} />
-            <Route path="/roadmap/:chapter-id" element={<ChapterPage />} />
+            <Route path="/roadmap/:sectionId" element={<ChapterPage />} />
           </Route>
           <Route element={<MainLayout isScrollAble />}>
             <Route path="/shop" element={<ShopPage />} />

@@ -1,4 +1,4 @@
-export interface TutorialStep {
+export interface PreviewStep {
   id: number;
   title: string;
   roadmapTitle: string;
@@ -6,15 +6,15 @@ export interface TutorialStep {
   description: string;
 }
 
-export interface TutorialData {
+export interface PreviewData {
   id: number;
   title: string;
   intro: string;
   targets: string[];
-  steps: TutorialStep[];
+  steps: PreviewStep[];
 }
 
-export const tutorialData: TutorialData[] = [
+export const previewData: PreviewData[] = [
   {
     id: 1,
     title: "자바스크립트 고급",

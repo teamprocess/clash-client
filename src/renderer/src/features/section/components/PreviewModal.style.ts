@@ -7,7 +7,7 @@ import Flag from "../assets/flag.svg";
 import Arrow from "../assets/arrow.svg";
 import Star from "../assets/star.svg";
 
-export const TutorialModalWrapper = styled.div`
+export const PreviewModalWrapper = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -16,7 +16,7 @@ export const TutorialModalWrapper = styled.div`
   gap: 2rem;
 `;
 
-export const TutorialModalTop = styled.div`
+export const PreviewModalTop = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -24,7 +24,7 @@ export const TutorialModalTop = styled.div`
   gap: 1.5rem;
 `;
 
-export const TutorialModalIntro = styled.div`
+export const PreviewModalIntro = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -33,46 +33,50 @@ export const TutorialModalIntro = styled.div`
   width: 100%;
 `;
 
-export const TutorialModalTitle = styled.span`
+export const PreviewModalTitle = styled.span`
   ${font.display1.bold}
   color: ${({ theme }) => theme.label.normal};
   width: 100%;
   text-align: start;
 `;
 
-export const TutorialModalInfo = styled.div`
+export const PreviewModalInfo = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
   width: 100%;
 `;
 
-export const TutorialModalDescription = styled.p`
+export const PreviewModalDescription = styled.p`
   ${font.body.medium}
   color: ${({ theme }) => theme.label.assistive};
 `;
 
-export const TutorialModalAction = styled.div`
+export const PreviewModalAction = styled.div<{ $locked?: boolean }>`
   display: flex;
   justify-content: center;
   align-items: center;
   ${font.label.medium}
-  color: ${palette.neutral["99"]};
-  background-color: ${({ theme }) => theme.primary.normal};
+  color: ${({ $locked }) => ($locked ? palette.neutral["70"] : palette.neutral["99"])};
+  background-color: ${({ theme, $locked }) =>
+    $locked ? theme.line.neutral : theme.primary.normal};
   border-radius: 0.25rem;
   padding: 0.5rem 2.5rem;
-  cursor: pointer;
+  cursor: ${({ $locked }) => ($locked ? "not-allowed" : "pointer")};
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
 `;
 
 export const SectionDivider = styled.div<{ $type: string }>`
   background-color: ${({ theme }) => theme.line.neutral};
   background-color: ${({ theme, $type }) =>
-    $type === "Tutorial" ? theme.line.neutral : theme.line.normal};
+    $type === "Preview" ? theme.line.neutral : theme.line.normal};
   width: 100%;
   height: 0.1rem;
 `;
 
-export const TutorialModalBottom = styled.div`
+export const PreviewModalBottom = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -81,7 +85,7 @@ export const TutorialModalBottom = styled.div`
   gap: 1.6rem;
 `;
 
-export const TutorialModalHead = styled.div`
+export const PreviewModalHead = styled.div`
   display: flex;
   justify-content: flex-start;
   align-items: center;
@@ -94,12 +98,12 @@ export const TutorialModalHead = styled.div`
 
 export const CheckIcon = styled(Check)``;
 
-export const TutorialModalHeadLabel = styled.span`
+export const PreviewModalHeadLabel = styled.span`
   ${font.body.medium}
   color: ${({ theme }) => theme.label.alternative};
 `;
 
-export const TutorialModalBody = styled.div`
+export const PreviewModalBody = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -160,6 +164,32 @@ export const RoadmapTitle = styled.span`
   color: ${({ theme }) => theme.label.assistive};
 `;
 
+export const RoadmapStepsContainer = styled.div`
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: visible;
+  padding: 4rem 2.5rem 2rem 2.5rem;
+  margin: 0 -2rem;
+
+  &::-webkit-scrollbar {
+    height: 0.5rem;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: ${({ theme }) => theme.background.neutral};
+    border-radius: 0.25rem;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: ${({ theme }) => theme.line.normal};
+    border-radius: 0.25rem;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: ${({ theme }) => theme.label.alternative};
+  }
+`;
+
 export const StepCircle = styled.div<{ $active?: boolean }>`
   width: 2.25rem;
   height: 2.25rem;
@@ -172,6 +202,7 @@ export const StepCircle = styled.div<{ $active?: boolean }>`
   align-items: center;
   justify-content: center;
   z-index: 1;
+  flex-shrink: 0;
 `;
 
 export const RoadmapSteps = styled.div`
@@ -179,14 +210,15 @@ export const RoadmapSteps = styled.div`
   display: flex;
   align-items: center;
   gap: 4.5rem;
-  margin-top: 4rem;
+  width: max-content;
+  padding: 0 2rem;
 
   &::before {
     content: "";
     position: absolute;
     top: 50%;
-    left: 0;
-    right: 0;
+    left: 2rem;
+    right: 2rem;
     height: 2px;
     background-color: ${({ theme }) => theme.line.neutral};
     z-index: 0;

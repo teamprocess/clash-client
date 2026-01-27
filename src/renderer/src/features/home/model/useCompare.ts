@@ -64,8 +64,8 @@ export const statsData = {
 
 // 증감률 함수
 export interface GrowthRateProps {
-  yesterday: number;
-  today: number;
+  yesterday?: number;
+  today?: number;
 }
 
 export const getGrowthInfo = (yesterday: number, today: number) => {
