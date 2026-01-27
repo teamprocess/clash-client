@@ -35,7 +35,7 @@ export const Transition = ({ transitionData, maxActive, maxContributors }: Trans
                 </S.Bars>
                 <S.Bars>
                   <S.Value value={transitionData?.activeTime.todayActiveTime ?? 0} max={maxActive}>
-                    {transitionData?.activeTime.todayActiveTime ?? 0}
+                    {formatTime(transitionData?.activeTime.todayActiveTime ?? 0)}
                   </S.Value>
                   <S.Bar value={transitionData?.activeTime.todayActiveTime ?? 0} max={maxActive} />
                 </S.Bars>
