@@ -19,7 +19,7 @@ export interface Mission {
 
 export interface Question {
   id: number;
-  title: string;
+  content: string;
   choices: Choice[];
   answerId: number;
   explanation: string;
@@ -27,5 +27,5 @@ export interface Question {
 
 export interface Choice {
   id: number;
-  text: string;
+  content: string;
 }

@@ -33,6 +33,8 @@ export const QuizModal = ({
     onClose,
   });
 
+  console.log(currentQuestion);
+
   if (state.view === "final") {
     return (
       <Modal width={25} height={33} isOpen={isOpen} onClose={handleClose} gap={6.5}>
@@ -79,7 +81,7 @@ export const QuizModal = ({
         <S.QuestionWrapper>
           <S.QuestionTitle>
             <S.QuestionPrefix>Q. </S.QuestionPrefix>
-            {currentQuestion.title}
+            {currentQuestion.content}
           </S.QuestionTitle>
         </S.QuestionWrapper>
       </S.ModalTop>
@@ -92,7 +94,7 @@ export const QuizModal = ({
               $selected={selectedChoiceId === choice.id}
               onClick={() => handleSelectChoice(choice.id)}
             >
-              {choice.text}
+              {choice.content}
             </S.AnswerOption>
           ))}
 
