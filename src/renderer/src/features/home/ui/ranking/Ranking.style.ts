@@ -13,7 +13,6 @@ export const RankingContainer = styled.div`
   flex-direction: column;
 `;
 
-// 상단 타이틀 박스
 export const TitleBox = styled.div`
   width: 100%;
   display: flex;
@@ -26,7 +25,6 @@ export const Title = styled.div`
   ${font.title2.bold}
 `;
 
-// 드랍다운
 export const DropDown = styled.div`
   width: 15rem;
   height: 100%;
@@ -69,7 +67,6 @@ export const Select = styled.select`
   }
 `;
 
-// 경계선
 export const Line = styled.div`
   width: 100%;
   height: 1px;
@@ -77,7 +74,6 @@ export const Line = styled.div`
   margin: 0.75rem;
 `;
 
-// 유저정보 및 랭킹 내용 => 또 다른 함수형으로 제작함
 export const UserWrapper = styled.div`
   width: 100%;
   height: 16rem;
