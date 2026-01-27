@@ -4,6 +4,7 @@ import { calculateDiscountedPrice } from "@/features/shop/lib/calculateDiscounte
 import { ProductCard } from "@/features/shop/ui/card/ProductCard";
 import { Filter } from "@/features/shop/ui/filter/Filter";
 import { Product } from "@/entities/product";
+import { PurchaseModal } from "@/features/shop/ui/purchase/PurchaseModal";
 
 interface ProductsProps {
   products: Product[];
@@ -13,6 +14,8 @@ interface ProductsProps {
 export const Products = ({ products, isLoading }: ProductsProps) => {
   const [selectedId, setSelectedId] = useState<number | null>(null);
 
+  const [isPurchaseOpen, setIsPurchaseOpen] = useState(false);
+
   const selectedProduct = products.find(product => product.id === selectedId);
   const isPanelOpen = selectedId !== null;
 
@@ -20,12 +23,26 @@ export const Products = ({ products, isLoading }: ProductsProps) => {
     setSelectedId(selectedId === id ? null : id);
   };
 
+  const handleOpenPurchase = () => {
+    if (!selectedProduct) return;
+    setIsPurchaseOpen(true);
+  };
+
+  const handleClosePurchase = () => {
+    setIsPurchaseOpen(false);
+  };
+
+  const handlePurchase = async (product: Product) => {
+    console.log("purchase:", product.id);
+  };
+
   useEffect(() => {
-    document.body.style.overflow = isPanelOpen ? "hidden" : "unset";
+    const shouldLock = isPanelOpen || isPurchaseOpen;
+    document.body.style.overflow = shouldLock ? "hidden" : "unset";
     return () => {
       document.body.style.overflow = "unset";
     };
-  }, [isPanelOpen]);
+  }, [isPanelOpen, isPurchaseOpen]);
 
   if (isLoading) {
     return (
@@ -54,6 +71,7 @@ export const Products = ({ products, isLoading }: ProductsProps) => {
             />
           ))}
         </S.CardContainer>
+
         {isPanelOpen && selectedProduct && (
           <S.DetailPanel>
             <S.InfoContainer>
@@ -61,7 +79,13 @@ export const Products = ({ products, isLoading }: ProductsProps) => {
               <S.MajorInfoWrapper>
                 <S.ProductTitleDetail>{selectedProduct.title}</S.ProductTitleDetail>
                 <S.ProductCategoryText>
-                  {`유형 : ${selectedProduct.category === "INSIGNIA" ? "휘장" : selectedProduct.category === "NAMEPLATE" ? "이름표" : "배너"}`}
+                  {`유형 : ${
+                    selectedProduct.category === "INSIGNIA"
+                      ? "휘장"
+                      : selectedProduct.category === "NAMEPLATE"
+                        ? "이름표"
+                        : "배너"
+                  }`}
                 </S.ProductCategoryText>
                 <S.PriceBoxDetail>
                   {selectedProduct.type === "TOKEN" ? <S.TokenIcon /> : <S.CookieIcon />}
@@ -78,13 +102,21 @@ export const Products = ({ products, isLoading }: ProductsProps) => {
                 </S.DescriptionBox>
               </S.MajorInfoWrapper>
             </S.InfoContainer>
-            <S.PurchaseBtn>
+
+            <S.PurchaseBtn onClick={handleOpenPurchase}>
               {selectedProduct.type === "TOKEN" ? <S.TokenIcon /> : <S.CookieIcon />}
               {`${calculateDiscountedPrice(selectedProduct.price, selectedProduct.discount)}에 구매하기`}
             </S.PurchaseBtn>
           </S.DetailPanel>
         )}
       </S.ContentWrapper>
+
+      <PurchaseModal
+        isOpen={isPurchaseOpen}
+        product={selectedProduct ?? null}
+        onClose={handleClosePurchase}
+        onPurchase={handlePurchase}
+      />
     </S.MainContainer>
   );
 };
