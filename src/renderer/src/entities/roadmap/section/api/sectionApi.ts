@@ -8,7 +8,7 @@ import {
 export const sectionApi = {
   // 내 정보 조회 (임시)
   getMyProfile: async () => {
-    const result = await api.get<ApiResponse<getMyProfileResponse>>("/user/me");
+    const result = await api.get<ApiResponse<getMyProfileResponse>>("/users/me");
     return result.data;
   },
 

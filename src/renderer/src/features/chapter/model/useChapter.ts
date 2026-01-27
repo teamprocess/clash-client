@@ -6,7 +6,10 @@ import {
   roadmapNodes as initialRoadmapNodes,
 } from "@/features/chapter/roadmapData";
 import { chapterApi } from "@/entities/roadmap/chapter/api/chapterApi";
-import { GetSectionDetailsResponse } from "@/entities/roadmap/chapter/model/chapter.types";
+import {
+  GetChapterDetailsRequest,
+  GetSectionDetailsResponse,
+} from "@/entities/roadmap/chapter/model/chapter.types";
 
 const transformChapterData = (serverData: GetSectionDetailsResponse): Stage[] => {
   return serverData.chapters.map(chapter => {
@@ -20,20 +23,14 @@ const transformChapterData = (serverData: GetSectionDetailsResponse): Stage[] =>
       status = "locked";
     }
 
-    const missions: Mission[] = Array.from({ length: chapter.totalMissions }, (_, idx) => ({
-      id: idx + 1,
-      title: `미션 ${idx + 1}`,
-      completed: idx < chapter.completedMissions,
-      questions: [],
-    }));
-
     return {
-      id: chapter.orderIndex + 1,
+      id: chapter.id,
+      orderIndex: chapter.orderIndex,
       title: chapter.title,
       status,
       currentProgress: chapter.completedMissions,
       totalMissions: chapter.totalMissions,
-      missions,
+      missions: [],
     };
   });
 };
@@ -55,7 +52,7 @@ export const useChapter = (sectionId: number) => {
     const fetchChapterData = async () => {
       try {
         setLoading(true);
-        const response = await chapterApi.getSectionDetails(sectionId);
+        const response = await chapterApi.getSectionDetails({ sectionId });
 
         if (response.success && response.data) {
           const transformedStages = transformChapterData(response.data);
@@ -70,6 +67,8 @@ export const useChapter = (sectionId: number) => {
               if (index < transformedStages.length) {
                 return {
                   ...node,
+                  id: transformedStages[index].id,
+                  orderIndex: index + 1,
                   status: transformedStages[index].status as NodeStatus,
                 };
               }
@@ -178,12 +177,37 @@ export const useChapter = (sectionId: number) => {
     });
   };
 
-  const handleSelectStage = (stageId: number) => {
+  const handleSelectStage = async (stageId: number) => {
     const stage = stages.find(s => s.id === stageId);
     const node = roadmapNodes.find(n => n.id === stageId);
     if (!stage || !node || node.status === "locked") return;
 
     setCurrentStageId(stageId);
+
+    await handleChapterClick({ chapterId: stageId });
+  };
+
+  const handleChapterClick = async (data: GetChapterDetailsRequest) => {
+    try {
+      const result = await chapterApi.getChapterDetails({
+        chapterId: data.chapterId,
+      });
+      if (result.success) {
+        const chapter = result.data;
+        if (chapter == null) return;
+        setStages(prev =>
+          prev.map(stage => {
+            if (stage.id != chapter.chapterId) return stage;
+            return {
+              ...stage,
+              missions: chapter.missions,
+            } as Stage;
+          })
+        );
+      }
+    } catch (error: unknown) {
+      console.error("미션 정보를 불러오는데 실패했습니다.", error);
+    }
   };
 
   return {
@@ -201,5 +225,6 @@ export const useChapter = (sectionId: number) => {
     handleMissionClick,
     handleMissionComplete,
     handleSelectStage,
+    handleChapterClick,
   };
 };

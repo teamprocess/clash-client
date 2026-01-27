@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Major, majorApi, MajorQuestion } from "@/entities/major/api/majorApi";
+import { majorApi } from "@/entities/major/api/majorApi";
+import { Major, MajorQuestion } from "@/entities/major/model/major.types";
 
 export type FeatureItem = "TEST" | "CHOICE" | null;
 export type MajorItem = "WEB" | "APP" | "SERVER" | "AI" | "GAME" | null;
