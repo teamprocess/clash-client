@@ -6,16 +6,18 @@ import { Ranking } from "@/features/home/ui/ranking/Ranking";
 import { useHome } from "@/features/home/model/useHome";
 import { useTransition } from "@/features/home/model/useTransition";
 import { useRanking } from "@/features/home/model/useRanking";
+import { useRival } from "@/features/home/model/useRival";
 
 export const HomePage = () => {
-  const { rival, active } = useHome();
+  const { active } = useHome();
   const { transition } = useTransition();
   const { ranking } = useRanking();
+  const { rivals } = useRival();
 
   return (
     <S.HomeContainer>
       <Transition {...transition} />
-      <Rival {...rival} />
+      <Rival {...rivals} />
       <Active {...active} />
       <Ranking {...ranking} />
     </S.HomeContainer>

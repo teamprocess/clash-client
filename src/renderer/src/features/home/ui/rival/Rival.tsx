@@ -1,15 +1,15 @@
 import * as S from "./Rival.style";
-import { RivalProps } from "@/features/home/model/useHome"; // 전체 props
+import { RivalProps } from "@/features/home/model/useRival";
 import { MyRivalUsers } from "@/features/home/ui/rival/myrival-users/MyRivalUsers";
 import { Modal } from "@/shared/ui/modal/Modal";
 
 export const Rival = ({
-  RivalsData,
+  userList,
+  rivalsData,
   getStatus,
   modalOpen,
   handleOpen,
   handleClose,
-  userList,
   rivalSelectedId,
   handleUserSelect,
   handleModalClose,
@@ -26,10 +26,10 @@ export const Rival = ({
       </S.TitleBox>
 
       <S.RivalBox>
-        {RivalsData.data.my_rivals.map(user => (
+        {rivalsData?.myRivals.map(user => (
           <MyRivalUsers key={user.username} user={user} getStatus={getStatus} />
         ))}
-        {RivalsData.data.my_rivals.length < 4 && (
+        {(rivalsData?.myRivals.length ?? 0) < 4 && (
           <S.ProfileContainer onClick={handleOpen} style={{ cursor: "pointer" }}>
             <S.AddRivalBox>
               <S.PlusIcon />
@@ -56,21 +56,25 @@ export const Rival = ({
                 </S.SearchIconBox>
               </S.SearchBox>
               <S.UserChoiceContainer>
-                {userList.map(user => (
+                {userList?.users.map(user => (
                   <S.UserChoiceBox
-                    key={user.name}
-                    $isSelected={rivalSelectedId.includes(user.name)}
-                    onClick={() => handleUserSelect(user.name)}
+                    key={user.userId}
+                    $isSelected={rivalSelectedId.includes(user.userName)}
+                    onClick={() => handleUserSelect(user.userName)}
                   >
                     <S.ProfileContent style={{ height: "3rem" }}>
                       <S.ProfileIcon />
                       <S.ProfileTagBox>
-                        <S.ProfileName>{user.name}</S.ProfileName>
-                        <S.ProfileMention>@{user.mention}</S.ProfileMention>
+                        <S.ProfileName>{user.userName}</S.ProfileName>
+                        <S.ProfileMention>@{user.gitHubId}</S.ProfileMention>
                       </S.ProfileTagBox>
                     </S.ProfileContent>
 
-                    {rivalSelectedId.includes(user.name) ? <S.CheckedIcon /> : <S.UncheckedBox />}
+                    {rivalSelectedId.includes(user.userName) ? (
+                      <S.CheckedIcon />
+                    ) : (
+                      <S.UncheckedBox />
+                    )}
                   </S.UserChoiceBox>
                 ))}
               </S.UserChoiceContainer>
