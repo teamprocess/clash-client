@@ -1,7 +1,7 @@
 import * as S from "./Ranking.style";
 import { RankingProps } from "@/features/home/model/useRanking";
 import { UserRanking } from "@/features/home/ui/ranking/user/UserRanking";
-import { RankingCategory, RankingPeriod } from "@/entities/home/model/useRanking.types";
+import { CategoryType, RankingPeriod } from "@/entities/home/model/useRanking.types";
 
 export const Ranking = ({
   RankingDropdown,
@@ -28,7 +28,7 @@ export const Ranking = ({
           <S.SelectWrapper>
             <S.Select
               value={RankingDropdown}
-              onChange={e => setRankingDropdown(e.target.value as RankingCategory)}
+              onChange={e => setRankingDropdown(e.target.value as CategoryType)}
             >
               {rankingDropDownValue.map(option => (
                 <option key={option.key} value={option.key}>

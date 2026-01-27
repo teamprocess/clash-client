@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, useLayoutEffect } from "react";
 import {
   RankingsResponse,
-  RankingCategory,
+  CategoryType,
   RankingPeriod,
 } from "@/entities/home/model/useRanking.types";
 import { rankingApi } from "@/entities/home/api/rankingApi";
@@ -17,7 +17,7 @@ export const useRanking = () => {
     rankings: [],
   });
 
-  const [RankingDropdown, setRankingDropdown] = useState<RankingCategory>("EXP");
+  const [RankingDropdown, setRankingDropdown] = useState<CategoryType>("EXP");
   const [RankingPeriodDropdown, setRankingPeriodDropdown] = useState<RankingPeriod>("WEEK");
 
   const rankingDropDownValue = [
