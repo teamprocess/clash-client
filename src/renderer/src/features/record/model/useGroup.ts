@@ -22,6 +22,10 @@ export const useGroup = () => {
   const menuRef = useRef<HTMLDivElement>(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [deleteAction, setDeleteAction] = useState<"delete" | "quit">("quit");
+  const [editPasswordRequired, setEditPasswordRequired] = useState(false);
+  const [isEditPasswordChangeEnabled, setIsEditPasswordChangeEnabled] = useState(false);
+  const [hasEditPassword, setHasEditPassword] = useState(false);
   const [isFormModalOpen, setIsFormModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [selectedGroupId, setSelectedGroupId] = useState<number | null>(null);
@@ -83,26 +87,57 @@ export const useGroup = () => {
     createForm.reset();
   };
 
-  const handleEditGroupRequest = () => {
+  const handleEditGroupRequest = async () => {
+    if (!currentGroupId) {
+      console.error("수정할 그룹 ID가 없습니다.");
+      return;
+    }
+
     setIsMenuOpen(false);
-    setIsEditModalOpen(true);
-    // 현재 그룹 정보로 수정 폼 초기화
-    editForm.reset({
-      name: "프로세스 팀",
-      password: "test1234**",
-      type: "TEAM",
-      maxMembers: 8,
-      description: "프로세스 팀",
-    });
+
+    try {
+      const result = await groupApi.getGroupDetail(currentGroupId);
+
+      if (result.success && result.data) {
+        const { group } = result.data;
+        editForm.reset({
+          name: group.name,
+          password: group.passwordRequired ? "********" : "",
+          type: group.category,
+          maxMembers: group.maxMembers,
+          description: group.description,
+        });
+        setEditPasswordRequired(group.passwordRequired);
+        setHasEditPassword(group.passwordRequired);
+        setIsEditPasswordChangeEnabled(!group.passwordRequired);
+        setIsEditModalOpen(true);
+      } else {
+        console.error("그룹 상세 조회 실패:", result.message);
+      }
+    } catch (error: unknown) {
+      console.error("그룹 상세 조회 실패:", error);
+
+      if (axios.isAxiosError(error)) {
+        const errorMessage =
+          error.response?.data?.error?.message ||
+          error.response?.data?.message ||
+          "그룹 상세 조회 중 오류가 발생했습니다.";
+        console.error(errorMessage);
+      }
+    }
   };
 
   const handleCloseEditModal = () => {
     setIsEditModalOpen(false);
+    setEditPasswordRequired(false);
+    setIsEditPasswordChangeEnabled(false);
+    setHasEditPassword(false);
     editForm.reset();
   };
 
-  const handleDeleteGroupRequest = () => {
+  const handleDeleteGroupRequest = (action: "delete" | "quit") => {
     setIsMenuOpen(false);
+    setDeleteAction(action);
     setIsDeleteModalOpen(true);
   };
 
@@ -112,27 +147,30 @@ export const useGroup = () => {
 
   const handleConfirmDelete = async () => {
     if (!currentGroupId) {
-      console.error("탈퇴할 그룹 ID가 없습니다.");
+      console.error("처리할 그룹 ID가 없습니다.");
       return;
     }
 
     try {
-      const result = await groupApi.quitGroup(currentGroupId);
+      const isDelete = deleteAction === "delete";
+      const result = isDelete
+        ? await groupApi.deleteGroup(currentGroupId)
+        : await groupApi.quitGroup(currentGroupId);
 
       if (result.success) {
         setIsDeleteModalOpen(false);
         setCurrentGroupId(null);
       } else {
-        console.error("그룹 탈퇴 실패:", result.message);
+        console.error(`그룹 ${deleteAction === "delete" ? "삭제" : "탈퇴"} 실패:`, result.message);
       }
     } catch (error: unknown) {
-      console.error("그룹 탈퇴 실패:", error);
+      console.error(`그룹 ${deleteAction === "delete" ? "삭제" : "탈퇴"} 실패:`, error);
 
       if (axios.isAxiosError(error)) {
         const errorMessage =
           error.response?.data?.error?.message ||
           error.response?.data?.message ||
-          "그룹 탈퇴 중 오류가 발생했습니다.";
+          `그룹 ${deleteAction === "delete" ? "삭제" : "탈퇴"} 중 오류가 발생했습니다.`;
         console.error(errorMessage);
       }
     }
@@ -144,6 +182,11 @@ export const useGroup = () => {
 
   const handleEditTypeSelect = (type: GroupCategory) => {
     editForm.setValue("type", type);
+  };
+
+  const handleEditPasswordChangeClick = () => {
+    setIsEditPasswordChangeEnabled(true);
+    editForm.setValue("password", "");
   };
 
   const handleCreateSubmit = async (data: GroupEditFormData) => {
@@ -210,13 +253,15 @@ export const useGroup = () => {
     }
 
     try {
+      const nextPassword = isEditPasswordChangeEnabled ? (data.password ?? "") : "";
+      const passwordRequired = editPasswordRequired || nextPassword.length > 0;
       const result = await groupApi.updateGroup(currentGroupId, {
         name: data.name,
         description: data.description,
         maxMembers: data.maxMembers,
         category: data.type,
-        passwordRequired: !!data.password,
-        password: data.password,
+        passwordRequired,
+        password: nextPassword,
       });
 
       if (result.success) {
@@ -264,12 +309,16 @@ export const useGroup = () => {
     isSubmitting: editForm.formState.isSubmitting,
     selectedType: editSelectedType,
     onTypeSelect: handleEditTypeSelect,
+    onPasswordChangeClick: handleEditPasswordChangeClick,
+    isPasswordChangeEnabled: isEditPasswordChangeEnabled,
+    showPasswordChangeButton: hasEditPassword,
   };
 
   const deleteModal = {
     isOpen: isDeleteModalOpen,
     onClose: handleCancelDelete,
     onConfirm: handleConfirmDelete,
+    action: deleteAction,
   };
 
   return {

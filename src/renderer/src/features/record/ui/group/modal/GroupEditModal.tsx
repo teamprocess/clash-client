@@ -12,6 +12,9 @@ export const GroupEditModal = ({
   isSubmitting,
   selectedType,
   onTypeSelect,
+  onPasswordChangeClick,
+  isPasswordChangeEnabled,
+  showPasswordChangeButton,
 }: GroupEditModalProps) => {
   return (
     <Modal width={64} height={42} isOpen={isOpen} onClose={onClose} gap={3}>
@@ -35,12 +38,28 @@ export const GroupEditModal = ({
               </S.InputBox>
               <S.InputBox>
                 <S.Label htmlFor="group-password-input">비밀번호 (선택사항)</S.Label>
-                <S.Input
-                  id="group-password-input"
-                  type="password"
-                  placeholder="그룹 비밀번호를 입력하세요."
-                  {...register("password")}
-                />
+                <S.PasswordInputWrapper>
+                  <S.Input
+                    id="group-password-input"
+                    type="password"
+                    placeholder={
+                      showPasswordChangeButton && !isPasswordChangeEnabled
+                        ? "비밀번호 변경을 눌러주세요."
+                        : "새 비밀번호를 입력하세요."
+                    }
+                    {...register("password")}
+                    readOnly={showPasswordChangeButton && !isPasswordChangeEnabled}
+                  />
+                  {showPasswordChangeButton && (
+                    <S.PasswordChangeButtonInside
+                      type="button"
+                      onClick={onPasswordChangeClick}
+                      disabled={isPasswordChangeEnabled}
+                    >
+                      비밀번호 변경
+                    </S.PasswordChangeButtonInside>
+                  )}
+                </S.PasswordInputWrapper>
                 {errors.password && <S.ErrorText>{errors.password.message}</S.ErrorText>}
               </S.InputBox>
             </S.InputWrapper>
