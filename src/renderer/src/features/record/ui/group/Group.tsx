@@ -8,81 +8,7 @@ import { formatTime } from "@/shared/lib";
 import { GroupDeleteModal } from "./modal/GroupDeleteModal";
 import { GroupEditModal } from "./modal/GroupEditModal";
 import { GroupFormModal } from "./modal/GroupFormModal";
-
-const MemberMockData = [
-  {
-    id: 1,
-    name: "조상철",
-    isActive: true,
-    studyTime: 60000,
-  },
-  {
-    id: 2,
-    name: "조상철",
-    isActive: false,
-    studyTime: 50000,
-  },
-  {
-    id: 3,
-    name: "조상철",
-    isActive: true,
-    studyTime: 40000,
-  },
-  {
-    id: 4,
-    name: "조상철",
-    isActive: true,
-    studyTime: 35000,
-  },
-  {
-    id: 5,
-    name: "조상철",
-    isActive: false,
-    studyTime: 30000,
-  },
-  {
-    id: 6,
-    name: "조상철",
-    isActive: true,
-    studyTime: 28000,
-  },
-  {
-    id: 7,
-    name: "조상철",
-    isActive: false,
-    studyTime: 27000,
-  },
-  {
-    id: 8,
-    name: "조상철",
-    isActive: true,
-    studyTime: 10000,
-  },
-  {
-    id: 15,
-    name: "조상철",
-    isActive: false,
-    studyTime: 30000,
-  },
-  {
-    id: 16,
-    name: "조상철",
-    isActive: true,
-    studyTime: 28000,
-  },
-  {
-    id: 17,
-    name: "조상철",
-    isActive: false,
-    studyTime: 27000,
-  },
-  {
-    id: 18,
-    name: "조상철",
-    isActive: true,
-    studyTime: 10000,
-  },
-];
+import { useGroupMembersActivity } from "@/features/record/model/useGroupMembersActivity";
 
 export const Group = () => {
   const [groups, setGroups] = useState<GroupEntity[]>([]);
@@ -100,6 +26,7 @@ export const Group = () => {
     deleteModal,
     setCurrentGroupId,
   } = useGroup();
+  const { fetchGroupMembers, groupMembers, incrementStudyingMembers } = useGroupMembersActivity();
 
   const currentGroup = useMemo(() => groups[currentIndex], [groups, currentIndex]);
 
@@ -155,7 +82,19 @@ export const Group = () => {
 
   useEffect(() => {
     setCurrentGroupId(currentGroup ? currentGroup.id : null);
-  }, [currentGroup, setCurrentGroupId]);
+
+    if (currentGroup) {
+      void fetchGroupMembers(currentGroup.id);
+    }
+  }, [currentGroup, setCurrentGroupId, fetchGroupMembers]);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      incrementStudyingMembers();
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [incrementStudyingMembers]);
 
   const handlePrevGroup = () => {
     if (groups.length <= 1) {
@@ -222,8 +161,8 @@ export const Group = () => {
             </S.GroupNameBox>
           </S.GroupHeader>
           <S.MemberContent>
-            {MemberMockData.map(member => (
-              <S.MemberBox key={member.id} $isActive={member.isActive}>
+            {groupMembers.map(member => (
+              <S.MemberBox key={member.id} $isActive={member.isStudying}>
                 <S.FireIon />
                 <S.MemberTextBox>
                   <S.MemberName>{member.name}</S.MemberName>
