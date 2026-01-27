@@ -5,7 +5,7 @@ import {
 } from "@/entities/competition/model/my-competition/myCompetition.types";
 import { myCompetitionApi } from "@/entities/competition/api/my-competition/myCompetitionApi";
 
-// 날짜별 다릅다운
+// 날짜별 드롭다운
 const competitionDropDownValue = [
   { key: "TODAY", label: "오늘" },
   { key: "YESTERDAY", label: "어제" },
