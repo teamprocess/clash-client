@@ -1,61 +1,10 @@
 import { useState } from "react";
 import { Modal } from "@/shared/ui/modal/Modal";
-import { GROUP_TYPE } from "@/features/record/model/useGroup";
+import { GROUP_CATEGORY_LABELS } from "@/entities/group";
 import type { GroupFormModalProps } from "@/features/record/model/useGroup";
+import { useGroupList } from "@/features/record/model/useGroupList";
+import { getPageNumbers } from "@/shared/lib";
 import * as S from "./GroupFormModal.style";
-
-const MOCK_GROUPS = [
-  {
-    id: 1,
-    name: "프로세스",
-    description: "전국의 풍마들을 모아라!",
-    category: "반",
-    currentMembers: 32,
-    maxMembers: 50,
-  },
-  {
-    id: 2,
-    name: "프로세스",
-    description: "전국의 풍마들을 모아라!",
-    category: "반",
-    currentMembers: 32,
-    maxMembers: 50,
-  },
-  {
-    id: 3,
-    name: "프로세스",
-    description: "전국의 풍마들을 모아라!",
-    category: "반",
-    currentMembers: 32,
-    maxMembers: 50,
-  },
-  {
-    id: 4,
-    name: "프로세스",
-    description: "전국의 풍마들을 모아라!",
-    category: "반",
-    currentMembers: 32,
-    maxMembers: 50,
-  },
-  {
-    id: 5,
-    name: "프로세스",
-    description: "전국의 풍마들을 모아라!",
-    category: "반",
-    currentMembers: 32,
-    maxMembers: 50,
-  },
-  {
-    id: 6,
-    name: "프로세스",
-    description: "전국의 풍마들을 모아라!",
-    category: "반",
-    currentMembers: 32,
-    maxMembers: 50,
-  },
-];
-
-const CATEGORIES = ["전체", "반", "동아리", "팀", "나르샤"] as const;
 
 export const GroupFormModal = ({
   isOpen,
@@ -68,11 +17,20 @@ export const GroupFormModal = ({
   isJoining,
   selectedType,
   onTypeSelect,
+  selectedGroupId,
+  setSelectedGroupId,
 }: GroupFormModalProps) => {
-  const [activeTab, setActiveTab] = useState<"join" | "create">("create");
-  const [selectedCategory, setSelectedCategory] = useState<string>("전체");
-  const [currentPage, setCurrentPage] = useState(1);
-  const [selectedGroupId, setSelectedGroupId] = useState<number | null>(null);
+  const [activeTab, setActiveTab] = useState<"join" | "create">("join");
+  const {
+    groups,
+    pagination,
+    isLoading,
+    currentPage,
+    selectedCategory,
+    categoryOptions,
+    handlePageChange,
+    handleCategoryChange,
+  } = useGroupList();
 
   return (
     <Modal width={64} height={42} isOpen={isOpen} onClose={onClose} gap={3}>
@@ -90,68 +48,89 @@ export const GroupFormModal = ({
         {activeTab === "join" ? (
           <S.JoinContainer>
             <S.CategoryFilters>
-              {CATEGORIES.map(category => (
+              {categoryOptions.map(category => (
                 <S.CategoryButton
                   key={category}
                   $isActive={selectedCategory === category}
-                  onClick={() => setSelectedCategory(category)}
+                  onClick={() => handleCategoryChange(category)}
                 >
-                  {category}
+                  {category === "ALL" ? "전체" : GROUP_CATEGORY_LABELS[category]}
                 </S.CategoryButton>
               ))}
             </S.CategoryFilters>
 
             <S.GroupsWrapper>
               <S.Groups>
-                {MOCK_GROUPS.map(group => (
-                  <S.GroupContainer
-                    key={group.id}
-                    $isSelected={selectedGroupId === group.id}
-                    onClick={() => setSelectedGroupId(group.id)}
-                  >
-                    <S.GroupHeader>
-                      <S.GroupHeaderTextBox>
-                        <S.GroupBadge>{group.category}</S.GroupBadge>
-                        <S.GroupName>{group.name}</S.GroupName>
-                      </S.GroupHeaderTextBox>
-                      <S.GroupDescription>{group.description}</S.GroupDescription>
-                    </S.GroupHeader>
-                    <S.GroupFooter>
-                      <S.GroupMembers>
-                        <span>{group.currentMembers}</span> / {group.maxMembers}
-                      </S.GroupMembers>
-                      <S.GroupJoinButton
-                        onClick={e => {
-                          e.stopPropagation();
-                          onJoinSubmit();
-                        }}
-                        disabled={isJoining}
-                      >
-                        {isJoining ? "가입 중..." : "가입"}
-                      </S.GroupJoinButton>
-                    </S.GroupFooter>
-                  </S.GroupContainer>
-                ))}
+                {isLoading ? (
+                  <div>로딩 중...</div>
+                ) : groups.length === 0 ? (
+                  <div>그룹이 없습니다.</div>
+                ) : (
+                  groups.map(group => (
+                    <S.GroupContainer
+                      key={group.id}
+                      $isSelected={selectedGroupId === group.id}
+                      onClick={() => setSelectedGroupId(group.id)}
+                    >
+                      <S.GroupHeader>
+                        <S.GroupHeaderTextBox>
+                          <S.GroupBadge>{GROUP_CATEGORY_LABELS[group.category]}</S.GroupBadge>
+                          <S.GroupName>{group.name}</S.GroupName>
+                        </S.GroupHeaderTextBox>
+                        <S.GroupDescription>{group.description}</S.GroupDescription>
+                      </S.GroupHeader>
+                      <S.GroupFooter>
+                        <S.GroupMembers>
+                          <span>{group.currentMemberCount}</span> / {group.maxMembers}
+                        </S.GroupMembers>
+                        <S.GroupJoinButton
+                          onClick={async e => {
+                            e.stopPropagation();
+                            if (group.passwordRequired) {
+                              const password = prompt("비밀번호를 입력하세요:");
+                              if (password) {
+                                await onJoinSubmit(group.id, password);
+                              }
+                            } else {
+                              await onJoinSubmit(group.id);
+                            }
+                          }}
+                          disabled={isJoining || group.isMember}
+                        >
+                          {group.isMember ? "가입됨" : isJoining ? "가입 중..." : "가입"}
+                        </S.GroupJoinButton>
+                      </S.GroupFooter>
+                    </S.GroupContainer>
+                  ))
+                )}
               </S.Groups>
             </S.GroupsWrapper>
 
-            <S.Pagination>
-              <S.PageButton disabled={currentPage === 1} onClick={() => setCurrentPage(p => p - 1)}>
-                ◀
-              </S.PageButton>
-              {[1, 2, 3, 4, 5].map(page => (
+            {pagination && (
+              <S.Pagination>
                 <S.PageButton
-                  key={page}
-                  $isActive={currentPage === page}
-                  onClick={() => setCurrentPage(page)}
+                  disabled={!pagination.hasPrevious}
+                  onClick={() => handlePageChange(currentPage - 1)}
                 >
-                  {page}
+                  ◀
                 </S.PageButton>
-              ))}
-              <S.PageButton disabled={currentPage === 5} onClick={() => setCurrentPage(p => p + 1)}>
-                ▶
-              </S.PageButton>
-            </S.Pagination>
+                {getPageNumbers(currentPage, pagination.totalPages).map(page => (
+                  <S.PageButton
+                    key={page}
+                    $isActive={currentPage === page}
+                    onClick={() => handlePageChange(page)}
+                  >
+                    {page}
+                  </S.PageButton>
+                ))}
+                <S.PageButton
+                  disabled={!pagination.hasNext}
+                  onClick={() => handlePageChange(currentPage + 1)}
+                >
+                  ▶
+                </S.PageButton>
+              </S.Pagination>
+            )}
           </S.JoinContainer>
         ) : (
           <S.FormContainer as="form" onSubmit={onCreateSubmit}>
@@ -186,38 +165,38 @@ export const GroupFormModal = ({
                   <S.SlideButtonBox>
                     <S.SlideButton
                       type="button"
-                      $isActive={selectedType === GROUP_TYPE.CLUB}
-                      onClick={() => onTypeSelect(GROUP_TYPE.CLUB)}
+                      $isActive={selectedType === "CLUB"}
+                      onClick={() => onTypeSelect("CLUB")}
                     >
-                      {GROUP_TYPE.CLUB}
+                      {GROUP_CATEGORY_LABELS.CLUB}
                     </S.SlideButton>
                     <S.SlideButton
                       type="button"
-                      $isActive={selectedType === GROUP_TYPE.CLASS}
-                      onClick={() => onTypeSelect(GROUP_TYPE.CLASS)}
+                      $isActive={selectedType === "CLASS"}
+                      onClick={() => onTypeSelect("CLASS")}
                     >
-                      {GROUP_TYPE.CLASS}
+                      {GROUP_CATEGORY_LABELS.CLASS}
                     </S.SlideButton>
                     <S.SlideButton
                       type="button"
-                      $isActive={selectedType === GROUP_TYPE.TEAM}
-                      onClick={() => onTypeSelect(GROUP_TYPE.TEAM)}
+                      $isActive={selectedType === "TEAM"}
+                      onClick={() => onTypeSelect("TEAM")}
                     >
-                      {GROUP_TYPE.TEAM}
+                      {GROUP_CATEGORY_LABELS.TEAM}
                     </S.SlideButton>
                     <S.SlideButton
                       type="button"
-                      $isActive={selectedType === GROUP_TYPE.NARSHA}
-                      onClick={() => onTypeSelect(GROUP_TYPE.NARSHA)}
+                      $isActive={selectedType === "NARSHA"}
+                      onClick={() => onTypeSelect("NARSHA")}
                     >
-                      {GROUP_TYPE.NARSHA}
+                      {GROUP_CATEGORY_LABELS.NARSHA}
                     </S.SlideButton>
                     <S.SlideButton
                       type="button"
-                      $isActive={selectedType === GROUP_TYPE.ETC}
-                      onClick={() => onTypeSelect(GROUP_TYPE.ETC)}
+                      $isActive={selectedType === "ETC"}
+                      onClick={() => onTypeSelect("ETC")}
                     >
-                      {GROUP_TYPE.ETC}
+                      {GROUP_CATEGORY_LABELS.ETC}
                     </S.SlideButton>
                   </S.SlideButtonBox>
                   {createErrors.type && <S.ErrorText>{createErrors.type.message}</S.ErrorText>}

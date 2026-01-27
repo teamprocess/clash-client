@@ -8,6 +8,7 @@ export const ModalContent = styled.div`
   gap: 1.5rem;
   padding: 1rem;
   height: 100%;
+  width: 100%;
 `;
 
 export const Tabs = styled.div`
@@ -192,6 +193,7 @@ export const GroupBadge = styled.span`
   ${font.body.medium};
   padding: 0.1rem 1rem;
   border-radius: 1rem;
+  min-width: fit-content;
   background-color: ${({ theme }) => theme.label.alternative};
   color: ${({ theme }) => theme.label.disable};
   cursor: pointer;
@@ -268,7 +270,7 @@ export const JoinContainer = styled.div`
   justify-content: space-between;
   height: 100%;
   gap: 1rem;
-  padding: 1rem;
+  padding: 0 1rem 1rem 1rem;
 `;
 
 export const GroupsWrapper = styled.div`
