@@ -22,19 +22,3 @@ export interface getAllSectionsResponse {
   sections: section[];
   categories: string[];
 }
-
-export interface getMyProfileResponse {
-  id: number;
-  createdAt: string;
-  updatedAt: string;
-  username: string;
-  name: string;
-  email: string;
-  role: string;
-  profileImage: string;
-  totalExp: number;
-  totalCookie: number;
-  totalToken: number;
-  major: string;
-  userStatus: string;
-}
