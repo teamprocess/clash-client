@@ -1,5 +1,5 @@
 import { Modal } from "@/shared/ui/modal/Modal";
-import { GROUP_TYPE } from "@/features/record/model/useGroup";
+import { GROUP_CATEGORY_LABELS } from "@/entities/group";
 import type { GroupEditModalProps } from "@/features/record/model/useGroup";
 import * as S from "./GroupEditModal.style";
 
@@ -50,38 +50,38 @@ export const GroupEditModal = ({
                 <S.SlideButtonBox>
                   <S.SlideButton
                     type="button"
-                    $isActive={selectedType === GROUP_TYPE.CLUB}
-                    onClick={() => onTypeSelect(GROUP_TYPE.CLUB)}
+                    $isActive={selectedType === "CLUB"}
+                    onClick={() => onTypeSelect("CLUB")}
                   >
-                    {GROUP_TYPE.CLUB}
+                    {GROUP_CATEGORY_LABELS.CLUB}
                   </S.SlideButton>
                   <S.SlideButton
                     type="button"
-                    $isActive={selectedType === GROUP_TYPE.CLASS}
-                    onClick={() => onTypeSelect(GROUP_TYPE.CLASS)}
+                    $isActive={selectedType === "CLASS"}
+                    onClick={() => onTypeSelect("CLASS")}
                   >
-                    {GROUP_TYPE.CLASS}
+                    {GROUP_CATEGORY_LABELS.CLASS}
                   </S.SlideButton>
                   <S.SlideButton
                     type="button"
-                    $isActive={selectedType === GROUP_TYPE.TEAM}
-                    onClick={() => onTypeSelect(GROUP_TYPE.TEAM)}
+                    $isActive={selectedType === "TEAM"}
+                    onClick={() => onTypeSelect("TEAM")}
                   >
-                    {GROUP_TYPE.TEAM}
+                    {GROUP_CATEGORY_LABELS.TEAM}
                   </S.SlideButton>
                   <S.SlideButton
                     type="button"
-                    $isActive={selectedType === GROUP_TYPE.NARSHA}
-                    onClick={() => onTypeSelect(GROUP_TYPE.NARSHA)}
+                    $isActive={selectedType === "NARSHA"}
+                    onClick={() => onTypeSelect("NARSHA")}
                   >
-                    {GROUP_TYPE.NARSHA}
+                    {GROUP_CATEGORY_LABELS.NARSHA}
                   </S.SlideButton>
                   <S.SlideButton
                     type="button"
-                    $isActive={selectedType === GROUP_TYPE.ETC}
-                    onClick={() => onTypeSelect(GROUP_TYPE.ETC)}
+                    $isActive={selectedType === "ETC"}
+                    onClick={() => onTypeSelect("ETC")}
                   >
-                    {GROUP_TYPE.ETC}
+                    {GROUP_CATEGORY_LABELS.ETC}
                   </S.SlideButton>
                 </S.SlideButtonBox>
                 {errors.type && <S.ErrorText>{errors.type.message}</S.ErrorText>}
