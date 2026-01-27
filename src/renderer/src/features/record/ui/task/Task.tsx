@@ -1,5 +1,5 @@
 import * as S from "./Task.style";
-import { formatTime } from "@/shared/lib/formatTime";
+import { formatTime } from "@/shared/lib";
 import { useTaskList } from "../../model/useTaskList";
 import { Modal } from "@/shared/ui/modal/Modal";
 

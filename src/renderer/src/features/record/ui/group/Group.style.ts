@@ -3,6 +3,7 @@ import { font } from "@/shared/config/font";
 import Arrow from "../../assets/arrow.svg";
 import Fire from "../../assets/fire.svg";
 import Plus from "../../assets/plus.svg";
+import More from "../../assets/more.svg";
 
 export const GroupContainer = styled.div`
   display: flex;
@@ -116,8 +117,68 @@ export const MemberTextBox = styled.div`
   gap: 0.25rem;
 `;
 
-export const PlusIcon = styled(Plus)`
+export const PlusIconWrapper = styled.button`
   position: absolute;
   bottom: 1.5rem;
   right: 1.5rem;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+export const PlusIcon = styled(Plus)``;
+
+export const MoreIcon = styled(More)`
+  cursor: pointer;
+`;
+
+export const MoreIconWrapper = styled.div`
+  position: relative;
+`;
+
+export const DropdownMenu = styled.div`
+  position: absolute;
+  top: 100%;
+  width: 7rem;
+  right: 0;
+  margin-top: 0.5rem;
+  background-color: ${({ theme }) => theme.label.disable};
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  z-index: 10;
+`;
+
+export const MenuItem = styled.button`
+  display: block;
+  width: 100%;
+  padding: 0.75rem 1.5rem;
+  text-align: left;
+  background: none;
+  border: none;
+  ${font.body.regular};
+  color: ${({ theme }) => theme.label.normal};
+  cursor: pointer;
+
+  &:hover {
+    background-color: ${({ theme }) => theme.fill.alternative};
+  }
+
+  &:not(:last-child) {
+    border-bottom: 1px solid ${({ theme }) => theme.line.normal};
+  }
+`;
+
+export const IconButton = styled.button`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
 `;

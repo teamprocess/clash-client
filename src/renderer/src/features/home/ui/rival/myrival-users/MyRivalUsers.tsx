@@ -1,5 +1,6 @@
 import * as S from "@/features/home/ui/rival/Rival.style";
-import { RivalsProps } from "@/features/home/model/useHome"; // 단독 props
+import { RivalsProps } from "@/features/home/model/useHome";
+import { formatTime } from "@/shared/lib"; // 단독 props
 
 export const MyRivalUsers = ({ user, getStatus }: RivalsProps) => {
   return (
@@ -19,7 +20,7 @@ export const MyRivalUsers = ({ user, getStatus }: RivalsProps) => {
           <S.UsingApp />
           <S.UsingAppText>{user.using_app}</S.UsingAppText>
         </S.UsingAppContainer>
-        <S.ActiveTime $status={user.status}>{user.active_time}</S.ActiveTime>
+        <S.ActiveTime $status={user.status}>{formatTime(user.active_time)}</S.ActiveTime>
       </S.ActiveBox>
     </S.ProfileContainer>
   );
