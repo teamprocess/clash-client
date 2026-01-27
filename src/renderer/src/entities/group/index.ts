@@ -1,9 +1,4 @@
 export { groupApi } from "./api/groupApi";
-export {
-  GROUP_CATEGORIES,
-  GROUP_CATEGORY_FILTERS,
-  GROUP_CATEGORY_LABELS,
-} from "./model/groupCategory";
 export type {
   Owner,
   Group,
@@ -14,5 +9,10 @@ export type {
   JoinGroupRequest,
   GroupMember,
   GetGroupActivityResponse,
-} from "./api/groupApi";
+} from "./model/group.types";
+export {
+  GROUP_CATEGORIES,
+  GROUP_CATEGORY_FILTERS,
+  GROUP_CATEGORY_LABELS,
+} from "./model/groupCategory";
 export type { GroupCategory, GroupCategoryFilter } from "./model/groupCategory";

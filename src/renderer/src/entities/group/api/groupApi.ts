@@ -1,66 +1,14 @@
 import { api } from "@/shared/api/axios";
-import type { ApiResponse, Pagination } from "@/shared/api/types";
-import type { GroupCategory, GroupCategoryFilter } from "@/entities/group/model/groupCategory";
-
-export interface Owner {
-  id: number;
-  name: string;
-}
-
-export interface Group {
-  id: number;
-  name: string;
-  description: string;
-  maxMembers: number;
-  currentMemberCount: number;
-  category: GroupCategory;
-  passwordRequired: boolean;
-  owner: Owner;
-  isMember: boolean;
-}
-
-export interface GetAllGroupsResponse {
-  pagination: Pagination;
-  groups: Group[];
-}
-
-export interface CreateGroupRequest {
-  name: string;
-  description: string;
-  maxMembers: number;
-  category: GroupCategory;
-  passwordRequired: boolean;
-  password?: string;
-}
-
-export interface JoinGroupRequest {
-  password?: string;
-}
-
-export interface GetGroupDetailResponse {
-  group: Group;
-}
-
-export interface UpdateGroupRequest {
-  name: string;
-  description: string;
-  maxMembers: number;
-  category: GroupCategory;
-  passwordRequired: boolean;
-  password?: string;
-}
-
-export interface GroupMember {
-  id: number;
-  name: string;
-  studyTime: number;
-  isStudying: boolean;
-}
-
-export interface GetGroupActivityResponse {
-  pagination: Pagination;
-  members: GroupMember[];
-}
+import type { ApiResponse } from "@/shared/api/types";
+import type { GroupCategoryFilter } from "@/entities/group/model/groupCategory";
+import type {
+  CreateGroupRequest,
+  GetAllGroupsResponse,
+  GetGroupActivityResponse,
+  GetGroupDetailResponse,
+  JoinGroupRequest,
+  UpdateGroupRequest,
+} from "@/entities/group/model/group.types";
 
 export const groupApi = {
   // 그룹 목록 조회
