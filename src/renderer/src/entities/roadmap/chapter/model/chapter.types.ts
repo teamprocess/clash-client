@@ -30,3 +30,22 @@ export interface Stage {
   totalMissions: number;
   missions: Mission[];
 }
+
+export interface GetSectionDetailsRequest {
+  sectionId: number;
+}
+
+export interface GetChapterDetailsRequest {
+  chapterId: number;
+}
+
+export interface GetChapterDetailsResponse {
+  chapterId: number;
+  title: string;
+  description: string;
+  currentMissionId: number;
+  currentQuestionId: number;
+  currentQuestionIndex: number;
+  totalQuestions: number;
+  missions: Mission[] | [];
+}
