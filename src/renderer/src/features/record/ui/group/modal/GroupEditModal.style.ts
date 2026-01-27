@@ -58,11 +58,6 @@ export const InputBox = styled.div`
   flex: 1;
 `;
 
-export const Label = styled.label`
-  color: ${({ theme }) => theme.label.normal};
-  ${font.headline2.medium};
-`;
-
 export const Input = styled.input`
   color: ${({ theme }) => theme.label.normal};
   background-color: ${({ theme }) => theme.label.disable};
@@ -75,6 +70,41 @@ export const Input = styled.input`
   border-radius: 0.5rem;
 
   &::placeholder {
+    color: ${({ theme }) => theme.label.assistive};
+  }
+`;
+
+export const Label = styled.label`
+  color: ${({ theme }) => theme.label.normal};
+  ${font.headline2.medium};
+`;
+
+export const PasswordInputWrapper = styled.div`
+  position: relative;
+  width: 100%;
+
+  ${Input} {
+    padding-right: 6.5rem;
+  }
+`;
+
+export const PasswordChangeButtonInside = styled.button`
+  position: absolute;
+  right: 0.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  ${font.label.medium};
+  color: ${({ theme }) => theme.label.normal};
+  background: ${({ theme }) => theme.primary.normal};
+  border: none;
+  padding: 0.35rem 0.6rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  min-width: 4.5rem;
+
+  &:disabled {
+    cursor: default;
+    background: ${({ theme }) => theme.line.normal};
     color: ${({ theme }) => theme.label.assistive};
   }
 `;
