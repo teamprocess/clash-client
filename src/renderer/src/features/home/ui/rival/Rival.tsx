@@ -2,6 +2,7 @@ import * as S from "./Rival.style";
 import { RivalProps } from "@/features/home/model/useRival";
 import { MyRivalUsers } from "@/features/home/ui/rival/myrival-users/MyRivalUsers";
 import { Modal } from "@/shared/ui/modal/Modal";
+import { Link } from "react-router-dom";
 
 export const Rival = ({
   userList,
@@ -19,10 +20,12 @@ export const Rival = ({
     <S.RivalContainer>
       <S.TitleBox>
         <S.Title>내 라이벌</S.Title>
-        <S.ArrowBox onClick={handleOpen} style={{ cursor: "pointer" }}>
-          자세히보기
-          <S.DetailArrowIcon />
-        </S.ArrowBox>
+        <Link to="/competition">
+          <S.ArrowBox style={{ cursor: "pointer" }}>
+            자세히보기
+            <S.DetailArrowIcon />
+          </S.ArrowBox>
+        </Link>
       </S.TitleBox>
 
       <S.RivalBox>
