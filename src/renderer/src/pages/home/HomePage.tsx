@@ -4,9 +4,13 @@ import { Rival } from "@/features/home/ui/rival/Rival";
 import { Active } from "@/features/home/ui/active/Active";
 import { Ranking } from "@/features/home/ui/ranking/Ranking";
 import { useHome } from "@/features/home/model/useHome";
+import { useTransition } from "@/features/home/model/useTransition";
+import { useRanking } from "@/features/home/model/useRanking";
 
 export const HomePage = () => {
-  const { transition, rival, active, ranking } = useHome();
+  const { rival, active } = useHome();
+  const { transition } = useTransition();
+  const { ranking } = useRanking();
 
   return (
     <S.HomeContainer>

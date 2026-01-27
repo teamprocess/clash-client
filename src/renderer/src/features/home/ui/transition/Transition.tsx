@@ -1,14 +1,9 @@
 import * as S from "./Transition.style";
-import { TransitionProps } from "@/features/home/model/useHome";
 import { Link } from "react-router-dom";
 import { formatTime } from "@/shared/lib";
+import { TransitionProps } from "@/features/home/model/useTransition";
 
-export const Transition = ({
-  activeTransitionData,
-  commitTransitionData,
-  transitionMaxCommit,
-  maxActive,
-}: TransitionProps) => {
+export const Transition = ({ transitionData, maxActive, maxContributors }: TransitionProps) => {
   return (
     <S.TransitionContainer>
       <S.TitleBox>
@@ -27,16 +22,22 @@ export const Transition = ({
             <S.InfoBox>
               <S.GraphBox>
                 <S.Bars>
-                  <S.Value value={activeTransitionData.yesterday} max={maxActive}>
-                    {formatTime(activeTransitionData.yesterday)}
+                  <S.Value
+                    value={transitionData?.activeTime.yesterdayActiveTime ?? 0}
+                    max={maxActive}
+                  >
+                    {formatTime(transitionData?.activeTime.yesterdayActiveTime ?? 0)}
                   </S.Value>
-                  <S.Bar value={activeTransitionData.yesterday} max={maxActive} />
+                  <S.Bar
+                    value={transitionData?.activeTime.yesterdayActiveTime ?? 0}
+                    max={maxActive}
+                  />
                 </S.Bars>
                 <S.Bars>
-                  <S.Value value={activeTransitionData.today} max={maxActive}>
-                    {formatTime(activeTransitionData.today)}
+                  <S.Value value={transitionData?.activeTime.todayActiveTime ?? 0} max={maxActive}>
+                    {transitionData?.activeTime.todayActiveTime ?? 0}
                   </S.Value>
-                  <S.Bar value={activeTransitionData.today} max={maxActive} />
+                  <S.Bar value={transitionData?.activeTime.todayActiveTime ?? 0} max={maxActive} />
                 </S.Bars>
               </S.GraphBox>
               <S.Line />
@@ -52,16 +53,28 @@ export const Transition = ({
             <S.InfoBox>
               <S.GraphBox>
                 <S.Bars>
-                  <S.Value value={commitTransitionData.yesterday} max={transitionMaxCommit}>
-                    {commitTransitionData.yesterday}
+                  <S.Value
+                    value={transitionData?.contributors.yesterdayContributors ?? 0}
+                    max={maxContributors}
+                  >
+                    {transitionData?.contributors.yesterdayContributors ?? 0}
                   </S.Value>
-                  <S.Bar value={commitTransitionData.yesterday} max={transitionMaxCommit} />
+                  <S.Bar
+                    value={transitionData?.contributors.yesterdayContributors ?? 0}
+                    max={maxContributors}
+                  />
                 </S.Bars>
                 <S.Bars>
-                  <S.Value value={commitTransitionData.today} max={transitionMaxCommit}>
-                    {commitTransitionData.today}
+                  <S.Value
+                    value={transitionData?.contributors.todayContributors ?? 0}
+                    max={maxContributors}
+                  >
+                    {transitionData?.contributors.todayContributors ?? 0}
                   </S.Value>
-                  <S.Bar value={commitTransitionData.today} max={transitionMaxCommit} />
+                  <S.Bar
+                    value={transitionData?.contributors.todayContributors ?? 0}
+                    max={maxContributors}
+                  />
                 </S.Bars>
               </S.GraphBox>
               <S.Line />
