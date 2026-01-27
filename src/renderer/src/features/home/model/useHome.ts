@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from "react";
+import { RankingItem } from "@/entities/home/model/useRanking.types";
 
 // Transition
 interface transitionData {
@@ -46,7 +47,6 @@ const months: { id: number; commit_count: number }[] = [
 ];
 
 // Rival
-
 export interface RivalUser {
   name: string;
   username: string;
@@ -115,8 +115,9 @@ type User = {
 };
 
 export interface UserRankingProps {
-  user: User;
+  user: RankingItem;
   rank: number;
+  isRival: boolean;
   isSticky?: boolean;
 }
 
