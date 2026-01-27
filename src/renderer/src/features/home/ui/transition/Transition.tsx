@@ -1,6 +1,7 @@
 import * as S from "./Transition.style";
 import { TransitionProps } from "@/features/home/model/useHome";
 import { Link } from "react-router-dom";
+import { formatTime } from "@/shared/lib";
 
 export const Transition = ({
   activeTransitionData,
@@ -27,13 +28,13 @@ export const Transition = ({
               <S.GraphBox>
                 <S.Bars>
                   <S.Value value={activeTransitionData.yesterday} max={maxActive}>
-                    {activeTransitionData.yesterday}
+                    {formatTime(activeTransitionData.yesterday)}
                   </S.Value>
                   <S.Bar value={activeTransitionData.yesterday} max={maxActive} />
                 </S.Bars>
                 <S.Bars>
                   <S.Value value={activeTransitionData.today} max={maxActive}>
-                    {activeTransitionData.today}
+                    {formatTime(activeTransitionData.today)}
                   </S.Value>
                   <S.Bar value={activeTransitionData.today} max={maxActive} />
                 </S.Bars>
