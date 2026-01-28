@@ -1,13 +1,26 @@
 import { useEffect, useState } from "react";
 import { myRivalsApi } from "@/entities/competition/api/rival-competition/myRivalsApi";
-import { MyRivalsResponse } from "@/entities/competition/model/rival-competition/myRivals.types";
-import { risvalApi } from "@/entities/home/api/rivalApi";
 import {
-  UserStatus,
-  USER_STATUS,
-  StatusType,
-  UsersResponse,
-} from "@/entities/home/model/useRival.types";
+  MyRivalsRequest,
+  MyRivalsResponse,
+} from "@/entities/competition/model/rival-competition/myRivals.types";
+import { risvalApi } from "@/entities/home/api/rivalApi";
+import { UsersResponse } from "@/entities/home/model/useRival.types";
+
+export interface MyRivalItem {
+  user: MyRivalsRequest;
+  getStatus: (status: UserStatus) => StatusType;
+}
+
+const USER_STATUS = {
+  ONLINE: "ONLINE",
+  AWAY: "AWAY",
+  OFFLINE: "OFFLINE",
+} as const;
+
+type UserStatus = (typeof USER_STATUS)[keyof typeof USER_STATUS];
+
+type StatusType = "온라인" | "자리비움" | "오프라인" | "";
 
 export const useRival = () => {
   const [rivalsData, setRivalsData] = useState<MyRivalsResponse | null>(null);

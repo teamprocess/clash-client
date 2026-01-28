@@ -22,7 +22,6 @@ export const useRanking = () => {
 
   const rankingDropDownValue = [
     { key: "GITHUB", label: "Github" },
-    { key: "SOLVED_AC", label: "solved.ac" },
     { key: "EXP", label: "EXP" },
     { key: "ACTIVE_TIME", label: "총 학습 시간" },
   ];
