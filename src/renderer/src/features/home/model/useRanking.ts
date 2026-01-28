@@ -121,22 +121,17 @@ export const useRanking = () => {
   }, [currentUser]);
 
   return {
-    ranking: {
-      RankingDropdown,
-      setRankingDropdown,
-      RankingPeriodDropdown,
-      setRankingPeriodDropdown,
-      rankingDropDownValue,
-      rankingPeriodDropDownValue,
-      wrapperRef,
-      currentUserRef,
-      userList,
-      stickyState,
-      currentUser,
-      currentUserRank,
-    },
+    RankingDropdown,
+    setRankingDropdown,
+    RankingPeriodDropdown,
+    setRankingPeriodDropdown,
+    rankingDropDownValue,
+    rankingPeriodDropDownValue,
+    wrapperRef,
+    currentUserRef,
+    userList,
+    stickyState,
+    currentUser,
+    currentUserRank,
   };
 };
-
-export type UseRankingReturn = ReturnType<typeof useRanking>;
-export type RankingProps = UseRankingReturn["ranking"];
