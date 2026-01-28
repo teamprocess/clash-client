@@ -121,21 +121,16 @@ export const useRival = () => {
   };
 
   return {
-    rivals: {
-      userList,
-      rivalsData,
-      getStatus,
-      modalOpen,
-      setModalOpen,
-      handleOpen,
-      handleClose,
-      rivalSelectedId,
-      handleUserSelect,
-      handleModalClose,
-      handleRivalCreate,
-    },
+    userList,
+    rivalsData,
+    getStatus,
+    modalOpen,
+    setModalOpen,
+    handleOpen,
+    handleClose,
+    rivalSelectedId,
+    handleUserSelect,
+    handleModalClose,
+    handleRivalCreate,
   };
 };
-
-export type UseRivalReturn = ReturnType<typeof useRival>;
-export type RivalProps = UseRivalReturn["rivals"];

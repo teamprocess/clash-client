@@ -42,7 +42,7 @@ export const Github = ({ today, yesterday }: CompareResponse) => {
                 <S.CalculateInfoBox>
                   <S.TimeIcon />
                   <S.ExplainText>
-                    첫커밋 <S.TimeText>{yesterday.commit.firstCommit.slice(0, 10)}</S.TimeText> ·
+                    첫 커밋 <S.TimeText>{yesterday.commit.firstCommit.slice(0, 10)}</S.TimeText> ·
                     마지막 커밋 <S.TimeText>{yesterday.commit.lastCommit.slice(0, 10)}</S.TimeText>
                   </S.ExplainText>
                 </S.CalculateInfoBox>
@@ -108,8 +108,6 @@ export const Github = ({ today, yesterday }: CompareResponse) => {
         </S.InfoContainer>
       </S.Content>
 
-      {/* 분간 */}
-
       <S.Content>
         <S.SubtitleBox>
           <S.Subtitle>오늘</S.Subtitle>
@@ -152,8 +150,8 @@ export const Github = ({ today, yesterday }: CompareResponse) => {
                 <S.CalculateInfoBox>
                   <S.TimeIcon />
                   <S.ExplainText>
-                    첫커밋 <S.TimeText>{today.commit.firstCommit.slice(0, 10)}</S.TimeText> · 마지막
-                    커밋 <S.TimeText>{today.commit.lastCommit.slice(0, 10)}</S.TimeText>
+                    첫 커밋 <S.TimeText>{today.commit.firstCommit.slice(0, 10)}</S.TimeText> ·
+                    마지막 커밋 <S.TimeText>{today.commit.lastCommit.slice(0, 10)}</S.TimeText>
                   </S.ExplainText>
                 </S.CalculateInfoBox>
               </S.CalculateContainer>

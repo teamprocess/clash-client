@@ -3,22 +3,16 @@ import { Transition } from "@/features/home/ui/transition/Transition";
 import { Rival } from "@/features/home/ui/rival/Rival";
 import { Active } from "@/features/home/ui/active/Active";
 import { Ranking } from "@/features/home/ui/ranking/Ranking";
-import { useTransition } from "@/features/home/model/useTransition";
 import { useRanking } from "@/features/home/model/useRanking";
-import { useRival } from "@/features/home/model/useRival";
-import { useActive } from "@/features/home/model/useActive";
 
 export const HomePage = () => {
-  const { transition } = useTransition();
   const { ranking } = useRanking();
-  const { rivals } = useRival();
-  const { active } = useActive();
 
   return (
     <S.HomeContainer>
-      <Transition {...transition} />
-      <Rival {...rivals} />
-      <Active {...active} />
+      <Transition />
+      <Rival />
+      <Active />
       <Ranking {...ranking} />
     </S.HomeContainer>
   );

@@ -48,16 +48,11 @@ export const useActive = () => {
   const variations = activeData?.variations ?? [];
 
   return {
-    active: {
-      activeData,
-      activeDropDownValue,
-      activeDropdown,
-      setActiveDropdown,
-      getLevel,
-      variations,
-    },
+    activeData,
+    activeDropDownValue,
+    activeDropdown,
+    setActiveDropdown,
+    getLevel,
+    variations,
   };
 };
-
-export type UseActiveReturn = ReturnType<typeof useActive>;
-export type ActiveProps = UseActiveReturn["active"];
