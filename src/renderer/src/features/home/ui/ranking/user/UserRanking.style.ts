@@ -4,9 +4,9 @@ import { font } from "@/shared/config/font";
 import { palette } from "@/shared/config/theme";
 
 export const UserContainer = styled.div<{ $sticky?: boolean }>`
-  padding: 0.5rem;
+  padding: 1rem;
   width: 100%;
-  height: 3.75rem;
+  height: 4rem;
   border-bottom: 1px solid ${({ theme }) => theme.line.alternative};
   display: flex;
   flex-direction: row;
