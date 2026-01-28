@@ -2,8 +2,20 @@ import { useEffect, useState } from "react";
 import { myRivalsApi } from "@/entities/competition/api/rival-competition/myRivalsApi";
 import { MyRivalsResponse } from "@/entities/competition/model/rival-competition/myRivals.types";
 
-// 필요 있는지에 대해 판단중인 주석
-// export type UserStatus = "ONLINE" | "AWAY" | "OFFLINE";
+export type UserStatus = "ONLINE" | "AWAY" | "OFFLINE";
+
+export const getStatus = (status: UserStatus) => {
+  switch (status) {
+    case "ONLINE":
+      return "온라인";
+    case "AWAY":
+      return "자리비움";
+    case "OFFLINE":
+      return "오프라인";
+    default:
+      return "";
+  }
+};
 
 export const useMyRivals = () => {
   const [myRivalsData, setMyRivalsData] = useState<MyRivalsResponse | null>(null);
