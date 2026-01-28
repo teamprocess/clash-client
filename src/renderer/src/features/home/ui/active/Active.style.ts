@@ -13,7 +13,6 @@ export const ActiveContainer = styled.div`
   background-color: ${({ theme }) => theme.background.normal};
 `;
 
-// 상단 타이틀 박스
 export const TitleBox = styled.div`
   width: 100%;
   display: flex;
@@ -34,7 +33,6 @@ export const ArrowIcon = styled(Arrow)`
   height: 0.75rem;
 `;
 
-// 글자와 그래프의 경계선
 export const Line = styled.div`
   width: 100%;
   height: 1px;
@@ -48,7 +46,6 @@ export const SelectWrapper = styled.div`
   position: relative;
 `;
 
-//드랍다운
 export const Select = styled.select`
   ${font.body.regular};
   width: 7.5rem;
@@ -68,7 +65,6 @@ export const Select = styled.select`
   }
 `;
 
-// 작동안되는 option 메소드 (브라우저에서 방해)
 export const Option = styled.option`
   ${font.body.regular};
   background-color: ${({ theme }) => theme.line.neutral};
@@ -82,15 +78,15 @@ export const StreakContainer = styled.div`
   justify-content: space-around;
 `;
 
-// 잔디수-Streak
 export const StreakBox = styled.div`
   min-width: 100%;
+  height: 100%;
   max-width: 33.125rem;
-  gap: 0.5rem;
 `;
 
 export const StreakTitle = styled.p`
   ${font.headline2.bold}
+  color: ${({ theme }) => theme.label.normal};
 `;
 
 export const GrassBox = styled.div`
@@ -107,6 +103,7 @@ export const Grid = styled.div`
   gap: 4px;
 `;
 
+// 고정 잔디색 (깃허브 기준)
 export const Grass = styled.div<{ $level: number }>`
   width: 0.75rem;
   height: 0.75rem;

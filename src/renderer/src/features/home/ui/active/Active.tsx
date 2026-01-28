@@ -1,11 +1,13 @@
 import * as S from "./Active.style";
-import { ActiveProps } from "@/features/home/model/useHome";
+import { ActiveProps } from "@/features/home/model/useActive";
+import { CategoryType } from "@/entities/home/model/useRanking.types";
 
 export const Active = ({
-  commitDays,
+  activeData,
   months,
   activeMaxCommit,
-  ActiveDropdown,
+  activeDropDownValue,
+  activeDropdown,
   setActiveDropdown,
   getLevel,
 }: ActiveProps) => {
@@ -14,10 +16,13 @@ export const Active = ({
       <S.TitleBox>
         <S.Title>내 활동 분석</S.Title>
         <S.SelectWrapper>
-          <S.Select value={ActiveDropdown} onChange={e => setActiveDropdown(e.target.value)}>
-            {["Github", "solved.ac"].map(option => (
-              <S.Option key={option} value={option}>
-                {option}
+          <S.Select
+            value={activeDropdown}
+            onChange={e => setActiveDropdown(e.target.value as CategoryType)}
+          >
+            {activeDropDownValue.map(option => (
+              <S.Option key={option.key} value={option.key}>
+                {option.label}
               </S.Option>
             ))}
           </S.Select>
@@ -30,8 +35,8 @@ export const Active = ({
           <S.StreakTitle>스트릭</S.StreakTitle>
           <S.GrassBox>
             <S.Grid>
-              {commitDays.map(day => (
-                <S.Grass key={day.id} $level={getLevel(day.count)} />
+              {activeData?.streaks.map(day => (
+                <S.Grass key={day.date} $level={getLevel(day.detailedInfo)} />
               ))}
             </S.Grid>
           </S.GrassBox>
