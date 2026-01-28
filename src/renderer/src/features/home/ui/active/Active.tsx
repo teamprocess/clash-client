@@ -1,16 +1,19 @@
 import * as S from "./Active.style";
 import { ActiveProps } from "@/features/home/model/useActive";
 import { CategoryType } from "@/entities/home/model/useRanking.types";
+import { ActiveLineChart } from "@/features/home/model/ActiveChart";
+import { toLineChartData } from "@/features/home/model/lineChartData";
 
 export const Active = ({
   activeData,
-  months,
-  activeMaxCommit,
   activeDropDownValue,
   activeDropdown,
   setActiveDropdown,
   getLevel,
+  variations,
 }: ActiveProps) => {
+  const chartData = toLineChartData(variations);
+
   return (
     <S.ActiveContainer>
       <S.TitleBox>
@@ -43,19 +46,9 @@ export const Active = ({
         </S.StreakBox>
         <S.StreakBox>
           <S.StreakTitle>Contributes 변화 추이</S.StreakTitle>
-          <S.GraphBox>
-            <S.Bars>
-              {months.map(({ id, commit_count }) => (
-                <S.BarWrapper key={id}>
-                  <S.BarValue>{commit_count}</S.BarValue>
-
-                  <S.Bar $ratio={commit_count / activeMaxCommit} />
-
-                  <S.BarLabel>{id}월</S.BarLabel>
-                </S.BarWrapper>
-              ))}
-            </S.Bars>
-          </S.GraphBox>
+          <S.ChartWrapper>
+            <ActiveLineChart data={chartData.data}></ActiveLineChart>
+          </S.ChartWrapper>
         </S.StreakBox>
       </S.StreakContainer>
     </S.ActiveContainer>

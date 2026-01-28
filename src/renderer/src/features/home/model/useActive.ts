@@ -70,6 +70,8 @@ export const useActive = () => {
     return 0;
   };
 
+  const variations = activeData?.variations ?? [];
+
   return {
     active: {
       activeData,
@@ -80,6 +82,7 @@ export const useActive = () => {
       activeDropdown,
       setActiveDropdown,
       getLevel,
+      variations,
     },
   };
 };

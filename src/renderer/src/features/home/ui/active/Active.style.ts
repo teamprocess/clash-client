@@ -124,48 +124,8 @@ export const Grass = styled.div<{ $level: number }>`
   }};
 `;
 
-export const GraphBox = styled.div`
-  padding: 0.5rem 1rem;
-  height: 85%;
-  display: flex;
-  align-items: flex-end;
-  background-color: ${({ theme }) => theme.background.alternative};
-  border-radius: 0.5rem;
-`;
-
-export const Bars = styled.div`
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  min-width: 100%;
-  overflow-x: auto;
-`;
-
-export const BarWrapper = styled.div`
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-`;
-
-export const Bar = styled.div<{ $ratio: number }>`
-  width: 0;
-  height: ${({ $ratio }) => $ratio * 3}rem;
-  transition: height 0.4s ease;
-`;
-
-export const BarValue = styled.p`
-  ${font.caption.bold}
-  color: ${({ theme }) => theme.background.alternative};
-  width: 1.5rem;
-  height: 1rem;
-  display: flex;
-  justify-content: center;
-  background-color: ${({ theme }) => theme.label.neutral};
-  border-radius: 999px;
-`;
-
-export const BarLabel = styled.p`
-  ${font.caption.medium}
-  color: ${({ theme }) => theme.label.normal};
+export const ChartWrapper = styled.div`
+  width: 100%;
+  height: 8rem; /* ← 여기 */
+  position: relative;
 `;
