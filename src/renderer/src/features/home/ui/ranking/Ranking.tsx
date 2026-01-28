@@ -1,22 +1,24 @@
 import * as S from "./Ranking.style";
-import { RankingProps } from "@/features/home/model/useRanking";
+import { useRanking } from "@/features/home/model/useRanking";
 import { UserRanking } from "@/features/home/ui/ranking/user/UserRanking";
 import { CategoryType, RankingPeriod } from "@/entities/home/model/useRanking.types";
 
-export const Ranking = ({
-  RankingDropdown,
-  setRankingDropdown,
-  RankingPeriodDropdown,
-  setRankingPeriodDropdown,
-  rankingDropDownValue,
-  rankingPeriodDropDownValue,
-  wrapperRef,
-  currentUserRef,
-  userList,
-  stickyState,
-  currentUser,
-  currentUserRank,
-}: RankingProps) => {
+export const Ranking = () => {
+  const {
+    RankingDropdown,
+    setRankingDropdown,
+    RankingPeriodDropdown,
+    setRankingPeriodDropdown,
+    rankingDropDownValue,
+    rankingPeriodDropDownValue,
+    wrapperRef,
+    currentUserRef,
+    userList,
+    stickyState,
+    currentUser,
+    currentUserRank,
+  } = useRanking();
+
   if (!userList) return null;
 
   return (
