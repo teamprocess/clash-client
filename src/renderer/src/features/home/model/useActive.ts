@@ -3,31 +3,6 @@ import { activeApi } from "@/entities/home/api/activeApi";
 import { ActiveResponse } from "@/entities/home/model/useActive.types";
 import { CategoryType } from "@/entities/home/model/useRanking.types";
 
-type CommitDay = {
-  id: number;
-  count: number;
-};
-
-const commitDays: CommitDay[] = Array.from({ length: 365 }, (_, i) => ({
-  id: i + 1,
-  count: Math.floor(Math.random() * 10),
-}));
-
-const months: { id: number; commit_count: number }[] = [
-  { id: 1, commit_count: 31 },
-  { id: 2, commit_count: 41 },
-  { id: 3, commit_count: 23 },
-  { id: 4, commit_count: 12 },
-  { id: 5, commit_count: 25 },
-  { id: 6, commit_count: 7 },
-  { id: 7, commit_count: 12 },
-  { id: 8, commit_count: 9 },
-  { id: 9, commit_count: 11 },
-  { id: 10, commit_count: 12 },
-  { id: 11, commit_count: 19 },
-  { id: 12, commit_count: 21 },
-];
-
 const activeDropDownValue = [
   { key: "GITHUB", label: "Github" },
   { key: "EXP", label: "EXP" },
@@ -52,14 +27,14 @@ export const useActive = () => {
     fetchActive();
   }, [activeDropdown]);
 
-  const activeMaxCommit = Math.max(...months.map(m => m.commit_count));
+  const maxContribute = activeData?.streaks?.length
+    ? Math.max(...activeData.streaks.map(v => v.detailedInfo))
+    : 0;
 
-  const MaxCommit = Math.max(...commitDays.map(d => d.count));
-
-  const getLevel = (count: number): number => {
+  const getLevel = (count: number) => {
     if (count === 0) return 0;
 
-    const ratio: number = count / MaxCommit;
+    const ratio: number = count / maxContribute;
 
     const ratioResult = ratio * 10;
 
@@ -75,9 +50,6 @@ export const useActive = () => {
   return {
     active: {
       activeData,
-      commitDays,
-      months,
-      activeMaxCommit,
       activeDropDownValue,
       activeDropdown,
       setActiveDropdown,

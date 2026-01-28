@@ -1,6 +1,13 @@
 import * as S from "./UserRanking.style";
-import { UserRankingProps } from "@/features/home/model/useHome";
 import { forwardRef } from "react";
+import { RankingItem } from "@/entities/home/model/useRanking.types";
+
+interface UserRankingProps {
+  user: RankingItem;
+  rank: number;
+  isRival: boolean;
+  isSticky?: boolean;
+}
 
 export const UserRanking = forwardRef<HTMLDivElement, UserRankingProps>(
   ({ user, isRival, rank, isSticky }, ref) => {

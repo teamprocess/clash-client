@@ -1,5 +1,5 @@
 import * as S from "./MyRivals.style";
-import { getStatus, UserStatus } from "@/features/home/model/useHome";
+import { UserStatus, getStatus } from "@/features/competition/model/useMyRivals";
 import { useMyRivals } from "@/features/competition/model/useMyRivals";
 import { formatTime } from "@/shared/lib";
 
