@@ -5,8 +5,14 @@ export interface UserType {
   profileImage: string;
 }
 
-export interface UsersResponse {
+export interface RivalUsersResponse {
   users: UserType[];
 }
 
-// post API 연결 예정
+interface IdType {
+  id: number;
+}
+
+export interface RivalApplyRequest {
+  ids: IdType[];
+}

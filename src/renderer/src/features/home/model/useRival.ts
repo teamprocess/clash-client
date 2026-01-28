@@ -5,7 +5,7 @@ import {
   MyRivalsResponse,
 } from "@/entities/competition/model/rival-competition/myRivals.types";
 import { risvalApi } from "@/entities/home/api/rivalApi";
-import { UsersResponse } from "@/entities/home/model/useRival.types";
+import { RivalUsersResponse } from "@/entities/home/model/useRival.types";
 
 export interface MyRivalItem {
   user: MyRivalsRequest;
@@ -24,7 +24,7 @@ type StatusType = "온라인" | "자리비움" | "오프라인" | "";
 
 export const useRival = () => {
   const [rivalsData, setRivalsData] = useState<MyRivalsResponse | null>(null);
-  const [userList, setUserList] = useState<UsersResponse | null>(null);
+  const [userList, setUserList] = useState<RivalUsersResponse | null>(null);
 
   useEffect(() => {
     const fetchMyRivals = async () => {
@@ -77,20 +77,20 @@ export const useRival = () => {
     setRivalSelectedId([]);
   };
 
-  const [rivalSelectedId, setRivalSelectedId] = useState<string[]>([]);
+  const [rivalSelectedId, setRivalSelectedId] = useState<number[]>([]);
 
-  const handleUserSelect = (name: string) => {
+  const handleUserSelect = (id: number) => {
     const currentRivalCount = rivalsData?.myRivals.length ?? 0;
 
     const maxAvailableSlots = 4 - currentRivalCount;
 
     setRivalSelectedId(prev => {
-      if (prev.includes(name)) {
-        return prev.filter(item => item !== name);
+      if (prev.includes(id)) {
+        return prev.filter(item => item !== id);
       }
 
       if (prev.length < maxAvailableSlots) {
-        return [...prev, name];
+        return [...prev, id];
       } else {
         return prev;
       }
@@ -102,10 +102,22 @@ export const useRival = () => {
     handleClose();
   };
 
-  // TODO: 확인 버튼 누를 시, POST할 데이터배열에 삽입 시키는 버튼
   const handleRivalCreate = () => {
-    setRivalSelectedId([]);
-    handleClose();
+    const postRivalApply = async () => {
+      try {
+        const payload = {
+          ids: rivalSelectedId.map(id => ({ id })),
+        };
+
+        const response = await risvalApi.postRivalApply(payload);
+        if (!response.data) return;
+        handleClose();
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    postRivalApply();
   };
 
   return {

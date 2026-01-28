@@ -62,8 +62,8 @@ export const Rival = ({
                 {userList?.users.map(user => (
                   <S.UserChoiceBox
                     key={user.userId}
-                    $isSelected={rivalSelectedId.includes(user.userName)}
-                    onClick={() => handleUserSelect(user.userName)}
+                    $isSelected={rivalSelectedId.includes(user.userId)}
+                    onClick={() => handleUserSelect(user.userId)}
                   >
                     <S.ProfileContent style={{ height: "3rem" }}>
                       <S.ProfileIcon />
@@ -73,11 +73,7 @@ export const Rival = ({
                       </S.ProfileTagBox>
                     </S.ProfileContent>
 
-                    {rivalSelectedId.includes(user.userName) ? (
-                      <S.CheckedIcon />
-                    ) : (
-                      <S.UncheckedBox />
-                    )}
+                    {rivalSelectedId.includes(user.userId) ? <S.CheckedIcon /> : <S.UncheckedBox />}
                   </S.UserChoiceBox>
                 ))}
               </S.UserChoiceContainer>
