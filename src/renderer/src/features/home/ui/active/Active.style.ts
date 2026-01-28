@@ -126,6 +126,6 @@ export const Grass = styled.div<{ $level: number }>`
 
 export const ChartWrapper = styled.div`
   width: 100%;
-  height: 8rem; /* ← 여기 */
+  height: 8rem;
   position: relative;
 `;

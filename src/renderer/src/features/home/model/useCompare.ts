@@ -21,7 +21,6 @@ export const useCompare = () => {
         const response = await compareApi.getCompare();
         if (!response.data) return;
         setCompareData(response.data);
-        console.log(response.data);
       } catch (error) {
         console.error(error);
       }
@@ -31,13 +30,8 @@ export const useCompare = () => {
   }, []);
 
   return {
-    compare: {
-      // compareDropdown,
-      // setCompareDropdown,
-      compareData,
-    },
+    // compareDropdown,
+    // setCompareDropdown,
+    compareData,
   };
 };
-
-export type CompareReturn = ReturnType<typeof useCompare>;
-export type CompareProps = CompareReturn["compare"];

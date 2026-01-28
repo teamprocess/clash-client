@@ -30,13 +30,8 @@ export const useTransition = () => {
   }, []);
 
   return {
-    transition: {
-      transitionData,
-      maxActive,
-      maxContributors,
-    },
+    transitionData,
+    maxActive,
+    maxContributors,
   };
 };
-
-export type UseTransitionReturn = ReturnType<typeof useTransition>;
-export type TransitionProps = UseTransitionReturn["transition"];

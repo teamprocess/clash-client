@@ -1,10 +1,11 @@
 import * as S from "./Compare.style";
 import { Link } from "react-router-dom";
 import { Github } from "@/features/home/ui/compare/github/CompareGithub";
-import { CompareProps } from "@/features/home/model/useCompare";
+import { useCompare } from "@/features/home/model/useCompare";
 
-export const Compare = ({ compareData }: CompareProps) => {
-  if (!compareData) return null;
+export const Compare = () => {
+  const getCompareData = useCompare();
+  if (!getCompareData.compareData) return null;
 
   return (
     <S.Wrapper>
@@ -27,7 +28,10 @@ export const Compare = ({ compareData }: CompareProps) => {
           {/*  <S.ArrowIcon />*/}
           {/*</S.SelectWrapper>*/}
         </S.TopPositionBox>
-        <Github yesterday={compareData?.yesterday} today={compareData?.today} />
+        <Github
+          yesterday={getCompareData.compareData?.yesterday}
+          today={getCompareData.compareData?.today}
+        />
 
         {/*{compareDropdown === "Github" ? (*/}
         {/*  <Github yesterday={statsData.data.yesterday} today={statsData.data.today} />*/}

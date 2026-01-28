@@ -36,7 +36,10 @@ export const useRanking = () => {
   useEffect(() => {
     const fetchRanking = async () => {
       try {
-        const response = await rankingApi.getRanking(RankingDropdown, RankingPeriodDropdown);
+        const response = await rankingApi.getRanking({
+          category: RankingDropdown,
+          period: RankingPeriodDropdown,
+        });
         if (!response.data) return;
         setUserList(response.data);
       } catch (error) {
