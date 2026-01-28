@@ -7,6 +7,8 @@ export const useRecord = () => {
     activeTaskId,
     currentStudyTime,
     startTime,
+    isLoading,
+    fetchTasks,
     start,
     stop,
     addTask,
@@ -14,6 +16,10 @@ export const useRecord = () => {
     deleteTask,
     setCurrentStudyTime,
   } = useRecordStore();
+
+  useEffect(() => {
+    void fetchTasks();
+  }, []);
 
   useEffect(() => {
     if (!startTime) return;
@@ -37,12 +43,13 @@ export const useRecord = () => {
     return tasks.reduce((sum, task) => sum + task.studyTime, 0) + currentStudyTime;
   };
 
-  const startStudy = (taskId: number) => start(taskId);
-  const stopStudy = () => stop();
+  const startStudy = async (taskId: number) => await start(taskId);
+  const stopStudy = async () => await stop();
 
   return {
     tasks,
     activeTaskId,
+    isLoading,
     startStudy,
     stopStudy,
     addTask,
