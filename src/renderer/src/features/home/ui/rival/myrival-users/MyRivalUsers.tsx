@@ -1,6 +1,6 @@
 import * as S from "@/features/home/ui/rival/Rival.style";
 import { formatTime } from "@/shared/lib";
-import { MyRivalItem } from "@/entities/home/model/useRival.types"; // 단독 props
+import { MyRivalItem } from "@/features/home/model/useRival"; // 단독 props
 
 export const MyRivalUsers = ({ user, getStatus }: MyRivalItem) => {
   return (
