@@ -5,7 +5,6 @@ import {
   PeriodType,
 } from "@/entities/competition/model/rival-competition/compareRivals.types";
 import { RivalCompetitionLineChart } from "@/features/competition/model/rival-compete-chart/RivalCompeteLineChart";
-import { toLineChartData } from "@/features/competition/model/rival-compete-chart/RivalCompeteChartData";
 
 export const RivalCompare = () => {
   const {
@@ -16,7 +15,10 @@ export const RivalCompare = () => {
     setCompetitionPeriodDropDown,
     competitionDropDownValue,
     competitionPeriodDropDownValue,
+    buildMultiLineData,
   } = useCompareRival();
+
+  const chartData = buildMultiLineData(compareRivals?.totalData ?? []);
 
   return (
     <S.Content>
@@ -53,11 +55,11 @@ export const RivalCompare = () => {
           </S.DropDownBox>
         </S.TitleBox>
         <S.GaroLine />
-        {compareRivals?.totalData.map(item => (
-          <S.ChartWrapper key={item.id}>
-            <RivalCompetitionLineChart dataPoint={toLineChartData(item.dataPoint).dataPoint} />
-          </S.ChartWrapper>
-        ))}
+        <S.ChartWrapper>
+          <S.ChartContainer>
+            <RivalCompetitionLineChart chartData={chartData} />
+          </S.ChartContainer>
+        </S.ChartWrapper>
       </S.RivalCompareWrapper>
     </S.Content>
   );
