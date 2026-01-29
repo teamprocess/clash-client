@@ -1,6 +1,7 @@
 import { Line } from "react-chartjs-2";
 import "chart.js/auto";
 
+// 멀티차트 변환 후 props Type
 interface RivalCompetitionLineChartProps {
   chartData: {
     labels: string[];
@@ -10,6 +11,7 @@ interface RivalCompetitionLineChartProps {
     }[];
   };
 }
+
 export const RivalCompetitionLineChart = ({ chartData }: RivalCompetitionLineChartProps) => {
   return (
     <Line
@@ -29,7 +31,7 @@ export const RivalCompetitionLineChart = ({ chartData }: RivalCompetitionLineCha
         maintainAspectRatio: false,
         plugins: {
           legend: {
-            display: true, // 멀티면 label 보여주는 게 좋음
+            display: true,
           },
         },
         scales: {
