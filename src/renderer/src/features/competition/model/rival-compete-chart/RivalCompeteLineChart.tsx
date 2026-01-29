@@ -34,6 +34,33 @@ export const RivalCompetitionLineChart = ({ chartData }: RivalCompetitionLineCha
         plugins: {
           legend: {
             display: true,
+
+            // 언더스코어 안쓰는 데이터 무시 -> 멀티차트에서만 사용
+            onClick: (_, legendItem, legend) => {
+              const index = legendItem.datasetIndex;
+              if (index === undefined) return; // ← 이 줄 하나로 해결
+
+              const chart = legend.chart;
+              const meta = chart.getDatasetMeta(index);
+
+              const visibleCount = chart.data.datasets.filter(
+                (_, i) => !chart.getDatasetMeta(i).hidden
+              ).length;
+
+              const isSolo = !meta.hidden && visibleCount === 1;
+
+              if (isSolo) {
+                chart.data.datasets.forEach((_, i) => {
+                  chart.getDatasetMeta(i).hidden = false;
+                });
+              } else {
+                chart.data.datasets.forEach((_, i) => {
+                  chart.getDatasetMeta(i).hidden = i !== index;
+                });
+              }
+
+              chart.update();
+            },
           },
         },
         scales: {
