@@ -1,7 +1,10 @@
 import { ThemeProvider } from "styled-components";
 import { HashRouter, Routes, Route } from "react-router-dom";
-import { useTheme } from "@/shared/lib/useTheme";
+import { QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { queryClient } from "@/shared/lib/queryClient";
 import { GlobalStyle } from "./styles/GlobalStyle";
+import { useTheme } from "@/shared/lib/useTheme";
 import { MainLayout } from "@/app/layouts/main";
 import { HomePage } from "@/pages/home";
 import { CompetitionPage } from "@/pages/competition";
@@ -18,35 +21,38 @@ function App() {
   const { theme } = useTheme();
 
   return (
-    <ThemeProvider theme={theme}>
-      <GlobalStyle />
-      <HashRouter>
-        <Routes>
-          <Route element={<MainLayout />}>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/home/transition" element={<ComparePage />} />
-            <Route path="/competition" element={<CompetitionPage />} />
-            <Route path="/record" element={<RecordPage />} />
-            <Route path="/shop" element={<ShopPage />} />
-            <Route path="/roadmap" element={<RoadmapPage />} />
-            <Route path="/roadmap/major-choice" element={<RoadmapMajorChoicePage />} />
-            <Route path="/roadmap/:sectionId" element={<ChapterPage />} />
-          </Route>
-          <Route element={<MainLayout isScrollAble />}>
-            <Route path="/shop" element={<ShopPage />} />
-          </Route>
-          <Route element={<MainLayout isFixed />}>
-            <Route path="/shop/products" element={<ProductsPage />} />
-          </Route>
-          <Route element={<AuthLayout />}>
-            <Route path="/sign-in" element={<SignInPage />} />
-            <Route path="/sign-up" element={<SignUpPage />} />
-          </Route>
+    <QueryClientProvider client={queryClient}>
+      <ThemeProvider theme={theme}>
+        <GlobalStyle />
+        <HashRouter>
+          <Routes>
+            <Route element={<MainLayout />}>
+              <Route path="/" element={<HomePage />} />
+              <Route path="/home/transition" element={<ComparePage />} />
+              <Route path="/competition" element={<CompetitionPage />} />
+              <Route path="/record" element={<RecordPage />} />
+              <Route path="/shop" element={<ShopPage />} />
+              <Route path="/roadmap" element={<RoadmapPage />} />
+              <Route path="/roadmap/major-choice" element={<RoadmapMajorChoicePage />} />
+              <Route path="/roadmap/:sectionId" element={<ChapterPage />} />
+            </Route>
+            <Route element={<MainLayout isScrollAble />}>
+              <Route path="/shop" element={<ShopPage />} />
+            </Route>
+            <Route element={<MainLayout isFixed />}>
+              <Route path="/shop/products" element={<ProductsPage />} />
+            </Route>
+            <Route element={<AuthLayout />}>
+              <Route path="/sign-in" element={<SignInPage />} />
+              <Route path="/sign-up" element={<SignUpPage />} />
+            </Route>
 
-          <Route path="*" element={<NotFoundPage />} />
-        </Routes>
-      </HashRouter>
-    </ThemeProvider>
+            <Route path="*" element={<NotFoundPage />} />
+          </Routes>
+        </HashRouter>
+      </ThemeProvider>
+      <ReactQueryDevtools initialIsOpen={false} />
+    </QueryClientProvider>
   );
 }
 
