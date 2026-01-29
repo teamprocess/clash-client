@@ -6,6 +6,7 @@ import {
   CompareRivalsResponse,
   PERIOD,
   PeriodType,
+  RivalCompeteUser,
 } from "@/entities/competition/model/rival-competition/compareRivals.types";
 
 const competitionDropDownValue = [
@@ -48,6 +49,24 @@ export const useCompareRival = () => {
     fetchCompareRival();
   }, [competitionDropdown, competitionPeriodDropDown]);
 
+  const buildMultiLineData = (totalData: RivalCompeteUser[]) => {
+    const labels = Array.from(
+      new Set(totalData.flatMap(user => user.dataPoint.map(p => p.date)))
+    ).sort();
+
+    const datasets = totalData.map(user => {
+      const map = new Map(user.dataPoint.map(p => [p.date, p.point]));
+
+      return {
+        label: user.name,
+        data: labels.map(date => map.get(date) ?? 0),
+        tension: 0.3,
+      };
+    });
+
+    return { labels, datasets };
+  };
+
   return {
     compareRivals,
     competitionDropdown,
@@ -56,5 +75,6 @@ export const useCompareRival = () => {
     setCompetitionPeriodDropDown,
     competitionDropDownValue,
     competitionPeriodDropDownValue,
+    buildMultiLineData,
   };
 };
