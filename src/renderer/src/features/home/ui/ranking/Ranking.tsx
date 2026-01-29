@@ -1,7 +1,7 @@
 import * as S from "./Ranking.style";
 import { useRanking } from "@/features/home/model/useRanking";
 import { UserRanking } from "@/features/home/ui/ranking/user/UserRanking";
-import { CategoryType, RankingItem, RankingPeriod } from "@/entities/home/model/useRanking.types";
+import { CategoryType, RankingItem, PeriodType } from "@/entities/home/model/useRanking.types";
 
 export const Ranking = () => {
   const {
@@ -44,7 +44,7 @@ export const Ranking = () => {
           <S.SelectWrapper>
             <S.Select
               value={RankingPeriodDropdown}
-              onChange={e => setRankingPeriodDropdown(e.target.value as RankingPeriod)}
+              onChange={e => setRankingPeriodDropdown(e.target.value as PeriodType)}
             >
               {rankingPeriodDropDownValue.map(option => (
                 <option key={option.key} value={option.key}>
@@ -66,12 +66,12 @@ export const Ranking = () => {
             user={user}
             rank={index + 1}
             isRival={user.isRival}
-            ref={user.isRival ? currentUserRef : null}
+            ref={user.userId === currentUser?.userId ? currentUserRef : null}
           />
         ))}
       </S.UserWrapper>
 
-      {stickyState !== "none" && currentUser && currentUserRank && (
+      {stickyState !== "none" && currentUser && currentUserRank !== null && (
         <S.StickyUser $position={stickyState}>
           <UserRanking user={currentUser} rank={currentUserRank} isRival={false} isSticky />
         </S.StickyUser>
