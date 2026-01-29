@@ -6,6 +6,7 @@ export const Background = styled.div`
   background: ${({ theme }) => theme.background.normal};
   border-radius: 1rem;
   padding: 2rem;
+  box-sizing: border-box;
 `;
 
 export const BodyRow = styled.div`
