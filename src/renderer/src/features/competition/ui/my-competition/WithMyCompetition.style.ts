@@ -21,6 +21,7 @@ export const GraphWrapper = styled.div`
   display: flex;
   flex-direction: column;
   padding: 0.75rem;
+  width: 100%;
   gap: 0.625rem;
   height: 100%;
 `;
@@ -228,7 +229,6 @@ export const SelectWrapper = styled.div`
   position: relative;
 `;
 
-//드랍다운
 export const Select = styled.select`
   ${font.body.regular};
   width: 7.5rem;
@@ -248,7 +248,6 @@ export const Select = styled.select`
   }
 `;
 
-// 작동안되는 option 메소드 (브라우저에서 방해)
 export const Option = styled.option`
   ${font.body.regular};
   background-color: ${({ theme }) => theme.line.neutral};
@@ -259,6 +258,12 @@ export const GrowthRateBox = styled.div`
   flex-direction: column;
   align-items: flex-end;
   gap: 0.25rem;
+`;
+
+export const ChartWrapper = styled.div`
+  width: 100%;
+  height: 100%;
+  position: relative;
 `;
 
 export const EXPIcon = styled(EXP)``;
