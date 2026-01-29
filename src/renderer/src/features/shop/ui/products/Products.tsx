@@ -11,6 +11,19 @@ interface ProductsProps {
   isLoading?: boolean;
 }
 
+const getCategoryLabel = (category: Product["category"]) => {
+  switch (category) {
+    case "INSIGNIA":
+      return "휘장";
+    case "NAMEPLATE":
+      return "이름표";
+    case "BANNER":
+      return "배너";
+    default:
+      return "기타";
+  }
+};
+
 export const Products = ({ products, isLoading }: ProductsProps) => {
   const [selectedId, setSelectedId] = useState<number | null>(null);
 
@@ -32,9 +45,7 @@ export const Products = ({ products, isLoading }: ProductsProps) => {
     setIsPurchaseOpen(false);
   };
 
-  const handlePurchase = async (product: Product) => {
-    console.log("purchase:", product.id);
-  };
+  const handlePurchase = async () => {};
 
   useEffect(() => {
     const shouldLock = isPanelOpen || isPurchaseOpen;
@@ -79,13 +90,7 @@ export const Products = ({ products, isLoading }: ProductsProps) => {
               <S.MajorInfoWrapper>
                 <S.ProductTitleDetail>{selectedProduct.title}</S.ProductTitleDetail>
                 <S.ProductCategoryText>
-                  {`유형 : ${
-                    selectedProduct.category === "INSIGNIA"
-                      ? "휘장"
-                      : selectedProduct.category === "NAMEPLATE"
-                        ? "이름표"
-                        : "배너"
-                  }`}
+                  {`유형 : ${getCategoryLabel(selectedProduct.category)}`}
                 </S.ProductCategoryText>
                 <S.PriceBoxDetail>
                   {selectedProduct.type === "TOKEN" ? <S.TokenIcon /> : <S.CookieIcon />}
