@@ -1,5 +1,5 @@
 export type CategoryType = "GITHUB" | "ACTIVE_TIME" | "EXP" | "SOLVED_AC";
-export type RankingPeriod = "DAY" | "WEEK" | "MONTH" | "YEAR";
+export type PeriodType = "DAY" | "WEEK" | "MONTH" | "YEAR" | "SEASON";
 
 export interface RankingItem {
   userId: number;
@@ -12,11 +12,11 @@ export interface RankingItem {
 
 export interface RankingsResponse {
   category: CategoryType;
-  period: RankingPeriod;
+  period: PeriodType;
   rankings: RankingItem[] | [];
 }
 
 export interface GetRankingsRequest {
   category: CategoryType;
-  period: RankingPeriod;
+  period: PeriodType;
 }
