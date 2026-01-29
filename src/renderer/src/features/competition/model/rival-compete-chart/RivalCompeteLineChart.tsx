@@ -38,7 +38,7 @@ export const RivalCompetitionLineChart = ({ chartData }: RivalCompetitionLineCha
             // 언더스코어 안쓰는 데이터 무시 -> 멀티차트에서만 사용
             onClick: (_, legendItem, legend) => {
               const index = legendItem.datasetIndex;
-              if (index === undefined) return; // ← 이 줄 하나로 해결
+              if (index === undefined) return;
 
               const chart = legend.chart;
               const meta = chart.getDatasetMeta(index);
