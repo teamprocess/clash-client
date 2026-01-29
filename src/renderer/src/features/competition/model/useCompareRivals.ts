@@ -49,6 +49,7 @@ export const useCompareRival = () => {
     fetchCompareRival();
   }, [competitionDropdown, competitionPeriodDropDown]);
 
+  // Multi Axis Line Chart 구조에 맞게 변환
   const buildMultiLineData = (totalData: RivalCompeteUser[]) => {
     const labels = Array.from(
       new Set(totalData.flatMap(user => user.dataPoint.map(p => p.date)))
