@@ -129,7 +129,7 @@ export const Topbar = ({ onToggleSidebar }: TopbarProps) => {
             </S.ModalContainer>
           </S.ModalOverlay>
         ) : null}
-        <S.ProfileBox to="/profile">
+        <S.ProfileBox to="profile">
           <S.ProfileIcon />
           <S.NameBox>
             <S.Name>{user?.name}</S.Name>
