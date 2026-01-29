@@ -79,7 +79,7 @@ export const UserWrapper = styled.div`
   height: 16rem;
   display: flex;
   flex-direction: column;
-  overflow-y: scroll;
+  overflow-y: auto;
   scrollbar-width: none;
 `;
 
