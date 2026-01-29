@@ -2,6 +2,7 @@ import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useNavigate } from "react-router-dom";
+import { useQueryClient } from "@tanstack/react-query";
 import { authApi } from "@/entities/user";
 import axios from "axios";
 
@@ -14,6 +15,7 @@ type SignInForm = z.infer<typeof signInSchema>;
 
 export const useSignIn = () => {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
   const {
     register,
@@ -33,6 +35,7 @@ export const useSignIn = () => {
       });
 
       if (result.success && result.data) {
+        await queryClient.invalidateQueries({ queryKey: ["user"] });
         navigate("/");
       } else {
         setError("root", {
