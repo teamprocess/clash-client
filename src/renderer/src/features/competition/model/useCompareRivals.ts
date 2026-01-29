@@ -9,6 +9,8 @@ import {
   RivalCompeteUser,
 } from "@/entities/competition/model/rival-competition/compareRivals.types";
 
+export const colorsOfMultiLine: string[] = ["#FFF", "#0081CC", "#C60608", "#15B756", "#FFCC01"];
+
 const competitionDropDownValue = [
   { key: "EXP", label: "EXP" },
   { key: "GITHUB", label: "Github" },
@@ -61,7 +63,6 @@ export const useCompareRival = () => {
       return {
         label: user.name,
         data: labels.map(date => map.get(date) ?? 0),
-        tension: 0.3,
       };
     });
 

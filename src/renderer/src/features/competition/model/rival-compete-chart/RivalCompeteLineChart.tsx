@@ -1,5 +1,6 @@
 import { Line } from "react-chartjs-2";
 import "chart.js/auto";
+import { colorsOfMultiLine } from "@/features/competition/model/useCompareRivals";
 
 // 멀티차트 변환 후 props Type
 interface RivalCompetitionLineChartProps {
@@ -17,11 +18,12 @@ export const RivalCompetitionLineChart = ({ chartData }: RivalCompetitionLineCha
     <Line
       data={{
         labels: chartData.labels,
-        datasets: chartData.datasets.map(ds => ({
+        datasets: chartData.datasets.map((ds, idx) => ({
           ...ds,
+          borderColor: colorsOfMultiLine[idx % colorsOfMultiLine.length],
+          backgroundColor: colorsOfMultiLine[idx % colorsOfMultiLine.length],
+          pointBackgroundColor: colorsOfMultiLine[idx % colorsOfMultiLine.length],
           borderWidth: 2,
-          tension: 0.3,
-          fill: false,
           pointRadius: 6,
           pointHoverRadius: 7,
         })),
