@@ -14,7 +14,7 @@ export const Timer = () => {
       <S.Date>{currentDate}</S.Date>
       <S.TimeBox>
         {activeTaskId !== null && (
-          <S.PlayButton onClick={stopStudy}>
+          <S.PlayButton onClick={() => stopStudy()}>
             <S.PauseIcon />
           </S.PlayButton>
         )}
