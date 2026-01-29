@@ -39,6 +39,20 @@ export const MyCompetitionLineChart = ({ data }: MyCompetitionLineChartProps) =>
           legend: {
             display: false,
           },
+          tooltip: {
+            backgroundColor: "#2A2B2C",
+            borderColor: "#747678",
+            borderWidth: 1,
+            displayColors: false,
+            callbacks: {
+              title: () => "",
+              label: tooltipItem => {
+                const value = tooltipItem.raw;
+                if (value === null || value === undefined) return "";
+                return value.toString();
+              },
+            },
+          },
         },
         scales: {
           x: {
