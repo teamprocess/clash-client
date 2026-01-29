@@ -2,29 +2,48 @@ import * as S from "./WithMyCompetition.style";
 import { GrowthRate } from "@/features/home/ui/compare/growth-rate/GrowthRate";
 import { useMyCompetition } from "@/features/competition/model/useMyCompetition";
 import { CompareStandard } from "@/entities/competition/model/my-competition/myCompetition.types";
+import { GrowthRateStandard } from "@/entities/competition/model/my-competition/myCompetition.types";
+import { toLineChartData } from "@/features/competition/model/lineChartData";
+import { MyCompetitionLineChart } from "@/features/competition/model/MyCompetitionLineChart";
 
 export const WithMyCompetition = () => {
-  const { myCompetition } = useMyCompetition();
+  const {
+    dataPoints,
+    myCompareData,
+    competitionDropdown,
+    setCompetitionDropdown,
+    growthRateDropdown,
+    setGrowthRateDropdown,
+    growthRateDropDownValue,
+    competitionDropDownValue,
+    oneDecimal,
+  } = useMyCompetition();
+
+  const chartData = toLineChartData(dataPoints);
 
   return (
     <S.ContentArea>
       <S.GraphWrapper>
-        <S.AnalyzeTitle>내 성장도 분석</S.AnalyzeTitle>
-        <S.GraphBox>
-          <S.Bars>
-            {myCompetition.myData.map(({ date, growth_rate }) => (
-              <S.BarWrapper key={date}>
-                <S.Bar $ratio={growth_rate / myCompetition.myCompetitionMaxCommit}>
-                  <S.ValueHoverBox>
-                    <S.BallValue />
-                    <S.BarValue>{myCompetition.oneDecimal(growth_rate)}%</S.BarValue>
-                  </S.ValueHoverBox>
-                </S.Bar>
-                <S.BarLabel>{date}월</S.BarLabel>
-              </S.BarWrapper>
-            ))}
-          </S.Bars>
-        </S.GraphBox>
+        <S.TitleBox style={{ justifyContent: "space-between" }}>
+          <S.AnalyzeTitle>내 성장도 분석</S.AnalyzeTitle>
+          <S.SelectWrapper>
+            <S.Select
+              value={growthRateDropdown}
+              onChange={e => setGrowthRateDropdown(e.target.value as GrowthRateStandard)}
+            >
+              {growthRateDropDownValue.map(option => (
+                <S.Option key={option.key} value={option.key}>
+                  {option.label}
+                </S.Option>
+              ))}
+            </S.Select>
+            <S.ArrowIcon />
+          </S.SelectWrapper>
+        </S.TitleBox>
+
+        <S.ChartWrapper>
+          <MyCompetitionLineChart data={chartData}></MyCompetitionLineChart>
+        </S.ChartWrapper>
       </S.GraphWrapper>
 
       <S.Line />
@@ -49,9 +68,7 @@ export const WithMyCompetition = () => {
                     <S.EXPIcon />
                     <S.ExplainText>총 획득 EXP</S.ExplainText>
                   </S.ImpressiveBox>
-                  <S.DataText>
-                    {myCompetition.oneDecimal(myCompetition.myCompareData?.earnedExp)} EXP
-                  </S.DataText>
+                  <S.DataText>{oneDecimal(myCompareData?.earnedExp)} EXP</S.DataText>
                 </S.DataBoxing>
               </S.GridBox>
 
@@ -61,9 +78,7 @@ export const WithMyCompetition = () => {
                     <S.RecordIcon />
                     <S.ExplainText>학습시간</S.ExplainText>
                   </S.ImpressiveBox>
-                  <S.DataText>
-                    {myCompetition.oneDecimal(myCompetition.myCompareData?.studyTime)} 시간
-                  </S.DataText>
+                  <S.DataText>{oneDecimal(myCompareData?.studyTime)} 시간</S.DataText>
                 </S.DataBoxing>
               </S.GridBox>
 
@@ -91,9 +106,7 @@ export const WithMyCompetition = () => {
                       기여수
                     </S.ExplainText>
                   </S.ImpressiveBox>
-                  <S.DataText>
-                    {myCompetition.oneDecimal(myCompetition.myCompareData?.gitHubAttribution)}
-                  </S.DataText>
+                  <S.DataText>{oneDecimal(myCompareData?.gitHubAttribution)}</S.DataText>
                 </S.DataBoxing>
               </S.GridBox>
             </S.GridContainer>
@@ -104,12 +117,10 @@ export const WithMyCompetition = () => {
               <S.CompareBoxTitle>비교2</S.CompareBoxTitle>
               <S.SelectWrapper>
                 <S.Select
-                  value={myCompetition.competitionDropdown}
-                  onChange={e =>
-                    myCompetition.setCompetitionDropdown(e.target.value as CompareStandard)
-                  }
+                  value={competitionDropdown}
+                  onChange={e => setCompetitionDropdown(e.target.value as CompareStandard)}
                 >
-                  {myCompetition.competitionDropDownValue.map(option => (
+                  {competitionDropDownValue.map(option => (
                     <S.Option key={option.key} value={option.key}>
                       {option.label}
                     </S.Option>
@@ -127,12 +138,10 @@ export const WithMyCompetition = () => {
                     <S.ExplainText>총 획득 EXP</S.ExplainText>
                   </S.ImpressiveBox>
                   <S.GrowthRateBox>
-                    <S.DataText>
-                      {myCompetition.oneDecimal(myCompetition.myCompareData?.earnedExp)} EXP
-                    </S.DataText>
+                    <S.DataText>{oneDecimal(myCompareData?.earnedExp)} EXP</S.DataText>
                     <GrowthRate
-                      yesterday={myCompetition.oneDecimal(myCompetition.myCompareData?.earnedExp)}
-                      today={myCompetition.oneDecimal(myCompetition.myCompareData?.earnedExp)}
+                      yesterday={oneDecimal(myCompareData?.earnedExp)}
+                      today={oneDecimal(myCompareData?.earnedExp)}
                     />
                   </S.GrowthRateBox>
                 </S.DataBoxing>
@@ -145,12 +154,10 @@ export const WithMyCompetition = () => {
                     <S.ExplainText>학습시간</S.ExplainText>
                   </S.ImpressiveBox>
                   <S.GrowthRateBox>
-                    <S.DataText>
-                      {myCompetition.oneDecimal(myCompetition.myCompareData?.studyTime)} 시간
-                    </S.DataText>
+                    <S.DataText>{oneDecimal(myCompareData?.studyTime)} 시간</S.DataText>
                     <GrowthRate
-                      yesterday={myCompetition.oneDecimal(myCompetition.myCompareData?.studyTime)}
-                      today={myCompetition.oneDecimal(myCompetition.myCompareData?.studyTime)}
+                      yesterday={oneDecimal(myCompareData?.studyTime)}
+                      today={oneDecimal(myCompareData?.studyTime)}
                     />
                   </S.GrowthRateBox>
                 </S.DataBoxing>
@@ -181,16 +188,10 @@ export const WithMyCompetition = () => {
                     </S.ExplainText>
                   </S.ImpressiveBox>
                   <S.GrowthRateBox>
-                    <S.DataText>
-                      {myCompetition.oneDecimal(myCompetition.myCompareData?.gitHubAttribution)}
-                    </S.DataText>
+                    <S.DataText>{oneDecimal(myCompareData?.gitHubAttribution)}</S.DataText>
                     <GrowthRate
-                      yesterday={myCompetition.oneDecimal(
-                        myCompetition.myCompareData?.gitHubAttribution
-                      )}
-                      today={myCompetition.oneDecimal(
-                        myCompetition.myCompareData?.gitHubAttribution
-                      )}
+                      yesterday={oneDecimal(myCompareData?.gitHubAttribution)}
+                      today={oneDecimal(myCompareData?.gitHubAttribution)}
                     />
                   </S.GrowthRateBox>
                 </S.DataBoxing>

@@ -1,7 +1,7 @@
 import * as S from "./Ranking.style";
 import { useRanking } from "@/features/home/model/useRanking";
 import { UserRanking } from "@/features/home/ui/ranking/user/UserRanking";
-import { CategoryType, RankingPeriod } from "@/entities/home/model/useRanking.types";
+import { CategoryType, RankingItem, RankingPeriod } from "@/entities/home/model/useRanking.types";
 
 export const Ranking = () => {
   const {
@@ -60,7 +60,7 @@ export const Ranking = () => {
       <S.Line />
 
       <S.UserWrapper ref={wrapperRef}>
-        {userList.rankings.map((user, index) => (
+        {userList.rankings.map((user: RankingItem, index: number) => (
           <UserRanking
             key={user.linkedId}
             user={user}
