@@ -1,6 +1,7 @@
 import * as S from "./Topbar.style";
 import { useState } from "react";
 import { Explain } from "./Topbar.style";
+import { useUser } from "@/entities/user";
 
 interface TopbarProps {
   onToggleSidebar: () => void;
@@ -30,15 +31,13 @@ const alarmInfo: AlamProps[] = [
 export const Topbar = ({ onToggleSidebar }: TopbarProps) => {
   const alarmCnt = alarmInfo.length;
   const [isAlamOpen, setIsAlamOpen] = useState(false);
+  const { data: user } = useUser();
 
   const handleOpen = () => {
     setIsAlamOpen(prev => !prev);
   };
-
   const handleConfirm = () => {};
-
   const handleDeny = () => {};
-
   const handleDelete = () => {};
 
   return (
@@ -104,7 +103,7 @@ export const Topbar = ({ onToggleSidebar }: TopbarProps) => {
           </S.ModalOverlay>
         ) : isAlamOpen && alarmCnt === 0 ? (
           <S.ModalOverlay>
-            <S.ModalContainer style={{ height: "13rem" }}>
+            <S.ModalContainer>
               <S.ModalHeader>
                 <S.ModalTitle>알림</S.ModalTitle>
                 <S.CloseButton onClick={handleOpen}>
@@ -121,8 +120,8 @@ export const Topbar = ({ onToggleSidebar }: TopbarProps) => {
         <S.ProfileBox to="/profile">
           <S.ProfileIcon />
           <S.NameBox>
-            <S.Name>조상철</S.Name>
-            <S.Username>@Sir0n</S.Username>
+            <S.Name>{user?.name}</S.Name>
+            <S.Username>@{user?.username}</S.Username>
           </S.NameBox>
         </S.ProfileBox>
       </S.RightMenu>

@@ -8,7 +8,6 @@ import More from "../../assets/more.svg";
 export const GroupContainer = styled.div`
   display: flex;
   flex: 1;
-  border-radius: 1rem;
 `;
 
 export const GroupWrapper = styled.div`
@@ -19,6 +18,7 @@ export const GroupWrapper = styled.div`
   gap: 1rem;
   position: relative;
   width: 100%;
+  border-radius: 1rem;
   background-color: ${({ theme }) => theme.background.alternative};
 `;
 
