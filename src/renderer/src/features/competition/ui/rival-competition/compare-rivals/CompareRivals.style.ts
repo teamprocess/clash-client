@@ -73,7 +73,9 @@ export const RivalCompareWrapper = styled.div`
   align-items: center;
   justify-content: center;
   gap: 0.75rem;
-  height: 32rem; // 현재는 멀티차트를 고정 높이로 설정, 차후에 미디어쿼리로 변환 예정
+  //height: 25rem; // 현재는 멀티차트를 고정 높이로 설정, 차후에 미디어쿼리로 변환 예정
+  //min-height: 12rem;
+  height: 100%;
 `;
 
 export const DropDownBox = styled.div`
@@ -85,14 +87,5 @@ export const DropDownBox = styled.div`
 
 export const ChartWrapper = styled.div`
   width: 100%;
-  height: 100%;
-  position: relative;
-`;
-
-export const ChartContainer = styled.div`
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  top: 0;
-  left: 0;
+  flex: 1;
 `;

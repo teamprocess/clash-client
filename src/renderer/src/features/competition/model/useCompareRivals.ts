@@ -42,7 +42,6 @@ export const useCompareRival = () => {
         });
         if (!response.data) return;
         setCompetitionRivals(response.data);
-        console.log(response.data);
       } catch (error) {
         console.error(error);
       }
