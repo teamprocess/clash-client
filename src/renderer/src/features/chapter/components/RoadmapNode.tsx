@@ -34,7 +34,7 @@ export const RoadmapNode = ({ node, onClick }: RoadmapNodeProps) => {
 
       {node.status === "current" && (
         <S.NodeNumber x={node.x} y={node.y + 12} textAnchor="middle">
-          {node.id}
+          {node.orderIndex}
         </S.NodeNumber>
       )}
 

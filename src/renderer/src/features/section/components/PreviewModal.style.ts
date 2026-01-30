@@ -168,7 +168,7 @@ export const RoadmapStepsContainer = styled.div`
   width: 100%;
   overflow-x: auto;
   overflow-y: visible;
-  padding: 4rem 2.5rem 2rem 2.5rem;
+  padding: 4rem 2rem 0 2rem;
   margin: 0 -2rem;
 
   &::-webkit-scrollbar {
@@ -228,6 +228,7 @@ export const RoadmapSteps = styled.div`
 export const StepWrapper = styled.div`
   position: relative;
   z-index: 1;
+  cursor: pointer;
 `;
 
 export const StepTooltip = styled.div`
