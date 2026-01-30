@@ -4,6 +4,8 @@ import {
   GetChapterDetailsResponse,
   GetSectionDetailsRequest,
   GetSectionDetailsResponse,
+  SubmitAnswerRequest,
+  SubmitAnswerResponse,
 } from "../model/chapter.types";
 
 export const chapterApi = {
@@ -18,6 +20,14 @@ export const chapterApi = {
   getChapterDetails: async (data: GetChapterDetailsRequest) => {
     const result = await api.get<ApiResponse<GetChapterDetailsResponse>>(
       `/chapters/${data.chapterId}/details`
+    );
+    return result.data;
+  },
+  // 미션 정답 제출
+  submitAnswer: async (data: SubmitAnswerRequest) => {
+    const result = await api.post<ApiResponse<SubmitAnswerResponse>>(
+      `/missions/${data.missionId}/questions/${data.questionId}/submit`,
+      { submittedChoiceId: data.submittedChoiceId }
     );
     return result.data;
   },
