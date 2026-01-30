@@ -1,104 +1,128 @@
-import { useState } from "react";
+import { useEffect, useState, useMemo } from "react";
+import { compareRivalsApi } from "@/entities/competition/api/rival-competition/compareRivalsApi";
+import {
+  CATEGORY,
+  CategoryType,
+  CompareRivalsResponse,
+  PERIOD,
+  PeriodType,
+  RivalCompeteUser,
+} from "@/entities/competition/model/rival-competition/compareRivals.types";
+import { authApi } from "@/entities/user";
+import axios from "axios";
 
-interface CompareRate {
-  date: number;
-  growth_rate: number;
-}
+export const colorsOfMultiLine: string[] = ["#FFF", "#0081CC", "#C60608", "#15B756", "#FFCC01"];
 
 const competitionDropDownValue = [
-  { key: "YesterDay", label: "어제" },
-  { key: "LastWeek", label: "일주일 전" },
-  { key: "LastMonth", label: "한달 전" },
-  { key: "LastSeason", label: "전 시즌" },
+  { key: "EXP", label: "EXP" },
+  { key: "GITHUB", label: "Github" },
+  { key: "SOLVED_AC", label: "solved.ac" },
+  { key: "ACTIVE_TIME", label: "총 학습 시간" },
 ];
 
 const competitionPeriodDropDownValue = [
-  { key: "EXP", label: "EXP" },
-  { key: "Github", label: "Github" },
-  { key: "Solved.Ac", label: "solved.ac" },
-  { key: "StudyTime", label: "총 학습 시간" },
+  { key: "DAY", label: "오늘" },
+  { key: "WEEK", label: "이번 주" },
+  { key: "MONTH", label: "이번 달" },
+  { key: "SEASON", label: "이번 시즌" },
 ];
 
 export const useCompareRival = () => {
-  const [competitionDropdown, setCompetitionDropdown] = useState("어제");
-  const [competitionPeriodDropDown, setCompetitionPeriodDropDown] = useState("EXP");
+  const [competitionDropdown, setCompetitionDropdown] = useState<CategoryType>(CATEGORY.EXP);
+  const [competitionPeriodDropDown, setCompetitionPeriodDropDown] = useState<PeriodType>(
+    PERIOD.DAY
+  );
 
-  const rivalsTransCompareData = [
-    {
-      name: "멧돼지",
-      username: "seunga_418",
-      totalRate: 2017,
-      rate: [
-        { date: 1, growth_rate: 51 },
-        { date: 2, growth_rate: 41 },
-        { date: 3, growth_rate: 23 },
-      ],
-    },
-    {
-      name: "나",
-      username: "me",
-      totalRate: 3450,
-      rate: [
-        { date: 1, growth_rate: 70 },
-        { date: 2, growth_rate: 41 },
-        { date: 3, growth_rate: 23 },
-      ],
-    },
-  ];
+  const [compareRivals, setCompetitionRivals] = useState<CompareRivalsResponse | null>(null);
 
-  const CHART_PADDING_LEFT = 10;
-  const CHART_PADDING_RIGHT = 10;
-  const CHART_PADDING_TOP = 12;
-  const CHART_PADDING_BOTTOM = 12;
-  const CHART_HEIGHT = 100;
-  const POINT_GAP = 30;
+  useEffect(() => {
+    const fetchCompareRival = async () => {
+      try {
+        const response = await compareRivalsApi.getCompareRivals({
+          category: competitionDropdown,
+          period: competitionPeriodDropDown,
+        });
+        if (!response.data) return;
+        setCompetitionRivals(response.data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
 
-  const COLORS: Record<string, string> = {
-    seunga_418: "#2F80ED",
-    me: "#FFFFFF",
+    fetchCompareRival();
+  }, [competitionDropdown, competitionPeriodDropDown]);
+
+  // Multi Axis Line Chart 구조에 맞게 변환
+  const buildMultiLineData = (totalData: RivalCompeteUser[]) => {
+    const labels = Array.from(
+      new Set(totalData.flatMap(user => user.dataPoint.map(p => p.date)))
+    ).sort();
+
+    const datasets = totalData.map(user => {
+      const map = new Map(user.dataPoint.map(p => [p.date, p.point]));
+
+      return {
+        label: user.name,
+        data: labels.map(date => map.get(date) ?? 0),
+      };
+    });
+
+    return { labels, datasets };
   };
 
-  const getMaxValue = () =>
-    Math.max(...rivalsTransCompareData.flatMap(r => r.rate.map(v => v.growth_rate)));
+  const [myUserId, setMyUserId] = useState<number | null>(null);
 
-  const maxValue = getMaxValue();
+  useEffect(() => {
+    const fetchMyProfile = async () => {
+      try {
+        const result = await authApi.getMyProfile();
 
-  const getX = (index: number) => CHART_PADDING_LEFT + index * POINT_GAP;
+        if (result.success && result.data) {
+          setMyUserId(result.data.id);
+        } else {
+          console.error("내 정보 조회 실패:", result.message);
+        }
+      } catch (error: unknown) {
+        console.error("내 정보 조회 실패:", error);
 
-  const getY = (value: number, max: number) => {
-    const usableHeight = CHART_HEIGHT - CHART_PADDING_TOP - CHART_PADDING_BOTTOM;
-    if (max === 0) return CHART_HEIGHT - CHART_PADDING_TOP;
-    return CHART_HEIGHT - CHART_PADDING_BOTTOM - (value / max) * usableHeight;
-  };
+        if (axios.isAxiosError(error)) {
+          const errorMessage =
+            error.response?.data?.error?.message ||
+            error.response?.data?.message ||
+            "내 정보 조회 중 오류가 발생했습니다.";
+          console.error(errorMessage);
+        }
+      }
+    };
 
-  const makeLinePath = (rates: CompareRate[], max: number) =>
-    rates
-      .map((r, i) => {
-        const x = getX(i);
-        const y = getY(r.growth_rate, max);
-        return `${i === 0 ? "M" : "L"} ${x} ${y}`;
-      })
-      .join(" ");
+    fetchMyProfile();
+  }, []);
 
-  const totalPoints = rivalsTransCompareData[0].rate.length;
-  const chartWidth = CHART_PADDING_LEFT + (totalPoints - 1) * POINT_GAP + CHART_PADDING_RIGHT;
+  const sortedCompareRivals = useMemo(() => {
+    if (!compareRivals?.totalData || !myUserId) return compareRivals;
+
+    const index = compareRivals.totalData.findIndex(user => user.id === myUserId);
+
+    if (index === -1) return compareRivals;
+
+    const reordered = [...compareRivals.totalData];
+    const [me] = reordered.splice(index, 1);
+    reordered.unshift(me);
+
+    return {
+      ...compareRivals,
+      totalData: reordered,
+    };
+  }, [compareRivals, myUserId]);
 
   return {
-    compareRivals: {
-      rivalsTransCompareData,
-      competitionDropdown,
-      setCompetitionDropdown,
-      competitionPeriodDropDown,
-      setCompetitionPeriodDropDown,
-      CHART_HEIGHT,
-      chartWidth,
-      COLORS,
-      getX,
-      getY,
-      makeLinePath,
-      maxValue,
-      competitionDropDownValue,
-      competitionPeriodDropDownValue,
-    },
+    compareRivals: sortedCompareRivals,
+    competitionDropdown,
+    setCompetitionDropdown,
+    competitionPeriodDropDown,
+    setCompetitionPeriodDropDown,
+    competitionDropDownValue,
+    competitionPeriodDropDownValue,
+    buildMultiLineData,
   };
 };

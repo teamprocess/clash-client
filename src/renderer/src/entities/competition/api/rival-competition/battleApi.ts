@@ -39,7 +39,9 @@ export const battleApi = {
 
   // 배틀 신청하기
   postCreateBattle: async (data: PostBattleRequest) => {
-    const result = await api.post<ApiResponse>(`/compete/rivals/battles/apply`, { ...data });
+    const result = await api.post<ApiResponse<PostBattleRequest>>(`/compete/rivals/battles/apply`, {
+      ...data,
+    });
     return result.data;
   },
 };

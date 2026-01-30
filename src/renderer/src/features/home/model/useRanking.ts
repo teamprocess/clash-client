@@ -1,14 +1,8 @@
 import { useEffect, useRef, useState, useLayoutEffect } from "react";
-import {
-  RankingsResponse,
-  CategoryType,
-  RankingPeriod,
-} from "@/entities/home/model/useRanking.types";
+import { RankingsResponse, CategoryType, PeriodType } from "@/entities/home/model/useRanking.types";
 import { rankingApi } from "@/entities/home/api/rankingApi";
 import { authApi } from "@/entities/user";
 import axios from "axios";
-
-export interface UserRankingType {}
 
 export const useRanking = () => {
   const [userList, setUserList] = useState<RankingsResponse>({
@@ -17,9 +11,6 @@ export const useRanking = () => {
     rankings: [],
   });
 
-  const [RankingDropdown, setRankingDropdown] = useState<CategoryType>("EXP");
-  const [RankingPeriodDropdown, setRankingPeriodDropdown] = useState<RankingPeriod>("WEEK");
-
   const rankingDropDownValue = [
     { key: "GITHUB", label: "Github" },
     { key: "EXP", label: "EXP" },
@@ -27,11 +18,14 @@ export const useRanking = () => {
   ];
 
   const rankingPeriodDropDownValue = [
-    { key: "DAY", label: "어제" },
+    { key: "DAY", label: "오늘" },
     { key: "WEEK", label: "이번 주" },
     { key: "MONTH", label: "이번 달" },
     { key: "YEAR", label: "이번 시즌" },
   ];
+
+  const [RankingDropdown, setRankingDropdown] = useState<CategoryType>("EXP");
+  const [RankingPeriodDropdown, setRankingPeriodDropdown] = useState<PeriodType>("DAY");
 
   useEffect(() => {
     const fetchRanking = async () => {
@@ -81,14 +75,11 @@ export const useRanking = () => {
     fetchMyProfile();
   }, []);
 
-  // 현재 유저에 대한 id 찾기
-  const currentUser = userList?.rankings.find(u => u.userId === myUserId);
+  const currentUserIndex = userList.rankings.findIndex(u => u.userId === myUserId);
 
-  // 현재 유저에 대한 순위 찾기
-  const currentUserRank =
-    userList?.rankings.findIndex(u => u.userId === myUserId) !== -1
-      ? userList!.rankings.findIndex(u => u.userId === myUserId) + 1
-      : 0;
+  const currentUser = currentUserIndex !== -1 ? userList.rankings[currentUserIndex] : null;
+
+  const currentUserRank = currentUserIndex !== -1 ? currentUserIndex + 1 : null;
 
   const [stickyState, setStickyState] = useState<"top" | "bottom" | "none">("none");
 
@@ -100,14 +91,15 @@ export const useRanking = () => {
 
       const wrapperRect = wrapperRef.current.getBoundingClientRect();
       const userRect = currentUserRef.current.getBoundingClientRect();
-      if (userRect.top <= wrapperRect.top) {
-        setStickyState("top");
-        return;
-      }
       if (userRect.top >= wrapperRect.bottom) {
         setStickyState("bottom");
         return;
       }
+      if (userRect.bottom <= wrapperRect.top) {
+        setStickyState("top");
+        return;
+      }
+
       setStickyState("none");
     };
 
@@ -118,7 +110,7 @@ export const useRanking = () => {
     return () => {
       wrapper.removeEventListener("scroll", handleScroll);
     };
-  }, [currentUser]);
+  }, [userList.rankings]);
 
   return {
     RankingDropdown,

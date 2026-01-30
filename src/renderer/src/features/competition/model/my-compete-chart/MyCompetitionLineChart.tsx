@@ -1,16 +1,18 @@
 import { Line } from "react-chartjs-2";
 import "chart.js/auto";
 
-interface ActiveLineChartProps {
+interface MyCompetitionLineChartProps {
   data: {
-    labels: number[];
-    values: number[];
+    dataPoint: {
+      labels: string[];
+      values: number[];
+    };
   };
 }
 
-export const ActiveLineChart = ({ data }: ActiveLineChartProps) => {
-  const labels = data.labels.map(v => `${v}월`);
-  const values = data.values.map(v => v);
+export const MyCompetitionLineChart = ({ data }: MyCompetitionLineChartProps) => {
+  const labels = data.dataPoint.labels.map(v => v);
+  const values = data.dataPoint.values.map(v => v);
 
   return (
     <Line
@@ -19,12 +21,12 @@ export const ActiveLineChart = ({ data }: ActiveLineChartProps) => {
         datasets: [
           {
             data: values,
-            borderColor: "#747678",
-            backgroundColor: "#DCDDDE",
             borderWidth: 2,
+            borderColor: "#0081CC",
+            backgroundColor: "none",
             pointRadius: 8,
             pointHoverRadius: 9,
-            pointBackgroundColor: "#DCDDDE",
+            pointBackgroundColor: "#0081CC",
             tension: 0,
             fill: false,
           },

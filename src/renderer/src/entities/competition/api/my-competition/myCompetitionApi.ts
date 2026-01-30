@@ -2,14 +2,17 @@ import { api, ApiResponse } from "@/shared/api";
 import {
   MyCompareRequest,
   MyCompareResponse,
+  MyGrowthRateRequest,
   MyGrowthRateResponse,
 } from "@/entities/competition/model/my-competition/myCompetition.types";
 
 export const myCompetitionApi = {
   // 내 성장도 분석
   // 차후 chart.js를 통해 구현 예정
-  getMyGrowthRate: async () => {
-    const result = await api.get<ApiResponse<MyGrowthRateResponse>>("/compete/my/growth-rate");
+  getMyGrowthRate: async (data: MyGrowthRateRequest) => {
+    const result = await api.get<ApiResponse<MyGrowthRateResponse>>("/compete/my/growth-rate", {
+      params: data,
+    });
     return result.data;
   },
 
