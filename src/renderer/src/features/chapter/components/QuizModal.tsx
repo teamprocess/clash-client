@@ -37,7 +37,7 @@ export const QuizModal = ({
 
   if (state.view === "final") {
     return (
-      <Modal width={25} height={33} isOpen={isOpen} onClose={handleClose} gap={6.5}>
+      <Modal width={25} height={34} isOpen={isOpen} onClose={handleClose} gap={6.5}>
         <QuizResult
           isFinal
           isPassed={state.correctCount >= 4}
@@ -52,7 +52,7 @@ export const QuizModal = ({
 
   if (state.view === "result") {
     return (
-      <Modal width={25} height={33} isOpen={isOpen} onClose={handleClose} gap={3}>
+      <Modal width={25} height={34} isOpen={isOpen} onClose={handleClose} gap={3}>
         <QuizResult
           isFinal={false}
           isCorrect={state.lastResult === true}
@@ -66,7 +66,7 @@ export const QuizModal = ({
   }
 
   return (
-    <Modal width={25} height={33} isOpen={isOpen} onClose={handleClose} gap={3}>
+    <Modal width={25} height={34} isOpen={isOpen} onClose={handleClose} gap={3}>
       <S.ModalTop>
         <S.ProgressBarWrapper>
           <S.BarBackground>

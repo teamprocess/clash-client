@@ -8,6 +8,7 @@ import { useChapter } from "@/features/chapter/model/useChapter";
 import { sectionApi } from "@/entities/roadmap/section/api/sectionApi";
 import { MajorEnum } from "@/entities/roadmap/section/model/section.types";
 import { useEffect, useState } from "react";
+import { authApi } from "@/entities/user";
 
 export const ChapterPage = () => {
   const { sectionId } = useParams<{ sectionId: string }>();
@@ -34,7 +35,7 @@ export const ChapterPage = () => {
   const navigate = useNavigate();
 
   const fetchData = async () => {
-    const myProfile = await sectionApi.getMyProfile();
+    const myProfile = await authApi.getMyProfile();
     const myMajor = myProfile.data?.major as MajorEnum;
     const section = await sectionApi.getMajorSection({ major: myMajor });
     return { data: section.data, myMajor };
