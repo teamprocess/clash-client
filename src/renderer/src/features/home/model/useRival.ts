@@ -4,7 +4,7 @@ import {
   MyRivalsRequest,
   MyRivalsResponse,
 } from "@/entities/competition/model/rival-competition/myRivals.types";
-import { risvalApi } from "@/entities/home/api/rivalApi";
+import { rivalsApi } from "@/entities/home/api/rivalApi";
 import { RivalUsersResponse } from "@/entities/home/model/useRival.types";
 
 export interface MyRivalItem {
@@ -43,7 +43,7 @@ export const useRival = () => {
   useEffect(() => {
     const fetchRivalsList = async () => {
       try {
-        const response = await risvalApi.getRivalList();
+        const response = await rivalsApi.getRivalList();
         if (!response.data) return;
         setUserList(response.data);
       } catch (error) {
@@ -109,7 +109,7 @@ export const useRival = () => {
           ids: rivalSelectedId.map(id => ({ id })),
         };
 
-        const response = await risvalApi.postRivalApply(payload);
+        const response = await rivalsApi.postRivalApply(payload);
         if (!response.data) return;
         handleClose();
       } catch (error) {
