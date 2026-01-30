@@ -2,7 +2,7 @@ export const CATEGORY = {
   EXP: "EXP",
   GITHUB: "GITHUB",
   SOLVED_AC: "SOLVED_AC",
-  STUDY_TIME: "STUDY_TIME",
+  ACTIVE_TIME: "ACTIVE_TIME",
 } as const;
 
 export type CategoryType = (typeof CATEGORY)[keyof typeof CATEGORY];

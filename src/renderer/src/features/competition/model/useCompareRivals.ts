@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { compareRivalsApi } from "@/entities/competition/api/rival-competition/compareRivalsApi";
 import {
   CATEGORY,
@@ -8,6 +8,8 @@ import {
   PeriodType,
   RivalCompeteUser,
 } from "@/entities/competition/model/rival-competition/compareRivals.types";
+import { authApi } from "@/entities/user";
+import axios from "axios";
 
 export const colorsOfMultiLine: string[] = ["#FFF", "#0081CC", "#C60608", "#15B756", "#FFCC01"];
 
@@ -15,7 +17,7 @@ const competitionDropDownValue = [
   { key: "EXP", label: "EXP" },
   { key: "GITHUB", label: "Github" },
   { key: "SOLVED_AC", label: "solved.ac" },
-  { key: "STUDY_TIME", label: "총 학습 시간" },
+  { key: "ACTIVE_TIME", label: "총 학습 시간" },
 ];
 
 const competitionPeriodDropDownValue = [
@@ -68,8 +70,53 @@ export const useCompareRival = () => {
     return { labels, datasets };
   };
 
+  const [myUserId, setMyUserId] = useState<number | null>(null);
+
+  useEffect(() => {
+    const fetchMyProfile = async () => {
+      try {
+        const result = await authApi.getMyProfile();
+
+        if (result.success && result.data) {
+          setMyUserId(result.data.id);
+        } else {
+          console.error("내 정보 조회 실패:", result.message);
+        }
+      } catch (error: unknown) {
+        console.error("내 정보 조회 실패:", error);
+
+        if (axios.isAxiosError(error)) {
+          const errorMessage =
+            error.response?.data?.error?.message ||
+            error.response?.data?.message ||
+            "내 정보 조회 중 오류가 발생했습니다.";
+          console.error(errorMessage);
+        }
+      }
+    };
+
+    fetchMyProfile();
+  }, []);
+
+  const sortedCompareRivals = useMemo(() => {
+    if (!compareRivals?.totalData || !myUserId) return compareRivals;
+
+    const index = compareRivals.totalData.findIndex(user => user.id === myUserId);
+
+    if (index === -1) return compareRivals;
+
+    const reordered = [...compareRivals.totalData];
+    const [me] = reordered.splice(index, 1);
+    reordered.unshift(me);
+
+    return {
+      ...compareRivals,
+      totalData: reordered,
+    };
+  }, [compareRivals, myUserId]);
+
   return {
-    compareRivals,
+    compareRivals: sortedCompareRivals,
     competitionDropdown,
     setCompetitionDropdown,
     competitionPeriodDropDown,
