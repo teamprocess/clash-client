@@ -116,6 +116,7 @@ export const TaskTextInput = styled.input`
 
 export const ButtonBox = styled.div`
   display: flex;
+  justify-content: flex-end;
   gap: 0.5rem;
 `;
 

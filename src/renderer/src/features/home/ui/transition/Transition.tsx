@@ -1,13 +1,11 @@
 import * as S from "./Transition.style";
-import { TransitionProps } from "@/features/home/model/useHome";
 import { Link } from "react-router-dom";
+import { formatTime } from "@/shared/lib";
+import { useTransition } from "@/features/home/model/useTransition";
 
-export const Transition = ({
-  activeTransitionData,
-  commitTransitionData,
-  transitionMaxCommit,
-  maxActive,
-}: TransitionProps) => {
+export const Transition = () => {
+  const getTransitionData = useTransition();
+
   return (
     <S.TransitionContainer>
       <S.TitleBox>
@@ -26,16 +24,30 @@ export const Transition = ({
             <S.InfoBox>
               <S.GraphBox>
                 <S.Bars>
-                  <S.Value value={activeTransitionData.yesterday} max={maxActive}>
-                    {activeTransitionData.yesterday}
+                  <S.Value
+                    value={getTransitionData.transitionData?.activeTime.yesterdayActiveTime ?? 0}
+                    max={getTransitionData.maxActive}
+                  >
+                    {formatTime(
+                      getTransitionData.transitionData?.activeTime.yesterdayActiveTime ?? 0
+                    )}
                   </S.Value>
-                  <S.Bar value={activeTransitionData.yesterday} max={maxActive} />
+                  <S.Bar
+                    value={getTransitionData.transitionData?.activeTime.yesterdayActiveTime ?? 0}
+                    max={getTransitionData.maxActive}
+                  />
                 </S.Bars>
                 <S.Bars>
-                  <S.Value value={activeTransitionData.today} max={maxActive}>
-                    {activeTransitionData.today}
+                  <S.Value
+                    value={getTransitionData.transitionData?.activeTime.todayActiveTime ?? 0}
+                    max={getTransitionData.maxActive}
+                  >
+                    {formatTime(getTransitionData.transitionData?.activeTime.todayActiveTime ?? 0)}
                   </S.Value>
-                  <S.Bar value={activeTransitionData.today} max={maxActive} />
+                  <S.Bar
+                    value={getTransitionData.transitionData?.activeTime.todayActiveTime ?? 0}
+                    max={getTransitionData.maxActive}
+                  />
                 </S.Bars>
               </S.GraphBox>
               <S.Line />
@@ -51,16 +63,32 @@ export const Transition = ({
             <S.InfoBox>
               <S.GraphBox>
                 <S.Bars>
-                  <S.Value value={commitTransitionData.yesterday} max={transitionMaxCommit}>
-                    {commitTransitionData.yesterday}
+                  <S.Value
+                    value={
+                      getTransitionData.transitionData?.contributors.yesterdayContributors ?? 0
+                    }
+                    max={getTransitionData.maxContributors}
+                  >
+                    {getTransitionData.transitionData?.contributors.yesterdayContributors ?? 0}
                   </S.Value>
-                  <S.Bar value={commitTransitionData.yesterday} max={transitionMaxCommit} />
+                  <S.Bar
+                    value={
+                      getTransitionData.transitionData?.contributors.yesterdayContributors ?? 0
+                    }
+                    max={getTransitionData.maxContributors}
+                  />
                 </S.Bars>
                 <S.Bars>
-                  <S.Value value={commitTransitionData.today} max={transitionMaxCommit}>
-                    {commitTransitionData.today}
+                  <S.Value
+                    value={getTransitionData.transitionData?.contributors.todayContributors ?? 0}
+                    max={getTransitionData.maxContributors}
+                  >
+                    {getTransitionData.transitionData?.contributors.todayContributors ?? 0}
                   </S.Value>
-                  <S.Bar value={commitTransitionData.today} max={transitionMaxCommit} />
+                  <S.Bar
+                    value={getTransitionData.transitionData?.contributors.todayContributors ?? 0}
+                    max={getTransitionData.maxContributors}
+                  />
                 </S.Bars>
               </S.GraphBox>
               <S.Line />

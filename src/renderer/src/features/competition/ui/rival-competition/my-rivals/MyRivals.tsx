@@ -1,6 +1,7 @@
 import * as S from "./MyRivals.style";
-import { getStatus } from "@/features/home/model/useHome";
+import { UserStatus, getStatus } from "@/features/competition/model/useMyRivals";
 import { useMyRivals } from "@/features/competition/model/useMyRivals";
+import { formatTime } from "@/shared/lib";
 
 export const MyRivals = () => {
   const { myRivals } = useMyRivals();
@@ -13,7 +14,7 @@ export const MyRivals = () => {
         </S.TitleBox>
         <S.GaroLine />
         <S.ProfileWrapper>
-          {myRivals.RivalsData.data.my_rivals.map(user => (
+          {myRivals.myRivalsData?.myRivals?.map(user => (
             <S.ProfileContainer key={user.username}>
               <S.ProfileContent>
                 <S.ProfileIcon />
@@ -21,16 +22,18 @@ export const MyRivals = () => {
                   <S.ProfileName>{user.name}</S.ProfileName>
                   <S.ProfileMention>@{user.username}</S.ProfileMention>
                 </S.NameBox>
-                <S.Status $status={user.status}>{getStatus(user.status)}</S.Status>
+                <S.Status $status={user.status as UserStatus}>
+                  {getStatus(user.status as UserStatus)}
+                </S.Status>
               </S.ProfileContent>
               <S.PlayTime>
                 {getStatus(user.status) === "온라인" && (
                   <>
-                    <S.UsingAppText>{user.using_app}</S.UsingAppText>
+                    <S.UsingAppText>{user.usingApp}</S.UsingAppText>
                     <S.Point>·</S.Point>
                   </>
                 )}
-                {user.active_time}
+                {formatTime(Number(user.activeTime))}
               </S.PlayTime>
             </S.ProfileContainer>
           ))}

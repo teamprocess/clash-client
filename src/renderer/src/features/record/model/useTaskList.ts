@@ -24,11 +24,11 @@ export const useTaskList = () => {
 
   const menuRef = useRef<HTMLDivElement>(null);
 
-  const handlePlayPauseClick = (taskId: number) => {
+  const handlePlayPauseClick = async (taskId: number) => {
     if (activeTaskId === taskId) {
-      stopStudy();
+      await stopStudy();
     } else {
-      startStudy(taskId);
+      await startStudy(taskId);
     }
   };
 
@@ -57,13 +57,13 @@ export const useTaskList = () => {
     setTaskName("");
   };
 
-  const handleSaveTask = () => {
+  const handleSaveTask = async () => {
     if (!taskName.trim()) return;
 
     if (editMode === "add") {
-      addTask(taskName);
+      await addTask(taskName);
     } else if (editMode === "edit" && editingTaskId !== null) {
-      updateTask(editingTaskId, taskName);
+      await updateTask(editingTaskId, taskName);
     }
 
     handleCancelEdit();
@@ -78,9 +78,9 @@ export const useTaskList = () => {
     setDeleteTargetId(null);
   };
 
-  const handleConfirmDelete = () => {
+  const handleConfirmDelete = async () => {
     if (deleteTargetId !== null) {
-      deleteTask(deleteTargetId);
+      await deleteTask(deleteTargetId);
       setDeleteTargetId(null);
     }
   };
