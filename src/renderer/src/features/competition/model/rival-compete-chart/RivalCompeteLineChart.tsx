@@ -33,7 +33,7 @@ export const RivalCompetitionLineChart = ({ chartData }: RivalCompetitionLineCha
         maintainAspectRatio: false,
         plugins: {
           legend: {
-            display: false,
+            display: true,
 
             // 언더스코어 안쓰는 데이터 무시 -> 멀티차트에서만 사용
             onClick: (_, legendItem, legend) => {

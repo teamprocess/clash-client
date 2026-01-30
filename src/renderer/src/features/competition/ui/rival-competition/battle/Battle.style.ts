@@ -485,7 +485,7 @@ export const ModalContent = styled.div`
   display: flex;
   flex-direction: column;
   height: 100%;
-  padding: 1rem;
+  padding-top: 1.5rem;
   align-items: flex-end;
   justify-content: space-between;
 `;
