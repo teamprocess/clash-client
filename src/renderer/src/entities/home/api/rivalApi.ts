@@ -10,7 +10,7 @@ export const rivalsApi = {
 
   // 라이벌 신청
   postRivalApply: async (data: RivalApplyRequest) => {
-    const result = await api.post<ApiResponse>(`/compete/rivals/battles/apply`, { ...data });
+    const result = await api.post<ApiResponse>(`/compete/compete/rivals/apply`, { ...data });
     return result.data;
   },
 };
