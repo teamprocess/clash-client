@@ -1,6 +1,10 @@
 import * as S from "./Battle.style";
 import { useBattle } from "@/features/competition/model/useBattle";
 import { Modal } from "@/shared/ui/modal/Modal";
+import {
+  AnalyzeCategory,
+  MatchValue,
+} from "@/entities/competition/model/rival-competition/battle.types";
 
 export const Battle = () => {
   const { battle } = useBattle();
@@ -19,80 +23,76 @@ export const Battle = () => {
             </S.TitleBox>
             <S.GaroLine />
             <S.BattleListContainer>
-              {battle.battleRivals.map(rival => (
+              {battle.battleData?.battles?.slice(0, 4).map(battleItem => (
                 <S.BattleProfileBox
-                  key={rival.username}
-                  onClick={() => battle.selectBattleTarget(rival.username)}
+                  key={battleItem.id}
+                  onClick={() => battle.selectBattleTarget(battleItem.id)}
                 >
                   <S.ProfileContent>
-                    <S.NameBox style={{ gap: "0.75rem" }}>
-                      <S.UpperHandJudge $type={battle.judgeUpperHand(rival.username)}>
-                        {battle.judgeUpperHand(rival.username)}
+                    <S.NameBox>
+                      <S.UpperHandJudge $type={battle.judgeUpperHand(battleItem.result)}>
+                        {battle.judgeUpperHand(battleItem.result)}
                       </S.UpperHandJudge>
-                      <S.BattleName>vs {rival.name}</S.BattleName>
+
+                      <S.BattleName>vs {battleItem.enemy.name}</S.BattleName>
+
                       <S.DateBox>
                         <S.DateIcon />
-                        <S.DateText>2026년 1월 13일까지</S.DateText>
+                        <S.DateText>{battleItem.expireDate}</S.DateText>
                       </S.DateBox>
                     </S.NameBox>
                   </S.ProfileContent>
 
                   <S.DetailBox>
-                    <S.DetailButton>상세내용보기</S.DetailButton>
+                    <S.DetailButton>
+                      {battleItem.result === MatchValue.WON || battleItem.result === MatchValue.LOST
+                        ? "결과 보기"
+                        : "상세 내용 보기"}
+                    </S.DetailButton>
                     <S.BackArrowIcon />
                   </S.DetailBox>
                 </S.BattleProfileBox>
               ))}
             </S.BattleListContainer>
 
-            {battle.battleTargetUsername ? (
+            {battle.isBattleSelected ? (
               <S.DetailWrapper>
-                {(() => {
-                  const rival = battle.battleRivals.find(
-                    d => d.username === battle.battleTargetUsername
-                  );
-                  const me = battle.me;
+                <S.UpperHandContainer>
+                  <S.UpperHandProfile>
+                    <S.UpperHandProfileIcon />
+                    <S.UpperHandName>{battle.battleDetailData?.enemy.name}</S.UpperHandName>
+                  </S.UpperHandProfile>
+                  <S.TransitionBox>
+                    <S.UpperHandTransition>
+                      <S.UpperHandBar
+                        $width={battle.rivalPercent}
+                        $isRival
+                        style={{ justifyContent: "flex-start" }}
+                      >
+                        <S.PercentText>{Math.round(battle.rivalPercent)}%</S.PercentText>
+                      </S.UpperHandBar>
 
-                  if (!rival || !me) return null;
+                      <S.UpperHandBar
+                        $width={battle.myPercent}
+                        $isRival={false}
+                        style={{ justifyContent: "flex-end" }}
+                      >
+                        <S.PercentText>{Math.round(battle.myPercent)}%</S.PercentText>
+                      </S.UpperHandBar>
+                    </S.UpperHandTransition>
 
-                  const total = rival.totalRate + me.totalRate;
-                  const rivalPercent = total === 0 ? 50 : (rival.totalRate / total) * 100;
-                  const myPercent = 100 - rivalPercent;
+                    <S.WarPeriodText>
+                      {battle.remainDays !== 0
+                        ? `종료 ${battle.battleDetailData?.expireDate} · ${battle.remainDays}일 남음`
+                        : `종료된 배틀입니다!`}
+                    </S.WarPeriodText>
+                  </S.TransitionBox>
+                  <S.UpperHandProfile>
+                    <S.UpperHandProfileIcon />
+                    <S.UpperHandName>나</S.UpperHandName>
+                  </S.UpperHandProfile>
+                </S.UpperHandContainer>
 
-                  return (
-                    <S.UpperHandContainer>
-                      <S.UpperHandProfile>
-                        <S.UpperHandProfileIcon />
-                        <S.UpperHandName>{rival.name}</S.UpperHandName>
-                      </S.UpperHandProfile>
-                      <S.TransitionBox>
-                        <S.UpperHandTransition>
-                          <S.UpperHandBar
-                            $width={rivalPercent}
-                            $isRival
-                            style={{ justifyContent: "flex-start" }}
-                          >
-                            <S.PercentText>{Math.round(rivalPercent)}%</S.PercentText>
-                          </S.UpperHandBar>
-
-                          <S.UpperHandBar
-                            $width={myPercent}
-                            $isRival={false}
-                            style={{ justifyContent: "flex-end" }}
-                          >
-                            <S.PercentText>{Math.round(myPercent)}%</S.PercentText>
-                          </S.UpperHandBar>
-                        </S.UpperHandTransition>
-
-                        <S.WarPeriodText>종료 2026년 1월 13일 · 3일 남음</S.WarPeriodText>
-                      </S.TransitionBox>
-                      <S.UpperHandProfile>
-                        <S.UpperHandProfileIcon />
-                        <S.UpperHandName>나</S.UpperHandName>
-                      </S.UpperHandProfile>
-                    </S.UpperHandContainer>
-                  );
-                })()}
                 <S.GaroLine />
                 <S.DetailAnalyzeContainer>
                   <S.TitleBox>
@@ -100,10 +100,10 @@ export const Battle = () => {
                     <S.DropDownBox>
                       <S.SelectWrapper>
                         <S.Select
-                          value={battle.competitionDropdown}
-                          onChange={e => battle.setCompetitionDropdown(e.target.value)}
+                          value={battle.category}
+                          onChange={e => battle.setCategory(e.target.value as AnalyzeCategory)}
                         >
-                          {battle.competitionDropDownValue.map(option => (
+                          {battle.analyzeCategoryOptions.map(option => (
                             <S.Option key={option.key} value={option.key}>
                               {option.label}
                             </S.Option>
@@ -125,16 +125,42 @@ export const Battle = () => {
                       }}
                     >
                       <S.AnalyzeContent>
-                        <S.AnalyzeName>{battle.selectedRival?.name}</S.AnalyzeName>
+                        <S.AnalyzeName>{battle.battleDetailData?.enemy.name}</S.AnalyzeName>
                         <S.AnalyzeName>나</S.AnalyzeName>
                       </S.AnalyzeContent>
                       <S.SeroLine />
                       <S.AnalyzeContent style={{ width: "100%" }}>
-                        <S.AnalyzeBar $width={battle.rivalPercent} $isRival>
-                          <S.AnalyzeLabel>{battle.rivalValue.toLocaleString()} EXP</S.AnalyzeLabel>
+                        <S.AnalyzeBar
+                          $width={(battle.rivalAnalyzePercent / battle.analyzeRate) * 100}
+                          $isRival
+                        >
+                          <S.AnalyzeLabel>
+                            <div>
+                              {Math.round(battle.rivalAnalyzePercent)}{" "}
+                              {battle.detailTextTranslate(battle.category)}
+                            </div>
+                            {battle.isRivalHigher && battle.diff > 0 && (
+                              <S.CompareDiff>
+                                +{(battle.diff / battle.analyzeRate) * 100}%
+                              </S.CompareDiff>
+                            )}
+                          </S.AnalyzeLabel>
                         </S.AnalyzeBar>
-                        <S.AnalyzeBar $width={battle.myPercent} $isRival={false}>
-                          <S.AnalyzeLabel>{battle.myValue.toLocaleString()} EXP</S.AnalyzeLabel>
+                        <S.AnalyzeBar
+                          $width={Math.round((battle.myAnalyzePercent / battle.analyzeRate) * 100)}
+                          $isRival={false}
+                        >
+                          <S.AnalyzeLabel>
+                            <div>
+                              {Math.round(battle.myAnalyzePercent)}{" "}
+                              {battle.detailTextTranslate(battle.category)}
+                            </div>
+                            {!battle.isRivalHigher && battle.diff > 0 && (
+                              <S.CompareDiff>
+                                +{Math.round((battle.diff / battle.analyzeRate) * 100)}%
+                              </S.CompareDiff>
+                            )}
+                          </S.AnalyzeLabel>
                         </S.AnalyzeBar>
                       </S.AnalyzeContent>
                     </div>
@@ -162,43 +188,15 @@ export const Battle = () => {
           isOpen={battle.isModalOpen}
           onClose={battle.closeModal}
         >
-          <div
-            style={{
-              height: "100%",
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "flex-end",
-              justifyContent: "space-between",
-            }}
-          >
-            <div
-              style={{
-                width: "100%",
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-              }}
-            >
-              <div
-                style={{
-                  width: "100%",
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                }}
-              >
-                <S.SearchBox>
-                  <S.SearchUsers placeholder={"이름 또는 아이디 검색"} />
-                  <S.SearchIconBox>
-                    <S.SearchIcon />
-                  </S.SearchIconBox>
-                </S.SearchBox>
+          <S.ModalContent>
+            <S.ModalBox>
+              <S.ModalBox>
                 <S.UserChoiceContainer>
-                  {battle.battleRivals.map(user => (
+                  {battle.battleList?.rivals.map(user => (
                     <S.UserChoiceBox
-                      key={user.username}
-                      $isSelected={battle.rivalSelectedId === user.username}
-                      onClick={() => battle.handleUserSelect(user.username)}
+                      key={user.id}
+                      $isSelected={battle.rivalSelectedId === user.id}
+                      onClick={() => battle.handleUserSelect(user.id)}
                     >
                       <S.ProfileContent style={{ height: "3rem" }}>
                         <S.ProfileIcon />
@@ -207,24 +205,38 @@ export const Battle = () => {
                         </S.ProfileTagBox>
                       </S.ProfileContent>
 
-                      {battle.rivalSelectedId === user.name ? (
-                        <S.CheckedIcon />
-                      ) : (
-                        <S.UncheckedBox />
-                      )}
+                      {battle.rivalSelectedId === user.id ? <S.CheckedIcon /> : <S.UncheckedBox />}
                     </S.UserChoiceBox>
                   ))}
                 </S.UserChoiceContainer>
-              </div>
+              </S.ModalBox>
+            </S.ModalBox>
+            <div style={{ display: "flex", width: "100%", justifyContent: "space-between" }}>
+              {battle.periodOptions.map(day => (
+                <S.DateChoiceBox
+                  key={day}
+                  onClick={() => {
+                    battle.setSelectedDay(day);
+                    battle.setDuration(day);
+                  }}
+                  $active={battle.selectedDay === day}
+                >
+                  {day}일
+                </S.DateChoiceBox>
+              ))}
             </div>
             <S.BottomBox>
               <S.ButtonBox>
                 <S.CloseButton onClick={battle.closeModal}>취소</S.CloseButton>
-                {/* 임시로 저장해둔 handleModalClose, 추후 createBattle 함수 제작 예정 */}
-                <S.OkayButton onClick={battle.closeModal}>배틀 신청</S.OkayButton>
+                <S.OkayButton
+                  disabled={!battle.rivalSelectedId || !battle.duration}
+                  onClick={battle.postBattle}
+                >
+                  배틀 신청
+                </S.OkayButton>
               </S.ButtonBox>
             </S.BottomBox>
-          </div>
+          </S.ModalContent>
         </Modal>
       ) : null}
     </>

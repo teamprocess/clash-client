@@ -1,7 +1,7 @@
 import { useState } from "react";
 import * as S from "./Timer.style";
 import { Toggle } from "@/shared/ui/toggle/Toggle";
-import { formatTime } from "@/shared/lib/formatTime";
+import { formatTime } from "@/shared/lib";
 import { useRecord } from "../../model/useRecord";
 
 export const Timer = () => {
@@ -14,7 +14,7 @@ export const Timer = () => {
       <S.Date>{currentDate}</S.Date>
       <S.TimeBox>
         {activeTaskId !== null && (
-          <S.PlayButton onClick={stopStudy}>
+          <S.PlayButton onClick={() => stopStudy()}>
             <S.PauseIcon />
           </S.PlayButton>
         )}

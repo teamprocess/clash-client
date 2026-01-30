@@ -65,6 +65,21 @@ function setupAppMonitorHandlers() {
   });
 }
 
+// 개발 환경에서 자체 서명 인증서 허용
+if (is.dev) {
+  app.commandLine.appendSwitch("ignore-certificate-errors");
+}
+
+// 개발 환경에서는 인증서 오류 무시
+app.on("certificate-error", (event, _webContents, _url, _error, _certificate, callback) => {
+  if (is.dev) {
+    event.preventDefault();
+    callback(true);
+  } else {
+    callback(false);
+  }
+});
+
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
@@ -73,8 +88,11 @@ app.whenReady().then(() => {
   electronApp.setAppUserModelId("com.electron");
 
   // CSP 설정
-  const apiUrl = process.env.VITE_API_URL || "http://localhost:8080";
-  const apiOrigin = new URL(apiUrl).origin;
+  const apiUrl = process.env.VITE_API_URL;
+  if (!apiUrl) {
+    console.error("VITE_API_URL이 설정되지 않았습니다.");
+  }
+  const apiOrigin = apiUrl ? new URL(apiUrl).origin : "";
 
   session.defaultSession.webRequest.onHeadersReceived((details, callback) => {
     callback({
