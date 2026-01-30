@@ -55,10 +55,10 @@ export const QuizModal = ({
       <Modal width={25} height={33} isOpen={isOpen} onClose={handleClose} gap={3}>
         <QuizResult
           isFinal={false}
-          isCorrect={state.lastResult ?? false}
+          isCorrect={state.lastResult === true}
           currentIndex={state.currentIndex}
           total={questions.length}
-          explanation={currentQuestion.explanation}
+          explanation={state.explanation}
           onNext={handleNextOrClose}
         />
       </Modal>

@@ -49,3 +49,23 @@ export interface GetChapterDetailsResponse {
   totalQuestions: number;
   missions: Mission[] | [];
 }
+
+export interface SubmitAnswerRequest {
+  missionId: number;
+  questionId: number;
+  submittedChoiceId: number;
+}
+
+export interface SubmitAnswerResponse {
+  isCorrect: boolean;
+  explanation: string;
+  currentProgress: number;
+  totalQuestion: number;
+  correctChoiceId: number | null;
+  isMissionCleared: boolean;
+  nextMissionId: number | null;
+  nextMissionOrderIndex: number | null;
+  isChapterCleared: boolean;
+  nextChapterId: number | null;
+  nextChapterOrderIndex: number | null;
+}
