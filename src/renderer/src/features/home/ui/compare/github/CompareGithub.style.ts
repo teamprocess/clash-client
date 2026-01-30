@@ -227,9 +227,14 @@ export const RateBox = styled.div`
 `;
 
 export const GitCommitIcon = styled(GitCommits)``;
-export const FireIcon = styled(Fire)``;
+export const FireIcon = styled(Fire)`
+  color: ${({ theme }) => theme.label.alternative};
+`;
 export const CodeIcon = styled(Code)``;
-export const TimeIcon = styled(Time)``;
+export const TimeIcon = styled(Time)`
+  width: 1.25rem;
+  height: 1.25rem;
+`;
 export const GitPRIcon = styled(GitPR)``;
 export const StatusIcon = styled(Status)``;
 export const ReviewIcon = styled(Review)<{ $width: number }>`

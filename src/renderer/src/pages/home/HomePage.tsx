@@ -3,17 +3,14 @@ import { Transition } from "@/features/home/ui/transition/Transition";
 import { Rival } from "@/features/home/ui/rival/Rival";
 import { Active } from "@/features/home/ui/active/Active";
 import { Ranking } from "@/features/home/ui/ranking/Ranking";
-import { useHome } from "@/features/home/model/useHome";
 
 export const HomePage = () => {
-  const { transition, rival, active, ranking } = useHome();
-
   return (
     <S.HomeContainer>
-      <Transition {...transition} />
-      <Rival {...rival} />
-      <Active {...active} />
-      <Ranking {...ranking} />
+      <Transition />
+      <Rival />
+      <Active />
+      <Ranking />
     </S.HomeContainer>
   );
 };

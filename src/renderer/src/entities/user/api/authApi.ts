@@ -32,6 +32,22 @@ export interface EmailVerifyRequest {
   code: string;
 }
 
+export interface getMyProfileResponse {
+  id: number;
+  createdAt: string;
+  updatedAt: string;
+  username: string;
+  name: string;
+  email: string;
+  role: string;
+  profileImage: string;
+  totalExp: number;
+  totalCookie: number;
+  totalToken: number;
+  major: string;
+  userStatus: string;
+}
+
 export const authApi = {
   // 로그인
   signIn: async (data: SignInRequest) => {
@@ -71,6 +87,12 @@ export const authApi = {
   // 로그아웃
   signOut: async () => {
     const result = await api.post<ApiResponse<void>>("/auth/sign-out");
+    return result.data;
+  },
+
+  // 내 정보 조회
+  getMyProfile: async () => {
+    const result = await api.get<ApiResponse<getMyProfileResponse>>("/users/me");
     return result.data;
   },
 };

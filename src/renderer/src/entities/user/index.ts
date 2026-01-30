@@ -6,4 +6,6 @@ export type {
   EmailVerifyRequest,
   UsernameDuplicateCheckRequest,
   UsernameDuplicateCheckResponse,
+  getMyProfileResponse,
 } from "./api/authApi";
+export { useUser } from "./model/useUser";

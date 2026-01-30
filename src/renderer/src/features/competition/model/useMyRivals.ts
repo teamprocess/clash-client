@@ -1,63 +1,39 @@
+import { useEffect, useState } from "react";
+import { myRivalsApi } from "@/entities/competition/api/rival-competition/myRivalsApi";
+import { MyRivalsResponse } from "@/entities/competition/model/rival-competition/myRivals.types";
+
 export type UserStatus = "ONLINE" | "AWAY" | "OFFLINE";
 
-interface RivalUser {
-  name: string;
-  username: string;
-  profile_image: string;
-  active_time: number;
-  using_app: string;
-  status: UserStatus;
-}
-
-interface RivalsResponse {
-  data: {
-    my_rivals: RivalUser[];
-  };
-}
+export const getStatus = (status: UserStatus) => {
+  switch (status) {
+    case "ONLINE":
+      return "온라인";
+    case "AWAY":
+      return "자리비움";
+    case "OFFLINE":
+      return "오프라인";
+    default:
+      return "";
+  }
+};
 
 export const useMyRivals = () => {
-  const RivalsData: RivalsResponse = {
-    data: {
-      my_rivals: [
-        {
-          name: "멧돼지",
-          username: "seunga_418",
-          profile_image: "https://example.com/profile/seunga_418.png",
-          active_time: 21522,
-          using_app: "Visual Studio Code",
-          status: "ONLINE",
-        },
-        {
-          name: "채근영",
-          username: "chaeyn",
-          profile_image: "https://example.com/profile/chaeyn.png",
-          active_time: 18340,
-          using_app: "IntelliJ",
-          status: "AWAY",
-        },
-        {
-          name: "한승환",
-          username: "h.7xn",
-          profile_image: "https://example.com/profile/h7xn.png",
-          active_time: 9720,
-          using_app: "Chrome",
-          status: "OFFLINE",
-        },
-        {
-          name: "권대형",
-          username: "gorani",
-          profile_image: "https://example.com/profile/gorani.png",
-          active_time: 14380,
-          using_app: "Notion",
-          status: "ONLINE",
-        },
-      ],
-    },
-  };
+  const [myRivalsData, setMyRivalsData] = useState<MyRivalsResponse | null>(null);
+
+  useEffect(() => {
+    const fetchMyRivalData = async () => {
+      try {
+        const result = await myRivalsApi.getMyRivals();
+        setMyRivalsData(result.data);
+      } catch (error) {
+        console.error("내 라이벌 조회 실패:", error);
+      }
+    };
+
+    fetchMyRivalData();
+  }, []);
 
   return {
-    myRivals: {
-      RivalsData,
-    },
+    myRivals: { myRivalsData },
   };
 };

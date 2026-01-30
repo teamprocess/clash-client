@@ -10,6 +10,7 @@ import {
   MajorEnum,
   section,
 } from "@/entities/roadmap/section/model/section.types";
+import { authApi } from "@/entities/user";
 
 export const Section = () => {
   const navigate = useNavigate();
@@ -39,7 +40,7 @@ export const Section = () => {
   };
 
   const fetchData = async () => {
-    const myProfile = await sectionApi.getMyProfile();
+    const myProfile = await authApi.getMyProfile();
     const myMajor = myProfile.data?.major as MajorEnum;
     const section = await sectionApi.getMajorSection({ major: myMajor });
     return { data: section.data, myMajor };

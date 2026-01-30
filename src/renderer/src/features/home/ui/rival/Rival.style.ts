@@ -8,7 +8,6 @@ import Plus from "../../assets/home/plus.svg";
 import Search from "../../assets/home/search.svg";
 import Checked from "../../assets/home/check-box.svg";
 
-// Rival styles
 export const RivalContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -111,7 +110,6 @@ export const ProfileBox = styled.div`
   align-items: center;
 `;
 
-// 상태
 type StatusProps = {
   $status: "ONLINE" | "AWAY" | "OFFLINE";
 };
