@@ -1,10 +1,13 @@
 import * as S from "./ChapterPage.style";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { ChapterRanking } from "@/features/chapter-ranking";
 import { SectionProgress } from "@/features/section-progress";
 import { Roadmap } from "@/features/chapter/components/Roadmap";
 import { QuizModal } from "@/features/chapter/components/QuizModal";
 import { useChapter } from "@/features/chapter/model/useChapter";
+import { sectionApi } from "@/entities/roadmap/section/api/sectionApi";
+import { MajorEnum } from "@/entities/roadmap/section/model/section.types";
+import { useEffect, useState } from "react";
 
 export const ChapterPage = () => {
   const { sectionId } = useParams<{ sectionId: string }>();
@@ -25,6 +28,27 @@ export const ChapterPage = () => {
     handleMissionComplete,
     handleSelectStage,
   } = useChapter(numericSectionId);
+
+  const [major, setMajor] = useState<MajorEnum | null>(null);
+
+  const navigate = useNavigate();
+
+  const fetchData = async () => {
+    const myProfile = await sectionApi.getMyProfile();
+    const myMajor = myProfile.data?.major as MajorEnum;
+    const section = await sectionApi.getMajorSection({ major: myMajor });
+    return { data: section.data, myMajor };
+  };
+
+  useEffect(() => {
+    fetchData().then(res => {
+      setMajor(res.myMajor);
+    });
+  }, []);
+
+  useEffect(() => {
+    if (major == MajorEnum.NONE) navigate("/roadmap/major-choice");
+  }, [major, navigate]);
 
   if (!sectionId || isNaN(numericSectionId) || numericSectionId === 0) {
     return (

@@ -12,6 +12,7 @@ export enum MajorEnum {
   APP = "APP",
   AI = "AI",
   GAME = "GAME",
+  NONE = "NONE",
 }
 
 export interface getMajorSectionRequest {
