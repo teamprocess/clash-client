@@ -1,7 +1,7 @@
 import * as S from "./GithubPanel.style";
-import ProfileTaps from "./profile-taps/ProfileTaps";
+import { ProfileTaps } from "./profile-taps/ProfileTaps";
 
-const GithubPanel = () => {
+export const GithubPanel = () => {
   return (
     <S.Banner>
       <ProfileTaps />
@@ -9,5 +9,3 @@ const GithubPanel = () => {
     </S.Banner>
   );
 };
-
-export default GithubPanel;

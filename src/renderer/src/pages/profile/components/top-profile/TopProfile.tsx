@@ -1,7 +1,7 @@
 import * as S from "./TopProfile.style";
 import ProfileImg from "../../assets/MypageProfile.png";
 
-const TopProfile = () => {
+export const TopProfile = () => {
   return (
     <S.Banner>
       <S.Button>
@@ -19,5 +19,3 @@ const TopProfile = () => {
     </S.Banner>
   );
 };
-
-export default TopProfile;
