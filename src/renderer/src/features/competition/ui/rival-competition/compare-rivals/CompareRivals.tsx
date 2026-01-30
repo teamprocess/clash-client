@@ -56,9 +56,7 @@ export const RivalCompare = () => {
         </S.TitleBox>
         <S.GaroLine />
         <S.ChartWrapper>
-          <S.ChartContainer>
-            <RivalCompetitionLineChart chartData={chartData} />
-          </S.ChartContainer>
+          <RivalCompetitionLineChart chartData={chartData} />
         </S.ChartWrapper>
       </S.RivalCompareWrapper>
     </S.Content>
