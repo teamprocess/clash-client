@@ -3,7 +3,7 @@ import * as S from "./ProfileTaps.style";
 
 type TabKey = "github" | "item" | "time";
 
-const ProfileTabs = () => {
+export const ProfileTabs = () => {
   const [active, setActive] = useState<TabKey>("github");
 
   return (
@@ -28,5 +28,3 @@ const ProfileTabs = () => {
     </S.Wrapper>
   );
 };
-
-export default ProfileTabs;
