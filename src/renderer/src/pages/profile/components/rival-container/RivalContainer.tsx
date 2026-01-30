@@ -5,7 +5,7 @@ import VscodeImg from "../../assets/Vscode.svg";
 
 const MaxRivals = 4;
 
-const RivalContainer = () => {
+export const RivalContainer = () => {
   const rivals: {
     id: number;
     name: string;
@@ -77,5 +77,3 @@ const RivalContainer = () => {
     </S.RivalList>
   );
 };
-
-export default RivalContainer;
