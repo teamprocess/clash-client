@@ -71,7 +71,7 @@ export const QuestionTitle = styled.span`
   color: ${({ theme }) => theme.label.normal};
   text-overflow: ellipsis;
   text-align: center;
-  width: 16.25rem;
+  width: 20rem;
 `;
 
 export const QuestionPrefix = styled.span`

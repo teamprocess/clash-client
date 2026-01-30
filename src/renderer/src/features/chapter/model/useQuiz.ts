@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Mission } from "@/features/chapter/mocks/missionData";
+import { chapterApi } from "@/entities/roadmap/chapter/api/chapterApi";
 
 interface QuizState {
   currentIndex: number;
@@ -7,6 +8,8 @@ interface QuizState {
   correctCount: number;
   view: "quiz" | "result" | "final";
   lastResult: boolean | null;
+  explanation: string;
+  isSubmitting: boolean;
 }
 
 const initialState: QuizState = {
@@ -15,6 +18,8 @@ const initialState: QuizState = {
   correctCount: 0,
   view: "quiz",
   lastResult: null,
+  explanation: "",
+  isSubmitting: false,
 };
 
 interface UseQuizParams {
@@ -40,17 +45,41 @@ export const useQuiz = ({ mission, onMissionComplete, onClose }: UseQuizParams) 
     }));
   };
 
-  const handleConfirm = () => {
-    if (selectedChoiceId == null) return;
+  const handleConfirm = async () => {
+    if (selectedChoiceId == null || state.isSubmitting) return;
 
-    const correct = selectedChoiceId === currentQuestion.answerId;
+    setState(prev => ({ ...prev, isSubmitting: true }));
 
-    setState(prev => ({
-      ...prev,
-      correctCount: correct ? prev.correctCount + 1 : prev.correctCount,
-      lastResult: correct,
-      view: "result",
-    }));
+    try {
+      const response = await chapterApi.submitAnswer({
+        missionId: mission.id,
+        questionId: currentQuestion.id,
+        submittedChoiceId: selectedChoiceId,
+      });
+
+      if (!response.success || !response.data) {
+        setState(prev => ({ ...prev, isSubmitting: false }));
+        return;
+      }
+
+      const result = response.data;
+
+      setState(prev => ({
+        ...prev,
+        correctCount: result.isCorrect ? prev.correctCount + 1 : prev.correctCount,
+        lastResult: result.isCorrect,
+        explanation: result.explanation ?? "",
+        view: "result",
+        isSubmitting: false,
+      }));
+
+      if (result.isMissionCleared) {
+        onMissionComplete?.(mission.id);
+      }
+    } catch (error: unknown) {
+      console.log(error);
+      setState(prev => ({ ...prev, isSubmitting: false }));
+    }
   };
 
   const handleNextOrClose = () => {
@@ -62,6 +91,7 @@ export const useQuiz = ({ mission, onMissionComplete, onClose }: UseQuizParams) 
         currentIndex: isLast ? prev.currentIndex : prev.currentIndex + 1,
         view: isLast ? "final" : "quiz",
         lastResult: null,
+        explanation: "",
       };
     });
   };
