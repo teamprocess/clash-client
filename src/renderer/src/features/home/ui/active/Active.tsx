@@ -1,23 +1,25 @@
 import * as S from "./Active.style";
-import { ActiveProps } from "@/features/home/model/useHome";
+import { CategoryType } from "@/entities/home/model/useRanking.types";
+import { ActiveLineChart } from "@/features/home/model/ActiveChart";
+import { toLineChartData } from "@/features/home/model/lineChartData";
+import { useActive } from "@/features/home/model/useActive";
 
-export const Active = ({
-  commitDays,
-  months,
-  activeMaxCommit,
-  ActiveDropdown,
-  setActiveDropdown,
-  getLevel,
-}: ActiveProps) => {
+export const Active = () => {
+  const getActiveData = useActive();
+  const chartData = toLineChartData(getActiveData.variations);
+
   return (
     <S.ActiveContainer>
       <S.TitleBox>
         <S.Title>내 활동 분석</S.Title>
         <S.SelectWrapper>
-          <S.Select value={ActiveDropdown} onChange={e => setActiveDropdown(e.target.value)}>
-            {["Github", "solved.ac"].map(option => (
-              <S.Option key={option} value={option}>
-                {option}
+          <S.Select
+            value={getActiveData.activeDropdown}
+            onChange={e => getActiveData.setActiveDropdown(e.target.value as CategoryType)}
+          >
+            {getActiveData.activeDropDownValue.map(option => (
+              <S.Option key={option.key} value={option.key}>
+                {option.label}
               </S.Option>
             ))}
           </S.Select>
@@ -30,27 +32,17 @@ export const Active = ({
           <S.StreakTitle>스트릭</S.StreakTitle>
           <S.GrassBox>
             <S.Grid>
-              {commitDays.map(day => (
-                <S.Grass key={day.id} $level={getLevel(day.count)} />
+              {getActiveData.activeData?.streaks.map(day => (
+                <S.Grass key={day.date} $level={getActiveData.getLevel(day.detailedInfo)} />
               ))}
             </S.Grid>
           </S.GrassBox>
         </S.StreakBox>
         <S.StreakBox>
           <S.StreakTitle>Contributes 변화 추이</S.StreakTitle>
-          <S.GraphBox>
-            <S.Bars>
-              {months.map(({ id, commit_count }) => (
-                <S.BarWrapper key={id}>
-                  <S.BarValue>{commit_count}</S.BarValue>
-
-                  <S.Bar $ratio={commit_count / activeMaxCommit} />
-
-                  <S.BarLabel>{id}월</S.BarLabel>
-                </S.BarWrapper>
-              ))}
-            </S.Bars>
-          </S.GraphBox>
+          <S.ChartWrapper>
+            <ActiveLineChart data={chartData.data}></ActiveLineChart>
+          </S.ChartWrapper>
         </S.StreakBox>
       </S.StreakContainer>
     </S.ActiveContainer>
