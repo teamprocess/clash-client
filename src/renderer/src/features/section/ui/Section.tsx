@@ -20,6 +20,8 @@ export const Section = () => {
 
   const [sectionData, setSectionData] = useState<getAllSectionsResponse | null>();
 
+  const [major, setMajor] = useState<MajorEnum | null>(null);
+
   const handleClick = (item: section) => {
     setSelectedSectionId(+item.id);
     setIsSelectedSectionLocked(item.locked);
@@ -40,12 +42,19 @@ export const Section = () => {
     const myProfile = await sectionApi.getMyProfile();
     const myMajor = myProfile.data?.major as MajorEnum;
     const section = await sectionApi.getMajorSection({ major: myMajor });
-    return section.data;
+    return { data: section.data, myMajor };
   };
 
   useEffect(() => {
-    fetchData().then(data => setSectionData(data));
+    fetchData().then(res => {
+      setSectionData(res.data);
+      setMajor(res.myMajor);
+    });
   }, []);
+
+  useEffect(() => {
+    if (major == MajorEnum.NONE) navigate("/roadmap/major-choice");
+  }, [major, navigate]);
 
   return (
     <S.RoadmapContainer>
