@@ -74,7 +74,7 @@ export const RivalCompareWrapper = styled.div`
   justify-content: center;
   gap: 0.75rem;
   height: 100%;
-  max-height: 25rem;
+  max-height: 21rem;
 `;
 
 export const DropDownBox = styled.div`
