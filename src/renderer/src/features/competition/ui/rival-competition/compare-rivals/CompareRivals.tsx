@@ -1,8 +1,24 @@
 import * as S from "./CompareRivals.style";
 import { useCompareRival } from "@/features/competition/model/useCompareRivals";
+import {
+  CategoryType,
+  PeriodType,
+} from "@/entities/competition/model/rival-competition/compareRivals.types";
+import { RivalCompetitionLineChart } from "@/features/competition/model/rival-compete-chart/RivalCompeteLineChart";
 
 export const RivalCompare = () => {
-  const { compareRivals } = useCompareRival();
+  const {
+    compareRivals,
+    competitionDropdown,
+    setCompetitionDropdown,
+    competitionPeriodDropDown,
+    setCompetitionPeriodDropDown,
+    competitionDropDownValue,
+    competitionPeriodDropDownValue,
+    buildMultiLineData,
+  } = useCompareRival();
+
+  const chartData = buildMultiLineData(compareRivals?.totalData ?? []);
 
   return (
     <S.Content>
@@ -12,10 +28,10 @@ export const RivalCompare = () => {
           <S.DropDownBox>
             <S.SelectWrapper>
               <S.Select
-                value={compareRivals.competitionPeriodDropDown}
-                onChange={e => compareRivals.setCompetitionPeriodDropDown(e.target.value)}
+                value={competitionPeriodDropDown}
+                onChange={e => setCompetitionPeriodDropDown(e.target.value as PeriodType)}
               >
-                {compareRivals.competitionPeriodDropDownValue.map(option => (
+                {competitionPeriodDropDownValue.map(option => (
                   <S.Option key={option.key} value={option.key}>
                     {option.label}
                   </S.Option>
@@ -25,10 +41,10 @@ export const RivalCompare = () => {
             </S.SelectWrapper>
             <S.SelectWrapper>
               <S.Select
-                value={compareRivals.competitionDropdown}
-                onChange={e => compareRivals.setCompetitionDropdown(e.target.value)}
+                value={competitionDropdown}
+                onChange={e => setCompetitionDropdown(e.target.value as CategoryType)}
               >
-                {compareRivals.competitionDropDownValue.map(option => (
+                {competitionDropDownValue.map(option => (
                   <S.Option key={option.key} value={option.key}>
                     {option.label}
                   </S.Option>
@@ -39,40 +55,9 @@ export const RivalCompare = () => {
           </S.DropDownBox>
         </S.TitleBox>
         <S.GaroLine />
-        <S.GraphBox>
-          <S.ScrollArea>
-            <S.GraphInner style={{ width: "100%" }}>
-              <S.Svg
-                width={compareRivals.chartWidth}
-                height="100%"
-                viewBox={`0 0 ${compareRivals.chartWidth} ${compareRivals.CHART_HEIGHT + 10}`}
-                preserveAspectRatio="none"
-              >
-                {compareRivals.rivalsTransCompareData.map(rival => {
-                  const isMe = rival.username === "me";
-                  return (
-                    <S.LineGroup key={rival.username}>
-                      <S.LinePath
-                        d={compareRivals.makeLinePath(rival.rate, compareRivals.maxValue)}
-                        stroke={compareRivals.COLORS[rival.username]}
-                        $isMe={isMe}
-                      />
-                      {rival.rate.map((point, idx) => (
-                        <S.Dot
-                          key={point.date}
-                          cx={compareRivals.getX(idx)}
-                          cy={compareRivals.getY(point.growth_rate, compareRivals.maxValue)}
-                          fill={compareRivals.COLORS[rival.username]}
-                          $isMe={isMe}
-                        />
-                      ))}
-                    </S.LineGroup>
-                  );
-                })}
-              </S.Svg>
-            </S.GraphInner>
-          </S.ScrollArea>
-        </S.GraphBox>
+        <S.ChartWrapper>
+          <RivalCompetitionLineChart chartData={chartData} />
+        </S.ChartWrapper>
       </S.RivalCompareWrapper>
     </S.Content>
   );
