@@ -12,6 +12,9 @@ import Cry from "@/widgets/sidebar/assets/cry-emoji.svg";
 import Confirm from "@/widgets/topbar/assets/confirm.svg";
 import Deny from "@/widgets//topbar/assets/deny.svg";
 import Trash from "@/widgets/topbar/assets/delete.svg";
+import EXP from "@/widgets/topbar/assets/exp.svg";
+import Token from "@/widgets/topbar/assets/token.svg";
+import Cookie from "@/widgets/topbar/assets/cookie.svg";
 
 export const TopbarContainer = styled.header`
   display: flex;
@@ -77,7 +80,9 @@ export const AlarmOnIcon = styled(AlarmOn)`
   cursor: pointer;
 `;
 
-export const AlamDoor = styled.div``;
+export const AlamDoor = styled.div`
+  margin-left: 0.75rem;
+`;
 
 export const ProfileIcon = styled(Profile)``;
 
@@ -120,7 +125,6 @@ export const ModalContainer = styled.div`
   min-height: 13rem;
   max-height: 30rem;
   background-color: ${({ theme }) => theme.label.disable};
-  box-shadow: 0 0 7px 0 ${({ theme }) => theme.line.normal};
 `;
 
 export const ModalHeader = styled.div`
@@ -253,3 +257,17 @@ export const ChoiceButton = styled.div`
 export const ConfirmIcon = styled(Confirm)``;
 export const DenyIcon = styled(Deny)``;
 export const TrashIcon = styled(Trash)``;
+export const EXPIcon = styled(EXP)``;
+export const TokenIcon = styled(Token)``;
+export const CookieIcon = styled(Cookie)``;
+
+export const GoodsBox = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+
+  & > span {
+    ${font.body.medium}
+    color: ${({ theme }) => theme.label.normal};
+  }
+`;
