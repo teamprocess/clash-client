@@ -47,6 +47,7 @@ export const useChapter = (sectionId: number) => {
 
   const [currentMission, setCurrentMission] = useState<Mission | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
+  const [missionModalOpen, setMissionModalOpen] = useState(false);
 
   useEffect(() => {
     const fetchChapterData = async () => {
@@ -183,6 +184,7 @@ export const useChapter = (sectionId: number) => {
     if (!stage || !node || node.status === "locked") return;
 
     setCurrentStageId(stageId);
+    setMissionModalOpen(true);
 
     await handleChapterClick({ chapterId: stageId });
   };
@@ -226,5 +228,6 @@ export const useChapter = (sectionId: number) => {
     handleMissionComplete,
     handleSelectStage,
     handleChapterClick,
+    missionModalOpen,
   };
 };
