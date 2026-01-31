@@ -28,6 +28,7 @@ export const ChapterPage = () => {
     handleMissionClick,
     handleMissionComplete,
     handleSelectStage,
+    missionModalOpen,
   } = useChapter(numericSectionId);
 
   const [major, setMajor] = useState<MajorEnum | null>(null);
@@ -105,30 +106,31 @@ export const ChapterPage = () => {
         <S.ArrowIcon $direction="right" />
       </S.CurrentSectionBox>
 
-      <S.MissionContainer>
-        <S.MissionBoxTop>
-          <S.MissionTitle>{currentStage.title}</S.MissionTitle>
-          <S.MissionProgress>
-            <S.MissionCurrentProgress>{currentStage.currentProgress}</S.MissionCurrentProgress>/
-            <S.MissionTotalMissions>{currentStage.totalMissions}</S.MissionTotalMissions>
-          </S.MissionProgress>
-        </S.MissionBoxTop>
-
-        <S.MissionList>
-          {currentStage.missions.map(mission => (
-            <S.MissionBox
-              key={mission.id}
-              onClick={() => {
-                if (currentStage.status === "locked") return;
-                handleMissionClick(mission.id);
-              }}
-            >
-              {mission.completed ? <S.CompletedLogo /> : <S.NotCompletedLogo />}
-              <S.MissionLabel>{mission.title}</S.MissionLabel>
-            </S.MissionBox>
-          ))}
-        </S.MissionList>
-      </S.MissionContainer>
+      {missionModalOpen && (
+        <S.MissionContainer>
+          <S.MissionBoxTop>
+            <S.MissionTitle>{currentStage.title}</S.MissionTitle>
+            <S.MissionProgress>
+              <S.MissionCurrentProgress>{currentStage.currentProgress}</S.MissionCurrentProgress>/
+              <S.MissionTotalMissions>{currentStage.totalMissions}</S.MissionTotalMissions>
+            </S.MissionProgress>
+          </S.MissionBoxTop>
+          <S.MissionList>
+            {currentStage.missions.map(mission => (
+              <S.MissionBox
+                key={mission.id}
+                onClick={() => {
+                  if (currentStage.status === "locked") return;
+                  handleMissionClick(mission.id);
+                }}
+              >
+                {mission.completed ? <S.CompletedLogo /> : <S.NotCompletedLogo />}
+                <S.MissionLabel>{mission.title}</S.MissionLabel>
+              </S.MissionBox>
+            ))}
+          </S.MissionList>
+        </S.MissionContainer>
+      )}
 
       {currentMission && (
         <QuizModal
