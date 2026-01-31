@@ -1,6 +1,5 @@
 import { useRef, useState, useEffect } from "react";
-import { useQuery } from "@tanstack/react-query";
-import { rankingApi } from "@/entities/roadmap/chapter/chapter-ranking/api/chapterRankingApi";
+import { useChapterRankingQuery } from "@/entities/roadmap/chapter/chapter-ranking/model/useChapterRanking.query";
 
 export const useChapterRanking = () => {
   const [isMyRankVisible, setIsMyRankVisible] = useState(true);
@@ -8,15 +7,7 @@ export const useChapterRanking = () => {
   const myRankRef = useRef<HTMLDivElement>(null);
   const listRef = useRef<HTMLDivElement>(null);
 
-  // API 호출
-  const {
-    data: rankingResponse,
-    isLoading,
-    error,
-  } = useQuery({
-    queryKey: ["chapterRankings"],
-    queryFn: rankingApi.getChapterRankings,
-  });
+  const { data: rankingResponse, isLoading, error } = useChapterRankingQuery();
 
   useEffect(() => {
     const observer = new IntersectionObserver(
