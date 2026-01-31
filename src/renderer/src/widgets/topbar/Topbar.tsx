@@ -1,7 +1,7 @@
 import * as S from "./Topbar.style";
 import { useState } from "react";
-import { Explain } from "./Topbar.style";
 import { useUser } from "@/entities/user";
+import { formatPrice } from "@/shared/lib";
 
 interface TopbarProps {
   onToggleSidebar: () => void;
@@ -51,6 +51,18 @@ export const Topbar = ({ onToggleSidebar }: TopbarProps) => {
         </S.LogoWrapper>
       </S.LeftMenu>
       <S.RightMenu>
+        <S.GoodsBox>
+          <S.EXPIcon />
+          <span>{formatPrice(user?.totalExp || 0)}</span>
+        </S.GoodsBox>
+        <S.GoodsBox>
+          <S.TokenIcon />
+          <span>{formatPrice(user?.totalToken || 0)}</span>
+        </S.GoodsBox>
+        <S.GoodsBox>
+          <S.CookieIcon />
+          <span>{formatPrice(user?.totalCookie || 0)}</span>
+        </S.GoodsBox>
         <S.AlamDoor onClick={handleOpen}>
           {alarmCnt > 0 ? <S.AlarmOnIcon /> : <S.AlarmIcon />}
         </S.AlamDoor>
@@ -78,7 +90,7 @@ export const Topbar = ({ onToggleSidebar }: TopbarProps) => {
                         <S.AlarmName>{alarm.name}</S.AlarmName>
                         <S.Mention>@{alarm.mention}</S.Mention>
                       </S.NameDiv>
-                      <Explain>{alarm.message}</Explain>
+                      <S.Explain>{alarm.message}</S.Explain>
                     </S.AlarmTextWrapper>
                     {alarm.answer === "YET" ? (
                       <S.ChoiceBox>
