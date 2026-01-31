@@ -1,6 +1,7 @@
 import { Product } from "@/entities/product";
 import * as S from "./PurchaseModal.style";
 import { usePurchaseModal } from "@/features/shop/model/usePurchaseModal";
+import { formatPrice } from "@/shared/lib";
 
 interface PurchaseModalProps {
   isOpen: boolean;
@@ -8,8 +9,6 @@ interface PurchaseModalProps {
   onClose: () => void;
   onPurchase?: (product: Product) => Promise<void> | void;
 }
-
-const formatPrice = (price: number) => price.toLocaleString("ko-KR");
 
 export const PurchaseModal = ({ isOpen, product, onClose, onPurchase }: PurchaseModalProps) => {
   const { step, isSubmitting, discountedPrice, afterBalance, handlePurchase, handleClose } =
