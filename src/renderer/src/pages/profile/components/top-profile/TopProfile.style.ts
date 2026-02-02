@@ -45,7 +45,7 @@ export const ProfileImg = styled.img`
 export const ProfileCard = styled.div`
   position: absolute;
   left: 4rem;
-  top: 5rem;
+  top: 6rem;
   width: 11rem;
   height: 11rem;
 `;
@@ -55,7 +55,7 @@ export const UserInfo = styled.div`
   display: flex;
   align-items: center;
   gap: 2rem;
-  margin-top: 0.375rem;
+  margin-top: 0.625rem;
 `;
 
 export const Name = styled.div`
