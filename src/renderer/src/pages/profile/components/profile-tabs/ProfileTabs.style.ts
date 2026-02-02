@@ -1,8 +1,8 @@
 import styled from "styled-components";
 
 export const Background = styled.div`
-  width: 39rem;
-  height: 24.375rem;
+  width: 43.25rem;
+  height: 26.25rem;
   border-radius: 1rem;
   background: ${({ theme }) => theme.background.alternative};
   display: flex;
@@ -15,5 +15,6 @@ export const Banner = styled.div`
   flex-direction: column;
   gap: 1.125rem;
   margin-left: auto;
-  margin-top: 2.1rem;
+  align-items: center;
+  margin-top: 3.125rem;
 `;

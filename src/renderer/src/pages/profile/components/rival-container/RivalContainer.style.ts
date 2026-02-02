@@ -3,25 +3,25 @@ import { font } from "@/shared/config/font";
 
 export const RivalList = styled.div`
   width: 24.875rem;
-  margin-top: 6.25rem;
+  margin-top: 7.25rem;
   flex-direction: column;
   display: flex;
-  gap: 1.1rem;
+  gap: 1.25rem;
   margin-right: auto;
   align-self: flex-start;
   margin-left: 0;
-  margin-right: auto;
 `;
 
 export const RivalBox = styled.div`
-  width: 21rem;
-  height: 5.25rem;
+  width: 100%;
+  height: 5.625rem;
   background: ${({ theme }) => theme.background.alternative};
   padding: 1rem;
   border-radius: 0.75rem;
   display: flex;
-  justify-content: space-between;
+  gap: 4.5rem;
   align-items: center;
+  justify-content: center;
 `;
 
 export const RivalProfileImg = styled.img`

@@ -2,19 +2,20 @@ import styled from "styled-components";
 
 export const RivalBox = styled.div`
   width: 100%;
-  height: 22.375rem;
+  height: 26.25rem;
   background: ${({ theme }) => theme.background.alternative};
   padding: 0.75rem;
   border-radius: 0.75rem;
-
   display: flex;
   align-items: center;
 `;
 
 export const RivalInfo = styled.div`
+  width: 21.5rem;
+  height: 5.625rem;
   display: flex;
   align-items: center;
-  gap: 0.875rem;
+  gap: 1.25rem;
 `;
 
 export const RivalProfileImg = styled.img`

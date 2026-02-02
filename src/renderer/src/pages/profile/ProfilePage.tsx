@@ -1,7 +1,7 @@
 import * as S from "./ProfilePage.style";
 import { TopProfile } from "@/pages/profile/components/top-profile/TopProfile";
 import { RivalContainer } from "@/pages/profile/components/rival-container/RivalContainer";
-import { GithubPanel } from "@/pages/profile/components/github-panel/GithubPanel";
+import { ProfileTabs } from "@/pages/profile/components/profile-tabs/ProfileTabs";
 
 export const ProfilePage = () => {
   return (
@@ -9,7 +9,7 @@ export const ProfilePage = () => {
       <TopProfile />
       <S.BodyRow>
         <RivalContainer />
-        <GithubPanel />
+        <ProfileTabs />
       </S.BodyRow>
     </S.Background>
   );
