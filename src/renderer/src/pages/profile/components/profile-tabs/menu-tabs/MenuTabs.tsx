@@ -1,9 +1,9 @@
 import { useState } from "react";
-import * as S from "./ProfileTaps.style";
+import * as S from "./MenuTabs.style";
 
 type TabKey = "github" | "item" | "time";
 
-export const ProfileTabs = () => {
+export const MenuTabs = () => {
   const [active, setActive] = useState<TabKey>("github");
 
   return (
