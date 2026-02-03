@@ -54,11 +54,14 @@ export const authApi = {
   },
 
   // 아이디 중복 검사
-  usernameDuplicateCheck: async (data: UsernameDuplicateCheckRequest) => {
+  usernameDuplicateCheck: async (data: UsernameDuplicateCheckRequest, options?: RecaptchaOptions) => {
     const result = await api.get<ApiResponse<UsernameDuplicateCheckResponse>>(
       "/auth/username-duplicate-check",
       {
         params: data,
+        headers: options?.recaptchaToken
+          ? { "X-Recaptcha-Token": options.recaptchaToken }
+          : undefined,
       }
     );
     return result.data;

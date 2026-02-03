@@ -63,9 +63,18 @@ export const useSignUp = () => {
     }
 
     try {
+      if (!executeRecaptcha) {
+        signUpForm.setError("username", {
+          type: "manual",
+          message: "보안 인증을 불러오는 중입니다. 잠시 후 다시 시도해주세요.",
+        });
+        return;
+      }
+
+      const recaptchaToken = await executeRecaptcha("username_duplicate_check");
       const result = await authApi.usernameDuplicateCheck({
         username: currentUsername,
-      });
+      }, { recaptchaToken });
 
       if (result.success && result.data?.duplicated === false) {
         setUsernameAvailable(true);
