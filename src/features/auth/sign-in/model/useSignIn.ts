@@ -1,0 +1,102 @@
+import { z } from "zod";
+import { useEffect } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
+import { useLocation } from "react-router-dom";
+import axios from "axios";
+import { authApi } from "@/entities/user";
+import { getAuthParams } from "@/shared/lib/authParams";
+
+const signInSchema = z.object({
+  id: z.string().min(4, "아이디를 입력하세요."),
+  password: z.string().min(8, "비밀번호를 입력하세요."),
+});
+
+type SignInForm = z.infer<typeof signInSchema>;
+
+export const useSignIn = () => {
+  const { executeRecaptcha } = useGoogleReCaptcha();
+  const location = useLocation();
+  const { state, redirectUri } = getAuthParams(location.search);
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+    setError,
+  } = useForm<SignInForm>({
+    resolver: zodResolver(signInSchema),
+  });
+
+  useEffect(() => {
+    if (!state || !redirectUri) {
+      setError("root", {
+        type: "manual",
+        message: "필수 인증 정보가 없습니다. 앱에서 다시 시도해주세요.",
+      });
+    }
+  }, [state, redirectUri, setError]);
+
+  const onSubmit = async (data: SignInForm) => {
+    try {
+      if (!state || !redirectUri) {
+        setError("root", {
+          type: "manual",
+          message: "필수 인증 정보가 없습니다. 앱에서 다시 시도해주세요.",
+        });
+        return;
+      }
+
+      if (!executeRecaptcha) {
+        setError("root", {
+          type: "manual",
+          message: "보안 인증을 불러오는 중입니다. 잠시 후 다시 시도해주세요.",
+        });
+        return;
+      }
+
+      const recaptchaToken = await executeRecaptcha("login");
+
+      const result = await authApi.signIn({
+        username: data.id,
+        password: data.password,
+        recaptchaToken,
+        action: "login",
+        state,
+        redirectUri,
+      });
+
+      if (result.success && result.data?.redirectUrl) {
+        window.location.href = result.data.redirectUrl;
+      } else {
+        setError("root", {
+          type: "manual",
+          message: result.message || "로그인에 실패했습니다.",
+        });
+      }
+    } catch (error: unknown) {
+      console.error("로그인 실패:", error);
+
+      let errorMessage = "로그인 중 오류가 발생했습니다.";
+
+      if (axios.isAxiosError(error)) {
+        errorMessage =
+          error.response?.data?.error?.message || error.response?.data?.message || errorMessage;
+      }
+
+      setError("root", {
+        type: "manual",
+        message: errorMessage,
+      });
+    }
+  };
+
+  return {
+    register,
+    handleSubmit,
+    errors,
+    isSubmitting,
+    onSubmit,
+  };
+};

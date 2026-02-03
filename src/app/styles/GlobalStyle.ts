@@ -1,5 +1,6 @@
 import { createGlobalStyle } from "styled-components";
 import { font } from "@/shared/config/font";
+import "pretendard/dist/web/static/pretendard.css";
 
 export const GlobalStyle = createGlobalStyle`
   * {
@@ -63,7 +64,6 @@ export const GlobalStyle = createGlobalStyle`
     font-family: inherit;
     border: none;
     background: none;
-    cursor: pointer;
   }
 
   input, textarea {
@@ -75,8 +75,4 @@ export const GlobalStyle = createGlobalStyle`
     color: inherit;
   }
 
-  #root {
-    width: 100%;
-    min-height: 100vh;
-  }
 `;
