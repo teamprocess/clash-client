@@ -9,7 +9,6 @@ export interface SignInRequest {
   username: string;
   password: string;
   recaptchaToken: string;
-  action: string;
   state: string;
   redirectUri: string;
 }

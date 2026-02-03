@@ -56,13 +56,12 @@ export const useSignIn = () => {
         return;
       }
 
-      const recaptchaToken = await executeRecaptcha("login");
+      const recaptchaToken = await executeRecaptcha("electron_login");
 
       const result = await authApi.signIn({
         username: data.id,
         password: data.password,
         recaptchaToken,
-        action: "login",
         state,
         redirectUri,
       });
