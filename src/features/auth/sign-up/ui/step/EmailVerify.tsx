@@ -26,7 +26,7 @@ export const EmailVerify = ({
 
   // code가 변경될 때마다 react hook form의 emailCode 값 업데이트
   useEffect(() => {
-    setValue("emailCode", code.join(""));
+    setValue("verificationCode", code.join(""));
   }, [code, setValue]);
 
   const handleChange = (index: number, e: ChangeEvent<HTMLInputElement>) => {
@@ -94,7 +94,9 @@ export const EmailVerify = ({
               />
             ))}
           </S.CodeInputContainer>
-          {errors.emailCode && <CommonS.ErrorText>{errors.emailCode.message}</CommonS.ErrorText>}
+          {errors.verificationCode && (
+            <CommonS.ErrorText>{errors.verificationCode.message}</CommonS.ErrorText>
+          )}
         </div>
       </CommonS.InputBox>
       <CommonS.ButtonWrapper>
