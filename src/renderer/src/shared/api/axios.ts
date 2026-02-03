@@ -19,12 +19,7 @@ api.interceptors.response.use(
   },
   error => {
     if (error.response) {
-      const publicPaths = [
-        "/auth/sign-in",
-        "/auth/sign-up",
-        "/auth/username-duplicate-check",
-        "/auth/verify-email",
-      ];
+      const publicPaths = ["/auth/electron/start", "/auth/electron/exchange"];
       const isPublicPath = publicPaths.some(path => error.config?.url?.includes(path));
 
       switch (error.response.status) {

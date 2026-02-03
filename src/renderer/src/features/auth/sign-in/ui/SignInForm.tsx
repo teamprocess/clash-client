@@ -1,29 +1,21 @@
 import * as S from "./SignInForm.style";
-import { useSignIn } from "@/features/auth/sign-in/model/useSignIn";
+import { useElectronAuth } from "@/features/auth/electron-auth/model/useElectronAuth";
 
 export const SignInForm = () => {
-  const { register, handleSubmit, errors, isSubmitting, onSubmit } = useSignIn();
+  const { startWebLogin, isStarting, error } = useElectronAuth();
 
   return (
-    <S.FormContainer onSubmit={handleSubmit(onSubmit)}>
-      <S.InputBox>
-        <div>
-          <S.Input placeholder="아이디를 입력하세요." {...register("id")} />
-          {errors.id && <S.ErrorText>{errors.id.message}</S.ErrorText>}
-        </div>
-        <div>
-          <S.Input placeholder="비밀번호를 입력하세요." type="password" {...register("password")} />
-          {errors.password && <S.ErrorText>{errors.password.message}</S.ErrorText>}
-        </div>
-      </S.InputBox>
+    <S.FormContainer>
+      <S.Title>Clash 로그인</S.Title>
+      <S.Description>웹 브라우저에서 로그인하여 안전하게 인증하세요</S.Description>
+
       <S.ButtonWrapper>
-        <S.SubmitButton type="submit" disabled={isSubmitting}>
-          {isSubmitting ? "로그인 중..." : "로그인"}
+        <S.SubmitButton type="button" onClick={startWebLogin} disabled={isStarting}>
+          {isStarting ? "로그인 페이지 여는 중..." : "웹으로 로그인"}
         </S.SubmitButton>
-        {errors.root && <S.ErrorText>{errors.root.message}</S.ErrorText>}
+        {error && <S.ErrorText>{error}</S.ErrorText>}
         <S.HelpTextBox>
           <S.HelpText to="/sign-up">회원가입</S.HelpText>
-          <S.HelpText to="/forgot-passwrod">비밀번호 찾기</S.HelpText>
         </S.HelpTextBox>
       </S.ButtonWrapper>
     </S.FormContainer>
