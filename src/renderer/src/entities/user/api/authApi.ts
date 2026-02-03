@@ -69,33 +69,18 @@ export interface getMyProfileResponse {
 }
 
 export const authApi = {
-  // 로그인
-  signIn: async (data: SignInRequest, options?: RecaptchaOptions) => {
-    const result = await api.post<ApiResponse<SignInResponse>>(
-      "/auth/sign-in",
-      {
-        ...data,
-        rememberMe: data.rememberMe ?? true,
-      },
-      {
-        headers: options?.recaptchaToken
-          ? { "X-Recaptcha-Token": options.recaptchaToken }
-          : undefined,
-      }
-    );
-    return result.data;
-  },
-
   // Electron 로그인 시작
   electronAuthStart: async () => {
-    const result = await api.post<ApiResponse<ElectronAuthStartResponse>>("/auth/electron/start");
+    const result = await api.post<ApiResponse<ElectronAuthStartResponse>>(
+      "/auth/electron/sign-in/start"
+    );
     return result.data;
   },
 
   // Electron 로그인 교환
   electronAuthExchange: async (data: ElectronAuthExchangeRequest) => {
     const result = await api.post<ApiResponse<ElectronAuthExchangeResponse>>(
-      "/auth/electron/exchange",
+      "/auth/electron/sign-in/exchange",
       {
         ...data,
       }
