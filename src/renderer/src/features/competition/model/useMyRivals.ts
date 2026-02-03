@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { myRivalsApi } from "@/entities/competition/api/rival-competition/myRivalsApi";
+import { myRivalsApi } from "@/entities/competition/api/rival-competition/api/myRivalsApi";
 import { MyRivalsResponse } from "@/entities/competition/model/rival-competition/myRivals.types";
 
 export type UserStatus = "ONLINE" | "AWAY" | "OFFLINE";

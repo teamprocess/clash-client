@@ -1,5 +1,5 @@
 import { useState, useMemo, useEffect } from "react";
-import { battleApi } from "@/entities/competition/api/rival-competition/battleApi";
+import { battleApi } from "@/entities/competition/api/rival-competition/api/battleApi";
 import {
   BattleResponse,
   BattleDetailResponse,

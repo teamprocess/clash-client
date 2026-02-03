@@ -1,5 +1,5 @@
 import { useEffect, useState, useMemo } from "react";
-import { compareRivalsApi } from "@/entities/competition/api/rival-competition/compareRivalsApi";
+import { compareRivalsApi } from "@/entities/competition/api/rival-competition/api/compareRivalsApi";
 import {
   CATEGORY,
   CategoryType,
