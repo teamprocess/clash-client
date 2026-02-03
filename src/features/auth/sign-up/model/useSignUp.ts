@@ -18,7 +18,7 @@ export type SignUpFormData = z.infer<typeof signUpSchema>;
 
 // EmailVerify Schema
 const emailVerifySchema = z.object({
-  emailCode: z.string("유효한 이메일 확인 코드를 입력하세요."),
+  verificationCode: z.string("유효한 이메일 확인 코드를 입력하세요."),
 });
 
 export type EmailVerifyFormData = z.infer<typeof emailVerifySchema>;
@@ -72,9 +72,12 @@ export const useSignUp = () => {
       }
 
       const recaptchaToken = await executeRecaptcha("username_duplicate_check");
-      const result = await authApi.usernameDuplicateCheck({
-        username: currentUsername,
-      }, { recaptchaToken });
+      const result = await authApi.usernameDuplicateCheck(
+        {
+          username: currentUsername,
+        },
+        { recaptchaToken }
+      );
 
       if (result.success && result.data?.duplicated === false) {
         setUsernameAvailable(true);
@@ -153,7 +156,7 @@ export const useSignUp = () => {
 
       const result = await authApi.verifyEmail(
         {
-          code: data.emailCode,
+          verificationCode: data.verificationCode,
         },
         { recaptchaToken }
       );

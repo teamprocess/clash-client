@@ -34,7 +34,7 @@ export interface SignUpRequest {
 }
 
 export interface EmailVerifyRequest {
-  code: string;
+  verificationCode: string;
 }
 
 export const authApi = {
