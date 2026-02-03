@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { myRivalsApi } from "@/entities/competition/api/rival-competition/myRivalsApi";
+import { myRivalsApi } from "@/entities/competition/api/rival-competition/api/myRivalsApi";
 import {
   MyRivalsRequest,
   MyRivalsResponse,
