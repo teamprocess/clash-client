@@ -2,6 +2,7 @@ import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { z } from "zod";
+import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
 import { authApi } from "@/entities/user";
 import { useNavigate } from "react-router-dom";
 
@@ -24,6 +25,7 @@ export type EmailVerifyFormData = z.infer<typeof emailVerifySchema>;
 
 export const useSignUp = () => {
   const navigate = useNavigate();
+  const { executeRecaptcha } = useGoogleReCaptcha();
   const [step, setStep] = useState<"SIGNUP" | "EMAIL_VERIFY">("SIGNUP");
 
   // SignUp 상태
@@ -92,12 +94,25 @@ export const useSignUp = () => {
     }
 
     try {
-      const result = await authApi.signUp({
-        username: data.username,
-        name: data.name,
-        password: data.password,
-        email: data.email,
-      });
+      if (!executeRecaptcha) {
+        signUpForm.setError("root", {
+          type: "manual",
+          message: "보안 인증을 불러오는 중입니다. 잠시 후 다시 시도해주세요.",
+        });
+        return;
+      }
+
+      const recaptchaToken = await executeRecaptcha("sign_up");
+
+      const result = await authApi.signUp(
+        {
+          username: data.username,
+          name: data.name,
+          password: data.password,
+          email: data.email,
+        },
+        { recaptchaToken }
+      );
 
       setEmail(data.email);
 
@@ -116,9 +131,22 @@ export const useSignUp = () => {
 
   const handleEmailVerify = async (data: EmailVerifyFormData) => {
     try {
-      const result = await authApi.verifyEmail({
-        code: data.emailCode,
-      });
+      if (!executeRecaptcha) {
+        emailVerifyForm.setError("root", {
+          type: "manual",
+          message: "보안 인증을 불러오는 중입니다. 잠시 후 다시 시도해주세요.",
+        });
+        return;
+      }
+
+      const recaptchaToken = await executeRecaptcha("verify_email");
+
+      const result = await authApi.verifyEmail(
+        {
+          code: data.emailCode,
+        },
+        { recaptchaToken }
+      );
 
       if (result.success) {
         navigate("/sign-in");
