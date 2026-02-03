@@ -34,3 +34,10 @@ export const LinkToMain = styled(Link)`
   padding: 0.75rem 5rem;
   border-radius: 1rem;
 `;
+
+export const SignOutButton = styled.button`
+  background-color: ${({ theme }) => theme.primary.normal};
+  color: ${palette.neutral[97]};
+  padding: 0.75rem 5rem;
+  border-radius: 1rem;
+`;

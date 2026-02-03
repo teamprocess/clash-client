@@ -1,6 +1,10 @@
 import { api } from "@/shared/api/axios";
 import type { ApiResponse } from "@/shared/api/types";
 
+interface RecaptchaOptions {
+  recaptchaToken?: string;
+}
+
 export interface SignInRequest {
   username: string;
   password: string;
@@ -11,6 +15,22 @@ export interface SignInResponse {
   id: number;
   username: string;
   name: string;
+}
+
+export interface ElectronAuthStartResponse {
+  loginUrl: string;
+  state: string;
+}
+
+export interface ElectronAuthExchangeRequest {
+  code: string;
+  state: string;
+}
+
+export interface ElectronAuthExchangeResponse {
+  userId: number;
+  username: string;
+  role: string;
 }
 
 export interface UsernameDuplicateCheckRequest {
@@ -50,11 +70,36 @@ export interface getMyProfileResponse {
 
 export const authApi = {
   // 로그인
-  signIn: async (data: SignInRequest) => {
-    const result = await api.post<ApiResponse<SignInResponse>>("/auth/sign-in", {
-      ...data,
-      rememberMe: data.rememberMe ?? true,
-    });
+  signIn: async (data: SignInRequest, options?: RecaptchaOptions) => {
+    const result = await api.post<ApiResponse<SignInResponse>>(
+      "/auth/sign-in",
+      {
+        ...data,
+        rememberMe: data.rememberMe ?? true,
+      },
+      {
+        headers: options?.recaptchaToken
+          ? { "X-Recaptcha-Token": options.recaptchaToken }
+          : undefined,
+      }
+    );
+    return result.data;
+  },
+
+  // Electron 로그인 시작
+  electronAuthStart: async () => {
+    const result = await api.post<ApiResponse<ElectronAuthStartResponse>>("/auth/electron/start");
+    return result.data;
+  },
+
+  // Electron 로그인 교환
+  electronAuthExchange: async (data: ElectronAuthExchangeRequest) => {
+    const result = await api.post<ApiResponse<ElectronAuthExchangeResponse>>(
+      "/auth/electron/exchange",
+      {
+        ...data,
+      }
+    );
     return result.data;
   },
 
@@ -70,17 +115,33 @@ export const authApi = {
   },
 
   // 회원가입
-  signUp: async (data: SignUpRequest) => {
-    const result = await api.post<ApiResponse<void>>("/auth/sign-up", {
-      ...data,
-    });
+  signUp: async (data: SignUpRequest, options?: RecaptchaOptions) => {
+    const result = await api.post<ApiResponse<void>>(
+      "/auth/sign-up",
+      {
+        ...data,
+      },
+      {
+        headers: options?.recaptchaToken
+          ? { "X-Recaptcha-Token": options.recaptchaToken }
+          : undefined,
+      }
+    );
     return result.data;
   },
 
-  verifyEmail: async (data: EmailVerifyRequest) => {
-    const result = await api.post<ApiResponse<void>>("/auth/verify-email", {
-      ...data,
-    });
+  verifyEmail: async (data: EmailVerifyRequest, options?: RecaptchaOptions) => {
+    const result = await api.post<ApiResponse<void>>(
+      "/auth/verify-email",
+      {
+        ...data,
+      },
+      {
+        headers: options?.recaptchaToken
+          ? { "X-Recaptcha-Token": options.recaptchaToken }
+          : undefined,
+      }
+    );
     return result.data;
   },
 
