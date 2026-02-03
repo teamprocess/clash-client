@@ -8,6 +8,8 @@ const api = {
   getActiveApp: () => ipcRenderer.invoke("app-monitor:get-active"),
   getSessions: () => ipcRenderer.invoke("app-monitor:get-sessions"),
 
+  openExternalUrl: (url: string) => ipcRenderer.invoke("open-external-url", url),
+
   onAppChanged: callback => {
     const subscription = (_, app) => callback(app);
     ipcRenderer.on("app-monitor:app-changed", subscription);
@@ -18,6 +20,12 @@ const api = {
     const subscription = (_, session) => callback(session);
     ipcRenderer.on("app-monitor:session-updated", subscription);
     return () => ipcRenderer.removeListener("app-monitor:session-updated", subscription);
+  },
+
+  onDeepLinkAuth: callback => {
+    const subscription = (_, payload) => callback(payload);
+    ipcRenderer.on("deep-link-auth", subscription);
+    return () => ipcRenderer.removeListener("deep-link-auth", subscription);
   },
 };
 
