@@ -40,7 +40,7 @@ export interface EmailVerifyRequest {
 export const authApi = {
   // 로그인
   signIn: async (data: SignInRequest) => {
-    const result = await api.post<ApiResponse<SignInResponse>>("/auth/electron/login", {
+    const result = await api.post<ApiResponse<SignInResponse>>("/auth/electron/sign-in", {
       ...data,
     });
     return result.data;
