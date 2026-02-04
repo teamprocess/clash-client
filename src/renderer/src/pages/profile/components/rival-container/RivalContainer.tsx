@@ -1,7 +1,7 @@
 import * as S from "./RivalContainer.style";
 import State from "./state/State";
 import RivalProfileImg from "../../assets/RivalProfile.png";
-import VscodeImg from "../../assets/Vscode.svg";
+import VscodeImg from "../../assets/Vscode.svg?url";
 
 const MaxRivals = 4;
 

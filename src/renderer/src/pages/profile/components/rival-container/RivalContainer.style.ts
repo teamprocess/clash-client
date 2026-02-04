@@ -4,12 +4,13 @@ import { font } from "@/shared/config/font";
 export const RivalList = styled.div`
   width: 24.875rem;
   margin-top: 7.25rem;
-  flex-direction: column;
   display: flex;
+  flex-direction: column;
   gap: 1.25rem;
-  margin-right: auto;
+  margin-right: 0;
   align-self: flex-start;
   margin-left: 0;
+  flex: 0 0 24.875rem;
 `;
 
 export const RivalBox = styled.div`
