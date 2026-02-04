@@ -1,14 +1,24 @@
-import { EmailVerify } from "@/features/auth/sign-up/ui/step/EmailVerify";
 import { useSignUp } from "../model/useSignUp";
-import { SignUp } from "@/features/auth/sign-up/ui/step/SignUp";
+import * as S from "./SignUpForm.style";
 
 export const SignUpForm = () => {
-  const { step, signUp, emailVerify } = useSignUp();
+  const { startWebSignup, isStarting, error } = useSignUp();
 
   return (
-    <>
-      {step === "SIGNUP" && <SignUp {...signUp} />}
-      {step === "EMAIL_VERIFY" && <EmailVerify {...emailVerify} />}
-    </>
+    <S.FormContainer>
+      <S.InputBox>
+        <S.Title>Clash 회원가입</S.Title>
+        <S.Description>웹 브라우저에서 회원가입 후 이메일 인증을 완료하세요.</S.Description>
+      </S.InputBox>
+      <S.ButtonWrapper>
+        <S.SubmitButton type="button" onClick={startWebSignup} disabled={isStarting}>
+          {isStarting ? "회원가입 페이지 여는 중..." : "웹에서 회원가입"}
+        </S.SubmitButton>
+        {error && <S.ErrorText>{error}</S.ErrorText>}
+        <S.HelpTextContainer>
+          <S.HelpText to="/sign-in">로그인</S.HelpText>
+        </S.HelpTextContainer>
+      </S.ButtonWrapper>
+    </S.FormContainer>
   );
 };
