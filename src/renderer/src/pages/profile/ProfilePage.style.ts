@@ -14,5 +14,8 @@ export const BodyRow = styled.div`
   gap: 2rem;
   align-items: flex-start;
   width: 100%;
-  justify-content: space-between;
+  justify-content: flex-start;
+  > * {
+    min-width: 0;
+  }
 `;
