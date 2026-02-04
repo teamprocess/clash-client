@@ -3,8 +3,8 @@ import {
   CompareStandard,
   GrowthRateStandard,
 } from "@/entities/competition/model/my-competition/myCompetition.types";
-import { useMyCompareQuery } from "@/entities/competition/api/my-competition/model/useMyCompetitionQuery.query";
-import { useMyGrowthRateQuery } from "@/entities/competition/api/my-competition/model/useMyCompetitionQuery.query";
+import { useMyCompareQuery } from "@/entities/competition/api/my-competition/api/useMyCompetitionQuery.query";
+import { useMyGrowthRateQuery } from "@/entities/competition/api/my-competition/api/useMyCompetitionQuery.query";
 
 // compare - 날짜별 드롭다운
 const competitionDropDownValue = [
