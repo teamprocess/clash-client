@@ -1,3 +1,4 @@
+import { useMemo, useRef, useState, useEffect } from "react";
 import * as S from "./GithubStreak.style";
 
 type CommitDay = { id: number | string; count: number };
@@ -30,25 +31,55 @@ export const GithubStreak = ({
     return 0;
   },
 }: GithubStreakProps) => {
-  const daysForView = commitDays && commitDays.length > 0 ? commitDays : commit_counts;
+  const daysForView = useMemo(
+    () => (commitDays && commitDays.length > 0 ? commitDays : commit_counts),
+    [commitDays]
+  );
+
+  const [selectedId, setSelectedId] = useState<string | number | null>(null);
+
+  const rootRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    const onPointerDown = (e: PointerEvent) => {
+      if (!rootRef.current) return;
+      const target = e.target as Node;
+      if (!rootRef.current.contains(target)) {
+        setSelectedId(null);
+      }
+    };
+
+    window.addEventListener("pointerdown", onPointerDown);
+    return () => window.removeEventListener("pointerdown", onPointerDown);
+  }, []);
+
+  const handleClick = (id: string | number) => {
+    setSelectedId(prev => (prev === id ? null : id));
+  };
 
   return (
-    <S.ActiveContainer>
-      <S.Section>
-        <S.Title>스트릭</S.Title>
+    <S.ActiveContainer ref={rootRef}>
+      <S.Title>스트릭</S.Title>
 
-        <S.GrassBox>
-          <S.Grid>
-            {daysForView.map(day => (
-              <S.Grass key={day.id} $level={getLevel(day.count)} />
-            ))}
-          </S.Grid>
-        </S.GrassBox>
-      </S.Section>
+      <S.GrassBox>
+        <S.Grid>
+          {daysForView.map(day => {
+            const isSelected = selectedId === day.id;
+            const isDimmed = selectedId !== null && !isSelected;
 
-      <S.Section>
-        <S.Title></S.Title>
-      </S.Section>
+            return (
+              <S.Grass
+                key={day.id}
+                type="button"
+                $level={getLevel(day.count)}
+                $dimmed={isDimmed}
+                aria-pressed={isSelected}
+                onClick={() => handleClick(day.id)}
+              />
+            );
+          })}
+        </S.Grid>
+      </S.GrassBox>
     </S.ActiveContainer>
   );
 };
