@@ -18,6 +18,19 @@ export const InputBox = styled.div`
   gap: 1rem;
 `;
 
+export const Title = styled.h2`
+  ${font.title1.medium};
+  color: ${({ theme }) => theme.label.neutral};
+  margin: 0;
+`;
+
+export const Description = styled.p`
+  ${font.body.regular};
+  color: ${({ theme }) => theme.label.assistive};
+  text-align: center;
+  margin: 0;
+`;
+
 export const InputWrapper = styled.div`
   position: relative;
   width: 24rem;
