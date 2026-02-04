@@ -11,7 +11,7 @@ interface DeepLinkAuthPayload {
   url: string;
 }
 
-export const useSignUp = () => {
+export const useSignIn = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const { executeRecaptcha } = useGoogleReCaptcha();
@@ -55,7 +55,7 @@ export const useSignUp = () => {
           await queryClient.invalidateQueries({ queryKey: ["user"] });
           navigate("/");
         } else {
-          setError(result.message || "회원가입에 실패했습니다.");
+          setError(result.message || "로그인에 실패했습니다.");
         }
       } catch (err: unknown) {
         console.error("Electron auth exchange failed:", err);
@@ -63,10 +63,10 @@ export const useSignUp = () => {
           setError(
             err.response?.data?.error?.message ||
               err.response?.data?.message ||
-              "회원가입에 실패했습니다."
+              "로그인에 실패했습니다."
           );
         } else {
-          setError("회원가입에 실패했습니다.");
+          setError("로그인에 실패했습니다.");
         }
       }
     });
@@ -76,7 +76,7 @@ export const useSignUp = () => {
     };
   }, [executeRecaptcha, navigate, pendingState, queryClient]);
 
-  const startWebSignup = async () => {
+  const startWebLogin = async () => {
     try {
       if (typeof window === "undefined" || !window.api?.openExternalUrl) {
         setError("외부 브라우저를 열 수 없습니다.");
@@ -91,25 +91,25 @@ export const useSignUp = () => {
       setIsStarting(true);
       setError(null);
 
-      const recaptchaToken = await executeRecaptcha("electron_auth_signup_start");
-      const result = await authApi.electronAuthStartSignup({ recaptchaToken });
+      const recaptchaToken = await executeRecaptcha("electron_auth_start");
+      const result = await authApi.electronAuthStart({ recaptchaToken });
 
-      if (result.success && result.data?.signupUrl) {
+      if (result.success && result.data?.loginUrl) {
         setPendingState(result.data.state);
-        await window.api.openExternalUrl(result.data.signupUrl);
+        await window.api.openExternalUrl(result.data.loginUrl);
       } else {
-        setError(result.message || "회원가입 페이지를 열 수 없습니다.");
+        setError(result.message || "로그인 페이지를 열 수 없습니다.");
       }
     } catch (err: unknown) {
-      console.error("Electron auth signup start failed:", err);
+      console.error("Electron auth start failed:", err);
       if (axios.isAxiosError(err)) {
         setError(
           err.response?.data?.error?.message ||
             err.response?.data?.message ||
-            "회원가입에 실패했습니다."
+            "로그인에 실패했습니다."
         );
       } else {
-        setError("회원가입에 실패했습니다.");
+        setError("로그인에 실패했습니다.");
       }
     } finally {
       setIsStarting(false);
@@ -117,7 +117,7 @@ export const useSignUp = () => {
   };
 
   return {
-    startWebSignup,
+    startWebLogin,
     isStarting,
     error,
   };
