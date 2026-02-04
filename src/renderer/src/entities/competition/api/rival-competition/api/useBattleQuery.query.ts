@@ -1,5 +1,5 @@
 import { useQuery, useMutation } from "@tanstack/react-query";
-import { battleApi } from "../api/battleApi";
+import { battleApi } from "./battleApi";
 import { AnalyzeBattleRequest } from "@/entities/competition/model/rival-competition/battle.types";
 
 export const useBattleInfoQuery = () => {

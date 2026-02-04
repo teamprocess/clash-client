@@ -7,7 +7,7 @@ import {
   RivalCompeteUser,
 } from "@/entities/competition/model/rival-competition/compareRivals.types";
 import { authApi } from "@/entities/user";
-import { useCompareRivalsQuery } from "@/entities/competition/api/rival-competition/model/useCompareRivalsQuery.query";
+import { useCompareRivalsQuery } from "@/entities/competition/api/rival-competition/api/useCompareRivalsQuery.query";
 
 export const colorsOfMultiLine: string[] = ["#FFF", "#0081CC", "#C60608", "#15B756", "#FFCC01"];
 
