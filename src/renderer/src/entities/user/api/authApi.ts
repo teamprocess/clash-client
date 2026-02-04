@@ -22,6 +22,11 @@ export interface ElectronAuthStartResponse {
   state: string;
 }
 
+export interface ElectronAuthStartSignupResponse {
+  signupUrl: string;
+  state: string;
+}
+
 export interface ElectronAuthExchangeRequest {
   code: string;
   state: string;
@@ -70,19 +75,44 @@ export interface getMyProfileResponse {
 
 export const authApi = {
   // Electron 로그인 시작
-  electronAuthStart: async () => {
+  electronAuthStart: async (options?: RecaptchaOptions) => {
     const result = await api.post<ApiResponse<ElectronAuthStartResponse>>(
-      "/auth/electron/sign-in/start"
+      "/auth/electron/sign-in/start",
+      {},
+      {
+        headers: options?.recaptchaToken
+          ? { "X-Recaptcha-Token": options.recaptchaToken }
+          : undefined,
+      }
+    );
+    return result.data;
+  },
+
+  // Electron 회원가입 시작
+  electronAuthStartSignup: async (options?: RecaptchaOptions) => {
+    const result = await api.post<ApiResponse<ElectronAuthStartSignupResponse>>(
+      "/auth/electron/sign-up/start",
+      {},
+      {
+        headers: options?.recaptchaToken
+          ? { "X-Recaptcha-Token": options.recaptchaToken }
+          : undefined,
+      }
     );
     return result.data;
   },
 
   // Electron 로그인 교환
-  electronAuthExchange: async (data: ElectronAuthExchangeRequest) => {
+  electronAuthExchange: async (data: ElectronAuthExchangeRequest, options?: RecaptchaOptions) => {
     const result = await api.post<ApiResponse<ElectronAuthExchangeResponse>>(
       "/auth/electron/sign-in/exchange",
       {
         ...data,
+      },
+      {
+        headers: options?.recaptchaToken
+          ? { "X-Recaptcha-Token": options.recaptchaToken }
+          : undefined,
       }
     );
     return result.data;
