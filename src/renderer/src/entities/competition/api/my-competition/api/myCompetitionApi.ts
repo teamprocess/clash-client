@@ -8,7 +8,6 @@ import {
 
 export const myCompetitionApi = {
   // 내 성장도 분석
-  // 차후 chart.js를 통해 구현 예정
   getMyGrowthRate: async (data: MyGrowthRateRequest) => {
     const result = await api.get<ApiResponse<MyGrowthRateResponse>>("/compete/my/growth-rate", {
       params: data,
