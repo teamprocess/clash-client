@@ -1,9 +1,10 @@
-import { useEffect, useState } from "react";
-import { transitionApi } from "@/entities/home/api/transitionApi";
+import { useTransitionQuery } from "@/entities/home/api/useTransitionQuery.query";
 import { TransitionResponse } from "@/entities/home/model/useTransition.types";
 
 export const useTransition = () => {
-  const [transitionData, setTransitionData] = useState<TransitionResponse | null>(null);
+  const { data } = useTransitionQuery();
+
+  const transitionData: TransitionResponse | null = data?.data ?? null;
 
   const maxActive = Math.max(
     transitionData?.activeTime.yesterdayActiveTime ?? 0,
@@ -14,20 +15,6 @@ export const useTransition = () => {
     transitionData?.contributors.yesterdayContributors ?? 0,
     transitionData?.contributors.todayContributors ?? 0
   );
-
-  useEffect(() => {
-    const fetchTransition = async () => {
-      try {
-        const response = await transitionApi.getTransition();
-        if (!response.data) return;
-        setTransitionData(response.data);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    fetchTransition();
-  }, []);
 
   return {
     transitionData,
