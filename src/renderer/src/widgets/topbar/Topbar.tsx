@@ -1,6 +1,6 @@
 import * as S from "./Topbar.style";
 import { useState } from "react";
-import { useUser } from "@/entities/user";
+import { useGetMyProfile } from "@/entities/user";
 import { formatPrice } from "@/shared/lib";
 
 interface TopbarProps {
@@ -31,7 +31,7 @@ const alarmInfo: AlamProps[] = [
 export const Topbar = ({ onToggleSidebar }: TopbarProps) => {
   const alarmCnt = alarmInfo.length;
   const [isAlamOpen, setIsAlamOpen] = useState(false);
-  const { data: user } = useUser();
+  const { data: user } = useGetMyProfile();
 
   const handleOpen = () => {
     setIsAlamOpen(prev => !prev);
