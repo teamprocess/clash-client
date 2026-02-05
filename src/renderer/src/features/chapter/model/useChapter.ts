@@ -164,6 +164,11 @@ export const useChapter = (sectionId: number) => {
       });
 
       if (nextStageId !== null) {
+        const updatedWithNextStage = updated.map(stage => {
+          if (stage.id !== nextStageId) return stage;
+          return { ...stage, status: "current" as StageStatus };
+        });
+
         setCurrentStageId(nextStageId);
         setRoadmapNodes(prev =>
           prev.map(node => {
@@ -172,6 +177,8 @@ export const useChapter = (sectionId: number) => {
             return node;
           })
         );
+
+        return updatedWithNextStage;
       }
 
       return updated;
