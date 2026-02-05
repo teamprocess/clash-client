@@ -34,11 +34,16 @@ export const Grid = styled.div`
   width: fit-content;
 `;
 
-export const Grass = styled.div<{ $level: number; $dimmed?: boolean }>`
+export const Grass = styled.div<{ $level: number; $dimmed?: boolean; $selected?: boolean }>`
   width: ${CELL}px;
   height: ${CELL}px;
   border-radius: ${RADIUS}px;
-  background-color: ${({ $level, theme }) => {
+
+  opacity: ${({ $dimmed }) => ($dimmed ? 0.25 : 1)};
+
+  background-color: ${({ $selected, $level, theme }) => {
+    if ($selected) return "#3DCD5F";
+
     switch ($level) {
       case 3:
         return "#3DCD5F";
@@ -50,6 +55,4 @@ export const Grass = styled.div<{ $level: number; $dimmed?: boolean }>`
         return theme.fill.neutral;
     }
   }};
-
-  opacity: ${({ $dimmed }) => ($dimmed ? 0.25 : 1)};
 `;

@@ -70,6 +70,7 @@ export const GithubStreak = ({
               $level={getLevel(day.count)}
               $dimmed={selectedId !== null && selectedId !== day.id}
               onClick={() => handleGrassClick(day.id)}
+              $selected={selectedId === day.id}
             />
           ))}
         </S.Grid>
