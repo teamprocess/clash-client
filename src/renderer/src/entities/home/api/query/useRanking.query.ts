@@ -1,11 +1,14 @@
 import { useQuery } from "@tanstack/react-query";
-import { rankingApi } from "../rankingApi";
-import { GetRankingsRequest } from "@/entities/home/model/useRanking.types";
+import { rankingApi } from "@/entities/home/api/rankingApi";
+import { CategoryType, PeriodType } from "@/entities/home/model/useRanking.types";
 
-export const useRankingQuery = (params: GetRankingsRequest) => {
+export const useRankingQuery = (category: CategoryType, period: PeriodType) => {
   return useQuery({
-    queryKey: ["ranking", params.category, params.period],
-    queryFn: () => rankingApi.getRanking(params),
-    enabled: !!params.category && !!params.period,
+    queryKey: ["ranking", category, period],
+    queryFn: () =>
+      rankingApi.getRanking({
+        category,
+        period,
+      }),
   });
 };
