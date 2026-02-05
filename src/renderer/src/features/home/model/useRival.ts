@@ -1,10 +1,10 @@
-import { useEffect, useState } from "react";
-import { myRivalsApi } from "@/entities/competition/api/rival-competition/api/myRivalsApi";
+import { useState } from "react";
+import { useMyRivalsQuery } from "@/entities/competition/api/rival-competition/api/useMyRivalsQuery.query";
+import { useRivalListQuery, useRivalApplyMutation } from "@/entities/home/api/useRivalsQuery.query";
 import {
   MyRivalsRequest,
   MyRivalsResponse,
 } from "@/entities/competition/model/rival-competition/myRivals.types";
-import { rivalsApi } from "@/entities/home/api/rivalApi";
 import { RivalUsersResponse } from "@/entities/home/model/useRival.types";
 
 export interface MyRivalItem {
@@ -19,40 +19,15 @@ const USER_STATUS = {
 } as const;
 
 type UserStatus = (typeof USER_STATUS)[keyof typeof USER_STATUS];
-
 type StatusType = "온라인" | "자리비움" | "오프라인" | "";
 
 export const useRival = () => {
-  const [rivalsData, setRivalsData] = useState<MyRivalsResponse | null>(null);
-  const [userList, setUserList] = useState<RivalUsersResponse | null>(null);
+  const { data: myRivalsRes } = useMyRivalsQuery();
+  const { data: rivalListRes } = useRivalListQuery();
+  const rivalApplyMutation = useRivalApplyMutation();
 
-  useEffect(() => {
-    const fetchMyRivals = async () => {
-      try {
-        const response = await myRivalsApi.getMyRivals();
-        if (!response.data) return;
-        setRivalsData(response.data);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    fetchMyRivals();
-  }, []);
-
-  useEffect(() => {
-    const fetchRivalsList = async () => {
-      try {
-        const response = await rivalsApi.getRivalList();
-        if (!response.data) return;
-        setUserList(response.data);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    fetchRivalsList();
-  }, []);
+  const rivalsData: MyRivalsResponse | null = myRivalsRes?.data ?? null;
+  const userList: RivalUsersResponse | null = rivalListRes?.data ?? null;
 
   const getStatus = (status: UserStatus): StatusType => {
     switch (status) {
@@ -72,6 +47,7 @@ export const useRival = () => {
   const handleOpen = () => {
     setModalOpen(true);
   };
+
   const handleClose = () => {
     setModalOpen(false);
     setRivalSelectedId([]);
@@ -81,7 +57,6 @@ export const useRival = () => {
 
   const handleUserSelect = (id: number) => {
     const currentRivalCount = rivalsData?.myRivals.length ?? 0;
-
     const maxAvailableSlots = 4 - currentRivalCount;
 
     setRivalSelectedId(prev => {
@@ -102,22 +77,13 @@ export const useRival = () => {
     handleClose();
   };
 
-  const handleRivalCreate = () => {
-    const postRivalApply = async () => {
-      try {
-        const payload = {
-          ids: rivalSelectedId.map(id => ({ id })),
-        };
-
-        const response = await rivalsApi.postRivalApply(payload);
-        if (!response.data) return;
-        handleClose();
-      } catch (error) {
-        console.error(error);
-      }
+  const handleRivalCreate = async () => {
+    const payload = {
+      ids: rivalSelectedId.map(id => ({ id })),
     };
 
-    postRivalApply();
+    await rivalApplyMutation.mutateAsync(payload);
+    handleClose();
   };
 
   return {
