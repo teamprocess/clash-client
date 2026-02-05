@@ -1,4 +1,4 @@
-import { useTransitionQuery } from "@/entities/home/api/useTransitionQuery.query";
+import { useTransitionQuery } from "@/entities/home/api/query/useTransition.query";
 import { TransitionResponse } from "@/entities/home/model/useTransition.types";
 
 export const useTransition = () => {

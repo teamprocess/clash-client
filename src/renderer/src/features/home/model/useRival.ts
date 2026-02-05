@@ -1,6 +1,9 @@
 import { useState } from "react";
-import { useMyRivalsQuery } from "@/entities/competition/api/rival-competition/api/useMyRivalsQuery.query";
-import { useRivalListQuery, useRivalApplyMutation } from "@/entities/home/api/useRivalsQuery.query";
+import { useMyRivalsQuery } from "@/entities/competition/api/rival-competition/api/query/useMyRivals.query";
+import {
+  useRivalListQuery,
+  useRivalApplyMutation,
+} from "@/entities/home/api/query/useRivals.query";
 import {
   MyRivalsRequest,
   MyRivalsResponse,

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useActiveQuery } from "@/entities/home/api/useActiveQuery.query";
+import { useActiveQuery } from "@/entities/home/api/query/useActive.query";
 import { ActiveResponse } from "@/entities/home/model/useActive.types";
 import { CategoryType } from "@/entities/home/model/useRanking.types";
 

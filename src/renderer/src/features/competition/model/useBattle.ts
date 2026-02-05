@@ -5,7 +5,7 @@ import {
   useAnalyzeBattleQuery,
   useBattleListQuery,
   useCreateBattleMutation,
-} from "@/entities/competition/api/rival-competition/api/useBattleQuery.query";
+} from "@/entities/competition/api/rival-competition/api/query/useBattle.query";
 
 import {
   BattleResponse,

@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { rankingApi } from "./rankingApi";
+import { rankingApi } from "../rankingApi";
 import { GetRankingsRequest } from "@/entities/home/model/useRanking.types";
 
 export const useRankingQuery = (params: GetRankingsRequest) => {
