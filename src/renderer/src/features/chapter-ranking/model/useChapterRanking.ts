@@ -1,5 +1,9 @@
 import { useRef, useState, useEffect } from "react";
 import { useChapterRankingQuery } from "@/entities/roadmap/chapter/chapter-ranking/model/useChapterRanking.query";
+import type {
+  GetChapterRankingsResponse,
+  RankingUser,
+} from "@/entities/roadmap/chapter/chapter-ranking/model/chapterRanking.types";
 
 export const useChapterRanking = () => {
   const [isMyRankVisible, setIsMyRankVisible] = useState(true);
@@ -37,8 +41,26 @@ export const useChapterRanking = () => {
     return () => observer.disconnect();
   }, []);
 
-  const myData = rankingResponse?.data?.myRank;
-  const allRankers = rankingResponse?.data?.allRankers || [];
+  const computeRankers = (data?: GetChapterRankingsResponse | null) => {
+    if (!data) return { myData: undefined, allRankers: [] as RankingUser[] };
+
+    const myId = data.myRank?.id;
+    const base = data.allRankers ?? [];
+    const withMe = myId != null && base.some(u => u.id === myId) ? base : [...base, data.myRank];
+
+    const sorted = [...withMe].sort((a, b) => {
+      if (b.completedChaptersCount !== a.completedChaptersCount) {
+        return b.completedChaptersCount - a.completedChaptersCount;
+      }
+      return a.id - b.id; // 동점이면 userId 오름차순
+    });
+
+    const ranked = sorted.map((u, idx) => ({ ...u, rank: idx + 1 }));
+    const myData = myId != null ? ranked.find(u => u.id === myId) : undefined;
+    return { myData, allRankers: ranked };
+  };
+
+  const { myData, allRankers } = computeRankers(rankingResponse?.data);
 
   return {
     isMyRankVisible,

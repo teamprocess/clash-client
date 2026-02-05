@@ -69,3 +69,14 @@ export interface SubmitAnswerResponse {
   nextChapterId: number | null;
   nextChapterOrderIndex: number | null;
 }
+
+export interface SubmitResultResponse {
+  missionId: number;
+  isCleared: boolean;
+  correctCount: number;
+  totalCount: number;
+  nextMissionId: number | null;
+  nextMissionOrderIndex: number | null;
+  nextChapterId: number | null;
+  nextChapterOrderIndex: number | null;
+}
