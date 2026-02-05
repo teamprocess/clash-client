@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { myRivalsApi } from "./myRivalsApi";
+import { myRivalsApi } from "../myRivalsApi";
 
 export const useMyRivalsQuery = () => {
   return useQuery({

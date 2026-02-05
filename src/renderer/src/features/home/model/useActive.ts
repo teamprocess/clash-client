@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { activeApi } from "@/entities/home/api/activeApi";
+import { useState } from "react";
+import { useActiveQuery } from "@/entities/home/api/query/useActive.query";
 import { ActiveResponse } from "@/entities/home/model/useActive.types";
 import { CategoryType } from "@/entities/home/model/useRanking.types";
 
@@ -10,22 +10,11 @@ const activeDropDownValue = [
 ];
 
 export const useActive = () => {
-  const [activeData, setActiveData] = useState<ActiveResponse | null>(null);
   const [activeDropdown, setActiveDropdown] = useState<CategoryType>("GITHUB");
 
-  useEffect(() => {
-    const fetchActive = async () => {
-      try {
-        const response = await activeApi.getActive(activeDropdown);
-        if (!response.data) return;
-        setActiveData(response.data);
-      } catch (error) {
-        console.error(error);
-      }
-    };
+  const { data } = useActiveQuery(activeDropdown);
 
-    fetchActive();
-  }, [activeDropdown]);
+  const activeData: ActiveResponse | null = data?.data ?? null;
 
   const maxContribute = activeData?.streaks?.length
     ? Math.max(...activeData.streaks.map(v => v.detailedInfo))
@@ -35,7 +24,6 @@ export const useActive = () => {
     if (count === 0) return 0;
 
     const ratio: number = count / maxContribute;
-
     const ratioResult = ratio * 10;
 
     if (ratioResult >= 8) return 4;

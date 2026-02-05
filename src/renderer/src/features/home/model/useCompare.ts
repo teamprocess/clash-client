@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react";
+import { useCompareQuery } from "@/entities/home/api/query/useCompare.query";
 import { CompareResponse } from "@/entities/home/model/useCompare.types";
-import { compareApi } from "@/entities/home/api/compareApi";
 
 export const getGrowthInfo = (yesterday: number, today: number) => {
+  // const [compareDropdown, setCompareDropdown] = useState("Github");
   const diff = today - yesterday;
 
   if (diff > 0) return { status: "up", deg: 180, value: Math.round(diff * 10) / 10 };
@@ -11,23 +11,9 @@ export const getGrowthInfo = (yesterday: number, today: number) => {
 };
 
 export const useCompare = () => {
-  // const [compareDropdown, setCompareDropdown] = useState("Github");
+  const { data } = useCompareQuery();
 
-  const [compareData, setCompareData] = useState<CompareResponse | null>(null);
-
-  useEffect(() => {
-    const fetchCompare = async () => {
-      try {
-        const response = await compareApi.getCompare();
-        if (!response.data) return;
-        setCompareData(response.data);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    fetchCompare();
-  }, []);
+  const compareData: CompareResponse | null = data?.data ?? null;
 
   return {
     // compareDropdown,

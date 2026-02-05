@@ -1,16 +1,9 @@
-import { useEffect, useRef, useState, useLayoutEffect } from "react";
+import { useRef, useState, useLayoutEffect } from "react";
 import { RankingsResponse, CategoryType, PeriodType } from "@/entities/home/model/useRanking.types";
-import { rankingApi } from "@/entities/home/api/rankingApi";
-import { authApi } from "@/entities/user";
-import axios from "axios";
+import { useGetMyProfile } from "@/entities/user";
+import { useRankingQuery } from "@/entities/home/api/query/useRanking.query";
 
 export const useRanking = () => {
-  const [userList, setUserList] = useState<RankingsResponse>({
-    category: "EXP",
-    period: "WEEK",
-    rankings: [],
-  });
-
   const rankingDropDownValue = [
     { key: "GITHUB", label: "Github" },
     { key: "EXP", label: "EXP" },
@@ -27,59 +20,24 @@ export const useRanking = () => {
   const [RankingDropdown, setRankingDropdown] = useState<CategoryType>("EXP");
   const [RankingPeriodDropdown, setRankingPeriodDropdown] = useState<PeriodType>("DAY");
 
-  useEffect(() => {
-    const fetchRanking = async () => {
-      try {
-        const response = await rankingApi.getRanking({
-          category: RankingDropdown,
-          period: RankingPeriodDropdown,
-        });
-        if (!response.data) return;
-        setUserList(response.data);
-      } catch (error) {
-        console.error(error);
-      }
-    };
+  const { data: rankingResponse } = useRankingQuery(RankingDropdown, RankingPeriodDropdown);
 
-    fetchRanking();
-  }, [RankingDropdown, RankingPeriodDropdown]);
+  const userList: RankingsResponse = rankingResponse?.data ?? {
+    category: RankingDropdown,
+    period: RankingPeriodDropdown,
+    rankings: [],
+  };
+
+  const { data: myProfile } = useGetMyProfile();
+
+  const myUserId = myProfile?.id;
+
+  const currentUserIndex = userList.rankings.findIndex(u => u.userId === myUserId);
+  const currentUser = currentUserIndex !== -1 ? userList.rankings[currentUserIndex] : null;
+  const currentUserRank = currentUserIndex !== -1 ? currentUserIndex + 1 : null;
 
   const wrapperRef = useRef<HTMLDivElement>(null);
   const currentUserRef = useRef<HTMLDivElement>(null);
-
-  const [myUserId, setMyUserId] = useState<number | null>(null);
-
-  useEffect(() => {
-    const fetchMyProfile = async () => {
-      try {
-        const result = await authApi.getMyProfile();
-
-        if (result.success && result.data) {
-          setMyUserId(result.data.id);
-        } else {
-          console.error("내 정보 조회 실패:", result.message);
-        }
-      } catch (error: unknown) {
-        console.error("내 정보 조회 실패:", error);
-
-        if (axios.isAxiosError(error)) {
-          const errorMessage =
-            error.response?.data?.error?.message ||
-            error.response?.data?.message ||
-            "내 정보 조회 중 오류가 발생했습니다.";
-          console.error(errorMessage);
-        }
-      }
-    };
-
-    fetchMyProfile();
-  }, []);
-
-  const currentUserIndex = userList.rankings.findIndex(u => u.userId === myUserId);
-
-  const currentUser = currentUserIndex !== -1 ? userList.rankings[currentUserIndex] : null;
-
-  const currentUserRank = currentUserIndex !== -1 ? currentUserIndex + 1 : null;
 
   const [stickyState, setStickyState] = useState<"top" | "bottom" | "none">("none");
 
@@ -91,6 +49,7 @@ export const useRanking = () => {
 
       const wrapperRect = wrapperRef.current.getBoundingClientRect();
       const userRect = currentUserRef.current.getBoundingClientRect();
+
       if (userRect.top >= wrapperRect.bottom) {
         setStickyState("bottom");
         return;
@@ -99,7 +58,6 @@ export const useRanking = () => {
         setStickyState("top");
         return;
       }
-
       setStickyState("none");
     };
 
