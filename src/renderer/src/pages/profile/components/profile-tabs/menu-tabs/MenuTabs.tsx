@@ -3,29 +3,29 @@ import * as S from "./MenuTabs.style";
 export type TabKey = "github" | "item" | "time";
 
 type MenuTabsProps = {
-  activeTab: TabKey;
-  onChangeTab: (tab: TabKey) => void;
+  active: TabKey;
+  onChange: (key: TabKey) => void;
 };
 
-export const MenuTabs = ({ activeTab, onChangeTab }: MenuTabsProps) => {
+export const MenuTabs = ({ active, onChange }: MenuTabsProps) => {
   return (
     <S.Wrapper>
       <S.TabRow>
-        <S.TabButton $active={activeTab === "github"} onClick={() => onChangeTab("github")}>
+        <S.TabButton $active={active === "github"} onClick={() => onChange("github")}>
           깃허브
         </S.TabButton>
 
-        <S.TabButton $active={activeTab === "item"} onClick={() => onChangeTab("item")}>
+        <S.TabButton $active={active === "item"} onClick={() => onChange("item")}>
           아이템
         </S.TabButton>
 
-        <S.TabButton $active={activeTab === "time"} onClick={() => onChangeTab("time")}>
+        <S.TabButton $active={active === "time"} onClick={() => onChange("time")}>
           시간
         </S.TabButton>
       </S.TabRow>
 
       <S.Underline>
-        <S.Indicator $active={activeTab} />
+        <S.Indicator $active={active} />
       </S.Underline>
     </S.Wrapper>
   );

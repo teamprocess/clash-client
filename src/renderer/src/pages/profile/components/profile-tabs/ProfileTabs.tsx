@@ -2,26 +2,27 @@ import { useState } from "react";
 import * as S from "./ProfileTabs.style";
 import { MenuTabs, TabKey } from "./menu-tabs/MenuTabs";
 import { GithubStreak } from "./github-streak/GithubStreak";
-import { GithubInfo } from "@/pages/profile/components/profile-tabs/github-info/GithubInfo";
+import { GithubInfo } from "./github-info/GithubInfo";
+import { ItemPanel } from "./item-panel/ItemPanel";
 
 export const ProfileTabs = () => {
-  const [activeTab, setActiveTab] = useState<TabKey>("github");
+  const [active, setActive] = useState<TabKey>("github");
 
   return (
     <S.Banner>
-      <MenuTabs activeTab={activeTab} onChangeTab={setActiveTab} />
+      <MenuTabs active={active} onChange={setActive} />
 
       <S.Background>
-        {activeTab === "github" && (
+        {active === "github" && (
           <>
             <GithubStreak />
             <GithubInfo />
           </>
         )}
 
-        {activeTab === "item" && <div />}
+        {active === "item" && <ItemPanel />}
 
-        {activeTab === "time" && <div />}
+        {active === "time" && <div />}
       </S.Background>
     </S.Banner>
   );
