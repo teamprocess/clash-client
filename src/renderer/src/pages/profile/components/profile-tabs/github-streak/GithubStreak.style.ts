@@ -34,7 +34,7 @@ export const Grid = styled.div`
   width: fit-content;
 `;
 
-export const Grass = styled.button<{ $level: number; $dimmed?: boolean }>`
+export const Grass = styled.div<{ $level: number; $dimmed?: boolean }>`
   width: ${CELL}px;
   height: ${CELL}px;
   border-radius: ${RADIUS}px;
@@ -52,9 +52,4 @@ export const Grass = styled.button<{ $level: number; $dimmed?: boolean }>`
   }};
 
   opacity: ${({ $dimmed }) => ($dimmed ? 0.25 : 1)};
-  border: 0;
-  padding: 0;
-  background-clip: padding-box;
-  cursor: pointer;
-  outline: none;
 `;

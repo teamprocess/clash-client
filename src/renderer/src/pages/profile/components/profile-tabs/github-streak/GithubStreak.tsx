@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState, useEffect } from "react";
+import { useMemo, useState, useEffect } from "react";
 import * as S from "./GithubStreak.style";
 
 type CommitDay = { id: number | string; count: number };
@@ -38,46 +38,40 @@ export const GithubStreak = ({
 
   const [selectedId, setSelectedId] = useState<string | number | null>(null);
 
-  const rootRef = useRef<HTMLDivElement | null>(null);
-
   useEffect(() => {
     const onPointerDown = (e: PointerEvent) => {
-      if (!rootRef.current) return;
-      const target = e.target as Node;
-      if (!rootRef.current.contains(target)) {
-        setSelectedId(null);
-      }
+      if (selectedId === null) return;
+      const target = e.target as HTMLElement | null;
+      if (!target) return;
+      const clickedGrass = target.closest('[data-grass-cell="true"]');
+      if (clickedGrass) return;
+
+      setSelectedId(null);
     };
 
     window.addEventListener("pointerdown", onPointerDown);
     return () => window.removeEventListener("pointerdown", onPointerDown);
-  }, []);
+  }, [selectedId]);
 
-  const handleClick = (id: string | number) => {
+  const handleGrassClick = (id: string | number) => {
     setSelectedId(prev => (prev === id ? null : id));
   };
 
   return (
-    <S.ActiveContainer ref={rootRef}>
+    <S.ActiveContainer>
       <S.Title>스트릭</S.Title>
 
       <S.GrassBox>
         <S.Grid>
-          {daysForView.map(day => {
-            const isSelected = selectedId === day.id;
-            const isDimmed = selectedId !== null && !isSelected;
-
-            return (
-              <S.Grass
-                key={day.id}
-                type="button"
-                $level={getLevel(day.count)}
-                $dimmed={isDimmed}
-                aria-pressed={isSelected}
-                onClick={() => handleClick(day.id)}
-              />
-            );
-          })}
+          {daysForView.map(day => (
+            <S.Grass
+              key={day.id}
+              data-grass-cell="true"
+              $level={getLevel(day.count)}
+              $dimmed={selectedId !== null && selectedId !== day.id}
+              onClick={() => handleGrassClick(day.id)}
+            />
+          ))}
         </S.Grid>
       </S.GrassBox>
     </S.ActiveContainer>
