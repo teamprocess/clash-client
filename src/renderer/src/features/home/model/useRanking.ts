@@ -1,8 +1,8 @@
 import { useRef, useState, useLayoutEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { RankingsResponse, CategoryType, PeriodType } from "@/entities/home/model/useRanking.types";
-import { rankingApi } from "@/entities/home/api/rankingApi";
 import { authApi } from "@/entities/user";
+import { useRankingQuery } from "@/entities/home/api/query/useRanking.query";
 
 export const useRanking = () => {
   const rankingDropDownValue = [
@@ -21,14 +21,7 @@ export const useRanking = () => {
   const [RankingDropdown, setRankingDropdown] = useState<CategoryType>("EXP");
   const [RankingPeriodDropdown, setRankingPeriodDropdown] = useState<PeriodType>("DAY");
 
-  const { data: rankingResponse } = useQuery({
-    queryKey: ["ranking", RankingDropdown, RankingPeriodDropdown],
-    queryFn: () =>
-      rankingApi.getRanking({
-        category: RankingDropdown,
-        period: RankingPeriodDropdown,
-      }),
-  });
+  const { data: rankingResponse } = useRankingQuery(RankingDropdown, RankingPeriodDropdown);
 
   const userList: RankingsResponse = rankingResponse?.data ?? {
     category: RankingDropdown,
