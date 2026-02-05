@@ -1,7 +1,6 @@
 import { useRef, useState, useLayoutEffect } from "react";
-import { useQuery } from "@tanstack/react-query";
 import { RankingsResponse, CategoryType, PeriodType } from "@/entities/home/model/useRanking.types";
-import { authApi } from "@/entities/user";
+import { useGetMyProfile } from "@/entities/user";
 import { useRankingQuery } from "@/entities/home/api/query/useRanking.query";
 
 export const useRanking = () => {
@@ -29,12 +28,9 @@ export const useRanking = () => {
     rankings: [],
   };
 
-  const { data: myProfile } = useQuery({
-    queryKey: ["myProfile"],
-    queryFn: authApi.getMyProfile,
-  });
+  const { data: myProfile } = useGetMyProfile();
 
-  const myUserId = myProfile?.data?.id ?? null;
+  const myUserId = myProfile?.id;
 
   const currentUserIndex = userList.rankings.findIndex(u => u.userId === myUserId);
   const currentUser = currentUserIndex !== -1 ? userList.rankings[currentUserIndex] : null;
