@@ -1,4 +1,4 @@
-import { useCompareQuery } from "@/entities/home/api/useCompareQuery.query";
+import { useCompareQuery } from "@/entities/home/api/query/useCompare.query";
 import { CompareResponse } from "@/entities/home/model/useCompare.types";
 
 export const getGrowthInfo = (yesterday: number, today: number) => {
