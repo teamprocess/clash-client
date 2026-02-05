@@ -1,29 +1,31 @@
-import { useState } from "react";
 import * as S from "./MenuTabs.style";
 
-type TabKey = "github" | "item" | "time";
+export type TabKey = "github" | "item" | "time";
 
-export const MenuTabs = () => {
-  const [active, setActive] = useState<TabKey>("github");
+type MenuTabsProps = {
+  activeTab: TabKey;
+  onChangeTab: (tab: TabKey) => void;
+};
 
+export const MenuTabs = ({ activeTab, onChangeTab }: MenuTabsProps) => {
   return (
     <S.Wrapper>
       <S.TabRow>
-        <S.TabButton $active={active === "github"} onClick={() => setActive("github")}>
+        <S.TabButton $active={activeTab === "github"} onClick={() => onChangeTab("github")}>
           깃허브
         </S.TabButton>
 
-        <S.TabButton $active={active === "item"} onClick={() => setActive("item")}>
+        <S.TabButton $active={activeTab === "item"} onClick={() => onChangeTab("item")}>
           아이템
         </S.TabButton>
 
-        <S.TabButton $active={active === "time"} onClick={() => setActive("time")}>
+        <S.TabButton $active={activeTab === "time"} onClick={() => onChangeTab("time")}>
           시간
         </S.TabButton>
       </S.TabRow>
 
       <S.Underline>
-        <S.Indicator $active={active} />
+        <S.Indicator $active={activeTab} />
       </S.Underline>
     </S.Wrapper>
   );
