@@ -3,14 +3,13 @@ import { Outlet } from "react-router-dom";
 import { Topbar } from "@/widgets/topbar";
 import { Sidebar } from "@/widgets/sidebar";
 import * as S from "./MainLayout.style";
+import type { LayoutVariant } from "./MainLayout.types";
 
-export const MainLayout = ({
-  isScrollAble = false,
-  isFixed = false,
-}: {
-  isScrollAble?: boolean;
-  isFixed?: boolean;
-}) => {
+interface MainLayoutProps {
+  variant?: LayoutVariant;
+}
+
+export const MainLayout = ({ variant = "default" }: MainLayoutProps) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
   const toggleSidebar = () => {
@@ -22,7 +21,7 @@ export const MainLayout = ({
       <Topbar onToggleSidebar={toggleSidebar} />
       <S.ContentWrapper>
         <Sidebar isOpen={isSidebarOpen} />
-        <S.MainContent $isFixed={isFixed} $isScrollAble={isScrollAble}>
+        <S.MainContent $variant={variant}>
           <Outlet />
         </S.MainContent>
       </S.ContentWrapper>
