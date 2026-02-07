@@ -1,46 +1,33 @@
-// import { useState } from "react";
 import * as S from "./Timer.style";
 import { formatTime } from "@/shared/lib";
-import { useRecord } from "../../model/useRecord";
-// import { Toggle } from "@/shared/ui/toggle/Toggle";
+import { useRecordStore } from "../../model/recordStore";
 
 export const Timer = () => {
-  const { activeTaskId, stopStudy, getTotalStudyTime } = useRecord();
+  const { activeTaskId, tasks, currentStudyTime, stop } = useRecordStore();
   const currentDate = new Date().toISOString().split("T")[0];
-  // const [isPomodoroMode, setIsPomodoroMode] = useState(false);
+  const totalStudyTime = tasks.reduce((sum, task) => sum + task.studyTime, 0) + currentStudyTime;
 
   const Timer = (
     <>
       <S.Date>{currentDate}</S.Date>
       <S.TimeBox>
         {activeTaskId !== null && (
-          <S.PlayButton onClick={() => stopStudy()}>
+          <S.PlayButton
+            onClick={() => {
+              void stop();
+            }}
+          >
             <S.PauseIcon />
           </S.PlayButton>
         )}
-        <S.Time>{formatTime(getTotalStudyTime())}</S.Time>
+        <S.Time>{formatTime(totalStudyTime)}</S.Time>
       </S.TimeBox>
     </>
   );
 
-  // const Pomodoro = (
-  // //   // <S.PomodoroTimerBox>
-  // //   //   <S.PomodoroTimer />
-  // //   //   <S.PomodoroTimeBox>
-  // //   //     <S.Date>{currentDate}</S.Date>
-  // //   //     <S.Time>{formatTime(getTotalStudyTime())}</S.Time>
-  // //   //   </S.PomodoroTimeBox>
-  // //   // </S.PomodoroTimerBox>
-  // );
-
   return (
     <S.TimerContainer>
       <S.TimerBox>{Timer}</S.TimerBox>
-      {/*{isPomodoroMode ? Pomodoro : <S.TimerBox>{Timer}</S.TimerBox>}*/}
-      {/*<S.ChangeMode>*/}
-      {/*  /!*<Toggle defaultValue={isPomodoroMode} onshange={setIsPomodoroMode} />*!/*/}
-      {/*  /!*<S.ChangeModeText>뽀모도로 타이머</S.ChangeModeText>*!/*/}
-      {/*</S.ChangeMode>*/}
     </S.TimerContainer>
   );
 };

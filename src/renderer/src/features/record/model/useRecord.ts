@@ -2,24 +2,11 @@ import { useEffect } from "react";
 import { useRecordStore } from "./recordStore";
 
 export const useRecord = () => {
-  const {
-    tasks,
-    activeTaskId,
-    currentStudyTime,
-    startTime,
-    isLoading,
-    fetchTasks,
-    start,
-    stop,
-    addTask,
-    updateTask,
-    deleteTask,
-    setCurrentStudyTime,
-  } = useRecordStore();
+  const { startTime, fetchTasks, setCurrentStudyTime } = useRecordStore();
 
   useEffect(() => {
     void fetchTasks();
-  }, []);
+  }, [fetchTasks]);
 
   useEffect(() => {
     if (!startTime) return;
@@ -30,33 +17,4 @@ export const useRecord = () => {
 
     return () => clearInterval(timer);
   }, [startTime, setCurrentStudyTime]);
-
-  const isTaskActive = (taskId: number) => activeTaskId === taskId;
-
-  const getTaskStudyTime = (taskId: number) => {
-    const task = tasks.find(task => task.id === taskId);
-    if (!task) return 0;
-    return activeTaskId === taskId ? task.studyTime + currentStudyTime : task.studyTime;
-  };
-
-  const getTotalStudyTime = () => {
-    return tasks.reduce((sum, task) => sum + task.studyTime, 0) + currentStudyTime;
-  };
-
-  const startStudy = async (taskId: number) => await start(taskId);
-  const stopStudy = async () => await stop();
-
-  return {
-    tasks,
-    activeTaskId,
-    isLoading,
-    startStudy,
-    stopStudy,
-    addTask,
-    updateTask,
-    deleteTask,
-    isTaskActive,
-    getTaskStudyTime,
-    getTotalStudyTime,
-  };
 };

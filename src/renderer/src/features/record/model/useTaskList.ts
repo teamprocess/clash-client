@@ -1,20 +1,11 @@
-import { useState, useRef } from "react";
-import { useRecord } from "./useRecord";
+import { useRef, useState } from "react";
+import { useRecordStore } from "./recordStore";
 
 type EditMode = "none" | "add" | "edit";
 
 export const useTaskList = () => {
-  const {
-    tasks,
-    activeTaskId,
-    startStudy,
-    stopStudy,
-    addTask,
-    updateTask,
-    deleteTask,
-    isTaskActive,
-    getTaskStudyTime,
-  } = useRecord();
+  const { tasks, activeTaskId, currentStudyTime, start, stop, addTask, updateTask, deleteTask } =
+    useRecordStore();
 
   const [editMode, setEditMode] = useState<EditMode>("none");
   const [editingTaskId, setEditingTaskId] = useState<number | null>(null);
@@ -26,9 +17,9 @@ export const useTaskList = () => {
 
   const handlePlayPauseClick = async (taskId: number) => {
     if (activeTaskId === taskId) {
-      await stopStudy();
+      await stop();
     } else {
-      await startStudy(taskId);
+      await start(taskId);
     }
   };
 
@@ -83,6 +74,14 @@ export const useTaskList = () => {
       await deleteTask(deleteTargetId);
       setDeleteTargetId(null);
     }
+  };
+
+  const isTaskActive = (taskId: number) => activeTaskId === taskId;
+
+  const getTaskStudyTime = (taskId: number) => {
+    const task = tasks.find(item => item.id === taskId);
+    if (!task) return 0;
+    return activeTaskId === taskId ? task.studyTime + currentStudyTime : task.studyTime;
   };
 
   return {
