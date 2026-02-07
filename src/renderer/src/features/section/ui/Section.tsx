@@ -72,6 +72,7 @@ export const Section = () => {
                     style={{ opacity: item.locked ? 0.5 : 1 }}
                   >
                     <S.SectionIconWrapper>
+                      {/*서버로부터 사진 연결 전 임시로 null*/}
                       <S.SectionIcon src={"null"} />
                       {item.completed && <S.SectionComplete />}
                       {item.locked && <S.SectionLock />}
