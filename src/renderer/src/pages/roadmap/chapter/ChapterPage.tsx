@@ -14,22 +14,7 @@ export const ChapterPage = () => {
   const { sectionId } = useParams<{ sectionId: string }>();
   const numericSectionId = sectionId ? Number(sectionId) : 0;
 
-  const {
-    chapterRef,
-    roadmapNodes,
-    currentStage,
-    currentMission,
-    modalOpen,
-    loading,
-    error,
-    sectionTitle,
-    setModalOpen,
-    setCurrentMission,
-    handleMissionClick,
-    handleMissionComplete,
-    handleSelectStage,
-    missionModalOpen,
-  } = useChapter(numericSectionId);
+  const { chapterRef, domain, view, handlers } = useChapter(numericSectionId);
 
   const [major, setMajor] = useState<MajorEnum | null>(null);
 
@@ -61,7 +46,7 @@ export const ChapterPage = () => {
     );
   }
 
-  if (loading) {
+  if (domain.loading) {
     return (
       <S.ChapterContainer>
         <div>로딩 중...</div>
@@ -69,10 +54,10 @@ export const ChapterPage = () => {
     );
   }
 
-  if (error) {
+  if (domain.error) {
     return (
       <S.ChapterContainer>
-        <div>데이터를 불러올 수 없습니다: {error}</div>
+        <div>데이터를 불러올 수 없습니다: {domain.error}</div>
         <Link to="/roadmap">로드맵으로 돌아가기</Link>
       </S.ChapterContainer>
     );
@@ -86,7 +71,7 @@ export const ChapterPage = () => {
         ))}
 
         <S.RoadmapWrapper>
-          <Roadmap nodes={roadmapNodes} onSelectStage={handleSelectStage} />
+          <Roadmap nodes={domain.roadmapNodes} onSelectStage={handlers.handleSelectStage} />
         </S.RoadmapWrapper>
       </S.ChapterScrollable>
 
@@ -102,26 +87,28 @@ export const ChapterPage = () => {
 
       <S.CurrentSectionBox>
         <S.ArrowIcon $direction="left" />
-        <S.CurrentSectionLabel>{sectionTitle}</S.CurrentSectionLabel>
+        <S.CurrentSectionLabel>{domain.sectionTitle}</S.CurrentSectionLabel>
         <S.ArrowIcon $direction="right" />
       </S.CurrentSectionBox>
 
-      {missionModalOpen && (
+      {view.missionModalOpen && (
         <S.MissionContainer>
           <S.MissionBoxTop>
-            <S.MissionTitle>{currentStage.title}</S.MissionTitle>
+            <S.MissionTitle>{domain.currentStage.title}</S.MissionTitle>
             <S.MissionProgress>
-              <S.MissionCurrentProgress>{currentStage.currentProgress}</S.MissionCurrentProgress>/
-              <S.MissionTotalMissions>{currentStage.totalMissions}</S.MissionTotalMissions>
+              <S.MissionCurrentProgress>
+                {domain.currentStage.currentProgress}
+              </S.MissionCurrentProgress>
+              /<S.MissionTotalMissions>{domain.currentStage.totalMissions}</S.MissionTotalMissions>
             </S.MissionProgress>
           </S.MissionBoxTop>
           <S.MissionList>
-            {currentStage.missions.map(mission => (
+            {domain.currentStage.missions.map(mission => (
               <S.MissionBox
                 key={mission.id}
                 onClick={() => {
-                  if (currentStage.status === "locked") return;
-                  handleMissionClick(mission.id);
+                  if (domain.currentStage.status === "locked") return;
+                  handlers.handleMissionClick(mission.id);
                 }}
               >
                 {mission.completed ? <S.CompletedLogo /> : <S.NotCompletedLogo />}
@@ -132,15 +119,12 @@ export const ChapterPage = () => {
         </S.MissionContainer>
       )}
 
-      {currentMission && (
+      {view.currentMission && (
         <QuizModal
-          isOpen={modalOpen}
-          onClose={() => {
-            setModalOpen(false);
-            setCurrentMission(null);
-          }}
-          currentMission={currentMission}
-          onMissionComplete={handleMissionComplete}
+          isOpen={view.modalOpen}
+          onClose={handlers.handleCloseQuizModal}
+          currentMission={view.currentMission}
+          onMissionComplete={handlers.handleMissionComplete}
         />
       )}
     </S.ChapterContainer>
