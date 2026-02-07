@@ -25,8 +25,8 @@ export const PreviewModal = ({
 
   // sectionId가 변경되면 currentStep 초기화
   if (prevSectionId !== sectionId) {
-    setCurrentStep(1);
     setPrevSectionId(sectionId);
+    setCurrentStep(1);
   }
 
   const activeStep = previewData?.steps.find(step => step.id === currentStep);
