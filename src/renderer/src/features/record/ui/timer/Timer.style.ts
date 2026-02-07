@@ -1,7 +1,6 @@
 import styled from "styled-components";
 import { font } from "@/shared/config/font";
 import Pause from "../../assets/pause.svg";
-import Timer from "../../assets/timer.svg";
 
 export const TimerContainer = styled.div`
   display: flex;
@@ -49,30 +48,3 @@ export const PlayButton = styled.button`
   cursor: pointer;
   padding: 0;
 `;
-
-export const ChangeMode = styled.div`
-  display: flex;
-  gap: 0.5rem;
-  justify-content: flex-end;
-  width: 100%;
-`;
-
-export const ChangeModeText = styled.span`
-  color: ${({ theme }) => theme.label.assistive};
-  ${font.headline1.medium};
-`;
-
-export const PomodoroTimerBox = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 3rem;
-`;
-
-export const PomodoroTimeBox = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1rem;
-`;
-
-export const PomodoroTimer = styled(Timer)``;
