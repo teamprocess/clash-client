@@ -32,7 +32,12 @@ export const useSignIn = () => {
           return;
         }
 
-        if (pendingState && payload.state !== pendingState) {
+        if (!pendingState) {
+          setError("로그인 요청을 확인할 수 없습니다. 다시 시도해주세요.");
+          return;
+        }
+
+        if (payload.state !== pendingState) {
           setError("인증 상태가 일치하지 않습니다. 다시 시도해주세요.");
           return;
         }
