@@ -48,41 +48,52 @@ export const useBattle = () => {
   const rivalPercent = 100 - myPercent;
 
   const judgeUpperHand = (result: string) => {
-    if (result == MatchValue.LOSING) return "우세";
-    if (result == MatchValue.WINNING) return "열세";
-    if (result == MatchValue.LOST) return "패배";
-    if (result == MatchValue.WON) return "승리";
-    if (result == MatchValue.DRAW) return "무승부";
+    if (result === MatchValue.LOSING) return "우세";
+    if (result === MatchValue.WINNING) return "열세";
+    if (result === MatchValue.LOST) return "패배";
+    if (result === MatchValue.WON) return "승리";
+    if (result === MatchValue.DRAW) return "무승부";
     return "동률";
   };
 
-  const myAnalyzePercent = useMemo(() => {
+  const myAnalyzePoint = useMemo(() => {
     if (!analyzeData) return 0;
     return analyzeData.myPoint;
   }, [analyzeData]);
 
-  const rivalAnalyzePercent = useMemo(() => {
+  const rivalAnalyzePoint = useMemo(() => {
     if (!analyzeData) return 0;
     return analyzeData.enemyPoint;
   }, [analyzeData]);
 
-  const analyzeRate = myAnalyzePercent + rivalAnalyzePercent;
-  const diff = Math.abs(rivalAnalyzePercent - myAnalyzePercent);
-  const isRivalHigher = rivalAnalyzePercent > myAnalyzePercent;
+  const analyzeTotal = myAnalyzePoint + rivalAnalyzePoint;
+
+  const myAnalyzeRate = analyzeTotal > 0 ? (myAnalyzePoint / analyzeTotal) * 100 : null;
+
+  const rivalAnalyzeRate = analyzeTotal > 0 ? (rivalAnalyzePoint / analyzeTotal) * 100 : null;
+
+  const diff =
+    myAnalyzeRate !== null && rivalAnalyzeRate !== null
+      ? Math.abs(rivalAnalyzeRate - myAnalyzeRate)
+      : null;
+
+  const isRivalHigher =
+    myAnalyzeRate !== null && rivalAnalyzeRate !== null ? rivalAnalyzeRate > myAnalyzeRate : false;
 
   const [rivalSelectedId, setRivalSelectedId] = useState<number | null>(null);
+
   const handleUserSelect = (id: number) => {
     setRivalSelectedId(prev => (prev === id ? null : id));
   };
 
   const detailTextTranslate = (category: AnalyzeCategory) => {
-    if (category == "GITHUB") return "Contributes";
-    if (category == "ACTIVE_TIME") return;
+    if (category === "GITHUB") return "Contributes";
+    if (category === "ACTIVE_TIME") return "Time";
     return "EXP";
   };
 
   const getRemainDays = (targetDate?: string) => {
-    if (!targetDate) return 0;
+    if (!targetDate) return null;
 
     const today = new Date();
     const target = new Date(targetDate);
@@ -90,6 +101,7 @@ export const useBattle = () => {
     target.setHours(0, 0, 0, 0);
 
     const diffTime = target.getTime() - today.getTime();
+
     return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
   };
 
@@ -138,11 +150,15 @@ export const useBattle = () => {
       judgeUpperHand,
       myPercent,
       rivalPercent,
-      myAnalyzePercent,
-      rivalAnalyzePercent,
-      analyzeRate,
+
+      myAnalyzePoint,
+      rivalAnalyzePoint,
+      analyzeTotal,
+      myAnalyzeRate,
+      rivalAnalyzeRate,
       diff,
       isRivalHigher,
+
       detailTextTranslate,
       remainDays,
 
