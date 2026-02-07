@@ -35,15 +35,14 @@ function App() {
                 <Route path="/home/transition" element={<ComparePage />} />
                 <Route path="/competition" element={<CompetitionPage />} />
                 <Route path="/record" element={<RecordPage />} />
-                <Route path="/shop" element={<ShopPage />} />
                 <Route path="/roadmap" element={<RoadmapPage />} />
                 <Route path="/roadmap/major-choice" element={<RoadmapMajorChoicePage />} />
                 <Route path="/roadmap/:sectionId" element={<ChapterPage />} />
               </Route>
-              <Route element={<MainLayout isScrollAble />}>
+              <Route element={<MainLayout variant="scrollable" />}>
                 <Route path="/shop" element={<ShopPage />} />
               </Route>
-              <Route element={<MainLayout isFixed />}>
+              <Route element={<MainLayout variant="fixed" />}>
                 <Route path="/shop/products" element={<ProductsPage />} />
               </Route>
               <Route element={<AuthLayout />}>
