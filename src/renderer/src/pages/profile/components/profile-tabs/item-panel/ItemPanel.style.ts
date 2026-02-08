@@ -45,6 +45,7 @@ export const GridScrollArea = styled.div`
   min-height: 0;
   overflow-y: auto;
   scrollbar-width: none;
+
   &::-webkit-scrollbar {
     display: none;
   }
@@ -84,7 +85,6 @@ export const ThumbBackground = styled.div`
   width: 100%;
   height: 4.5rem;
   border-radius: 0.75rem;
-
   background-color: var(--item-accent, #2f547b);
   background-image: var(--item-bg-image, none);
   background-size: cover;

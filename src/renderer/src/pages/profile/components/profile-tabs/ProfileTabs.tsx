@@ -3,7 +3,7 @@ import * as S from "./ProfileTabs.style";
 import { MenuTabs, TabKey } from "./menu-tabs/MenuTabs";
 import { GithubStreak } from "./github-streak/GithubStreak";
 import { GithubInfo } from "./github-info/GithubInfo";
-import { ItemPanel, type ItemPreviewPayload } from "./item-panel/ItemPanel";
+import { ItemPanel, ItemPreviewPayload } from "./item-panel/ItemPanel";
 
 type ProfileTabsProps = {
   onPreviewChange?: (payload: ItemPreviewPayload) => void;
