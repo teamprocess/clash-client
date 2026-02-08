@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, type CSSProperties } from "react";
 import * as S from "./ItemPanel.style";
 import MypageProfile from "@/pages/profile/assets/MypageProfile.png";
 
@@ -8,6 +8,8 @@ type BaseItem = {
   id: string;
   title: string;
   category: Exclude<ItemCategory, "all">;
+  accentColor?: string;
+  bgImageUrl?: string;
 };
 
 type BadgeItem = BaseItem & { category: "badge" };
@@ -16,15 +18,20 @@ type NameplateItem = BaseItem & { category: "nameplate" };
 
 type Item = BadgeItem | BackgroundItem | NameplateItem;
 
+export type ItemPreviewPayload =
+  | { kind: "background"; accentColor?: string; bgImageUrl?: string }
+  | { kind: "badge"; accentColor?: string; bgImageUrl?: string }
+  | { kind: "nameplate"; accentColor?: string; bgImageUrl?: string };
+
 const MOCK_ITEMS: Item[] = [
-  { id: "bg-1", category: "background", title: "상품명입니다." },
-  { id: "badge-1", category: "badge", title: "상품명" },
-  { id: "bg-2", category: "background", title: "상품명입니다." },
-  { id: "name-1", category: "nameplate", title: "상품명입니다." },
-  { id: "bg-3", category: "background", title: "상품명입니다." },
-  { id: "name-2", category: "nameplate", title: "상품명입니다." },
-  { id: "badge-2", category: "badge", title: "상품명" },
-  { id: "bg-4", category: "background", title: "상품명입니다." },
+  { id: "bg-1", category: "background", title: "상품명입니다.", accentColor: "#2F547B" },
+  { id: "bg-2", category: "background", title: "상품명입니다.", accentColor: "#2F547B" },
+  { id: "bg-3", category: "background", title: "상품명입니다.", accentColor: "#2F547B" },
+  { id: "bg-4", category: "background", title: "상품명입니다.", accentColor: "#2F547B" },
+  { id: "badge-1", category: "badge", title: "상품명", accentColor: "#2F547B" },
+  { id: "badge-2", category: "badge", title: "상품명", accentColor: "#2F547B" },
+  { id: "name-1", category: "nameplate", title: "상품명입니다.", accentColor: "#2F547B" },
+  { id: "name-2", category: "nameplate", title: "상품명입니다.", accentColor: "#2F547B" },
 ];
 
 const chipLabel: Record<ItemCategory, string> = {
@@ -40,13 +47,39 @@ const pillLabel: Record<Exclude<ItemCategory, "all">, string> = {
   nameplate: "이름표",
 };
 
-export const ItemPanel = () => {
+type ItemPanelProps = {
+  onPreviewChange?: (payload: ItemPreviewPayload) => void;
+};
+
+type ItemCssVars = CSSProperties & {
+  ["--item-accent"]?: string;
+  ["--item-bg-image"]?: string;
+};
+
+export const ItemPanel = ({ onPreviewChange }: ItemPanelProps) => {
   const [filter, setFilter] = useState<ItemCategory>("all");
+  const [selectedId, setSelectedId] = useState<string | null>(null);
 
   const items = useMemo(() => {
     if (filter === "all") return MOCK_ITEMS;
     return MOCK_ITEMS.filter(i => i.category === filter);
   }, [filter]);
+
+  const emitPreview = (item: Item) => {
+    const payload: ItemPreviewPayload =
+      item.category === "background"
+        ? { kind: "background", accentColor: item.accentColor, bgImageUrl: item.bgImageUrl }
+        : item.category === "badge"
+          ? { kind: "badge", accentColor: item.accentColor, bgImageUrl: item.bgImageUrl }
+          : { kind: "nameplate", accentColor: item.accentColor, bgImageUrl: item.bgImageUrl };
+
+    onPreviewChange?.(payload);
+  };
+
+  const handleCardClick = (item: Item) => {
+    setSelectedId(item.id);
+    emitPreview(item);
+  };
 
   return (
     <S.Wrapper>
@@ -69,58 +102,73 @@ export const ItemPanel = () => {
 
       <S.GridScrollArea>
         <S.Grid>
-          {items.map(item => (
-            <S.Card key={item.id}>
-              {item.category === "background" && (
-                <>
-                  <S.ThumbBackground />
-                  <S.CardFooter>
-                    <S.ItemTitle>{item.title}</S.ItemTitle>
-                    <S.BadgePill>{pillLabel[item.category]}</S.BadgePill>
-                  </S.CardFooter>
-                </>
-              )}
+          {items.map(item => {
+            const isActive = selectedId === item.id;
 
-              {item.category === "badge" && (
-                <S.ThumbBadgeCard>
-                  <S.BadgeLeftRing>
-                    <S.BadgeAvatar src={MypageProfile} alt="profile" />
-                  </S.BadgeLeftRing>
+            const styleVars: ItemCssVars = {};
+            if (item.accentColor) styleVars["--item-accent"] = item.accentColor;
+            if (item.bgImageUrl) styleVars["--item-bg-image"] = `url(${item.bgImageUrl})`;
 
-                  <S.BadgeRight>
-                    <S.BadgePillInline>{pillLabel[item.category]}</S.BadgePillInline>
-                    <S.BadgeTitle>{item.title}</S.BadgeTitle>
-                  </S.BadgeRight>
-                </S.ThumbBadgeCard>
-              )}
+            return (
+              <S.CardButton
+                key={item.id}
+                type="button"
+                $active={isActive}
+                onClick={() => handleCardClick(item)}
+              >
+                <S.CardInner>
+                  {item.category === "background" && (
+                    <>
+                      <S.ThumbBackground style={styleVars} />
+                      <S.CardFooter>
+                        <S.ItemTitle>{item.title}</S.ItemTitle>
+                        <S.BadgePill>{pillLabel[item.category]}</S.BadgePill>
+                      </S.CardFooter>
+                    </>
+                  )}
 
-              {item.category === "nameplate" && (
-                <>
-                  <S.ThumbName>
-                    <S.NameSmallRow>
-                      <S.NameSmallAvatar src={MypageProfile} alt="" />
-                      <S.NameSmallBar />
-                    </S.NameSmallRow>
+                  {item.category === "badge" && (
+                    <S.ThumbBadgeCard>
+                      <S.BadgeLeftRing style={styleVars}>
+                        <S.BadgeAvatar src={MypageProfile} alt="profile" />
+                      </S.BadgeLeftRing>
 
-                    <S.NameMainRow>
-                      <S.NameMainAvatar src={MypageProfile} alt="" />
-                      <S.NameMainBar />
-                    </S.NameMainRow>
+                      <S.BadgeRight>
+                        <S.BadgePillInline>{pillLabel[item.category]}</S.BadgePillInline>
+                        <S.BadgeTitle>{item.title}</S.BadgeTitle>
+                      </S.BadgeRight>
+                    </S.ThumbBadgeCard>
+                  )}
 
-                    <S.NameSmallRow>
-                      <S.NameSmallAvatar src={MypageProfile} alt="" />
-                      <S.NameSmallBar />
-                    </S.NameSmallRow>
-                  </S.ThumbName>
+                  {item.category === "nameplate" && (
+                    <>
+                      <S.ThumbName>
+                        <S.NameSmallRow>
+                          <S.NameSmallAvatar src={MypageProfile} alt="" />
+                          <S.NameSmallBar />
+                        </S.NameSmallRow>
 
-                  <S.CardFooter>
-                    <S.ItemTitle>{item.title}</S.ItemTitle>
-                    <S.BadgePill>{pillLabel[item.category]}</S.BadgePill>
-                  </S.CardFooter>
-                </>
-              )}
-            </S.Card>
-          ))}
+                        <S.NameMainRow>
+                          <S.NameMainAvatar src={MypageProfile} alt="" style={styleVars} />
+                          <S.NameMainBar style={styleVars} />
+                        </S.NameMainRow>
+
+                        <S.NameSmallRow>
+                          <S.NameSmallAvatar src={MypageProfile} alt="" />
+                          <S.NameSmallBar />
+                        </S.NameSmallRow>
+                      </S.ThumbName>
+
+                      <S.CardFooter>
+                        <S.ItemTitle>{item.title}</S.ItemTitle>
+                        <S.BadgePill>{pillLabel[item.category]}</S.BadgePill>
+                      </S.CardFooter>
+                    </>
+                  )}
+                </S.CardInner>
+              </S.CardButton>
+            );
+          })}
         </S.Grid>
       </S.GridScrollArea>
     </S.Wrapper>

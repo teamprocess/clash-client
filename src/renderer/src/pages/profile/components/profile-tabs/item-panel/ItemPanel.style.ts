@@ -45,7 +45,6 @@ export const GridScrollArea = styled.div`
   min-height: 0;
   overflow-y: auto;
   scrollbar-width: none;
-
   &::-webkit-scrollbar {
     display: none;
   }
@@ -58,9 +57,20 @@ export const Grid = styled.div`
   justify-content: start;
 `;
 
-export const Card = styled.div`
+export const CardButton = styled.button<{ $active: boolean }>`
   width: 12.25rem;
   height: 8.125rem;
+  border: none;
+  padding: 0;
+  background: transparent;
+  cursor: pointer;
+  text-align: left;
+  border-radius: 1.25rem;
+`;
+
+export const CardInner = styled.div`
+  width: 100%;
+  height: 100%;
   border-radius: 1.25rem;
   background: ${({ theme }) => theme.fill.neutral};
   padding: 0.625rem;
@@ -73,8 +83,13 @@ export const Card = styled.div`
 export const ThumbBackground = styled.div`
   width: 100%;
   height: 4.5rem;
-  border-radius: 12px;
-  background: #2f547b;
+  border-radius: 0.75rem;
+
+  background-color: var(--item-accent, #2f547b);
+  background-image: var(--item-bg-image, none);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 `;
 
 export const ThumbBadgeCard = styled.div`
@@ -94,25 +109,25 @@ export const BadgeLeftRing = styled.div`
   height: 5.625rem;
   border-radius: 5rem;
   box-sizing: border-box;
-  border: 0.5rem solid #2f547b;
+  border: 0.5rem solid var(--item-accent, #2f547b);
   display: flex;
   align-items: center;
   justify-content: center;
   background: ${({ theme }) => theme.fill.alternative};
   flex: 0 0 auto;
+  overflow: hidden;
 `;
 
 export const BadgeAvatar = styled.img`
   width: 100%;
   height: 100%;
-  border-radius: 15rem;
   object-fit: cover;
 `;
 
 export const BadgeRight = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-end;
   align-items: flex-end;
   gap: 0.5rem;
   min-width: 0;
@@ -140,7 +155,7 @@ export const ThumbName = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-end;
+  justify-content: center;
   gap: 0.25rem;
   box-sizing: border-box;
 `;
@@ -184,14 +199,18 @@ export const NameMainAvatar = styled.img`
   border-radius: 1.25rem;
   object-fit: cover;
   box-sizing: border-box;
-  border: 0.25rem solid #2f547b;
+  border: 0.25rem solid var(--item-accent, #2f547b);
 `;
 
 export const NameMainBar = styled.div`
   flex: 1;
   height: 1.125rem;
   border-radius: 0.5rem;
-  background: #2f547b;
+  background-color: var(--item-accent, #2f547b);
+  background-image: var(--item-bg-image, none);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 `;
 
 export const CardFooter = styled.div`

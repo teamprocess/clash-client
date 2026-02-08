@@ -2,11 +2,23 @@ import styled from "styled-components";
 import { palette } from "@/shared/config/theme";
 import { font } from "@/shared/config/font";
 
-export const Banner = styled.div`
+export const Banner = styled.div<{ $accent?: string; $bgImage?: string }>`
   width: 100%;
   height: 25%;
   border-radius: 1rem;
   background: ${({ theme }) => theme.background.alternative};
+
+  ${({ $accent, $bgImage }) =>
+    $accent || $bgImage
+      ? `
+        background-color: ${$accent ?? "transparent"};
+        background-image: ${$bgImage ? `url(${$bgImage})` : "none"};
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+      `
+      : ""}
+
   padding: 1.5rem;
   display: flex;
   justify-content: flex-end;
@@ -21,6 +33,8 @@ export const ButtonEdit = styled.button`
   border-radius: 0.75rem;
   color: ${palette.neutral[97]};
   ${font.label.medium};
+  border: none;
+  cursor: pointer;
 `;
 
 export const ButtonLogout = styled.button`
@@ -30,6 +44,8 @@ export const ButtonLogout = styled.button`
   border-radius: 0.75rem;
   color: ${palette.neutral[97]};
   ${font.label.medium};
+  border: none;
+  cursor: pointer;
 `;
 
 export const Button = styled.div`
