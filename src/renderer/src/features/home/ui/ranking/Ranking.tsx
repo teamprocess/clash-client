@@ -4,22 +4,9 @@ import { UserRanking } from "@/features/home/ui/ranking/user/UserRanking";
 import { CategoryType, RankingItem, PeriodType } from "@/entities/home/model/useRanking.types";
 
 export const Ranking = () => {
-  const {
-    RankingDropdown,
-    setRankingDropdown,
-    RankingPeriodDropdown,
-    setRankingPeriodDropdown,
-    rankingDropDownValue,
-    rankingPeriodDropDownValue,
-    wrapperRef,
-    currentUserRef,
-    userList,
-    stickyState,
-    currentUser,
-    currentUserRank,
-  } = useRanking();
+  const { wrapperRef, currentUserRef, options, filters, domain, view } = useRanking();
 
-  if (!userList) return null;
+  if (!domain.userList) return null;
 
   return (
     <S.RankingContainer>
@@ -29,10 +16,10 @@ export const Ranking = () => {
         <S.DropDown>
           <S.SelectWrapper>
             <S.Select
-              value={RankingDropdown}
-              onChange={e => setRankingDropdown(e.target.value as CategoryType)}
+              value={filters.RankingDropdown}
+              onChange={e => filters.setRankingDropdown(e.target.value as CategoryType)}
             >
-              {rankingDropDownValue.map(option => (
+              {options.rankingDropDownValue.map(option => (
                 <option key={option.key} value={option.key}>
                   {option.label}
                 </option>
@@ -43,10 +30,10 @@ export const Ranking = () => {
 
           <S.SelectWrapper>
             <S.Select
-              value={RankingPeriodDropdown}
-              onChange={e => setRankingPeriodDropdown(e.target.value as PeriodType)}
+              value={filters.RankingPeriodDropdown}
+              onChange={e => filters.setRankingPeriodDropdown(e.target.value as PeriodType)}
             >
-              {rankingPeriodDropDownValue.map(option => (
+              {options.rankingPeriodDropDownValue.map(option => (
                 <option key={option.key} value={option.key}>
                   {option.label}
                 </option>
@@ -60,20 +47,25 @@ export const Ranking = () => {
       <S.Line />
 
       <S.UserWrapper ref={wrapperRef}>
-        {userList.rankings.map((user: RankingItem, index: number) => (
+        {domain.userList.rankings.map((user: RankingItem, index: number) => (
           <UserRanking
             key={user.linkedId}
             user={user}
             rank={index + 1}
             isRival={user.isRival}
-            ref={user.userId === currentUser?.userId ? currentUserRef : null}
+            ref={user.userId === domain.currentUser?.userId ? currentUserRef : null}
           />
         ))}
       </S.UserWrapper>
 
-      {stickyState !== "none" && currentUser && currentUserRank !== null && (
-        <S.StickyUser $position={stickyState}>
-          <UserRanking user={currentUser} rank={currentUserRank} isRival={false} isSticky />
+      {view.stickyState !== "none" && domain.currentUser && domain.currentUserRank !== null && (
+        <S.StickyUser $position={view.stickyState}>
+          <UserRanking
+            user={domain.currentUser}
+            rank={domain.currentUserRank}
+            isRival={false}
+            isSticky
+          />
         </S.StickyUser>
       )}
     </S.RankingContainer>
