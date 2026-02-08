@@ -3,9 +3,13 @@ import * as S from "./ProfileTabs.style";
 import { MenuTabs, TabKey } from "./menu-tabs/MenuTabs";
 import { GithubStreak } from "./github-streak/GithubStreak";
 import { GithubInfo } from "./github-info/GithubInfo";
-import { ItemPanel } from "./item-panel/ItemPanel";
+import { ItemPanel, type ItemPreviewPayload } from "./item-panel/ItemPanel";
 
-export const ProfileTabs = () => {
+type ProfileTabsProps = {
+  onPreviewChange?: (payload: ItemPreviewPayload) => void;
+};
+
+export const ProfileTabs = ({ onPreviewChange }: ProfileTabsProps) => {
   const [active, setActive] = useState<TabKey>("github");
 
   return (
@@ -20,7 +24,7 @@ export const ProfileTabs = () => {
           </>
         )}
 
-        {active === "item" && <ItemPanel />}
+        {active === "item" && <ItemPanel onPreviewChange={onPreviewChange} />}
 
         {active === "time" && <div />}
       </S.Background>
