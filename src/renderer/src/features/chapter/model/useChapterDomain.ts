@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import type { Stage, StageStatus } from "@/features/chapter/mocks/missionData";
+import type { Stage, StageStatus } from "@/features/chapter/model/chapter.types";
 import type { Node, NodeStatus } from "@/features/chapter/roadmapData";
 import { roadmapNodes as initialRoadmapNodes } from "@/features/chapter/roadmapData";
 import { chapterApi } from "@/entities/roadmap/chapter/api/chapterApi";

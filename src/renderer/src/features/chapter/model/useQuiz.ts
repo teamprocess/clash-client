@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import { Mission } from "@/features/chapter/mocks/missionData";
+import type { Mission } from "@/features/chapter/model/chapter.types";
 import { chapterApi } from "@/entities/roadmap/chapter/api/chapterApi";
 
 interface QuizState {
