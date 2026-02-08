@@ -1,4 +1,4 @@
-import { useMemo, useState, type CSSProperties } from "react";
+import { useMemo, useState } from "react";
 import * as S from "./ItemPanel.style";
 import MypageProfile from "@/pages/profile/assets/MypageProfile.png";
 
@@ -25,13 +25,13 @@ export type ItemPreviewPayload =
 
 const MOCK_ITEMS: Item[] = [
   { id: "bg-1", category: "background", title: "상품명입니다.", accentColor: "#2F547B" },
-  { id: "bg-2", category: "background", title: "상품명입니다.", accentColor: "#2F547B" },
-  { id: "bg-3", category: "background", title: "상품명입니다.", accentColor: "#2F547B" },
-  { id: "bg-4", category: "background", title: "상품명입니다.", accentColor: "#2F547B" },
   { id: "badge-1", category: "badge", title: "상품명", accentColor: "#2F547B" },
-  { id: "badge-2", category: "badge", title: "상품명", accentColor: "#2F547B" },
+  { id: "bg-2", category: "background", title: "상품명입니다.", accentColor: "#2F547B" },
   { id: "name-1", category: "nameplate", title: "상품명입니다.", accentColor: "#2F547B" },
+  { id: "bg-3", category: "background", title: "상품명입니다.", accentColor: "#2F547B" },
   { id: "name-2", category: "nameplate", title: "상품명입니다.", accentColor: "#2F547B" },
+  { id: "badge-2", category: "badge", title: "상품명", accentColor: "#2F547B" },
+  { id: "bg-4", category: "background", title: "상품명입니다.", accentColor: "#2F547B" },
 ];
 
 const chipLabel: Record<ItemCategory, string> = {
@@ -47,13 +47,10 @@ const pillLabel: Record<Exclude<ItemCategory, "all">, string> = {
   nameplate: "이름표",
 };
 
+type CSSVars = React.CSSProperties & Record<`--${string}`, string>;
+
 type ItemPanelProps = {
   onPreviewChange?: (payload: ItemPreviewPayload) => void;
-};
-
-type ItemCssVars = CSSProperties & {
-  ["--item-accent"]?: string;
-  ["--item-bg-image"]?: string;
 };
 
 export const ItemPanel = ({ onPreviewChange }: ItemPanelProps) => {
@@ -105,9 +102,10 @@ export const ItemPanel = ({ onPreviewChange }: ItemPanelProps) => {
           {items.map(item => {
             const isActive = selectedId === item.id;
 
-            const styleVars: ItemCssVars = {};
-            if (item.accentColor) styleVars["--item-accent"] = item.accentColor;
-            if (item.bgImageUrl) styleVars["--item-bg-image"] = `url(${item.bgImageUrl})`;
+            const styleVars: CSSVars = {
+              ...(item.accentColor ? { ["--item-accent"]: item.accentColor } : {}),
+              ...(item.bgImageUrl ? { ["--item-bg-image"]: `url(${item.bgImageUrl})` } : {}),
+            };
 
             return (
               <S.CardButton

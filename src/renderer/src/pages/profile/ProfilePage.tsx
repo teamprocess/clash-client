@@ -6,43 +6,78 @@ import { ProfileTabs } from "@/pages/profile/components/profile-tabs/ProfileTabs
 import type { ItemPreviewPayload } from "@/pages/profile/components/profile-tabs/item-panel/ItemPanel";
 
 type BgState = { accentColor?: string; bgImageUrl?: string };
+type BadgeState = { accentColor?: string; bgImageUrl?: string };
+
+type EditingKind = "background" | "badge" | null;
 
 export const ProfilePage = () => {
   const [savedBg, setSavedBg] = useState<BgState>({});
+  const [savedBadge, setSavedBadge] = useState<BadgeState>({});
   const [draftBg, setDraftBg] = useState<BgState | null>(null);
-  const isBackgroundEditing = draftBg !== null;
+  const [draftBadge, setDraftBadge] = useState<BadgeState | null>(null);
+  const [editingKind, setEditingKind] = useState<EditingKind>(null);
+  const isEditing = editingKind !== null;
+
+  const appliedBg = useMemo(
+    () => (editingKind === "background" ? draftBg : null) ?? savedBg,
+    [editingKind, draftBg, savedBg]
+  );
+
+  const appliedBadge = useMemo(
+    () => (editingKind === "badge" ? draftBadge : null) ?? savedBadge,
+    [editingKind, draftBadge, savedBadge]
+  );
 
   const handlePreviewChange = (payload: ItemPreviewPayload) => {
-    if (payload.kind !== "background") return;
+    if (payload.kind === "background") {
+      setEditingKind("background");
+      setDraftBg({
+        accentColor: payload.accentColor,
+        bgImageUrl: payload.bgImageUrl,
+      });
+      return;
+    }
 
-    setDraftBg({
-      accentColor: payload.accentColor,
-      bgImageUrl: payload.bgImageUrl,
-    });
+    if (payload.kind === "badge") {
+      setEditingKind("badge");
+      setDraftBadge({
+        accentColor: payload.accentColor ?? "#2F547B",
+        bgImageUrl: payload.bgImageUrl,
+      });
+      return;
+    }
   };
 
-  const handleCancelBackground = () => {
-    setDraftBg(null);
+  const handleCancel = () => {
+    if (editingKind === "background") setDraftBg(null);
+    if (editingKind === "badge") setDraftBadge(null);
+    setEditingKind(null);
   };
 
-  const handleSaveBackground = () => {
-    if (!draftBg) return;
-    setSavedBg(draftBg);
-    setDraftBg(null);
-  };
+  const handleSave = () => {
+    if (editingKind === "background") {
+      if (draftBg) setSavedBg(draftBg);
+      setDraftBg(null);
+    }
 
-  const applied = useMemo(() => {
-    return isBackgroundEditing ? (draftBg ?? {}) : savedBg;
-  }, [isBackgroundEditing, draftBg, savedBg]);
+    if (editingKind === "badge") {
+      if (draftBadge) setSavedBadge(draftBadge);
+      setDraftBadge(null);
+    }
+
+    setEditingKind(null);
+  };
 
   return (
     <S.Background>
       <TopProfile
-        bannerAccentColor={applied.accentColor}
-        bannerBgImageUrl={applied.bgImageUrl}
-        isBackgroundEditing={isBackgroundEditing}
-        onCancelBackground={handleCancelBackground}
-        onSaveBackground={handleSaveBackground}
+        bannerAccentColor={appliedBg?.accentColor}
+        bannerBgImageUrl={appliedBg?.bgImageUrl}
+        badgeAccentColor={appliedBadge?.accentColor}
+        badgeBgImageUrl={appliedBadge?.bgImageUrl}
+        isEditing={isEditing}
+        onCancel={handleCancel}
+        onSave={handleSave}
       />
 
       <S.BodyRow>

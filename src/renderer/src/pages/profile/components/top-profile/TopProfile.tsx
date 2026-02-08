@@ -4,12 +4,11 @@ import ProfileImg from "../../assets/MypageProfile.png";
 type TopProfileProps = {
   bannerAccentColor?: string;
   bannerBgImageUrl?: string;
-
-  isBackgroundEditing?: boolean;
-
-  onCancelBackground?: () => void;
-  onSaveBackground?: () => void;
-
+  badgeAccentColor?: string;
+  badgeBgImageUrl?: string;
+  isEditing?: boolean;
+  onCancel?: () => void;
+  onSave?: () => void;
   onEditProfile?: () => void;
   onLogout?: () => void;
 };
@@ -17,21 +16,23 @@ type TopProfileProps = {
 export const TopProfile = ({
   bannerAccentColor,
   bannerBgImageUrl,
-  isBackgroundEditing,
-  onCancelBackground,
-  onSaveBackground,
+  badgeAccentColor,
+  badgeBgImageUrl,
+  isEditing,
+  onCancel,
+  onSave,
   onEditProfile,
   onLogout,
 }: TopProfileProps) => {
   return (
     <S.Banner $accent={bannerAccentColor} $bgImage={bannerBgImageUrl}>
       <S.Button>
-        {isBackgroundEditing ? (
+        {isEditing ? (
           <>
-            <S.ButtonEdit type="button" onClick={onCancelBackground}>
+            <S.ButtonEdit type="button" onClick={onCancel}>
               취소
             </S.ButtonEdit>
-            <S.ButtonLogout type="button" onClick={onSaveBackground}>
+            <S.ButtonLogout type="button" onClick={onSave}>
               저장
             </S.ButtonLogout>
           </>
@@ -48,10 +49,13 @@ export const TopProfile = ({
       </S.Button>
 
       <S.ProfileCard>
-        <S.ProfileImg src={ProfileImg} alt="프로필" />
+        <S.ProfileImgWrap $accent={badgeAccentColor} $bgImage={badgeBgImageUrl}>
+          <S.ProfileImg src={ProfileImg} alt="프로필" />
+        </S.ProfileImgWrap>
+
         <S.UserInfo>
           <S.Name>whtkdcjf</S.Name>
-          <S.Badge />
+          <S.BadgeDot />
         </S.UserInfo>
       </S.ProfileCard>
     </S.Banner>
