@@ -1,6 +1,6 @@
 import * as S from "./QuizModal.style";
 import { Modal } from "@/shared/ui/modal/Modal";
-import { Mission } from "@/features/chapter/mocks/missionData";
+import type { Mission } from "@/features/chapter/model/chapter.types";
 import { QuizResult } from "@/features/chapter/components/QuizResult";
 import { useQuiz } from "../model/useQuiz";
 

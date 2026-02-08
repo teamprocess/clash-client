@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import type { Mission } from "@/features/chapter/mocks/missionData";
+import type { Mission } from "@/features/chapter/model/chapter.types";
 
 interface UseChapterViewParams {
   loading: boolean;

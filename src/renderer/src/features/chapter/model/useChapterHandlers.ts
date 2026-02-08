@@ -1,5 +1,5 @@
 import type { Dispatch, SetStateAction } from "react";
-import type { Stage, Mission, StageStatus } from "@/features/chapter/mocks/missionData";
+import type { Stage, Mission, StageStatus } from "@/features/chapter/model/chapter.types";
 import type { Node, NodeStatus } from "@/features/chapter/roadmapData";
 import { chapterApi } from "@/entities/roadmap/chapter/api/chapterApi";
 import type { GetChapterDetailsRequest } from "@/entities/roadmap/chapter/model/chapter.types";
