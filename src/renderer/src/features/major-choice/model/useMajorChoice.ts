@@ -24,12 +24,15 @@ export const useMajorChoice = () => {
   const select = (path: FeatureItem) => setSelected(path);
 
   const [questionData, setQuestionData] = useState<MajorQuestion[]>([]);
+  const [answers, setAnswers] = useState<(number | null)[]>([]);
 
   const { getMajorQuestions, postMyMajor } = majorApi;
 
   useEffect(() => {
     getMajorQuestions().then(res => {
-      setQuestionData(res.data?.majorQuestions ?? []);
+      const questions = res.data?.majorQuestions ?? [];
+      setQuestionData(questions);
+      setAnswers(Array(questions.length).fill(null));
     });
   }, [getMajorQuestions]);
 
@@ -50,9 +53,9 @@ export const useMajorChoice = () => {
   const selectedMajor = (path: MajorItem) => setMajor(path);
 
   // Test 컴포넌트
-  const [answers, setAnswers] = useState<(number | null)[]>(Array(questionData.length).fill(null));
   const [analyzedMajor, setAnalyzedMajor] = useState<MajorItem>(null);
-  const isAllAnswered = !answers.includes(null);
+  const isAllAnswered =
+    questionData.length > 0 && answers.length === questionData.length && !answers.includes(null);
 
   // 전공 성향 검사에서 답을 선택받는 함수
   const handleSelect = (questionId: number, answerId: number) => {
@@ -64,7 +67,7 @@ export const useMajorChoice = () => {
   // 전공 성향 검사 테스트 제출 시 점수 계산 및 결과 도출 함수
   // 결과를 서버에 보내는 API 연동 예정
   const handleComplete = () => {
-    if (answers.includes(null)) return;
+    if (!isAllAnswered) return;
 
     const scores = { web: 0, app: 0, server: 0, ai: 0, game: 0 };
     answers.forEach((answer, index) => {
