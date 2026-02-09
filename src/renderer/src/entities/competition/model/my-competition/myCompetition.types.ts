@@ -15,10 +15,10 @@ export type MyCompareResponse = {
   gitHubAttribution: number;
 };
 
-export type MyDataPoint = {
+export interface MyDataPoint {
   date: string;
   rate: number;
-};
+}
 
 export type MyGrowthRateResponse = {
   dataPoint: MyDataPoint[];
