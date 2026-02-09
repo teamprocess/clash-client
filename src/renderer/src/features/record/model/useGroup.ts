@@ -8,7 +8,7 @@ import {
   type GroupCategory,
   useGroupDetailQuery,
 } from "@/entities/group";
-import axios from "axios";
+import { getErrorMessage } from "@/shared/lib";
 
 const groupEditSchema = z.object({
   name: z.string().min(1, "그룹 이름을 입력하세요."),
@@ -136,14 +136,11 @@ export const useGroup = () => {
       return;
     }
 
-    console.error("그룹 상세 조회 실패:", groupDetailError);
-    if (axios.isAxiosError(groupDetailError)) {
-      const errorMessage =
-        groupDetailError.response?.data?.error?.message ||
-        groupDetailError.response?.data?.message ||
-        "그룹 상세 조회 중 오류가 발생했습니다.";
-      console.error(errorMessage);
-    }
+    const errorMessage = getErrorMessage(
+      groupDetailError,
+      "그룹 상세 조회 중 오류가 발생했습니다."
+    );
+    console.error("그룹 상세 조회 실패:", errorMessage, groupDetailError);
 
     setEditingGroupId(null);
   }, [editingGroupId, groupDetailError]);
@@ -185,15 +182,9 @@ export const useGroup = () => {
         console.error(`그룹 ${deleteAction === "delete" ? "삭제" : "탈퇴"} 실패:`, result.message);
       }
     } catch (error: unknown) {
-      console.error(`그룹 ${deleteAction === "delete" ? "삭제" : "탈퇴"} 실패:`, error);
-
-      if (axios.isAxiosError(error)) {
-        const errorMessage =
-          error.response?.data?.error?.message ||
-          error.response?.data?.message ||
-          `그룹 ${deleteAction === "delete" ? "삭제" : "탈퇴"} 중 오류가 발생했습니다.`;
-        console.error(errorMessage);
-      }
+      const actionLabel = deleteAction === "delete" ? "삭제" : "탈퇴";
+      const errorMessage = getErrorMessage(error, `그룹 ${actionLabel} 중 오류가 발생했습니다.`);
+      console.error(`그룹 ${actionLabel} 실패:`, errorMessage, error);
     }
   };
 
@@ -228,15 +219,8 @@ export const useGroup = () => {
         console.error("그룹 생성 실패:", result.message);
       }
     } catch (error: unknown) {
-      console.error("그룹 생성 실패:", error);
-
-      if (axios.isAxiosError(error)) {
-        const errorMessage =
-          error.response?.data?.error?.message ||
-          error.response?.data?.message ||
-          "그룹 생성 중 오류가 발생했습니다.";
-        console.error(errorMessage);
-      }
+      const errorMessage = getErrorMessage(error, "그룹 생성 중 오류가 발생했습니다.");
+      console.error("그룹 생성 실패:", errorMessage, error);
     }
   };
 
@@ -253,15 +237,8 @@ export const useGroup = () => {
         console.error("그룹 참여 실패:", result.message);
       }
     } catch (error: unknown) {
-      console.error("그룹 참여 실패:", error);
-
-      if (axios.isAxiosError(error)) {
-        const errorMessage =
-          error.response?.data?.error?.message ||
-          error.response?.data?.message ||
-          "그룹 참여 중 오류가 발생했습니다.";
-        console.error(errorMessage);
-      }
+      const errorMessage = getErrorMessage(error, "그룹 참여 중 오류가 발생했습니다.");
+      console.error("그룹 참여 실패:", errorMessage, error);
     } finally {
       setIsJoining(false);
     }
@@ -292,15 +269,8 @@ export const useGroup = () => {
         console.error("그룹 수정 실패:", result.message);
       }
     } catch (error: unknown) {
-      console.error("그룹 수정 실패:", error);
-
-      if (axios.isAxiosError(error)) {
-        const errorMessage =
-          error.response?.data?.error?.message ||
-          error.response?.data?.message ||
-          "그룹 수정 중 오류가 발생했습니다.";
-        console.error(errorMessage);
-      }
+      const errorMessage = getErrorMessage(error, "그룹 수정 중 오류가 발생했습니다.");
+      console.error("그룹 수정 실패:", errorMessage, error);
     }
   };
 

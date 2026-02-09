@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useQueryClient } from "@tanstack/react-query";
 import { authApi } from "@/entities/user";
+import { getErrorMessage } from "@/shared/lib";
 
 export const useSignOut = () => {
   const navigate = useNavigate();
@@ -22,9 +23,9 @@ export const useSignOut = () => {
 
       // 로그인 페이지로 이동
       navigate("/sign-in", { replace: true });
-    } catch (err) {
-      console.error("로그아웃 실패:", err);
-      setError("로그아웃에 실패했습니다.");
+    } catch (error: unknown) {
+      console.error("로그아웃 실패:", error);
+      setError(getErrorMessage(error, "로그아웃에 실패했습니다."));
     } finally {
       setIsLoading(false);
     }
