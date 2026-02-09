@@ -1,5 +1,5 @@
 import { useLayoutEffect, useRef, useState } from "react";
-import type { RankingItem } from "@/entities/home/model/useRanking.types";
+import type { RankingItem } from "@/entities/home";
 
 interface UseRankingViewParams {
   rankings: RankingItem[];

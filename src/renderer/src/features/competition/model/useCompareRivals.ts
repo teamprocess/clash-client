@@ -1,13 +1,13 @@
-import { useState, useMemo } from "react";
+import { useEffect, useState, useMemo } from "react";
 import {
-  CATEGORY,
   CategoryType,
-  PERIOD,
   PeriodType,
   RivalCompeteUser,
-} from "@/entities/competition/model/rival-competition/compareRivals.types";
-import { useGetMyProfile } from "@/entities/user";
-import { useCompareRivalsQuery } from "@/entities/competition/api/rival-competition/api/query/useCompareRivals.query";
+  useCompareRivalsQuery,
+  CATEGORY,
+  PERIOD,
+} from "@/entities/competition";
+import { authApi } from "@/entities/user";
 
 export const colorsOfMultiLine: string[] = ["#FFF", "#0081CC", "#C60608", "#15B756", "#FFCC01"];
 
@@ -36,13 +36,23 @@ export const useCompareRival = () => {
     competitionPeriodDropDown
   );
 
-  const { data: myUserId } = useGetMyProfile();
+  const [myUserId, setMyUserId] = useState<number | null>(null);
+
+  useEffect(() => {
+    const fetchMyProfile = async () => {
+      const result = await authApi.getMyProfile();
+      if (result.success && result.data) {
+        setMyUserId(result.data.id);
+      }
+    };
+    fetchMyProfile();
+  }, []);
 
   const sortedCompareRivals = useMemo(() => {
     const compareRivals = compareRivalsResponse?.data;
     if (!compareRivals?.totalData || !myUserId) return compareRivals;
 
-    const index = compareRivals.totalData.findIndex(user => user.id === myUserId.id);
+    const index = compareRivals.totalData.findIndex(user => user.id === myUserId);
 
     if (index === -1) return compareRivals;
 

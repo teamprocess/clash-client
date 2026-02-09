@@ -1,5 +1,4 @@
-import { useMyRivalsQuery } from "@/entities/competition/api/rival-competition/api/query/useMyRivals.query";
-import { MyRivalsResponse } from "@/entities/competition/model/rival-competition/myRivals.types";
+import { useMyRivalsQuery, MyRivalsResponse } from "@/entities/competition";
 
 export type UserStatus = "ONLINE" | "AWAY" | "OFFLINE";
 
