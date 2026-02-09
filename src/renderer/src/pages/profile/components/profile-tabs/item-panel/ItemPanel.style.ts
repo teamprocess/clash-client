@@ -3,6 +3,7 @@ import { font } from "@/shared/config/font";
 import { palette } from "@/shared/config/theme";
 
 export const Wrapper = styled.section`
+  -webkit-app-region: no-drag;
   width: 100%;
   height: 100%;
   display: flex;
@@ -59,6 +60,7 @@ export const Grid = styled.div`
 `;
 
 export const CardButton = styled.button<{ $active: boolean }>`
+  -webkit-app-region: no-drag;
   width: 12.25rem;
   height: 8.125rem;
   border: none;
@@ -66,7 +68,17 @@ export const CardButton = styled.button<{ $active: boolean }>`
   background: transparent;
   cursor: pointer;
   text-align: left;
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
   border-radius: 1.25rem;
+  &:focus,
+  &:focus-visible,
+  &:active,
+  &:hover {
+    outline: none;
+    box-shadow: none;
+  }
+  onClickCapture={() => console.log("CAPTURE CLICK", item.id)}
 `;
 
 export const CardInner = styled.div`
@@ -78,7 +90,7 @@ export const CardInner = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  box-shadow: 0rem 0rem 0.5rem ${({ theme }) => theme.fill.neutral};
+  box-shadow: none;
 `;
 
 export const ThumbBackground = styled.div`
@@ -231,4 +243,90 @@ export const BadgePill = styled.span`
   background: ${({ theme }) => theme.primary.normal};
   color: ${palette.neutral[95]};
   ${font.caption.medium};
+`;
+
+export const ModalOverlay = styled.div`
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  -webkit-app-region: no-drag;
+`;
+
+export const ModalContainer = styled.div`
+  width: 46.5rem;
+  height: 31rem;
+  border-radius: 1rem;
+  background: ${({ theme }) => theme.fill.neutral};
+  position: relative;
+  padding: 2rem;
+  box-sizing: border-box;
+  -webkit-app-region: no-drag;
+`;
+
+export const ModalCloseButton = styled.button`
+  position: absolute;
+  right: 1.5rem;
+  top: 1.5rem;
+  width: 2rem;
+  height: 2rem;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+`;
+
+export const ModalBody = styled.div`
+  width: 100%;
+  height: calc(100% - 4.5rem);
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+`;
+
+export const ModalTitle = styled.p`
+  ${font.title1.medium};
+  color: ${({ theme }) => theme.label.normal};
+`;
+
+export const ModalDesc = styled.p`
+  ${font.body.medium};
+  color: ${({ theme }) => theme.label.assistive};
+`;
+
+export const ModalFooter = styled.div`
+  position: absolute;
+  right: 2rem;
+  bottom: 2rem;
+  display: flex;
+  gap: 0.75rem;
+`;
+
+export const ModalCancel = styled.button`
+  width: 4rem;
+  height: 2rem;
+  border: none;
+  border-radius: 0.75rem;
+  background: ${({ theme }) => theme.line.normal};
+  color: ${palette.neutral[97]};
+  ${font.label.medium};
+  cursor: pointer;
+`;
+
+export const ModalSave = styled.button`
+  width: 4rem;
+  height: 2rem;
+  border: none;
+  border-radius: 0.75rem;
+  background: ${({ theme }) => theme.primary.normal};
+  color: ${palette.neutral[97]};
+  ${font.label.medium};
+  cursor: pointer;
 `;
