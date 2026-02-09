@@ -13,6 +13,7 @@ import {
   PeriodDay,
   MATCHVALUE,
 } from "@/entities/competition";
+import { getErrorMessage } from "@/shared/lib";
 
 const analyzeCategoryOptions = [
   { key: "EXP", label: "EXP" },
@@ -117,8 +118,9 @@ export const useBattle = () => {
         id: rivalSelectedId,
         duration,
       });
-    } catch (error) {
-      console.error(error);
+    } catch (error: unknown) {
+      const errorMessage = getErrorMessage(error, "배틀 신청 중 오류가 발생했습니다.");
+      console.error("배틀 신청 실패", errorMessage, error);
     } finally {
       setRivalSelectedId(null);
     }

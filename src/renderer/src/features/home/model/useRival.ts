@@ -6,6 +6,7 @@ import {
   RivalApplyRequest,
   rivalsApi,
 } from "@/entities/home";
+import { getErrorMessage } from "@/shared/lib";
 
 export interface MyRivalItem {
   user: MyRivalsRequest;
@@ -81,8 +82,9 @@ export const useRival = () => {
 
     try {
       await rivalsApi.postRivalApply(applyPayload);
-    } catch (error) {
-      console.log(error);
+    } catch (error: unknown) {
+      const errorMessage = getErrorMessage(error, "라이벌 신청 중 오류가 발생했습니다.");
+      console.error("라이벌 신청 실패:", errorMessage, error);
     } finally {
       handleClose();
       setApplyPayload(null);
