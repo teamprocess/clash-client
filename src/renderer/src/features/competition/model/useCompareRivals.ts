@@ -36,13 +36,13 @@ export const useCompareRival = () => {
     competitionPeriodDropDown
   );
 
-  const { data: myUserId } = useGetMyProfile();
+  const { data: myProfile } = useGetMyProfile();
 
   const sortedCompareRivals = useMemo(() => {
     const compareRivals = compareRivalsResponse?.data;
-    if (!compareRivals?.totalData || !myUserId) return compareRivals;
+    if (!compareRivals?.totalData || !myProfile?.id) return compareRivals;
 
-    const index = compareRivals.totalData.findIndex(user => user.id === myUserId.id);
+    const index = compareRivals.totalData.findIndex(user => user.id === myProfile?.id);
 
     if (index === -1) return compareRivals;
 
@@ -54,7 +54,7 @@ export const useCompareRival = () => {
       ...compareRivals,
       totalData: reordered,
     };
-  }, [compareRivalsResponse, myUserId]);
+  }, [compareRivalsResponse, myProfile?.id]);
 
   // Multi Axis Line Chart 구조에 맞게 변환
   const buildMultiLineData = (totalData: RivalCompeteUser[]) => {
