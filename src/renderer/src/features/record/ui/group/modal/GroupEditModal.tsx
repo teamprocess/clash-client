@@ -1,6 +1,6 @@
 import { Modal } from "@/shared/ui/modal/Modal";
 import { GROUP_CATEGORY_LABELS } from "@/entities/group";
-import type { GroupEditModalProps } from "@/features/record/model/useGroup";
+import type { GroupEditModalProps } from "../../../model/useGroup";
 import * as S from "./GroupEditModal.style";
 
 export const GroupEditModal = ({

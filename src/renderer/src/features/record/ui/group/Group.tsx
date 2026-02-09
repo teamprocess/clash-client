@@ -2,12 +2,12 @@ import * as S from "./Group.style";
 import { useEffect, useMemo, useState } from "react";
 import { type Group as GroupEntity, useMyGroupsQuery } from "@/entities/group";
 import { useGetMyProfile } from "@/entities/user";
-import { useGroup } from "@/features/record/model/useGroup";
+import { useGroup } from "../../model/useGroup";
 import { formatTime } from "@/shared/lib";
 import { GroupDeleteModal } from "./modal/GroupDeleteModal";
 import { GroupEditModal } from "./modal/GroupEditModal";
 import { GroupFormModal } from "./modal/GroupFormModal";
-import { useGroupMembersActivity } from "@/features/record/model/useGroupMembersActivity";
+import { useGroupMembersActivity } from "../../model/useGroupMembersActivity";
 
 export const Group = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
