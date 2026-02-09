@@ -1,5 +1,5 @@
 import * as S from "./RecordPage.style";
-import { Record } from "@/features/record/ui/Record";
+import { Record } from "@/features/record";
 
 export const RecordPage = () => {
   return (

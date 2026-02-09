@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { Modal } from "@/shared/ui/modal/Modal";
 import { GROUP_CATEGORY_LABELS } from "@/entities/group";
-import type { GroupFormModalProps } from "@/features/record/model/useGroup";
-import { useGroupList } from "@/features/record/model/useGroupList";
+import type { GroupFormModalProps } from "../../../model/useGroup";
+import { useGroupList } from "../../../model/useGroupList";
 import { getPageNumbers } from "@/shared/lib";
 import * as S from "./GroupFormModal.style";
 

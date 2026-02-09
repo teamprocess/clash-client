@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import More from "@/features/record/assets/more.svg";
+import More from "../assets/more.svg";
 
 export const RecordContainer = styled.div`
   display: flex;

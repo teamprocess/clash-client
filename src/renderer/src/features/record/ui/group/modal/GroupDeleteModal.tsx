@@ -1,5 +1,5 @@
 import { Modal } from "@/shared/ui/modal/Modal";
-import type { GroupDeleteModalProps } from "@/features/record/model/useGroup";
+import type { GroupDeleteModalProps } from "../../../model/useGroup";
 import * as S from "./GroupDeleteModal.style";
 
 export const GroupDeleteModal = ({ isOpen, onClose, onConfirm, action }: GroupDeleteModalProps) => {
