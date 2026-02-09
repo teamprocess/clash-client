@@ -1,14 +1,14 @@
-interface ActiveTimeResponse {
+type ActiveTimeResponse = {
   yesterdayActiveTime: number;
   todayActiveTime: number;
-}
+};
 
-interface ContributorsResponse {
+type ContributorsResponse = {
   yesterdayContributors: number;
   todayContributors: number;
-}
+};
 
-export interface TransitionResponse {
+export type TransitionResponse = {
   activeTime: ActiveTimeResponse;
   contributors: ContributorsResponse;
-}
+};
