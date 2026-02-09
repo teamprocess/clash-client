@@ -7,53 +7,53 @@ export enum MatchValue {
   PENDING = "PENDING",
 }
 
-interface Enemy {
+type Enemy = {
   id: number;
   name: string;
   profileImage: string;
-}
+};
 
-interface BattlesRequest {
+type BattlesRequest = {
   id: number;
   enemy: Enemy;
   expireDate: string;
   result: MatchValue;
-}
+};
 
-export interface BattleResponse {
+export type BattleResponse = {
   battles: BattlesRequest[];
-}
+};
 
-export interface BattleDetailResponse {
+export type BattleDetailResponse = {
   id: number;
   enemy: Enemy;
   expireDate: string;
   myOverallPercentage: number;
-}
+};
 
 export type AnalyzeCategory = "EXP" | "GITHUB" | "ACTIVE_TIME";
 
-export interface AnalyzeBattleRequest {
+export type AnalyzeBattleRequest = {
   id: number;
   category: AnalyzeCategory;
-}
+};
 
-export interface AnalyzeBattleResponse {
+export type AnalyzeBattleResponse = {
   category: AnalyzeCategory;
   id: number;
   enemyPoint: number;
   myPoint: number;
-}
+};
 
-interface BattleListRequest {
+type BattleListRequest = {
   id: number;
   name: string;
   profileImage: string;
-}
+};
 
-export interface BattleListResponse {
+export type BattleListResponse = {
   rivals: BattleListRequest[];
-}
+};
 
 export type PeriodDay = 3 | 5 | 7;
 
