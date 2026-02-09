@@ -7,6 +7,7 @@ export const Background = styled.div`
   border-radius: 1rem;
   padding: 2rem;
   box-sizing: border-box;
+  -webkit-app-region: no-drag;
 `;
 
 export const BodyRow = styled.div`
