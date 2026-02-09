@@ -1,7 +1,8 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { majorApi } from "@/entities/major/api/majorApi";
-import { Major, MajorQuestion } from "@/entities/major/model/major.types";
+import { useMajorQuestionsQuery } from "@/entities/major/api/query/useMajorQuestions.query";
+import { Major } from "@/entities/major/model/major.types";
 
 export type FeatureItem = "TEST" | "CHOICE" | null;
 export type MajorItem = "WEB" | "APP" | "SERVER" | "AI" | "GAME" | null;
@@ -23,18 +24,12 @@ export const useMajorChoice = () => {
   const [selected, setSelected] = useState<FeatureItem>(null);
   const select = (path: FeatureItem) => setSelected(path);
 
-  const [questionData, setQuestionData] = useState<MajorQuestion[]>([]);
-  const [answers, setAnswers] = useState<(number | null)[]>([]);
+  const [answers, setAnswers] = useState<(number | null | undefined)[]>([]);
 
-  const { getMajorQuestions, postMyMajor } = majorApi;
+  const { postMyMajor } = majorApi;
 
-  useEffect(() => {
-    getMajorQuestions().then(res => {
-      const questions = res.data?.majorQuestions ?? [];
-      setQuestionData(questions);
-      setAnswers(Array(questions.length).fill(null));
-    });
-  }, [getMajorQuestions]);
+  const { data: questionsResponse } = useMajorQuestionsQuery();
+  const questionData = questionsResponse?.data?.majorQuestions ?? [];
 
   // 전공이 없을 경우 전공 성향 검사 및 전공 선택 중 선택하고 결과를 전달하는 함수
   const handleFeatureChoiceSubmit = () => {
@@ -55,7 +50,9 @@ export const useMajorChoice = () => {
   // Test 컴포넌트
   const [analyzedMajor, setAnalyzedMajor] = useState<MajorItem>(null);
   const isAllAnswered =
-    questionData.length > 0 && answers.length === questionData.length && !answers.includes(null);
+    questionData.length > 0 &&
+    answers.length === questionData.length &&
+    questionData.every((_, idx) => answers[idx] != null);
 
   // 전공 성향 검사에서 답을 선택받는 함수
   const handleSelect = (questionId: number, answerId: number) => {
@@ -71,14 +68,13 @@ export const useMajorChoice = () => {
 
     const scores = { web: 0, app: 0, server: 0, ai: 0, game: 0 };
     answers.forEach((answer, index) => {
-      if (answer !== null) {
-        const question = questionData[index];
-        const multiplier = answer - 3;
-        Object.keys(scores).forEach(key => {
-          const major = key as keyof typeof scores;
-          scores[major] += (question.weight[major] || 0) * multiplier;
-        });
-      }
+      if (answer == null) return;
+      const question = questionData[index];
+      const multiplier = answer - 3;
+      Object.keys(scores).forEach(key => {
+        const major = key as keyof typeof scores;
+        scores[major] += (question.weight[major] || 0) * multiplier;
+      });
     });
 
     const resultMajorKey = Object.entries(scores).reduce((a, b) => (a[1] > b[1] ? a : b))[0];
