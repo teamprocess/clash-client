@@ -1,5 +1,5 @@
 import { useRef, useState, useEffect } from "react";
-import { useChapterRankingQuery } from "@/entities/roadmap/chapter/chapter-ranking/model/useChapterRanking.query";
+import { useChapterRankingQuery } from "@/entities/roadmap/chapter/chapter-ranking/api/query/useChapterRanking.query";
 import type {
   GetChapterRankingsResponse,
   RankingUser,
