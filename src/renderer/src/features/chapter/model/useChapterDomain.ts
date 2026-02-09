@@ -51,6 +51,7 @@ export const useChapterDomain = (sectionId: number) => {
     const fetchChapterData = async () => {
       try {
         setLoading(true);
+        setError(null);
         const response = await chapterApi.getSectionDetails({ sectionId });
 
         if (response.success && response.data) {
@@ -75,8 +76,9 @@ export const useChapterDomain = (sectionId: number) => {
             })
           );
         }
-      } catch (err) {
-        setError(err instanceof Error ? err.message : "Failed to load chapter data");
+      } catch (error: unknown) {
+        console.error("챕터 데이터를 불러오는데 실패했습니다:", error);
+        setError(error instanceof Error ? error.message : "챕터 데이터를 불러오는데 실패했습니다.");
       } finally {
         setLoading(false);
       }

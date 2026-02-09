@@ -35,6 +35,7 @@ export const usePreview = (sectionId: number) => {
     const fetchPreview = async () => {
       try {
         setLoading(true);
+        setError(null);
         const response = await previewApi.getSectionPreview(sectionId);
 
         if (response.success && response.data) {
@@ -43,8 +44,11 @@ export const usePreview = (sectionId: number) => {
         } else {
           setError(response.message || "Failed to load preview");
         }
-      } catch (err) {
-        setError(err instanceof Error ? err.message : "Failed to load preview");
+      } catch (error: unknown) {
+        console.error("섹션 미리보기를 불러오는데 실패했습니다:", error);
+        setError(
+          error instanceof Error ? error.message : "섹션 미리보기를 불러오는데 실패했습니다."
+        );
       } finally {
         setLoading(false);
       }
