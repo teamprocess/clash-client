@@ -4,7 +4,7 @@ import type {
   CategoryType,
   PeriodType,
 } from "@/entities/home/model/useRanking.types";
-import { useMyProfile } from "@/entities/user";
+import { useGetMyProfile } from "@/entities/user";
 import { useRankingQuery } from "@/entities/home/api/query/useRanking.query";
 
 export const rankingDropDownValue: Array<{ key: CategoryType; label: string }> = [
@@ -32,7 +32,7 @@ export const useRankingDomain = () => {
     rankings: [],
   };
 
-  const { data: myProfile } = useMyProfile();
+  const { data: myProfile } = useGetMyProfile();
   const myUserId = myProfile?.id;
 
   const currentUserIndex = userList.rankings.findIndex(u => u.userId === myUserId);
