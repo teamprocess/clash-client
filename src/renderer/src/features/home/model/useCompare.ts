@@ -1,5 +1,4 @@
-import { useCompareQuery } from "@/entities/home/api/query/useCompare.query";
-import { CompareResponse } from "@/entities/home/model/useCompare.types";
+import { useCompareQuery, CompareResponse } from "@/entities/home";
 
 export const getGrowthInfo = (yesterday: number, today: number) => {
   // const [compareDropdown, setCompareDropdown] = useState("Github");

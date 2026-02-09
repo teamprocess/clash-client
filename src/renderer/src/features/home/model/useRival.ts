@@ -1,12 +1,11 @@
 import { useState } from "react";
-import { useMyRivalsQuery } from "@/entities/competition/api/rival-competition/api/query/useMyRivals.query";
-import { useRivalListQuery } from "@/entities/home/api/query/useRivals.query";
+import { useMyRivalsQuery, MyRivalsRequest, MyRivalsResponse } from "@/entities/competition";
 import {
-  MyRivalsRequest,
-  MyRivalsResponse,
-} from "@/entities/competition/model/rival-competition/myRivals.types";
-import { RivalUsersResponse, RivalApplyRequest } from "@/entities/home/model/useRival.types";
-import { rivalsApi } from "@/entities/home/api/rivalApi";
+  useRivalListQuery,
+  RivalUsersResponse,
+  RivalApplyRequest,
+  rivalsApi,
+} from "@/entities/home";
 
 export interface MyRivalItem {
   user: MyRivalsRequest;
