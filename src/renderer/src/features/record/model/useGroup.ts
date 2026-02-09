@@ -1,8 +1,13 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { GROUP_CATEGORIES, type GroupCategory, groupApi } from "@/entities/group";
+import {
+  GROUP_CATEGORIES,
+  groupApi,
+  type GroupCategory,
+  useGroupDetailQuery,
+} from "@/entities/group";
 import axios from "axios";
 
 const groupEditSchema = z.object({
@@ -32,6 +37,9 @@ export const useGroup = () => {
   const [joinPassword, setJoinPassword] = useState<string>("");
   const [currentGroupId, setCurrentGroupId] = useState<number | null>(null);
   const [isJoining, setIsJoining] = useState(false);
+  const [editingGroupId, setEditingGroupId] = useState<number | null>(null);
+  const { data: groupDetailResponse, error: groupDetailError } =
+    useGroupDetailQuery(editingGroupId);
 
   // 그룹 생성 폼
   const createForm = useForm<GroupEditFormData>({
@@ -87,45 +95,58 @@ export const useGroup = () => {
     createForm.reset();
   };
 
-  const handleEditGroupRequest = async () => {
+  const handleEditGroupRequest = () => {
     if (!currentGroupId) {
       console.error("수정할 그룹 ID가 없습니다.");
       return;
     }
 
     setIsMenuOpen(false);
-
-    try {
-      const result = await groupApi.getGroupDetail(currentGroupId);
-
-      if (result.success && result.data) {
-        const { group } = result.data;
-        editForm.reset({
-          name: group.name,
-          password: group.passwordRequired ? "********" : "",
-          type: group.category,
-          maxMembers: group.maxMembers,
-          description: group.description,
-        });
-        setEditPasswordRequired(group.passwordRequired);
-        setHasEditPassword(group.passwordRequired);
-        setIsEditPasswordChangeEnabled(!group.passwordRequired);
-        setIsEditModalOpen(true);
-      } else {
-        console.error("그룹 상세 조회 실패:", result.message);
-      }
-    } catch (error: unknown) {
-      console.error("그룹 상세 조회 실패:", error);
-
-      if (axios.isAxiosError(error)) {
-        const errorMessage =
-          error.response?.data?.error?.message ||
-          error.response?.data?.message ||
-          "그룹 상세 조회 중 오류가 발생했습니다.";
-        console.error(errorMessage);
-      }
-    }
+    setEditingGroupId(currentGroupId);
   };
+
+  // 그룹 수정 진입 시 최신 상세 데이터로 폼 채우기
+  useEffect(() => {
+    if (!editingGroupId || !groupDetailResponse) {
+      return;
+    }
+
+    if (groupDetailResponse.success && groupDetailResponse.data) {
+      const { group } = groupDetailResponse.data;
+      editForm.reset({
+        name: group.name,
+        password: group.passwordRequired ? "********" : "",
+        type: group.category,
+        maxMembers: group.maxMembers,
+        description: group.description,
+      });
+      setEditPasswordRequired(group.passwordRequired);
+      setHasEditPassword(group.passwordRequired);
+      setIsEditPasswordChangeEnabled(!group.passwordRequired);
+      setIsEditModalOpen(true);
+    } else {
+      console.error("그룹 상세 조회 실패:", groupDetailResponse.message);
+    }
+
+    setEditingGroupId(null);
+  }, [editForm, editingGroupId, groupDetailResponse]);
+
+  useEffect(() => {
+    if (!editingGroupId || !groupDetailError) {
+      return;
+    }
+
+    console.error("그룹 상세 조회 실패:", groupDetailError);
+    if (axios.isAxiosError(groupDetailError)) {
+      const errorMessage =
+        groupDetailError.response?.data?.error?.message ||
+        groupDetailError.response?.data?.message ||
+        "그룹 상세 조회 중 오류가 발생했습니다.";
+      console.error(errorMessage);
+    }
+
+    setEditingGroupId(null);
+  }, [editingGroupId, groupDetailError]);
 
   const handleCloseEditModal = () => {
     setIsEditModalOpen(false);

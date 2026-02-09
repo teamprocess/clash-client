@@ -1,13 +1,12 @@
 import { create } from "zustand";
-import { recordApi, type Task } from "@/entities/record";
+import { recordApi, recordQueryKeys, type Task } from "@/entities/record";
+import { queryClient } from "@/shared/lib";
 
 interface RecordStore {
   tasks: Task[];
   activeTaskId: number | null;
   currentStudyTime: number;
   startTime: number | null;
-  isLoading: boolean;
-  fetchTasks: () => Promise<void>;
   start: (taskId: number) => Promise<void>;
   stop: () => Promise<void>;
   addTask: (name: string) => Promise<void>;
@@ -15,6 +14,7 @@ interface RecordStore {
   deleteTask: (taskId: number) => Promise<void>;
   setCurrentStudyTime: (time: number) => void;
   setTasks: (tasks: Task[]) => void;
+  setActiveSession: (activeTaskId: number | null, startTime: number | null) => void;
 }
 
 export const useRecordStore = create<RecordStore>((set, get) => ({
@@ -22,41 +22,6 @@ export const useRecordStore = create<RecordStore>((set, get) => ({
   activeTaskId: null,
   currentStudyTime: 0,
   startTime: null,
-  isLoading: false,
-
-  // 과목 정보 조회
-  fetchTasks: async () => {
-    try {
-      set({ isLoading: true });
-
-      const tasksResponse = await recordApi.getTasks();
-      if (tasksResponse.success && tasksResponse.data) {
-        set({ tasks: tasksResponse.data.tasks });
-      }
-
-      const todayResponse = await recordApi.getToday();
-      if (todayResponse.success && todayResponse.data) {
-        const { sessions } = todayResponse.data;
-        const activeSession = sessions.find(session => session.endedAt === null);
-
-        if (activeSession) {
-          const serverStartTime = new Date(activeSession.startedAt).getTime();
-          const now = Date.now();
-          const elapsedSeconds = Math.floor((now - serverStartTime) / 1000);
-
-          set({
-            activeTaskId: activeSession.task.id,
-            startTime: now - elapsedSeconds * 1000,
-            currentStudyTime: 0,
-          });
-        }
-      }
-    } catch (error) {
-      console.error("과목 목록 조회 실패:", error);
-    } finally {
-      set({ isLoading: false });
-    }
-  },
 
   // 공부 시작
   start: async (taskId: number) => {
@@ -88,7 +53,13 @@ export const useRecordStore = create<RecordStore>((set, get) => ({
 
       if (response.success) {
         set({ activeTaskId: null, startTime: null, currentStudyTime: 0 });
-        await get().fetchTasks();
+        // 공부 중지 후 tasks, today 쿼리 무효화
+        // 과목 추가 후 tasks 무효화
+        // -> 수동 조회 없이 데이터 일관성 유지
+        await Promise.all([
+          queryClient.invalidateQueries({ queryKey: recordQueryKeys.tasks }),
+          queryClient.invalidateQueries({ queryKey: recordQueryKeys.today }),
+        ]);
       }
     } catch (error) {
       console.error("기록 중지 실패:", error);
@@ -101,8 +72,7 @@ export const useRecordStore = create<RecordStore>((set, get) => ({
     try {
       const response = await recordApi.createTask({ name });
       if (response.success) {
-        // 과목 목록 다시 조회
-        await get().fetchTasks();
+        await queryClient.invalidateQueries({ queryKey: recordQueryKeys.tasks });
       }
     } catch (error) {
       console.error("과목 추가 실패:", error);
@@ -144,4 +114,6 @@ export const useRecordStore = create<RecordStore>((set, get) => ({
 
   setCurrentStudyTime: (time: number) => set({ currentStudyTime: time }),
   setTasks: (tasks: Task[]) => set({ tasks }),
+  setActiveSession: (activeTaskId: number | null, startTime: number | null) =>
+    set({ activeTaskId, startTime }),
 }));
