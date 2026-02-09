@@ -1,21 +1,18 @@
 import { useState, useMemo } from "react";
 import {
+  battleApi,
   useBattleInfoQuery,
   useBattleDetailQuery,
   useAnalyzeBattleQuery,
   useBattleListQuery,
-} from "@/entities/competition/api/rival-competition/api/query/useBattle.query";
-
-import {
   BattleResponse,
   BattleDetailResponse,
-  MatchValue,
   AnalyzeBattleResponse,
   AnalyzeCategory,
   BattleListResponse,
   PeriodDay,
-} from "@/entities/competition/model/rival-competition/battle.types";
-import { battleApi } from "@/entities/competition/api/rival-competition/api/battleApi";
+} from "@/entities/competition";
+import { MatchValue } from "@/entities/competition/model/rival-competition/battle.types";
 
 const analyzeCategoryOptions = [
   { key: "EXP", label: "EXP" },

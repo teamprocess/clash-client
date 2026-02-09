@@ -1,10 +1,9 @@
 import * as S from "./WithMyCompetition.style";
 import { GrowthRate } from "@/features/home/ui/compare/growth-rate/GrowthRate";
 import { useMyCompetition } from "@/features/competition/model/useMyCompetition";
-import { CompareStandard } from "@/entities/competition/model/my-competition/myCompetition.types";
-import { GrowthRateStandard } from "@/entities/competition/model/my-competition/myCompetition.types";
 import { toLineChartData } from "@/features/competition/model/my-compete-chart/MyCompeteChartData";
 import { MyCompetitionLineChart } from "@/features/competition/model/my-compete-chart/MyCompetitionLineChart";
+import { CompareStandard, GrowthRateStandard } from "@/entities/competition";
 
 export const WithMyCompetition = () => {
   const {

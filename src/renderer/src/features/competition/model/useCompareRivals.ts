@@ -1,13 +1,15 @@
 import { useEffect, useState, useMemo } from "react";
 import {
   CATEGORY,
-  CategoryType,
   PERIOD,
+} from "@/entities/competition/model/rival-competition/compareRivals.types";
+import {
+  CategoryType,
   PeriodType,
   RivalCompeteUser,
-} from "@/entities/competition/model/rival-competition/compareRivals.types";
+  useCompareRivalsQuery,
+} from "@/entities/competition";
 import { authApi } from "@/entities/user";
-import { useCompareRivalsQuery } from "@/entities/competition/api/rival-competition/api/query/useCompareRivals.query";
 
 export const colorsOfMultiLine: string[] = ["#FFF", "#0081CC", "#C60608", "#15B756", "#FFCC01"];
 
