@@ -6,8 +6,9 @@ import ArrowRight from "@/pages/profile/assets/ArrowRight.svg?url";
 type Level = 0 | 1 | 2 | 3;
 
 const WEEKDAYS = ["일", "월", "화", "수", "목", "금", "토"] as const;
+
 const mockLevelByISO = (iso: string): Level => {
-  const n = Number(iso.slice(-2)); // day
+  const n = Number(iso.slice(-2));
   if (n % 7 === 1) return 3;
   if (n % 5 === 0) return 2;
   if (n % 3 === 0) return 1;
@@ -28,9 +29,14 @@ export const TimePanel = () => {
     const m = monthCursor.getMonth();
     const first = new Date(y, m, 1);
     const firstDow = first.getDay();
+    const last = new Date(y, m + 1, 0);
+    const daysInMonth = last.getDate();
+    const neededCells = firstDow + daysInMonth;
+    const weeks = Math.ceil(neededCells / 7);
+    const cellCount = weeks * 7;
     const start = new Date(y, m, 1 - firstDow);
 
-    const cells = Array.from({ length: 42 }).map((_, i) => {
+    const cells = Array.from({ length: cellCount }).map((_, i) => {
       const d = new Date(start);
       d.setDate(start.getDate() + i);
 

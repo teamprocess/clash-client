@@ -29,7 +29,7 @@ export const Title = styled.div`
 `;
 
 export const Weekdays = styled.div`
-  margin-top: 0.25rem;
+  margin-top: 0.5rem;
   display: grid;
   grid-template-columns: repeat(7, 3.125rem);
   gap: 2.25rem;
