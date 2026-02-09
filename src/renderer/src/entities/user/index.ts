@@ -10,4 +10,4 @@ export type {
   UsernameDuplicateCheckResponse,
   getMyProfileResponse,
 } from "./api/authApi";
-export { useGetMyProfile } from "./model/useGetMyProfile";
+export { useMyProfile } from "./model/useMyProfile";
