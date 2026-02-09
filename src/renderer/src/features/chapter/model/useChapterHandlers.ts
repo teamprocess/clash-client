@@ -5,7 +5,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import type { GetChapterDetailsResponse } from "@/entities/roadmap/chapter/model/chapter.types";
 import { chapterQueryKeys } from "@/entities/roadmap/chapter/api/query/chapterQueryKeys";
 
-interface UseChapterHandlersParams {
+type UseChapterHandlersParams = {
   stages: Stage[];
   setStages: Dispatch<SetStateAction<Stage[]>>;
   roadmapNodes: Node[];
@@ -16,7 +16,7 @@ interface UseChapterHandlersParams {
   setCurrentMission: Dispatch<SetStateAction<Mission | null>>;
   setModalOpen: Dispatch<SetStateAction<boolean>>;
   setMissionModalOpen: Dispatch<SetStateAction<boolean>>;
-}
+};
 
 export const useChapterHandlers = ({
   stages,

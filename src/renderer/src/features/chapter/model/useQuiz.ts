@@ -2,7 +2,7 @@ import { useRef, useState } from "react";
 import type { Mission } from "@/features/chapter/model/chapter.types";
 import { chapterApi } from "@/entities/roadmap/chapter/api/chapterApi";
 
-interface QuizState {
+type QuizState = {
   currentIndex: number;
   answers: Record<number, number>;
   correctCount: number;
@@ -10,7 +10,7 @@ interface QuizState {
   lastResult: boolean | null;
   explanation: string;
   isSubmitting: boolean;
-}
+};
 
 const initialState: QuizState = {
   currentIndex: 0,
@@ -22,11 +22,11 @@ const initialState: QuizState = {
   isSubmitting: false,
 };
 
-interface UseQuizParams {
+type UseQuizParams = {
   mission: Mission;
   onMissionComplete?: (missionId: number) => void;
   onClose: () => void;
-}
+};
 
 export const useQuiz = ({ mission, onMissionComplete, onClose }: UseQuizParams) => {
   const [state, setState] = useState<QuizState>(initialState);
