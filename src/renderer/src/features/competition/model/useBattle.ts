@@ -122,6 +122,8 @@ export const useBattle = () => {
       });
     } catch (error) {
       console.error(error);
+    } finally {
+      setRivalSelectedId(null);
     }
 
     closeModal();
