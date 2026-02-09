@@ -2,8 +2,8 @@ import { useEffect, useState } from "react";
 import type { Stage, StageStatus } from "@/features/chapter/model/chapter.types";
 import type { Node, NodeStatus } from "@/features/chapter/roadmapData";
 import { roadmapNodes as initialRoadmapNodes } from "@/features/chapter/roadmapData";
-import { chapterApi } from "@/entities/roadmap/chapter/api/chapterApi";
 import type { GetSectionDetailsResponse } from "@/entities/roadmap/chapter/model/chapter.types";
+import { useSectionDetailsQuery } from "@/entities/roadmap/chapter/api/query/useSectionDetails.query";
 
 const transformChapterData = (serverData: GetSectionDetailsResponse): Stage[] => {
   return serverData.chapters.map(chapter => {
@@ -44,46 +44,36 @@ export const useChapterDomain = (sectionId: number) => {
   const [roadmapNodes, setRoadmapNodes] = useState<Node[]>(initialRoadmapNodes);
   const [currentStageId, setCurrentStageId] = useState<number>(1);
   const [sectionTitle, setSectionTitle] = useState("");
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const { data: sectionDetails, isLoading, error } = useSectionDetailsQuery(sectionId);
 
   useEffect(() => {
-    const fetchChapterData = async () => {
-      try {
-        setLoading(true);
-        const response = await chapterApi.getSectionDetails({ sectionId });
+    const applySectionDetails = async () => {
+      if (!sectionDetails) return;
 
-        if (response.success && response.data) {
-          const transformedStages = transformChapterData(response.data);
-          setStages(transformedStages);
-          setSectionTitle(response.data.sectionTitle);
+      const transformedStages = transformChapterData(sectionDetails);
+      setStages(transformedStages);
+      setSectionTitle(sectionDetails.sectionTitle);
 
-          const currentChapter = transformedStages.find(stage => stage.status === "current");
-          setCurrentStageId(currentChapter?.id ?? transformedStages[0]?.id ?? 1);
+      const currentChapter = transformedStages.find(stage => stage.status === "current");
+      setCurrentStageId(currentChapter?.id ?? transformedStages[0]?.id ?? 1);
 
-          setRoadmapNodes(prev =>
-            prev.map((node, index) => {
-              if (index < transformedStages.length) {
-                return {
-                  ...node,
-                  id: transformedStages[index].id,
-                  orderIndex: index + 1,
-                  status: transformedStages[index].status as NodeStatus,
-                };
-              }
-              return node;
-            })
-          );
-        }
-      } catch (err) {
-        setError(err instanceof Error ? err.message : "Failed to load chapter data");
-      } finally {
-        setLoading(false);
-      }
+      setRoadmapNodes(
+        initialRoadmapNodes.map((node, index) => {
+          if (index < transformedStages.length) {
+            return {
+              ...node,
+              id: transformedStages[index].id,
+              orderIndex: index + 1,
+              status: transformedStages[index].status as NodeStatus,
+            };
+          }
+          return node;
+        })
+      );
     };
 
-    fetchChapterData();
-  }, [sectionId]);
+    void applySectionDetails();
+  }, [sectionDetails]);
 
   const currentStage = stages.find(stage => stage.id === currentStageId) ?? EMPTY_STAGE;
 
@@ -96,7 +86,7 @@ export const useChapterDomain = (sectionId: number) => {
     setCurrentStageId,
     currentStage,
     sectionTitle,
-    loading,
-    error,
+    loading: isLoading,
+    error: error instanceof Error ? error.message : null,
   };
 };

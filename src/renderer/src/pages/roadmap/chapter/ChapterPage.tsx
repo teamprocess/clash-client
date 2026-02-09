@@ -5,10 +5,9 @@ import { SectionProgress } from "@/features/section-progress";
 import { Roadmap } from "@/features/chapter/components/Roadmap";
 import { QuizModal } from "@/features/chapter/components/QuizModal";
 import { useChapter } from "@/features/chapter/model/useChapter";
-import { sectionApi } from "@/entities/roadmap/section/api/sectionApi";
 import { MajorEnum } from "@/entities/roadmap/section/model/section.types";
-import { useEffect, useState } from "react";
-import { authApi } from "@/entities/user";
+import { useEffect } from "react";
+import { useGetMyProfile } from "@/entities/user";
 
 export const ChapterPage = () => {
   const { sectionId } = useParams<{ sectionId: string }>();
@@ -16,22 +15,10 @@ export const ChapterPage = () => {
 
   const { chapterRef, domain, view, handlers } = useChapter(numericSectionId);
 
-  const [major, setMajor] = useState<MajorEnum | null>(null);
+  const { data: myProfile } = useGetMyProfile();
+  const major = myProfile?.major as MajorEnum | undefined;
 
   const navigate = useNavigate();
-
-  const fetchData = async () => {
-    const myProfile = await authApi.getMyProfile();
-    const myMajor = myProfile.data?.major as MajorEnum;
-    const section = await sectionApi.getMajorSection({ major: myMajor });
-    return { data: section.data, myMajor };
-  };
-
-  useEffect(() => {
-    fetchData().then(res => {
-      setMajor(res.myMajor);
-    });
-  }, []);
 
   useEffect(() => {
     if (major == MajorEnum.NONE) navigate("/roadmap/major-choice");
@@ -103,7 +90,7 @@ export const ChapterPage = () => {
             </S.MissionProgress>
           </S.MissionBoxTop>
           <S.MissionList>
-            {domain.currentStage.missions.map(mission => (
+            {domain.currentStageMissions.map(mission => (
               <S.MissionBox
                 key={mission.id}
                 onClick={() => {
