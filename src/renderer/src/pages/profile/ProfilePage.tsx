@@ -7,7 +7,6 @@ import type { ItemPreviewPayload } from "@/pages/profile/components/profile-tabs
 
 type BgState = { accentColor?: string; bgImageUrl?: string };
 type BadgeState = { accentColor?: string; bgImageUrl?: string };
-
 type EditingKind = "background" | "badge" | null;
 
 export const ProfilePage = () => {
@@ -28,7 +27,18 @@ export const ProfilePage = () => {
     [editingKind, draftBadge, savedBadge]
   );
 
+  const clearEditing = () => {
+    setDraftBg(null);
+    setDraftBadge(null);
+    setEditingKind(null);
+  };
+
   const handlePreviewChange = (payload: ItemPreviewPayload) => {
+    if (payload.kind === "none") {
+      clearEditing();
+      return;
+    }
+
     if (payload.kind === "background") {
       setEditingKind("background");
       setDraftBg({
@@ -46,12 +56,14 @@ export const ProfilePage = () => {
       });
       return;
     }
+
+    if (payload.kind === "nameplate") {
+      return;
+    }
   };
 
   const handleCancel = () => {
-    if (editingKind === "background") setDraftBg(null);
-    if (editingKind === "badge") setDraftBadge(null);
-    setEditingKind(null);
+    clearEditing();
   };
 
   const handleSave = () => {
