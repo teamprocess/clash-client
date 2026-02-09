@@ -146,12 +146,7 @@ export const useMajorChoice = () => {
 
 // 타입 불일치 방지 & 코드 중복 제거를 위해 ReturnType을 활용한 타입 추출
 export type UseRoadMapReturn = ReturnType<typeof useMajorChoice>;
-type FeaturePropsBase = UseRoadMapReturn["feature"];
-type MajorPropsBase = UseRoadMapReturn["major"];
-type TestPropsBase = UseRoadMapReturn["test"];
-type ResultPropsBase = UseRoadMapReturn["result"];
-
-export interface FeatureProps extends FeaturePropsBase {}
-export interface MajorProps extends MajorPropsBase {}
-export interface TestProps extends TestPropsBase {}
-export interface ResultProps extends ResultPropsBase {}
+export type FeatureProps = UseRoadMapReturn["feature"];
+export type MajorProps = UseRoadMapReturn["major"];
+export type TestProps = UseRoadMapReturn["test"];
+export type ResultProps = UseRoadMapReturn["result"];
