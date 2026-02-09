@@ -1,4 +1,9 @@
 export { recordApi } from "./api/recordApi";
+export {
+  recordQueryKeys,
+  useRecordTasksQuery,
+  useRecordTodayQuery,
+} from "./api/query/useRecord.query";
 export type {
   Task,
   Session,

@@ -1,4 +1,10 @@
 export { groupApi } from "./api/groupApi";
+export {
+  useAllGroupsQuery,
+  useGroupActivityQuery,
+  useGroupDetailQuery,
+  useMyGroupsQuery,
+} from "./api/query/useGroup.query";
 export type {
   Owner,
   Group,

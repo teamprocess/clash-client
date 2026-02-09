@@ -1,8 +1,7 @@
 import * as S from "./Group.style";
 import { useEffect, useMemo, useState } from "react";
-import axios from "axios";
-import { type Group as GroupEntity, groupApi } from "@/entities/group";
-import { authApi } from "@/entities/user";
+import { type Group as GroupEntity, useMyGroupsQuery } from "@/entities/group";
+import { useGetMyProfile } from "@/entities/user";
 import { useGroup } from "@/features/record/model/useGroup";
 import { formatTime } from "@/shared/lib";
 import { GroupDeleteModal } from "./modal/GroupDeleteModal";
@@ -11,9 +10,13 @@ import { GroupFormModal } from "./modal/GroupFormModal";
 import { useGroupMembersActivity } from "@/features/record/model/useGroupMembersActivity";
 
 export const Group = () => {
-  const [groups, setGroups] = useState<GroupEntity[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [myUserId, setMyUserId] = useState<number | null>(null);
+  const { data: myGroupsResponse } = useMyGroupsQuery(1, 20);
+  const { data: myProfile } = useGetMyProfile();
+  const groupList = myGroupsResponse?.data?.groups;
+  const groups = useMemo<GroupEntity[]>(() => groupList ?? [], [groupList]);
+  const myUserId = myProfile?.id ?? null;
+
   const {
     menuRef,
     isMenuOpen,
@@ -26,67 +29,22 @@ export const Group = () => {
     deleteModal,
     setCurrentGroupId,
   } = useGroup();
-  const { fetchGroupMembers, groupMembers, incrementStudyingMembers } = useGroupMembersActivity();
 
-  const currentGroup = useMemo(() => groups[currentIndex], [groups, currentIndex]);
+  const safeCurrentIndex = useMemo(() => {
+    if (groups.length === 0) {
+      return 0;
+    }
 
-  useEffect(() => {
-    const fetchMyGroups = async () => {
-      try {
-        const result = await groupApi.getMyGroups(1, 20);
-
-        if (result.success && result.data) {
-          setGroups(result.data.groups);
-          setCurrentIndex(0);
-        } else {
-          console.error("그룹 목록 조회 실패:", result.message);
-        }
-      } catch (error: unknown) {
-        console.error("그룹 목록 조회 실패:", error);
-
-        if (axios.isAxiosError(error)) {
-          const errorMessage =
-            error.response?.data?.error?.message ||
-            error.response?.data?.message ||
-            "그룹 목록 조회 중 오류가 발생했습니다.";
-          console.error(errorMessage);
-        }
-      }
-    };
-
-    const fetchMyProfile = async () => {
-      try {
-        const result = await authApi.getMyProfile();
-
-        if (result.success && result.data) {
-          setMyUserId(result.data.id);
-        } else {
-          console.error("내 정보 조회 실패:", result.message);
-        }
-      } catch (error: unknown) {
-        console.error("내 정보 조회 실패:", error);
-
-        if (axios.isAxiosError(error)) {
-          const errorMessage =
-            error.response?.data?.error?.message ||
-            error.response?.data?.message ||
-            "내 정보 조회 중 오류가 발생했습니다.";
-          console.error(errorMessage);
-        }
-      }
-    };
-
-    void fetchMyGroups();
-    void fetchMyProfile();
-  }, []);
+    return Math.min(currentIndex, groups.length - 1);
+  }, [currentIndex, groups.length]);
+  const currentGroup = useMemo(() => groups[safeCurrentIndex], [groups, safeCurrentIndex]);
+  const { groupMembers, incrementStudyingMembers } = useGroupMembersActivity(
+    currentGroup?.id ?? null
+  );
 
   useEffect(() => {
     setCurrentGroupId(currentGroup ? currentGroup.id : null);
-
-    if (currentGroup) {
-      void fetchGroupMembers(currentGroup.id);
-    }
-  }, [currentGroup, setCurrentGroupId, fetchGroupMembers]);
+  }, [currentGroup, setCurrentGroupId]);
 
   useEffect(() => {
     const interval = setInterval(() => {
