@@ -4,7 +4,7 @@ import type { Node, NodeStatus } from "@/features/chapter/roadmapData";
 import { chapterApi } from "@/entities/roadmap/chapter/api/chapterApi";
 import type { GetChapterDetailsRequest } from "@/entities/roadmap/chapter/model/chapter.types";
 
-interface UseChapterHandlersParams {
+type UseChapterHandlersParams = {
   stages: Stage[];
   setStages: Dispatch<SetStateAction<Stage[]>>;
   roadmapNodes: Node[];
@@ -15,7 +15,7 @@ interface UseChapterHandlersParams {
   setCurrentMission: Dispatch<SetStateAction<Mission | null>>;
   setModalOpen: Dispatch<SetStateAction<boolean>>;
   setMissionModalOpen: Dispatch<SetStateAction<boolean>>;
-}
+};
 
 export const useChapterHandlers = ({
   stages,
