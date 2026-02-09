@@ -2,8 +2,8 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useQueryClient } from "@tanstack/react-query";
 import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
-import axios from "axios";
 import { authApi } from "@/entities/user";
+import { getErrorMessage } from "@/shared/lib";
 
 interface DeepLinkAuthPayload {
   code: string;
@@ -62,17 +62,9 @@ export const useSignUp = () => {
         } else {
           setError(result.message || "회원가입에 실패했습니다.");
         }
-      } catch (err: unknown) {
-        console.error("Electron auth exchange failed:", err);
-        if (axios.isAxiosError(err)) {
-          setError(
-            err.response?.data?.error?.message ||
-              err.response?.data?.message ||
-              "회원가입에 실패했습니다."
-          );
-        } else {
-          setError("회원가입에 실패했습니다.");
-        }
+      } catch (error: unknown) {
+        console.error("Electron auth exchange failed:", error);
+        setError(getErrorMessage(error, "회원가입에 실패했습니다."));
       }
     });
 
@@ -105,17 +97,9 @@ export const useSignUp = () => {
       } else {
         setError(result.message || "회원가입 페이지를 열 수 없습니다.");
       }
-    } catch (err: unknown) {
-      console.error("Electron auth signup start failed:", err);
-      if (axios.isAxiosError(err)) {
-        setError(
-          err.response?.data?.error?.message ||
-            err.response?.data?.message ||
-            "회원가입에 실패했습니다."
-        );
-      } else {
-        setError("회원가입에 실패했습니다.");
-      }
+    } catch (error: unknown) {
+      console.error("Electron auth signup start failed:", error);
+      setError(getErrorMessage(error, "회원가입에 실패했습니다."));
     } finally {
       setIsStarting(false);
     }

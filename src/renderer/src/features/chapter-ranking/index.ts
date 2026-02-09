@@ -1,1 +1,1 @@
-export { ChapterRanking } from "@/features/chapter-ranking/ui/ChapterRanking";
+export { ChapterRanking } from "./ui/ChapterRanking";

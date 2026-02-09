@@ -1,14 +1,12 @@
 import { useState } from "react";
-import { useMyRivalsQuery } from "@/entities/competition/api/rival-competition/api/query/useMyRivals.query";
+import { useMyRivalsQuery, MyRivalsRequest, MyRivalsResponse } from "@/entities/competition";
 import {
   useRivalListQuery,
-  useRivalApplyMutation,
-} from "@/entities/home/api/query/useRivals.query";
-import {
-  MyRivalsRequest,
-  MyRivalsResponse,
-} from "@/entities/competition/model/rival-competition/myRivals.types";
-import { RivalUsersResponse } from "@/entities/home/model/useRival.types";
+  RivalUsersResponse,
+  RivalApplyRequest,
+  rivalsApi,
+} from "@/entities/home";
+import { getErrorMessage } from "@/shared/lib";
 
 export interface MyRivalItem {
   user: MyRivalsRequest;
@@ -27,7 +25,6 @@ type StatusType = "온라인" | "자리비움" | "오프라인" | "";
 export const useRival = () => {
   const { data: myRivalsRes } = useMyRivalsQuery();
   const { data: rivalListRes } = useRivalListQuery();
-  const rivalApplyMutation = useRivalApplyMutation();
 
   const rivalsData: MyRivalsResponse | null = myRivalsRes?.data ?? null;
   const userList: RivalUsersResponse | null = rivalListRes?.data ?? null;
@@ -47,9 +44,7 @@ export const useRival = () => {
 
   const [modalOpen, setModalOpen] = useState(false);
 
-  const handleOpen = () => {
-    setModalOpen(true);
-  };
+  const handleOpen = () => setModalOpen(true);
 
   const handleClose = () => {
     setModalOpen(false);
@@ -69,9 +64,9 @@ export const useRival = () => {
 
       if (prev.length < maxAvailableSlots) {
         return [...prev, id];
-      } else {
-        return prev;
       }
+
+      return prev;
     });
   };
 
@@ -80,13 +75,20 @@ export const useRival = () => {
     handleClose();
   };
 
-  const handleRivalCreate = async () => {
-    const payload = {
-      ids: rivalSelectedId.map(id => ({ id })),
-    };
+  const [applyPayload, setApplyPayload] = useState<RivalApplyRequest | null>(null);
 
-    await rivalApplyMutation.mutateAsync(payload);
-    handleClose();
+  const handleRivalCreate = async () => {
+    if (!applyPayload) return;
+
+    try {
+      await rivalsApi.postRivalApply(applyPayload);
+    } catch (error: unknown) {
+      const errorMessage = getErrorMessage(error, "라이벌 신청 중 오류가 발생했습니다.");
+      console.error("라이벌 신청 실패:", errorMessage, error);
+    } finally {
+      handleClose();
+      setApplyPayload(null);
+    }
   };
 
   return {

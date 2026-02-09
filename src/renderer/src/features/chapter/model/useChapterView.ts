@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 import type { Mission } from "@/features/chapter/model/chapter.types";
 
-interface UseChapterViewParams {
+type UseChapterViewParams = {
   loading: boolean;
-}
+};
 
 export const useChapterView = ({ loading }: UseChapterViewParams) => {
   const chapterRef = useRef<HTMLDivElement>(null);

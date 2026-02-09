@@ -1,21 +1,19 @@
 import { useState, useMemo } from "react";
 import {
+  battleApi,
   useBattleInfoQuery,
   useBattleDetailQuery,
   useAnalyzeBattleQuery,
   useBattleListQuery,
-  useCreateBattleMutation,
-} from "@/entities/competition/api/rival-competition/api/query/useBattle.query";
-
-import {
   BattleResponse,
   BattleDetailResponse,
-  MatchValue,
   AnalyzeBattleResponse,
   AnalyzeCategory,
   BattleListResponse,
   PeriodDay,
-} from "@/entities/competition/model/rival-competition/battle.types";
+  MATCHVALUE,
+} from "@/entities/competition";
+import { getErrorMessage } from "@/shared/lib";
 
 const analyzeCategoryOptions = [
   { key: "EXP", label: "EXP" },
@@ -37,7 +35,6 @@ export const useBattle = () => {
   const { data: battleDetailRes } = useBattleDetailQuery(battleTargetId ?? 0);
   const { data: analyzeRes } = useAnalyzeBattleQuery(battleDetailRes?.data?.id ?? 0, category);
   const { data: battleListRes } = useBattleListQuery();
-  const createBattleMutation = useCreateBattleMutation();
 
   const battleData: BattleResponse | null = battleInfoRes?.data ?? null;
   const battleDetailData: BattleDetailResponse | null = battleDetailRes?.data ?? null;
@@ -48,11 +45,11 @@ export const useBattle = () => {
   const rivalPercent = 100 - myPercent;
 
   const judgeUpperHand = (result: string) => {
-    if (result === MatchValue.LOSING) return "우세";
-    if (result === MatchValue.WINNING) return "열세";
-    if (result === MatchValue.LOST) return "패배";
-    if (result === MatchValue.WON) return "승리";
-    if (result === MatchValue.DRAW) return "무승부";
+    if (result === MATCHVALUE.LOSING) return "우세";
+    if (result === MATCHVALUE.WINNING) return "열세";
+    if (result === MATCHVALUE.LOST) return "패배";
+    if (result === MATCHVALUE.WON) return "승리";
+    if (result === MATCHVALUE.DRAW) return "무승부";
     return "동률";
   };
 
@@ -114,13 +111,19 @@ export const useBattle = () => {
   const periodOptions: PeriodDay[] = [3, 5, 7];
   const [selectedDay, setSelectedDay] = useState<number | null>(null);
 
-  const postBattle = async () => {
+  const createBattle = async () => {
     if (!rivalSelectedId) return;
-
-    await createBattleMutation.mutateAsync({
-      id: rivalSelectedId,
-      duration,
-    });
+    try {
+      await battleApi.postCreateBattle({
+        id: rivalSelectedId,
+        duration,
+      });
+    } catch (error: unknown) {
+      const errorMessage = getErrorMessage(error, "배틀 신청 중 오류가 발생했습니다.");
+      console.error("배틀 신청 실패", errorMessage, error);
+    } finally {
+      setRivalSelectedId(null);
+    }
 
     closeModal();
   };
@@ -133,45 +136,43 @@ export const useBattle = () => {
   };
 
   return {
-    battle: {
-      isModalOpen,
-      openModal,
-      closeModal,
-      duration,
-      setDuration,
-      periodOptions,
-      postBattle,
-      selectedDay,
-      setSelectedDay,
+    isModalOpen,
+    openModal,
+    closeModal,
+    duration,
+    setDuration,
+    periodOptions,
+    createBattle,
+    selectedDay,
+    setSelectedDay,
 
-      selectBattleTarget,
-      isBattleSelected,
+    selectBattleTarget,
+    isBattleSelected,
 
-      judgeUpperHand,
-      myPercent,
-      rivalPercent,
+    judgeUpperHand,
+    myPercent,
+    rivalPercent,
 
-      myAnalyzePoint,
-      rivalAnalyzePoint,
-      analyzeTotal,
-      myAnalyzeRate,
-      rivalAnalyzeRate,
-      diff,
-      isRivalHigher,
+    myAnalyzePoint,
+    rivalAnalyzePoint,
+    analyzeTotal,
+    myAnalyzeRate,
+    rivalAnalyzeRate,
+    diff,
+    isRivalHigher,
 
-      detailTextTranslate,
-      remainDays,
+    detailTextTranslate,
+    remainDays,
 
-      rivalSelectedId,
-      handleUserSelect,
+    rivalSelectedId,
+    handleUserSelect,
 
-      analyzeCategoryOptions,
-      setCategory,
-      category,
+    analyzeCategoryOptions,
+    setCategory,
+    category,
 
-      battleData,
-      battleDetailData,
-      battleList,
-    },
+    battleData,
+    battleDetailData,
+    battleList,
   };
 };

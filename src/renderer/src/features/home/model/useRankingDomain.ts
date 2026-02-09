@@ -1,11 +1,6 @@
 import { useState } from "react";
-import type {
-  RankingsResponse,
-  CategoryType,
-  PeriodType,
-} from "@/entities/home/model/useRanking.types";
+import { RankingsResponse, CategoryType, PeriodType, useRankingQuery } from "@/entities/home";
 import { useGetMyProfile } from "@/entities/user";
-import { useRankingQuery } from "@/entities/home/api/query/useRanking.query";
 
 export const rankingDropDownValue: Array<{ key: CategoryType; label: string }> = [
   { key: "GITHUB", label: "Github" },

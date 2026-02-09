@@ -1,13 +1,13 @@
-import { useEffect, useState, useMemo } from "react";
+import { useState, useMemo } from "react";
 import {
-  CATEGORY,
   CategoryType,
-  PERIOD,
   PeriodType,
   RivalCompeteUser,
-} from "@/entities/competition/model/rival-competition/compareRivals.types";
-import { authApi } from "@/entities/user";
-import { useCompareRivalsQuery } from "@/entities/competition/api/rival-competition/api/query/useCompareRivals.query";
+  useCompareRivalsQuery,
+  CATEGORY,
+  PERIOD,
+} from "@/entities/competition";
+import { useGetMyProfile } from "@/entities/user";
 
 export const colorsOfMultiLine: string[] = ["#FFF", "#0081CC", "#C60608", "#15B756", "#FFCC01"];
 
@@ -36,23 +36,13 @@ export const useCompareRival = () => {
     competitionPeriodDropDown
   );
 
-  const [myUserId, setMyUserId] = useState<number | null>(null);
-
-  useEffect(() => {
-    const fetchMyProfile = async () => {
-      const result = await authApi.getMyProfile();
-      if (result.success && result.data) {
-        setMyUserId(result.data.id);
-      }
-    };
-    fetchMyProfile();
-  }, []);
+  const { data: myProfile } = useGetMyProfile();
 
   const sortedCompareRivals = useMemo(() => {
     const compareRivals = compareRivalsResponse?.data;
-    if (!compareRivals?.totalData || !myUserId) return compareRivals;
+    if (!compareRivals?.totalData || !myProfile?.id) return compareRivals;
 
-    const index = compareRivals.totalData.findIndex(user => user.id === myUserId);
+    const index = compareRivals.totalData.findIndex(user => user.id === myProfile?.id);
 
     if (index === -1) return compareRivals;
 
@@ -64,7 +54,7 @@ export const useCompareRival = () => {
       ...compareRivals,
       totalData: reordered,
     };
-  }, [compareRivalsResponse, myUserId]);
+  }, [compareRivalsResponse, myProfile?.id]);
 
   // Multi Axis Line Chart 구조에 맞게 변환
   const buildMultiLineData = (totalData: RivalCompeteUser[]) => {
