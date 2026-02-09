@@ -1,14 +1,12 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useMyRivalsQuery } from "@/entities/competition/api/rival-competition/api/query/useMyRivals.query";
-import {
-  useRivalListQuery,
-  useRivalApplyMutation,
-} from "@/entities/home/api/query/useRivals.query";
+import { useRivalListQuery } from "@/entities/home/api/query/useRivals.query";
 import {
   MyRivalsRequest,
   MyRivalsResponse,
 } from "@/entities/competition/model/rival-competition/myRivals.types";
-import { RivalUsersResponse } from "@/entities/home/model/useRival.types";
+import { RivalUsersResponse, RivalApplyRequest } from "@/entities/home/model/useRival.types";
+import { rivalsApi } from "@/entities/home/api/rivalApi";
 
 export interface MyRivalItem {
   user: MyRivalsRequest;
@@ -27,7 +25,6 @@ type StatusType = "온라인" | "자리비움" | "오프라인" | "";
 export const useRival = () => {
   const { data: myRivalsRes } = useMyRivalsQuery();
   const { data: rivalListRes } = useRivalListQuery();
-  const rivalApplyMutation = useRivalApplyMutation();
 
   const rivalsData: MyRivalsResponse | null = myRivalsRes?.data ?? null;
   const userList: RivalUsersResponse | null = rivalListRes?.data ?? null;
@@ -47,9 +44,7 @@ export const useRival = () => {
 
   const [modalOpen, setModalOpen] = useState(false);
 
-  const handleOpen = () => {
-    setModalOpen(true);
-  };
+  const handleOpen = () => setModalOpen(true);
 
   const handleClose = () => {
     setModalOpen(false);
@@ -69,9 +64,9 @@ export const useRival = () => {
 
       if (prev.length < maxAvailableSlots) {
         return [...prev, id];
-      } else {
-        return prev;
       }
+
+      return prev;
     });
   };
 
@@ -80,13 +75,31 @@ export const useRival = () => {
     handleClose();
   };
 
-  const handleRivalCreate = async () => {
-    const payload = {
+  const [applyPayload, setApplyPayload] = useState<RivalApplyRequest | null>(null);
+
+  useEffect(() => {
+    if (!applyPayload) return;
+
+    const postApplyRival = async () => {
+      try {
+        await rivalsApi.postRivalApply(applyPayload);
+        handleClose();
+      } catch (e) {
+        console.error("Rival apply failed", e);
+      } finally {
+        setApplyPayload(null);
+      }
+    };
+
+    postApplyRival();
+  }, [applyPayload]);
+
+  const handleRivalCreate = () => {
+    const payload: RivalApplyRequest = {
       ids: rivalSelectedId.map(id => ({ id })),
     };
 
-    await rivalApplyMutation.mutateAsync(payload);
-    handleClose();
+    setApplyPayload(payload);
   };
 
   return {
