@@ -81,10 +81,10 @@ export const useRival = () => {
 
     try {
       await rivalsApi.postRivalApply(applyPayload);
-      handleClose();
     } catch (error) {
       console.log(error);
     } finally {
+      handleClose();
       setApplyPayload(null);
     }
   };
