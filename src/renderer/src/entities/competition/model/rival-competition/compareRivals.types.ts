@@ -16,10 +16,10 @@ export const PERIOD = {
 
 export type PeriodType = (typeof PERIOD)[keyof typeof PERIOD];
 
-export interface DataPoint {
+export type DataPoint = {
   date: string;
   point: number;
-}
+};
 
 export interface RivalCompeteUser {
   id: number;
@@ -27,11 +27,11 @@ export interface RivalCompeteUser {
   dataPoint: DataPoint[];
 }
 
-export interface CompareRivalsResponse {
+export type CompareRivalsResponse = {
   category: CategoryType;
   period: PeriodType;
   totalData: RivalCompeteUser[];
-}
+};
 
 export interface GetCompareRivalsRequest {
   category: CategoryType;

@@ -9,17 +9,17 @@ export interface MyGrowthRateRequest {
   standard: GrowthRateStandard;
 }
 
-export interface MyCompareResponse {
+export type MyCompareResponse = {
   earnedExp: number;
   studyTime: number;
   gitHubAttribution: number;
-}
+};
 
-export interface MyDataPoint {
+export type MyDataPoint = {
   date: string;
   rate: number;
-}
+};
 
-export interface MyGrowthRateResponse {
+export type MyGrowthRateResponse = {
   dataPoint: MyDataPoint[];
-}
+};

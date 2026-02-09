@@ -9,6 +9,6 @@ export interface MyRivalsRequest {
   status: UserStatus;
 }
 
-export interface MyRivalsResponse {
+export type MyRivalsResponse = {
   myRivals: MyRivalsRequest[];
-}
+};
