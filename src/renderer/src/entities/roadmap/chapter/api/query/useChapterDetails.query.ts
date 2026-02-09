@@ -19,7 +19,7 @@ export const useChapterDetailsQuery = (
     queryFn: async (): Promise<GetChapterDetailsResponse> => {
       const response = await chapterApi.getChapterDetails({ chapterId: resolvedChapterId });
       if (!response.success || !response.data) {
-        throw new Error(response.message ?? "Failed to load chapter details");
+        throw new Error(response.message ?? "챕터 정보를 불러오지 못했습니다.");
       }
       return response.data;
     },
