@@ -1,12 +1,40 @@
 import { useEffect } from "react";
 import { useRecordStore } from "./recordStore";
+import { useRecordTasksQuery, useRecordTodayQuery } from "@/entities/record";
 
 export const useRecord = () => {
-  const { startTime, fetchTasks, setCurrentStudyTime } = useRecordStore();
+  const { startTime, setCurrentStudyTime, setTasks, setActiveSession } = useRecordStore();
+  const { data: tasksResponse } = useRecordTasksQuery();
+  const { data: todayResponse } = useRecordTodayQuery();
 
   useEffect(() => {
-    void fetchTasks();
-  }, [fetchTasks]);
+    if (tasksResponse?.success && tasksResponse.data) {
+      setTasks(tasksResponse.data.tasks);
+    }
+  }, [setTasks, tasksResponse]);
+
+  useEffect(() => {
+    if (!todayResponse?.success || !todayResponse.data) {
+      return;
+    }
+
+    // 앱 재진입 시에도 현재 진행 중인 공부 세션 복원
+    const activeSession = todayResponse.data.sessions.find(session => session.endedAt === null);
+
+    // 활성 공부 세션이 없으면 공부 중 아님 상태 명확하게 고정
+    if (!activeSession) {
+      setActiveSession(null, null);
+      setCurrentStudyTime(0);
+      return;
+    }
+
+    const serverStartTime = new Date(activeSession.startedAt).getTime();
+    const now = Date.now();
+    const elapsedSeconds = Math.floor((now - serverStartTime) / 1000);
+
+    setActiveSession(activeSession.task.id, now - elapsedSeconds * 1000);
+    setCurrentStudyTime(0);
+  }, [setActiveSession, setCurrentStudyTime, todayResponse]);
 
   useEffect(() => {
     if (!startTime) return;
