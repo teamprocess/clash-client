@@ -113,7 +113,7 @@ export const useBattle = () => {
   const periodOptions: PeriodDay[] = [3, 5, 7];
   const [selectedDay, setSelectedDay] = useState<number | null>(null);
 
-  const postBattle = async () => {
+  const createBattle = async () => {
     if (!rivalSelectedId) return;
     try {
       await battleApi.postCreateBattle({
@@ -144,7 +144,7 @@ export const useBattle = () => {
       duration,
       setDuration,
       periodOptions,
-      postBattle,
+      postBattle: createBattle,
       selectedDay,
       setSelectedDay,
 
