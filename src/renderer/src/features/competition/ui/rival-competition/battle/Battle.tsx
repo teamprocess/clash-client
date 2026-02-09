@@ -1,9 +1,6 @@
 import * as S from "./Battle.style";
 import { Modal } from "@/shared/ui/modal/Modal";
-import {
-  AnalyzeCategory,
-  MATCHVALUE,
-} from "@/entities/competition/model/rival-competition/battle.types";
+import { AnalyzeCategory, MATCHVALUE } from "@/entities/competition";
 import { useBattle } from "@/features/competition/model/useBattle";
 
 export const Battle = () => {
