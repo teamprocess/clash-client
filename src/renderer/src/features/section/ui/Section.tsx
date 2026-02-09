@@ -4,13 +4,9 @@ import { useNavigate } from "react-router-dom";
 import { SectionProgress } from "@/features/section-progress";
 import { useEffect, useState } from "react";
 import { PreviewModal } from "@/features/section/components/PreviewModal";
-import { sectionApi } from "@/entities/roadmap/section/api/sectionApi";
-import {
-  getAllSectionsResponse,
-  MajorEnum,
-  section,
-} from "@/entities/roadmap/section/model/section.types";
-import { authApi } from "@/entities/user";
+import { useMajorSectionQuery } from "@/entities/roadmap/section/api/query/useMajorSection.query";
+import { MajorEnum, section } from "@/entities/roadmap/section/model/section.types";
+import { useGetMyProfile } from "@/entities/user";
 
 export const Section = () => {
   const navigate = useNavigate();
@@ -18,10 +14,10 @@ export const Section = () => {
   const [isTutorialModalOpen, setIsTutorialModalOpen] = useState(false);
   const [selectedSectionId, setSelectedSectionId] = useState<number | null>(null);
   const [isSelectedSectionLocked, setIsSelectedSectionLocked] = useState(false);
-
-  const [sectionData, setSectionData] = useState<getAllSectionsResponse | null>();
-
-  const [major, setMajor] = useState<MajorEnum | null>(null);
+  const { data: myProfile } = useGetMyProfile();
+  const major = myProfile?.major as MajorEnum | undefined;
+  const { data: sectionResponse } = useMajorSectionQuery(major);
+  const sectionData = sectionResponse?.data ?? undefined;
 
   const handleClick = (item: section) => {
     setSelectedSectionId(+item.id);
@@ -38,20 +34,6 @@ export const Section = () => {
       navigate(`/roadmap/${selectedSectionId}`);
     }
   };
-
-  const fetchData = async () => {
-    const myProfile = await authApi.getMyProfile();
-    const myMajor = myProfile.data?.major as MajorEnum;
-    const section = await sectionApi.getMajorSection({ major: myMajor });
-    return { data: section.data, myMajor };
-  };
-
-  useEffect(() => {
-    fetchData().then(res => {
-      setSectionData(res.data);
-      setMajor(res.myMajor);
-    });
-  }, []);
 
   useEffect(() => {
     if (major == MajorEnum.NONE) navigate("/roadmap/major-choice");
