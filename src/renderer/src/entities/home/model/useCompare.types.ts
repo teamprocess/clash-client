@@ -1,13 +1,13 @@
-interface CommitSummary {
+type CommitSummary = {
   count: number;
   representationRepo: string;
   addLines: number;
   removeLines: number;
   firstCommit: string;
   lastCommit: string;
-}
+};
 
-interface PullRequestSummary {
+type PullRequestSummary = {
   count: number;
   representationRepo: string;
   mergedCount: number;
@@ -16,21 +16,21 @@ interface PullRequestSummary {
   inReviewCount: number;
   approvedCount: number;
   requestCount: number;
-}
+};
 
-interface CountType {
+type CountType = {
   count: number;
-}
+};
 
-interface CompareType {
+type CompareType = {
   date: string;
   commit: CommitSummary;
   pullRequest: PullRequestSummary;
   issue: CountType;
   review: CountType;
-}
+};
 
-export interface CompareResponse {
+export type CompareResponse = {
   yesterday: CompareType;
   today: CompareType;
-}
+};

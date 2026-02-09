@@ -1,17 +1,17 @@
-export interface UserType {
+type UserType = {
   userId: number;
   userName: string;
   gitHubId: string;
   profileImage: string;
-}
+};
 
-export interface RivalUsersResponse {
+export type RivalUsersResponse = {
   users: UserType[];
-}
+};
 
-interface IdType {
+type IdType = {
   id: number;
-}
+};
 
 export interface RivalApplyRequest {
   ids: IdType[];
