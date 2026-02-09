@@ -53,6 +53,14 @@ export const CalendarBox = styled.div`
   background: ${({ theme }) => theme.background.normal};
   padding: 0.25rem 1.25rem;
   box-sizing: border-box;
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 `;
 
 export const Grid = styled.div`
