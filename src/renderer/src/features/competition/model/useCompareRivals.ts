@@ -1,13 +1,11 @@
 import { useEffect, useState, useMemo } from "react";
 import {
-  CATEGORY,
-  PERIOD,
-} from "@/entities/competition/model/rival-competition/compareRivals.types";
-import {
   CategoryType,
   PeriodType,
   RivalCompeteUser,
   useCompareRivalsQuery,
+  CATEGORY,
+  PERIOD,
 } from "@/entities/competition";
 import { authApi } from "@/entities/user";
 

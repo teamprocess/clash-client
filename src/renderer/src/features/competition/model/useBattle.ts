@@ -11,8 +11,8 @@ import {
   AnalyzeCategory,
   BattleListResponse,
   PeriodDay,
+  MATCHVALUE,
 } from "@/entities/competition";
-import { MatchValue } from "@/entities/competition/model/rival-competition/battle.types";
 
 const analyzeCategoryOptions = [
   { key: "EXP", label: "EXP" },
@@ -44,11 +44,11 @@ export const useBattle = () => {
   const rivalPercent = 100 - myPercent;
 
   const judgeUpperHand = (result: string) => {
-    if (result === MatchValue.LOSING) return "우세";
-    if (result === MatchValue.WINNING) return "열세";
-    if (result === MatchValue.LOST) return "패배";
-    if (result === MatchValue.WON) return "승리";
-    if (result === MatchValue.DRAW) return "무승부";
+    if (result === MATCHVALUE.LOSING) return "우세";
+    if (result === MATCHVALUE.WINNING) return "열세";
+    if (result === MATCHVALUE.LOST) return "패배";
+    if (result === MATCHVALUE.WON) return "승리";
+    if (result === MATCHVALUE.DRAW) return "무승부";
     return "동률";
   };
 

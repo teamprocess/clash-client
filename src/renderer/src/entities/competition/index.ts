@@ -35,12 +35,12 @@ export type {
 } from "./model/rival-competition/battle.types";
 export type { MyRivalsRequest, MyRivalsResponse } from "./model/rival-competition/myRivals.types";
 export type {
-  CATEGORY,
   CategoryType,
-  PERIOD,
   PeriodType,
   DataPoint,
   RivalCompeteUser,
   CompareRivalsResponse,
   GetCompareRivalsRequest,
 } from "./model/rival-competition/compareRivals.types";
+export { MATCHVALUE } from "./model/rival-competition/battle.types";
+export { CATEGORY, PERIOD } from "./model/rival-competition/compareRivals.types";

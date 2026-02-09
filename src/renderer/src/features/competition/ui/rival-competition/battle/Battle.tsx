@@ -2,7 +2,7 @@ import * as S from "./Battle.style";
 import { Modal } from "@/shared/ui/modal/Modal";
 import {
   AnalyzeCategory,
-  MatchValue,
+  MATCHVALUE,
 } from "@/entities/competition/model/rival-competition/battle.types";
 import { useBattle } from "@/features/competition/model/useBattle";
 
@@ -45,7 +45,7 @@ export const Battle = () => {
 
                   <S.DetailBox>
                     <S.DetailButton>
-                      {battleItem.result === MatchValue.WON || battleItem.result === MatchValue.LOST
+                      {battleItem.result === MATCHVALUE.WON || battleItem.result === MATCHVALUE.LOST
                         ? "결과 보기"
                         : "상세 내용 보기"}
                     </S.DetailButton>
