@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useQueryClient } from "@tanstack/react-query";
-import axios from "axios";
 import { authApi } from "@/entities/user";
+import { getErrorMessage } from "@/shared/lib";
 
 interface DeepLinkAuthPayload {
   code: string;
@@ -50,17 +50,9 @@ export const useElectronAuth = () => {
         } else {
           setError(result.message || "로그인에 실패했습니다.");
         }
-      } catch (err: unknown) {
-        console.error("Electron auth exchange failed:", err);
-        if (axios.isAxiosError(err)) {
-          setError(
-            err.response?.data?.error?.message ||
-              err.response?.data?.message ||
-              "로그인에 실패했습니다."
-          );
-        } else {
-          setError("로그인에 실패했습니다.");
-        }
+      } catch (error: unknown) {
+        console.error("Electron auth exchange failed:", error);
+        setError(getErrorMessage(error, "로그인에 실패했습니다."));
       }
     });
 
@@ -86,17 +78,9 @@ export const useElectronAuth = () => {
       } else {
         setError(result.message || "로그인 페이지를 열 수 없습니다.");
       }
-    } catch (err: unknown) {
-      console.error("Electron auth start failed:", err);
-      if (axios.isAxiosError(err)) {
-        setError(
-          err.response?.data?.error?.message ||
-            err.response?.data?.message ||
-            "로그인에 실패했습니다."
-        );
-      } else {
-        setError("로그인에 실패했습니다.");
-      }
+    } catch (error: unknown) {
+      console.error("Electron auth start failed:", error);
+      setError(getErrorMessage(error, "로그인에 실패했습니다."));
     } finally {
       setIsStarting(false);
     }
