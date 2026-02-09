@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useMyRivalsQuery } from "@/entities/competition/api/rival-competition/api/query/useMyRivals.query";
 import { useRivalListQuery } from "@/entities/home/api/query/useRivals.query";
 import {
@@ -77,29 +77,17 @@ export const useRival = () => {
 
   const [applyPayload, setApplyPayload] = useState<RivalApplyRequest | null>(null);
 
-  useEffect(() => {
+  const handleRivalCreate = async () => {
     if (!applyPayload) return;
 
-    const postApplyRival = async () => {
-      try {
-        await rivalsApi.postRivalApply(applyPayload);
-        handleClose();
-      } catch (e) {
-        console.error("Rival apply failed", e);
-      } finally {
-        setApplyPayload(null);
-      }
-    };
-
-    postApplyRival();
-  }, [applyPayload]);
-
-  const handleRivalCreate = () => {
-    const payload: RivalApplyRequest = {
-      ids: rivalSelectedId.map(id => ({ id })),
-    };
-
-    setApplyPayload(payload);
+    try {
+      await rivalsApi.postRivalApply(applyPayload);
+      handleClose();
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setApplyPayload(null);
+    }
   };
 
   return {
