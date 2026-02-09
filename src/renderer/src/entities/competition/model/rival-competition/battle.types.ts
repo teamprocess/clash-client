@@ -1,11 +1,13 @@
-export enum MatchValue {
-  WON = "WON",
-  LOST = "LOST",
-  WINNING = "WINNING",
-  LOSING = "LOSING",
-  DRAW = "DRAW",
-  PENDING = "PENDING",
-}
+export const MATCHVALUE = {
+  WON: "WON",
+  LOST: "LOST",
+  WINNING: "WINNING",
+  LOSING: "LOSING",
+  DRAW: "DRAW",
+  PENDING: "PENDING",
+} as const;
+
+export type MatchValueType = (typeof MATCHVALUE)[keyof typeof MATCHVALUE];
 
 type Enemy = {
   id: number;
@@ -17,7 +19,7 @@ type BattlesRequest = {
   id: number;
   enemy: Enemy;
   expireDate: string;
-  result: MatchValue;
+  result: MatchValueType;
 };
 
 export type BattleResponse = {
