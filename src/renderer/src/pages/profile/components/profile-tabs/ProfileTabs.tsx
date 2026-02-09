@@ -4,6 +4,7 @@ import { MenuTabs, TabKey } from "./menu-tabs/MenuTabs";
 import { GithubStreak } from "./github-streak/GithubStreak";
 import { GithubInfo } from "./github-info/GithubInfo";
 import { ItemPanel, ItemPreviewPayload } from "./item-panel/ItemPanel";
+import { TimePanel } from "./time-panel/TimePanel";
 
 type ProfileTabsProps = {
   onPreviewChange?: (payload: ItemPreviewPayload) => void;
@@ -26,7 +27,7 @@ export const ProfileTabs = ({ onPreviewChange }: ProfileTabsProps) => {
 
         {active === "item" && <ItemPanel onPreviewChange={onPreviewChange} />}
 
-        {active === "time" && <div />}
+        {active === "time" && <TimePanel />}
       </S.Background>
     </S.Banner>
   );
