@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import { recordApi, recordQueryKeys, type Task } from "@/entities/record";
-import { queryClient } from "@/shared/lib";
+import { getErrorMessage, queryClient } from "@/shared/lib";
 
 interface RecordStore {
   tasks: Task[];
@@ -41,8 +41,9 @@ export const useRecordStore = create<RecordStore>((set, get) => ({
       if (response.success) {
         set({ activeTaskId: taskId, startTime: Date.now(), currentStudyTime: 0 });
       }
-    } catch (error) {
-      console.error("기록 시작 실패:", error);
+    } catch (error: unknown) {
+      const errorMessage = getErrorMessage(error, "기록 시작에 실패했습니다.");
+      console.error("기록 시작 실패:", errorMessage, error);
     }
   },
 
@@ -61,8 +62,9 @@ export const useRecordStore = create<RecordStore>((set, get) => ({
           queryClient.invalidateQueries({ queryKey: recordQueryKeys.today }),
         ]);
       }
-    } catch (error) {
-      console.error("기록 중지 실패:", error);
+    } catch (error: unknown) {
+      const errorMessage = getErrorMessage(error, "기록 중지에 실패했습니다.");
+      console.error("기록 중지 실패:", errorMessage, error);
       set({ activeTaskId: null, startTime: null, currentStudyTime: 0 });
     }
   },
@@ -74,8 +76,9 @@ export const useRecordStore = create<RecordStore>((set, get) => ({
       if (response.success) {
         await queryClient.invalidateQueries({ queryKey: recordQueryKeys.tasks });
       }
-    } catch (error) {
-      console.error("과목 추가 실패:", error);
+    } catch (error: unknown) {
+      const errorMessage = getErrorMessage(error, "과목 추가에 실패했습니다.");
+      console.error("과목 추가 실패:", errorMessage, error);
     }
   },
 
@@ -88,8 +91,9 @@ export const useRecordStore = create<RecordStore>((set, get) => ({
           tasks: state.tasks.map(task => (task.id === taskId ? { ...task, name } : task)),
         }));
       }
-    } catch (error) {
-      console.error("과목 수정 실패:", error);
+    } catch (error: unknown) {
+      const errorMessage = getErrorMessage(error, "과목 수정에 실패했습니다.");
+      console.error("과목 수정 실패:", errorMessage, error);
     }
   },
 
@@ -107,8 +111,9 @@ export const useRecordStore = create<RecordStore>((set, get) => ({
       if (response.success) {
         set(state => ({ tasks: state.tasks.filter(task => task.id !== taskId) }));
       }
-    } catch (error) {
-      console.error("과목 삭제 실패:", error);
+    } catch (error: unknown) {
+      const errorMessage = getErrorMessage(error, "과목 삭제에 실패했습니다.");
+      console.error("과목 삭제 실패:", errorMessage, error);
     }
   },
 
