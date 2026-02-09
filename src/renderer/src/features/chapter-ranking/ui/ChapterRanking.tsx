@@ -3,7 +3,11 @@ import Profile from "../assets/profile.svg?url";
 import { useChapterRanking } from "@/features/chapter-ranking/model/useChapterRanking";
 import { RankingPageEnum } from "./ChapterRanking.style";
 
-export const ChapterRanking = ({ page }: { page: RankingPageEnum }) => {
+interface ChapterRankingProps {
+  page: RankingPageEnum;
+}
+
+export const ChapterRanking = ({ page }: ChapterRankingProps) => {
   const {
     isMyRankVisible,
     stickyPosition,
