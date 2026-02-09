@@ -4,7 +4,6 @@ import {
   useBattleDetailQuery,
   useAnalyzeBattleQuery,
   useBattleListQuery,
-  useCreateBattleMutation,
 } from "@/entities/competition/api/rival-competition/api/query/useBattle.query";
 
 import {
@@ -16,6 +15,7 @@ import {
   BattleListResponse,
   PeriodDay,
 } from "@/entities/competition/model/rival-competition/battle.types";
+import { battleApi } from "@/entities/competition/api/rival-competition/api/battleApi";
 
 const analyzeCategoryOptions = [
   { key: "EXP", label: "EXP" },
@@ -37,7 +37,6 @@ export const useBattle = () => {
   const { data: battleDetailRes } = useBattleDetailQuery(battleTargetId ?? 0);
   const { data: analyzeRes } = useAnalyzeBattleQuery(battleDetailRes?.data?.id ?? 0, category);
   const { data: battleListRes } = useBattleListQuery();
-  const createBattleMutation = useCreateBattleMutation();
 
   const battleData: BattleResponse | null = battleInfoRes?.data ?? null;
   const battleDetailData: BattleDetailResponse | null = battleDetailRes?.data ?? null;
@@ -116,11 +115,14 @@ export const useBattle = () => {
 
   const postBattle = async () => {
     if (!rivalSelectedId) return;
-
-    await createBattleMutation.mutateAsync({
-      id: rivalSelectedId,
-      duration,
-    });
+    try {
+      await battleApi.postCreateBattle({
+        id: rivalSelectedId,
+        duration,
+      });
+    } catch (error) {
+      console.error(error);
+    }
 
     closeModal();
   };
