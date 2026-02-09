@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { authApi } from "../api/authApi";
 
-export const useMyProfile = () => {
+export const useGetMyProfile = () => {
   return useQuery({
     queryKey: ["user"],
     queryFn: async () => {
