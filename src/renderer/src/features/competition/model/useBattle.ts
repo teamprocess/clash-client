@@ -4,7 +4,6 @@ import {
   useBattleDetailQuery,
   useAnalyzeBattleQuery,
   useBattleListQuery,
-  useCreateBattleMutation,
 } from "@/entities/competition/api/rival-competition/api/query/useBattle.query";
 
 import {
@@ -16,6 +15,7 @@ import {
   BattleListResponse,
   PeriodDay,
 } from "@/entities/competition/model/rival-competition/battle.types";
+import { battleApi } from "@/entities/competition/api/rival-competition/api/battleApi";
 
 const analyzeCategoryOptions = [
   { key: "EXP", label: "EXP" },
@@ -37,7 +37,6 @@ export const useBattle = () => {
   const { data: battleDetailRes } = useBattleDetailQuery(battleTargetId ?? 0);
   const { data: analyzeRes } = useAnalyzeBattleQuery(battleDetailRes?.data?.id ?? 0, category);
   const { data: battleListRes } = useBattleListQuery();
-  const createBattleMutation = useCreateBattleMutation();
 
   const battleData: BattleResponse | null = battleInfoRes?.data ?? null;
   const battleDetailData: BattleDetailResponse | null = battleDetailRes?.data ?? null;
@@ -114,13 +113,18 @@ export const useBattle = () => {
   const periodOptions: PeriodDay[] = [3, 5, 7];
   const [selectedDay, setSelectedDay] = useState<number | null>(null);
 
-  const postBattle = async () => {
+  const createBattle = async () => {
     if (!rivalSelectedId) return;
-
-    await createBattleMutation.mutateAsync({
-      id: rivalSelectedId,
-      duration,
-    });
+    try {
+      await battleApi.postCreateBattle({
+        id: rivalSelectedId,
+        duration,
+      });
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setRivalSelectedId(null);
+    }
 
     closeModal();
   };
@@ -133,45 +137,43 @@ export const useBattle = () => {
   };
 
   return {
-    battle: {
-      isModalOpen,
-      openModal,
-      closeModal,
-      duration,
-      setDuration,
-      periodOptions,
-      postBattle,
-      selectedDay,
-      setSelectedDay,
+    isModalOpen,
+    openModal,
+    closeModal,
+    duration,
+    setDuration,
+    periodOptions,
+    createBattle,
+    selectedDay,
+    setSelectedDay,
 
-      selectBattleTarget,
-      isBattleSelected,
+    selectBattleTarget,
+    isBattleSelected,
 
-      judgeUpperHand,
-      myPercent,
-      rivalPercent,
+    judgeUpperHand,
+    myPercent,
+    rivalPercent,
 
-      myAnalyzePoint,
-      rivalAnalyzePoint,
-      analyzeTotal,
-      myAnalyzeRate,
-      rivalAnalyzeRate,
-      diff,
-      isRivalHigher,
+    myAnalyzePoint,
+    rivalAnalyzePoint,
+    analyzeTotal,
+    myAnalyzeRate,
+    rivalAnalyzeRate,
+    diff,
+    isRivalHigher,
 
-      detailTextTranslate,
-      remainDays,
+    detailTextTranslate,
+    remainDays,
 
-      rivalSelectedId,
-      handleUserSelect,
+    rivalSelectedId,
+    handleUserSelect,
 
-      analyzeCategoryOptions,
-      setCategory,
-      category,
+    analyzeCategoryOptions,
+    setCategory,
+    category,
 
-      battleData,
-      battleDetailData,
-      battleList,
-    },
+    battleData,
+    battleDetailData,
+    battleList,
   };
 };

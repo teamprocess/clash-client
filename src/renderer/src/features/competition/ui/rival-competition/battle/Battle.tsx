@@ -1,13 +1,13 @@
 import * as S from "./Battle.style";
-import { useBattle } from "@/features/competition/model/useBattle";
 import { Modal } from "@/shared/ui/modal/Modal";
 import {
   AnalyzeCategory,
   MatchValue,
 } from "@/entities/competition/model/rival-competition/battle.types";
+import { useBattle } from "@/features/competition/model/useBattle";
 
 export const Battle = () => {
-  const { battle } = useBattle();
+  const battle = useBattle();
 
   return (
     <>
@@ -236,7 +236,7 @@ export const Battle = () => {
                 <S.CloseButton onClick={battle.closeModal}>취소</S.CloseButton>
                 <S.OkayButton
                   disabled={!battle.rivalSelectedId || !battle.duration}
-                  onClick={battle.postBattle}
+                  onClick={battle.createBattle}
                 >
                   배틀 신청
                 </S.OkayButton>
