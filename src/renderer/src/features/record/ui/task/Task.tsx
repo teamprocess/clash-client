@@ -1,7 +1,7 @@
 import * as S from "./Task.style";
-import { formatTime } from "@/shared/lib/formatTime";
+import { formatTime } from "@/shared/lib";
 import { useTaskList } from "../../model/useTaskList";
-import { Modal } from "@/shared/ui/modal/Modal";
+import { Button, ConfirmDialog, Popover } from "@/shared/ui";
 
 export const Task = () => {
   const {
@@ -17,6 +17,7 @@ export const Task = () => {
     setTaskName,
     handlePlayPauseClick,
     handleMoreClick,
+    handleCloseMenu,
     handleEditClick,
     handleDeleteRequest,
     handleAddClick,
@@ -48,12 +49,12 @@ export const Task = () => {
                   </S.TaskLeftBox>
                   <S.TaskRightBox>
                     <S.ButtonBox>
-                      <S.Button $type="CANCEL" onClick={handleCancelEdit}>
+                      <Button variant="secondary" size="sm" onClick={handleCancelEdit}>
                         취소
-                      </S.Button>
-                      <S.Button $type="SAVE" onClick={handleSaveTask}>
+                      </Button>
+                      <Button variant="primary" size="sm" onClick={handleSaveTask}>
                         저장
-                      </S.Button>
+                      </Button>
                     </S.ButtonBox>
                   </S.TaskRightBox>
                 </S.TaskItem>
@@ -74,14 +75,14 @@ export const Task = () => {
                     <S.IconButton onClick={() => handleMoreClick(task.id)}>
                       <S.MoreIcon />
                     </S.IconButton>
-                    {isMenuOpen && (
-                      <S.DropdownMenu>
+                    <Popover isOpen={isMenuOpen} onClose={handleCloseMenu} anchorRef={menuRef}>
+                      <S.MenuList>
                         <S.MenuItem onClick={() => handleEditClick(task.id)}>과목 수정</S.MenuItem>
                         <S.MenuItem onClick={() => handleDeleteRequest(task.id)}>
                           과목 삭제
                         </S.MenuItem>
-                      </S.DropdownMenu>
-                    )}
+                      </S.MenuList>
+                    </Popover>
                   </S.MoreIconWrapper>
                 </S.TaskRightBox>
               </S.TaskItem>
@@ -98,12 +99,12 @@ export const Task = () => {
               </S.TaskLeftBox>
               <S.TaskRightBox>
                 <S.ButtonBox>
-                  <S.Button $type="CANCEL" onClick={handleCancelEdit}>
+                  <Button variant="secondary" size="sm" onClick={handleCancelEdit}>
                     취소
-                  </S.Button>
-                  <S.Button $type="SAVE" onClick={handleSaveTask}>
+                  </Button>
+                  <Button variant="primary" size="sm" onClick={handleSaveTask}>
                     저장
-                  </S.Button>
+                  </Button>
                 </S.ButtonBox>
               </S.TaskRightBox>
             </S.TaskItem>
@@ -111,29 +112,16 @@ export const Task = () => {
         </S.TaskBox>
         <S.AddTaskButton onClick={handleAddClick}>+ 과목 추가</S.AddTaskButton>
       </S.TaskContainer>
-      <Modal
-        width={22}
-        height={13}
+      <ConfirmDialog
         isOpen={deleteTargetId !== null}
+        title="과목 삭제"
+        description="정말 해당 과목을 삭제하시겠습니까?"
+        confirmMessage="삭제 시 해당 과목의 데이터가 모두 삭제됩니다"
+        confirmLabel="삭제"
+        confirmVariant="danger"
         onClose={handleCancelDelete}
-        modalTitle="과목 삭제"
-        gap={3}
-      >
-        <S.ModalContent>
-          <S.TextBox>
-            <S.Text>정말 해당 과목을 삭제하시겠습니까?</S.Text>
-            <S.Text $type="WARNING">삭제 시 해당 과목의 데이터가 모두 삭제됩니다</S.Text>
-          </S.TextBox>
-          <S.ButtonBox>
-            <S.Button $type="CANCEL" onClick={handleCancelDelete}>
-              취소
-            </S.Button>
-            <S.Button $type="DELETE" onClick={handleConfirmDelete}>
-              삭제
-            </S.Button>
-          </S.ButtonBox>
-        </S.ModalContent>
-      </Modal>
+        onConfirm={handleConfirmDelete}
+      />
     </>
   );
 };

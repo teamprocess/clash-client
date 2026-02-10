@@ -5,10 +5,8 @@ import { palette } from "@/shared/config/theme";
 import VSCode from "../../assets/home/vscode.svg";
 import Profile from "../../assets/home/profile.svg";
 import Plus from "../../assets/home/plus.svg";
-import Search from "../../assets/home/search.svg";
 import Checked from "../../assets/home/check-box.svg";
 
-// Rival styles
 export const RivalContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -55,7 +53,7 @@ export const RivalBox = styled.div`
 `;
 
 // MyRivalUsers styles
-export const ProfileContainer = styled.div`
+export const ProfileContainer = styled.button`
   width: 100%;
   height: 100%;
   border-radius: 0.5rem;
@@ -111,7 +109,6 @@ export const ProfileBox = styled.div`
   align-items: center;
 `;
 
-// 상태
 type StatusProps = {
   $status: "ONLINE" | "AWAY" | "OFFLINE";
 };
@@ -218,19 +215,6 @@ export const SearchUsers = styled.input`
 `;
 
 export const PlusIcon = styled(Plus)``;
-export const SearchIconBox = styled.div`
-  color: ${({ theme }) => theme.label.neutral};
-`;
-
-export const SearchIcon = styled(Search)`
-  position: absolute;
-  right: 1rem;
-  top: 43%;
-  transform: translateY(-50%);
-  width: 1.85rem;
-  height: 1.85rem;
-  pointer-events: none;
-`;
 
 export const UserChoiceContainer = styled.div`
   display: flex;

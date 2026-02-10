@@ -1,43 +1,17 @@
-import React, { useRef, useState, useEffect } from "react";
-
-const rankingResponse = {
-  data: {
-    myRanking: {
-      rank: 12,
-      id: 12,
-      name: "배수아",
-      completedChapterCount: 78,
-    },
-    allRankers: [
-      { rank: 1, id: 1, name: "김민준", completedChapterCount: 100 },
-      { rank: 2, id: 2, name: "이서연", completedChapterCount: 98 },
-      { rank: 3, id: 3, name: "박지훈", completedChapterCount: 96 },
-      { rank: 4, id: 4, name: "최유진", completedChapterCount: 94 },
-      { rank: 5, id: 5, name: "정도현", completedChapterCount: 92 },
-      { rank: 6, id: 6, name: "한예린", completedChapterCount: 90 },
-      { rank: 7, id: 7, name: "오세훈", completedChapterCount: 88 },
-      { rank: 8, id: 8, name: "윤지우", completedChapterCount: 86 },
-      { rank: 9, id: 9, name: "장민수", completedChapterCount: 84 },
-      { rank: 10, id: 10, name: "서하늘", completedChapterCount: 82 },
-      { rank: 11, id: 11, name: "문준혁", completedChapterCount: 80 },
-      { rank: 12, id: 12, name: "배수아", completedChapterCount: 78 },
-      { rank: 13, id: 13, name: "신도윤", completedChapterCount: 76 },
-      { rank: 14, id: 14, name: "김예은", completedChapterCount: 74 },
-      { rank: 15, id: 15, name: "류현우", completedChapterCount: 72 },
-      { rank: 16, id: 16, name: "조하린", completedChapterCount: 70 },
-      { rank: 17, id: 17, name: "임재원", completedChapterCount: 68 },
-      { rank: 18, id: 18, name: "노아린", completedChapterCount: 66 },
-      { rank: 19, id: 19, name: "강도윤", completedChapterCount: 64 },
-      { rank: 20, id: 20, name: "백지민", completedChapterCount: 62 },
-    ],
-  },
-};
+import { useRef, useState, useEffect } from "react";
+import { useChapterRankingQuery } from "@/entities/roadmap/chapter/chapter-ranking/api/query/useChapterRanking.query";
+import type {
+  GetChapterRankingsResponse,
+  RankingUser,
+} from "@/entities/roadmap/chapter/chapter-ranking/model/chapterRanking.types";
 
 export const useChapterRanking = () => {
-  const [isMyRankVisible, setIsMyRankVisible] = React.useState(true);
+  const [isMyRankVisible, setIsMyRankVisible] = useState(true);
   const [stickyPosition, setStickyPosition] = useState<"top" | "bottom">("bottom");
   const myRankRef = useRef<HTMLDivElement>(null);
   const listRef = useRef<HTMLDivElement>(null);
+
+  const { data: rankingResponse, isLoading, error } = useChapterRankingQuery();
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -67,14 +41,36 @@ export const useChapterRanking = () => {
     return () => observer.disconnect();
   }, []);
 
-  const myData = rankingResponse.data.myRanking;
+  const computeRankers = (data?: GetChapterRankingsResponse | null) => {
+    if (!data) return { myData: undefined, allRankers: [] as RankingUser[] };
+
+    const myId = data.myRank?.id;
+    const base = data.allRankers ?? [];
+    const withMe = myId != null && base.some(u => u.id === myId) ? base : [...base, data.myRank];
+
+    const sorted = [...withMe].sort((a, b) => {
+      if (b.completedChaptersCount !== a.completedChaptersCount) {
+        return b.completedChaptersCount - a.completedChaptersCount;
+      }
+      return a.id - b.id; // 동점이면 userId 오름차순
+    });
+
+    const ranked = sorted.map((u, idx) => ({ ...u, rank: idx + 1 }));
+    const myData = myId != null ? ranked.find(u => u.id === myId) : undefined;
+    return { myData, allRankers: ranked };
+  };
+
+  const { myData, allRankers } = computeRankers(rankingResponse?.data);
 
   return {
     isMyRankVisible,
     stickyPosition,
     listRef,
     myData,
+    allRankers,
     rankingResponse,
     myRankRef,
+    isLoading,
+    error,
   };
 };

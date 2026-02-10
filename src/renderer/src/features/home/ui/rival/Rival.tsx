@@ -1,36 +1,31 @@
 import * as S from "./Rival.style";
-import { RivalProps } from "@/features/home/model/useHome"; // 전체 props
 import { MyRivalUsers } from "@/features/home/ui/rival/myrival-users/MyRivalUsers";
-import { Modal } from "@/shared/ui/modal/Modal";
+import { Dialog } from "@/shared/ui";
+import { Link } from "react-router-dom";
+import { useRival } from "@/features/home/model/useRival";
+import { SearchInput } from "@/shared/ui/search-input";
 
-export const Rival = ({
-  RivalsData,
-  getStatus,
-  modalOpen,
-  handleOpen,
-  handleClose,
-  userList,
-  rivalSelectedId,
-  handleUserSelect,
-  handleModalClose,
-  handleRivalCreate,
-}: RivalProps) => {
+export const Rival = () => {
+  const getRivalData = useRival();
+
   return (
     <S.RivalContainer>
       <S.TitleBox>
         <S.Title>내 라이벌</S.Title>
-        <S.ArrowBox onClick={handleOpen} style={{ cursor: "pointer" }}>
-          자세히보기
-          <S.DetailArrowIcon />
-        </S.ArrowBox>
+        <Link to="/competition">
+          <S.ArrowBox style={{ cursor: "pointer" }}>
+            자세히보기
+            <S.DetailArrowIcon />
+          </S.ArrowBox>
+        </Link>
       </S.TitleBox>
 
       <S.RivalBox>
-        {RivalsData.data.my_rivals.map(user => (
-          <MyRivalUsers key={user.username} user={user} getStatus={getStatus} />
+        {getRivalData.rivalsData?.myRivals.map(user => (
+          <MyRivalUsers key={user.username} user={user} getStatus={getRivalData.getStatus} />
         ))}
-        {RivalsData.data.my_rivals.length < 4 && (
-          <S.ProfileContainer onClick={handleOpen} style={{ cursor: "pointer" }}>
+        {(getRivalData.rivalsData?.myRivals.length ?? 0) < 4 && (
+          <S.ProfileContainer onClick={getRivalData.handleOpen} style={{ cursor: "pointer" }}>
             <S.AddRivalBox>
               <S.PlusIcon />
               <S.AddRivalText>버튼을 눌러 라이벌을 추가할 수 있어요.</S.AddRivalText>
@@ -39,38 +34,43 @@ export const Rival = ({
         )}
       </S.RivalBox>
 
-      {modalOpen && (
-        <Modal
-          modalTitle={"라이벌 추가"}
+      {getRivalData.modalOpen && (
+        <Dialog
+          title={"라이벌 추가"}
           width={21.625}
           height={25.175}
-          isOpen={modalOpen}
-          onClose={handleClose}
+          isOpen={getRivalData.modalOpen}
+          onClose={getRivalData.handleClose}
         >
           <div style={{ display: "flex", flexDirection: "column" }}>
             <div>
-              <S.SearchBox>
-                <S.SearchUsers placeholder={"이름 또는 아이디 검색"} />
-                <S.SearchIconBox>
-                  <S.SearchIcon />
-                </S.SearchIconBox>
-              </S.SearchBox>
+              <SearchInput
+                placeholder={"이름 또는 아이디 검색"}
+                inputSize={"md"}
+                variant={"light"}
+                fullWidth={true}
+                style={{ margin: "1rem 0" }}
+              />
               <S.UserChoiceContainer>
-                {userList.map(user => (
+                {getRivalData.userList?.users.map(user => (
                   <S.UserChoiceBox
-                    key={user.name}
-                    $isSelected={rivalSelectedId.includes(user.name)}
-                    onClick={() => handleUserSelect(user.name)}
+                    key={user.userId}
+                    $isSelected={getRivalData.rivalSelectedId.includes(user.userId)}
+                    onClick={() => getRivalData.handleUserSelect(user.userId)}
                   >
                     <S.ProfileContent style={{ height: "3rem" }}>
                       <S.ProfileIcon />
                       <S.ProfileTagBox>
-                        <S.ProfileName>{user.name}</S.ProfileName>
-                        <S.ProfileMention>@{user.mention}</S.ProfileMention>
+                        <S.ProfileName>{user.userName}</S.ProfileName>
+                        <S.ProfileMention>@{user.gitHubId}</S.ProfileMention>
                       </S.ProfileTagBox>
                     </S.ProfileContent>
 
-                    {rivalSelectedId.includes(user.name) ? <S.CheckedIcon /> : <S.UncheckedBox />}
+                    {getRivalData.rivalSelectedId.includes(user.userId) ? (
+                      <S.CheckedIcon />
+                    ) : (
+                      <S.UncheckedBox />
+                    )}
                   </S.UserChoiceBox>
                 ))}
               </S.UserChoiceContainer>
@@ -78,11 +78,11 @@ export const Rival = ({
           </div>
           <S.BottomBox>
             <S.ButtonBox>
-              <S.CloseButton onClick={handleModalClose}>취소</S.CloseButton>
-              <S.OkayButton onClick={handleRivalCreate}>확인</S.OkayButton>
+              <S.CloseButton onClick={getRivalData.handleModalClose}>취소</S.CloseButton>
+              <S.OkayButton onClick={getRivalData.handleRivalCreate}>확인</S.OkayButton>
             </S.ButtonBox>
           </S.BottomBox>
-        </Modal>
+        </Dialog>
       )}
     </S.RivalContainer>
   );

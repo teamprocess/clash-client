@@ -1,20 +1,11 @@
-import { useState, useRef } from "react";
-import { useRecord } from "./useRecord";
+import { useRef, useState } from "react";
+import { useRecordStore } from "./recordStore";
 
 type EditMode = "none" | "add" | "edit";
 
 export const useTaskList = () => {
-  const {
-    tasks,
-    activeTaskId,
-    startStudy,
-    stopStudy,
-    addTask,
-    updateTask,
-    deleteTask,
-    isTaskActive,
-    getTaskStudyTime,
-  } = useRecord();
+  const { tasks, activeTaskId, currentStudyTime, start, stop, addTask, updateTask, deleteTask } =
+    useRecordStore();
 
   const [editMode, setEditMode] = useState<EditMode>("none");
   const [editingTaskId, setEditingTaskId] = useState<number | null>(null);
@@ -24,11 +15,11 @@ export const useTaskList = () => {
 
   const menuRef = useRef<HTMLDivElement>(null);
 
-  const handlePlayPauseClick = (taskId: number) => {
+  const handlePlayPauseClick = async (taskId: number) => {
     if (activeTaskId === taskId) {
-      stopStudy();
+      await stop();
     } else {
-      startStudy(taskId);
+      await start(taskId);
     }
   };
 
@@ -51,19 +42,23 @@ export const useTaskList = () => {
     setOpenMenuTaskId(prev => (prev === taskId ? null : taskId));
   };
 
+  const handleCloseMenu = () => {
+    setOpenMenuTaskId(null);
+  };
+
   const handleCancelEdit = () => {
     setEditMode("none");
     setEditingTaskId(null);
     setTaskName("");
   };
 
-  const handleSaveTask = () => {
+  const handleSaveTask = async () => {
     if (!taskName.trim()) return;
 
     if (editMode === "add") {
-      addTask(taskName);
+      await addTask(taskName);
     } else if (editMode === "edit" && editingTaskId !== null) {
-      updateTask(editingTaskId, taskName);
+      await updateTask(editingTaskId, taskName);
     }
 
     handleCancelEdit();
@@ -78,11 +73,19 @@ export const useTaskList = () => {
     setDeleteTargetId(null);
   };
 
-  const handleConfirmDelete = () => {
+  const handleConfirmDelete = async () => {
     if (deleteTargetId !== null) {
-      deleteTask(deleteTargetId);
+      await deleteTask(deleteTargetId);
       setDeleteTargetId(null);
     }
+  };
+
+  const isTaskActive = (taskId: number) => activeTaskId === taskId;
+
+  const getTaskStudyTime = (taskId: number) => {
+    const task = tasks.find(item => item.id === taskId);
+    if (!task) return 0;
+    return activeTaskId === taskId ? task.studyTime + currentStudyTime : task.studyTime;
   };
 
   return {
@@ -98,6 +101,7 @@ export const useTaskList = () => {
     setTaskName,
     handlePlayPauseClick,
     handleMoreClick,
+    handleCloseMenu,
     handleEditClick,
     handleDeleteRequest,
     handleAddClick,

@@ -4,12 +4,9 @@ import { useNavigate } from "react-router-dom";
 import { SectionProgress } from "@/features/section-progress";
 import { useEffect, useState } from "react";
 import { PreviewModal } from "@/features/section/components/PreviewModal";
-import { sectionApi } from "@/entities/roadmap/section/api/sectionApi";
-import {
-  getAllSectionsResponse,
-  MajorEnum,
-  section,
-} from "@/entities/roadmap/section/model/section.types";
+import { useMajorSectionQuery } from "@/entities/roadmap/section/api/query/useMajorSection.query";
+import { MajorEnum, section } from "@/entities/roadmap/section/model/section.types";
+import { useGetMyProfile } from "@/entities/user";
 
 export const Section = () => {
   const navigate = useNavigate();
@@ -17,8 +14,10 @@ export const Section = () => {
   const [isTutorialModalOpen, setIsTutorialModalOpen] = useState(false);
   const [selectedSectionId, setSelectedSectionId] = useState<number | null>(null);
   const [isSelectedSectionLocked, setIsSelectedSectionLocked] = useState(false);
-
-  const [sectionData, setSectionData] = useState<getAllSectionsResponse | null>();
+  const { data: myProfile } = useGetMyProfile();
+  const major = myProfile?.major as MajorEnum | undefined;
+  const { data: sectionResponse } = useMajorSectionQuery(major);
+  const sectionData = sectionResponse?.data ?? undefined;
 
   const handleClick = (item: section) => {
     setSelectedSectionId(+item.id);
@@ -36,16 +35,9 @@ export const Section = () => {
     }
   };
 
-  const fetchData = async () => {
-    const myProfile = await sectionApi.getMyProfile();
-    const myMajor = myProfile.data?.major as MajorEnum;
-    const section = await sectionApi.getMajorSection({ major: myMajor });
-    return section.data;
-  };
-
   useEffect(() => {
-    fetchData().then(data => setSectionData(data));
-  }, []);
+    if (major == MajorEnum.NONE) navigate("/roadmap/major-choice");
+  }, [major, navigate]);
 
   return (
     <S.RoadmapContainer>
@@ -56,12 +48,9 @@ export const Section = () => {
               {sectionData.sections
                 .filter(item => item.category === category)
                 .map(item => (
-                  <S.SectionItem
-                    key={item.id}
-                    onClick={() => handleClick(item)}
-                    style={{ opacity: item.locked ? 0.5 : 1 }}
-                  >
-                    <S.SectionIconWrapper>
+                  <S.SectionItem key={item.id} style={{ opacity: item.locked ? 0.5 : 1 }}>
+                    <S.SectionIconWrapper onClick={() => handleClick(item)}>
+                      {/*서버로부터 사진 연결 전 임시로 null*/}
                       <S.SectionIcon src={"null"} />
                       {item.completed && <S.SectionComplete />}
                       {item.locked && <S.SectionLock />}

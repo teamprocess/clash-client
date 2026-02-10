@@ -1,16 +1,20 @@
-import { useState, useMemo, useEffect } from "react";
-import { battleApi } from "@/entities/competition/api/rival-competition/battleApi";
+import { useState, useMemo } from "react";
 import {
+  battleApi,
+  useBattleInfoQuery,
+  useBattleDetailQuery,
+  useAnalyzeBattleQuery,
+  useBattleListQuery,
   BattleResponse,
   BattleDetailResponse,
-  MatchValue,
   AnalyzeBattleResponse,
   AnalyzeCategory,
   BattleListResponse,
   PeriodDay,
-} from "@/entities/competition/model/rival-competition/battle.types";
+  MATCHVALUE,
+} from "@/entities/competition";
+import { getErrorMessage } from "@/shared/lib";
 
-// category 드롭다운
 const analyzeCategoryOptions = [
   { key: "EXP", label: "EXP" },
   { key: "GITHUB", label: "Github" },
@@ -19,105 +23,59 @@ const analyzeCategoryOptions = [
 
 export const useBattle = () => {
   const [battleTargetId, setBattleTargetId] = useState<number | null>(null);
-
   const [isBattleSelected, setIsBattleSelected] = useState(false);
+  const [category, setCategory] = useState<AnalyzeCategory>("EXP");
 
   const selectBattleTarget = (id: number) => {
     setBattleTargetId(id);
     setIsBattleSelected(true);
   };
 
-  const [battleData, setBattleData] = useState<BattleResponse | null>(null);
-  const [battleDetailData, setBattleDetailData] = useState<BattleDetailResponse | null>(null);
+  const { data: battleInfoRes } = useBattleInfoQuery();
+  const { data: battleDetailRes } = useBattleDetailQuery(battleTargetId ?? 0);
+  const { data: analyzeRes } = useAnalyzeBattleQuery(battleDetailRes?.data?.id ?? 0, category);
+  const { data: battleListRes } = useBattleListQuery();
 
-  useEffect(() => {
-    const fetchBattle = async () => {
-      try {
-        const response = await battleApi.getBattleInfo();
-        if (!response.data) return;
-        setBattleData(response.data);
-      } catch (error) {
-        console.error("배틀 정보 조회 실패:", error);
-      }
-    };
+  const battleData: BattleResponse | null = battleInfoRes?.data ?? null;
+  const battleDetailData: BattleDetailResponse | null = battleDetailRes?.data ?? null;
+  const analyzeData: AnalyzeBattleResponse | null = analyzeRes?.data ?? null;
+  const battleList: BattleListResponse | null = battleListRes?.data ?? null;
 
-    fetchBattle();
-  }, []);
-
-  const [analyzeData, setAnalyzeData] = useState<AnalyzeBattleResponse | null>(null);
-  const [category, setCategory] = useState<AnalyzeCategory>("EXP");
-
-  useEffect(() => {
-    const fetchBattleDetail = async () => {
-      if (!battleTargetId) {
-        setBattleDetailData(null);
-        return;
-      }
-
-      try {
-        const response = await battleApi.getBattleDetailInfo(battleTargetId);
-        if (!response.data) return;
-        setBattleDetailData(response.data);
-      } catch (error) {
-        console.error("배틀 상세 정보 조회 실패:", error);
-      }
-    };
-
-    fetchBattleDetail();
-  }, [battleTargetId]);
-
-  useEffect(() => {
-    if (!battleDetailData) return;
-
-    const fetchAnalyzeData = async () => {
-      try {
-        const response = await battleApi.getAnalyzeBattleData({
-          id: battleDetailData.id,
-          category,
-        });
-
-        if (!response.data) return;
-
-        setAnalyzeData(response.data);
-        console.log(response.data);
-      } catch (error) {
-        console.error("배틀 분석 정보 조회 실패:", error);
-      }
-    };
-
-    fetchAnalyzeData();
-  }, [battleDetailData, category]);
-
-  // 나의 성장세 값이 없을 때, 50으로 반환
-  // 전체적인 성장세의 수치값
   const myPercent = battleDetailData?.myOverallPercentage ?? 50;
   const rivalPercent = 100 - myPercent;
 
   const judgeUpperHand = (result: string) => {
-    if (result == MatchValue.LOSING) return "우세";
-    if (result == MatchValue.WINNING) return "열세";
-    if (result == MatchValue.LOST) return "패배";
-    if (result == MatchValue.WON) return "승리";
-    if (result == MatchValue.DRAW) return "무승부";
+    if (result === MATCHVALUE.LOSING) return "우세";
+    if (result === MATCHVALUE.WINNING) return "열세";
+    if (result === MATCHVALUE.LOST) return "패배";
+    if (result === MATCHVALUE.WON) return "승리";
+    if (result === MATCHVALUE.DRAW) return "무승부";
     return "동률";
   };
 
-  // 각 category별 헤딩하는 성장도 수치
-  const myAnalyzePercent = useMemo(() => {
+  const myAnalyzePoint = useMemo(() => {
     if (!analyzeData) return 0;
     return analyzeData.myPoint;
   }, [analyzeData]);
 
-  const rivalAnalyzePercent = useMemo(() => {
+  const rivalAnalyzePoint = useMemo(() => {
     if (!analyzeData) return 0;
     return analyzeData.enemyPoint;
   }, [analyzeData]);
 
-  const analyzeRate = myAnalyzePercent + rivalAnalyzePercent;
+  const analyzeTotal = myAnalyzePoint + rivalAnalyzePoint;
 
-  // 각 category별 헤딩하는 성장도 수치를 계산해서 나오는 상대(나)와의 차이값
-  const diff = Math.abs(rivalAnalyzePercent - myAnalyzePercent);
-  const isRivalHigher = rivalAnalyzePercent > myAnalyzePercent;
+  const myAnalyzeRate = analyzeTotal > 0 ? (myAnalyzePoint / analyzeTotal) * 100 : null;
+
+  const rivalAnalyzeRate = analyzeTotal > 0 ? (rivalAnalyzePoint / analyzeTotal) * 100 : null;
+
+  const diff =
+    myAnalyzeRate !== null && rivalAnalyzeRate !== null
+      ? Math.abs(rivalAnalyzeRate - myAnalyzeRate)
+      : null;
+
+  const isRivalHigher =
+    myAnalyzeRate !== null && rivalAnalyzeRate !== null ? rivalAnalyzeRate > myAnalyzeRate : false;
 
   const [rivalSelectedId, setRivalSelectedId] = useState<number | null>(null);
 
@@ -126,69 +84,49 @@ export const useBattle = () => {
   };
 
   const detailTextTranslate = (category: AnalyzeCategory) => {
-    if (category == "GITHUB") return "Contributes";
-    if (category == "ACTIVE_TIME") return;
+    if (category === "GITHUB") return "Contributes";
+    if (category === "ACTIVE_TIME") return "Time";
     return "EXP";
   };
 
-  // 오늘부터 해당날짜까지 몇일 남았는지 표기하는 함수
-  const getRemainDays = targetDate => {
+  const getRemainDays = (targetDate?: string) => {
+    if (!targetDate) return null;
+
     const today = new Date();
     const target = new Date(targetDate);
-
-    // 시간을 00:00:00으로 설정
     today.setHours(0, 0, 0, 0);
     target.setHours(0, 0, 0, 0);
 
-    // 밀리초 단위 차이 계산
     const diffTime = target.getTime() - today.getTime();
 
-    // 밀리초 → 일(day) 단위 변환
     return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
   };
 
   const remainDays = getRemainDays(battleDetailData?.expireDate);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [battleList, setBattleList] = useState<BattleListResponse | null>(null);
-
-  const openModal = () => {
-    setIsModalOpen(true);
-  };
-
-  useEffect(() => {
-    if (!isModalOpen) return;
-
-    const fetchBattleList = async () => {
-      try {
-        const response = await battleApi.getBattleList();
-        if (!response.data) return;
-        setBattleList(response.data);
-      } catch (error) {
-        console.error("배틀 정보 조회 실패:", error);
-      }
-    };
-
-    fetchBattleList();
-  }, [isModalOpen]);
+  const openModal = () => setIsModalOpen(true);
 
   const [duration, setDuration] = useState<PeriodDay>(3);
+  const periodOptions: PeriodDay[] = [3, 5, 7];
+  const [selectedDay, setSelectedDay] = useState<number | null>(null);
 
-  const postBattle = async () => {
+  const createBattle = async () => {
+    if (!rivalSelectedId) return;
     try {
-      const response = await battleApi.postCreateBattle({ id: rivalSelectedId, duration });
-      if (!response.data) return;
-      closeModal();
-    } catch (error) {
-      console.error("배틀 정보 조회 실패:", error);
+      await battleApi.postCreateBattle({
+        id: rivalSelectedId,
+        duration,
+      });
+    } catch (error: unknown) {
+      const errorMessage = getErrorMessage(error, "배틀 신청 중 오류가 발생했습니다.");
+      console.error("배틀 신청 실패", errorMessage, error);
+    } finally {
+      setRivalSelectedId(null);
     }
 
-    postBattle();
+    closeModal();
   };
-
-  const periodOptions: PeriodDay[] = [3, 5, 7];
-
-  const [selectedDay, setSelectedDay] = useState<number | null>(null);
 
   const closeModal = () => {
     setIsModalOpen(false);
@@ -198,47 +136,43 @@ export const useBattle = () => {
   };
 
   return {
-    battle: {
-      // modal
-      isModalOpen,
-      openModal,
-      closeModal,
-      duration,
-      setDuration,
-      periodOptions,
-      postBattle,
-      selectedDay,
-      setSelectedDay,
+    isModalOpen,
+    openModal,
+    closeModal,
+    duration,
+    setDuration,
+    periodOptions,
+    createBattle,
+    selectedDay,
+    setSelectedDay,
 
-      // target
-      selectBattleTarget,
-      isBattleSelected,
+    selectBattleTarget,
+    isBattleSelected,
 
-      // compare
-      judgeUpperHand,
-      myPercent,
-      rivalPercent,
-      myAnalyzePercent,
-      rivalAnalyzePercent,
-      analyzeRate,
-      diff,
-      isRivalHigher,
-      detailTextTranslate,
-      remainDays,
+    judgeUpperHand,
+    myPercent,
+    rivalPercent,
 
-      // modal select
-      rivalSelectedId,
-      handleUserSelect,
+    myAnalyzePoint,
+    rivalAnalyzePoint,
+    analyzeTotal,
+    myAnalyzeRate,
+    rivalAnalyzeRate,
+    diff,
+    isRivalHigher,
 
-      // dropdown
-      analyzeCategoryOptions,
-      setCategory,
-      category,
+    detailTextTranslate,
+    remainDays,
 
-      // API data
-      battleData,
-      battleDetailData,
-      battleList,
-    },
+    rivalSelectedId,
+    handleUserSelect,
+
+    analyzeCategoryOptions,
+    setCategory,
+    category,
+
+    battleData,
+    battleDetailData,
+    battleList,
   };
 };

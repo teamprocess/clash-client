@@ -1,6 +1,7 @@
 import * as S from "./MyRivals.style";
-import { getStatus, UserStatus } from "@/features/home/model/useHome";
+import { UserStatus, getStatus } from "@/features/competition/model/useMyRivals";
 import { useMyRivals } from "@/features/competition/model/useMyRivals";
+import { formatTime } from "@/shared/lib";
 
 export const MyRivals = () => {
   const { myRivals } = useMyRivals();
@@ -32,7 +33,7 @@ export const MyRivals = () => {
                     <S.Point>·</S.Point>
                   </>
                 )}
-                {user.activeTime}
+                {formatTime(Number(user.activeTime))}
               </S.PlayTime>
             </S.ProfileContainer>
           ))}

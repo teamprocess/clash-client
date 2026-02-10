@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import type { LayoutVariant } from "./MainLayout.types";
 
 export const LayoutContainer = styled.div`
   display: flex;
@@ -12,11 +13,10 @@ export const ContentWrapper = styled.div`
   flex: 1;
 `;
 
-export const MainContent = styled.main<{ $isScrollAble: boolean; $isFixed: boolean }>`
+export const MainContent = styled.main<{ $variant: LayoutVariant }>`
   flex: 1;
-  padding: ${({ $isScrollAble, $isFixed }) =>
-    $isScrollAble || $isFixed ? "2.5rem 2.5rem 0 2.5rem" : "2.5rem"};
-  overflow: ${({ $isFixed }) => ($isFixed ? "hidden" : "auto")};
+  padding: ${({ $variant }) => ($variant === "default" ? "2.5rem" : "2.5rem 2.5rem 0 2.5rem")};
+  overflow: ${({ $variant }) => ($variant === "fixed" ? "hidden" : "auto")};
   background-color: ${({ theme }) => theme.background.alternative};
 
   &::-webkit-scrollbar {

@@ -1,59 +1,61 @@
-export enum MatchValue {
-  WON = "WON",
-  LOST = "LOST",
-  WINNING = "WINNING",
-  LOSING = "LOSING",
-  DRAW = "DRAW",
-  PENDING = "PENDING",
-}
+export const MATCHVALUE = {
+  WON: "WON",
+  LOST: "LOST",
+  WINNING: "WINNING",
+  LOSING: "LOSING",
+  DRAW: "DRAW",
+  PENDING: "PENDING",
+} as const;
 
-interface Enemy {
+export type MatchValueType = (typeof MATCHVALUE)[keyof typeof MATCHVALUE];
+
+type Enemy = {
   id: number;
   name: string;
   profileImage: string;
-}
+};
 
-interface BattlesRequest {
+type BattlesRequest = {
   id: number;
   enemy: Enemy;
   expireDate: string;
-  result: MatchValue;
-}
+  result: MatchValueType;
+};
 
-export interface BattleResponse {
+export type BattleResponse = {
   battles: BattlesRequest[];
-}
+};
 
-export interface BattleDetailResponse {
+export type BattleDetailResponse = {
   id: number;
   enemy: Enemy;
   expireDate: string;
   myOverallPercentage: number;
-}
+};
 
 export type AnalyzeCategory = "EXP" | "GITHUB" | "ACTIVE_TIME";
 
-export interface AnalyzeBattleRequest {
+export type AnalyzeBattleRequest = {
   id: number;
   category: AnalyzeCategory;
-}
+};
 
-export interface AnalyzeBattleResponse {
+export type AnalyzeBattleResponse = {
   category: AnalyzeCategory;
   id: number;
   enemyPoint: number;
   myPoint: number;
-}
+};
 
-interface BattleListRequest {
+type BattleListRequest = {
   id: number;
   name: string;
   profileImage: string;
-}
+};
 
-export interface BattleListResponse {
+export type BattleListResponse = {
   rivals: BattleListRequest[];
-}
+};
 
 export type PeriodDay = 3 | 5 | 7;
 

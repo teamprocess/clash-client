@@ -1,9 +1,13 @@
 export { authApi } from "./api/authApi";
 export type {
-  SignInRequest,
-  SignInResponse,
+  ElectronAuthStartResponse,
+  ElectronAuthStartSignupResponse,
+  ElectronAuthExchangeRequest,
+  ElectronAuthExchangeResponse,
   SignUpRequest,
   EmailVerifyRequest,
   UsernameDuplicateCheckRequest,
   UsernameDuplicateCheckResponse,
+  getMyProfileResponse,
 } from "./api/authApi";
+export { useGetMyProfile } from "./model/useGetMyProfile";

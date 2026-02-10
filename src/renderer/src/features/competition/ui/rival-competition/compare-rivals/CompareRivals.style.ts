@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { font } from "@/shared/config/font";
-import Arrow from "@/features/home/assets/home/arrow.svg";
+import Arrow from "@/shared/ui/assets/arrow.svg";
 
 export const GaroLine = styled.div`
   width: 100%;
@@ -43,7 +43,6 @@ export const ArrowIcon = styled(Arrow)`
   height: 0.75rem;
 `;
 
-//드랍다운
 export const Select = styled.select`
   ${font.body.regular};
   width: 7.5rem;
@@ -63,7 +62,6 @@ export const Select = styled.select`
   }
 `;
 
-// 작동안되는 option 메소드 (브라우저에서 방해)
 export const Option = styled.option`
   ${font.body.regular};
   background-color: ${({ theme }) => theme.line.neutral};
@@ -75,6 +73,8 @@ export const RivalCompareWrapper = styled.div`
   align-items: center;
   justify-content: center;
   gap: 0.75rem;
+  height: 100%;
+  max-height: 21rem;
 `;
 
 export const DropDownBox = styled.div`
@@ -84,47 +84,7 @@ export const DropDownBox = styled.div`
   gap: 0.75rem;
 `;
 
-export const GraphBox = styled.div`
-  padding: 1rem 1rem;
-  height: 18rem;
+export const ChartWrapper = styled.div`
   width: 100%;
-  display: flex;
-  align-items: flex-end;
-  background-color: ${({ theme }) => theme.background.alternative};
-  border-radius: 0.5rem;
-  position: relative;
-`;
-
-export const Svg = styled.svg`
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  inset: 0;
-`;
-
-export const LineGroup = styled.g``;
-
-export const LinePath = styled.path<{ $isMe?: boolean }>`
-  fill: none;
-  stroke-width: ${({ $isMe }) => ($isMe ? 0.5 : 0.5)};
-  opacity: ${({ $isMe }) => ($isMe ? 1 : 1)};
-  transition: 0.2s;
-`;
-
-export const Dot = styled.circle<{ $isMe?: boolean }>`
-  r: ${({ $isMe }) => ($isMe ? 2.5 : 2.5)};
-  cursor: pointer;
-`;
-
-export const ScrollArea = styled.div`
-  width: 100%;
-  overflow-x: auto;
-  overflow-y: hidden;
-  -webkit-overflow-scrolling: touch;
-`;
-
-export const GraphInner = styled.div`
-  width: max-content;
-  min-width: 100%;
-  padding-bottom: 0.5rem;
+  flex: 1;
 `;
