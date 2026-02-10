@@ -3,7 +3,7 @@ import { MyRivalUsers } from "@/features/home/ui/rival/myrival-users/MyRivalUser
 import { Modal } from "@/shared/ui/modal/Modal";
 import { Link } from "react-router-dom";
 import { useRival } from "@/features/home/model/useRival";
-import { SearchInput } from "@/shared/ui/search-input/SearchInput";
+import { SearchInput } from "@/shared/ui/search-input";
 
 export const Rival = () => {
   const getRivalData = useRival();
