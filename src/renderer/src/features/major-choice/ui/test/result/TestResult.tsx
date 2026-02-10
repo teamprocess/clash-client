@@ -1,5 +1,6 @@
 import * as S from "./TestResult.style";
 import { ResultProps } from "@/features/major-choice/model/useMajorChoice";
+import { Button } from "@/shared/ui/button";
 
 const majorIcons = {
   Web: S.WebIcon,
@@ -30,12 +31,12 @@ export const TestResult = ({ analyzedMajor, username, setStep }: ResultProps) =>
         </S.ResultCard>
 
         <S.ButtonGroup>
-          <S.Button $buttonType="retry" onClick={() => setStep("TEST")}>
+          <Button variant="secondary" size="lg" onClick={() => setStep("TEST")}>
             다시 검사하기
-          </S.Button>
-          <S.Button $buttonType="start" onClick={() => setStep("CHOICE")}>
+          </Button>
+          <Button variant="primary" size="lg" onClick={() => setStep("CHOICE")}>
             전공 선택하기
-          </S.Button>
+          </Button>
         </S.ButtonGroup>
       </S.ResultContents>
     </S.ResultContainer>
