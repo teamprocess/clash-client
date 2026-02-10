@@ -42,6 +42,10 @@ export const useTaskList = () => {
     setOpenMenuTaskId(prev => (prev === taskId ? null : taskId));
   };
 
+  const handleCloseMenu = () => {
+    setOpenMenuTaskId(null);
+  };
+
   const handleCancelEdit = () => {
     setEditMode("none");
     setEditingTaskId(null);
@@ -97,6 +101,7 @@ export const useTaskList = () => {
     setTaskName,
     handlePlayPauseClick,
     handleMoreClick,
+    handleCloseMenu,
     handleEditClick,
     handleDeleteRequest,
     handleAddClick,

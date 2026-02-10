@@ -1,5 +1,5 @@
 import * as S from "./QuizModal.style";
-import { Modal } from "@/shared/ui/modal/Modal";
+import { Dialog } from "@/shared/ui";
 import type { Mission } from "@/features/chapter/model/chapter.types";
 import { QuizResult } from "@/features/chapter/components/QuizResult";
 import { useQuiz } from "../model/useQuiz";
@@ -37,7 +37,7 @@ export const QuizModal = ({
 
   if (state.view === "final") {
     return (
-      <Modal width={25} height={34} isOpen={isOpen} onClose={handleClose} gap={6.5}>
+      <Dialog width={25} height={34} isOpen={isOpen} onClose={handleClose} gap={6.5}>
         <QuizResult
           isFinal
           isPassed={state.correctCount >= 4}
@@ -46,13 +46,13 @@ export const QuizModal = ({
           onRestart={resetState}
           onClose={handleClose}
         />
-      </Modal>
+      </Dialog>
     );
   }
 
   if (state.view === "result") {
     return (
-      <Modal width={25} height={34} isOpen={isOpen} onClose={handleClose} gap={3}>
+      <Dialog width={25} height={34} isOpen={isOpen} onClose={handleClose} gap={3}>
         <QuizResult
           isFinal={false}
           isCorrect={state.lastResult === true}
@@ -61,12 +61,12 @@ export const QuizModal = ({
           explanation={state.explanation}
           onNext={handleNextOrClose}
         />
-      </Modal>
+      </Dialog>
     );
   }
 
   return (
-    <Modal width={25} height={34} isOpen={isOpen} onClose={handleClose} gap={3}>
+    <Dialog width={25} height={34} isOpen={isOpen} onClose={handleClose} gap={3}>
       <S.ModalTop>
         <S.ProgressBarWrapper>
           <S.BarBackground>
@@ -101,6 +101,6 @@ export const QuizModal = ({
           <S.ConfirmButton onClick={handleConfirm}>선택 완료하기</S.ConfirmButton>
         </S.ButtonGroup>
       </S.ModalBody>
-    </Modal>
+    </Dialog>
   );
 };

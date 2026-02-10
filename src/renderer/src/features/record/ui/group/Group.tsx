@@ -4,6 +4,7 @@ import { type Group as GroupEntity, useMyGroupsQuery } from "@/entities/group";
 import { useGetMyProfile } from "@/entities/user";
 import { useGroup } from "../../model/useGroup";
 import { formatTime } from "@/shared/lib";
+import { Popover } from "@/shared/ui";
 import { GroupDeleteModal } from "./modal/GroupDeleteModal";
 import { GroupEditModal } from "./modal/GroupEditModal";
 import { GroupFormModal } from "./modal/GroupFormModal";
@@ -21,6 +22,7 @@ export const Group = () => {
     menuRef,
     isMenuOpen,
     handleMoreClick,
+    handleCloseMenu,
     handleOpenFormModal,
     handleEditGroupRequest,
     handleDeleteGroupRequest,
@@ -98,8 +100,8 @@ export const Group = () => {
                   <S.IconButton onClick={() => handleMoreClick()}>
                     <S.MoreIcon />
                   </S.IconButton>
-                  {isMenuOpen && (
-                    <S.DropdownMenu>
+                  <Popover isOpen={isMenuOpen} onClose={handleCloseMenu} anchorRef={menuRef}>
+                    <S.MenuList>
                       {isOwner ? (
                         <>
                           <S.MenuItem onClick={handleEditGroupRequest}>그룹 수정</S.MenuItem>
@@ -112,8 +114,8 @@ export const Group = () => {
                           그룹 탈퇴
                         </S.MenuItem>
                       )}
-                    </S.DropdownMenu>
-                  )}
+                    </S.MenuList>
+                  </Popover>
                 </S.MoreIconWrapper>
               )}
             </S.GroupNameBox>

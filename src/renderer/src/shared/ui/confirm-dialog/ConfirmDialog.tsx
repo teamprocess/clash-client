@@ -1,4 +1,4 @@
-import { Modal } from "@/shared/ui/modal/Modal";
+import { Dialog } from "@/shared/ui";
 import type { ButtonVariant } from "@/shared/ui/button";
 import { Button } from "@/shared/ui/button";
 import * as S from "./ConfirmDialog.style";
@@ -29,7 +29,7 @@ export const ConfirmDialog = ({
   onConfirm,
 }: ConfirmDialogProps) => {
   return (
-    <Modal width={23} height={13} isOpen={isOpen} onClose={onClose} modalTitle={title} gap={3}>
+    <Dialog width={23} height={13} isOpen={isOpen} onClose={onClose} title={title} gap={3}>
       <S.Content>
         <S.MessageBox>
           <S.Description>{description}</S.Description>
@@ -44,6 +44,6 @@ export const ConfirmDialog = ({
           </Button>
         </S.ActionBox>
       </S.Content>
-    </Modal>
+    </Dialog>
   );
 };
