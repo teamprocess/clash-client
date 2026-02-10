@@ -52,7 +52,7 @@ export const PreviewModalDescription = styled.p`
   color: ${({ theme }) => theme.label.assistive};
 `;
 
-export const PreviewModalAction = styled.div<{ $locked?: boolean }>`
+export const PreviewModalAction = styled.button<{ $locked?: boolean }>`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -270,7 +270,7 @@ export const RoadmapDescriptionBox = styled.div`
   border-radius: 0.75rem;
 `;
 
-export const RoadmapNumberBox = styled.div`
+export const RoadmapNumberBox = styled.button`
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -392,7 +392,7 @@ export const TargetItemText = styled.span`
   color: ${({ theme }) => theme.label.assistive};
 `;
 
-export const ArrowButton = styled.div<{ $disabled: boolean }>`
+export const ArrowButton = styled.button<{ $disabled: boolean }>`
   display: flex;
   align-items: center;
   justify-content: center;
