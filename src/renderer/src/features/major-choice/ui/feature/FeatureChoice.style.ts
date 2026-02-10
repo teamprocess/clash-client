@@ -1,6 +1,16 @@
 import styled from "styled-components";
 import { palette } from "@/shared/config/theme";
 import { font } from "@/shared/config/font";
+import Test from "@/features/major-choice/assets/test.svg";
+import Choice from "@/features/major-choice/assets/choice.svg";
+
+export const TestIcon = styled(Test)`
+  width: 5rem;
+`;
+
+export const ChoiceIcon = styled(Choice)`
+  width: 5rem;
+`;
 
 export const RoadMapContainer = styled.div`
   display: flex;

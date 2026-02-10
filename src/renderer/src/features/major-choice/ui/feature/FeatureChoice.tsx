@@ -1,7 +1,5 @@
 import * as S from "./FeatureChoice.style";
 import { FeatureProps } from "@/features/major-choice/model/useMajorChoice";
-import TestIcon from "@/features/major-choice/assets/test.svg";
-import ChoiceIcon from "@/features/major-choice/assets/choice.svg";
 import { ChoiceBox } from "../choice-box/ChoiceBox";
 
 export const FeatureChoice = ({
@@ -29,14 +27,14 @@ export const FeatureChoice = ({
           <ChoiceBox
             size="md"
             selected={selected === "TEST"}
-            icon={<TestIcon />}
+            icon={<S.TestIcon />}
             label="전공 성향 검사"
             onClick={() => select("TEST")}
           />
           <ChoiceBox
             size="md"
             selected={selected === "CHOICE"}
-            icon={<ChoiceIcon />}
+            icon={<S.ChoiceIcon />}
             label="전공 선택"
             onClick={() => select("CHOICE")}
           />
