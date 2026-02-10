@@ -1,8 +1,8 @@
 import * as S from "./Active.style";
-import { CategoryType } from "@/entities/home/model/useRanking.types";
 import { ActiveLineChart } from "@/features/home/model/ActiveChart";
 import { toLineChartData } from "@/features/home/model/lineChartData";
 import { useActive } from "@/features/home/model/useActive";
+import { Select } from "@/shared/ui/select/Select";
 
 export const Active = () => {
   const getActiveData = useActive();
@@ -12,19 +12,11 @@ export const Active = () => {
     <S.ActiveContainer>
       <S.TitleBox>
         <S.Title>내 활동 분석</S.Title>
-        <S.SelectWrapper>
-          <S.Select
-            value={getActiveData.activeDropdown}
-            onChange={e => getActiveData.setActiveDropdown(e.target.value as CategoryType)}
-          >
-            {getActiveData.activeDropDownValue.map(option => (
-              <S.Option key={option.key} value={option.key}>
-                {option.label}
-              </S.Option>
-            ))}
-          </S.Select>
-          <S.ArrowIcon />
-        </S.SelectWrapper>
+        <Select
+          value={getActiveData.activeDropdown}
+          options={getActiveData.activeDropDownValue}
+          onChange={getActiveData.setActiveDropdown}
+        />
       </S.TitleBox>
       <S.Line />
       <S.StreakContainer>
