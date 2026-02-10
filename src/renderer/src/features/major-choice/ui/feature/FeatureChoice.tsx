@@ -1,5 +1,6 @@
 import * as S from "./FeatureChoice.style";
 import { FeatureProps } from "@/features/major-choice/model/useMajorChoice";
+import { Button } from "@/shared/ui/button";
 
 export const FeatureChoice = ({
   selected,
@@ -21,6 +22,7 @@ export const FeatureChoice = ({
             기능입니다. 전공 선택 기능은 나의 전공을 선택할 수 있는 기능입니다.
           </S.RoadMapDescription>
         </S.RoadMapTop>
+
         <S.ChoiceWrapper>
           <S.ChoiceBox onClick={() => select("TEST")} $isSelected={selected === "TEST"}>
             <S.ChoiceItem>
@@ -29,6 +31,7 @@ export const FeatureChoice = ({
               <S.ChoiceText>전공 성향 검사</S.ChoiceText>
             </S.ChoiceItem>
           </S.ChoiceBox>
+
           <S.ChoiceBox onClick={() => select("CHOICE")} $isSelected={selected === "CHOICE"}>
             <S.ChoiceItem>
               {selected === "CHOICE" ? <S.CheckedIcon /> : <S.NotCheckedIcon />}
@@ -37,9 +40,16 @@ export const FeatureChoice = ({
             </S.ChoiceItem>
           </S.ChoiceBox>
         </S.ChoiceWrapper>
-        <S.RoadMapButton disabled={!isValid} onClick={() => handleFeatureChoiceSubmit()}>
+
+        <Button
+          variant="primary"
+          size="lg"
+          disabled={!isValid}
+          onClick={handleFeatureChoiceSubmit}
+          fullWidth={true}
+        >
           선택 완료하기
-        </S.RoadMapButton>
+        </Button>
       </S.RoadMapContents>
     </S.RoadMapContainer>
   );
