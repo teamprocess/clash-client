@@ -136,22 +136,6 @@ export const ButtonBox = styled.div`
   gap: 0.5rem;
 `;
 
-export const Button = styled.button<{ $type: "CANCEL" | "SUBMIT" }>`
-  padding: 0.5rem 1.5rem;
-  border-radius: 0.5rem;
-  ${font.headline2.medium};
-  cursor: pointer;
-  background-color: ${({ theme, $type }) => {
-    switch ($type) {
-      case "CANCEL":
-        return theme.line.normal;
-      case "SUBMIT":
-        return theme.primary.normal;
-    }
-  }};
-  color: ${({ theme }) => theme.label.normal};
-`;
-
 export const Groups = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));

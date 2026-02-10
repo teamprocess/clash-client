@@ -1,4 +1,5 @@
 import { Modal } from "@/shared/ui/modal/Modal";
+import { Button } from "@/shared/ui";
 import { GROUP_CATEGORY_LABELS } from "@/entities/group";
 import type { GroupEditModalProps } from "../../../model/useGroup";
 import * as S from "./GroupEditModal.style";
@@ -128,12 +129,12 @@ export const GroupEditModal = ({
             </S.InputBox>
           </S.InputContainer>
           <S.ButtonBox>
-            <S.Button type="button" $type="CANCEL" onClick={onClose}>
+            <Button type="button" variant="secondary" size="lg" onClick={onClose}>
               취소
-            </S.Button>
-            <S.Button type="submit" $type="SAVE" disabled={isSubmitting}>
+            </Button>
+            <Button type="submit" variant="primary" size="lg" disabled={isSubmitting}>
               {isSubmitting ? "저장 중..." : "저장"}
-            </S.Button>
+            </Button>
           </S.ButtonBox>
         </S.GroupEditContainer>
       </S.ModalContent>
