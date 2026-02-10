@@ -48,12 +48,8 @@ export const Section = () => {
               {sectionData.sections
                 .filter(item => item.category === category)
                 .map(item => (
-                  <S.SectionItem
-                    key={item.id}
-                    onClick={() => handleClick(item)}
-                    style={{ opacity: item.locked ? 0.5 : 1 }}
-                  >
-                    <S.SectionIconWrapper>
+                  <S.SectionItem key={item.id} style={{ opacity: item.locked ? 0.5 : 1 }}>
+                    <S.SectionIconWrapper onClick={() => handleClick(item)}>
                       {/*서버로부터 사진 연결 전 임시로 null*/}
                       <S.SectionIcon src={"null"} />
                       {item.completed && <S.SectionComplete />}
