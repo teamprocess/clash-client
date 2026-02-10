@@ -41,12 +41,6 @@ export const FormContainer = styled.div`
   width: 100%;
 `;
 
-export const ButtonBox = styled.div`
-  display: flex;
-  justify-content: flex-end;
-  gap: 0.5rem;
-`;
-
 export const Groups = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
