@@ -1,8 +1,7 @@
 import styled from "styled-components";
-import Close from "@/features/home/assets/home/no.svg";
 import { font } from "@/shared/config/font";
 
-export const ModalOverlay = styled.div`
+export const DialogOverlay = styled.div`
   position: fixed;
   top: 0;
   left: 0;
@@ -15,7 +14,7 @@ export const ModalOverlay = styled.div`
   background: rgba(0, 0, 0, 0.5);
 `;
 
-export const ModalContainer = styled.div<{ $width: number; $height: number }>`
+export const DialogContainer = styled.div<{ $width: number; $height: number }>`
   padding: 1.25rem;
   border-radius: 1.25rem;
   width: ${({ $width }) => $width}rem;
@@ -27,20 +26,44 @@ export const ModalContainer = styled.div<{ $width: number; $height: number }>`
   flex-direction: column;
 `;
 
-export const ModalTitle = styled.p`
+export const DialogTitle = styled.p`
   ${font.title2.medium}
 `;
 
-export const CloseIcon = styled(Close)``;
-
-export const CloseButton = styled.div`
+export const CloseButton = styled.button`
   position: absolute;
   top: 1rem;
   right: 1rem;
+  width: 1.5rem;
+  height: 1.5rem;
+  padding: 0;
+  border: none;
+  background: transparent;
   cursor: pointer;
+
+  &::before,
+  &::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0.85rem;
+    height: 0.12rem;
+    border-radius: 999px;
+    background: ${({ theme }) => theme.label.assistive};
+    transform-origin: center;
+  }
+
+  &::before {
+    transform: translate(-50%, -50%) rotate(45deg);
+  }
+
+  &::after {
+    transform: translate(-50%, -50%) rotate(-45deg);
+  }
 `;
 
-export const ModalContent = styled.div<{ $gap: number }>`
+export const DialogContent = styled.div<{ $gap: number }>`
   display: flex;
   flex-direction: column;
   width: 100%;

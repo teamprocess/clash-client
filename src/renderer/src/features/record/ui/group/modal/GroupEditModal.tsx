@@ -1,5 +1,4 @@
-import { Modal } from "@/shared/ui/modal/Modal";
-import { Button } from "@/shared/ui";
+import { Dialog, Button } from "@/shared/ui";
 import type { GroupEditModalProps } from "../../../model/useGroup";
 import { GroupFormFields } from "./GroupFormFields";
 import * as S from "./GroupEditModal.style";
@@ -18,7 +17,7 @@ export const GroupEditModal = ({
   showPasswordChangeButton,
 }: GroupEditModalProps) => {
   return (
-    <Modal width={64} height={42} isOpen={isOpen} onClose={onClose} gap={3}>
+    <Dialog width={64} height={42} isOpen={isOpen} onClose={onClose} gap={3}>
       <S.ModalContent>
         <S.Tabs>
           <S.Tab $isActive={true}>그룹 수정</S.Tab>
@@ -54,6 +53,6 @@ export const GroupEditModal = ({
           </S.ButtonBox>
         </S.GroupEditContainer>
       </S.ModalContent>
-    </Modal>
+    </Dialog>
   );
 };

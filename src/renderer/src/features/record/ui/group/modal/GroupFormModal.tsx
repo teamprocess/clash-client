@@ -1,6 +1,5 @@
 import { useState } from "react";
-import { Modal } from "@/shared/ui/modal/Modal";
-import { Button } from "@/shared/ui";
+import { Dialog, Button } from "@/shared/ui";
 import { GROUP_CATEGORY_LABELS } from "@/entities/group";
 import type { GroupFormModalProps } from "../../../model/useGroup";
 import { useGroupList } from "../../../model/useGroupList";
@@ -35,7 +34,7 @@ export const GroupFormModal = ({
   } = useGroupList();
 
   return (
-    <Modal width={64} height={42} isOpen={isOpen} onClose={onClose} gap={3}>
+    <Dialog width={64} height={42} isOpen={isOpen} onClose={onClose} gap={3}>
       <S.ModalContent>
         <S.Tabs>
           <S.Tab $isActive={activeTab === "join"} onClick={() => setActiveTab("join")}>
@@ -158,6 +157,6 @@ export const GroupFormModal = ({
           </S.FormContainer>
         )}
       </S.ModalContent>
-    </Modal>
+    </Dialog>
   );
 };

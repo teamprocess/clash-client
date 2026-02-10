@@ -1,5 +1,5 @@
 import * as S from "./PreviewModal.style";
-import { Modal } from "@/shared/ui/modal/Modal";
+import { Dialog } from "@/shared/ui";
 import { usePreview } from "../model/usePreview";
 import { useState } from "react";
 
@@ -49,26 +49,26 @@ export const PreviewModal = ({
 
   if (loading) {
     return (
-      <Modal width={74} height={48} isOpen={isOpen} onClose={onClose}>
+      <Dialog width={74} height={48} isOpen={isOpen} onClose={onClose}>
         <S.PreviewModalWrapper>
           <div>로딩 중...</div>
         </S.PreviewModalWrapper>
-      </Modal>
+      </Dialog>
     );
   }
 
   if (error || !previewData) {
     return (
-      <Modal width={74} height={48} isOpen={isOpen} onClose={onClose}>
+      <Dialog width={74} height={48} isOpen={isOpen} onClose={onClose}>
         <S.PreviewModalWrapper>
           <div>데이터를 불러올 수 없습니다.</div>
         </S.PreviewModalWrapper>
-      </Modal>
+      </Dialog>
     );
   }
 
   return (
-    <Modal width={74} height={48} isOpen={isOpen} onClose={onClose}>
+    <Dialog width={74} height={48} isOpen={isOpen} onClose={onClose}>
       <S.PreviewModalWrapper>
         <S.PreviewModalTop>
           <S.PreviewModalIntro>
@@ -160,6 +160,6 @@ export const PreviewModal = ({
           </S.PreviewModalBody>
         </S.PreviewModalBottom>
       </S.PreviewModalWrapper>
-    </Modal>
+    </Dialog>
   );
 };
