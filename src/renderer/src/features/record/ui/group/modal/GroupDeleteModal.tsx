@@ -1,4 +1,5 @@
 import { Modal } from "@/shared/ui/modal/Modal";
+import { Button } from "@/shared/ui";
 import type { GroupDeleteModalProps } from "../../../model/useGroup";
 import * as S from "./GroupDeleteModal.style";
 
@@ -21,12 +22,12 @@ export const GroupDeleteModal = ({ isOpen, onClose, onConfirm, action }: GroupDe
           <S.Text $type="WARNING">{warning}</S.Text>
         </S.TextBox>
         <S.ButtonBox>
-          <S.Button $type="CANCEL" onClick={onClose}>
+          <Button variant="secondary" size="lg" onClick={onClose}>
             취소
-          </S.Button>
-          <S.Button $type="DELETE" onClick={onConfirm}>
+          </Button>
+          <Button variant="danger" size="lg" onClick={onConfirm}>
             {confirmLabel}
-          </S.Button>
+          </Button>
         </S.ButtonBox>
       </S.ModalContent>
     </Modal>

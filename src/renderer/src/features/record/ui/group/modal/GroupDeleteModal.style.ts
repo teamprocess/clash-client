@@ -26,19 +26,3 @@ export const ButtonBox = styled.div`
   justify-content: flex-end;
   gap: 0.5rem;
 `;
-
-export const Button = styled.button<{ $type: "CANCEL" | "DELETE" }>`
-  padding: 0.5rem 1.5rem;
-  border-radius: 0.5rem;
-  ${font.headline2.medium};
-  cursor: pointer;
-  background-color: ${({ theme, $type }) => {
-    switch ($type) {
-      case "CANCEL":
-        return theme.line.normal;
-      case "DELETE":
-        return palette.red[60];
-    }
-  }};
-  color: ${({ theme, $type }) => ($type === "DELETE" ? palette.neutral[99] : theme.label.normal)};
-`;
