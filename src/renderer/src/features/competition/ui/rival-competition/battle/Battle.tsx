@@ -1,5 +1,5 @@
 import * as S from "./Battle.style";
-import { Modal } from "@/shared/ui/modal/Modal";
+import { Dialog } from "@/shared/ui";
 import { AnalyzeCategory, MATCHVALUE } from "@/entities/competition";
 import { useBattle } from "@/features/competition/model/useBattle";
 
@@ -182,8 +182,8 @@ export const Battle = () => {
       </S.ContentBox>
 
       {battle.isModalOpen && (
-        <Modal
-          modalTitle={"배틀 생성하기"}
+        <Dialog
+          title={"배틀 생성하기"}
           width={21.625}
           height={34}
           isOpen={battle.isModalOpen}
@@ -240,7 +240,7 @@ export const Battle = () => {
               </S.ButtonBox>
             </S.BottomBox>
           </S.ModalContent>
-        </Modal>
+        </Dialog>
       )}
     </>
   );
