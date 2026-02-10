@@ -1,4 +1,5 @@
 import * as S from "./Filter.style";
+import { SearchInput } from "@/shared/ui/search-input";
 
 const sortOptions = [
   { label: "최신 순", value: "latest" },
@@ -38,10 +39,7 @@ export const Filter = () => {
           <S.ArrowIcon />
         </S.SelectWrapper>
       </S.FilterBox>
-      <S.SearchBox>
-        <S.SearchInput placeholder="상품명으로 검색" />
-        <S.SearchIcon />
-      </S.SearchBox>
+      <SearchInput placeholder={"상품명으로 검색"} inputSize={"sm"} variant={"dark"} />
     </S.FilterContainer>
   );
 };
