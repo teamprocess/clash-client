@@ -13,7 +13,7 @@ interface ButtonProps {
 
 const sizeStyleMap = {
   sm: css`
-    ${font.headline2.medium};
+    ${font.body.medium};
     min-height: 2rem;
     padding: 0.4rem 1.5rem;
   `,
