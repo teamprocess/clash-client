@@ -1,5 +1,6 @@
 import * as S from "./MajorChoice.style";
 import { MajorProps } from "@/features/major-choice/model/useMajorChoice";
+import { Button } from "@/shared/ui/button";
 
 export const MajorChoice = ({ selectedMajor, major, isValid, username, onSubmit }: MajorProps) => {
   return (
@@ -55,9 +56,15 @@ export const MajorChoice = ({ selectedMajor, major, isValid, username, onSubmit 
               </S.ChoiceBox>
             </S.ChoiceBottom>
           </S.ChoiceWrapper>
-          <S.RoadMapButton disabled={!isValid} onClick={onSubmit}>
+          <Button
+            variant="primary"
+            size="lg"
+            disabled={!isValid}
+            onClick={onSubmit}
+            fullWidth={true}
+          >
             선택 완료하기
-          </S.RoadMapButton>
+          </Button>
         </S.ChoiceContents>
       </S.ChoiceContainer>
     </>
