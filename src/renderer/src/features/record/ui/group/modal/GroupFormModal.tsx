@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Modal } from "@/shared/ui/modal/Modal";
+import { Button } from "@/shared/ui";
 import { GROUP_CATEGORY_LABELS } from "@/entities/group";
 import type { GroupFormModalProps } from "../../../model/useGroup";
 import { useGroupList } from "../../../model/useGroupList";
@@ -228,12 +229,12 @@ export const GroupFormModal = ({
               </S.InputBox>
             </S.InputContainer>
             <S.ButtonBox>
-              <S.Button type="button" $type="CANCEL" onClick={onClose}>
+              <Button type="button" variant="secondary" size="lg" onClick={onClose}>
                 취소
-              </S.Button>
-              <S.Button type="submit" $type="SUBMIT" disabled={isCreating}>
+              </Button>
+              <Button type="submit" variant="primary" size="lg" disabled={isCreating}>
                 {isCreating ? "생성 중..." : "저장"}
-              </S.Button>
+              </Button>
             </S.ButtonBox>
           </S.FormContainer>
         )}

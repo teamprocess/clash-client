@@ -24,8 +24,9 @@ const sizeStyleMap = {
   `,
   lg: css`
     ${font.headline2.medium};
-    min-height: 2.5rem;
-    padding: 0.5rem 1.5rem;
+    min-height: 2.75rem;
+    padding: 0.875rem 1.5rem;
+    border-radius: 0.75rem;
   `,
 } as const;
 

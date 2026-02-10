@@ -24,7 +24,7 @@ export const TaskItem = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 1.5rem 2.5rem;
+  padding: 1.25rem 2.5rem;
   border-bottom: 2px solid ${({ theme }) => theme.fill.alternative};
 `;
 
@@ -118,24 +118,6 @@ export const ButtonBox = styled.div`
   display: flex;
   justify-content: flex-end;
   gap: 0.5rem;
-`;
-
-export const Button = styled.button<{ $type: "CANCEL" | "SAVE" | "DELETE" }>`
-  padding: 0.5rem 1rem;
-  border-radius: 0.5rem;
-  ${font.headline2.medium};
-  cursor: pointer;
-  background-color: ${({ theme, $type }) => {
-    switch ($type) {
-      case "CANCEL":
-        return theme.label.assistive;
-      case "SAVE":
-        return theme.primary.normal;
-      case "DELETE":
-        return palette.red[60];
-    }
-  }};
-  color: ${({ theme, $type }) => ($type === "DELETE" ? palette.neutral[99] : theme.label.normal)};
 `;
 
 export const ModalContent = styled.div`
