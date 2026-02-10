@@ -1,6 +1,31 @@
 import styled from "styled-components";
 import { palette } from "@/shared/config/theme";
 import { font } from "@/shared/config/font";
+import Web from "../../assets/web.svg";
+import App from "../../assets/app.svg";
+import Server from "../../assets/server.svg";
+import Ai from "../../assets/ai.svg";
+import Game from "../../assets/game.svg";
+
+export const WebIcon = styled(Web)`
+  width: 5rem;
+`;
+
+export const AppIcon = styled(App)`
+  width: 5rem;
+`;
+
+export const ServerIcon = styled(Server)`
+  width: 5rem;
+`;
+
+export const AiIcon = styled(Ai)`
+  width: 5rem;
+`;
+
+export const GameIcon = styled(Game)`
+  width: 5rem;
+`;
 
 export const ChoiceContainer = styled.div`
   display: flex;

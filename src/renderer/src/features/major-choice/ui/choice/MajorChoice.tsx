@@ -1,11 +1,6 @@
 import * as S from "./MajorChoice.style";
 import { MajorProps } from "@/features/major-choice/model/useMajorChoice";
 import { ChoiceBox } from "@/features/major-choice/ui/choice-box/ChoiceBox";
-import WebIcon from "../../assets/web.svg";
-import AppIcon from "../../assets/app.svg";
-import ServerIcon from "../../assets/server.svg";
-import AiIcon from "../../assets/ai.svg";
-import GameIcon from "../../assets/game.svg";
 
 export const MajorChoice = ({ selectedMajor, major, isValid, username, onSubmit }: MajorProps) => {
   return (
@@ -25,21 +20,21 @@ export const MajorChoice = ({ selectedMajor, major, isValid, username, onSubmit 
             <ChoiceBox
               size="sm"
               selected={major === "WEB"}
-              icon={<WebIcon />}
+              icon={<S.WebIcon />}
               label="웹"
               onClick={() => selectedMajor("WEB")}
             />
             <ChoiceBox
               size="sm"
               selected={major === "APP"}
-              icon={<AppIcon />}
+              icon={<S.AppIcon />}
               label="앱"
               onClick={() => selectedMajor("APP")}
             />
             <ChoiceBox
               size="sm"
               selected={major === "SERVER"}
-              icon={<ServerIcon />}
+              icon={<S.ServerIcon />}
               label="서버"
               onClick={() => selectedMajor("SERVER")}
             />
@@ -49,14 +44,14 @@ export const MajorChoice = ({ selectedMajor, major, isValid, username, onSubmit 
             <ChoiceBox
               size="sm"
               selected={major === "AI"}
-              icon={<AiIcon />}
+              icon={<S.AiIcon />}
               label="AI"
               onClick={() => selectedMajor("AI")}
             />
             <ChoiceBox
               size="sm"
               selected={major === "GAME"}
-              icon={<GameIcon />}
+              icon={<S.GameIcon />}
               label="게임"
               onClick={() => selectedMajor("GAME")}
             />
