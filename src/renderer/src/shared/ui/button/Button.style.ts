@@ -15,12 +15,12 @@ const sizeStyleMap = {
   sm: css`
     ${font.headline2.medium};
     min-height: 2rem;
-    padding: 0.4rem 0.5rem;
+    padding: 0.4rem 1.5rem;
   `,
   md: css`
     ${font.headline2.medium};
     min-height: 2.25rem;
-    padding: 0.5rem 1rem;
+    padding: 0.5rem 2rem;
   `,
   lg: css`
     ${font.headline2.medium};

@@ -5,6 +5,7 @@ import { GROUP_CATEGORY_LABELS } from "@/entities/group";
 import type { GroupFormModalProps } from "../../../model/useGroup";
 import { useGroupList } from "../../../model/useGroupList";
 import { getPageNumbers } from "@/shared/lib";
+import { GroupFormFields } from "./GroupFormFields";
 import * as S from "./GroupFormModal.style";
 
 export const GroupFormModal = ({
@@ -135,104 +136,22 @@ export const GroupFormModal = ({
           </S.JoinContainer>
         ) : (
           <S.FormContainer as="form" onSubmit={onCreateSubmit}>
-            <S.InputContainer>
-              <S.InputWrapper>
-                <S.InputBox>
-                  <S.Label htmlFor="group-name-input">그룹 이름</S.Label>
-                  <S.Input
-                    id="group-name-input"
-                    type="text"
-                    placeholder="그룹 이름을 입력하세요."
-                    {...createRegister("name")}
-                  />
-                  {createErrors.name && <S.ErrorText>{createErrors.name.message}</S.ErrorText>}
-                </S.InputBox>
-                <S.InputBox>
-                  <S.Label htmlFor="group-password-input">비밀번호 (선택사항)</S.Label>
-                  <S.Input
-                    id="group-password-input"
-                    type="password"
-                    placeholder="그룹 비밀번호를 입력하세요."
-                    {...createRegister("password")}
-                  />
-                  {createErrors.password && (
-                    <S.ErrorText>{createErrors.password.message}</S.ErrorText>
-                  )}
-                </S.InputBox>
-              </S.InputWrapper>
-              <S.InputWrapper>
-                <S.InputBox>
-                  <S.Label htmlFor="group-type">카테고리</S.Label>
-                  <S.SlideButtonBox>
-                    <S.SlideButton
-                      type="button"
-                      $isActive={selectedType === "CLUB"}
-                      onClick={() => onTypeSelect("CLUB")}
-                    >
-                      {GROUP_CATEGORY_LABELS.CLUB}
-                    </S.SlideButton>
-                    <S.SlideButton
-                      type="button"
-                      $isActive={selectedType === "CLASS"}
-                      onClick={() => onTypeSelect("CLASS")}
-                    >
-                      {GROUP_CATEGORY_LABELS.CLASS}
-                    </S.SlideButton>
-                    <S.SlideButton
-                      type="button"
-                      $isActive={selectedType === "TEAM"}
-                      onClick={() => onTypeSelect("TEAM")}
-                    >
-                      {GROUP_CATEGORY_LABELS.TEAM}
-                    </S.SlideButton>
-                    <S.SlideButton
-                      type="button"
-                      $isActive={selectedType === "NARSHA"}
-                      onClick={() => onTypeSelect("NARSHA")}
-                    >
-                      {GROUP_CATEGORY_LABELS.NARSHA}
-                    </S.SlideButton>
-                    <S.SlideButton
-                      type="button"
-                      $isActive={selectedType === "ETC"}
-                      onClick={() => onTypeSelect("ETC")}
-                    >
-                      {GROUP_CATEGORY_LABELS.ETC}
-                    </S.SlideButton>
-                  </S.SlideButtonBox>
-                  {createErrors.type && <S.ErrorText>{createErrors.type.message}</S.ErrorText>}
-                </S.InputBox>
-                <S.InputBox>
-                  <S.Label htmlFor="group-max-members">최대 인원</S.Label>
-                  <S.Input
-                    id="group-max-members"
-                    type="number"
-                    placeholder="최대 인원을 입력하세요."
-                    {...createRegister("maxMembers", { valueAsNumber: true })}
-                  />
-                  {createErrors.maxMembers && (
-                    <S.ErrorText>{createErrors.maxMembers.message}</S.ErrorText>
-                  )}
-                </S.InputBox>
-              </S.InputWrapper>
-              <S.InputBox>
-                <S.Label htmlFor="group-description">그룹 설명</S.Label>
-                <S.TextArea
-                  id="group-description"
-                  rows={5}
-                  placeholder="어떤 그룹인지 설명해주세요"
-                  {...createRegister("description")}
-                />
-                {createErrors.description && (
-                  <S.ErrorText>{createErrors.description.message}</S.ErrorText>
-                )}
-              </S.InputBox>
-            </S.InputContainer>
+            <GroupFormFields
+              idPrefix="create-group"
+              register={createRegister}
+              errors={createErrors}
+              selectedType={selectedType}
+              onTypeSelect={onTypeSelect}
+              typeLabel="카테고리"
+              maxMembersLabel="최대 인원"
+              descriptionPlaceholder="어떤 그룹인지 설명해주세요"
+              passwordPlaceholder="그룹 비밀번호를 입력하세요."
+            />
             <S.ButtonBox>
-              <Button type="button" variant="secondary" size="lg" onClick={onClose}>
+              <Button type="button" variant="secondary" size="md" onClick={onClose}>
                 취소
               </Button>
-              <Button type="submit" variant="primary" size="lg" disabled={isCreating}>
+              <Button type="submit" variant="primary" size="md" disabled={isCreating}>
                 {isCreating ? "생성 중..." : "저장"}
               </Button>
             </S.ButtonBox>
