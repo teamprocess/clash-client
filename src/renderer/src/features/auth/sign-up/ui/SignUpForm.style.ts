@@ -8,7 +8,7 @@ export const FormContainer = styled.form`
   flex-direction: column;
   align-items: center;
   width: 100%;
-  gap: 5rem;
+  gap: 3rem;
 `;
 
 export const InputBox = styled.div`
@@ -89,17 +89,8 @@ export const ButtonWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1rem;
-`;
-
-export const SubmitButton = styled.button`
   width: 24rem;
-  padding: 1rem 0;
-  border-radius: 1rem;
-  border: none;
-  color: ${palette.neutral[97]};
-  background-color: ${({ theme }) => theme.primary.normal};
-  ${font.headline2.medium};
+  gap: 1rem;
 `;
 
 export const HelpTextContainer = styled.div`

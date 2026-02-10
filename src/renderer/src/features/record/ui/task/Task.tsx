@@ -2,6 +2,7 @@ import * as S from "./Task.style";
 import { formatTime } from "@/shared/lib";
 import { useTaskList } from "../../model/useTaskList";
 import { Modal } from "@/shared/ui/modal/Modal";
+import { Button } from "@/shared/ui";
 
 export const Task = () => {
   const {
@@ -48,12 +49,12 @@ export const Task = () => {
                   </S.TaskLeftBox>
                   <S.TaskRightBox>
                     <S.ButtonBox>
-                      <S.Button $type="CANCEL" onClick={handleCancelEdit}>
+                      <Button variant="secondary" size="md" onClick={handleCancelEdit}>
                         취소
-                      </S.Button>
-                      <S.Button $type="SAVE" onClick={handleSaveTask}>
+                      </Button>
+                      <Button variant="primary" size="md" onClick={handleSaveTask}>
                         저장
-                      </S.Button>
+                      </Button>
                     </S.ButtonBox>
                   </S.TaskRightBox>
                 </S.TaskItem>
@@ -98,12 +99,12 @@ export const Task = () => {
               </S.TaskLeftBox>
               <S.TaskRightBox>
                 <S.ButtonBox>
-                  <S.Button $type="CANCEL" onClick={handleCancelEdit}>
+                  <Button variant="secondary" size="md" onClick={handleCancelEdit}>
                     취소
-                  </S.Button>
-                  <S.Button $type="SAVE" onClick={handleSaveTask}>
+                  </Button>
+                  <Button variant="primary" size="md" onClick={handleSaveTask}>
                     저장
-                  </S.Button>
+                  </Button>
                 </S.ButtonBox>
               </S.TaskRightBox>
             </S.TaskItem>
@@ -125,12 +126,12 @@ export const Task = () => {
             <S.Text $type="WARNING">삭제 시 해당 과목의 데이터가 모두 삭제됩니다</S.Text>
           </S.TextBox>
           <S.ButtonBox>
-            <S.Button $type="CANCEL" onClick={handleCancelDelete}>
+            <Button variant="secondary" size="md" onClick={handleCancelDelete}>
               취소
-            </S.Button>
-            <S.Button $type="DELETE" onClick={handleConfirmDelete}>
+            </Button>
+            <Button variant="danger" size="md" onClick={handleConfirmDelete}>
               삭제
-            </S.Button>
+            </Button>
           </S.ButtonBox>
         </S.ModalContent>
       </Modal>
