@@ -1,7 +1,5 @@
-import { Modal } from "@/shared/ui/modal/Modal";
-import { Button } from "@/shared/ui";
+import { ConfirmDialog } from "@/shared/ui";
 import type { GroupDeleteModalProps } from "../../../model/useGroup";
-import * as S from "./GroupDeleteModal.style";
 
 export const GroupDeleteModal = ({ isOpen, onClose, onConfirm, action }: GroupDeleteModalProps) => {
   const isDelete = action === "delete";
@@ -15,21 +13,15 @@ export const GroupDeleteModal = ({ isOpen, onClose, onConfirm, action }: GroupDe
   const confirmLabel = isDelete ? "삭제" : "탈퇴";
 
   return (
-    <Modal width={22} height={13} isOpen={isOpen} onClose={onClose} modalTitle={title} gap={3}>
-      <S.ModalContent>
-        <S.TextBox>
-          <S.Text>{description}</S.Text>
-          <S.Text $type="WARNING">{warning}</S.Text>
-        </S.TextBox>
-        <S.ButtonBox>
-          <Button variant="secondary" size="md" onClick={onClose}>
-            취소
-          </Button>
-          <Button variant="danger" size="md" onClick={onConfirm}>
-            {confirmLabel}
-          </Button>
-        </S.ButtonBox>
-      </S.ModalContent>
-    </Modal>
+    <ConfirmDialog
+      isOpen={isOpen}
+      title={title}
+      description={description}
+      confirmMessage={warning}
+      confirmLabel={confirmLabel}
+      confirmVariant="danger"
+      onClose={onClose}
+      onConfirm={onConfirm}
+    />
   );
 };
