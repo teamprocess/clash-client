@@ -4,7 +4,7 @@ import { useMyCompetition } from "@/features/competition/model/useMyCompetition"
 import { toLineChartData } from "@/features/competition/model/my-compete-chart/MyCompeteChartData";
 import { MyCompetitionLineChart } from "@/features/competition/model/my-compete-chart/MyCompetitionLineChart";
 import { CompareStandard, GrowthRateStandard } from "@/entities/competition";
-import { Select } from "@/shared/ui/select/Select";
+import { Select } from "@/shared/ui/select";
 
 export const WithMyCompetition = () => {
   const {

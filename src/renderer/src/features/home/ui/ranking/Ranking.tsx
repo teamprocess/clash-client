@@ -2,7 +2,7 @@ import * as S from "./Ranking.style";
 import { useRanking } from "@/features/home/model/useRanking";
 import { UserRanking } from "@/features/home/ui/ranking/user/UserRanking";
 import { CategoryType, RankingItem, PeriodType } from "@/entities/home/model/useRanking.types";
-import { Select } from "@/shared/ui/select/Select";
+import { Select } from "@/shared/ui/select";
 
 export const Ranking = () => {
   const { wrapperRef, currentUserRef, options, filters, domain, view } = useRanking();
