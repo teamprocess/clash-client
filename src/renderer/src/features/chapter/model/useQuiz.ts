@@ -1,6 +1,7 @@
 import { useRef, useState } from "react";
 import type { Mission } from "@/features/chapter/model/chapter.types";
 import { chapterApi } from "@/entities/roadmap/chapter/api/chapterApi";
+import { getErrorMessage } from "@/shared/lib";
 
 type QuizState = {
   currentIndex: number;
@@ -30,6 +31,8 @@ type UseQuizParams = {
 
 export const useQuiz = ({ mission, onMissionComplete, onClose }: UseQuizParams) => {
   const [state, setState] = useState<QuizState>(initialState);
+  const [error, setError] = useState<string | null>(null);
+
   const isClosingRef = useRef(false);
   const isRequestingMissionResultRef = useRef(false);
   const missionResultDoneRef = useRef(false);
@@ -48,6 +51,8 @@ export const useQuiz = ({ mission, onMissionComplete, onClose }: UseQuizParams) 
       const passedByServer = response.success && response.data?.isCleared === true;
       const passedByLocal = fallbackCorrectCount != null ? fallbackCorrectCount >= 4 : undefined;
 
+      setError(null);
+
       if (passedByServer) {
         missionResultDoneRef.current = true;
         onMissionComplete?.(mission.id);
@@ -55,15 +60,12 @@ export const useQuiz = ({ mission, onMissionComplete, onClose }: UseQuizParams) 
       }
 
       if (!response.success) {
+        setError(response.message || "미션 결과 저장에 실패했습니다.");
         console.error("미션 결과 저장/조회에 실패했습니다.", response);
       } else if (passedByLocal === true) {
         console.error(
           "서버는 미션 미통과로 응답했지만( isCleared=false ), 로컬 기준으로는 통과입니다.",
-          {
-            missionId: mission.id,
-            fallbackCorrectCount,
-            response,
-          }
+          { missionId: mission.id, fallbackCorrectCount, response }
         );
       }
 
@@ -74,6 +76,7 @@ export const useQuiz = ({ mission, onMissionComplete, onClose }: UseQuizParams) 
       missionResultDoneRef.current = true;
     } catch (error: unknown) {
       console.error("미션 결과 저장/조회 요청에 실패했습니다.", error);
+      setError(getErrorMessage(error, "미션 결과 저장에 실패했습니다."));
       if (fallbackCorrectCount != null && fallbackCorrectCount >= 4) {
         onMissionComplete?.(mission.id);
       }
@@ -105,9 +108,12 @@ export const useQuiz = ({ mission, onMissionComplete, onClose }: UseQuizParams) 
       });
 
       if (!response.success || !response.data) {
+        setError(response.message || "정답 제출에 실패했습니다.");
         setState(prev => ({ ...prev, isSubmitting: false }));
         return;
       }
+
+      setError(null);
 
       const result = response.data;
       const isLastQuestion = state.currentIndex === questions.length - 1;
@@ -126,7 +132,8 @@ export const useQuiz = ({ mission, onMissionComplete, onClose }: UseQuizParams) 
         await requestMissionResult(nextCorrectCount);
       }
     } catch (error: unknown) {
-      console.log(error);
+      console.error("정답 제출 요청에 실패했습니다.", error);
+      setError(getErrorMessage(error, "정답 제출에 실패했습니다."));
       setState(prev => ({ ...prev, isSubmitting: false }));
     }
   };
@@ -148,6 +155,7 @@ export const useQuiz = ({ mission, onMissionComplete, onClose }: UseQuizParams) 
   const resetState = () => {
     missionResultDoneRef.current = false;
     setState(initialState);
+    setError(null);
   };
 
   const handleClose = async () => {
@@ -156,8 +164,6 @@ export const useQuiz = ({ mission, onMissionComplete, onClose }: UseQuizParams) 
 
     try {
       if (state.view === "final") await requestMissionResult();
-    } catch (error: unknown) {
-      console.log(error);
     } finally {
       resetState();
       onClose();
@@ -167,6 +173,7 @@ export const useQuiz = ({ mission, onMissionComplete, onClose }: UseQuizParams) 
 
   return {
     state,
+    error,
     questions,
     currentQuestion,
     selectedChoiceId,

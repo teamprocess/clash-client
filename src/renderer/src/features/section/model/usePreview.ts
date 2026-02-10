@@ -5,6 +5,7 @@ import {
   GetSectionPreviewResponse,
 } from "@/entities/roadmap/section/preview/model/preview.types";
 import { previewApi } from "@/entities/roadmap/section/preview/api/previewApi";
+import { getErrorMessage } from "@/shared/lib";
 
 const transformPreviewData = (serverData: GetSectionPreviewResponse): PreviewData => {
   return {
@@ -35,16 +36,18 @@ export const usePreview = (sectionId: number) => {
     const fetchPreview = async () => {
       try {
         setLoading(true);
+        setError(null);
         const response = await previewApi.getSectionPreview(sectionId);
 
         if (response.success && response.data) {
           const transformed = transformPreviewData(response.data);
           setPreviewData(transformed);
         } else {
-          setError(response.message || "Failed to load preview");
+          setError(response.message || "섹션 미리보기를 불러오는데 실패했습니다.");
         }
-      } catch (err) {
-        setError(err instanceof Error ? err.message : "Failed to load preview");
+      } catch (error: unknown) {
+        console.error("섹션 미리보기를 불러오는데 실패했습니다:", error);
+        setError(getErrorMessage(error, "섹션 미리보기를 불러오는데 실패했습니다."));
       } finally {
         setLoading(false);
       }
