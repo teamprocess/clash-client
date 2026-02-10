@@ -1,4 +1,4 @@
-import { Dialog, Button } from "@/shared/ui";
+import { Dialog, ModalActions } from "@/shared/ui";
 import type { GroupEditModalProps } from "../../../model/useGroup";
 import { GroupFormFields } from "./GroupFormFields";
 import * as S from "./GroupEditModal.style";
@@ -43,14 +43,13 @@ export const GroupEditModal = ({
             isPasswordChangeEnabled={isPasswordChangeEnabled}
             onPasswordChangeClick={onPasswordChangeClick}
           />
-          <S.ButtonBox>
-            <Button type="button" variant="secondary" size="md" onClick={onClose}>
-              취소
-            </Button>
-            <Button type="submit" variant="primary" size="md" disabled={isSubmitting}>
-              {isSubmitting ? "저장 중..." : "저장"}
-            </Button>
-          </S.ButtonBox>
+          <ModalActions
+            onCancel={onClose}
+            confirmLabel={isSubmitting ? "저장 중..." : "저장"}
+            confirmType="submit"
+            confirmDisabled={isSubmitting}
+            size="md"
+          />
         </S.GroupEditContainer>
       </S.ModalContent>
     </Dialog>
