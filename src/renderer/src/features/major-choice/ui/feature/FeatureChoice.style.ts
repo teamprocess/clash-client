@@ -1,8 +1,4 @@
 import styled from "styled-components";
-import Test from "@/features/major-choice/assets/test.svg";
-import Choice from "@/features/major-choice/assets/choice.svg";
-import Check from "@/features/major-choice/assets/check.svg";
-import NotCheck from "@/features/major-choice/assets/not-check.svg";
 import { palette } from "@/shared/config/theme";
 import { font } from "@/shared/config/font";
 
@@ -54,57 +50,6 @@ export const ChoiceWrapper = styled.div`
   gap: 3rem;
   width: 26rem;
   height: 13rem;
-`;
-
-export const ChoiceBox = styled.div<{ $isSelected: boolean }>`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  position: relative;
-  background-color: ${({ theme }) => theme.background.normal};
-  border-radius: 0.75rem;
-  box-shadow: 0 0 6px 0
-    ${({ $isSelected, theme }) => ($isSelected ? theme.primary.normal : theme.line.normal)};
-  width: 11rem;
-  height: 12.5rem;
-  cursor: pointer;
-`;
-
-export const ChoiceItem = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 1rem;
-  width: 7.375rem;
-`;
-
-export const CheckedIcon = styled(Check)`
-  position: absolute;
-  top: 0.75rem;
-  right: 0.75rem;
-  border-radius: 50%;
-  width: 1.5rem;
-  height: 1.5rem;
-`;
-
-export const NotCheckedIcon = styled(NotCheck)`
-  position: absolute;
-  top: 0.75rem;
-  right: 0.75rem;
-  border-radius: 50%;
-  width: 1.5rem;
-  height: 1.5rem;
-`;
-
-export const TestIcon = styled(Test)``;
-
-export const ChoiceIcon = styled(Choice)``;
-
-export const ChoiceText = styled.span`
-  ${font.headline1.medium};
-  color: ${({ theme }) => theme.label.alternative};
 `;
 
 export const RoadMapButton = styled.button<{ disabled: boolean }>`
