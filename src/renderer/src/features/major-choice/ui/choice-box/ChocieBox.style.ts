@@ -7,8 +7,8 @@ export type ChoiceBoxSize = "sm" | "md" | "lg";
 
 const sizeMap = {
   sm: {
-    width: "9rem",
-    height: "10.5rem",
+    width: "9.75rem",
+    height: "10rem",
   },
   md: {
     width: "11rem",
