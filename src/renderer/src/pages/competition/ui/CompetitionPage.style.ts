@@ -20,7 +20,7 @@ export const CompetitionTopBar = styled.div`
   border-radius: 0.75rem;
 `;
 
-export const WitchCompete = styled.div<{ $isActive: boolean }>`
+export const WitchCompete = styled.button<{ $isActive: boolean }>`
   display: flex;
   align-items: center;
   justify-content: center;

@@ -137,7 +137,7 @@ export const BattleTextBox = styled.div`
   align-items: center;
 `;
 
-export const MakeBattle = styled.div`
+export const MakeBattle = styled.button`
   ${font.body.medium}
   color: ${({ theme }) => theme.label.normal};
   background-color: ${({ theme }) => theme.primary.normal};
@@ -164,7 +164,7 @@ export const UpperHandJudge = styled.div<{ $type: string }>`
   border-radius: 0.5rem;
 `;
 
-export const BattleProfileBox = styled.div`
+export const BattleProfileBox = styled.button`
   display: flex;
   align-items: center;
   justify-content: space-between;
