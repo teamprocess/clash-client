@@ -2,7 +2,6 @@ import styled from "styled-components";
 import Play from "../../assets/play.svg";
 import Pause from "../../assets/pause.svg";
 import { font } from "@/shared/config/font";
-import { palette } from "@/shared/config/theme/palette";
 import More from "../../assets/more.svg";
 
 export const TaskContainer = styled.div`
@@ -118,24 +117,6 @@ export const ButtonBox = styled.div`
   display: flex;
   justify-content: flex-end;
   gap: 0.5rem;
-`;
-
-export const ModalContent = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-  padding: 1rem 0;
-`;
-
-export const TextBox = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-`;
-
-export const Text = styled.p<{ $type?: "WARNING" }>`
-  ${font.body.medium};
-  color: ${({ theme, $type }) => ($type === "WARNING" ? palette.red[60] : theme.label.normal)};
 `;
 
 export const AddTaskButton = styled.button`
