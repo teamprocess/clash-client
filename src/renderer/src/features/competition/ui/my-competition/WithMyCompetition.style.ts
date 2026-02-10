@@ -4,7 +4,7 @@ import EXP from "@/features/competition/assets/exp.svg";
 import Record from "@/features/competition/assets/record.svg";
 import Github from "@/features/competition/assets/github.svg";
 import SolvedAc from "@/features/home/assets/home/solved-logo.svg";
-import Arrow from "@/features/home/assets/home/arrow.svg";
+import Arrow from "@/shared/ui/assets/arrow.svg";
 
 export const ContentArea = styled.div`
   display: flex;
