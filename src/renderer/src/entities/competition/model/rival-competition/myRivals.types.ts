@@ -1,4 +1,4 @@
-import { UserStatus } from "@/features/home/model/useHome";
+import { UserStatus } from "@/features/competition/model/useMyRivals";
 
 export interface MyRivalsRequest {
   name: string;
@@ -9,6 +9,6 @@ export interface MyRivalsRequest {
   status: UserStatus;
 }
 
-export interface MyRivalsResponse {
+export type MyRivalsResponse = {
   myRivals: MyRivalsRequest[];
-}
+};

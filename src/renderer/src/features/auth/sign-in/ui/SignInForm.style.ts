@@ -3,12 +3,12 @@ import { palette } from "@/shared/config/theme";
 import { font } from "@/shared/config/font";
 import { Link } from "react-router-dom";
 
-export const FormContainer = styled.form`
+export const FormContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
   width: 100%;
-  gap: 5rem;
+  gap: 3rem;
 `;
 
 export const InputBox = styled.div`
@@ -18,16 +18,17 @@ export const InputBox = styled.div`
   gap: 1rem;
 `;
 
-export const Input = styled.input`
-  border-radius: 1rem;
-  width: 24rem;
-  height: 3.5rem;
-  padding: 0 1.5rem;
-  ${font.body.medium}
+export const Title = styled.h1`
+  ${font.title1.bold};
   color: ${({ theme }) => theme.label.neutral};
-  background-color: ${({ theme }) => theme.background.alternative};
-  border: none;
-  outline: none;
+  margin: 0;
+`;
+
+export const Description = styled.p`
+  ${font.body.regular};
+  color: ${({ theme }) => theme.label.alternative};
+  margin: 0;
+  text-align: center;
 `;
 
 export const ErrorText = styled.span`
@@ -41,18 +42,8 @@ export const ButtonWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1rem;
-`;
-
-export const SubmitButton = styled.button`
   width: 24rem;
-  padding: 1rem 0;
-  border-radius: 1rem;
-  border: none;
-  color: ${palette.neutral[97]};
-  background-color: ${({ theme }) => theme.primary.normal};
-  ${font.headline2.medium};
-  cursor: pointer;
+  gap: 1rem;
 `;
 
 export const HelpTextBox = styled.div`

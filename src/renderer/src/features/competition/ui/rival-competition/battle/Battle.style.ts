@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { font } from "@/shared/config/font";
 import { palette } from "@/shared/config/theme";
 import Profile from "@/features/home/assets/home/profile.svg";
-import Arrow from "@/features/home/assets/home/arrow.svg";
+import Arrow from "@/shared/ui/assets/arrow.svg";
 import Date from "@/features/home/assets/home/date.svg";
 import BackArrow from "@/features/home/assets/home/back.svg";
 import Fire from "@/features/home/assets/home/fire.svg";
@@ -137,7 +137,7 @@ export const BattleTextBox = styled.div`
   align-items: center;
 `;
 
-export const MakeBattle = styled.div`
+export const MakeBattle = styled.button`
   ${font.body.medium}
   color: ${({ theme }) => theme.label.normal};
   background-color: ${({ theme }) => theme.primary.normal};
@@ -164,7 +164,7 @@ export const UpperHandJudge = styled.div<{ $type: string }>`
   border-radius: 0.5rem;
 `;
 
-export const BattleProfileBox = styled.div`
+export const BattleProfileBox = styled.button`
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -485,7 +485,7 @@ export const ModalContent = styled.div`
   display: flex;
   flex-direction: column;
   height: 100%;
-  padding: 1rem;
+  padding-top: 1.5rem;
   align-items: flex-end;
   justify-content: space-between;
 `;

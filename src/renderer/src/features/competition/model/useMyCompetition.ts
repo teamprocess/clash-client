@@ -1,68 +1,50 @@
 import { useState } from "react";
+import {
+  CompareStandard,
+  GrowthRateStandard,
+  useMyCompareQuery,
+  useMyGrowthRateQuery,
+} from "@/entities/competition";
 
-interface CompareDataProps {
-  earned_exp: number;
-  study_time: number;
-  github_attributor: number;
-}
+// compare - 날짜별 드롭다운
+const competitionDropDownValue: { key: CompareStandard; label: string }[] = [
+  { key: "TODAY", label: "오늘" },
+  { key: "YESTERDAY", label: "어제" },
+  { key: "LAST_WEEK", label: "일주일 전" },
+  { key: "LAST_MONTH", label: "한달 전" },
+] as const;
 
-interface TotalCompareData {
-  beforeMyCompareData: CompareDataProps[];
-  nowMyCompareData: CompareDataProps[];
-}
-
-const competitionDropDownValue = [
-  { key: "YesterDay", label: "어제" },
-  { key: "LastWeek", label: "일주일 전" },
-  { key: "LastMonth", label: "한달 전" },
-  { key: "LastSeason", label: "전 시즌" },
+// growthRate - 날짜별 드롭다운
+const growthRateDropDownValue: { key: GrowthRateStandard; label: string }[] = [
+  { key: "DAY", label: "오늘" },
+  { key: "WEEK", label: "이번 주" },
+  { key: "MONTH", label: "이번 달" },
 ];
 
 export const useMyCompetition = () => {
-  const [competitionDropdown, setCompetitionDropdown] = useState("어제");
+  const [competitionDropdown, setCompetitionDropdown] = useState<CompareStandard>("TODAY");
+  const [growthRateDropdown, setGrowthRateDropdown] = useState<GrowthRateStandard>("DAY");
 
-  const myData: { date: number; growth_rate: number }[] = [
-    { date: 1, growth_rate: 31 },
-    { date: 2, growth_rate: 41 },
-    { date: 3, growth_rate: 23 },
-    { date: 4, growth_rate: 12 },
-    { date: 5, growth_rate: 25 },
-    { date: 6, growth_rate: 7 },
-    { date: 7, growth_rate: 12 },
-    { date: 8, growth_rate: 9 },
-    { date: 9, growth_rate: 11 },
-    { date: 10, growth_rate: 12 },
-    { date: 11, growth_rate: 19 },
-    { date: 12, growth_rate: 21 },
-  ];
+  const { data: compareResponse, isLoading: isCompareLoading } =
+    useMyCompareQuery(competitionDropdown);
 
-  const myCompetitionMaxCommit = Math.max(...myData.map(m => m.growth_rate));
+  const { data: growthRateResponse } = useMyGrowthRateQuery(growthRateDropdown);
 
-  const allData: TotalCompareData = {
-    beforeMyCompareData: [
-      {
-        earned_exp: 120.5,
-        study_time: 4.5,
-        github_attributor: 15,
-      },
-    ],
-    nowMyCompareData: [
-      {
-        earned_exp: 140.2,
-        study_time: 5.2,
-        github_attributor: 12,
-      },
-    ],
-  };
+  // 첫번쨰 소수점까지 정리식
+  const oneDecimal = (value?: number | null) => (value == null ? 0 : Math.trunc(value * 10) / 10);
+
+  const dataPoints = growthRateResponse?.data?.dataPoint ?? [];
 
   return {
-    myCompetition: {
-      allData,
-      myData,
-      competitionDropdown,
-      setCompetitionDropdown,
-      myCompetitionMaxCommit,
-      competitionDropDownValue,
-    },
+    dataPoints,
+    isCompareLoading,
+    myCompareData: compareResponse?.data,
+    competitionDropdown,
+    setCompetitionDropdown,
+    growthRateDropdown,
+    setGrowthRateDropdown,
+    growthRateDropDownValue,
+    competitionDropDownValue,
+    oneDecimal,
   };
 };

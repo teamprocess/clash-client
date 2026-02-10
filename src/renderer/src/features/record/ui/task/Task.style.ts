@@ -2,7 +2,6 @@ import styled from "styled-components";
 import Play from "../../assets/play.svg";
 import Pause from "../../assets/pause.svg";
 import { font } from "@/shared/config/font";
-import { palette } from "@/shared/config/theme/palette";
 import More from "../../assets/more.svg";
 
 export const TaskContainer = styled.div`
@@ -24,7 +23,7 @@ export const TaskItem = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 1.5rem 2.5rem;
+  padding: 1.25rem 2.5rem;
   border-bottom: 2px solid ${({ theme }) => theme.fill.alternative};
 `;
 
@@ -67,17 +66,9 @@ export const MoreIconWrapper = styled.div`
   position: relative;
 `;
 
-export const DropdownMenu = styled.div`
-  position: absolute;
-  top: 100%;
-  width: 7rem;
-  right: 0;
-  margin-top: 0.5rem;
-  background-color: ${({ theme }) => theme.label.disable};
-  border-radius: 0.5rem;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
-  z-index: 10;
+export const MenuList = styled.div`
+  display: flex;
+  flex-direction: column;
 `;
 
 export const MenuItem = styled.button`
@@ -116,43 +107,8 @@ export const TaskTextInput = styled.input`
 
 export const ButtonBox = styled.div`
   display: flex;
+  justify-content: flex-end;
   gap: 0.5rem;
-`;
-
-export const Button = styled.button<{ $type: "CANCEL" | "SAVE" | "DELETE" }>`
-  padding: 0.5rem 1rem;
-  border-radius: 0.5rem;
-  ${font.headline2.medium};
-  cursor: pointer;
-  background-color: ${({ theme, $type }) => {
-    switch ($type) {
-      case "CANCEL":
-        return theme.label.assistive;
-      case "SAVE":
-        return theme.primary.normal;
-      case "DELETE":
-        return palette.red[60];
-    }
-  }};
-  color: ${({ theme, $type }) => ($type === "DELETE" ? palette.neutral[99] : theme.label.normal)};
-`;
-
-export const ModalContent = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-  padding: 1rem 0;
-`;
-
-export const TextBox = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-`;
-
-export const Text = styled.p<{ $type?: "WARNING" }>`
-  ${font.body.medium};
-  color: ${({ theme, $type }) => ($type === "WARNING" ? palette.red[60] : theme.label.normal)};
 `;
 
 export const AddTaskButton = styled.button`

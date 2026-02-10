@@ -1,19 +1,40 @@
 import { useEffect } from "react";
 import { useRecordStore } from "./recordStore";
+import { useRecordTasksQuery, useRecordTodayQuery } from "@/entities/record";
 
 export const useRecord = () => {
-  const {
-    tasks,
-    activeTaskId,
-    currentStudyTime,
-    startTime,
-    start,
-    stop,
-    addTask,
-    updateTask,
-    deleteTask,
-    setCurrentStudyTime,
-  } = useRecordStore();
+  const { startTime, setCurrentStudyTime, setTasks, setActiveSession } = useRecordStore();
+  const { data: tasksResponse } = useRecordTasksQuery();
+  const { data: todayResponse } = useRecordTodayQuery();
+
+  useEffect(() => {
+    if (tasksResponse?.success && tasksResponse.data) {
+      setTasks(tasksResponse.data.tasks);
+    }
+  }, [setTasks, tasksResponse]);
+
+  useEffect(() => {
+    if (!todayResponse?.success || !todayResponse.data) {
+      return;
+    }
+
+    // 앱 재진입 시에도 현재 진행 중인 공부 세션 복원
+    const activeSession = todayResponse.data.sessions.find(session => session.endedAt === null);
+
+    // 활성 공부 세션이 없으면 공부 중 아님 상태 명확하게 고정
+    if (!activeSession) {
+      setActiveSession(null, null);
+      setCurrentStudyTime(0);
+      return;
+    }
+
+    const serverStartTime = new Date(activeSession.startedAt).getTime();
+    const now = Date.now();
+    const elapsedSeconds = Math.floor((now - serverStartTime) / 1000);
+
+    setActiveSession(activeSession.task.id, now - elapsedSeconds * 1000);
+    setCurrentStudyTime(0);
+  }, [setActiveSession, setCurrentStudyTime, todayResponse]);
 
   useEffect(() => {
     if (!startTime) return;
@@ -24,32 +45,4 @@ export const useRecord = () => {
 
     return () => clearInterval(timer);
   }, [startTime, setCurrentStudyTime]);
-
-  const isTaskActive = (taskId: number) => activeTaskId === taskId;
-
-  const getTaskStudyTime = (taskId: number) => {
-    const task = tasks.find(task => task.id === taskId);
-    if (!task) return 0;
-    return activeTaskId === taskId ? task.studyTime + currentStudyTime : task.studyTime;
-  };
-
-  const getTotalStudyTime = () => {
-    return tasks.reduce((sum, task) => sum + task.studyTime, 0) + currentStudyTime;
-  };
-
-  const startStudy = (taskId: number) => start(taskId);
-  const stopStudy = () => stop();
-
-  return {
-    tasks,
-    activeTaskId,
-    startStudy,
-    stopStudy,
-    addTask,
-    updateTask,
-    deleteTask,
-    isTaskActive,
-    getTaskStudyTime,
-    getTotalStudyTime,
-  };
 };

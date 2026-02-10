@@ -1,11 +1,75 @@
-import { app, shell, BrowserWindow, ipcMain, session } from "electron";
-import { join } from "path";
-import { electronApp, optimizer, is } from "@electron-toolkit/utils";
+import { app, BrowserWindow, ipcMain, session, shell } from "electron";
+import { join, resolve } from "path";
+import { electronApp, is, optimizer } from "@electron-toolkit/utils";
 import ClashIcon from "../../resources/clash-icon.png?asset";
 import { AppMonitor } from "./services/AppMonitor";
 
 let mainWindow: BrowserWindow | null = null;
 let appMonitor: AppMonitor | null = null;
+
+const PROTOCOL = "clashapp";
+let pendingDeepLink: string | null = null;
+
+const handleDeepLink = (url: string) => {
+  if (!url) {
+    return;
+  }
+
+  if (!mainWindow) {
+    pendingDeepLink = url;
+    return;
+  }
+
+  try {
+    const parsed = new URL(url);
+    const code = parsed.searchParams.get("code") ?? "";
+    const state = parsed.searchParams.get("state") ?? "";
+    mainWindow.webContents.send("deep-link-auth", { code, state, url });
+  } catch (error) {
+    console.error("Invalid deep link URL:", url, error);
+  }
+
+  if (mainWindow.isMinimized()) {
+    mainWindow.restore();
+  }
+  mainWindow.show();
+  mainWindow.focus();
+};
+
+const registerProtocol = () => {
+  if (process.defaultApp) {
+    if (process.argv.length >= 2) {
+      app.setAsDefaultProtocolClient(PROTOCOL, process.execPath, [resolve(process.argv[1])]);
+    }
+  } else {
+    app.setAsDefaultProtocolClient(PROTOCOL);
+  }
+};
+
+const gotTheLock = app.requestSingleInstanceLock();
+
+if (!gotTheLock) {
+  app.quit();
+} else {
+  app.on("second-instance", (_event, commandLine) => {
+    const url = commandLine.find(arg => arg.startsWith(`${PROTOCOL}://`));
+    if (url) {
+      handleDeepLink(url);
+    }
+
+    if (mainWindow) {
+      if (mainWindow.isMinimized()) {
+        mainWindow.restore();
+      }
+      mainWindow.focus();
+    }
+  });
+}
+
+app.on("open-url", (event, url) => {
+  event.preventDefault();
+  handleDeepLink(url);
+});
 
 // 브라우저 윈도우 생성
 function createWindow(): void {
@@ -43,6 +107,12 @@ function createWindow(): void {
   // AppMonitor 초기화
   appMonitor = new AppMonitor(mainWindow);
   setupAppMonitorHandlers();
+
+  if (pendingDeepLink) {
+    const url = pendingDeepLink;
+    pendingDeepLink = null;
+    handleDeepLink(url);
+  }
 }
 
 function setupAppMonitorHandlers() {
@@ -63,25 +133,48 @@ function setupAppMonitorHandlers() {
   ipcMain.handle("app-monitor:get-sessions", () => {
     return appMonitor?.getSessions() ?? [];
   });
+
+  ipcMain.handle("open-external-url", async (_, url: string) => {
+    await shell.openExternal(url);
+  });
 }
+
+// 개발 환경에서 자체 서명 인증서 허용
+if (is.dev) {
+  app.commandLine.appendSwitch("ignore-certificate-errors");
+}
+
+// 개발 환경에서는 인증서 오류 무시
+app.on("certificate-error", (event, _webContents, _url, _error, _certificate, callback) => {
+  if (is.dev) {
+    event.preventDefault();
+    callback(true);
+  } else {
+    callback(false);
+  }
+});
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.whenReady().then(() => {
+  registerProtocol();
   // Set app user model id for windows
   electronApp.setAppUserModelId("com.electron");
 
   // CSP 설정
-  const apiUrl = process.env.VITE_API_URL || "http://localhost:8080";
-  const apiOrigin = new URL(apiUrl).origin;
+  const apiUrl = process.env.VITE_API_URL;
+  if (!apiUrl) {
+    console.error("VITE_API_URL이 설정되지 않았습니다.");
+  }
+  const apiOrigin = apiUrl ? new URL(apiUrl).origin : "";
 
   session.defaultSession.webRequest.onHeadersReceived((details, callback) => {
     callback({
       responseHeaders: {
         ...details.responseHeaders,
         "Content-Security-Policy": [
-          `default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self' ${apiOrigin}`,
+          `default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.google.com https://www.gstatic.com; style-src 'self' 'unsafe-inline' https://www.gstatic.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https://www.gstatic.com; frame-src https://www.google.com; connect-src 'self' ${apiOrigin} https://www.google.com`,
         ],
       },
     });

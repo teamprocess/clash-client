@@ -11,6 +11,7 @@ export const Container = styled.div`
 export const CompareContentBox = styled.div`
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
   width: 100%;
   height: 100%;
   gap: 1rem;

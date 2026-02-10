@@ -1,6 +1,10 @@
 import { api } from "@/shared/api/axios";
 import type { ApiResponse } from "@/shared/api/types";
 
+interface RecaptchaOptions {
+  recaptchaToken?: string;
+}
+
 export interface SignInRequest {
   username: string;
   password: string;
@@ -11,6 +15,27 @@ export interface SignInResponse {
   id: number;
   username: string;
   name: string;
+}
+
+export interface ElectronAuthStartResponse {
+  loginUrl: string;
+  state: string;
+}
+
+export interface ElectronAuthStartSignupResponse {
+  signupUrl: string;
+  state: string;
+}
+
+export interface ElectronAuthExchangeRequest {
+  code: string;
+  state: string;
+}
+
+export interface ElectronAuthExchangeResponse {
+  userId: number;
+  username: string;
+  role: string;
 }
 
 export interface UsernameDuplicateCheckRequest {
@@ -32,13 +57,64 @@ export interface EmailVerifyRequest {
   code: string;
 }
 
+export interface getMyProfileResponse {
+  id: number;
+  createdAt: string;
+  updatedAt: string;
+  username: string;
+  name: string;
+  email: string;
+  role: string;
+  profileImage: string;
+  totalExp: number;
+  totalCookie: number;
+  totalToken: number;
+  major: string;
+  userStatus: string;
+}
+
 export const authApi = {
-  // 로그인
-  signIn: async (data: SignInRequest) => {
-    const result = await api.post<ApiResponse<SignInResponse>>("/auth/sign-in", {
-      ...data,
-      rememberMe: data.rememberMe ?? true,
-    });
+  // Electron 로그인 시작
+  electronAuthStart: async (options?: RecaptchaOptions) => {
+    const result = await api.post<ApiResponse<ElectronAuthStartResponse>>(
+      "/auth/electron/sign-in/start",
+      {},
+      {
+        headers: options?.recaptchaToken
+          ? { "X-Recaptcha-Token": options.recaptchaToken }
+          : undefined,
+      }
+    );
+    return result.data;
+  },
+
+  // Electron 회원가입 시작
+  electronAuthStartSignup: async (options?: RecaptchaOptions) => {
+    const result = await api.post<ApiResponse<ElectronAuthStartSignupResponse>>(
+      "/auth/electron/sign-up/start",
+      {},
+      {
+        headers: options?.recaptchaToken
+          ? { "X-Recaptcha-Token": options.recaptchaToken }
+          : undefined,
+      }
+    );
+    return result.data;
+  },
+
+  // Electron 로그인 교환
+  electronAuthExchange: async (data: ElectronAuthExchangeRequest, options?: RecaptchaOptions) => {
+    const result = await api.post<ApiResponse<ElectronAuthExchangeResponse>>(
+      "/auth/electron/sign-in/exchange",
+      {
+        ...data,
+      },
+      {
+        headers: options?.recaptchaToken
+          ? { "X-Recaptcha-Token": options.recaptchaToken }
+          : undefined,
+      }
+    );
     return result.data;
   },
 
@@ -54,23 +130,45 @@ export const authApi = {
   },
 
   // 회원가입
-  signUp: async (data: SignUpRequest) => {
-    const result = await api.post<ApiResponse<void>>("/auth/sign-up", {
-      ...data,
-    });
+  signUp: async (data: SignUpRequest, options?: RecaptchaOptions) => {
+    const result = await api.post<ApiResponse<void>>(
+      "/auth/sign-up",
+      {
+        ...data,
+      },
+      {
+        headers: options?.recaptchaToken
+          ? { "X-Recaptcha-Token": options.recaptchaToken }
+          : undefined,
+      }
+    );
     return result.data;
   },
 
-  verifyEmail: async (data: EmailVerifyRequest) => {
-    const result = await api.post<ApiResponse<void>>("/auth/verify-email", {
-      ...data,
-    });
+  verifyEmail: async (data: EmailVerifyRequest, options?: RecaptchaOptions) => {
+    const result = await api.post<ApiResponse<void>>(
+      "/auth/verify-email",
+      {
+        ...data,
+      },
+      {
+        headers: options?.recaptchaToken
+          ? { "X-Recaptcha-Token": options.recaptchaToken }
+          : undefined,
+      }
+    );
     return result.data;
   },
 
   // 로그아웃
   signOut: async () => {
     const result = await api.post<ApiResponse<void>>("/auth/sign-out");
+    return result.data;
+  },
+
+  // 내 정보 조회
+  getMyProfile: async () => {
+    const result = await api.get<ApiResponse<getMyProfileResponse>>("/users/me");
     return result.data;
   },
 };

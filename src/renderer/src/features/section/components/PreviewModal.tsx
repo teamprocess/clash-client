@@ -1,6 +1,7 @@
 import * as S from "./PreviewModal.style";
-import { Modal } from "@/shared/ui/modal/Modal";
+import { Dialog } from "@/shared/ui";
 import { usePreview } from "../model/usePreview";
+import { useState } from "react";
 
 interface PreviewModalProps {
   isOpen: boolean;
@@ -17,39 +18,57 @@ export const PreviewModal = ({
   isLocked,
   sectionId,
 }: PreviewModalProps) => {
-  const {
-    previewData,
-    loading,
-    error,
-    currentStep,
-    activeStep,
-    totalSteps,
-    handlePrev,
-    handleNext,
-  } = usePreview(sectionId);
+  const { previewData, loading, error, totalSteps } = usePreview(sectionId);
+
+  const [currentStep, setCurrentStep] = useState(1);
+  const [prevSectionId, setPrevSectionId] = useState(sectionId);
+
+  // sectionId가 변경되면 currentStep 초기화
+  if (prevSectionId !== sectionId) {
+    setPrevSectionId(sectionId);
+    setCurrentStep(1);
+  }
+
+  const activeStep = previewData?.steps.find(step => step.id === currentStep);
+
+  const handlePrev = () => {
+    if (currentStep > 1) {
+      setCurrentStep(currentStep - 1);
+    }
+  };
+
+  const handleNext = () => {
+    if (currentStep < totalSteps) {
+      setCurrentStep(currentStep + 1);
+    }
+  };
+
+  const handleStepClick = (stepId: number) => {
+    setCurrentStep(stepId);
+  };
 
   if (loading) {
     return (
-      <Modal width={74} height={48} isOpen={isOpen} onClose={onClose}>
+      <Dialog width={74} height={48} isOpen={isOpen} onClose={onClose}>
         <S.PreviewModalWrapper>
           <div>로딩 중...</div>
         </S.PreviewModalWrapper>
-      </Modal>
+      </Dialog>
     );
   }
 
   if (error || !previewData) {
     return (
-      <Modal width={74} height={48} isOpen={isOpen} onClose={onClose}>
+      <Dialog width={74} height={48} isOpen={isOpen} onClose={onClose}>
         <S.PreviewModalWrapper>
           <div>데이터를 불러올 수 없습니다.</div>
         </S.PreviewModalWrapper>
-      </Modal>
+      </Dialog>
     );
   }
 
   return (
-    <Modal width={74} height={48} isOpen={isOpen} onClose={onClose}>
+    <Dialog width={74} height={48} isOpen={isOpen} onClose={onClose}>
       <S.PreviewModalWrapper>
         <S.PreviewModalTop>
           <S.PreviewModalIntro>
@@ -84,7 +103,7 @@ export const PreviewModal = ({
                 <S.RoadmapStepsContainer>
                   <S.RoadmapSteps>
                     {previewData.steps.map(step => (
-                      <S.StepWrapper key={step.id}>
+                      <S.StepWrapper key={step.id} onClick={() => handleStepClick(step.id)}>
                         <S.StepCircle $active={step.id === currentStep}>{step.id}</S.StepCircle>
                         {step.id === currentStep && <S.StepTooltip>{step.tooltip}</S.StepTooltip>}
                       </S.StepWrapper>
@@ -141,6 +160,6 @@ export const PreviewModal = ({
           </S.PreviewModalBody>
         </S.PreviewModalBottom>
       </S.PreviewModalWrapper>
-    </Modal>
+    </Dialog>
   );
 };

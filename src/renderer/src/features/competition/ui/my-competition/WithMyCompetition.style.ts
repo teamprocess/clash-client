@@ -1,11 +1,10 @@
 import styled from "styled-components";
 import { font } from "@/shared/config/font";
-import { palette } from "@/shared/config/theme";
 import EXP from "@/features/competition/assets/exp.svg";
 import Record from "@/features/competition/assets/record.svg";
 import Github from "@/features/competition/assets/github.svg";
 import SolvedAc from "@/features/home/assets/home/solved-logo.svg";
-import Arrow from "@/features/home/assets/home/arrow.svg";
+import Arrow from "@/shared/ui/assets/arrow.svg";
 
 export const ContentArea = styled.div`
   display: flex;
@@ -21,97 +20,13 @@ export const GraphWrapper = styled.div`
   display: flex;
   flex-direction: column;
   padding: 0.75rem;
+  width: 100%;
   gap: 0.625rem;
   height: 100%;
 `;
 
 export const AnalyzeTitle = styled.p`
   ${font.title2.bold};
-  color: ${({ theme }) => theme.label.normal};
-`;
-
-export const GraphBox = styled.div`
-  padding: 1rem 1rem;
-  height: 100%;
-  width: 100%;
-  display: flex;
-  align-items: flex-end;
-  background-color: ${({ theme }) => theme.background.alternative};
-  border-radius: 0.5rem;
-`;
-
-export const Bars = styled.div`
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  width: 100%;
-  height: 100%;
-  gap: 8rem;
-  overflow-x: auto;
-  scrollbar-width: none;
-`;
-
-export const BarWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-end;
-  height: 100%;
-  gap: 0.5rem;
-  flex: 1;
-`;
-
-export const Bar = styled.div<{ $ratio: number }>`
-  display: flex;
-  justify-content: center;
-  width: 1.5rem;
-  height: ${({ $ratio }) => `calc(${$ratio * 90}%)`};
-  min-height: 4px;
-  border-radius: 0.25rem 0.25rem 0 0;
-  position: relative;
-  &:hover ${() => BarValue} {
-    opacity: 1;
-    visibility: visible;
-    transform: translate(0, -50%);
-  }
-`;
-
-export const ValueHoverBox = styled.div`
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  height: 100%;
-`;
-
-export const BarValue = styled.p`
-  ${font.caption.bold}
-  color: ${({ theme }) => theme.label.normal};
-  background-color: ${({ theme }) => theme.fill.alternative};
-  padding: 0.125rem 0.4rem;
-  border-radius: 0.25rem;
-  z-index: 1000;
-  white-space: nowrap;
-  margin-top: 1.75rem;
-
-  position: absolute;
-  visibility: hidden;
-  opacity: 0;
-  transform: translate(-0.25rem, 50%);
-  pointer-events: none;
-`;
-
-export const BallValue = styled.div`
-  width: 0.75rem;
-  height: 0.75rem;
-  background: ${palette.blue[40]};
-  border-radius: 999px;
-  cursor: pointer;
-  z-index: 2;
-`;
-
-export const BarLabel = styled.p`
-  ${font.caption.medium}
   color: ${({ theme }) => theme.label.normal};
 `;
 
@@ -228,7 +143,6 @@ export const SelectWrapper = styled.div`
   position: relative;
 `;
 
-//드랍다운
 export const Select = styled.select`
   ${font.body.regular};
   width: 7.5rem;
@@ -248,7 +162,6 @@ export const Select = styled.select`
   }
 `;
 
-// 작동안되는 option 메소드 (브라우저에서 방해)
 export const Option = styled.option`
   ${font.body.regular};
   background-color: ${({ theme }) => theme.line.neutral};
@@ -259,6 +172,12 @@ export const GrowthRateBox = styled.div`
   flex-direction: column;
   align-items: flex-end;
   gap: 0.25rem;
+`;
+
+export const ChartWrapper = styled.div`
+  width: 100%;
+  flex: 1;
+  position: relative;
 `;
 
 export const EXPIcon = styled(EXP)``;

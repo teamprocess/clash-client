@@ -1,6 +1,6 @@
 import * as S from "./QuizModal.style";
-import { Modal } from "@/shared/ui/modal/Modal";
-import { Mission } from "@/features/chapter/mocks/missionData";
+import { Dialog } from "@/shared/ui";
+import type { Mission } from "@/features/chapter/model/chapter.types";
 import { QuizResult } from "@/features/chapter/components/QuizResult";
 import { useQuiz } from "../model/useQuiz";
 
@@ -33,9 +33,11 @@ export const QuizModal = ({
     onClose,
   });
 
+  console.log(currentQuestion);
+
   if (state.view === "final") {
     return (
-      <Modal width={25} height={33} isOpen={isOpen} onClose={handleClose} gap={6.5}>
+      <Dialog width={25} height={34} isOpen={isOpen} onClose={handleClose} gap={6.5}>
         <QuizResult
           isFinal
           isPassed={state.correctCount >= 4}
@@ -44,27 +46,27 @@ export const QuizModal = ({
           onRestart={resetState}
           onClose={handleClose}
         />
-      </Modal>
+      </Dialog>
     );
   }
 
   if (state.view === "result") {
     return (
-      <Modal width={25} height={33} isOpen={isOpen} onClose={handleClose} gap={3}>
+      <Dialog width={25} height={34} isOpen={isOpen} onClose={handleClose} gap={3}>
         <QuizResult
           isFinal={false}
-          isCorrect={state.lastResult ?? false}
+          isCorrect={state.lastResult === true}
           currentIndex={state.currentIndex}
           total={questions.length}
-          explanation={currentQuestion.explanation}
+          explanation={state.explanation}
           onNext={handleNextOrClose}
         />
-      </Modal>
+      </Dialog>
     );
   }
 
   return (
-    <Modal width={25} height={33} isOpen={isOpen} onClose={handleClose} gap={3}>
+    <Dialog width={25} height={34} isOpen={isOpen} onClose={handleClose} gap={3}>
       <S.ModalTop>
         <S.ProgressBarWrapper>
           <S.BarBackground>
@@ -79,7 +81,7 @@ export const QuizModal = ({
         <S.QuestionWrapper>
           <S.QuestionTitle>
             <S.QuestionPrefix>Q. </S.QuestionPrefix>
-            {currentQuestion.title}
+            {currentQuestion.content}
           </S.QuestionTitle>
         </S.QuestionWrapper>
       </S.ModalTop>
@@ -92,13 +94,13 @@ export const QuizModal = ({
               $selected={selectedChoiceId === choice.id}
               onClick={() => handleSelectChoice(choice.id)}
             >
-              {choice.text}
+              {choice.content}
             </S.AnswerOption>
           ))}
 
           <S.ConfirmButton onClick={handleConfirm}>선택 완료하기</S.ConfirmButton>
         </S.ButtonGroup>
       </S.ModalBody>
-    </Modal>
+    </Dialog>
   );
 };

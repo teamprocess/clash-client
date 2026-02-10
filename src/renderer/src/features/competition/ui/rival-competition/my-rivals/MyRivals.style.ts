@@ -47,7 +47,7 @@ export const ProfileWrapper = styled.div`
   gap: 0.5rem;
 `;
 
-export const ProfileContainer = styled.div`
+export const ProfileContainer = styled.button`
   display: flex;
   align-items: center;
   justify-content: space-between;

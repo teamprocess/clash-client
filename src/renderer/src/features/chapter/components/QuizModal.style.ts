@@ -71,7 +71,7 @@ export const QuestionTitle = styled.span`
   color: ${({ theme }) => theme.label.normal};
   text-overflow: ellipsis;
   text-align: center;
-  width: 16.25rem;
+  width: 20rem;
 `;
 
 export const QuestionPrefix = styled.span`
@@ -98,7 +98,7 @@ export const ButtonGroup = styled.div`
   gap: 0.75rem;
 `;
 
-export const AnswerOption = styled.div<{ $selected: boolean }>`
+export const AnswerOption = styled.button<{ $selected: boolean }>`
   display: flex;
   align-items: center;
   justify-content: center;
@@ -112,7 +112,7 @@ export const AnswerOption = styled.div<{ $selected: boolean }>`
   border: 3px solid ${({ $selected, theme }) => ($selected ? theme.primary.normal : "transparent")};
 `;
 
-export const ConfirmButton = styled.div`
+export const ConfirmButton = styled.button`
   display: flex;
   align-items: center;
   justify-content: center;
@@ -190,7 +190,7 @@ export const ResultButtonGroup = styled.div`
   gap: 0.75rem;
 `;
 
-export const ResultButton = styled.div<ResultButtonType>`
+export const ResultButton = styled.button<ResultButtonType>`
   display: flex;
   justify-content: center;
   align-items: center;
