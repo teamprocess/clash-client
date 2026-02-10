@@ -6,3 +6,5 @@ export { Dialog } from "./dialog";
 export type { DialogProps } from "./dialog";
 export { Popover } from "./popover";
 export type { PopoverProps } from "./popover";
+export { ModalActions } from "./dialog-actions";
+export type { ModalActionsProps } from "./dialog-actions";

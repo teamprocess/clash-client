@@ -26,9 +26,3 @@ export const ConfirmMessage = styled.p`
   ${font.body.medium};
   color: ${palette.red[60]};
 `;
-
-export const ActionBox = styled.div`
-  display: flex;
-  justify-content: flex-end;
-  gap: 0.5rem;
-`;
