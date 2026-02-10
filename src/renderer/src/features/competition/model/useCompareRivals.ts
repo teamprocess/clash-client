@@ -11,14 +11,14 @@ import { useGetMyProfile } from "@/entities/user";
 
 export const colorsOfMultiLine: string[] = ["#FFF", "#0081CC", "#C60608", "#15B756", "#FFCC01"];
 
-const competitionDropDownValue = [
+const competitionDropDownValue: { key: CategoryType; label: string }[] = [
   { key: "EXP", label: "EXP" },
   { key: "GITHUB", label: "Github" },
   { key: "SOLVED_AC", label: "solved.ac" },
   { key: "ACTIVE_TIME", label: "총 학습 시간" },
 ];
 
-const competitionPeriodDropDownValue = [
+const competitionPeriodDropDownValue: { key: PeriodType; label: string }[] = [
   { key: "DAY", label: "오늘" },
   { key: "WEEK", label: "이번 주" },
   { key: "MONTH", label: "이번 달" },
