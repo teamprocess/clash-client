@@ -54,7 +54,7 @@ export const RivalBox = styled.div`
 `;
 
 // MyRivalUsers styles
-export const ProfileContainer = styled.div`
+export const ProfileContainer = styled.button`
   width: 100%;
   height: 100%;
   border-radius: 0.5rem;
