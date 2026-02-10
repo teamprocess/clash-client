@@ -1,45 +1,42 @@
 import * as S from "./Filter.style";
 import { SearchInput } from "@/shared/ui/search-input";
+import { Select } from "@/shared/ui/select";
+import { useState } from "react";
 
-const sortOptions = [
-  { label: "최신 순", value: "latest" },
-  { label: "인기 순", value: "popular" },
-  { label: "가격 높은 순", value: "expensive" },
-  { label: "가격 낮은 순", value: "cheapest" },
+type SortType = "LATEST" | "POPULAR" | "EXPENSIVE" | "CHEAPEST";
+type CategoryType = "BANNER" | "NAMETAG" | "INSIGNIA";
+
+const sortOptions: {
+  key: SortType;
+  label: string;
+}[] = [
+  { key: "LATEST", label: "최신 순" },
+  { key: "POPULAR", label: "인기 순" },
+  { key: "EXPENSIVE", label: "가격 높은 순" },
+  { key: "CHEAPEST", label: "가격 낮은 순" },
 ];
 
-const categoryOptions = [
-  { label: "배너", value: "banner" },
-  { label: "이름표", value: "nametag" },
-  { label: "휘장", value: "insignia" },
+const categoryOptions: {
+  key: CategoryType;
+  label: string;
+}[] = [
+  { key: "BANNER", label: "배너" },
+  { key: "NAMETAG", label: "이름표" },
+  { key: "INSIGNIA", label: "휘장" },
 ];
 
 export const Filter = () => {
+  const [sort, setSort] = useState<SortType>("LATEST");
+  const [category, setCategory] = useState<CategoryType>("BANNER");
+
   return (
     <S.FilterContainer>
       <S.FilterBox>
-        <S.SelectWrapper>
-          <S.Select>
-            {sortOptions.map(option => (
-              <option key={option.value} value={option.value}>
-                {option.label}
-              </option>
-            ))}
-          </S.Select>
-          <S.ArrowIcon />
-        </S.SelectWrapper>
-        <S.SelectWrapper>
-          <S.Select>
-            {categoryOptions.map(option => (
-              <option key={option.value} value={option.value}>
-                {option.label}
-              </option>
-            ))}
-          </S.Select>
-          <S.ArrowIcon />
-        </S.SelectWrapper>
+        <Select<SortType> value={sort} options={sortOptions} onChange={setSort} />
+        <Select<CategoryType> value={category} options={categoryOptions} onChange={setCategory} />
       </S.FilterBox>
-      <SearchInput placeholder={"상품명으로 검색"} inputSize={"sm"} variant={"dark"} />
+
+      <SearchInput placeholder="상품명으로 검색" inputSize="sm" variant="dark" />
     </S.FilterContainer>
   );
 };

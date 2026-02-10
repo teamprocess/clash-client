@@ -4,6 +4,7 @@ import { useMyCompetition } from "@/features/competition/model/useMyCompetition"
 import { toLineChartData } from "@/features/competition/model/my-compete-chart/MyCompeteChartData";
 import { MyCompetitionLineChart } from "@/features/competition/model/my-compete-chart/MyCompetitionLineChart";
 import { CompareStandard, GrowthRateStandard } from "@/entities/competition";
+import { Select } from "@/shared/ui/select";
 
 export const WithMyCompetition = () => {
   const {
@@ -25,19 +26,11 @@ export const WithMyCompetition = () => {
       <S.GraphWrapper>
         <S.TitleBox style={{ justifyContent: "space-between" }}>
           <S.AnalyzeTitle>내 성장도 분석</S.AnalyzeTitle>
-          <S.SelectWrapper>
-            <S.Select
-              value={growthRateDropdown}
-              onChange={e => setGrowthRateDropdown(e.target.value as GrowthRateStandard)}
-            >
-              {growthRateDropDownValue.map(option => (
-                <S.Option key={option.key} value={option.key}>
-                  {option.label}
-                </S.Option>
-              ))}
-            </S.Select>
-            <S.ArrowIcon />
-          </S.SelectWrapper>
+          <Select<GrowthRateStandard>
+            value={growthRateDropdown}
+            options={growthRateDropDownValue}
+            onChange={setGrowthRateDropdown}
+          />
         </S.TitleBox>
 
         <S.ChartWrapper>
@@ -114,19 +107,11 @@ export const WithMyCompetition = () => {
           <S.CompareBox>
             <S.TextBox>
               <S.CompareBoxTitle>비교2</S.CompareBoxTitle>
-              <S.SelectWrapper>
-                <S.Select
-                  value={competitionDropdown}
-                  onChange={e => setCompetitionDropdown(e.target.value as CompareStandard)}
-                >
-                  {competitionDropDownValue.map(option => (
-                    <S.Option key={option.key} value={option.key}>
-                      {option.label}
-                    </S.Option>
-                  ))}
-                </S.Select>
-                <S.ArrowIcon />
-              </S.SelectWrapper>
+              <Select<CompareStandard>
+                value={competitionDropdown}
+                options={competitionDropDownValue}
+                onChange={setCompetitionDropdown}
+              />
             </S.TextBox>
 
             <S.GridContainer>

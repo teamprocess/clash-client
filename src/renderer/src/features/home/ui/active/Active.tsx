@@ -2,7 +2,7 @@ import * as S from "./Active.style";
 import { ActiveLineChart } from "@/features/home/model/ActiveChart";
 import { toLineChartData } from "@/features/home/model/lineChartData";
 import { useActive } from "@/features/home/model/useActive";
-import { Select } from "@/shared/ui/select/Select";
+import { Select } from "@/shared/ui/select";
 import { CategoryType } from "@/entities/home";
 
 export const Active = () => {
