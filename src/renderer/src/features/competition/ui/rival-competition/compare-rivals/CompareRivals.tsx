@@ -5,6 +5,7 @@ import {
   PeriodType,
 } from "@/entities/competition/model/rival-competition/compareRivals.types";
 import { RivalCompetitionLineChart } from "@/features/competition/model/rival-compete-chart/RivalCompeteLineChart";
+import { Select } from "@/shared/ui/select";
 
 export const RivalCompare = () => {
   const {
@@ -26,32 +27,16 @@ export const RivalCompare = () => {
         <S.TitleBox>
           <S.Title>라이벌과 비교</S.Title>
           <S.DropDownBox>
-            <S.SelectWrapper>
-              <S.Select
-                value={competitionPeriodDropDown}
-                onChange={e => setCompetitionPeriodDropDown(e.target.value as PeriodType)}
-              >
-                {competitionPeriodDropDownValue.map(option => (
-                  <S.Option key={option.key} value={option.key}>
-                    {option.label}
-                  </S.Option>
-                ))}
-              </S.Select>
-              <S.ArrowIcon />
-            </S.SelectWrapper>
-            <S.SelectWrapper>
-              <S.Select
-                value={competitionDropdown}
-                onChange={e => setCompetitionDropdown(e.target.value as CategoryType)}
-              >
-                {competitionDropDownValue.map(option => (
-                  <S.Option key={option.key} value={option.key}>
-                    {option.label}
-                  </S.Option>
-                ))}
-              </S.Select>
-              <S.ArrowIcon />
-            </S.SelectWrapper>
+            <Select<PeriodType>
+              value={competitionPeriodDropDown}
+              options={competitionPeriodDropDownValue}
+              onChange={setCompetitionPeriodDropDown}
+            />
+            <Select<CategoryType>
+              value={competitionDropdown}
+              options={competitionDropDownValue}
+              onChange={setCompetitionDropdown}
+            />
           </S.DropDownBox>
         </S.TitleBox>
         <S.GaroLine />
