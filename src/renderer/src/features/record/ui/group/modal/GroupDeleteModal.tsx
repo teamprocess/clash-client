@@ -22,10 +22,10 @@ export const GroupDeleteModal = ({ isOpen, onClose, onConfirm, action }: GroupDe
           <S.Text $type="WARNING">{warning}</S.Text>
         </S.TextBox>
         <S.ButtonBox>
-          <Button variant="secondary" size="lg" onClick={onClose}>
+          <Button variant="secondary" size="md" onClick={onClose}>
             취소
           </Button>
-          <Button variant="danger" size="lg" onClick={onConfirm}>
+          <Button variant="danger" size="md" onClick={onConfirm}>
             {confirmLabel}
           </Button>
         </S.ButtonBox>

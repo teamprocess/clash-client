@@ -33,10 +33,10 @@ export const ConfirmDialog = ({
           {confirmMessage && <S.ConfirmMessage>{confirmMessage}</S.ConfirmMessage>}
         </S.MessageBox>
         <S.ActionBox>
-          <Button variant="secondary" size="lg" onClick={onClose} disabled={isConfirming}>
+          <Button variant="secondary" size="md" onClick={onClose} disabled={isConfirming}>
             {cancelLabel}
           </Button>
-          <Button variant="primary" size="lg" onClick={onConfirm} disabled={isConfirming}>
+          <Button variant="primary" size="md" onClick={onConfirm} disabled={isConfirming}>
             {isConfirming ? `${confirmLabel} 중...` : confirmLabel}
           </Button>
         </S.ActionBox>
