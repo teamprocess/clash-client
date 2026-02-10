@@ -1,4 +1,4 @@
-import * as S from "./Select.styles";
+import * as S from "./Select.style";
 
 interface SelectOption<T extends string> {
   key: T;
