@@ -5,6 +5,7 @@ import { ProductCard } from "@/features/shop/ui/card/ProductCard";
 import { Filter } from "@/features/shop/ui/filter/Filter";
 import { Product } from "@/entities/product";
 import { PurchaseModal } from "@/features/shop/ui/purchase/PurchaseModal";
+import { usePurchaseProduct } from "@/features/shop/model/usePurchaseProduct";
 
 interface ProductsProps {
   products: Product[];
@@ -45,7 +46,11 @@ export const Products = ({ products, isLoading }: ProductsProps) => {
     setIsPurchaseOpen(false);
   };
 
-  const handlePurchase = async () => {};
+  const purchaseMutation = usePurchaseProduct();
+
+  const handlePurchase = async (product: Product) => {
+    await purchaseMutation.mutateAsync(product.id);
+  };
 
   useEffect(() => {
     const shouldLock = isPanelOpen || isPurchaseOpen;
