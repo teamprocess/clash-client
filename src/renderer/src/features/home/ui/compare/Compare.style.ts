@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import BackArrow from "../../assets/home/back.svg";
-import Arrow from "@/features/home/assets/home/arrow.svg";
+import Arrow from "@/shared/ui/assets/arrow.svg";
 import { font } from "@/shared/config/font";
 
 export const Wrapper = styled.div`
