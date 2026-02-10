@@ -1,4 +1,5 @@
 import { Modal } from "@/shared/ui/modal/Modal";
+import type { ButtonVariant } from "@/shared/ui/button";
 import { Button } from "@/shared/ui/button";
 import * as S from "./ConfirmDialog.style";
 
@@ -9,6 +10,7 @@ export interface ConfirmDialogProps {
   confirmMessage?: string;
   confirmLabel?: string;
   cancelLabel?: string;
+  confirmVariant?: ButtonVariant;
   isConfirming?: boolean;
   onClose: () => void;
   onConfirm: () => void;
@@ -21,6 +23,7 @@ export const ConfirmDialog = ({
   confirmMessage,
   confirmLabel = "확인",
   cancelLabel = "취소",
+  confirmVariant = "primary",
   isConfirming = false,
   onClose,
   onConfirm,
@@ -36,7 +39,7 @@ export const ConfirmDialog = ({
           <Button variant="secondary" size="md" onClick={onClose} disabled={isConfirming}>
             {cancelLabel}
           </Button>
-          <Button variant="primary" size="md" onClick={onConfirm} disabled={isConfirming}>
+          <Button variant={confirmVariant} size="md" onClick={onConfirm} disabled={isConfirming}>
             {isConfirming ? `${confirmLabel} 중...` : confirmLabel}
           </Button>
         </S.ActionBox>
