@@ -1,7 +1,7 @@
 import * as S from "./Task.style";
 import { formatTime } from "@/shared/lib";
 import { useTaskList } from "../../model/useTaskList";
-import { Button, ConfirmDialog } from "@/shared/ui";
+import { Button, ConfirmDialog, Popover } from "@/shared/ui";
 
 export const Task = () => {
   const {
@@ -17,6 +17,7 @@ export const Task = () => {
     setTaskName,
     handlePlayPauseClick,
     handleMoreClick,
+    handleCloseMenu,
     handleEditClick,
     handleDeleteRequest,
     handleAddClick,
@@ -74,14 +75,14 @@ export const Task = () => {
                     <S.IconButton onClick={() => handleMoreClick(task.id)}>
                       <S.MoreIcon />
                     </S.IconButton>
-                    {isMenuOpen && (
-                      <S.DropdownMenu>
+                    <Popover isOpen={isMenuOpen} onClose={handleCloseMenu} anchorRef={menuRef}>
+                      <S.MenuList>
                         <S.MenuItem onClick={() => handleEditClick(task.id)}>과목 수정</S.MenuItem>
                         <S.MenuItem onClick={() => handleDeleteRequest(task.id)}>
                           과목 삭제
                         </S.MenuItem>
-                      </S.DropdownMenu>
-                    )}
+                      </S.MenuList>
+                    </Popover>
                   </S.MoreIconWrapper>
                 </S.TaskRightBox>
               </S.TaskItem>

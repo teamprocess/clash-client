@@ -79,6 +79,10 @@ export const useGroup = () => {
     setIsMenuOpen(!isMenuOpen);
   };
 
+  const handleCloseMenu = () => {
+    setIsMenuOpen(false);
+  };
+
   const handleOpenFormModal = () => {
     setIsFormModalOpen(true);
     createForm.reset({
@@ -316,6 +320,7 @@ export const useGroup = () => {
     menuRef,
     isMenuOpen,
     handleMoreClick,
+    handleCloseMenu,
     // 그룹 생성/참여 모달
     handleOpenFormModal,
     // 그룹 수정 모달
