@@ -1,7 +1,6 @@
 import styled from "styled-components";
 import Arrow from "@/features/shop/assets/arrow.svg";
 import { font } from "@/shared/config/font";
-import Search from "@/features/shop/assets/search.svg";
 
 export const FilterContainer = styled.div`
   flex-shrink: 0;
@@ -50,31 +49,4 @@ export const Select = styled.select`
   &:focus {
     outline: none;
   }
-`;
-
-export const SearchBox = styled.div`
-  display: flex;
-  width: 14.5rem;
-  height: 2.25rem;
-  padding: 0.5rem 1rem;
-  justify-content: space-between;
-  align-items: center;
-  border-radius: 0.75rem;
-  background-color: ${({ theme }) => theme.fill.neutral};
-`;
-
-export const SearchInput = styled.input`
-  width: 10.75rem;
-  overflow: hidden;
-  background-color: transparent;
-  border: none;
-  color: ${({ theme }) => theme.label.assistive};
-  ${font.body.regular};
-  &:focus {
-    outline: none;
-  }
-`;
-
-export const SearchIcon = styled(Search)`
-  cursor: pointer;
 `;
