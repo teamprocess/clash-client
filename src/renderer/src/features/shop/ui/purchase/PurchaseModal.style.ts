@@ -172,3 +172,8 @@ export const SuccessTitle = styled.div`
   ${font.headline2.bold};
   text-align: center;
 `;
+
+export const ErrorText = styled.p`
+  margin-top: 12px;
+  text-align: center;
+`;
