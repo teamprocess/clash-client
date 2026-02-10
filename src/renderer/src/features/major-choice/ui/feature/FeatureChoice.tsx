@@ -1,5 +1,6 @@
 import * as S from "./FeatureChoice.style";
 import { FeatureProps } from "@/features/major-choice/model/useMajorChoice";
+import { ChoiceBox } from "../choice-box/ChoiceBox";
 
 export const FeatureChoice = ({
   selected,
@@ -21,23 +22,25 @@ export const FeatureChoice = ({
             기능입니다. 전공 선택 기능은 나의 전공을 선택할 수 있는 기능입니다.
           </S.RoadMapDescription>
         </S.RoadMapTop>
+
         <S.ChoiceWrapper>
-          <S.ChoiceBox onClick={() => select("TEST")} $isSelected={selected === "TEST"}>
-            <S.ChoiceItem>
-              {selected === "TEST" ? <S.CheckedIcon /> : <S.NotCheckedIcon />}
-              <S.TestIcon />
-              <S.ChoiceText>전공 성향 검사</S.ChoiceText>
-            </S.ChoiceItem>
-          </S.ChoiceBox>
-          <S.ChoiceBox onClick={() => select("CHOICE")} $isSelected={selected === "CHOICE"}>
-            <S.ChoiceItem>
-              {selected === "CHOICE" ? <S.CheckedIcon /> : <S.NotCheckedIcon />}
-              <S.ChoiceIcon />
-              <S.ChoiceText>전공 선택</S.ChoiceText>
-            </S.ChoiceItem>
-          </S.ChoiceBox>
+          <ChoiceBox
+            size="md"
+            selected={selected === "TEST"}
+            icon={<S.TestIcon />}
+            label="전공 성향 검사"
+            onClick={() => select("TEST")}
+          />
+          <ChoiceBox
+            size="md"
+            selected={selected === "CHOICE"}
+            icon={<S.ChoiceIcon />}
+            label="전공 선택"
+            onClick={() => select("CHOICE")}
+          />
         </S.ChoiceWrapper>
-        <S.RoadMapButton disabled={!isValid} onClick={() => handleFeatureChoiceSubmit()}>
+
+        <S.RoadMapButton disabled={!isValid} onClick={handleFeatureChoiceSubmit}>
           선택 완료하기
         </S.RoadMapButton>
       </S.RoadMapContents>
