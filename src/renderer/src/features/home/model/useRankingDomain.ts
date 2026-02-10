@@ -2,13 +2,13 @@ import { useState } from "react";
 import { RankingsResponse, CategoryType, PeriodType, useRankingQuery } from "@/entities/home";
 import { useGetMyProfile } from "@/entities/user";
 
-export const rankingDropDownValue: Array<{ key: CategoryType; label: string }> = [
+export const rankingDropDownValue: { key: CategoryType; label: string }[] = [
   { key: "GITHUB", label: "Github" },
   { key: "EXP", label: "EXP" },
   { key: "ACTIVE_TIME", label: "총 학습 시간" },
 ];
 
-export const rankingPeriodDropDownValue: Array<{ key: PeriodType; label: string }> = [
+export const rankingPeriodDropDownValue: { key: PeriodType; label: string }[] = [
   { key: "DAY", label: "오늘" },
   { key: "WEEK", label: "이번 주" },
   { key: "MONTH", label: "이번 달" },
