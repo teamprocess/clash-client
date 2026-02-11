@@ -31,9 +31,11 @@ export const Ranking = () => {
 
       <S.UserWrapper ref={wrapperRef}>
         {domain.userList.rankings.length === 0 ? (
-          <S.EmptyTitleBox>
-            <S.EmptyTitle>아직 랭킹 데이터가 없어요.</S.EmptyTitle>
-          </S.EmptyTitleBox>
+          <S.DetailWrapper>
+            <S.DefaultBattleBox>
+              <S.DefaultBattleText>아직 랭킹에 대한 데이터가 없어요.</S.DefaultBattleText>
+            </S.DefaultBattleBox>
+          </S.DetailWrapper>
         ) : (
           domain.userList.rankings.map((user: RankingItem, index: number) => (
             <UserRanking

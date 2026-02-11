@@ -43,7 +43,7 @@ export const Line = styled.div`
 
 export const UserWrapper = styled.div`
   width: 100%;
-  height: 16rem;
+  flex: 1;
   display: flex;
   flex-direction: column;
   overflow-y: auto;
@@ -62,14 +62,27 @@ export const StickyUser = styled.div<{ $position: "top" | "bottom" }>`
   margin: 1rem 0;
 `;
 
-export const EmptyTitleBox = styled.div`
+export const DetailWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem;
+  gap: 1rem;
+  border-radius: 0.5rem;
   width: 100%;
   height: 100%;
-  align-content: center;
-  text-align: center;
+  background-color: ${({ theme }) => theme.background.alternative};
 `;
 
-export const EmptyTitle = styled.p`
-  ${font.headline2.medium}
-  color: ${({ theme }) => theme.label.neutral};
+export const DefaultBattleBox = styled.div`
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+`;
+
+export const DefaultBattleText = styled.p`
+  ${font.label.medium};
+  color: ${({ theme }) => theme.label.assistive};
 `;
