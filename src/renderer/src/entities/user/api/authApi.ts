@@ -71,6 +71,8 @@ export interface getMyProfileResponse {
   totalToken: number;
   major: string;
   userStatus: string;
+  githubLinked: boolean;
+  activityStatus: string;
 }
 
 export const authApi = {
