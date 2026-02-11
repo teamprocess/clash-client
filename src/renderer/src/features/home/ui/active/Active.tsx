@@ -4,10 +4,24 @@ import { toLineChartData } from "@/features/home/model/lineChartData";
 import { useActive } from "@/features/home/model/useActive";
 import { Select } from "@/shared/ui/select";
 import { CategoryType } from "@/entities/home";
-
+import { useMemo } from "react";
 export const Active = () => {
   const getActiveData = useActive();
   const chartData = toLineChartData(getActiveData.variations);
+
+  const fullChartData = useMemo(() => {
+    const fullMonths = Array.from({ length: 12 }, (_, i) => i + 1);
+
+    const values = fullMonths.map(month => {
+      const index = chartData.data.labels.indexOf(month);
+      return index !== -1 ? chartData.data.values[index] : 0;
+    });
+
+    return {
+      labels: fullMonths,
+      values,
+    };
+  }, [chartData]);
 
   return (
     <S.ActiveContainer>
@@ -44,19 +58,11 @@ export const Active = () => {
             </S.Grid>
           </S.GrassBox>
         </S.StreakBox>
+
         <S.StreakBox>
           <S.StreakTitle>Contributes 변화 추이</S.StreakTitle>
           <S.ChartWrapper>
-            <ActiveLineChart
-              data={
-                chartData.data.labels.length === 0
-                  ? {
-                      labels: Array.from({ length: 12 }, (_, i) => i + 1),
-                      values: Array(12).fill(0),
-                    }
-                  : chartData.data
-              }
-            />
+            <ActiveLineChart data={fullChartData} />
           </S.ChartWrapper>
         </S.StreakBox>
       </S.StreakContainer>
