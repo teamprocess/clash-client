@@ -1,5 +1,6 @@
 export { groupApi } from "./api/groupApi";
 export {
+  groupQueryKeys,
   useAllGroupsQuery,
   useGroupActivityQuery,
   useGroupDetailQuery,
