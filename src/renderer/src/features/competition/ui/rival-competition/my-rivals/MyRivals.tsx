@@ -41,7 +41,13 @@ export const MyRivals = () => {
               </S.ProfileContainer>
             ))
           ) : (
-            <S.EmptyText>현재 등록된 라이벌이 없습니다.</S.EmptyText>
+            <S.DetailWrapper>
+              <S.DefaultBattleBox>
+                <S.DefaultBattleText>
+                  위 배틀을 선택하여 배틀의 상세 내용을 확인해보세요!
+                </S.DefaultBattleText>
+              </S.DefaultBattleBox>
+            </S.DetailWrapper>
           )}
         </S.ProfileWrapper>
       </S.RivalList>
