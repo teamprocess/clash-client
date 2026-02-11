@@ -25,7 +25,13 @@ export const Active = () => {
           <S.StreakTitle>스트릭</S.StreakTitle>
           <S.GrassBox>
             <S.Grid>
-              {getActiveData.activeData?.streaks.map(day => (
+              {(
+                getActiveData.activeData?.streaks ??
+                Array.from({ length: 365 }, (_, i) => ({
+                  date: `empty-${i}`,
+                  detailedInfo: 0,
+                }))
+              ).map(day => (
                 <S.Grass key={day.date} $level={getActiveData.getLevel(day.detailedInfo)} />
               ))}
             </S.Grid>
@@ -34,7 +40,16 @@ export const Active = () => {
         <S.StreakBox>
           <S.StreakTitle>Contributes 변화 추이</S.StreakTitle>
           <S.ChartWrapper>
-            <ActiveLineChart data={chartData.data}></ActiveLineChart>
+            <ActiveLineChart
+              data={
+                chartData.data.labels.length === 0
+                  ? {
+                      labels: Array.from({ length: 12 }, (_, i) => i + 1),
+                      values: Array(365).fill(0),
+                    }
+                  : chartData.data
+              }
+            />
           </S.ChartWrapper>
         </S.StreakBox>
       </S.StreakContainer>
