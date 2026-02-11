@@ -25,17 +25,17 @@ export const useActive = () => {
   const { data } = useActiveQuery(activeDropdown);
   const activeData: ActiveResponse | null = data?.data ?? null;
 
+  const streaks = activeData?.streaks ?? [];
+
   const maxContribute = useMemo(() => {
-    if (!activeData?.streaks?.length) return 0;
-    return Math.max(...activeData.streaks.map(v => v.detailedInfo));
-  }, [activeData]);
+    if (!streaks.length) return 0;
+    return Math.max(...streaks.map(v => v.detailedInfo));
+  }, [streaks]);
 
-  const getLevel = (count: number) => {
-    const numeric = Number(count);
+  const getLevel = (count: number): number => {
+    if (!maxContribute || count <= 0) return 0;
 
-    if (!maxContribute || isNaN(numeric) || numeric <= 0) return 0;
-
-    const ratio = numeric / maxContribute;
+    const ratio = count / maxContribute;
 
     if (ratio >= 0.8) return 4;
     if (ratio >= 0.6) return 3;
@@ -44,34 +44,38 @@ export const useActive = () => {
   };
 
   const paddedStreaks: RenderStreakItem[] = useMemo(() => {
-    const streaks = activeData?.streaks ?? [];
-
     if (!streaks.length) return [];
 
-    const sorted = [...streaks].sort(
-      (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
-    );
+    const sorted = [...streaks].sort((a, b) => +new Date(a.date) - +new Date(b.date));
 
     const startDate = new Date(sorted[0].date);
+    const year = startDate.getFullYear();
+    const endDate = new Date(year, 11, 31);
 
-    const endDate = new Date(startDate.getFullYear(), 11, 31);
-
-    const dateList: string[] = [];
-    const current = new Date(startDate);
-
-    while (current <= endDate) {
-      dateList.push(current.toISOString().split("T")[0]);
-      current.setDate(current.getDate() + 1);
+    const streakMap = new Map<string, number>();
+    for (const s of sorted) {
+      streakMap.set(s.date, s.detailedInfo);
     }
 
-    const streakMap = new Map(streaks.map(v => [v.date, v.detailedInfo]));
+    const fullRange: RenderStreakItem[] = [];
+    const cursor = new Date(startDate);
 
-    const fullRange: RenderStreakItem[] = dateList.map(date => ({
-      date,
-      detailedInfo: streakMap.get(date) ?? 0,
-    }));
+    while (cursor <= endDate) {
+      const yyyy = cursor.getFullYear();
+      const mm = String(cursor.getMonth() + 1).padStart(2, "0");
+      const dd = String(cursor.getDate()).padStart(2, "0");
 
-    const firstDay = new Date(fullRange[0].date).getDay();
+      const dateStr = `${yyyy}-${mm}-${dd}`;
+
+      fullRange.push({
+        date: dateStr,
+        detailedInfo: streakMap.get(dateStr) ?? 0,
+      });
+
+      cursor.setDate(cursor.getDate() + 1);
+    }
+
+    const firstDay = new Date(fullRange[0].date).getDay(); // 0(일)~6(토)
     const mondayIndex = firstDay === 0 ? 6 : firstDay - 1;
 
     const padding: RenderStreakItem[] = Array.from({ length: mondayIndex }, (_, i) => ({
@@ -81,7 +85,7 @@ export const useActive = () => {
     }));
 
     return [...padding, ...fullRange];
-  }, [activeData]);
+  }, [streaks]);
 
   const variations = activeData?.variations ?? [];
 
