@@ -19,20 +19,27 @@ export const Active = () => {
           onChange={getActiveData.setActiveDropdown}
         />
       </S.TitleBox>
+
       <S.Line />
+
       <S.StreakContainer>
         <S.StreakBox>
           <S.StreakTitle>스트릭</S.StreakTitle>
+
           <S.GrassBox>
             <S.Grid>
-              {(getActiveData.activeData?.streaks && getActiveData.activeData.streaks.length > 0
-                ? getActiveData.activeData.streaks
-                : Array.from({ length: 365 }, (_, i) => ({
-                    date: `empty-${i}`,
-                    detailedInfo: 0,
-                  }))
-              ).map(day => (
-                <S.Grass key={day.date} $level={getActiveData.getLevel(day.detailedInfo ?? 0)} />
+              {getActiveData.paddedStreaks.map(day => (
+                <S.GrassWrapper key={day.date}>
+                  <S.Grass $level={getActiveData.getLevel(day.detailedInfo ?? 0)} />
+
+                  {!day.isPadding && (
+                    <S.Tooltip>
+                      {day.date}
+                      <br />
+                      {day.detailedInfo ?? 0}회
+                    </S.Tooltip>
+                  )}
+                </S.GrassWrapper>
               ))}
             </S.Grid>
           </S.GrassBox>
@@ -45,7 +52,7 @@ export const Active = () => {
                 chartData.data.labels.length === 0
                   ? {
                       labels: Array.from({ length: 12 }, (_, i) => i + 1),
-                      values: Array(365).fill(0),
+                      values: Array(12).fill(0),
                     }
                   : chartData.data
               }
