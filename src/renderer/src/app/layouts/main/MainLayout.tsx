@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Outlet } from "react-router-dom";
+import { GitHubGuard } from "@/features/github";
 import { Topbar } from "@/widgets/topbar";
 import { Sidebar } from "@/widgets/sidebar";
 import * as S from "./MainLayout.style";
@@ -25,6 +26,7 @@ export const MainLayout = ({ variant = "default" }: MainLayoutProps) => {
           <Outlet />
         </S.MainContent>
       </S.ContentWrapper>
+      <GitHubGuard />
     </S.LayoutContainer>
   );
 };
