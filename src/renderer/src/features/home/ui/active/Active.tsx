@@ -14,7 +14,13 @@ export const Active = () => {
 
     const values = fullMonths.map(month => {
       const index = chartData.data.labels.indexOf(month);
-      return index !== -1 ? chartData.data.values[index] : 0;
+
+      if (index !== -1) {
+        const value = chartData.data.values[index];
+        return Math.round(Number(value));
+      }
+
+      return 0;
     });
 
     return {
