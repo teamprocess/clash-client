@@ -74,7 +74,12 @@ export const useRecordStore = create<RecordStore>((set, get) => ({
       const response = await recordApi.stopRecord();
 
       if (!response.success) {
-        throw new Error("기록 중지 응답이 실패로 반환되었습니다.");
+        console.error("기록 중지 실패:", "기록 중지 응답이 실패로 반환되었습니다.", response);
+        await Promise.all([
+          queryClient.invalidateQueries({ queryKey: recordQueryKeys.tasks }),
+          queryClient.invalidateQueries({ queryKey: recordQueryKeys.today }),
+        ]);
+        return;
       }
 
       // 중지 직후 서버 정합성만 다시 맞추면 충분해서 tasks만 무효화
