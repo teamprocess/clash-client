@@ -1,8 +1,10 @@
 import * as S from "./QuizModal.style";
+import { Button } from "@/shared/ui/button";
 import { Dialog } from "@/shared/ui";
 import type { Mission } from "@/features/chapter/model/chapter.types";
 import { QuizResult } from "@/features/chapter/components/QuizResult";
 import { useQuiz } from "../model/useQuiz";
+import { AnswerOptionButton } from "../ui/AnswerOptionButton";
 
 interface QuizModalProps {
   isOpen: boolean;
@@ -32,8 +34,6 @@ export const QuizModal = ({
     onMissionComplete,
     onClose,
   });
-
-  console.log(currentQuestion);
 
   if (state.view === "final") {
     return (
@@ -89,16 +89,24 @@ export const QuizModal = ({
       <S.ModalBody>
         <S.ButtonGroup>
           {currentQuestion.choices.map(choice => (
-            <S.AnswerOption
+            <AnswerOptionButton
               key={choice.id}
-              $selected={selectedChoiceId === choice.id}
-              onClick={() => handleSelectChoice(choice.id)}
-            >
-              {choice.content}
-            </S.AnswerOption>
+              id={choice.id}
+              content={choice.content}
+              selectedId={selectedChoiceId}
+              onSelect={handleSelectChoice}
+            />
           ))}
 
-          <S.ConfirmButton onClick={handleConfirm}>선택 완료하기</S.ConfirmButton>
+          <Button
+            variant="primary"
+            size="lg"
+            onClick={handleConfirm}
+            disabled={!selectedChoiceId}
+            fullWidth
+          >
+            선택 완료하기
+          </Button>
         </S.ButtonGroup>
       </S.ModalBody>
     </Dialog>

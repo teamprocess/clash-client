@@ -1,23 +1,24 @@
 import * as S from "./MajorChoice.style";
 import { MajorProps } from "@/features/major-choice/model/useMajorChoice";
+import { Button } from "@/shared/ui/button";
 import { ChoiceBox } from "@/features/major-choice/ui/choice-box/ChoiceBox";
 
 export const MajorChoice = ({ selectedMajor, major, isValid, username, onSubmit }: MajorProps) => {
   return (
-    <S.ChoiceContainer>
-      <S.ChoiceContents>
-        <S.ChoiceContentsTop>
-          <S.ChoiceTitle>원하는 전공을 선택해주세요!</S.ChoiceTitle>
-          <S.ChoiceDescription>
-            안녕하세요. {username}님. 원하는 전공을 선택하여 주세요.
-            <br />
-            희망하는 전공을 선택하여 나의 전공에 맞는 로드맵을 수행할 수 있습니다.
-          </S.ChoiceDescription>
-        </S.ChoiceContentsTop>
-
-        <S.ChoiceWrapper>
-          <S.ChoiceTop>
-            <ChoiceBox
+    <>
+      <S.ChoiceContainer>
+        <S.ChoiceContents>
+          <S.ChoiceContentsTop>
+            <S.ChoiceTitle>원하는 전공을 선택해주세요!</S.ChoiceTitle>
+            <S.ChoiceDescription>
+              안녕하세요. {username}님. 원하는 전공을 선택하여 주세요.
+              <br />
+              희망하는 전공을 선택하여 나의 전공에 맞는 로드맵을 수행할 수 있습니다.
+            </S.ChoiceDescription>
+          </S.ChoiceContentsTop>
+          <S.ChoiceWrapper>
+            <S.ChoiceTop>
+               <ChoiceBox
               size="sm"
               selected={major === "WEB"}
               icon={<S.WebIcon />}
@@ -55,13 +56,19 @@ export const MajorChoice = ({ selectedMajor, major, isValid, username, onSubmit 
               label="게임"
               onClick={() => selectedMajor("GAME")}
             />
-          </S.ChoiceBottom>
-        </S.ChoiceWrapper>
-
-        <S.RoadMapButton disabled={!isValid} onClick={onSubmit}>
-          선택 완료하기
-        </S.RoadMapButton>
-      </S.ChoiceContents>
-    </S.ChoiceContainer>
+            </S.ChoiceBottom>
+          </S.ChoiceWrapper>
+          <Button
+            variant="primary"
+            size="lg"
+            disabled={!isValid}
+            onClick={onSubmit}
+            fullWidth={true}
+          >
+            선택 완료하기
+          </Button>
+        </S.ChoiceContents>
+      </S.ChoiceContainer>
+    </>
   );
 };

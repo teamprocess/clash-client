@@ -52,20 +52,10 @@ export const PreviewModalDescription = styled.p`
   color: ${({ theme }) => theme.label.assistive};
 `;
 
-export const PreviewModalAction = styled.button<{ $locked?: boolean }>`
+export const PreviewModalAction = styled.div<{ $locked?: boolean }>`
   display: flex;
   justify-content: center;
   align-items: center;
-  ${font.label.medium}
-  color: ${({ $locked }) => ($locked ? palette.neutral["70"] : palette.neutral["99"])};
-  background-color: ${({ theme, $locked }) =>
-    $locked ? theme.line.neutral : theme.primary.normal};
-  border-radius: 0.25rem;
-  padding: 0.5rem 2.5rem;
-  cursor: ${({ $locked }) => ($locked ? "not-allowed" : "pointer")};
-  transition:
-    background-color 0.2s ease,
-    color 0.2s ease;
 `;
 
 export const SectionDivider = styled.div<{ $type: string }>`

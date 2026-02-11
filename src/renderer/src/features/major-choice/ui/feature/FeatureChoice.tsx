@@ -1,5 +1,6 @@
 import * as S from "./FeatureChoice.style";
 import { FeatureProps } from "@/features/major-choice/model/useMajorChoice";
+import { Button } from "@/shared/ui/button";
 import { ChoiceBox } from "../choice-box/ChoiceBox";
 
 export const FeatureChoice = ({
@@ -39,10 +40,16 @@ export const FeatureChoice = ({
             onClick={() => select("CHOICE")}
           />
         </S.ChoiceWrapper>
-
+        <Button
+          variant="primary"
+          size="lg"
+          disabled={!isValid}
+          onClick={handleFeatureChoiceSubmit}
+          fullWidth={true}
+        >
         <S.RoadMapButton disabled={!isValid} onClick={handleFeatureChoiceSubmit}>
           선택 완료하기
-        </S.RoadMapButton>
+        </Button>
       </S.RoadMapContents>
     </S.RoadMapContainer>
   );

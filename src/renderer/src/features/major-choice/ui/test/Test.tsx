@@ -1,5 +1,6 @@
 import * as S from "./Test.style";
 import { TestProps } from "@/features/major-choice/model/useMajorChoice";
+import { Button } from "@/shared/ui/button";
 
 const answerBoxData = [
   { id: 1, content: "매우 그렇지 않다", size: "Large" },
@@ -52,13 +53,15 @@ export const Test = ({
               </S.AnswerContainer>
             </S.QuestionBox>
           ))}
-          <S.SubmitButton
-            $isActive={isAllAnswered}
+          <Button
+            variant="primary"
+            size="lg"
             disabled={!isAllAnswered}
             onClick={handleComplete}
+            fullWidth={true}
           >
             결과 확인하기
-          </S.SubmitButton>
+          </Button>
         </S.QuestionWrapper>
       </S.TestContainer>
     </>

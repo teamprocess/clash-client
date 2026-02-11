@@ -2,6 +2,7 @@ import * as S from "./PreviewModal.style";
 import { Dialog } from "@/shared/ui";
 import { usePreview } from "../model/usePreview";
 import { useState } from "react";
+import { Button } from "@/shared/ui/button/Button";
 
 interface PreviewModalProps {
   isOpen: boolean;
@@ -23,7 +24,6 @@ export const PreviewModal = ({
   const [currentStep, setCurrentStep] = useState(1);
   const [prevSectionId, setPrevSectionId] = useState(sectionId);
 
-  // sectionId가 변경되면 currentStep 초기화
   if (prevSectionId !== sectionId) {
     setPrevSectionId(sectionId);
     setCurrentStep(1);
@@ -75,8 +75,10 @@ export const PreviewModal = ({
             <S.PreviewModalTitle>{previewData.title}</S.PreviewModalTitle>
             <S.PreviewModalInfo>
               <S.PreviewModalDescription>{previewData.intro}</S.PreviewModalDescription>
-              <S.PreviewModalAction $locked={isLocked} onClick={onStart}>
-                시작하기
+              <S.PreviewModalAction $locked={isLocked}>
+                <Button variant="primary" size="sm" disabled={isLocked} onClick={onStart}>
+                  시작하기
+                </Button>
               </S.PreviewModalAction>
             </S.PreviewModalInfo>
           </S.PreviewModalIntro>
