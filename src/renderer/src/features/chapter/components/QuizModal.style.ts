@@ -185,9 +185,12 @@ export const LastResultTitle = styled.span`
 
 export const ResultButtonGroup = styled.div`
   display: flex;
-  justify-content: center;
-  align-items: center;
+  width: 80%;
   gap: 0.75rem;
+
+  & > * {
+    flex: 1;
+  }
 `;
 
 export const ResultButton = styled.button<ResultButtonType>`

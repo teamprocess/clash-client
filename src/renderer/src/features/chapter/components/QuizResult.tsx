@@ -1,4 +1,5 @@
 import * as S from "./QuizModal.style";
+import { Button } from "@/shared/ui/button";
 
 interface QuizResultProps {
   isFinal: boolean;
@@ -58,12 +59,13 @@ export const QuizResult = ({
 
         <S.ModalBottom>
           <S.ResultButtonGroup>
-            <S.ResultButton $buttonType="restart" onClick={onRestart}>
+            <Button variant="secondary" size="md" fullWidth onClick={onRestart}>
               다시하기
-            </S.ResultButton>
-            <S.ResultButton $buttonType="finish" onClick={onClose}>
+            </Button>
+
+            <Button variant="primary" size="md" fullWidth onClick={onClose}>
               끝내기
-            </S.ResultButton>
+            </Button>
           </S.ResultButtonGroup>
         </S.ModalBottom>
       </>
@@ -96,7 +98,9 @@ export const QuizResult = ({
 
         <S.CommentaryBox>{explanation}</S.CommentaryBox>
 
-        <S.ConfirmButton onClick={onNext}>다음</S.ConfirmButton>
+        <Button variant="primary" size="lg" onClick={onNext} fullWidth>
+          다음
+        </Button>
       </S.ModalBody>
     </>
   );
