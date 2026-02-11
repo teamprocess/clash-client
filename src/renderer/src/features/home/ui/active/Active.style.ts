@@ -58,10 +58,10 @@ export const GrassBox = styled.div`
 
 export const Grid = styled.div`
   display: grid;
-  grid-template-rows: repeat(7, 12px);
   grid-auto-flow: column;
-  grid-auto-columns: 12px;
-  gap: 4px;
+  grid-template-rows: repeat(7, 1fr);
+  grid-auto-columns: 0.75rem;
+  gap: 0.25rem;
 `;
 
 // 고정 잔디색 (깃허브 기준)
@@ -83,6 +83,32 @@ export const Grass = styled.div<{ $level: number }>`
         return theme.fill.neutral;
     }
   }};
+`;
+
+export const GrassWrapper = styled.div`
+  position: relative;
+
+  &:hover div {
+    opacity: 1;
+    visibility: visible;
+  }
+`;
+
+export const Tooltip = styled.div`
+  position: absolute;
+  bottom: 120%;
+  left: 50%;
+  transform: translateX(-50%) translateY(0);
+  background: ${({ theme }) => theme.background.neutral};
+  color: ${({ theme }) => theme.label.normal};
+  ${font.caption.bold}
+  padding: 0.35rem 0.5rem;
+  border-radius: 0.35rem;
+  white-space: nowrap;
+  opacity: 0;
+  transition: all 0.2s ease;
+  pointer-events: none;
+  z-index: 10;
 `;
 
 export const ChartWrapper = styled.div`
