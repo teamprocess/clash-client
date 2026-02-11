@@ -37,9 +37,9 @@ export const useActive = () => {
 
     const ratio = count / maxContribute;
 
-    if (ratio >= 0.8) return 4;
-    if (ratio >= 0.6) return 3;
-    if (ratio >= 0.2) return 2;
+    if (ratio >= 0.75) return 4;
+    if (ratio >= 0.5) return 3;
+    if (ratio >= 0.25) return 2;
     return 1;
   };
 
@@ -71,7 +71,7 @@ export const useActive = () => {
     }));
 
     const firstDay = new Date(fullRange[0].date).getDay();
-    const mondayIndex = firstDay === 0 ? 6 : firstDay - 1;
+    const mondayIndex = firstDay === 0 ? 6 : firstDay;
 
     const padding: RenderStreakItem[] = Array.from({ length: mondayIndex }, (_, i) => ({
       date: `pad-${i}`,
