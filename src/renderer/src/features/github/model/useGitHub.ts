@@ -129,17 +129,6 @@ export const useGitHub = () => {
         return;
       }
 
-      if (!GITHUB_CLIENT_ID) {
-        setError("GitHub 연동 설정이 누락되었습니다. VITE_GITHUB_CLIENT_ID를 확인해주세요.");
-        return;
-      }
-      if (!GITHUB_OAUTH_REDIRECT_URI) {
-        setError(
-          "GitHub 연동 설정이 누락되었습니다. VITE_GITHUB_OAUTH_REDIRECT_URI를 확인해주세요."
-        );
-        return;
-      }
-
       setError(null);
       setIsConnecting(true);
 
