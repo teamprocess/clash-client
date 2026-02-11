@@ -2,7 +2,7 @@ import { Product } from "@/entities/product";
 import * as S from "./PurchaseModal.style";
 import { usePurchaseModal } from "@/features/shop/model/usePurchaseModal";
 import { formatPrice } from "@/shared/lib";
-import { useGetUserProfile } from "@/features/shop/model/useGetUserProfile";
+import { useGetMyProfile } from "@/entities/user/model/useGetMyProfile";
 
 interface PurchaseModalProps {
   isOpen: boolean;
@@ -12,7 +12,7 @@ interface PurchaseModalProps {
 }
 
 export const PurchaseModal = ({ isOpen, product, onClose, onPurchase }: PurchaseModalProps) => {
-  const { data: user } = useGetUserProfile();
+  const { data: user } = useGetMyProfile();
 
   const totalToken = user?.totalToken ?? 0;
   const totalCookie = user?.totalCookie ?? 0;

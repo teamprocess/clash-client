@@ -6,7 +6,7 @@ import { calculateDiscountedPrice } from "@/features/shop/lib/calculateDiscounte
 
 type Step = "confirm" | "success";
 
-interface UsePurchaseModalParams {
+interface UsePurchaseModalProps {
   product: Product | null;
   onPurchase?: (product: Product) => Promise<void> | void;
   onClose: () => void;
@@ -22,7 +22,7 @@ export const usePurchaseModal = ({
   onPurchase,
   onClose,
   currentBalance,
-}: UsePurchaseModalParams) => {
+}: UsePurchaseModalProps) => {
   const [step, setStep] = useState<Step>("confirm");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
