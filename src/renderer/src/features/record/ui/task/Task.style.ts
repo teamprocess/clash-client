@@ -2,7 +2,6 @@ import styled from "styled-components";
 import Play from "../../assets/play.svg";
 import Pause from "../../assets/pause.svg";
 import { font } from "@/shared/config/font";
-import { palette } from "@/shared/config/theme/palette";
 import More from "../../assets/more.svg";
 
 export const TaskContainer = styled.div`
@@ -67,17 +66,9 @@ export const MoreIconWrapper = styled.div`
   position: relative;
 `;
 
-export const DropdownMenu = styled.div`
-  position: absolute;
-  top: 100%;
-  width: 7rem;
-  right: 0;
-  margin-top: 0.5rem;
-  background-color: ${({ theme }) => theme.label.disable};
-  border-radius: 0.5rem;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
-  z-index: 10;
+export const MenuList = styled.div`
+  display: flex;
+  flex-direction: column;
 `;
 
 export const MenuItem = styled.button`
@@ -118,24 +109,6 @@ export const ButtonBox = styled.div`
   display: flex;
   justify-content: flex-end;
   gap: 0.5rem;
-`;
-
-export const ModalContent = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-  padding: 1rem 0;
-`;
-
-export const TextBox = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-`;
-
-export const Text = styled.p<{ $type?: "WARNING" }>`
-  ${font.body.medium};
-  color: ${({ theme, $type }) => ($type === "WARNING" ? palette.red[60] : theme.label.normal)};
 `;
 
 export const AddTaskButton = styled.button`

@@ -35,9 +35,3 @@ export const GroupEditContainer = styled.div`
   height: 100%;
   width: 100%;
 `;
-
-export const ButtonBox = styled.div`
-  display: flex;
-  justify-content: flex-end;
-  gap: 0.5rem;
-`;

@@ -1,8 +1,9 @@
 import * as S from "./Rival.style";
 import { MyRivalUsers } from "@/features/home/ui/rival/myrival-users/MyRivalUsers";
-import { Modal } from "@/shared/ui/modal/Modal";
+import { Dialog } from "@/shared/ui";
 import { Link } from "react-router-dom";
 import { useRival } from "@/features/home/model/useRival";
+import { SearchInput } from "@/shared/ui/search-input";
 
 export const Rival = () => {
   const getRivalData = useRival();
@@ -34,8 +35,8 @@ export const Rival = () => {
       </S.RivalBox>
 
       {getRivalData.modalOpen && (
-        <Modal
-          modalTitle={"라이벌 추가"}
+        <Dialog
+          title={"라이벌 추가"}
           width={21.625}
           height={25.175}
           isOpen={getRivalData.modalOpen}
@@ -43,12 +44,13 @@ export const Rival = () => {
         >
           <div style={{ display: "flex", flexDirection: "column" }}>
             <div>
-              <S.SearchBox>
-                <S.SearchUsers placeholder={"이름 또는 아이디 검색"} />
-                <S.SearchIconBox>
-                  <S.SearchIcon />
-                </S.SearchIconBox>
-              </S.SearchBox>
+              <SearchInput
+                placeholder={"이름 또는 아이디 검색"}
+                inputSize={"md"}
+                variant={"light"}
+                fullWidth={true}
+                style={{ margin: "1rem 0" }}
+              />
               <S.UserChoiceContainer>
                 {getRivalData.userList?.users.map(user => (
                   <S.UserChoiceBox
@@ -80,7 +82,7 @@ export const Rival = () => {
               <S.OkayButton onClick={getRivalData.handleRivalCreate}>확인</S.OkayButton>
             </S.ButtonBox>
           </S.BottomBox>
-        </Modal>
+        </Dialog>
       )}
     </S.RivalContainer>
   );

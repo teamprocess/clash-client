@@ -1,7 +1,10 @@
 import { useState } from "react";
 import { useActiveQuery, ActiveResponse, CategoryType } from "@/entities/home";
 
-const activeDropDownValue = [
+const activeDropDownValue: {
+  key: CategoryType;
+  label: string;
+}[] = [
   { key: "GITHUB", label: "Github" },
   { key: "EXP", label: "EXP" },
   { key: "ACTIVE_TIME", label: "총 학습 시간" },
