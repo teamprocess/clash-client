@@ -31,9 +31,11 @@ export const useActive = () => {
   }, [activeData]);
 
   const getLevel = (count: number) => {
-    if (!maxContribute || count === 0) return 0;
+    const numericCount = Number(count);
 
-    const ratio = count / maxContribute;
+    if (!maxContribute || isNaN(numericCount) || numericCount <= 0) return 0;
+
+    const ratio = numericCount / maxContribute;
 
     if (ratio >= 0.8) return 4;
     if (ratio >= 0.6) return 3;
