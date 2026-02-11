@@ -10,6 +10,8 @@ let appMonitor: AppMonitor | null = null;
 const PROTOCOL = "clashapp";
 let pendingDeepLink: string | null = null;
 
+const DEFAULT_SOCKET_ENDPOINT = "wss://api.clash.kr/socket.io";
+
 const handleDeepLink = (url: string) => {
   if (!url) {
     return;
@@ -168,13 +170,20 @@ app.whenReady().then(() => {
     console.error("VITE_API_URL이 설정되지 않았습니다.");
   }
   const apiOrigin = apiUrl ? new URL(apiUrl).origin : "";
+  const socketEndpoint = process.env.VITE_SOCKET_IO_URL || DEFAULT_SOCKET_ENDPOINT;
+  const socketOrigin = new URL(socketEndpoint).origin;
+  const wsSocketOrigin = socketOrigin.startsWith("https://")
+    ? socketOrigin.replace("https://", "wss://")
+    : socketOrigin.startsWith("http://")
+      ? socketOrigin.replace("http://", "ws://")
+      : "";
 
   session.defaultSession.webRequest.onHeadersReceived((details, callback) => {
     callback({
       responseHeaders: {
         ...details.responseHeaders,
         "Content-Security-Policy": [
-          `default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.google.com https://www.gstatic.com; style-src 'self' 'unsafe-inline' https://www.gstatic.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https://www.gstatic.com; frame-src https://www.google.com; connect-src 'self' ${apiOrigin} https://www.google.com`,
+          `default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.google.com https://www.gstatic.com; style-src 'self' 'unsafe-inline' https://www.gstatic.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https://www.gstatic.com; frame-src https://www.google.com; connect-src 'self' ${apiOrigin} ${socketOrigin} ${wsSocketOrigin} https://www.google.com`,
         ],
       },
     });
