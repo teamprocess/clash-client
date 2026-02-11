@@ -34,7 +34,18 @@ export const WithMyCompetition = () => {
         </S.TitleBox>
 
         <S.ChartWrapper>
-          <MyCompetitionLineChart data={chartData}></MyCompetitionLineChart>
+          <MyCompetitionLineChart
+            data={
+              chartData?.dataPoint?.labels?.length
+                ? chartData
+                : {
+                    dataPoint: {
+                      labels: Array.from({ length: 12 }, (_, i) => `${i + 1}월`),
+                      values: Array(12).fill(0),
+                    },
+                  }
+            }
+          />
         </S.ChartWrapper>
       </S.GraphWrapper>
 
