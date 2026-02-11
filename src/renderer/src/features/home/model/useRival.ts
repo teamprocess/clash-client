@@ -70,24 +70,20 @@ export const useRival = () => {
     });
   };
 
-  const handleModalClose = () => {
-    setRivalSelectedId([]);
-    handleClose();
-  };
-
-  const [applyPayload, setApplyPayload] = useState<RivalApplyRequest | null>(null);
-
   const handleRivalCreate = async () => {
-    if (!applyPayload) return;
+    if (rivalSelectedId.length === 0) return;
+
+    const payload: RivalApplyRequest = {
+      ids: rivalSelectedId.map(id => ({ id })),
+    };
 
     try {
-      await rivalsApi.postRivalApply(applyPayload);
+      await rivalsApi.postRivalApply(payload);
     } catch (error: unknown) {
       const errorMessage = getErrorMessage(error, "라이벌 신청 중 오류가 발생했습니다.");
       console.error("라이벌 신청 실패:", errorMessage, error);
     } finally {
       handleClose();
-      setApplyPayload(null);
     }
   };
 
@@ -101,7 +97,6 @@ export const useRival = () => {
     handleClose,
     rivalSelectedId,
     handleUserSelect,
-    handleModalClose,
     handleRivalCreate,
   };
 };

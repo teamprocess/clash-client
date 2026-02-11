@@ -26,6 +26,7 @@ export const RivalList = styled.div`
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
+  height: 100%;
 `;
 
 export const TitleBox = styled.div`
@@ -43,6 +44,7 @@ export const Title = styled.p`
 
 export const ProfileWrapper = styled.div`
   width: 100%;
+  min-height: 14.25rem;
   height: 100%;
   gap: 0.5rem;
 `;
@@ -122,4 +124,29 @@ export const PlayTime = styled.div`
   gap: 0.75rem;
   ${font.headline1.bold}
   color: ${({ theme }) => theme.label.normal};
+`;
+
+export const DetailWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem;
+  gap: 1rem;
+  border-radius: 0.5rem;
+  width: 100%;
+  height: 100%;
+  background-color: ${({ theme }) => theme.background.alternative};
+`;
+
+export const DefaultBattleBox = styled.div`
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+`;
+
+export const DefaultBattleText = styled.p`
+  ${font.label.medium};
+  color: ${({ theme }) => theme.label.assistive};
 `;

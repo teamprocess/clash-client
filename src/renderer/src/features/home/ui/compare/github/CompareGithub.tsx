@@ -10,7 +10,7 @@ export const Github = ({ today, yesterday }: CompareResponse) => {
           <S.Subtitle>어제</S.Subtitle>
           <S.DateBox>
             <S.DateIcon />
-            <S.DateText>{yesterday.date}</S.DateText>
+            <S.DateText>{yesterday?.date}</S.DateText>
           </S.DateBox>
         </S.SubtitleBox>
         <S.InfoContainer>
@@ -20,7 +20,7 @@ export const Github = ({ today, yesterday }: CompareResponse) => {
               <S.GithubInfoBox>
                 <S.GitCommitIcon />
                 <S.InfoSubtitleBox>
-                  <S.CountText>{yesterday.commit.count}</S.CountText>
+                  <S.CountText>{yesterday?.commit.count ?? 0}</S.CountText>
                   <S.InfoSubtitle>commit</S.InfoSubtitle>
                 </S.InfoSubtitleBox>
               </S.GithubInfoBox>
@@ -28,22 +28,27 @@ export const Github = ({ today, yesterday }: CompareResponse) => {
                 <S.CalculateInfoBox>
                   <S.FireIcon />
                   <S.ExplainText>최다 커밋 레포지토리</S.ExplainText>
-                  <S.RepositorieName>{yesterday.commit.representationRepo}</S.RepositorieName>
+                  <S.RepositorieName>
+                    {yesterday?.commit.representationRepo ??
+                      "현재 최다 커밋 레포지토리가 없습니다."}
+                  </S.RepositorieName>
                 </S.CalculateInfoBox>
                 <S.WidthLine />
                 <S.CalculateInfoBox>
                   <S.CodeIcon />
                   <S.CodeGap>
-                    하루 동안 <S.PlusText>+{yesterday.commit.addLines}</S.PlusText> /{" "}
-                    <S.MinusText>-{yesterday.commit.removeLines}</S.MinusText> lines
+                    하루 동안 <S.PlusText>+{yesterday?.commit.addLines ?? 0}</S.PlusText> /{" "}
+                    <S.MinusText>-{yesterday?.commit.removeLines ?? 0}</S.MinusText> lines
                   </S.CodeGap>
                 </S.CalculateInfoBox>
                 <S.WidthLine />
                 <S.CalculateInfoBox>
                   <S.TimeIcon />
                   <S.ExplainText>
-                    첫 커밋 <S.TimeText>{yesterday.commit.firstCommit.slice(0, 10)}</S.TimeText> ·
-                    마지막 커밋 <S.TimeText>{yesterday.commit.lastCommit.slice(0, 10)}</S.TimeText>
+                    첫 커밋{" "}
+                    <S.TimeText>{yesterday?.commit.firstCommit.slice(0, 10) ?? 0}</S.TimeText> ·
+                    마지막 커밋{" "}
+                    <S.TimeText>{yesterday?.commit.lastCommit.slice(0, 10) ?? 0}</S.TimeText>
                   </S.ExplainText>
                 </S.CalculateInfoBox>
               </S.CalculateContainer>
@@ -55,7 +60,7 @@ export const Github = ({ today, yesterday }: CompareResponse) => {
               <S.GithubInfoBox>
                 <S.GitPRIcon />
                 <S.InfoSubtitleBox>
-                  <S.CountText>{yesterday.pullRequest.count}</S.CountText>
+                  <S.CountText>{yesterday?.pullRequest.count ?? 0}</S.CountText>
                   <S.InfoSubtitle>Pull request</S.InfoSubtitle>
                 </S.InfoSubtitleBox>
               </S.GithubInfoBox>
@@ -63,24 +68,27 @@ export const Github = ({ today, yesterday }: CompareResponse) => {
                 <S.CalculateInfoBox>
                   <S.FireIcon />
                   <S.ExplainText>최다 PR 레포지토리</S.ExplainText>
-                  <S.RepositorieName>{yesterday.pullRequest.representationRepo}</S.RepositorieName>
+                  <S.RepositorieName>
+                    {yesterday?.pullRequest.representationRepo ??
+                      "현재 최다 PR 레포지토리가 없습니다."}
+                  </S.RepositorieName>
                 </S.CalculateInfoBox>
                 <S.WidthLine />
                 <S.CalculateInfoBox>
                   <S.StatusIcon />
                   <S.ExplainText>
-                    Merged <S.TimeText>{yesterday.pullRequest.mergedCount}</S.TimeText> · Open{" "}
-                    <S.TimeText>{yesterday.pullRequest.openCount}</S.TimeText> · Closed{" "}
-                    <S.TimeText>{yesterday.pullRequest.closedCount}</S.TimeText>
+                    Merged <S.TimeText>{yesterday?.pullRequest.mergedCount ?? 0}</S.TimeText> · Open{" "}
+                    <S.TimeText>{yesterday?.pullRequest.openCount ?? 0}</S.TimeText> · Closed{" "}
+                    <S.TimeText>{yesterday?.pullRequest.closedCount ?? 0}</S.TimeText>
                   </S.ExplainText>
                 </S.CalculateInfoBox>
                 <S.WidthLine />
                 <S.CalculateInfoBox>
                   <S.ReviewIcon $width={1.25} />
                   <S.ExplainText>
-                    리뷰 요청 <S.TimeText>{yesterday.pullRequest.inReviewCount}</S.TimeText> · 승인{" "}
-                    <S.TimeText>{yesterday.pullRequest.approvedCount}</S.TimeText> · 변경요청{" "}
-                    <S.TimeText>{yesterday.pullRequest.requestCount}</S.TimeText>
+                    리뷰 요청 <S.TimeText>{yesterday?.pullRequest.inReviewCount ?? 0}</S.TimeText> ·
+                    승인 <S.TimeText>{yesterday?.pullRequest.approvedCount ?? 0}</S.TimeText> ·
+                    변경요청 <S.TimeText>{yesterday?.pullRequest.requestCount ?? 0}</S.TimeText>
                   </S.ExplainText>
                 </S.CalculateInfoBox>
               </S.CalculateContainer>
@@ -91,7 +99,7 @@ export const Github = ({ today, yesterday }: CompareResponse) => {
               <S.GroupTitle>이슈 수</S.GroupTitle>
               <S.MainStat>
                 <S.GitIssueIcon />
-                <span className="count">{yesterday.issue.count}</span>
+                <span className="count">{yesterday?.issue.count ?? 0}</span>
                 <span className="unit">Issues</span>
               </S.MainStat>
             </S.FooterItem>
@@ -100,7 +108,7 @@ export const Github = ({ today, yesterday }: CompareResponse) => {
               <S.GroupTitle>리뷰 수</S.GroupTitle>
               <S.MainStat>
                 <S.ReviewIcon $width={2.25} />
-                <span className="count">{yesterday.review.count}</span>
+                <span className="count">{yesterday?.review.count ?? 0}</span>
                 <span className="unit">Review</span>
               </S.MainStat>
             </S.FooterItem>
@@ -113,7 +121,7 @@ export const Github = ({ today, yesterday }: CompareResponse) => {
           <S.Subtitle>오늘</S.Subtitle>
           <S.DateBox>
             <S.DateIcon />
-            <S.DateText>{today.date}</S.DateText>
+            <S.DateText>{today?.date}</S.DateText>
           </S.DateBox>
         </S.SubtitleBox>
         <S.InfoContainer>
@@ -125,33 +133,39 @@ export const Github = ({ today, yesterday }: CompareResponse) => {
                   <S.GithubInfoBox>
                     <S.GitCommitIcon />
                     <S.InfoSubtitleBox>
-                      <S.CountText>{today.commit.count}</S.CountText>
+                      <S.CountText>{today?.commit.count ?? 0}</S.CountText>
                       <S.InfoSubtitle>commit</S.InfoSubtitle>
                     </S.InfoSubtitleBox>
                   </S.GithubInfoBox>
-                  <GrowthRate yesterday={yesterday.commit.count} today={today.commit.count} />
+                  <GrowthRate
+                    yesterday={yesterday?.commit.count ?? 0}
+                    today={today?.commit.count ?? 0}
+                  />
                 </S.RateBox>
               </S.GrowthBox>
               <S.CalculateContainer>
                 <S.CalculateInfoBox>
                   <S.FireIcon />
                   <S.ExplainText>최다 커밋 레포지토리</S.ExplainText>
-                  <S.RepositorieName>{today.commit.representationRepo}</S.RepositorieName>
+                  <S.RepositorieName>
+                    {today?.commit.representationRepo ?? "현재 최다 커밋 레포지토리가 없습니다."}
+                  </S.RepositorieName>
                 </S.CalculateInfoBox>
                 <S.WidthLine />
                 <S.CalculateInfoBox>
                   <S.CodeIcon />
                   <S.CodeGap>
-                    하루 동안 <S.PlusText>{today.commit.addLines}</S.PlusText> /{" "}
-                    <S.MinusText>-{today.commit.removeLines}</S.MinusText> lines
+                    하루 동안 <S.PlusText>{today?.commit.addLines ?? 0}</S.PlusText> /{" "}
+                    <S.MinusText>-{today?.commit.removeLines ?? 0}</S.MinusText> lines
                   </S.CodeGap>
                 </S.CalculateInfoBox>
                 <S.WidthLine />
                 <S.CalculateInfoBox>
                   <S.TimeIcon />
                   <S.ExplainText>
-                    첫 커밋 <S.TimeText>{today.commit.firstCommit.slice(0, 10)}</S.TimeText> ·
-                    마지막 커밋 <S.TimeText>{today.commit.lastCommit.slice(0, 10)}</S.TimeText>
+                    첫 커밋 <S.TimeText>{today?.commit.firstCommit.slice(0, 10) ?? 0}</S.TimeText> ·
+                    마지막 커밋{" "}
+                    <S.TimeText>{today?.commit.lastCommit.slice(0, 10) ?? 0}</S.TimeText>
                   </S.ExplainText>
                 </S.CalculateInfoBox>
               </S.CalculateContainer>
@@ -165,13 +179,13 @@ export const Github = ({ today, yesterday }: CompareResponse) => {
                   <S.GithubInfoBox>
                     <S.GitPRIcon />
                     <S.InfoSubtitleBox>
-                      <S.CountText>{today.pullRequest.count}</S.CountText>
+                      <S.CountText>{today?.pullRequest.count ?? 0}</S.CountText>
                       <S.InfoSubtitle>Pull request</S.InfoSubtitle>
                     </S.InfoSubtitleBox>
                   </S.GithubInfoBox>
                   <GrowthRate
-                    yesterday={yesterday.pullRequest.count}
-                    today={today.pullRequest.count}
+                    yesterday={yesterday?.pullRequest.count ?? 0}
+                    today={today?.pullRequest.count ?? 0}
                   />
                 </S.RateBox>
               </S.GrowthBox>
@@ -179,24 +193,26 @@ export const Github = ({ today, yesterday }: CompareResponse) => {
                 <S.CalculateInfoBox>
                   <S.FireIcon />
                   <S.ExplainText>최다 PR 레포지토리</S.ExplainText>
-                  <S.RepositorieName>{today.pullRequest.representationRepo}</S.RepositorieName>
+                  <S.RepositorieName>
+                    {today?.pullRequest.representationRepo ?? "현재 최다 PR 레포지토리가 없습니다."}
+                  </S.RepositorieName>
                 </S.CalculateInfoBox>
                 <S.WidthLine />
                 <S.CalculateInfoBox>
                   <S.StatusIcon />
                   <S.ExplainText>
-                    Merged <S.TimeText>{today.pullRequest.mergedCount}</S.TimeText> · Open{" "}
-                    <S.TimeText>{today.pullRequest.openCount}</S.TimeText> · Closed{" "}
-                    <S.TimeText>{today.pullRequest.closedCount}</S.TimeText>
+                    Merged <S.TimeText>{today?.pullRequest.mergedCount ?? 0}</S.TimeText> · Open{" "}
+                    <S.TimeText>{today?.pullRequest.openCount ?? 0}</S.TimeText> · Closed{" "}
+                    <S.TimeText>{today?.pullRequest.closedCount ?? 0}</S.TimeText>
                   </S.ExplainText>
                 </S.CalculateInfoBox>
                 <S.WidthLine />
                 <S.CalculateInfoBox>
                   <S.ReviewIcon $width={1.25} />
                   <S.ExplainText>
-                    리뷰 요청 <S.TimeText>{today.pullRequest.inReviewCount}</S.TimeText> · 승인{" "}
-                    <S.TimeText>{today.pullRequest.approvedCount}</S.TimeText> · 변경요청{" "}
-                    <S.TimeText>{today.pullRequest.requestCount}</S.TimeText>
+                    리뷰 요청 <S.TimeText>{today?.pullRequest.inReviewCount ?? 0}</S.TimeText> ·
+                    승인 <S.TimeText>{today?.pullRequest.approvedCount ?? 0}</S.TimeText> · 변경요청{" "}
+                    <S.TimeText>{today?.pullRequest.requestCount ?? 0}</S.TimeText>
                   </S.ExplainText>
                 </S.CalculateInfoBox>
               </S.CalculateContainer>
@@ -210,10 +226,13 @@ export const Github = ({ today, yesterday }: CompareResponse) => {
                   <S.RateBox>
                     <S.MainStat>
                       <S.GitIssueIcon />
-                      <span className="count">{today.issue.count}</span>
+                      <span className="count">{today?.issue.count ?? 0}</span>
                       <span className="unit">Issues</span>
                     </S.MainStat>
-                    <GrowthRate yesterday={yesterday.issue.count} today={today.issue.count} />
+                    <GrowthRate
+                      yesterday={yesterday?.issue.count ?? 0}
+                      today={today?.issue.count ?? 0}
+                    />
                   </S.RateBox>
                 </S.GrowthBox>
               </div>
@@ -226,10 +245,13 @@ export const Github = ({ today, yesterday }: CompareResponse) => {
                   <S.RateBox>
                     <S.MainStat>
                       <S.ReviewIcon $width={2.25} />
-                      <span className="count">{today.review.count}</span>
+                      <span className="count">{today?.review.count ?? 0}</span>
                       <span className="unit">Reviews</span>
                     </S.MainStat>
-                    <GrowthRate yesterday={yesterday.review.count} today={today.review.count} />
+                    <GrowthRate
+                      yesterday={yesterday?.review.count ?? 0}
+                      today={today?.review.count ?? 0}
+                    />
                   </S.RateBox>
                 </S.GrowthBox>
               </div>

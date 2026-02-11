@@ -22,9 +22,10 @@ export const useActive = () => {
     : 0;
 
   const getLevel = (count: number) => {
+    if (!maxContribute || maxContribute === 0) return 0;
     if (count === 0) return 0;
 
-    const ratio: number = count / maxContribute;
+    const ratio = count / maxContribute;
     const ratioResult = ratio * 10;
 
     if (ratioResult >= 8) return 4;

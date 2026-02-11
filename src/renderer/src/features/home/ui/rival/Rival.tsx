@@ -54,19 +54,19 @@ export const Rival = () => {
               <S.UserChoiceContainer>
                 {getRivalData.userList?.users.map(user => (
                   <S.UserChoiceBox
-                    key={user.userId}
-                    $isSelected={getRivalData.rivalSelectedId.includes(user.userId)}
-                    onClick={() => getRivalData.handleUserSelect(user.userId)}
+                    key={user.id}
+                    $isSelected={getRivalData.rivalSelectedId.includes(user.id)}
+                    onClick={() => getRivalData.handleUserSelect(user.id)}
                   >
                     <S.ProfileContent style={{ height: "3rem" }}>
                       <S.ProfileIcon />
                       <S.ProfileTagBox>
-                        <S.ProfileName>{user.userName}</S.ProfileName>
-                        <S.ProfileMention>@{user.gitHubId}</S.ProfileMention>
+                        <S.ProfileName>{user.name}</S.ProfileName>
+                        <S.ProfileMention>@{user.username}</S.ProfileMention>
                       </S.ProfileTagBox>
                     </S.ProfileContent>
 
-                    {getRivalData.rivalSelectedId.includes(user.userId) ? (
+                    {getRivalData.rivalSelectedId.includes(user.id) ? (
                       <S.CheckedIcon />
                     ) : (
                       <S.UncheckedBox />
@@ -78,7 +78,7 @@ export const Rival = () => {
           </div>
           <S.BottomBox>
             <S.ButtonBox>
-              <S.CloseButton onClick={getRivalData.handleModalClose}>취소</S.CloseButton>
+              <S.CloseButton onClick={getRivalData.handleClose}>취소</S.CloseButton>
               <S.OkayButton onClick={getRivalData.handleRivalCreate}>확인</S.OkayButton>
             </S.ButtonBox>
           </S.BottomBox>

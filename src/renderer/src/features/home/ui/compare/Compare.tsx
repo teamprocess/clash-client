@@ -5,7 +5,7 @@ import { useCompare } from "@/features/home/model/useCompare";
 
 export const Compare = () => {
   const getCompareData = useCompare();
-  if (!getCompareData.compareData) return null;
+  // if (!getCompareData.compareData) return null;
 
   return (
     <S.Wrapper>
@@ -29,8 +29,8 @@ export const Compare = () => {
           {/*</S.SelectWrapper>*/}
         </S.TopPositionBox>
         <Github
-          yesterday={getCompareData.compareData?.yesterday}
-          today={getCompareData.compareData?.today}
+          yesterday={getCompareData.compareData?.yesterday ?? null}
+          today={getCompareData.compareData?.today ?? null}
         />
 
         {/*{compareDropdown === "Github" ? (*/}
