@@ -1,6 +1,7 @@
 type UserType = {
-  userId: number;
-  userName: string;
+  id: number;
+  username: string;
+  name: string;
   gitHubId: string;
   profileImage: string;
 };
@@ -13,6 +14,6 @@ type IdType = {
   id: number;
 };
 
-export interface RivalApplyRequest {
+export type RivalApplyRequest = {
   ids: IdType[];
-}
+};

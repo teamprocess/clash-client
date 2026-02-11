@@ -31,6 +31,6 @@ type CompareType = {
 };
 
 export type CompareResponse = {
-  yesterday: CompareType;
-  today: CompareType;
+  yesterday: CompareType | null;
+  today: CompareType | null;
 };
