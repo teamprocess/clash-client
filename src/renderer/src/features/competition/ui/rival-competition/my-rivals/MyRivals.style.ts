@@ -43,6 +43,7 @@ export const Title = styled.p`
 
 export const ProfileWrapper = styled.div`
   width: 100%;
+  min-height: 14.25rem;
   height: 100%;
   gap: 0.5rem;
 `;
@@ -122,4 +123,9 @@ export const PlayTime = styled.div`
   gap: 0.75rem;
   ${font.headline1.bold}
   color: ${({ theme }) => theme.label.normal};
+`;
+
+export const EmptyText = styled.p`
+  ${font.headline2.medium}
+  color: ${({ theme }) => theme.label.neutral};
 `;
