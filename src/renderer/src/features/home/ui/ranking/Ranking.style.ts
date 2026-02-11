@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { font } from "@/shared/config/font";
-import Arrow from "../../assets/home/arrow.svg";
+import Arrow from "../../../../shared/ui/assets/arrow.svg";
 
 export const RankingContainer = styled.div`
   position: relative;

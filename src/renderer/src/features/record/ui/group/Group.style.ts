@@ -140,17 +140,9 @@ export const MoreIconWrapper = styled.div`
   position: relative;
 `;
 
-export const DropdownMenu = styled.div`
-  position: absolute;
-  top: 100%;
-  width: 7rem;
-  right: 0;
-  margin-top: 0.5rem;
-  background-color: ${({ theme }) => theme.label.disable};
-  border-radius: 0.5rem;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
-  z-index: 10;
+export const MenuList = styled.div`
+  display: flex;
+  flex-direction: column;
 `;
 
 export const MenuItem = styled.button`

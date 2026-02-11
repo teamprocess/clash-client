@@ -1,5 +1,4 @@
-import { Modal } from "@/shared/ui/modal/Modal";
-import { Button } from "@/shared/ui";
+import { Dialog, ModalActions } from "@/shared/ui";
 import type { GroupEditModalProps } from "../../../model/useGroup";
 import { GroupFormFields } from "./GroupFormFields";
 import * as S from "./GroupEditModal.style";
@@ -18,7 +17,7 @@ export const GroupEditModal = ({
   showPasswordChangeButton,
 }: GroupEditModalProps) => {
   return (
-    <Modal width={64} height={42} isOpen={isOpen} onClose={onClose} gap={3}>
+    <Dialog width={64} height={42} isOpen={isOpen} onClose={onClose} gap={3}>
       <S.ModalContent>
         <S.Tabs>
           <S.Tab $isActive={true}>그룹 수정</S.Tab>
@@ -44,16 +43,15 @@ export const GroupEditModal = ({
             isPasswordChangeEnabled={isPasswordChangeEnabled}
             onPasswordChangeClick={onPasswordChangeClick}
           />
-          <S.ButtonBox>
-            <Button type="button" variant="secondary" size="md" onClick={onClose}>
-              취소
-            </Button>
-            <Button type="submit" variant="primary" size="md" disabled={isSubmitting}>
-              {isSubmitting ? "저장 중..." : "저장"}
-            </Button>
-          </S.ButtonBox>
+          <ModalActions
+            onCancel={onClose}
+            confirmLabel={isSubmitting ? "저장 중..." : "저장"}
+            confirmType="submit"
+            confirmDisabled={isSubmitting}
+            size="md"
+          />
         </S.GroupEditContainer>
       </S.ModalContent>
-    </Modal>
+    </Dialog>
   );
 };

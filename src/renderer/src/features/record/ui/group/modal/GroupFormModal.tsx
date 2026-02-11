@@ -1,6 +1,5 @@
 import { useState } from "react";
-import { Modal } from "@/shared/ui/modal/Modal";
-import { Button } from "@/shared/ui";
+import { Dialog, ModalActions } from "@/shared/ui";
 import { GROUP_CATEGORY_LABELS } from "@/entities/group";
 import type { GroupFormModalProps } from "../../../model/useGroup";
 import { useGroupList } from "../../../model/useGroupList";
@@ -35,7 +34,7 @@ export const GroupFormModal = ({
   } = useGroupList();
 
   return (
-    <Modal width={64} height={42} isOpen={isOpen} onClose={onClose} gap={3}>
+    <Dialog width={64} height={42} isOpen={isOpen} onClose={onClose} gap={3}>
       <S.ModalContent>
         <S.Tabs>
           <S.Tab $isActive={activeTab === "join"} onClick={() => setActiveTab("join")}>
@@ -147,17 +146,16 @@ export const GroupFormModal = ({
               descriptionPlaceholder="어떤 그룹인지 설명해주세요"
               passwordPlaceholder="그룹 비밀번호를 입력하세요."
             />
-            <S.ButtonBox>
-              <Button type="button" variant="secondary" size="md" onClick={onClose}>
-                취소
-              </Button>
-              <Button type="submit" variant="primary" size="md" disabled={isCreating}>
-                {isCreating ? "생성 중..." : "저장"}
-              </Button>
-            </S.ButtonBox>
+            <ModalActions
+              onCancel={onClose}
+              confirmLabel={isCreating ? "생성 중..." : "저장"}
+              confirmType="submit"
+              confirmDisabled={isCreating}
+              size="md"
+            />
           </S.FormContainer>
         )}
       </S.ModalContent>
-    </Modal>
+    </Dialog>
   );
 };
