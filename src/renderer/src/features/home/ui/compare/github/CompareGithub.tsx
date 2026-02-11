@@ -155,7 +155,7 @@ export const Github = ({ today, yesterday }: CompareResponse) => {
                 <S.CalculateInfoBox>
                   <S.CodeIcon />
                   <S.CodeGap>
-                    하루 동안 <S.PlusText>{today?.commit.addLines ?? 0}</S.PlusText> /{" "}
+                    하루 동안 <S.PlusText>+{today?.commit.addLines ?? 0}</S.PlusText> /{" "}
                     <S.MinusText>-{today?.commit.removeLines ?? 0}</S.MinusText> lines
                   </S.CodeGap>
                 </S.CalculateInfoBox>
