@@ -25,14 +25,14 @@ export const Active = () => {
           <S.StreakTitle>스트릭</S.StreakTitle>
           <S.GrassBox>
             <S.Grid>
-              {(
-                getActiveData.activeData?.streaks ??
-                Array.from({ length: 365 }, (_, i) => ({
-                  date: `empty-${i}`,
-                  detailedInfo: 0,
-                }))
+              {(getActiveData.activeData?.streaks && getActiveData.activeData.streaks.length > 0
+                ? getActiveData.activeData.streaks
+                : Array.from({ length: 365 }, (_, i) => ({
+                    date: `empty-${i}`,
+                    detailedInfo: 0,
+                  }))
               ).map(day => (
-                <S.Grass key={day.date} $level={getActiveData.getLevel(day.detailedInfo)} />
+                <S.Grass key={day.date} $level={getActiveData.getLevel(day.detailedInfo ?? 0)} />
               ))}
             </S.Grid>
           </S.GrassBox>
