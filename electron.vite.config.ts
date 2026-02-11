@@ -11,6 +11,7 @@ export default defineConfig(({ mode }) => {
     main: {
       define: {
         "process.env.VITE_API_URL": JSON.stringify(env.VITE_API_URL),
+        "process.env.VITE_SOCKET_IO_URL": JSON.stringify(env.VITE_SOCKET_IO_URL ?? ""),
       },
     },
     preload: {},
