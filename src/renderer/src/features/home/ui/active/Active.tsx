@@ -36,7 +36,7 @@ export const Active = () => {
                     <S.Tooltip>
                       {day.date}
                       <br />
-                      {day.detailedInfo ?? 0}회
+                      {(day.detailedInfo ?? 0) === 0 ? "No contributions" : `${day.detailedInfo}회`}
                     </S.Tooltip>
                   )}
                 </S.GrassWrapper>
