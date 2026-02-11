@@ -20,36 +20,51 @@ export const Battle = () => {
             </S.TitleBox>
             <S.GaroLine />
             <S.BattleListContainer>
-              {battle.battleData?.battles?.slice(0, 4).map(battleItem => (
-                <S.BattleProfileBox
-                  key={battleItem.id}
-                  onClick={() => battle.selectBattleTarget(battleItem.id)}
+              {battle.battleData?.battles && battle.battleData.battles.length > 0 ? (
+                battle.battleData.battles.slice(0, 4).map(battleItem => (
+                  <S.BattleProfileBox
+                    key={battleItem.id}
+                    onClick={() => battle.selectBattleTarget(battleItem.id)}
+                  >
+                    <S.ProfileContent>
+                      <S.NameBox>
+                        <S.UpperHandJudge $type={battle.judgeUpperHand(battleItem.result)}>
+                          {battle.judgeUpperHand(battleItem.result)}
+                        </S.UpperHandJudge>
+
+                        <S.BattleName>vs {battleItem.enemy.name}</S.BattleName>
+
+                        <S.DateBox>
+                          <S.DateIcon />
+                          <S.DateText>{battleItem.expireDate}</S.DateText>
+                        </S.DateBox>
+                      </S.NameBox>
+                    </S.ProfileContent>
+
+                    <S.DetailBox>
+                      <S.DetailButton>
+                        {battleItem.result === MATCHVALUE.WON ||
+                        battleItem.result === MATCHVALUE.LOST
+                          ? "결과 보기"
+                          : "상세 내용 보기"}
+                      </S.DetailButton>
+                      <S.BackArrowIcon />
+                    </S.DetailBox>
+                  </S.BattleProfileBox>
+                ))
+              ) : (
+                <S.DetailWrapper
+                  style={{
+                    height: "18rem",
+                  }}
                 >
-                  <S.ProfileContent>
-                    <S.NameBox>
-                      <S.UpperHandJudge $type={battle.judgeUpperHand(battleItem.result)}>
-                        {battle.judgeUpperHand(battleItem.result)}
-                      </S.UpperHandJudge>
-
-                      <S.BattleName>vs {battleItem.enemy.name}</S.BattleName>
-
-                      <S.DateBox>
-                        <S.DateIcon />
-                        <S.DateText>{battleItem.expireDate}</S.DateText>
-                      </S.DateBox>
-                    </S.NameBox>
-                  </S.ProfileContent>
-
-                  <S.DetailBox>
-                    <S.DetailButton>
-                      {battleItem.result === MATCHVALUE.WON || battleItem.result === MATCHVALUE.LOST
-                        ? "결과 보기"
-                        : "상세 내용 보기"}
-                    </S.DetailButton>
-                    <S.BackArrowIcon />
-                  </S.DetailBox>
-                </S.BattleProfileBox>
-              ))}
+                  <S.DefaultBattleBox>
+                    <S.DefaultBattleText>
+                      현재 배틀에 관한 데이터가 없습니다. 배틀을 생성해보세요!
+                    </S.DefaultBattleText>
+                  </S.DefaultBattleBox>
+                </S.DetailWrapper>
+              )}
             </S.BattleListContainer>
 
             {battle.isBattleSelected ? (
