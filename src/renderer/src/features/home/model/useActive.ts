@@ -31,11 +31,11 @@ export const useActive = () => {
   }, [activeData]);
 
   const getLevel = (count: number) => {
-    const numericCount = Number(count);
+    const numeric = Number(count);
 
-    if (!maxContribute || isNaN(numericCount) || numericCount <= 0) return 0;
+    if (!maxContribute || isNaN(numeric) || numeric <= 0) return 0;
 
-    const ratio = numericCount / maxContribute;
+    const ratio = numeric / maxContribute;
 
     if (ratio >= 0.8) return 4;
     if (ratio >= 0.6) return 3;
@@ -46,19 +46,33 @@ export const useActive = () => {
   const paddedStreaks: RenderStreakItem[] = useMemo(() => {
     const streaks = activeData?.streaks ?? [];
 
-    if (!streaks.length) {
-      return Array.from({ length: 365 }, (_, i) => ({
-        date: `empty-${i}`,
-        detailedInfo: 0,
-      }));
-    }
+    if (!streaks.length) return [];
 
     const sorted = [...streaks].sort(
       (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
     );
 
-    const firstDay = new Date(sorted[0].date).getDay();
-    const mondayIndex = firstDay === 0 ? 6 : firstDay;
+    const startDate = new Date(sorted[0].date);
+
+    const endDate = new Date(startDate.getFullYear(), 11, 31);
+
+    const dateList: string[] = [];
+    const current = new Date(startDate);
+
+    while (current <= endDate) {
+      dateList.push(current.toISOString().split("T")[0]);
+      current.setDate(current.getDate() + 1);
+    }
+
+    const streakMap = new Map(streaks.map(v => [v.date, v.detailedInfo]));
+
+    const fullRange: RenderStreakItem[] = dateList.map(date => ({
+      date,
+      detailedInfo: streakMap.get(date) ?? 0,
+    }));
+
+    const firstDay = new Date(fullRange[0].date).getDay();
+    const mondayIndex = firstDay === 0 ? 6 : firstDay - 1;
 
     const padding: RenderStreakItem[] = Array.from({ length: mondayIndex }, (_, i) => ({
       date: `pad-${i}`,
@@ -66,7 +80,7 @@ export const useActive = () => {
       isPadding: true,
     }));
 
-    return [...padding, ...sorted];
+    return [...padding, ...fullRange];
   }, [activeData]);
 
   const variations = activeData?.variations ?? [];
