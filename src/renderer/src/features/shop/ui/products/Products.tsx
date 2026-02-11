@@ -5,7 +5,7 @@ import { ProductCard } from "@/features/shop/ui/card/ProductCard";
 import { Filter } from "@/features/shop/ui/filter/Filter";
 import { Product } from "@/entities/product";
 import { PurchaseModal } from "@/features/shop/ui/purchase/PurchaseModal";
-import { usePurchaseProduct } from "@/features/shop/model/usePurchaseProduct";
+import { usePurchaseProduct } from "@/entities/shop/model/usePurchaseProduct";
 
 interface ProductsProps {
   products: Product[];
@@ -49,7 +49,7 @@ export const Products = ({ products, isLoading }: ProductsProps) => {
   const purchaseMutation = usePurchaseProduct();
 
   const handlePurchase = async (product: Product) => {
-    await purchaseMutation.mutateAsync(product.id);
+    await purchaseMutation.mutateAsync({ productId: product.id });
   };
 
   useEffect(() => {
