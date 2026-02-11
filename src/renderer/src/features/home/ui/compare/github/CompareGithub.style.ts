@@ -146,7 +146,7 @@ export const RepositorieName = styled.p`
   color: ${({ theme }) => theme.label.alternative};
 `;
 
-export const CodeGap = styled.p`
+export const CodeGap = styled.div`
   ${font.label.bold};
   color: ${({ theme }) => theme.label.alternative};
 `;
@@ -229,6 +229,8 @@ export const RateBox = styled.div`
 export const GitCommitIcon = styled(GitCommits)``;
 export const FireIcon = styled(Fire)`
   color: ${({ theme }) => theme.label.alternative};
+  width: 1.25rem;
+  height: 1.25rem;
 `;
 export const CodeIcon = styled(Code)``;
 export const TimeIcon = styled(Time)`
