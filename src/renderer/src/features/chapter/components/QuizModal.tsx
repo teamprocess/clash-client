@@ -1,5 +1,6 @@
 import * as S from "./QuizModal.style";
 import { Modal } from "@/shared/ui/modal/Modal";
+import { Button } from "@/shared/ui/button";
 import type { Mission } from "@/features/chapter/model/chapter.types";
 import { QuizResult } from "@/features/chapter/components/QuizResult";
 import { useQuiz } from "../model/useQuiz";
@@ -32,8 +33,6 @@ export const QuizModal = ({
     onMissionComplete,
     onClose,
   });
-
-  console.log(currentQuestion);
 
   if (state.view === "final") {
     return (
@@ -98,7 +97,15 @@ export const QuizModal = ({
             </S.AnswerOption>
           ))}
 
-          <S.ConfirmButton onClick={handleConfirm}>선택 완료하기</S.ConfirmButton>
+          <Button
+            variant="primary"
+            size="lg"
+            onClick={handleConfirm}
+            disabled={!selectedChoiceId}
+            fullWidth={true}
+          >
+            선택 완료하기
+          </Button>
         </S.ButtonGroup>
       </S.ModalBody>
     </Modal>
