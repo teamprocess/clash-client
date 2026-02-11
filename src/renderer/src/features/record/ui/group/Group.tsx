@@ -41,7 +41,8 @@ export const Group = () => {
   }, [currentIndex, groups.length]);
   const currentGroup = useMemo(() => groups[safeCurrentIndex], [groups, safeCurrentIndex]);
   const { groupMembers, incrementStudyingMembers } = useGroupMembersActivity(
-    currentGroup?.id ?? null
+    currentGroup?.id ?? null,
+    myUserId
   );
 
   useEffect(() => {

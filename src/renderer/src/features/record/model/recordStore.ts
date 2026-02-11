@@ -49,23 +49,43 @@ export const useRecordStore = create<RecordStore>((set, get) => ({
 
   // 공부 중지
   stop: async () => {
+    const { activeTaskId, startTime, currentStudyTime } = get();
+
+    if (activeTaskId === null) {
+      return;
+    }
+
+    // 중지 버튼 누르는 순간 시간을 고정해두고 바로 UI를 멈춤
+    const elapsedAtStop =
+      startTime !== null
+        ? Math.max(0, Math.floor((Date.now() - startTime) / 1000))
+        : Math.max(0, currentStudyTime);
+
+    set(state => ({
+      tasks: state.tasks.map(task =>
+        task.id === activeTaskId ? { ...task, studyTime: task.studyTime + elapsedAtStop } : task
+      ),
+      activeTaskId: null,
+      startTime: null,
+      currentStudyTime: 0,
+    }));
+
     try {
       const response = await recordApi.stopRecord();
 
-      if (response.success) {
-        set({ activeTaskId: null, startTime: null, currentStudyTime: 0 });
-        // 공부 중지 후 tasks, today 쿼리 무효화
-        // 과목 추가 후 tasks 무효화
-        // -> 수동 조회 없이 데이터 일관성 유지
-        await Promise.all([
-          queryClient.invalidateQueries({ queryKey: recordQueryKeys.tasks }),
-          queryClient.invalidateQueries({ queryKey: recordQueryKeys.today }),
-        ]);
+      if (!response.success) {
+        throw new Error("기록 중지 응답이 실패로 반환되었습니다.");
       }
+
+      // 중지 직후 서버 정합성만 다시 맞추면 충분해서 tasks만 무효화
+      await queryClient.invalidateQueries({ queryKey: recordQueryKeys.tasks });
     } catch (error: unknown) {
       const errorMessage = getErrorMessage(error, "기록 중지에 실패했습니다.");
       console.error("기록 중지 실패:", errorMessage, error);
-      set({ activeTaskId: null, startTime: null, currentStudyTime: 0 });
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: recordQueryKeys.tasks }),
+        queryClient.invalidateQueries({ queryKey: recordQueryKeys.today }),
+      ]);
     }
   },
 
