@@ -3,9 +3,10 @@ import type { Mission } from "@/features/chapter/model/chapter.types";
 
 type UseChapterViewParams = {
   loading: boolean;
+  sectionId: number;
 };
 
-export const useChapterView = ({ loading }: UseChapterViewParams) => {
+export const useChapterView = ({ loading, sectionId }: UseChapterViewParams) => {
   const chapterRef = useRef<HTMLDivElement>(null);
 
   const [currentMission, setCurrentMission] = useState<Mission | null>(null);
@@ -31,7 +32,7 @@ export const useChapterView = ({ loading }: UseChapterViewParams) => {
   useEffect(() => {
     if (!chapterRef.current || loading) return;
     chapterRef.current.scrollTo(chapterRef.current.scrollWidth, chapterRef.current.scrollHeight);
-  }, [loading]);
+  }, [loading, sectionId]);
 
   useEffect(() => {
     if (!chapterRef.current) return;
