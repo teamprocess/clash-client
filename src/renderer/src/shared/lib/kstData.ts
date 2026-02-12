@@ -24,7 +24,7 @@ export const kstDate = {
     return Math.floor((end.getTime() - start.getTime()) / DAY) + 1;
   },
 
-  // Array.from으로 날짜들을 담는 배열 생성
+  // Array.from으로 시작날짜~끝날짜들을 담는 배열 생성
   buildRange(startStr: string, endStr: string): string[] {
     const start = this.normalize(this.parse(startStr));
     const end = this.normalize(this.parse(endStr));
