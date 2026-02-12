@@ -69,7 +69,7 @@ export const useActive = () => {
     }));
 
     const firstDay = new Date(fullRange[0].date).getDay();
-    const mondayIndex = firstDay === 0 ? 6 : firstDay - 1;
+    const mondayIndex = firstDay === 0 ? 6 : firstDay;
 
     const padding: RenderStreakItem[] = Array.from({ length: mondayIndex }, (_, i) => ({
       date: `pad-${i}`,
