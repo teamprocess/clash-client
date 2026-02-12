@@ -1,5 +1,5 @@
 export const kstDate = {
-  // 로컬(KST) 00:00 계산
+  // kstData.parse(DateInfo) -> 로컬(KST) 00:00 계산
   parse(dateStr: string): Date {
     const [year, month, day] = dateStr.split("-").map(Number);
     return new Date(year, month - 1, day);
