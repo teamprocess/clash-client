@@ -49,12 +49,14 @@ const MONITORED_APPS = [
 
 export class AppMonitor {
   private readonly INACTIVE_THRESHOLD_MS = 5 * 60 * 1000; // 5분
+  private readonly APP_QUERY_ERROR_LOG_INTERVAL_MS = 30 * 1000;
   private activeApps: Map<string, TrackedApp> = new Map();
   private sessions: MonitoringSession[] = [];
   private intervalId: NodeJS.Timeout | null = null;
   private mainWindow: BrowserWindow | null = null;
   private lastSentAppName: string | null = null; // 마지막으로 전송한 앱 이름
   private isChecking = false; // 비동기 체크 중복 방지
+  private lastRunningAppsErrorLoggedAt = 0;
 
   constructor(mainWindow: BrowserWindow) {
     this.mainWindow = mainWindow;
@@ -145,7 +147,7 @@ export class AppMonitor {
   private async getRunningAppNames(): Promise<string[] | null> {
     try {
       const { stdout } = await execAsync(
-        "osascript -e 'tell application \"System Events\" to get name of (application processes whose background only is false)'"
+        "osascript -e 'tell application \"System Events\" to get name of every application process'"
       );
 
       const appNames = stdout
@@ -155,7 +157,11 @@ export class AppMonitor {
 
       return appNames;
     } catch (error) {
-      console.error("실행 중인 앱 정보를 가져오는데 실패했습니다:", error);
+      const now = Date.now();
+      if (now - this.lastRunningAppsErrorLoggedAt >= this.APP_QUERY_ERROR_LOG_INTERVAL_MS) {
+        console.error("실행 중인 앱 정보를 가져오는데 실패했습니다:", error);
+        this.lastRunningAppsErrorLoggedAt = now;
+      }
       return null;
     }
   }
