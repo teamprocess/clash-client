@@ -9,11 +9,6 @@ export type RenderStreakItem = StreakItem & {
   isPadding?: boolean;
 };
 
-// -- 라이브러리 설명 --
-// 시작일 ~ 종료일까지의 모든 날짜를 포함하고
-// 월요일 시작 기준으로 앞에 빈 칸(isPadding)을 붙인
-// 연속된 1차원 날짜 배열
-
 // -- 입력 예시 --
 // [
 //   { date: "2026-02-03", detailedInfo: 2 },
