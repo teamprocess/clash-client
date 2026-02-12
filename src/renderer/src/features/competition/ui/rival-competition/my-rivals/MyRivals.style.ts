@@ -52,6 +52,7 @@ export const ProfileWrapper = styled.div`
 export const ProfileContainer = styled.button`
   display: flex;
   align-items: center;
+  width: 100%;
   justify-content: space-between;
   flex-direction: row;
   padding: 0.75rem;
