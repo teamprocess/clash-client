@@ -17,46 +17,20 @@ export const MajorChoice = ({ selectedMajor, major, isValid, username, onSubmit 
             </S.ChoiceDescription>
           </S.ChoiceContentsTop>
           <S.ChoiceWrapper>
-            <S.ChoiceTop>
-               <ChoiceBox
-              size="sm"
+            <ChoiceBox
+              size="md"
               selected={major === "WEB"}
               icon={<S.WebIcon />}
               label="웹"
               onClick={() => selectedMajor("WEB")}
             />
             <ChoiceBox
-              size="sm"
-              selected={major === "APP"}
-              icon={<S.AppIcon />}
-              label="앱"
-              onClick={() => selectedMajor("APP")}
-            />
-            <ChoiceBox
-              size="sm"
+              size="md"
               selected={major === "SERVER"}
               icon={<S.ServerIcon />}
               label="서버"
               onClick={() => selectedMajor("SERVER")}
             />
-          </S.ChoiceTop>
-
-          <S.ChoiceBottom>
-            <ChoiceBox
-              size="sm"
-              selected={major === "AI"}
-              icon={<S.AiIcon />}
-              label="AI"
-              onClick={() => selectedMajor("AI")}
-            />
-            <ChoiceBox
-              size="sm"
-              selected={major === "GAME"}
-              icon={<S.GameIcon />}
-              label="게임"
-              onClick={() => selectedMajor("GAME")}
-            />
-            </S.ChoiceBottom>
           </S.ChoiceWrapper>
           <Button
             variant="primary"
