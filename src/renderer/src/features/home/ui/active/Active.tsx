@@ -56,7 +56,10 @@ export const Active = () => {
             <S.Grid>
               {getActiveData.paddedStreaks.map(day => (
                 <S.GrassWrapper key={day.date}>
-                  <S.Grass $level={getActiveData.getLevel(day.detailedInfo ?? 0)} />
+                  <S.Grass
+                    $level={getActiveData.getLevel(day.detailedInfo ?? 0)}
+                    style={day.isPadding ? { visibility: "hidden" } : undefined}
+                  />
 
                   {!day.isPadding && (
                     <S.Tooltip>
