@@ -42,6 +42,7 @@ export const useRecordStore = create<RecordStore>((set, get) => ({
       const response = await recordApi.startRecord({ recordType: "TASK", taskId });
       if (response.success) {
         set({ activeTaskId: taskId, startTime: Date.now(), currentStudyTime: 0 });
+        await queryClient.invalidateQueries({ queryKey: recordQueryKeys.today });
       }
     } catch (error: unknown) {
       const errorMessage = getErrorMessage(error, "기록 시작에 실패했습니다.");
