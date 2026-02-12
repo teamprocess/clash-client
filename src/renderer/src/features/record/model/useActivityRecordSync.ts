@@ -134,11 +134,21 @@ export const useActivityRecordSync = (activeApp: ActiveApp | null, isElectron: b
 
       if (serverSession.type === "ACTIVITY") {
         try {
-          const stopResponse = await recordApi.stopRecord();
-          if (!stopResponse.success) {
+          const switchResponse = await recordApi.switchActivityApp({
+            appName: targetAppName,
+          });
+          const switchedSession = switchResponse.data?.session;
+          if (!switchResponse.success || !switchedSession) {
             serverSessionRef.current = await loadCurrentSession();
             return;
           }
+
+          serverSessionRef.current = {
+            type: "ACTIVITY",
+            appName: switchedSession.activity?.appName ?? targetAppName,
+          };
+          await invalidateToday();
+          return;
         } catch (error) {
           const errorMessage = getErrorMessage(error, "개발 활동 기록 전환에 실패했습니다.");
           console.error("개발 활동 기록 전환 실패:", errorMessage, error);
