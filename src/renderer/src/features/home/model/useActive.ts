@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { useActiveQuery, ActiveResponse, CategoryType } from "@/entities/home";
-import { kstDate } from "@/shared/lib/kstData";
+import { buildPaddedStreak } from "@/shared/lib/buildPaddedStreaks";
 
 const activeDropDownValue: {
   key: CategoryType;
@@ -10,15 +10,6 @@ const activeDropDownValue: {
   { key: "EXP", label: "EXP" },
   { key: "ACTIVE_TIME", label: "총 학습 시간" },
 ];
-
-export type StreakItem = {
-  date: string;
-  detailedInfo: number;
-};
-
-export type RenderStreakItem = StreakItem & {
-  isPadding?: boolean;
-};
 
 export const useActive = () => {
   const [activeDropdown, setActiveDropdown] = useState<CategoryType>("GITHUB");
@@ -44,33 +35,9 @@ export const useActive = () => {
     return 1;
   };
 
-  const paddedStreaks: RenderStreakItem[] = useMemo(() => {
-    if (!streaks || streaks.length === 0) return [];
-
-    const sorted = [...streaks].sort((a, b) => a.date.localeCompare(b.date));
-
-    const startStr = sorted[0].date;
-    const endStr = sorted[sorted.length - 1].date;
-
-    const dateList = kstDate.buildRange(startStr, endStr);
-
-    const streakMap = new Map(sorted.map(v => [v.date, v.detailedInfo]));
-
-    const fullRange: RenderStreakItem[] = dateList.map(date => ({
-      date,
-      detailedInfo: streakMap.get(date) ?? 0,
-    }));
-
-    const firstDay = kstDate.parse(fullRange[0].date).getDay();
-    const mondayIndex = firstDay === 0 ? 6 : firstDay;
-
-    const padding: RenderStreakItem[] = Array.from({ length: mondayIndex }, (_, i) => ({
-      date: `pad-${i}`,
-      detailedInfo: 0,
-      isPadding: true,
-    }));
-
-    return [...padding, ...fullRange];
+  const paddedStreaks = useMemo(() => {
+    if (!streaks) return [];
+    return buildPaddedStreak(streaks);
   }, [streaks]);
 
   const variations = activeData?.variations ?? [];
