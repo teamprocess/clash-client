@@ -115,11 +115,11 @@ export class AppMonitor {
     // 2. 비활성 앱 체크 및 세션 종료
     const hadInactiveApps = this.checkInactiveApps(now);
 
-    // 3. 현재 활성 앱들 정보 계산
-    const activeAppsData = this.calculateActiveApps(now);
+    // 3. 현재 기준 앱 계산 (최근 활성 기준)
+    const primaryApp = this.getMostRecentlyActiveApp(now);
 
     // 4. Renderer에 업데이트 전송
-    this.sendUpdateToRenderer(activeAppsData, hadInactiveApps);
+    this.sendUpdateToRenderer(primaryApp, hadInactiveApps);
   }
 
   // mac에서 활성 앱 가져오기
@@ -172,20 +172,28 @@ export class AppMonitor {
     return appsToDelete.length > 0;
   }
 
-  private calculateActiveApps(now: number): ActiveApp[] {
-    const activeAppsData: ActiveApp[] = [];
+  private toActiveApp(app: TrackedApp, now: number): ActiveApp {
+    return {
+      appName: app.appName,
+      startTime: app.sessionStartTime,
+      currentDuration: now - app.sessionStartTime.getTime(),
+    };
+  }
+
+  private getMostRecentlyActiveApp(now: number): ActiveApp | null {
+    let latest: TrackedApp | null = null;
 
     for (const app of this.activeApps.values()) {
-      const currentDuration = now - app.sessionStartTime.getTime();
-
-      activeAppsData.push({
-        appName: app.appName,
-        startTime: app.sessionStartTime,
-        currentDuration: currentDuration,
-      });
+      if (!latest || app.lastActiveTime.getTime() > latest.lastActiveTime.getTime()) {
+        latest = app;
+      }
     }
 
-    return activeAppsData;
+    if (!latest) {
+      return null;
+    }
+
+    return this.toActiveApp(latest, now);
   }
 
   private endSession(appName: string, app: TrackedApp) {
@@ -207,15 +215,8 @@ export class AppMonitor {
     this.mainWindow?.webContents.send("app-monitor:session-updated", session);
   }
 
-  private sendUpdateToRenderer(activeApps: ActiveApp[], forceUpdate = false) {
-    // 가장 오래 사용한 앱 찾기
-    const primaryApp =
-      activeApps.reduce(
-        (max, app) => (app.currentDuration > (max?.currentDuration || 0) ? app : max),
-        null as ActiveApp | null
-      ) || null;
-
-    const currentAppName = primaryApp?.appName || null;
+  private sendUpdateToRenderer(primaryApp: ActiveApp | null, forceUpdate = false) {
+    const currentAppName = primaryApp?.appName ?? null;
 
     // 앱 이름이 바뀌었거나 강제 업데이트일 때 전송
     if (currentAppName !== this.lastSentAppName || forceUpdate) {
@@ -225,16 +226,7 @@ export class AppMonitor {
   }
 
   getActiveApp(): ActiveApp | null {
-    const now = Date.now();
-    const activeAppsData = this.calculateActiveApps(now);
-
-    // 가장 오래 사용한 앱 반환
-    return (
-      activeAppsData.reduce(
-        (max, app) => (app.currentDuration > (max?.currentDuration || 0) ? app : max),
-        null as ActiveApp | null
-      ) || null
-    );
+    return this.getMostRecentlyActiveApp(Date.now());
   }
 
   getSessions(): MonitoringSession[] {
