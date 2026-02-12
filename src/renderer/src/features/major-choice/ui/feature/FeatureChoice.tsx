@@ -47,9 +47,7 @@ export const FeatureChoice = ({
           onClick={handleFeatureChoiceSubmit}
           fullWidth={true}
         >
-          <S.RoadMapButton disabled={!isValid} onClick={handleFeatureChoiceSubmit}>
-            선택 완료하기
-          </S.RoadMapButton>
+          선택 완료하기
         </Button>
       </S.RoadMapContents>
     </S.RoadMapContainer>
