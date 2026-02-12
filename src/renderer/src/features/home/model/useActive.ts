@@ -47,9 +47,7 @@ export const useActive = () => {
   const paddedStreaks: RenderStreakItem[] = useMemo(() => {
     if (!streaks || streaks.length === 0) return [];
 
-    const sorted = [...streaks].sort(
-      (a, b) => kstDate.parse(a.date).getTime() - kstDate.parse(b.date).getTime()
-    );
+    const sorted = [...streaks].sort((a, b) => a.date.localeCompare(b.date));
 
     const startStr = sorted[0].date;
     const endStr = sorted[sorted.length - 1].date;
