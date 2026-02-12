@@ -7,21 +7,40 @@ export interface Task {
   studyTime: number;
 }
 
-export interface Session {
-  startedAt: Date;
-  endedAt: Date | null;
+export type RecordType = "TASK" | "ACTIVITY";
+export type IsoDateTimeString = string;
+
+export interface TaskRecordSession {
+  id: number;
+  recordType: "TASK";
+  startedAt: IsoDateTimeString;
+  endedAt: IsoDateTimeString | null;
   task: {
     id: number;
     name: string;
   };
+  activity: null;
 }
+
+export interface ActivityRecordSession {
+  id: number;
+  recordType: "ACTIVITY";
+  startedAt: IsoDateTimeString;
+  endedAt: IsoDateTimeString | null;
+  task: null;
+  activity: {
+    appName: string;
+  };
+}
+
+export type RecordSession = TaskRecordSession | ActivityRecordSession;
 
 export interface RecordTodayResponse {
   date: string;
   pomodoroEnabled: boolean;
   totalStudyTime: number;
-  studyStoppedAt: Date;
-  sessions: Session[];
+  studyStoppedAt: IsoDateTimeString | null;
+  sessions: RecordSession[];
 }
 
 export interface RecordSettingResponse {
@@ -37,16 +56,34 @@ export interface RecordSettingUpdateRequest {
 }
 
 export interface RecordStartRequest {
-  taskId: number;
+  recordType?: RecordType;
+  taskId?: number;
+  appName?: string;
 }
 
 export interface RecordStartResponse {
-  startedTime: Date;
+  startedTime: IsoDateTimeString;
+  session: RecordSession;
 }
 
 export interface RecordStopResponse {
-  taskId: number;
-  stoppedAt: Date;
+  stoppedAt: IsoDateTimeString;
+  session: RecordSession;
+}
+
+export interface RecordSwitchActivityAppRequest {
+  appName: string;
+}
+
+export interface RecordSwitchActivityAppResponse {
+  switchedAt: IsoDateTimeString;
+  session: RecordSession;
+}
+
+export type RecordCurrentResponse = RecordSession | null;
+
+export interface RecordMonitoredAppsResponse {
+  apps: string[];
 }
 
 export interface RecordTasksResponse {
@@ -95,6 +132,29 @@ export const recordApi = {
   // 일반 기록 중지
   stopRecord: async () => {
     const result = await api.post<ApiResponse<RecordStopResponse>>("/record/stop");
+    return result.data;
+  },
+
+  // 활동 앱 전환
+  switchActivityApp: async (data: RecordSwitchActivityAppRequest) => {
+    const result = await api.patch<ApiResponse<RecordSwitchActivityAppResponse>>(
+      "/record/activities/switch-app",
+      data
+    );
+    return result.data;
+  },
+
+  // 현재 기록 세션 조회
+  getCurrentRecord: async () => {
+    const result = await api.get<ApiResponse<RecordCurrentResponse>>("/record/current");
+    return result.data;
+  },
+
+  // 활동 기록 가능 앱 목록 조회
+  getMonitoredApps: async () => {
+    const result = await api.get<ApiResponse<RecordMonitoredAppsResponse>>(
+      "/record/activities/monitored-apps"
+    );
     return result.data;
   },
 
