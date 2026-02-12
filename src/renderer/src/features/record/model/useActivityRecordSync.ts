@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef } from "react";
 import type { ActiveApp } from "@/entities/app-monitor";
-import { recordApi, recordQueryKeys } from "@/entities/record";
+import { matchMonitoredApp, recordApi, recordQueryKeys } from "@/entities/record";
 import { getErrorMessage, queryClient } from "@/shared/lib";
 
 type ServerSessionState =
@@ -10,28 +10,6 @@ type ServerSessionState =
 
 const SYNC_POLL_MS = 15000;
 const APP_CHANGE_DEBOUNCE_MS = 5000;
-
-const matchMonitoredApp = (appName: string, monitoredApps: string[]) => {
-  const loweredName = appName.toLowerCase();
-
-  // 1) 완전 일치 우선
-  const exact = monitoredApps.find(candidate => candidate.toLowerCase() === loweredName);
-  if (exact) {
-    return exact;
-  }
-
-  // 2) 부분 일치가 여러 개면 더 구체적인(긴) 이름을 우선 선택
-  const partialMatches = monitoredApps.filter(candidate => {
-    const loweredCandidate = candidate.toLowerCase();
-    return loweredName.includes(loweredCandidate) || loweredCandidate.includes(loweredName);
-  });
-
-  if (partialMatches.length === 0) {
-    return null;
-  }
-
-  return partialMatches.sort((a, b) => b.length - a.length)[0];
-};
 
 const parseServerSession = (
   data: Awaited<ReturnType<typeof recordApi.getCurrentRecord>>["data"]
@@ -51,13 +29,21 @@ const parseServerSession = (
 };
 
 export const useActivityRecordSync = (activeApp: ActiveApp | null, isElectron: boolean) => {
-  const targetAppNameRef = useRef<string | null>(null);
-  const lastObservedAppNameRef = useRef<string | null>(null);
+  const pendingTargetsRef = useRef<Array<string | null>>([]);
   const monitoredAppsRef = useRef<string[] | null>(null);
   const serverSessionRef = useRef<ServerSessionState>({ type: "NONE", appName: null });
   const initializedRef = useRef(false);
   const syncingRef = useRef(false);
-  const pendingRef = useRef(false);
+
+  const enqueueTarget = useCallback((targetAppName: string | null) => {
+    const queue = pendingTargetsRef.current;
+    const lastTarget = queue.length > 0 ? queue[queue.length - 1] : null;
+    if (lastTarget === targetAppName) {
+      return;
+    }
+
+    queue.push(targetAppName);
+  }, []);
 
   const invalidateToday = useCallback(async () => {
     await queryClient.invalidateQueries({ queryKey: recordQueryKeys.today });
@@ -105,16 +91,17 @@ export const useActivityRecordSync = (activeApp: ActiveApp | null, isElectron: b
 
     const monitoredApps = monitoredAppsRef.current;
     if (!monitoredApps || monitoredApps.length === 0) {
-      return rawAppName;
+      return null;
     }
 
-    return matchMonitoredApp(rawAppName, monitoredApps) ?? rawAppName;
+    return matchMonitoredApp(rawAppName, monitoredApps);
   }, []);
 
   const stopActivitySession = useCallback(async () => {
     try {
       const stopResponse = await recordApi.stopRecord();
       if (!stopResponse.success) {
+        console.error("개발 활동 기록 중지 API 실패 응답:", stopResponse.message);
         await refreshServerSession();
         return;
       }
@@ -138,6 +125,9 @@ export const useActivityRecordSync = (activeApp: ActiveApp | null, isElectron: b
           !switchedSession ||
           switchedSession.recordType !== "ACTIVITY"
         ) {
+          if (!switchResponse.success) {
+            console.error("개발 활동 기록 전환 API 실패 응답:", switchResponse.message);
+          }
           await refreshServerSession();
           return;
         }
@@ -165,6 +155,9 @@ export const useActivityRecordSync = (activeApp: ActiveApp | null, isElectron: b
         });
         const startedSession = startResponse.data?.session;
         if (!startResponse.success || !startedSession || startedSession.recordType !== "ACTIVITY") {
+          if (!startResponse.success) {
+            console.error("개발 활동 기록 시작 API 실패 응답:", startResponse.message);
+          }
           await refreshServerSession();
           return;
         }
@@ -246,8 +239,8 @@ export const useActivityRecordSync = (activeApp: ActiveApp | null, isElectron: b
 
     syncingRef.current = true;
     try {
-      while (pendingRef.current) {
-        pendingRef.current = false;
+      while (pendingTargetsRef.current.length > 0) {
+        const targetAppName = pendingTargetsRef.current.shift() ?? null;
 
         if (!initializedRef.current) {
           await loadMonitoredApps();
@@ -255,7 +248,7 @@ export const useActivityRecordSync = (activeApp: ActiveApp | null, isElectron: b
           initializedRef.current = true;
         }
 
-        await syncServerSession(targetAppNameRef.current);
+        await syncServerSession(targetAppName);
       }
     } finally {
       syncingRef.current = false;
@@ -268,30 +261,21 @@ export const useActivityRecordSync = (activeApp: ActiveApp | null, isElectron: b
     }
 
     const currentObservedAppName = activeApp?.appName ?? null;
-    const previousObservedAppName = lastObservedAppNameRef.current;
-    lastObservedAppNameRef.current = currentObservedAppName;
-
-    const isDirectAppSwitch =
-      previousObservedAppName !== null &&
-      currentObservedAppName !== null &&
-      previousObservedAppName !== currentObservedAppName;
-
-    // 앱 -> 앱 전환은 즉시 반영해서 segment 전환 누락을 막음
-    if (isDirectAppSwitch) {
-      targetAppNameRef.current = currentObservedAppName;
-      pendingRef.current = true;
+    // IDE/모니터링 대상 앱이 잡히면 즉시 반영 (전환 누락 방지)
+    if (currentObservedAppName !== null) {
+      enqueueTarget(currentObservedAppName);
       void flushSync();
       return;
     }
 
+    // IDE를 벗어난 경우(null)만 5초 유예 후 중지 처리
     const debounceTimer = setTimeout(() => {
-      targetAppNameRef.current = currentObservedAppName;
-      pendingRef.current = true;
+      enqueueTarget(currentObservedAppName);
       void flushSync();
     }, APP_CHANGE_DEBOUNCE_MS);
 
     return () => clearTimeout(debounceTimer);
-  }, [activeApp?.appName, flushSync, isElectron]);
+  }, [activeApp?.appName, enqueueTarget, flushSync, isElectron]);
 
   useEffect(() => {
     if (!isElectron) {
@@ -299,10 +283,10 @@ export const useActivityRecordSync = (activeApp: ActiveApp | null, isElectron: b
     }
 
     const timer = setInterval(() => {
-      pendingRef.current = true;
+      enqueueTarget(activeApp?.appName ?? null);
       void flushSync();
     }, SYNC_POLL_MS);
 
     return () => clearInterval(timer);
-  }, [flushSync, isElectron]);
+  }, [activeApp?.appName, enqueueTarget, flushSync, isElectron]);
 };
