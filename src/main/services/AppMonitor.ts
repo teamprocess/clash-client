@@ -40,7 +40,6 @@ const MONITORED_APPS = [
   "PhpStorm",
   "RubyMine",
   "CLion",
-  "DataGrip",
   "Rider",
   "Android Studio",
 
@@ -93,9 +92,10 @@ export class AppMonitor {
       this.intervalId = null;
     }
 
+    const stoppedAt = new Date();
     // 모든 활성 앱의 세션 종료
     for (const [appName, app] of this.activeApps.entries()) {
-      this.endSession(appName, app);
+      this.endSession(appName, app, stoppedAt);
     }
     this.activeApps.clear();
     this.lastSentAppName = null;
@@ -104,7 +104,10 @@ export class AppMonitor {
 
   private async checkActiveApp() {
     const now = Date.now();
-    const rawAppName = await this.getActiveAppName();
+    const [rawAppName, runningAppNames] = await Promise.all([
+      this.getActiveAppName(),
+      this.getRunningAppNames(),
+    ]);
 
     // 1. frontmost 앱이 모니터링 대상이면 활성 상태 업데이트
     const frontmostApp = rawAppName && this.isMonitoredApp(rawAppName) ? rawAppName : null;
@@ -112,14 +115,18 @@ export class AppMonitor {
       this.updateAppActivity(frontmostApp, now);
     }
 
-    // 2. 비활성 앱 체크 및 세션 종료
+    // 2. 강제 종료된 앱은 즉시 세션 종료
+    const hadForceClosedApps =
+      runningAppNames !== null ? this.checkForceClosedApps(now, runningAppNames) : false;
+
+    // 3. 비활성 앱 체크 및 세션 종료
     const hadInactiveApps = this.checkInactiveApps(now);
 
-    // 3. 현재 기준 앱 계산 (최근 활성 기준)
+    // 4. 현재 기준 앱 계산 (최근 활성 기준)
     const primaryApp = this.getMostRecentlyActiveApp(now);
 
-    // 4. Renderer에 업데이트 전송
-    this.sendUpdateToRenderer(primaryApp, hadInactiveApps);
+    // 5. Renderer에 업데이트 전송
+    this.sendUpdateToRenderer(primaryApp, hadForceClosedApps || hadInactiveApps);
   }
 
   // mac에서 활성 앱 가져오기
@@ -131,6 +138,24 @@ export class AppMonitor {
       return stdout.trim();
     } catch (error) {
       console.error("활성 상태의 앱 정보를 가져오는데 실패했습니다:", error);
+      return null;
+    }
+  }
+
+  private async getRunningAppNames(): Promise<string[] | null> {
+    try {
+      const { stdout } = await execAsync(
+        "osascript -e 'tell application \"System Events\" to get name of (application processes whose background only is false)'"
+      );
+
+      const appNames = stdout
+        .split(",")
+        .map(name => name.trim())
+        .filter(Boolean);
+
+      return appNames;
+    } catch (error) {
+      console.error("실행 중인 앱 정보를 가져오는데 실패했습니다:", error);
       return null;
     }
   }
@@ -172,6 +197,39 @@ export class AppMonitor {
     return appsToDelete.length > 0;
   }
 
+  private checkForceClosedApps(now: number, runningAppNames: string[]): boolean {
+    if (runningAppNames.length === 0) {
+      return false;
+    }
+
+    const appsToDelete: string[] = [];
+
+    for (const [appName, app] of this.activeApps.entries()) {
+      const isStillRunning = runningAppNames.some(runningAppName =>
+        this.isSameAppName(appName, runningAppName)
+      );
+
+      if (!isStillRunning) {
+        // 강제 종료된 케이스라 유예 없이 바로 종료
+        this.endSession(appName, app, new Date(now));
+        appsToDelete.push(appName);
+      }
+    }
+
+    for (const appName of appsToDelete) {
+      this.activeApps.delete(appName);
+    }
+
+    return appsToDelete.length > 0;
+  }
+
+  private isSameAppName(left: string, right: string): boolean {
+    const normalizedLeft = left.toLowerCase();
+    const normalizedRight = right.toLowerCase();
+
+    return normalizedLeft.includes(normalizedRight) || normalizedRight.includes(normalizedLeft);
+  }
+
   private toActiveApp(app: TrackedApp, now: number): ActiveApp {
     return {
       appName: app.appName,
@@ -196,14 +254,15 @@ export class AppMonitor {
     return this.toActiveApp(latest, now);
   }
 
-  private endSession(appName: string, app: TrackedApp) {
-    const endTime = new Date(app.lastActiveTime.getTime() + this.INACTIVE_THRESHOLD_MS);
-    const duration = endTime.getTime() - app.sessionStartTime.getTime();
+  private endSession(appName: string, app: TrackedApp, endTime: Date | null = null) {
+    const resolvedEndTime =
+      endTime ?? new Date(app.lastActiveTime.getTime() + this.INACTIVE_THRESHOLD_MS);
+    const duration = Math.max(0, resolvedEndTime.getTime() - app.sessionStartTime.getTime());
 
     const session: MonitoringSession = {
       appName,
       startTime: app.sessionStartTime,
-      endTime,
+      endTime: resolvedEndTime,
       duration,
     };
 
