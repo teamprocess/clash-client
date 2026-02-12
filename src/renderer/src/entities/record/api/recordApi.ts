@@ -7,13 +7,20 @@ export interface Task {
   studyTime: number;
 }
 
-export interface Session {
+export type RecordType = "TASK" | "ACTIVITY";
+
+export interface RecordSession {
+  id: number;
+  recordType: RecordType;
   startedAt: Date;
   endedAt: Date | null;
   task: {
     id: number;
     name: string;
-  };
+  } | null;
+  activity: {
+    appName: string;
+  } | null;
 }
 
 export interface RecordTodayResponse {
@@ -21,7 +28,7 @@ export interface RecordTodayResponse {
   pomodoroEnabled: boolean;
   totalStudyTime: number;
   studyStoppedAt: Date;
-  sessions: Session[];
+  sessions: RecordSession[];
 }
 
 export interface RecordSettingResponse {
@@ -37,16 +44,25 @@ export interface RecordSettingUpdateRequest {
 }
 
 export interface RecordStartRequest {
-  taskId: number;
+  recordType?: RecordType;
+  taskId?: number;
+  appName?: string;
 }
 
 export interface RecordStartResponse {
   startedTime: Date;
+  session: RecordSession;
 }
 
 export interface RecordStopResponse {
-  taskId: number;
   stoppedAt: Date;
+  session: RecordSession;
+}
+
+export interface RecordCurrentResponse extends RecordSession {}
+
+export interface RecordMonitoredAppsResponse {
+  apps: string[];
 }
 
 export interface RecordTasksResponse {
@@ -95,6 +111,20 @@ export const recordApi = {
   // 일반 기록 중지
   stopRecord: async () => {
     const result = await api.post<ApiResponse<RecordStopResponse>>("/record/stop");
+    return result.data;
+  },
+
+  // 현재 기록 세션 조회
+  getCurrentRecord: async () => {
+    const result = await api.get<ApiResponse<RecordCurrentResponse>>("/record/current");
+    return result.data;
+  },
+
+  // 활동 기록 가능 앱 목록 조회
+  getMonitoredApps: async () => {
+    const result = await api.get<ApiResponse<RecordMonitoredAppsResponse>>(
+      "/record/activities/monitored-apps"
+    );
     return result.data;
   },
 
