@@ -75,7 +75,7 @@ export const Active = () => {
         </S.StreakBox>
 
         <S.StreakBox>
-          <S.StreakTitle>Contributes 변화 추이</S.StreakTitle>
+          <S.StreakTitle>Contributions 변화 추이</S.StreakTitle>
           <S.ChartWrapper>
             <ActiveLineChart data={fullChartData} />
           </S.ChartWrapper>
