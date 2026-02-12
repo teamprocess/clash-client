@@ -42,7 +42,7 @@ export const Ranking = () => {
               key={user.linkedId}
               user={user}
               rank={index + 1}
-              isRival={user.isRival}
+              isRival={user.userId !== domain.currentUser?.userId && user.isRival}
               ref={user.userId === domain.currentUser?.userId ? currentUserRef : null}
             />
           ))
