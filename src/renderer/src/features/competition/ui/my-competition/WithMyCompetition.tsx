@@ -9,7 +9,8 @@ import { Select } from "@/shared/ui/select";
 export const WithMyCompetition = () => {
   const {
     dataPoints,
-    myCompareData,
+    todayData,
+    compareData,
     competitionDropdown,
     setCompetitionDropdown,
     growthRateDropdown,
@@ -60,64 +61,7 @@ export const WithMyCompetition = () => {
         <S.CompareContainer>
           <S.CompareBox>
             <S.TextBox>
-              <S.CompareBoxTitle>비교1</S.CompareBoxTitle>
-              <S.DateText>오늘</S.DateText>
-            </S.TextBox>
-
-            <S.GridContainer>
-              <S.GridBox>
-                <S.DataBoxing>
-                  <S.ImpressiveBox>
-                    <S.EXPIcon />
-                    <S.ExplainText>총 획득 EXP</S.ExplainText>
-                  </S.ImpressiveBox>
-                  <S.DataText>{oneDecimal(myCompareData?.earnedExp)} EXP</S.DataText>
-                </S.DataBoxing>
-              </S.GridBox>
-
-              <S.GridBox>
-                <S.DataBoxing>
-                  <S.ImpressiveBox>
-                    <S.RecordIcon />
-                    <S.ExplainText>학습시간</S.ExplainText>
-                  </S.ImpressiveBox>
-                  <S.DataText>{oneDecimal(myCompareData?.studyTime)} 시간</S.DataText>
-                </S.DataBoxing>
-              </S.GridBox>
-
-              <S.GridBox>
-                <S.DataBoxing>
-                  <S.ImpressiveBox>
-                    <S.SolvedAcIcon />
-                    <S.ExplainText>
-                      solved.ac
-                      <br />
-                      문제 해결 수
-                    </S.ExplainText>
-                  </S.ImpressiveBox>
-                  <S.DataText>0 문제</S.DataText>
-                </S.DataBoxing>
-              </S.GridBox>
-
-              <S.GridBox>
-                <S.DataBoxing>
-                  <S.ImpressiveBox>
-                    <S.GithubIcon />
-                    <S.ExplainText>
-                      Github
-                      <br />
-                      기여수
-                    </S.ExplainText>
-                  </S.ImpressiveBox>
-                  <S.DataText>{oneDecimal(myCompareData?.gitHubAttribution)}</S.DataText>
-                </S.DataBoxing>
-              </S.GridBox>
-            </S.GridContainer>
-          </S.CompareBox>
-
-          <S.CompareBox>
-            <S.TextBox>
-              <S.CompareBoxTitle>비교2</S.CompareBoxTitle>
+              <S.CompareBoxTitle>이전의 활동량</S.CompareBoxTitle>
               <Select<CompareStandard>
                 value={competitionDropdown}
                 options={competitionDropDownValue}
@@ -132,13 +76,7 @@ export const WithMyCompetition = () => {
                     <S.EXPIcon />
                     <S.ExplainText>총 획득 EXP</S.ExplainText>
                   </S.ImpressiveBox>
-                  <S.GrowthRateBox>
-                    <S.DataText>{oneDecimal(myCompareData?.earnedExp)} EXP</S.DataText>
-                    <GrowthRate
-                      yesterday={oneDecimal(myCompareData?.earnedExp)}
-                      today={oneDecimal(myCompareData?.earnedExp)}
-                    />
-                  </S.GrowthRateBox>
+                  <S.DataText>{oneDecimal(compareData?.earnedExp)} EXP</S.DataText>
                 </S.DataBoxing>
               </S.GridBox>
 
@@ -148,27 +86,7 @@ export const WithMyCompetition = () => {
                     <S.RecordIcon />
                     <S.ExplainText>학습시간</S.ExplainText>
                   </S.ImpressiveBox>
-                  <S.GrowthRateBox>
-                    <S.DataText>{oneDecimal(myCompareData?.studyTime)} 시간</S.DataText>
-                    <GrowthRate
-                      yesterday={oneDecimal(myCompareData?.studyTime)}
-                      today={oneDecimal(myCompareData?.studyTime)}
-                    />
-                  </S.GrowthRateBox>
-                </S.DataBoxing>
-              </S.GridBox>
-
-              <S.GridBox>
-                <S.DataBoxing>
-                  <S.ImpressiveBox>
-                    <S.SolvedAcIcon />
-                    <S.ExplainText>
-                      solved.ac
-                      <br />
-                      문제 해결 수
-                    </S.ExplainText>
-                  </S.ImpressiveBox>
-                  <S.DataText>0 문제</S.DataText>
+                  <S.DataText>{oneDecimal(compareData?.studyTime)} 시간</S.DataText>
                 </S.DataBoxing>
               </S.GridBox>
 
@@ -183,10 +101,67 @@ export const WithMyCompetition = () => {
                     </S.ExplainText>
                   </S.ImpressiveBox>
                   <S.GrowthRateBox>
-                    <S.DataText>{oneDecimal(myCompareData?.gitHubAttribution)}</S.DataText>
+                    <S.DataText>{oneDecimal(compareData?.gitHubAttribution)}개</S.DataText>
+                  </S.GrowthRateBox>
+                </S.DataBoxing>
+              </S.GridBox>
+            </S.GridContainer>
+          </S.CompareBox>
+
+          <S.CompareBox>
+            <S.TextBox>
+              <S.CompareBoxTitle>오늘의 활동량</S.CompareBoxTitle>
+              <S.DateText>오늘</S.DateText>
+            </S.TextBox>
+
+            <S.GridContainer>
+              <S.GridBox>
+                <S.DataBoxing>
+                  <S.ImpressiveBox>
+                    <S.EXPIcon />
+                    <S.ExplainText>총 획득 EXP</S.ExplainText>
+                  </S.ImpressiveBox>
+                  <S.GrowthRateBox>
+                    <S.DataText>{oneDecimal(todayData?.earnedExp)} EXP</S.DataText>
                     <GrowthRate
-                      yesterday={oneDecimal(myCompareData?.gitHubAttribution)}
-                      today={oneDecimal(myCompareData?.gitHubAttribution)}
+                      yesterday={oneDecimal(compareData?.earnedExp)}
+                      today={oneDecimal(todayData?.earnedExp)}
+                    />
+                  </S.GrowthRateBox>
+                </S.DataBoxing>
+              </S.GridBox>
+
+              <S.GridBox>
+                <S.DataBoxing>
+                  <S.ImpressiveBox>
+                    <S.RecordIcon />
+                    <S.ExplainText>학습시간</S.ExplainText>
+                  </S.ImpressiveBox>
+                  <S.GrowthRateBox>
+                    <S.DataText>{oneDecimal(todayData?.studyTime)} 시간</S.DataText>
+                    <GrowthRate
+                      yesterday={oneDecimal(compareData?.studyTime)}
+                      today={oneDecimal(todayData?.studyTime)}
+                    />
+                  </S.GrowthRateBox>
+                </S.DataBoxing>
+              </S.GridBox>
+
+              <S.GridBox>
+                <S.DataBoxing>
+                  <S.ImpressiveBox>
+                    <S.GithubIcon />
+                    <S.ExplainText>
+                      Github
+                      <br />
+                      기여수
+                    </S.ExplainText>
+                  </S.ImpressiveBox>
+                  <S.GrowthRateBox>
+                    <S.DataText>{oneDecimal(todayData?.gitHubAttribution)}개</S.DataText>
+                    <GrowthRate
+                      yesterday={oneDecimal(compareData?.gitHubAttribution)}
+                      today={oneDecimal(todayData?.gitHubAttribution)}
                     />
                   </S.GrowthRateBox>
                 </S.DataBoxing>
