@@ -1,29 +1,13 @@
 import styled from "styled-components";
-import { palette } from "@/shared/config/theme";
 import { font } from "@/shared/config/font";
 import Web from "../../assets/web.svg";
-import App from "../../assets/app.svg";
 import Server from "../../assets/server.svg";
-import Ai from "../../assets/ai.svg";
-import Game from "../../assets/game.svg";
 
 export const WebIcon = styled(Web)`
   width: 5rem;
 `;
 
-export const AppIcon = styled(App)`
-  width: 5rem;
-`;
-
 export const ServerIcon = styled(Server)`
-  width: 5rem;
-`;
-
-export const AiIcon = styled(Ai)`
-  width: 5rem;
-`;
-
-export const GameIcon = styled(Game)`
   width: 5rem;
 `;
 
@@ -44,6 +28,7 @@ export const ChoiceContents = styled.div`
   justify-content: center;
   align-items: center;
   gap: 3.25rem;
+  width: 30rem;
 `;
 
 export const ChoiceContentsTop = styled.div`
@@ -70,37 +55,9 @@ export const ChoiceDescription = styled.span`
 
 export const ChoiceWrapper = styled.div`
   display: flex;
-  flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 1.75rem;
+  gap: 3rem;
   width: 26rem;
-`;
-
-export const RoadMapButton = styled.button<{ disabled: boolean }>`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 32rem;
-  height: 3.25rem;
-  background-color: ${({ disabled, theme }) =>
-    disabled ? theme.line.normal : theme.primary.normal};
-  ${font.headline1.medium};
-  color: ${palette.neutral["97"]};
-  border-radius: 1rem;
-  cursor: ${({ disabled }) => (disabled ? "default" : "pointer")};
-`;
-
-export const ChoiceTop = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 3rem;
-`;
-
-export const ChoiceBottom = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 3rem;
+  height: 13rem;
 `;

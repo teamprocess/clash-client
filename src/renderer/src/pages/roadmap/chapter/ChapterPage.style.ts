@@ -66,7 +66,7 @@ export const RoadmapWrapper = styled.div`
   width: 48rem;
   height: 68rem;
   position: absolute;
-  top: -10rem;
+  top: -2rem;
   right: 5rem;
 `;
 

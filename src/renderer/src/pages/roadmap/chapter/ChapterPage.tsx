@@ -53,7 +53,7 @@ export const ChapterPage = () => {
   return (
     <S.ChapterContainer>
       <S.ChapterScrollable ref={chapterRef}>
-        {Array.from({ length: 300 }).map((_, idx) => (
+        {Array.from({ length: 340 }).map((_, idx) => (
           <S.Square key={idx} />
         ))}
 

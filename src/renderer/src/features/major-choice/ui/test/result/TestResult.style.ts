@@ -2,10 +2,7 @@ import styled from "styled-components";
 import { font } from "@/shared/config/font";
 import { palette } from "@/shared/config/theme";
 import Web from "../../../assets/web.svg";
-import App from "../../../assets/app.svg";
 import Server from "../../../assets/server.svg";
-import Ai from "../../../assets/ai.svg";
-import Game from "../../../assets/game.svg";
 
 export const ResultContainer = styled.div`
   display: flex;
@@ -50,13 +47,7 @@ export const ResultDescription = styled.span`
 
 export const WebIcon = styled(Web)``;
 
-export const AppIcon = styled(App)``;
-
 export const ServerIcon = styled(Server)``;
-
-export const AiIcon = styled(Ai)``;
-
-export const GameIcon = styled(Game)``;
 
 export const ResultCard = styled.div`
   display: flex;
