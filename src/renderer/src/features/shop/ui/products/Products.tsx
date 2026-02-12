@@ -1,4 +1,5 @@
-import { useState, useEffect } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import * as S from "./Products.style";
 import { calculateDiscountedPrice } from "@/features/shop/lib/calculateDiscountedPrice";
 import { ProductCard } from "@/features/shop/ui/card/ProductCard";
@@ -26,15 +27,33 @@ const getCategoryLabel = (category: Product["category"]) => {
 };
 
 export const Products = ({ products, isLoading }: ProductsProps) => {
-  const [selectedId, setSelectedId] = useState<number | null>(null);
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const [initialOpenProductId] = useState<number | null>(
+    () => location.state?.openProductId ?? null
+  );
+
+  const [internalSelectedId, setInternalSelectedId] = useState<number | null | undefined>(
+    undefined
+  );
+
+  const selectedId = internalSelectedId !== undefined ? internalSelectedId : initialOpenProductId;
 
   const [isPurchaseOpen, setIsPurchaseOpen] = useState(false);
 
-  const selectedProduct = products.find(product => product.id === selectedId);
+  const selectedProduct = useMemo(() => {
+    if (selectedId == null) return null;
+    return products.find(product => String(product.id) === String(selectedId)) ?? null;
+  }, [products, selectedId]);
+
   const isPanelOpen = selectedId !== null;
 
   const handleCardClick = (id: number) => {
-    setSelectedId(selectedId === id ? null : id);
+    setInternalSelectedId(prev => {
+      const current = prev !== undefined ? prev : initialOpenProductId;
+      return String(current) === String(id) ? null : id;
+    });
   };
 
   const handleOpenPurchase = () => {
@@ -49,7 +68,7 @@ export const Products = ({ products, isLoading }: ProductsProps) => {
   const purchaseMutation = usePurchaseProduct();
 
   const handlePurchase = async (product: Product) => {
-    await purchaseMutation.mutateAsync({ productId: product.id });
+    await purchaseMutation.mutateAsync({ productId: Number(product.id) });
   };
 
   useEffect(() => {
@@ -59,6 +78,12 @@ export const Products = ({ products, isLoading }: ProductsProps) => {
       document.body.style.overflow = "unset";
     };
   }, [isPanelOpen, isPurchaseOpen]);
+
+  useEffect(() => {
+    if (initialOpenProductId != null && selectedProduct) {
+      navigate(".", { replace: true, state: null });
+    }
+  }, [initialOpenProductId, selectedProduct, navigate]);
 
   if (isLoading) {
     return (
@@ -83,7 +108,7 @@ export const Products = ({ products, isLoading }: ProductsProps) => {
               price={product.price}
               discount={product.discount}
               type={product.type}
-              onClick={() => handleCardClick(product.id)}
+              onClick={() => handleCardClick(Number(product.id))}
             />
           ))}
         </S.CardContainer>
