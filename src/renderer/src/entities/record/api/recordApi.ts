@@ -8,26 +8,38 @@ export interface Task {
 }
 
 export type RecordType = "TASK" | "ACTIVITY";
+export type IsoDateTimeString = string;
 
-export interface RecordSession {
+export interface TaskRecordSession {
   id: number;
-  recordType: RecordType;
-  startedAt: Date;
-  endedAt: Date | null;
+  recordType: "TASK";
+  startedAt: IsoDateTimeString;
+  endedAt: IsoDateTimeString | null;
   task: {
     id: number;
     name: string;
-  } | null;
+  };
+  activity: null;
+}
+
+export interface ActivityRecordSession {
+  id: number;
+  recordType: "ACTIVITY";
+  startedAt: IsoDateTimeString;
+  endedAt: IsoDateTimeString | null;
+  task: null;
   activity: {
     appName: string;
-  } | null;
+  };
 }
+
+export type RecordSession = TaskRecordSession | ActivityRecordSession;
 
 export interface RecordTodayResponse {
   date: string;
   pomodoroEnabled: boolean;
   totalStudyTime: number;
-  studyStoppedAt: Date;
+  studyStoppedAt: IsoDateTimeString | null;
   sessions: RecordSession[];
 }
 
@@ -50,12 +62,12 @@ export interface RecordStartRequest {
 }
 
 export interface RecordStartResponse {
-  startedTime: Date;
+  startedTime: IsoDateTimeString;
   session: RecordSession;
 }
 
 export interface RecordStopResponse {
-  stoppedAt: Date;
+  stoppedAt: IsoDateTimeString;
   session: RecordSession;
 }
 
@@ -64,11 +76,11 @@ export interface RecordSwitchActivityAppRequest {
 }
 
 export interface RecordSwitchActivityAppResponse {
-  switchedAt: Date;
+  switchedAt: IsoDateTimeString;
   session: RecordSession;
 }
 
-export interface RecordCurrentResponse extends RecordSession {}
+export type RecordCurrentResponse = RecordSession | null;
 
 export interface RecordMonitoredAppsResponse {
   apps: string[];
