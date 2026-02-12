@@ -190,10 +190,6 @@ export const useActivityRecordSync = (activeApp: ActiveApp | null, isElectron: b
       }
 
       if (targetAppName === null) {
-        if (serverSession.type !== "ACTIVITY") {
-          return;
-        }
-
         serverSession = await refreshServerSession();
         if (serverSession.type !== "ACTIVITY") {
           return;
