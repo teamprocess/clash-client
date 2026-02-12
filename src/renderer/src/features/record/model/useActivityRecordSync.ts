@@ -9,6 +9,7 @@ type ServerSessionState =
   | { type: "ACTIVITY"; appName: string | null };
 
 const SYNC_POLL_MS = 15000;
+const APP_CHANGE_DEBOUNCE_MS = 800;
 
 const matchMonitoredApp = (appName: string, monitoredApps: string[]) => {
   const loweredName = appName.toLowerCase();
@@ -78,6 +79,12 @@ export const useActivityRecordSync = (activeApp: ActiveApp | null, isElectron: b
     }
   }, []);
 
+  const refreshServerSession = useCallback(async (): Promise<ServerSessionState> => {
+    const latestSession = await loadCurrentSession();
+    serverSessionRef.current = latestSession;
+    return latestSession;
+  }, [loadCurrentSession]);
+
   const normalizeTargetAppName = useCallback((rawAppName: string | null) => {
     if (!rawAppName) {
       return null;
@@ -91,6 +98,78 @@ export const useActivityRecordSync = (activeApp: ActiveApp | null, isElectron: b
     return matchMonitoredApp(rawAppName, monitoredApps) ?? rawAppName;
   }, []);
 
+  const stopActivitySession = useCallback(async () => {
+    try {
+      const stopResponse = await recordApi.stopRecord();
+      if (!stopResponse.success) {
+        await refreshServerSession();
+        return;
+      }
+
+      serverSessionRef.current = { type: "NONE", appName: null };
+      await invalidateToday();
+    } catch (error) {
+      const errorMessage = getErrorMessage(error, "개발 활동 기록 중지에 실패했습니다.");
+      console.error("개발 활동 기록 중지 실패:", errorMessage, error);
+      await refreshServerSession();
+    }
+  }, [invalidateToday, refreshServerSession]);
+
+  const switchActivitySession = useCallback(
+    async (targetAppName: string) => {
+      try {
+        const switchResponse = await recordApi.switchActivityApp({ appName: targetAppName });
+        const switchedSession = switchResponse.data?.session;
+        if (
+          !switchResponse.success ||
+          !switchedSession ||
+          switchedSession.recordType !== "ACTIVITY"
+        ) {
+          await refreshServerSession();
+          return;
+        }
+
+        serverSessionRef.current = {
+          type: "ACTIVITY",
+          appName: switchedSession.activity.appName,
+        };
+        await invalidateToday();
+      } catch (error) {
+        const errorMessage = getErrorMessage(error, "개발 활동 기록 전환에 실패했습니다.");
+        console.error("개발 활동 기록 전환 실패:", errorMessage, error);
+        await refreshServerSession();
+      }
+    },
+    [invalidateToday, refreshServerSession]
+  );
+
+  const startActivitySession = useCallback(
+    async (targetAppName: string) => {
+      try {
+        const startResponse = await recordApi.startRecord({
+          recordType: "ACTIVITY",
+          appName: targetAppName,
+        });
+        const startedSession = startResponse.data?.session;
+        if (!startResponse.success || !startedSession || startedSession.recordType !== "ACTIVITY") {
+          await refreshServerSession();
+          return;
+        }
+
+        serverSessionRef.current = {
+          type: "ACTIVITY",
+          appName: startedSession.activity.appName,
+        };
+        await invalidateToday();
+      } catch (error) {
+        const errorMessage = getErrorMessage(error, "개발 활동 기록 시작에 실패했습니다.");
+        console.error("개발 활동 기록 시작 실패:", errorMessage, error);
+        await refreshServerSession();
+      }
+    },
+    [invalidateToday, refreshServerSession]
+  );
+
   const syncServerSession = useCallback(
     async (rawTargetAppName: string | null) => {
       const targetAppName = normalizeTargetAppName(rawTargetAppName);
@@ -98,8 +177,7 @@ export const useActivityRecordSync = (activeApp: ActiveApp | null, isElectron: b
 
       // TASK 세션이면 활동 자동 기록은 건드리지 않음 (기존 기록 흐름 우선)
       if (serverSession.type === "TASK") {
-        serverSession = await loadCurrentSession();
-        serverSessionRef.current = serverSession;
+        serverSession = await refreshServerSession();
         if (serverSession.type === "TASK") {
           return;
         }
@@ -110,72 +188,42 @@ export const useActivityRecordSync = (activeApp: ActiveApp | null, isElectron: b
           return;
         }
 
-        try {
-          const stopResponse = await recordApi.stopRecord();
-          if (!stopResponse.success) {
-            serverSessionRef.current = await loadCurrentSession();
-            return;
-          }
-
-          serverSessionRef.current = { type: "NONE", appName: null };
-          await invalidateToday();
-          return;
-        } catch (error) {
-          const errorMessage = getErrorMessage(error, "개발 활동 기록 중지에 실패했습니다.");
-          console.error("개발 활동 기록 중지 실패:", errorMessage, error);
-          serverSessionRef.current = await loadCurrentSession();
+        serverSession = await refreshServerSession();
+        if (serverSession.type !== "ACTIVITY") {
           return;
         }
+
+        await stopActivitySession();
+        return;
       }
 
       if (serverSession.type === "ACTIVITY" && serverSession.appName === targetAppName) {
         return;
       }
 
+      // start/switch 직전에 서버 최신 세션을 다시 보고 조작 대상이 맞는지 검증
+      serverSession = await refreshServerSession();
+      if (serverSession.type === "TASK") {
+        return;
+      }
+
       if (serverSession.type === "ACTIVITY") {
-        try {
-          const switchResponse = await recordApi.switchActivityApp({
-            appName: targetAppName,
-          });
-          const switchedSession = switchResponse.data?.session;
-          if (!switchResponse.success || !switchedSession) {
-            serverSessionRef.current = await loadCurrentSession();
-            return;
-          }
-
-          serverSessionRef.current = {
-            type: "ACTIVITY",
-            appName: switchedSession.activity?.appName ?? targetAppName,
-          };
-          await invalidateToday();
-          return;
-        } catch (error) {
-          const errorMessage = getErrorMessage(error, "개발 활동 기록 전환에 실패했습니다.");
-          console.error("개발 활동 기록 전환 실패:", errorMessage, error);
-          serverSessionRef.current = await loadCurrentSession();
+        if (serverSession.appName === targetAppName) {
           return;
         }
+        await switchActivitySession(targetAppName);
+        return;
       }
 
-      try {
-        const startResponse = await recordApi.startRecord({
-          recordType: "ACTIVITY",
-          appName: targetAppName,
-        });
-        if (!startResponse.success) {
-          serverSessionRef.current = await loadCurrentSession();
-          return;
-        }
-
-        serverSessionRef.current = { type: "ACTIVITY", appName: targetAppName };
-        await invalidateToday();
-      } catch (error) {
-        const errorMessage = getErrorMessage(error, "개발 활동 기록 시작에 실패했습니다.");
-        console.error("개발 활동 기록 시작 실패:", errorMessage, error);
-        serverSessionRef.current = await loadCurrentSession();
-      }
+      await startActivitySession(targetAppName);
     },
-    [invalidateToday, loadCurrentSession, normalizeTargetAppName]
+    [
+      normalizeTargetAppName,
+      refreshServerSession,
+      startActivitySession,
+      stopActivitySession,
+      switchActivitySession,
+    ]
   );
 
   const flushSync = useCallback(async () => {
@@ -206,9 +254,13 @@ export const useActivityRecordSync = (activeApp: ActiveApp | null, isElectron: b
       return;
     }
 
-    targetAppNameRef.current = activeApp?.appName ?? null;
-    pendingRef.current = true;
-    void flushSync();
+    const debounceTimer = setTimeout(() => {
+      targetAppNameRef.current = activeApp?.appName ?? null;
+      pendingRef.current = true;
+      void flushSync();
+    }, APP_CHANGE_DEBOUNCE_MS);
+
+    return () => clearTimeout(debounceTimer);
   }, [activeApp?.appName, flushSync, isElectron]);
 
   useEffect(() => {
