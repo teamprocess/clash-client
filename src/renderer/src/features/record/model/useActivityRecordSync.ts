@@ -13,12 +13,24 @@ const APP_CHANGE_DEBOUNCE_MS = 5000;
 
 const matchMonitoredApp = (appName: string, monitoredApps: string[]) => {
   const loweredName = appName.toLowerCase();
-  return (
-    monitoredApps.find(candidate => {
-      const loweredCandidate = candidate.toLowerCase();
-      return loweredName.includes(loweredCandidate) || loweredCandidate.includes(loweredName);
-    }) ?? null
-  );
+
+  // 1) 완전 일치 우선
+  const exact = monitoredApps.find(candidate => candidate.toLowerCase() === loweredName);
+  if (exact) {
+    return exact;
+  }
+
+  // 2) 부분 일치가 여러 개면 더 구체적인(긴) 이름을 우선 선택
+  const partialMatches = monitoredApps.filter(candidate => {
+    const loweredCandidate = candidate.toLowerCase();
+    return loweredName.includes(loweredCandidate) || loweredCandidate.includes(loweredName);
+  });
+
+  if (partialMatches.length === 0) {
+    return null;
+  }
+
+  return partialMatches.sort((a, b) => b.length - a.length)[0];
 };
 
 const parseServerSession = (
@@ -40,6 +52,7 @@ const parseServerSession = (
 
 export const useActivityRecordSync = (activeApp: ActiveApp | null, isElectron: boolean) => {
   const targetAppNameRef = useRef<string | null>(null);
+  const lastObservedAppNameRef = useRef<string | null>(null);
   const monitoredAppsRef = useRef<string[] | null>(null);
   const serverSessionRef = useRef<ServerSessionState>({ type: "NONE", appName: null });
   const initializedRef = useRef(false);
@@ -254,8 +267,25 @@ export const useActivityRecordSync = (activeApp: ActiveApp | null, isElectron: b
       return;
     }
 
+    const currentObservedAppName = activeApp?.appName ?? null;
+    const previousObservedAppName = lastObservedAppNameRef.current;
+    lastObservedAppNameRef.current = currentObservedAppName;
+
+    const isDirectAppSwitch =
+      previousObservedAppName !== null &&
+      currentObservedAppName !== null &&
+      previousObservedAppName !== currentObservedAppName;
+
+    // 앱 -> 앱 전환은 즉시 반영해서 segment 전환 누락을 막음
+    if (isDirectAppSwitch) {
+      targetAppNameRef.current = currentObservedAppName;
+      pendingRef.current = true;
+      void flushSync();
+      return;
+    }
+
     const debounceTimer = setTimeout(() => {
-      targetAppNameRef.current = activeApp?.appName ?? null;
+      targetAppNameRef.current = currentObservedAppName;
       pendingRef.current = true;
       void flushSync();
     }, APP_CHANGE_DEBOUNCE_MS);
