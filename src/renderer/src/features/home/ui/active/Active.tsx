@@ -10,7 +10,13 @@ export const Active = () => {
   const chartData = toLineChartData(getActiveData.variations);
 
   const fullChartData = useMemo(() => {
-    const fullMonths = Array.from({ length: 12 }, (_, i) => i + 1);
+    const now = new Date();
+    const currentMonth = now.getMonth() + 1;
+
+    const fullMonths = Array.from({ length: 12 }, (_, i) => {
+      const month = currentMonth - 11 + i;
+      return month <= 0 ? month + 12 : month;
+    });
 
     const values = fullMonths.map(month => {
       const index = chartData.data.labels.indexOf(month);
@@ -56,7 +62,7 @@ export const Active = () => {
                     <S.Tooltip>
                       {day.date}
                       <br />
-                      {(day.detailedInfo ?? 0) === 0 ? "No contributions" : `${day.detailedInfo}회`}
+                      {(day.detailedInfo ?? 0) === 0 ? `${0}개` : `${day.detailedInfo}개`}
                     </S.Tooltip>
                   )}
                 </S.GrassWrapper>
