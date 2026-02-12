@@ -44,8 +44,6 @@ export const useActive = () => {
   };
 
   const paddedStreaks: RenderStreakItem[] = useMemo(() => {
-    const streaks = activeData?.streaks;
-
     if (!streaks || streaks.length === 0) return [];
 
     const sorted = [...streaks].sort(
@@ -53,7 +51,7 @@ export const useActive = () => {
     );
 
     const startDate = new Date(sorted[0].date);
-    const endDate = new Date(startDate.getFullYear(), 11, 31);
+    const endDate = new Date(sorted[sorted.length - 1].date);
 
     const dateList: string[] = [];
     const current = new Date(startDate);
@@ -63,7 +61,7 @@ export const useActive = () => {
       current.setDate(current.getDate() + 1);
     }
 
-    const streakMap = new Map(streaks.map(v => [v.date, v.detailedInfo]));
+    const streakMap = new Map(sorted.map(v => [v.date, v.detailedInfo]));
 
     const fullRange: RenderStreakItem[] = dateList.map(date => ({
       date,
@@ -71,7 +69,7 @@ export const useActive = () => {
     }));
 
     const firstDay = new Date(fullRange[0].date).getDay();
-    const mondayIndex = firstDay === 0 ? 6 : firstDay;
+    const mondayIndex = firstDay === 0 ? 6 : firstDay - 1;
 
     const padding: RenderStreakItem[] = Array.from({ length: mondayIndex }, (_, i) => ({
       date: `pad-${i}`,
@@ -80,7 +78,7 @@ export const useActive = () => {
     }));
 
     return [...padding, ...fullRange];
-  }, [activeData?.streaks]);
+  }, [streaks]);
 
   const variations = activeData?.variations ?? [];
 
