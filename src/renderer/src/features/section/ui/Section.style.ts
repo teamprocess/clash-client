@@ -13,7 +13,7 @@ export const RoadmapScrollable = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
   width: 100%;
   height: 100%;
   background-color: ${({ theme }) => theme.background.normal};
@@ -25,7 +25,7 @@ export const RoadmapScrollable = styled.div`
   }
 
   &::-webkit-scrollbar-track {
-    background: transparent; /* 스크롤바 배경(길) */
+    background: transparent;
   }
 
   &::-webkit-scrollbar-thumb {
@@ -36,11 +36,12 @@ export const RoadmapScrollable = styled.div`
 
 export const SectionItemWrapper = styled.div`
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   gap: 3rem;
   height: 35rem;
-  margin-left: 36rem;
+  padding-left: 24rem;
+  min-width: max-content;
 `;
 
 export const SectionItemBox = styled.div`
