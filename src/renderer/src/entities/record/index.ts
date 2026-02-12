@@ -6,7 +6,10 @@ export {
 } from "./api/query/useRecord.query";
 export type {
   Task,
+  IsoDateTimeString,
   RecordType,
+  TaskRecordSession,
+  ActivityRecordSession,
   RecordSession,
   RecordTodayResponse,
   RecordSettingResponse,
