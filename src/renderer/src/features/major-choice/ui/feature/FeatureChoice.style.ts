@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import { palette } from "@/shared/config/theme";
 import { font } from "@/shared/config/font";
 import Test from "@/features/major-choice/assets/test.svg";
 import Choice from "@/features/major-choice/assets/choice.svg";
@@ -60,18 +59,4 @@ export const ChoiceWrapper = styled.div`
   gap: 3rem;
   width: 26rem;
   height: 13rem;
-`;
-
-export const RoadMapButton = styled.button<{ disabled: boolean }>`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 32rem;
-  height: 3.25rem;
-  background-color: ${({ disabled, theme }) =>
-    disabled ? theme.line.normal : theme.primary.normal};
-  ${font.headline1.medium};
-  color: ${palette.neutral["97"]};
-  border-radius: 1rem;
-  cursor: ${({ disabled }) => (disabled ? "default" : "pointer")};
 `;
