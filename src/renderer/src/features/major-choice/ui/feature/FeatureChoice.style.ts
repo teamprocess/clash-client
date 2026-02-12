@@ -28,6 +28,7 @@ export const RoadMapContents = styled.div`
   justify-content: center;
   align-items: center;
   gap: 3.5rem;
+  width: 30rem;
 `;
 
 export const RoadMapTop = styled.div`
