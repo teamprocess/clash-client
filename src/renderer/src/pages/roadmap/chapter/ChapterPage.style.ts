@@ -84,6 +84,20 @@ export const ArrowIcon = styled(Arrow)<{ $direction: "left" | "right" }>`
   rotate: ${({ $direction }) => ($direction === "left" ? "0deg" : "180deg")};
 `;
 
+export const ArrowButton = styled.button<{ $disabled: boolean }>`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: ${({ $disabled }) => ($disabled ? 0.3 : 1)};
+  cursor: ${({ $disabled }) => ($disabled ? "not-allowed" : "pointer")};
+  pointer-events: ${({ $disabled }) => ($disabled ? "none" : "auto")};
+  transition: opacity 0.2s ease;
+
+  &:hover:not([disabled]) {
+    opacity: 0.8;
+  }
+`;
+
 export const CurrentSectionLabel = styled.span`
   ${font.display2.medium}
   color: ${({ theme }) => theme.label.neutral};
