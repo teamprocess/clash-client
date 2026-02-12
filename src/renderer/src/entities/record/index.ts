@@ -1,4 +1,5 @@
 export { recordApi } from "./api/recordApi";
+export { matchMonitoredApp } from "./lib/matchMonitoredApp";
 export {
   recordQueryKeys,
   useRecordTasksQuery,
