@@ -14,6 +14,8 @@ export type {
   RecordStartRequest,
   RecordStartResponse,
   RecordStopResponse,
+  RecordSwitchActivityAppRequest,
+  RecordSwitchActivityAppResponse,
   RecordCurrentResponse,
   RecordMonitoredAppsResponse,
   RecordTasksResponse,

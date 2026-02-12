@@ -59,6 +59,15 @@ export interface RecordStopResponse {
   session: RecordSession;
 }
 
+export interface RecordSwitchActivityAppRequest {
+  appName: string;
+}
+
+export interface RecordSwitchActivityAppResponse {
+  switchedAt: Date;
+  session: RecordSession;
+}
+
 export interface RecordCurrentResponse extends RecordSession {}
 
 export interface RecordMonitoredAppsResponse {
@@ -111,6 +120,15 @@ export const recordApi = {
   // 일반 기록 중지
   stopRecord: async () => {
     const result = await api.post<ApiResponse<RecordStopResponse>>("/record/stop");
+    return result.data;
+  },
+
+  // 활동 앱 전환
+  switchActivityApp: async (data: RecordSwitchActivityAppRequest) => {
+    const result = await api.patch<ApiResponse<RecordSwitchActivityAppResponse>>(
+      "/record/activities/switch-app",
+      data
+    );
     return result.data;
   },
 
