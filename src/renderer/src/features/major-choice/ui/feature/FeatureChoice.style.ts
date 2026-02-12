@@ -27,7 +27,7 @@ export const RoadMapContents = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 3.5rem;
+  gap: 3.25rem;
   width: 30rem;
 `;
 
