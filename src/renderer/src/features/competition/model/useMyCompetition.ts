@@ -23,14 +23,15 @@ const growthRateDropDownValue: { key: GrowthRateStandard; label: string }[] = [
 
 export const useMyCompetition = () => {
   const [competitionDropdown, setCompetitionDropdown] = useState<CompareStandard>("TODAY");
+
   const [growthRateDropdown, setGrowthRateDropdown] = useState<GrowthRateStandard>("DAY");
 
+  const { data: todayResponse } = useMyCompareQuery("TODAY");
   const { data: compareResponse, isLoading: isCompareLoading } =
     useMyCompareQuery(competitionDropdown);
 
   const { data: growthRateResponse } = useMyGrowthRateQuery(growthRateDropdown);
 
-  // 첫번쨰 소수점까지 정리식
   const oneDecimal = (value?: number | null) => (value == null ? 0 : Math.trunc(value * 10) / 10);
 
   const dataPoints = growthRateResponse?.data?.dataPoint ?? [];
@@ -38,7 +39,8 @@ export const useMyCompetition = () => {
   return {
     dataPoints,
     isCompareLoading,
-    myCompareData: compareResponse?.data,
+    todayData: todayResponse?.data,
+    compareData: compareResponse?.data,
     competitionDropdown,
     setCompetitionDropdown,
     growthRateDropdown,
