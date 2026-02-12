@@ -4,6 +4,7 @@ import { majorApi } from "@/entities/major/api/majorApi";
 import { useMajorQuestionsQuery } from "@/entities/major/api/query/useMajorQuestions.query";
 import { Major } from "@/entities/major/model/major.types";
 import { useQueryClient } from "@tanstack/react-query";
+import { useGetMyProfile } from "@/entities/user";
 
 export type FeatureItem = "TEST" | "CHOICE" | null;
 export type MajorItem = "WEB" | "SERVER" | null;
@@ -22,6 +23,9 @@ export const useMajorChoice = () => {
 
   // 로드맵 페이지 컴포넌트 step useState
   const [step, setStep] = useState<StepType>("FEATURE");
+
+  const { data: myProfile } = useGetMyProfile();
+  const username = myProfile?.name ?? "";
 
   // Feature Choice 컴포넌트
   const [selected, setSelected] = useState<FeatureItem>(null);
@@ -116,7 +120,7 @@ export const useMajorChoice = () => {
     feature: {
       selected,
       select,
-      username: "조상철",
+      username,
       isValid: selected !== null,
       setStep,
       handleFeatureChoiceSubmit,
@@ -127,7 +131,7 @@ export const useMajorChoice = () => {
       selectedMajor,
       isValid: major !== null,
       major,
-      username: "조상철",
+      username,
       onSubmit,
     },
     test: {
@@ -141,7 +145,7 @@ export const useMajorChoice = () => {
     },
     result: {
       analyzedMajor,
-      username: "조상철",
+      username,
       setStep,
     },
   };
