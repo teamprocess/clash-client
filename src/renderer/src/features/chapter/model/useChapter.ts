@@ -6,7 +6,7 @@ import type { Mission } from "@/features/chapter/model/chapter.types";
 
 export const useChapter = (sectionId: number) => {
   const domain = useChapterDomain(sectionId);
-  const view = useChapterView({ loading: domain.loading });
+  const view = useChapterView({ loading: domain.loading, sectionId });
   const chapterDetailsQuery = useChapterDetailsQuery(domain.currentStageId, {
     enabled: view.missionModalOpen,
   });

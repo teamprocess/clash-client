@@ -4,10 +4,7 @@ import { Button } from "@/shared/ui/button";
 
 const majorIcons = {
   Web: S.WebIcon,
-  App: S.AppIcon,
   Server: S.ServerIcon,
-  AI: S.AiIcon,
-  Game: S.GameIcon,
 };
 
 export const TestResult = ({ analyzedMajor, username, setStep }: ResultProps) => {
