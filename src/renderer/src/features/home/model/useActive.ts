@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useActiveQuery, ActiveResponse, CategoryType } from "@/entities/home";
+import { buildPaddedStreak } from "@/shared/lib/buildPaddedStreaks";
 
 const activeDropDownValue: {
   key: CategoryType;
@@ -14,26 +15,30 @@ export const useActive = () => {
   const [activeDropdown, setActiveDropdown] = useState<CategoryType>("GITHUB");
 
   const { data } = useActiveQuery(activeDropdown);
-
   const activeData: ActiveResponse | null = data?.data ?? null;
 
-  const maxContribute = activeData?.streaks?.length
-    ? Math.max(...activeData.streaks.map(v => v.detailedInfo))
-    : 0;
+  const streaks = activeData?.streaks ?? null;
 
-  const getLevel = (count: number) => {
-    if (!maxContribute || maxContribute === 0) return 0;
-    if (count === 0) return 0;
+  const maxContribute = useMemo(() => {
+    if (!streaks?.length) return 0;
+    return Math.max(...streaks.map(v => v.detailedInfo));
+  }, [streaks]);
+
+  const getLevel = (count: number): number => {
+    if (!maxContribute || count <= 0) return 0;
 
     const ratio = count / maxContribute;
-    const ratioResult = ratio * 10;
 
-    if (ratioResult >= 8) return 4;
-    if (ratioResult >= 6) return 3;
-    if (ratioResult >= 2) return 2;
-    if (ratioResult > 0) return 1;
-    return 0;
+    if (ratio >= 0.75) return 4;
+    if (ratio >= 0.5) return 3;
+    if (ratio >= 0.25) return 2;
+    return 1;
   };
+
+  const paddedStreaks = useMemo(() => {
+    if (!streaks) return [];
+    return buildPaddedStreak(streaks);
+  }, [streaks]);
 
   const variations = activeData?.variations ?? [];
 
@@ -44,5 +49,6 @@ export const useActive = () => {
     setActiveDropdown,
     getLevel,
     variations,
+    paddedStreaks,
   };
 };
