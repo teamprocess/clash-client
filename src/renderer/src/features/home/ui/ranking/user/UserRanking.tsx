@@ -7,10 +7,11 @@ interface UserRankingProps {
   rank: number;
   isRival: boolean;
   isSticky?: boolean;
+  unit: string;
 }
 
 export const UserRanking = forwardRef<HTMLDivElement, UserRankingProps>(
-  ({ user, isRival, rank, isSticky }, ref) => {
+  ({ user, isRival, rank, isSticky, unit }, ref) => {
     return (
       <S.UserContainer ref={ref} $sticky={isSticky}>
         <S.Content>
@@ -22,11 +23,15 @@ export const UserRanking = forwardRef<HTMLDivElement, UserRankingProps>(
               <S.ProfileName>{user.name}</S.ProfileName>
               <S.ProfileMention>(@{user.linkedId})</S.ProfileMention>
             </S.NameBox>
+
             {isRival && <S.RivalMention>RIVAL</S.RivalMention>}
           </S.ProfileContent>
         </S.Content>
 
-        <S.Point>{user.point.toLocaleString()} 포인트</S.Point>
+        <S.Point>
+          {user.point.toLocaleString()}
+          {unit}
+        </S.Point>
       </S.UserContainer>
     );
   }
