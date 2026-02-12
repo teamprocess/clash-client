@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { majorApi } from "@/entities/major/api/majorApi";
 import { useMajorQuestionsQuery } from "@/entities/major/api/query/useMajorQuestions.query";
 import { Major } from "@/entities/major/model/major.types";
+import { useQueryClient } from "@tanstack/react-query";
 
 export type FeatureItem = "TEST" | "CHOICE" | null;
 export type MajorItem = "WEB" | "SERVER" | null;
@@ -17,6 +18,8 @@ const majorNames: Record<MajorScoreKey, Exclude<AnalyzedMajorItem, null>> = {
 };
 
 export const useMajorChoice = () => {
+  const queryClient = useQueryClient();
+
   // 로드맵 페이지 컴포넌트 step useState
   const [step, setStep] = useState<StepType>("FEATURE");
 
@@ -93,7 +96,13 @@ export const useMajorChoice = () => {
     postMyMajor({
       major: major as Major,
     }).then(() => {
-      navigate("/roadmap");
+      queryClient
+        .invalidateQueries({
+          queryKey: ["user"],
+        })
+        .then(() => {
+          navigate("/roadmap");
+        });
     });
   };
 
