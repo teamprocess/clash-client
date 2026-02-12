@@ -6,13 +6,16 @@ export {
 } from "./api/query/useRecord.query";
 export type {
   Task,
-  Session,
+  RecordType,
+  RecordSession,
   RecordTodayResponse,
   RecordSettingResponse,
   RecordSettingUpdateRequest,
   RecordStartRequest,
   RecordStartResponse,
   RecordStopResponse,
+  RecordCurrentResponse,
+  RecordMonitoredAppsResponse,
   RecordTasksResponse,
   RecordTaskCreateRequest,
   RecordTaskUpdateRequest,
