@@ -1,5 +1,4 @@
 import { useEffect, useMemo, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
 import * as S from "./Products.style";
 import { calculateDiscountedPrice } from "@/features/shop/lib/calculateDiscountedPrice";
 import { ProductCard } from "@/features/shop/ui/card/ProductCard";
@@ -7,6 +6,7 @@ import { Filter } from "@/features/shop/ui/filter/Filter";
 import { Product } from "@/entities/product";
 import { PurchaseModal } from "@/features/shop/ui/purchase/PurchaseModal";
 import { usePurchaseProduct } from "@/entities/shop/model/usePurchaseProduct";
+import { useProductDetailStore } from "@/entities/shop/model/productDetailStore";
 
 interface ProductsProps {
   products: Product[];
@@ -27,18 +27,9 @@ const getCategoryLabel = (category: Product["category"]) => {
 };
 
 export const Products = ({ products, isLoading }: ProductsProps) => {
-  const location = useLocation();
-  const navigate = useNavigate();
-
-  const [initialOpenProductId] = useState<number | null>(
-    () => location.state?.openProductId ?? null
-  );
-
-  const [internalSelectedId, setInternalSelectedId] = useState<number | null | undefined>(
-    undefined
-  );
-
-  const selectedId = internalSelectedId !== undefined ? internalSelectedId : initialOpenProductId;
+  const selectedId = useProductDetailStore(s => s.selectedProductId);
+  const toggle = useProductDetailStore(s => s.toggle);
+  const close = useProductDetailStore(s => s.close);
 
   const [isPurchaseOpen, setIsPurchaseOpen] = useState(false);
 
@@ -50,10 +41,7 @@ export const Products = ({ products, isLoading }: ProductsProps) => {
   const isPanelOpen = selectedId !== null;
 
   const handleCardClick = (id: number) => {
-    setInternalSelectedId(prev => {
-      const current = prev !== undefined ? prev : initialOpenProductId;
-      return String(current) === String(id) ? null : id;
-    });
+    toggle(id);
   };
 
   const handleOpenPurchase = () => {
@@ -80,10 +68,10 @@ export const Products = ({ products, isLoading }: ProductsProps) => {
   }, [isPanelOpen, isPurchaseOpen]);
 
   useEffect(() => {
-    if (initialOpenProductId != null && selectedProduct) {
-      navigate(".", { replace: true, state: null });
-    }
-  }, [initialOpenProductId, selectedProduct, navigate]);
+    if (selectedId == null) return;
+    const exists = products.some(p => String(p.id) === String(selectedId));
+    if (!exists) close();
+  }, [products, selectedId, close]);
 
   if (isLoading) {
     return (
