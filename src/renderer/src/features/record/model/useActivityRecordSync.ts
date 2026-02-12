@@ -9,7 +9,7 @@ type ServerSessionState =
   | { type: "ACTIVITY"; appName: string | null };
 
 const SYNC_POLL_MS = 15000;
-const APP_CHANGE_DEBOUNCE_MS = 800;
+const APP_CHANGE_DEBOUNCE_MS = 5000;
 
 const matchMonitoredApp = (appName: string, monitoredApps: string[]) => {
   const loweredName = appName.toLowerCase();
