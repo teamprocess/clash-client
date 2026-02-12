@@ -12,21 +12,12 @@ export type RenderStreakItem = StreakItem & {
 // -- 입력 예시 --
 // [
 //   { date: "2026-02-03", detailedInfo: 2 },
-//   { date: "2026-02-04", detailedInfo: 5 },
-//   { date: "2026-02-05", detailedInfo: 1 }
 // ]
 
 // -- 반환 데이터 예시 --
 // [
-//   앞쪽에 빈 잔디를 채우는 데이터 ({일,월,화..~,토} 를 맞추기 위해서)
 //   { date: "pad-0", detailedInfo: 0, isPadding: true },
-//   { date: "pad-1", detailedInfo: 0, isPadding: true },
-//   { date: "pad-2", detailedInfo: 0, isPadding: true },
-//
-//   // 실제 데이터
 //   { date: "2026-02-03", detailedInfo: 2 },
-//   { date: "2026-02-04", detailedInfo: 5 },
-//   { date: "2026-02-05", detailedInfo: 1 }
 // ]
 
 export const buildPaddedStreak = (streaks: StreakItem[]): RenderStreakItem[] => {
