@@ -5,15 +5,15 @@ import { useMajorQuestionsQuery } from "@/entities/major/api/query/useMajorQuest
 import { Major } from "@/entities/major/model/major.types";
 
 export type FeatureItem = "TEST" | "CHOICE" | null;
-export type MajorItem = "WEB" | "APP" | "SERVER" | "AI" | "GAME" | null;
+export type MajorItem = "WEB" | "SERVER" | null;
+export type AnalyzedMajorItem = "Web" | "Server" | null;
 export type StepType = "FEATURE" | "TEST" | "LOADING" | "RESULT" | "CHOICE";
 
-const majorNames: Record<string, string> = {
+type MajorScoreKey = "web" | "server";
+
+const majorNames: Record<MajorScoreKey, Exclude<AnalyzedMajorItem, null>> = {
   web: "Web",
-  app: "App",
   server: "Server",
-  ai: "AI",
-  game: "Game",
 };
 
 export const useMajorChoice = () => {
@@ -48,7 +48,7 @@ export const useMajorChoice = () => {
   const selectedMajor = (path: MajorItem) => setMajor(path);
 
   // Test 컴포넌트
-  const [analyzedMajor, setAnalyzedMajor] = useState<MajorItem>(null);
+  const [analyzedMajor, setAnalyzedMajor] = useState<AnalyzedMajorItem>(null);
   const isAllAnswered =
     questionData.length > 0 &&
     answers.length === questionData.length &&
@@ -66,22 +66,20 @@ export const useMajorChoice = () => {
   const handleComplete = () => {
     if (!isAllAnswered) return;
 
-    const scores = { web: 0, app: 0, server: 0, ai: 0, game: 0 };
+    const scores: Record<MajorScoreKey, number> = { web: 0, server: 0 };
     answers.forEach((answer, index) => {
       if (answer == null) return;
       const question = questionData[index];
       const multiplier = answer - 3;
-      Object.keys(scores).forEach(key => {
-        const major = key as keyof typeof scores;
-        scores[major] += (question.weight[major] || 0) * multiplier;
-      });
+
+      scores.web += (question.weight.web || 0) * multiplier;
+      scores.server += (question.weight.server || 0) * multiplier;
     });
 
-    const resultMajorKey = Object.entries(scores).reduce((a, b) => (a[1] > b[1] ? a : b))[0];
-
+    const resultMajorKey: MajorScoreKey = scores.web > scores.server ? "web" : "server";
     const finalMajor = majorNames[resultMajorKey];
 
-    setAnalyzedMajor(finalMajor as MajorItem);
+    setAnalyzedMajor(finalMajor);
     // 임시로 2초 로딩
     setStep("LOADING");
     setTimeout(() => {
