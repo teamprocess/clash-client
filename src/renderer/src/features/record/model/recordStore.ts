@@ -8,7 +8,7 @@ interface RecordStore {
   currentStudyTime: number;
   startTime: number | null;
   start: (taskId: number) => Promise<void>;
-  stop: () => Promise<void>;
+  stop: () => Promise<boolean>;
   addTask: (name: string) => Promise<void>;
   updateTask: (taskId: number, name: string) => Promise<void>;
   deleteTask: (taskId: number) => Promise<void>;
@@ -16,6 +16,8 @@ interface RecordStore {
   setTasks: (tasks: Task[]) => void;
   setActiveSession: (activeTaskId: number | null, startTime: number | null) => void;
 }
+
+let stopInFlight: Promise<boolean> | null = null;
 
 export const useRecordStore = create<RecordStore>((set, get) => ({
   tasks: [],
@@ -37,9 +39,10 @@ export const useRecordStore = create<RecordStore>((set, get) => ({
         return;
       }
 
-      const response = await recordApi.startRecord({ taskId });
+      const response = await recordApi.startRecord({ recordType: "TASK", taskId });
       if (response.success) {
         set({ activeTaskId: taskId, startTime: Date.now(), currentStudyTime: 0 });
+        await queryClient.invalidateQueries({ queryKey: recordQueryKeys.today });
       }
     } catch (error: unknown) {
       const errorMessage = getErrorMessage(error, "기록 시작에 실패했습니다.");
@@ -49,49 +52,63 @@ export const useRecordStore = create<RecordStore>((set, get) => ({
 
   // 공부 중지
   stop: async () => {
-    const { activeTaskId, startTime, currentStudyTime } = get();
-
-    if (activeTaskId === null) {
-      return;
+    // 이미 중지 요청이 진행 중이면 같은 요청을 기다림
+    if (stopInFlight) {
+      return stopInFlight;
     }
 
-    // 중지 버튼 누르는 순간 시간을 고정해두고 바로 UI를 멈춤
-    const elapsedAtStop =
-      startTime !== null
-        ? Math.max(0, Math.floor((Date.now() - startTime) / 1000))
-        : Math.max(0, currentStudyTime);
+    const runStop = async (): Promise<boolean> => {
+      const { activeTaskId, startTime, currentStudyTime } = get();
 
-    set(state => ({
-      tasks: state.tasks.map(task =>
-        task.id === activeTaskId ? { ...task, studyTime: task.studyTime + elapsedAtStop } : task
-      ),
-      activeTaskId: null,
-      startTime: null,
-      currentStudyTime: 0,
-    }));
+      if (activeTaskId === null) {
+        return true;
+      }
 
-    try {
-      const response = await recordApi.stopRecord();
+      // 중지 버튼 누르는 순간 시간을 고정해두고 바로 UI를 멈춤
+      const elapsedAtStop =
+        startTime !== null
+          ? Math.max(0, Math.floor((Date.now() - startTime) / 1000))
+          : Math.max(0, currentStudyTime);
 
-      if (!response.success) {
-        console.error("기록 중지 실패:", "기록 중지 응답이 실패로 반환되었습니다.", response);
+      set(state => ({
+        tasks: state.tasks.map(task =>
+          task.id === activeTaskId ? { ...task, studyTime: task.studyTime + elapsedAtStop } : task
+        ),
+        activeTaskId: null,
+        startTime: null,
+        currentStudyTime: 0,
+      }));
+
+      try {
+        const response = await recordApi.stopRecord();
+
+        if (!response.success) {
+          console.error("기록 중지 실패:", "기록 중지 응답이 실패로 반환되었습니다.", response);
+          await Promise.all([
+            queryClient.invalidateQueries({ queryKey: recordQueryKeys.tasks }),
+            queryClient.invalidateQueries({ queryKey: recordQueryKeys.today }),
+          ]);
+          return false;
+        }
+
+        // 중지 직후 서버 정합성만 다시 맞추면 충분해서 tasks만 무효화
+        await queryClient.invalidateQueries({ queryKey: recordQueryKeys.tasks });
+        return true;
+      } catch (error: unknown) {
+        const errorMessage = getErrorMessage(error, "기록 중지에 실패했습니다.");
+        console.error("기록 중지 실패:", errorMessage, error);
         await Promise.all([
           queryClient.invalidateQueries({ queryKey: recordQueryKeys.tasks }),
           queryClient.invalidateQueries({ queryKey: recordQueryKeys.today }),
         ]);
-        return;
+        return false;
       }
+    };
 
-      // 중지 직후 서버 정합성만 다시 맞추면 충분해서 tasks만 무효화
-      await queryClient.invalidateQueries({ queryKey: recordQueryKeys.tasks });
-    } catch (error: unknown) {
-      const errorMessage = getErrorMessage(error, "기록 중지에 실패했습니다.");
-      console.error("기록 중지 실패:", errorMessage, error);
-      await Promise.all([
-        queryClient.invalidateQueries({ queryKey: recordQueryKeys.tasks }),
-        queryClient.invalidateQueries({ queryKey: recordQueryKeys.today }),
-      ]);
-    }
+    stopInFlight = runStop();
+    const stopped = await stopInFlight;
+    stopInFlight = null;
+    return stopped;
   },
 
   // 과목 추가
@@ -124,18 +141,27 @@ export const useRecordStore = create<RecordStore>((set, get) => ({
 
   // 과목 삭제
   deleteTask: async (taskId: number) => {
-    const { activeTaskId } = get();
+    const { activeTaskId, startTime, currentStudyTime } = get();
 
     try {
-      // 삭제하려는 과목이 현재 진행 중이면 먼저 중지
-      if (activeTaskId === taskId) {
-        await get().stop();
+      // 삭제 대상이 실행 중 과목이거나, stop 요청이 진행 중이면 stop 완료를 먼저 보장
+      if (activeTaskId === taskId || startTime !== null || currentStudyTime > 0 || stopInFlight) {
+        const stopSuccess = await get().stop();
+        if (!stopSuccess) {
+          console.error("과목 삭제 실패:", "기록 중지에 실패해 삭제를 진행하지 않았습니다.");
+          return;
+        }
       }
 
       const response = await recordApi.deleteTask(taskId);
-      if (response.success) {
-        set(state => ({ tasks: state.tasks.filter(task => task.id !== taskId) }));
+      if (!response.success) {
+        console.error("과목 삭제 실패:", "과목 삭제 응답이 실패로 반환되었습니다.", response);
+        await queryClient.invalidateQueries({ queryKey: recordQueryKeys.tasks });
+        return;
       }
+
+      set(state => ({ tasks: state.tasks.filter(task => task.id !== taskId) }));
+      await queryClient.invalidateQueries({ queryKey: recordQueryKeys.tasks });
     } catch (error: unknown) {
       const errorMessage = getErrorMessage(error, "과목 삭제에 실패했습니다.");
       console.error("과목 삭제 실패:", errorMessage, error);
