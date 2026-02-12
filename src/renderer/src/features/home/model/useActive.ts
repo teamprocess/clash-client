@@ -46,20 +46,42 @@ export const useActive = () => {
   const paddedStreaks: RenderStreakItem[] = useMemo(() => {
     if (!streaks || streaks.length === 0) return [];
 
+    // KST 기준 로컬타임 파싱
+    const parseLocalDate = (dateStr: string) => {
+      const [year, month, day] = dateStr.split("-").map(Number);
+      return new Date(year, month - 1, day);
+    };
+
+    const formatDate = (date: Date) => {
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, "0");
+      const day = String(date.getDate()).padStart(2, "0");
+      return `${year}-${month}-${day}`;
+    };
+
     const sorted = [...streaks].sort(
-      (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
+      (a, b) => parseLocalDate(a.date).getTime() - parseLocalDate(b.date).getTime()
     );
 
-    const startDate = new Date(sorted[0].date);
-    const endDate = new Date(sorted[sorted.length - 1].date);
+    const startDate = parseLocalDate(sorted[0].date);
+    const endDate = parseLocalDate(sorted[sorted.length - 1].date);
 
-    const dateList: string[] = [];
-    const current = new Date(startDate);
+    // 시,분,초 제거하고 날짜만 생성
+    const normalize = (date: Date) => new Date(date.getFullYear(), date.getMonth(), date.getDate());
 
-    while (current <= endDate) {
-      dateList.push(current.toISOString().split("T")[0]);
-      current.setDate(current.getDate() + 1);
-    }
+    const start = normalize(startDate);
+    const end = normalize(endDate);
+
+    const DAY = 1000 * 60 * 60 * 24;
+
+    const diffDays = Math.floor((end.getTime() - start.getTime()) / DAY) + 1;
+
+    // 조건계산하는 while대신 고정적인 계산하여 dataList 생성
+    const dateList: string[] = Array.from({ length: diffDays }, (_, i) => {
+      const date = new Date(start);
+      date.setDate(start.getDate() + i);
+      return formatDate(date);
+    });
 
     const streakMap = new Map(sorted.map(v => [v.date, v.detailedInfo]));
 
@@ -68,7 +90,7 @@ export const useActive = () => {
       detailedInfo: streakMap.get(date) ?? 0,
     }));
 
-    const firstDay = new Date(fullRange[0].date).getDay();
+    const firstDay = parseLocalDate(fullRange[0].date).getDay();
     const mondayIndex = firstDay === 0 ? 6 : firstDay;
 
     const padding: RenderStreakItem[] = Array.from({ length: mondayIndex }, (_, i) => ({
