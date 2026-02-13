@@ -59,7 +59,7 @@ export const Transition = () => {
           </S.Content>
           <S.VerticalLine />
           <S.Content>
-            <S.SubTitle>Contributions 수</S.SubTitle>
+            <S.SubTitle>Contributions</S.SubTitle>
             <S.InfoBox>
               <S.GraphBox>
                 <S.Bars>
