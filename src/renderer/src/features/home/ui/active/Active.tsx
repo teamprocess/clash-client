@@ -4,9 +4,13 @@ import { toLineChartData } from "@/features/home/model/lineChartData";
 import { useActive } from "@/features/home/model/useActive";
 import { Select } from "@/shared/ui/select";
 import { CategoryType } from "@/entities/home";
-import { useMemo } from "react";
+import { useMemo, useRef } from "react";
 export const Active = () => {
-  const getActiveData = useActive();
+  const grassRef = useRef<HTMLDivElement>(null);
+
+  // Responses
+  const getActiveData = useActive(grassRef);
+  // Chart Data
   const chartData = toLineChartData(getActiveData.variations);
 
   const fullChartData = useMemo(() => {
@@ -52,7 +56,7 @@ export const Active = () => {
         <S.StreakBox>
           <S.StreakTitle>스트릭</S.StreakTitle>
 
-          <S.GrassBox>
+          <S.GrassBox ref={grassRef}>
             <S.Grid>
               {getActiveData.paddedStreaks.map(day => (
                 <S.GrassWrapper key={day.date}>
