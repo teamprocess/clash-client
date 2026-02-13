@@ -21,7 +21,7 @@ export const Github = ({ today, yesterday }: CompareResponse) => {
                 <S.GitCommitIcon />
                 <S.InfoSubtitleBox>
                   <S.CountText>{yesterday?.commit.count ?? 0}</S.CountText>
-                  <S.InfoSubtitle>commit</S.InfoSubtitle>
+                  <S.InfoSubtitle>Commit</S.InfoSubtitle>
                 </S.InfoSubtitleBox>
               </S.GithubInfoBox>
               <S.CalculateContainer>
@@ -61,7 +61,7 @@ export const Github = ({ today, yesterday }: CompareResponse) => {
                 <S.GitPRIcon />
                 <S.InfoSubtitleBox>
                   <S.CountText>{yesterday?.pullRequest.count ?? 0}</S.CountText>
-                  <S.InfoSubtitle>Pull request</S.InfoSubtitle>
+                  <S.InfoSubtitle>Pull Request</S.InfoSubtitle>
                 </S.InfoSubtitleBox>
               </S.GithubInfoBox>
               <S.CalculateContainer>
@@ -134,7 +134,7 @@ export const Github = ({ today, yesterday }: CompareResponse) => {
                     <S.GitCommitIcon />
                     <S.InfoSubtitleBox>
                       <S.CountText>{today?.commit.count ?? 0}</S.CountText>
-                      <S.InfoSubtitle>commit</S.InfoSubtitle>
+                      <S.InfoSubtitle>Commit</S.InfoSubtitle>
                     </S.InfoSubtitleBox>
                   </S.GithubInfoBox>
                   <GrowthRate
@@ -180,7 +180,7 @@ export const Github = ({ today, yesterday }: CompareResponse) => {
                     <S.GitPRIcon />
                     <S.InfoSubtitleBox>
                       <S.CountText>{today?.pullRequest.count ?? 0}</S.CountText>
-                      <S.InfoSubtitle>Pull request</S.InfoSubtitle>
+                      <S.InfoSubtitle>Pull Request</S.InfoSubtitle>
                     </S.InfoSubtitleBox>
                   </S.GithubInfoBox>
                   <GrowthRate
