@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { RefObject, useLayoutEffect, useMemo, useState } from "react";
 import { useActiveQuery, ActiveResponse, CategoryType } from "@/entities/home";
 import { buildPaddedStreak } from "@/shared/lib/buildPaddedStreaks";
 
@@ -11,7 +11,7 @@ const activeDropDownValue: {
   { key: "ACTIVE_TIME", label: "총 학습 시간" },
 ];
 
-export const useActive = () => {
+export const useActive = (grassRef: RefObject<HTMLDivElement | null>) => {
   const [activeDropdown, setActiveDropdown] = useState<CategoryType>("GITHUB");
 
   const { data } = useActiveQuery(activeDropdown);
@@ -42,6 +42,14 @@ export const useActive = () => {
 
   const variations = activeData?.variations ?? [];
 
+  // 스트릭 오른쪽 정렬
+  useLayoutEffect(() => {
+    const element = grassRef.current;
+    if (!element) return;
+
+    element.scrollLeft = element.scrollWidth - element.clientWidth;
+  }, [grassRef, paddedStreaks]);
+
   return {
     activeData,
     activeDropDownValue,
@@ -50,5 +58,6 @@ export const useActive = () => {
     getLevel,
     variations,
     paddedStreaks,
+    grassRef,
   };
 };
