@@ -36,7 +36,7 @@ export const StreakContainer = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: space-around;
+  justify-content: space-between;
 `;
 
 export const StreakBox = styled.div`
@@ -113,6 +113,6 @@ export const Tooltip = styled.div`
 
 export const ChartWrapper = styled.div`
   width: 100%;
-  height: 8rem;
+  height: 7rem;
   position: relative;
 `;
