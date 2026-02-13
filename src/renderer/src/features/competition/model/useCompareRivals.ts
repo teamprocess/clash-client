@@ -14,15 +14,13 @@ export const colorsOfMultiLine: string[] = ["#FFF", "#0081CC", "#C60608", "#15B7
 const competitionDropDownValue: { key: CategoryType; label: string }[] = [
   { key: "EXP", label: "EXP" },
   { key: "GITHUB", label: "Github" },
-  { key: "SOLVED_AC", label: "solved.ac" },
   { key: "ACTIVE_TIME", label: "총 학습 시간" },
 ];
 
 const competitionPeriodDropDownValue: { key: PeriodType; label: string }[] = [
-  { key: "DAY", label: "오늘" },
-  { key: "WEEK", label: "이번 주" },
-  { key: "MONTH", label: "이번 달" },
-  { key: "SEASON", label: "이번 시즌" },
+  { key: "DAY", label: "일별" },
+  { key: "WEEK", label: "주별" },
+  { key: "MONTH", label: "월별" },
 ];
 
 export const useCompareRival = () => {
@@ -83,7 +81,11 @@ export const useCompareRival = () => {
 
       return {
         label: user.name,
-        data: finalLabels.map(date => map.get(date) ?? 0),
+        // 해당 사용자의 날짜별 결과값 반올림
+        data: finalLabels.map(date => {
+          const value = map.get(date) ?? 0;
+          return value == null ? 0 : Math.round(value * 10) / 10;
+        }),
       };
     });
 
