@@ -8,7 +8,6 @@ import {
 
 // compare - 날짜별 드롭다운
 const competitionDropDownValue: { key: CompareStandard; label: string }[] = [
-  { key: "TODAY", label: "오늘" },
   { key: "YESTERDAY", label: "어제" },
   { key: "LAST_WEEK", label: "일주일 전" },
   { key: "LAST_MONTH", label: "한달 전" },
@@ -16,9 +15,9 @@ const competitionDropDownValue: { key: CompareStandard; label: string }[] = [
 
 // growthRate - 날짜별 드롭다운
 const growthRateDropDownValue: { key: GrowthRateStandard; label: string }[] = [
-  { key: "DAY", label: "오늘" },
-  { key: "WEEK", label: "이번 주" },
-  { key: "MONTH", label: "이번 달" },
+  { key: "DAY", label: "일별" },
+  { key: "WEEK", label: "주별" },
+  { key: "MONTH", label: "월별" },
 ];
 
 export const useMyCompetition = () => {
