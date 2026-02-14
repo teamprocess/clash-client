@@ -5,11 +5,18 @@ import { CategoryType, RankingItem, PeriodType } from "@/entities/home/model/use
 import { Select } from "@/shared/ui/select";
 
 export const Ranking = () => {
-  const { wrapperRef, currentUserRef, options, filters, domain, view, unit } = useRanking();
+  const {
+    wrapperRef,
+    currentUserRef,
+    options,
+    filters,
+    domain,
+    view,
+    unit,
+    formatActiveRankingPoint,
+  } = useRanking();
 
   if (!domain.userList) return null;
-
-  const unitData = unit[filters.RankingDropdown];
 
   return (
     <S.RankingContainer>
@@ -45,6 +52,7 @@ export const Ranking = () => {
               user={user}
               rank={index + 1}
               unit={unit}
+              formatValue={formatActiveRankingPoint}
               isRival={user.userId !== domain.currentUser?.userId && user.isRival}
               ref={user.userId === domain.currentUser?.userId ? currentUserRef : null}
             />
@@ -59,7 +67,8 @@ export const Ranking = () => {
             rank={domain.currentUserRank}
             isRival={false}
             isSticky
-            unit={unitData}
+            unit={unit}
+            formatValue={formatActiveRankingPoint}
           />
         </S.StickyUser>
       )}
