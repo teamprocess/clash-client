@@ -35,6 +35,7 @@ export const StreakContainer = styled.div`
   width: 100%;
   height: 100%;
   display: flex;
+  gap: 0.625rem;
   flex-direction: column;
   justify-content: space-between;
 `;
@@ -111,6 +112,6 @@ export const PortalTooltip = styled.div`
   border-radius: 0.4rem;
   white-space: nowrap;
   pointer-events: none;
-  z-index: 9999;
+  z-index: 99;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 `;
