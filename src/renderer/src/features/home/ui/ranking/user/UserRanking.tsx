@@ -8,10 +8,11 @@ interface UserRankingProps {
   isRival: boolean;
   isSticky?: boolean;
   unit: string;
+  formatValue: (value: number) => string | number;
 }
 
 export const UserRanking = forwardRef<HTMLDivElement, UserRankingProps>(
-  ({ user, isRival, rank, isSticky, unit }, ref) => {
+  ({ user, isRival, rank, isSticky, unit, formatValue }, ref) => {
     return (
       <S.UserContainer ref={ref} $sticky={isSticky}>
         <S.Content>
@@ -29,8 +30,8 @@ export const UserRanking = forwardRef<HTMLDivElement, UserRankingProps>(
         </S.Content>
 
         <S.Point>
-          {user.point.toLocaleString()}
-          {unit}
+          {formatValue(user.point)}
+          {unit && `${unit}`}
         </S.Point>
       </S.UserContainer>
     );
