@@ -55,6 +55,7 @@ export class AppMonitor {
   private intervalId: NodeJS.Timeout | null = null;
   private mainWindow: BrowserWindow | null = null;
   private lastSentAppName: string | null = null; // 마지막으로 전송한 앱 이름
+  private frontmostMonitoredAppName: string | null = null; // 현재 전면의 개발 앱
   private isChecking = false; // 비동기 체크 중복 방지
   private lastRunningAppsErrorLoggedAt = 0;
 
@@ -101,6 +102,7 @@ export class AppMonitor {
     }
     this.activeApps.clear();
     this.lastSentAppName = null;
+    this.frontmostMonitoredAppName = null;
     this.isChecking = false;
   }
 
@@ -113,6 +115,7 @@ export class AppMonitor {
 
     // 1. frontmost 앱이 모니터링 대상이면 활성 상태 업데이트
     const frontmostApp = rawAppName && this.isMonitoredApp(rawAppName) ? rawAppName : null;
+    this.frontmostMonitoredAppName = frontmostApp;
     if (frontmostApp) {
       this.updateAppActivity(frontmostApp, now);
     }
@@ -292,6 +295,10 @@ export class AppMonitor {
 
   getActiveApp(): ActiveApp | null {
     return this.getMostRecentlyActiveApp(Date.now());
+  }
+
+  getFrontmostMonitoredAppName(): string | null {
+    return this.frontmostMonitoredAppName;
   }
 
   getSessions(): MonitoringSession[] {

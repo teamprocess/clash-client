@@ -2,18 +2,56 @@ import { useState, useEffect, useMemo } from "react";
 import { useAppMonitor } from "./useAppMonitor";
 import { useActivityRecordSync } from "@/features/record/model/useActivityRecordSync";
 import { formatDuration } from "@/entities/app-monitor";
-import { matchMonitoredApp, recordApi } from "@/entities/record";
+import { matchMonitoredApp, recordApi, useRecordTodayQuery } from "@/entities/record";
 
 export const useSidebarMonitor = () => {
   // Electron 환경 체크
-  const isElectron = Boolean(typeof window !== "undefined" && window.api);
+  const isElectron = !!(typeof window !== "undefined" && window.api);
 
   const { activeApp } = useAppMonitor();
+  const { data: todayResponse } = useRecordTodayQuery();
   const [monitoredApps, setMonitoredApps] = useState<string[]>([]);
+  const [frontmostMonitoredApp, setFrontmostMonitoredApp] = useState<string | null>(null);
   const [displayTime, setDisplayTime] = useState("00:00:00");
 
+  const isTaskRecording = useMemo(
+    () =>
+      !!(
+        todayResponse?.success &&
+        todayResponse.data?.sessions.some(
+          session => session.endedAt === null && session.recordType === "TASK"
+        )
+      ),
+    [todayResponse]
+  );
+
+  const isActivityRecording = useMemo(
+    () =>
+      !!(
+        todayResponse?.success &&
+        todayResponse.data?.sessions.some(
+          session => session.endedAt === null && session.recordType === "ACTIVITY"
+        )
+      ),
+    [todayResponse]
+  );
+
+  const activeActivityStartedAt = useMemo(() => {
+    if (!todayResponse?.success || !todayResponse.data) {
+      return null;
+    }
+
+    const activeActivitySession = todayResponse.data.sessions.find(
+      session => session.endedAt === null && session.recordType === "ACTIVITY"
+    );
+
+    return activeActivitySession?.startedAt ?? null;
+  }, [todayResponse]);
+
+  const isFrontmostMonitoredApp = frontmostMonitoredApp !== null;
+
   const filteredActiveApp = useMemo(() => {
-    if (!activeApp || monitoredApps.length === 0) {
+    if (!activeApp || monitoredApps.length === 0 || isTaskRecording) {
       return null;
     }
 
@@ -22,10 +60,19 @@ export const useSidebarMonitor = () => {
       return null;
     }
 
-    return { ...activeApp, appName: matchedAppName };
-  }, [activeApp, monitoredApps]);
+    // 개발 세션이 실제로 열려있을 때만 사이드바에 개발 시간 표시
+    if (!isActivityRecording) {
+      return null;
+    }
 
-  useActivityRecordSync(activeApp, isElectron);
+    return {
+      ...activeApp,
+      appName: matchedAppName,
+      startTime: activeActivityStartedAt ? new Date(activeActivityStartedAt) : activeApp.startTime,
+    };
+  }, [activeApp, monitoredApps, isActivityRecording, isTaskRecording, activeActivityStartedAt]);
+
+  useActivityRecordSync(isTaskRecording ? null : activeApp, isElectron, isFrontmostMonitoredApp);
 
   useEffect(() => {
     if (!isElectron) {
@@ -52,6 +99,38 @@ export const useSidebarMonitor = () => {
 
     return () => {
       cancelled = true;
+    };
+  }, [isElectron]);
+
+  useEffect(() => {
+    if (!isElectron) {
+      return;
+    }
+
+    let cancelled = false;
+
+    const refreshFrontmostMonitoredApp = async () => {
+      try {
+        const appName = await window.api.getFrontmostMonitoredApp();
+        if (!cancelled) {
+          setFrontmostMonitoredApp(appName);
+        }
+      } catch (error) {
+        if (!cancelled) {
+          setFrontmostMonitoredApp(null);
+        }
+        console.error("전면 개발 앱 조회 실패:", error);
+      }
+    };
+
+    void refreshFrontmostMonitoredApp();
+    const interval = setInterval(() => {
+      void refreshFrontmostMonitoredApp();
+    }, 2000);
+
+    return () => {
+      cancelled = true;
+      clearInterval(interval);
     };
   }, [isElectron]);
 
