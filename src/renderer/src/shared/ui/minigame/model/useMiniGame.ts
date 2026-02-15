@@ -59,7 +59,7 @@ export const useMiniGame = () => {
     }
 
     const tick = () => {
-      // 1) 플레이어 물리
+      // 플레이어 물리
       velocityRef.current += GRAVITY;
       const nextY = playerYRef.current + velocityRef.current;
 
@@ -71,7 +71,7 @@ export const useMiniGame = () => {
         playerYRef.current = nextY;
       }
 
-      // 2) 장애물 이동
+      // 장애물 이동
       const nextObstacleX = obstacleXRef.current - OBSTACLE_SPEED;
 
       if (nextObstacleX < OBSTACLE_OFFSCREEN_X) {
@@ -81,11 +81,11 @@ export const useMiniGame = () => {
         obstacleXRef.current = nextObstacleX;
       }
 
-      // 3) 렌더링 반영
+      // 렌더링 반영
       setPlayerY(playerYRef.current);
       setObstacleX(obstacleXRef.current);
 
-      // 4) 충돌 판정 (DOM getBoundingClientRect 제거: 성능/정확도 ↑)
+      //  충돌 판정
       const playerLeft = PLAYER_X;
       const playerRight = PLAYER_X + PLAYER_WIDTH;
 
@@ -95,7 +95,7 @@ export const useMiniGame = () => {
       const hitX = playerRight > obstacleLeft && playerLeft < obstacleRight;
 
       // 장애물 높이(40px)보다 점프가 낮으면(= 바닥에서 충분히 못 뜨면) 충돌 처리
-      // playerY는 음수로 올라가므로, -40보다 "덜" 올라갔으면 충돌 가능
+      // playerY는 음수로 올라가므로, -40보다 덜 올라갔으면 충돌 가능
       const hitY = playerYRef.current > -OBSTACLE_HEIGHT;
 
       if (hitX && hitY) {

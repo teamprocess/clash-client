@@ -10,11 +10,7 @@ export const MiniGame = () => {
   };
 
   return (
-    <S.Container
-      type="button"
-      onClick={handleAction}
-      aria-label={isGameOver ? "Restart mini game" : "Jump"}
-    >
+    <S.Container onClick={handleAction} aria-label={isGameOver ? "Restart mini game" : "Jump"}>
       <S.Player style={{ transform: `translateY(${playerY}px)` }} />
       <S.Obstacle style={{ transform: `translateX(${obstacleX}px)` }} />
 

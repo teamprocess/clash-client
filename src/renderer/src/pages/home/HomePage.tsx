@@ -58,14 +58,4 @@ export const HomePage = () => {
   //     )}
   //   </S.HomeContainer>
   // );
-
-  // 기존
-  // return (
-  //   <S.HomeContainer>
-  //     <Transition />
-  //     <Rival />
-  //     <Active />
-  //     <Ranking />
-  //   </S.HomeContainer>
-  // );
 };
