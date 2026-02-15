@@ -9,12 +9,18 @@ import { Dialog } from "@/shared/ui";
 export const HomePage = () => {
   const isFetching = useIsFetching();
 
+  // 깃허브 연동 디아로그 추가 버전 1
   return (
-    // 깃허브 연동 디아로그 추가 버전
     <S.HomeContainer>
       {isFetching > 0 ? (
         <Dialog width={21.5} height={21.5} isOpen={true}>
-          연결중입니다..
+          <S.ConnectingContainer>
+            <S.GithubIcon />
+            <S.FontBox>
+              <S.HugeFont>깃허브 계정을 연동 중입니다</S.HugeFont>
+              <S.TinyFont>잠시만 기다려주세요.</S.TinyFont>
+            </S.FontBox>
+          </S.ConnectingContainer>
         </Dialog>
       ) : (
         <>
