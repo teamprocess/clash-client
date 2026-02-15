@@ -6,8 +6,6 @@ export const Container = styled.button`
   border: 2px solid white;
   position: relative;
   overflow: hidden;
-
-  /* button reset */
   padding: 0;
   background: transparent;
   cursor: pointer;
@@ -21,7 +19,6 @@ export const Player = styled.div`
   position: absolute;
   bottom: 0;
   left: 50px;
-
   will-change: transform;
   pointer-events: none;
 `;
@@ -33,7 +30,6 @@ export const Obstacle = styled.div`
   position: absolute;
   bottom: 0;
   left: 0;
-
   will-change: transform;
   pointer-events: none;
 `;
@@ -44,7 +40,6 @@ export const Score = styled.div`
   left: 8px;
   color: white;
   font-size: 12px;
-
   pointer-events: none;
   user-select: none;
 `;
@@ -56,6 +51,5 @@ export const GameOver = styled.div`
   place-items: center;
   color: white;
   font-size: 20px;
-
   pointer-events: none;
 `;
