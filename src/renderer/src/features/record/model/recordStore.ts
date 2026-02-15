@@ -91,8 +91,11 @@ export const useRecordStore = create<RecordStore>((set, get) => ({
           return false;
         }
 
-        // 중지 직후 서버 정합성만 다시 맞추면 충분해서 tasks만 무효화
-        await queryClient.invalidateQueries({ queryKey: recordQueryKeys.tasks });
+        // 중지 직후에는 today의 active session 캐시도 함께 정리해야 타이머가 즉시 멈춤
+        await Promise.all([
+          queryClient.invalidateQueries({ queryKey: recordQueryKeys.tasks }),
+          queryClient.invalidateQueries({ queryKey: recordQueryKeys.today }),
+        ]);
         return true;
       } catch (error: unknown) {
         const errorMessage = getErrorMessage(error, "기록 중지에 실패했습니다.");

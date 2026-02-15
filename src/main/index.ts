@@ -136,6 +136,10 @@ function setupAppMonitorHandlers() {
     return appMonitor?.getSessions() ?? [];
   });
 
+  ipcMain.handle("app-monitor:get-frontmost-monitored-app", () => {
+    return appMonitor?.getFrontmostMonitoredAppName() ?? null;
+  });
+
   ipcMain.handle("open-external-url", async (_, url: string) => {
     await shell.openExternal(url);
   });
