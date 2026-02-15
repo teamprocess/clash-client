@@ -11,11 +11,15 @@ export const Task = () => {
     taskName,
     openMenuTaskId,
     deleteTargetId,
+    activitySwitchTargetTaskId,
+    isSwitchingFromActivity,
     menuRef,
     isTaskActive,
     getTaskStudyTime,
     setTaskName,
     handlePlayPauseClick,
+    handleCloseActivitySwitchDialog,
+    handleConfirmActivitySwitch,
     handleMoreClick,
     handleCloseMenu,
     handleEditClick,
@@ -121,6 +125,15 @@ export const Task = () => {
         confirmVariant="danger"
         onClose={handleCancelDelete}
         onConfirm={handleConfirmDelete}
+      />
+      <ConfirmDialog
+        isOpen={activitySwitchTargetTaskId !== null}
+        title="개발 기록 중"
+        description="현재 개발 중입니다. 개발 중인 세션을 종료하고 일반 과목 공부를 하시겠습니까?"
+        confirmLabel="종료 후 시작"
+        isConfirming={isSwitchingFromActivity}
+        onClose={handleCloseActivitySwitchDialog}
+        onConfirm={handleConfirmActivitySwitch}
       />
     </>
   );

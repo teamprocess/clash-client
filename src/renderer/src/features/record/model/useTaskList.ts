@@ -1,25 +1,79 @@
 import { useRef, useState } from "react";
 import { useRecordStore } from "./recordStore";
+import { recordApi, recordQueryKeys, useRecordTodayQuery } from "@/entities/record";
+import { getErrorMessage, queryClient } from "@/shared/lib";
 
 type EditMode = "none" | "add" | "edit";
 
 export const useTaskList = () => {
   const { tasks, activeTaskId, currentStudyTime, start, stop, addTask, updateTask, deleteTask } =
     useRecordStore();
+  const { data: todayResponse } = useRecordTodayQuery();
 
   const [editMode, setEditMode] = useState<EditMode>("none");
   const [editingTaskId, setEditingTaskId] = useState<number | null>(null);
   const [taskName, setTaskName] = useState("");
   const [openMenuTaskId, setOpenMenuTaskId] = useState<number | null>(null);
   const [deleteTargetId, setDeleteTargetId] = useState<number | null>(null);
+  const [activitySwitchTargetTaskId, setActivitySwitchTargetTaskId] = useState<number | null>(null);
+  const [isSwitchingFromActivity, setIsSwitchingFromActivity] = useState(false);
 
   const menuRef = useRef<HTMLDivElement>(null);
 
+  const isActivityRecording = Boolean(
+    todayResponse?.success &&
+    todayResponse.data?.sessions.some(
+      session => session.endedAt === null && session.recordType === "ACTIVITY"
+    )
+  );
+
   const handlePlayPauseClick = async (taskId: number) => {
+    if (isActivityRecording && activeTaskId !== taskId) {
+      setActivitySwitchTargetTaskId(taskId);
+      return;
+    }
+
     if (activeTaskId === taskId) {
       await stop();
     } else {
       await start(taskId);
+    }
+  };
+
+  const handleCloseActivitySwitchDialog = () => {
+    if (isSwitchingFromActivity) {
+      return;
+    }
+    setActivitySwitchTargetTaskId(null);
+  };
+
+  const handleConfirmActivitySwitch = async () => {
+    if (activitySwitchTargetTaskId === null) {
+      return;
+    }
+
+    setIsSwitchingFromActivity(true);
+    try {
+      const stopResponse = await recordApi.stopRecord();
+      if (!stopResponse.success) {
+        console.error(
+          "개발 기록 종료 실패:",
+          stopResponse.message ?? "개발 세션 종료 응답이 실패로 반환되었습니다."
+        );
+        return;
+      }
+
+      await queryClient.invalidateQueries({ queryKey: recordQueryKeys.today });
+      await start(activitySwitchTargetTaskId);
+      setActivitySwitchTargetTaskId(null);
+    } catch (error: unknown) {
+      const errorMessage = getErrorMessage(
+        error,
+        "개발 기록 종료 후 과목 공부 시작에 실패했습니다."
+      );
+      console.error("개발 기록 종료 후 과목 공부 시작 실패:", errorMessage, error);
+    } finally {
+      setIsSwitchingFromActivity(false);
     }
   };
 
@@ -95,11 +149,15 @@ export const useTaskList = () => {
     taskName,
     openMenuTaskId,
     deleteTargetId,
+    activitySwitchTargetTaskId,
+    isSwitchingFromActivity,
     menuRef,
     isTaskActive,
     getTaskStudyTime,
     setTaskName,
     handlePlayPauseClick,
+    handleCloseActivitySwitchDialog,
+    handleConfirmActivitySwitch,
     handleMoreClick,
     handleCloseMenu,
     handleEditClick,
