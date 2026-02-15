@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { authApi } from "@/entities/user";
 import { getAuthParams } from "@/shared/lib/authParams";
@@ -18,6 +18,7 @@ type SignInForm = z.infer<typeof signInSchema>;
 export const useSignIn = () => {
   const { executeRecaptcha } = useGoogleReCaptcha();
   const location = useLocation();
+  const navigate = useNavigate();
   const { state, redirectUri } = getAuthParams(location.search);
 
   const {
@@ -67,7 +68,16 @@ export const useSignIn = () => {
       });
 
       if (result.success && result.data?.redirectUrl) {
-        window.location.href = result.data.redirectUrl;
+        navigate(
+          {
+            pathname: "/sign-in-complete",
+            search: location.search,
+          },
+          {
+            replace: true,
+            state: { redirectUrl: result.data.redirectUrl },
+          }
+        );
       } else {
         setError("root", {
           type: "manual",
