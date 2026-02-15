@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { rankingApi } from "@/entities/home/api/rankingApi";
 import { CategoryType, PeriodType } from "@/entities/home/model/useRanking.types";
 
@@ -7,7 +7,7 @@ export const rankingQueryKeys = {
 };
 
 export const useRankingQuery = (category: CategoryType, period: PeriodType) => {
-  return useQuery({
+  return useSuspenseQuery({
     queryKey: rankingQueryKeys.rankings(category, period),
     queryFn: () =>
       rankingApi.getRanking({
