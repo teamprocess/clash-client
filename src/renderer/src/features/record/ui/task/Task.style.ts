@@ -23,7 +23,7 @@ export const TaskItem = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 1.25rem 2.5rem;
+  padding: 1.25rem 1.5rem;
   border-bottom: 2px solid ${({ theme }) => theme.fill.alternative};
 `;
 
@@ -95,7 +95,7 @@ export const TaskTextInput = styled.input`
   padding: 0.5rem 0.5rem 0.5rem 1rem;
   border: 1px solid ${({ theme }) => theme.line.normal};
   border-radius: 0.5rem;
-  ${font.title2.medium};
+  ${font.headline1.medium};
   color: ${({ theme }) => theme.label.alternative};
   background-color: ${({ theme }) => theme.background.normal};
   outline: none;
