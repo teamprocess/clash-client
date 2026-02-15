@@ -10,9 +10,15 @@ export const ModalContent = styled.div`
   width: 100%;
 `;
 
-export const Tabs = styled.div`
+export const TabHeader = styled.div`
   display: flex;
-  justify-content: flex-start;
+  flex-direction: column;
+  gap: 0.75rem;
+`;
+
+export const Tabs = styled.div`
+  display: grid;
+  grid-template-columns: repeat(2, max-content);
   align-items: center;
   gap: 1rem;
 `;
@@ -26,10 +32,25 @@ export const Tab = styled.button<{ $isActive: boolean }>`
   padding: 0;
 `;
 
-export const Hr = styled.div`
+export const TabRail = styled.div`
+  position: relative;
   height: 4px;
   width: 100%;
   background-color: ${({ theme }) => theme.line.neutral};
+  border-radius: 1rem;
+  overflow: hidden;
+`;
+
+export const TabActiveRail = styled.div<{ $left: number; $width: number }>`
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: ${({ $left }) => `${$left}px`};
+  width: ${({ $width }) => `${$width}px`};
+  background-color: ${({ theme }) => theme.primary.normal};
+  transition:
+    left 0.2s ease,
+    width 0.2s ease;
 `;
 
 export const FormContainer = styled.div`
