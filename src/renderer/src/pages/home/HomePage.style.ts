@@ -10,3 +10,5 @@ export const HomeContainer = styled.div`
   height: 100%;
   width: 100%;
 `;
+
+export const LoadingDialog = styled.div``;
