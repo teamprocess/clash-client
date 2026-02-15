@@ -95,7 +95,7 @@ export const TaskTextInput = styled.input`
   padding: 0.5rem 0.5rem 0.5rem 1rem;
   border: 1px solid ${({ theme }) => theme.line.normal};
   border-radius: 0.5rem;
-  ${font.title2.medium};
+  ${font.headline1.medium};
   color: ${({ theme }) => theme.label.alternative};
   background-color: ${({ theme }) => theme.background.normal};
   outline: none;
