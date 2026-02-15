@@ -5,7 +5,7 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { GoogleReCaptchaProvider } from "react-google-recaptcha-v3";
 import { queryClient } from "@/shared/lib/queryClient";
 import { GlobalStyle } from "./styles/GlobalStyle";
-import { useTheme } from "@/shared/lib/useTheme";
+import { useNetworkStatus, useTheme } from "@/shared/lib";
 import { MainLayout } from "@/app/layouts/main";
 import { HomePage } from "@/pages/home";
 import { CompetitionPage } from "@/pages/competition";
@@ -17,11 +17,22 @@ import { SignInPage, SignUpPage } from "@/pages/auth";
 import { NotFoundPage } from "@/pages/not-found/NotFoundPage";
 import { RoadmapPage } from "@/pages/roadmap/section/RoadmapPage";
 import { ComparePage } from "@/pages/home/compare/ComparePage";
+import { OfflinePage } from "@/pages/offline";
 
 const RECAPTCHA_SITE_KEY = import.meta.env.VITE_RECAPTCHA_SITE_KEY || "";
 
 function App() {
   const { theme } = useTheme();
+  const isOnline = useNetworkStatus();
+
+  if (!isOnline) {
+    return (
+      <ThemeProvider theme={theme}>
+        <GlobalStyle />
+        <OfflinePage />
+      </ThemeProvider>
+    );
+  }
 
   return (
     <GoogleReCaptchaProvider reCaptchaKey={RECAPTCHA_SITE_KEY}>
