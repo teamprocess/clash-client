@@ -266,8 +266,13 @@ export const GoodsBox = styled.div`
   align-items: center;
   gap: 0.25rem;
 
+  & > svg {
+    width: 1.75rem;
+    height: 1.75rem;
+  }
+
   & > span {
-    ${font.body.medium}
+    ${font.headline2.medium}
     color: ${({ theme }) => theme.label.normal};
   }
 `;
