@@ -87,6 +87,12 @@ export const SubmitButton = styled.button`
   color: ${palette.neutral[97]};
   background-color: ${({ theme }) => theme.primary.normal};
   ${font.headline2.medium};
+  cursor: pointer;
+
+  &:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+  }
 `;
 
 export const HelpTextContainer = styled.div`
@@ -98,4 +104,5 @@ export const HelpText = styled(Link)`
   ${font.caption.medium};
   text-decoration: underline;
   color: ${({ theme }) => theme.label.neutral};
+  cursor: pointer;
 `;

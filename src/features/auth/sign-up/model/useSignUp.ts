@@ -32,6 +32,7 @@ export const useSignUp = () => {
   // SignUp 상태
   const [checkedUsername, setCheckedUsername] = useState<string>("");
   const [usernameAvailable, setUsernameAvailable] = useState(false);
+  const [isCheckingUsername, setIsCheckingUsername] = useState(false);
   const [email, setEmail] = useState<string>("");
 
   const signUpForm = useForm<SignUpFormData>({
@@ -63,6 +64,8 @@ export const useSignUp = () => {
     }
 
     try {
+      setIsCheckingUsername(true);
+
       if (!executeRecaptcha) {
         signUpForm.setError("username", {
           type: "manual",
@@ -92,6 +95,8 @@ export const useSignUp = () => {
         type: "manual",
         message: "아이디 중복 확인 중 오류가 발생했습니다.",
       });
+    } finally {
+      setIsCheckingUsername(false);
     }
   };
 
@@ -181,6 +186,7 @@ export const useSignUp = () => {
       handleSubmit: signUpForm.handleSubmit,
       errors: signUpForm.formState.errors,
       isSubmitting: signUpForm.formState.isSubmitting,
+      isCheckingUsername,
       usernameChecked,
       usernameAvailable,
       handleUsernameCheck,
