@@ -36,6 +36,18 @@ export const useSidebarMonitor = () => {
     [todayResponse]
   );
 
+  const activeActivityStartedAt = useMemo(() => {
+    if (!todayResponse?.success || !todayResponse.data) {
+      return null;
+    }
+
+    const activeActivitySession = todayResponse.data.sessions.find(
+      session => session.endedAt === null && session.recordType === "ACTIVITY"
+    );
+
+    return activeActivitySession?.startedAt ?? null;
+  }, [todayResponse]);
+
   const isFrontmostMonitoredApp = frontmostMonitoredApp !== null;
 
   const filteredActiveApp = useMemo(() => {
@@ -48,13 +60,17 @@ export const useSidebarMonitor = () => {
       return null;
     }
 
-    // 추적 중인 ACTIVITY 세션이 없고 전면 IDE도 아니면 사이드바 표시를 숨김
-    if (!isActivityRecording && !isFrontmostMonitoredApp) {
+    // 개발 세션이 실제로 열려있을 때만 사이드바에 개발 시간 표시
+    if (!isActivityRecording) {
       return null;
     }
 
-    return { ...activeApp, appName: matchedAppName };
-  }, [activeApp, monitoredApps, isActivityRecording, isFrontmostMonitoredApp, isTaskRecording]);
+    return {
+      ...activeApp,
+      appName: matchedAppName,
+      startTime: activeActivityStartedAt ? new Date(activeActivityStartedAt) : activeApp.startTime,
+    };
+  }, [activeApp, monitoredApps, isActivityRecording, isTaskRecording, activeActivityStartedAt]);
 
   useActivityRecordSync(isTaskRecording ? null : activeApp, isElectron, isFrontmostMonitoredApp);
 
