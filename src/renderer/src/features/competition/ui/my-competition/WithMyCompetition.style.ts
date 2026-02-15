@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { font } from "@/shared/config/font";
 import EXP from "@/features/competition/assets/exp.svg";
 import Record from "@/features/competition/assets/record.svg";
-import Github from "@/features/competition/assets/github.svg";
+import Github from "@/shared/ui/assets/github.svg";
 import SolvedAc from "@/features/home/assets/home/solved-logo.svg";
 import Arrow from "@/shared/ui/assets/arrow.svg";
 
