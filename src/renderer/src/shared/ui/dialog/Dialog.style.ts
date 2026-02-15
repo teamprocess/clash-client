@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { font } from "@/shared/config/font";
+import ExitIconSvg from "@/shared/ui/assets/exit.svg";
 
 export const DialogOverlay = styled.div`
   position: fixed;
@@ -40,27 +41,14 @@ export const CloseButton = styled.button`
   border: none;
   background: transparent;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
 
-  &::before,
-  &::after {
-    content: "";
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 0.85rem;
-    height: 0.12rem;
-    border-radius: 999px;
-    background: ${({ theme }) => theme.label.assistive};
-    transform-origin: center;
-  }
-
-  &::before {
-    transform: translate(-50%, -50%) rotate(45deg);
-  }
-
-  &::after {
-    transform: translate(-50%, -50%) rotate(-45deg);
-  }
+export const CloseIcon = styled(ExitIconSvg)`
+  width: 1rem;
+  height: 1rem;
 `;
 
 export const DialogContent = styled.div<{ $gap: number }>`
