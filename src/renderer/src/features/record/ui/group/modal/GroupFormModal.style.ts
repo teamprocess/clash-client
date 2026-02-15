@@ -64,14 +64,16 @@ export const FormContainer = styled.div`
 
 export const Groups = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
-  grid-template-rows: repeat(auto-fit, minmax(8rem, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(16rem, 16rem));
+  grid-auto-rows: minmax(8rem, auto);
+  justify-content: flex-start;
+  align-content: flex-start;
   gap: 2rem;
   width: 100%;
   height: 100%;
 `;
 
-export const GroupContainer = styled.div<{ $isSelected?: boolean }>`
+export const GroupContainer = styled.div<{ $isSelected?: boolean; $isMember?: boolean }>`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -80,10 +82,15 @@ export const GroupContainer = styled.div<{ $isSelected?: boolean }>`
   border: 3px solid
     ${({ theme, $isSelected }) => ($isSelected ? theme.primary.normal : "transparent")};
   background-color: ${({ theme }) => theme.label.disable};
-  cursor: pointer;
+  cursor: ${({ $isMember }) => ($isMember ? "default" : "pointer")};
 
   &:hover {
-    border-color: ${({ theme }) => theme.primary.normal};
+    border-color: ${({ theme, $isMember, $isSelected }) => {
+      if ($isMember) {
+        return $isSelected ? theme.primary.normal : "transparent";
+      }
+      return theme.primary.normal;
+    }};
   }
 `;
 
@@ -137,17 +144,18 @@ export const GroupMembers = styled.span`
   }
 `;
 
-export const GroupJoinButton = styled.button`
+export const GroupJoinButton = styled.button<{ $isMember?: boolean }>`
   ${font.body.medium};
   padding: 0.25rem 0.75rem;
   border-radius: 0.5rem;
   background-color: ${({ theme }) => theme.line.normal};
   color: ${({ theme }) => theme.label.normal};
   border: none;
-  cursor: pointer;
+  cursor: ${({ $isMember }) => ($isMember ? "default" : "pointer")};
 
   &:hover {
-    background-color: ${({ theme }) => theme.primary.normal};
+    background-color: ${({ theme, $isMember }) =>
+      $isMember ? theme.line.normal : theme.primary.normal};
   }
 `;
 
