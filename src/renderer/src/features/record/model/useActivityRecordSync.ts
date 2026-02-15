@@ -28,10 +28,15 @@ const parseServerSession = (
   } satisfies ServerSessionState;
 };
 
-export const useActivityRecordSync = (activeApp: ActiveApp | null, isElectron: boolean) => {
+export const useActivityRecordSync = (
+  activeApp: ActiveApp | null,
+  isElectron: boolean,
+  isFrontmostMonitoredApp: boolean
+) => {
   const pendingTargetsRef = useRef<Array<string | null>>([]);
   const monitoredAppsRef = useRef<string[] | null>(null);
   const serverSessionRef = useRef<ServerSessionState>({ type: "NONE", appName: null });
+  const requiresFrontmostToRestartRef = useRef(false);
   const initializedRef = useRef(false);
   const syncingRef = useRef(false);
 
@@ -179,33 +184,26 @@ export const useActivityRecordSync = (activeApp: ActiveApp | null, isElectron: b
   const syncServerSession = useCallback(
     async (rawTargetAppName: string | null) => {
       const targetAppName = normalizeTargetAppName(rawTargetAppName);
-      let serverSession = serverSessionRef.current;
-
-      // TASK 세션이면 활동 자동 기록은 건드리지 않음 (기존 기록 흐름 우선)
+      // 서버 최신 세션을 확인 후 공부 중에는 개발 자동 추적이 동작하지 않게 고정
+      const serverSession = await refreshServerSession();
       if (serverSession.type === "TASK") {
-        serverSession = await refreshServerSession();
-        if (serverSession.type === "TASK") {
-          return;
-        }
+        // TASK가 끝난 직후에는 실제 IDE 전면 복귀가 있을 때만 ACTIVITY를 다시 시작
+        requiresFrontmostToRestartRef.current = true;
+        return;
+      }
+
+      if (serverSession.type === "ACTIVITY") {
+        requiresFrontmostToRestartRef.current = false;
+      } else if (requiresFrontmostToRestartRef.current && !isFrontmostMonitoredApp) {
+        return;
       }
 
       if (targetAppName === null) {
-        serverSession = await refreshServerSession();
         if (serverSession.type !== "ACTIVITY") {
           return;
         }
 
         await stopActivitySession();
-        return;
-      }
-
-      if (serverSession.type === "ACTIVITY" && serverSession.appName === targetAppName) {
-        return;
-      }
-
-      // start/switch 직전에 서버 최신 세션을 다시 보고 조작 대상이 맞는지 검증
-      serverSession = await refreshServerSession();
-      if (serverSession.type === "TASK") {
         return;
       }
 
@@ -217,9 +215,16 @@ export const useActivityRecordSync = (activeApp: ActiveApp | null, isElectron: b
         return;
       }
 
+      // 새 ACTIVITY 세션 시작은 "지금 전면 IDE인 경우"에만 허용
+      if (!isFrontmostMonitoredApp) {
+        return;
+      }
+
       await startActivitySession(targetAppName);
+      requiresFrontmostToRestartRef.current = false;
     },
     [
+      isFrontmostMonitoredApp,
       normalizeTargetAppName,
       refreshServerSession,
       startActivitySession,

@@ -7,6 +7,7 @@ const api = {
   stopMonitoring: () => ipcRenderer.invoke("app-monitor:stop"),
   getActiveApp: () => ipcRenderer.invoke("app-monitor:get-active"),
   getSessions: () => ipcRenderer.invoke("app-monitor:get-sessions"),
+  getFrontmostMonitoredApp: () => ipcRenderer.invoke("app-monitor:get-frontmost-monitored-app"),
 
   openExternalUrl: (url: string) => ipcRenderer.invoke("open-external-url", url),
 
