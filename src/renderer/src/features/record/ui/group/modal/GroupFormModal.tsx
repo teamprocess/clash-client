@@ -123,7 +123,8 @@ export const GroupFormModal = ({
                     <S.GroupContainer
                       key={group.id}
                       $isSelected={selectedGroupId === group.id}
-                      onClick={() => setSelectedGroupId(group.id)}
+                      $isMember={group.isMember}
+                      onClick={group.isMember ? undefined : () => setSelectedGroupId(group.id)}
                     >
                       <S.GroupHeader>
                         <S.GroupHeaderTextBox>
@@ -149,6 +150,7 @@ export const GroupFormModal = ({
                             }
                           }}
                           disabled={isJoining || group.isMember}
+                          $isMember={group.isMember}
                         >
                           {group.isMember ? "가입됨" : isJoining ? "가입 중..." : "가입"}
                         </S.GroupJoinButton>
