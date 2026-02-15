@@ -25,10 +25,9 @@ export const buildPaddedStreak = (streaks: StreakItem[]): RenderStreakItem[] => 
 
   const sorted = [...streaks].sort((a, b) => a.date.localeCompare(b.date));
 
-  const firstDay = kstDate.parse(sorted[0].date).getDay();
-  const mondayIndex = firstDay === 0 ? 6 : firstDay;
+  const sundayIndex = kstDate.parse(sorted[0].date).getDay();
 
-  const padding = Array.from({ length: mondayIndex }, (_, i) => ({
+  const padding = Array.from({ length: sundayIndex }, (_, i) => ({
     date: `pad-${i}`,
     detailedInfo: 0,
     isPadding: true,
