@@ -101,7 +101,7 @@ export const EmailVerify = ({
       </CommonS.InputBox>
       <CommonS.ButtonWrapper>
         <CommonS.SubmitButton type="submit" disabled={isSubmitting}>
-          {isSubmitting ? "코드 인증 중..." : "코드 인증"}
+          {isSubmitting ? "이메일 인증 중..." : "이메일 인증"}
         </CommonS.SubmitButton>
         <CommonS.HelpTextContainer>
           <CommonS.HelpText to={{ pathname: "/sign-in", search }}>로그인</CommonS.HelpText>

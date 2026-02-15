@@ -7,6 +7,8 @@ export const SignUp = ({
   handleSubmit,
   errors,
   onSubmit,
+  isSubmitting,
+  isCheckingUsername,
   usernameChecked,
   usernameAvailable,
   handleUsernameCheck,
@@ -23,9 +25,15 @@ export const SignUp = ({
             <S.VerifyButton
               type="button"
               onClick={handleUsernameCheck}
-              disabled={usernameChecked && usernameAvailable}
+              disabled={
+                isCheckingUsername || isSubmitting || (usernameChecked && usernameAvailable)
+              }
             >
-              {usernameChecked && usernameAvailable ? "확인완료" : "중복확인"}
+              {isCheckingUsername
+                ? "중복 확인중..."
+                : usernameChecked && usernameAvailable
+                  ? "확인완료"
+                  : "중복확인"}
             </S.VerifyButton>
           </S.InputWrapper>
           {errors.username && <S.ErrorText>{errors.username.message}</S.ErrorText>}
@@ -50,7 +58,9 @@ export const SignUp = ({
         </div>
       </S.InputBox>
       <S.ButtonWrapper>
-        <S.SubmitButton type="submit">다음</S.SubmitButton>
+        <S.SubmitButton type="submit" disabled={isSubmitting || isCheckingUsername}>
+          {isSubmitting ? "회원가입 진행 중..." : "다음"}
+        </S.SubmitButton>
         <S.HelpTextContainer>
           <S.HelpText to={{ pathname: "/sign-in", search }}>로그인</S.HelpText>
         </S.HelpTextContainer>

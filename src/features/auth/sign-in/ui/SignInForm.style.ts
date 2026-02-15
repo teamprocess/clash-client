@@ -64,4 +64,5 @@ export const HelpText = styled(Link)`
   ${font.caption.medium};
   text-decoration: underline;
   color: ${({ theme }) => theme.label.neutral};
+  cursor: pointer;
 `;
