@@ -1,8 +1,8 @@
-import { useSuspenseQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { rivalsApi } from "@/entities/home/api/rivalApi";
 
 export const useRivalListQuery = () => {
-  return useSuspenseQuery({
+  return useQuery({
     queryKey: ["rivalList"],
     queryFn: rivalsApi.getRivalList,
   });
