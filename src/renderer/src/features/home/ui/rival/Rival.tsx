@@ -4,9 +4,14 @@ import { Dialog } from "@/shared/ui";
 import { Link } from "react-router-dom";
 import { useRival } from "@/features/home/model/useRival";
 import { SearchInput } from "@/shared/ui/search-input";
+import { MyRivalsResponse } from "@/entities/competition";
 
-export const Rival = () => {
-  const getRivalData = useRival();
+interface RivalProps {
+  rivalsData: MyRivalsResponse | null;
+}
+
+export const Rival = ({ rivalsData }: RivalProps) => {
+  const getRivalData = useRival(rivalsData);
 
   return (
     <S.RivalContainer>
@@ -80,6 +85,7 @@ export const Rival = () => {
             <S.ButtonBox>
               <S.CloseButton onClick={getRivalData.handleClose}>취소</S.CloseButton>
               <S.OkayButton onClick={getRivalData.handleRivalCreate}>확인</S.OkayButton>
+              {getRivalData.error && <S.ErrorText>{getRivalData.error}</S.ErrorText>}
             </S.ButtonBox>
           </S.BottomBox>
         </Dialog>
