@@ -3,16 +3,15 @@ import * as S from "./Home.style";
 import { Active, Ranking, Rival, Transition } from "@/features/home";
 import { useTransitionQuery } from "@/entities/home";
 import { useMyRivalsQuery } from "@/entities/competition";
+import { Suspense } from "react";
 
 export const Home = () => {
   const transitionQuery = useTransitionQuery();
   const myRivalQuery = useMyRivalsQuery();
 
-  const isLoading = transitionQuery.isLoading || myRivalQuery.isLoading;
-
   return (
-    <>
-      {isLoading && (
+    <Suspense
+      fallback={
         <Dialog width={21.5} height={21.5} isOpen={true}>
           <S.ConnectingContainer>
             <S.GithubIcon />
@@ -22,11 +21,12 @@ export const Home = () => {
             </S.FontBox>
           </S.ConnectingContainer>
         </Dialog>
-      )}
+      }
+    >
       <Transition data={transitionQuery.data?.data ?? null} />
       <Rival rivalsData={myRivalQuery.data?.data ?? null} />
       <Active />
       <Ranking />
-    </>
+    </Suspense>
   );
 };
