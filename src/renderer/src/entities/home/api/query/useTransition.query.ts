@@ -1,8 +1,8 @@
-import { useSuspenseQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { transitionApi } from "@/entities/home/api/transitionApi";
 
 export const useTransitionQuery = () => {
-  return useSuspenseQuery({
+  return useQuery({
     queryKey: ["transition"],
     queryFn: transitionApi.getTransition,
   });
