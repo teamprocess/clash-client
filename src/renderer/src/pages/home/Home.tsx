@@ -1,27 +1,14 @@
 import { Dialog } from "@/shared/ui";
 import * as S from "./Home.style";
 import { Active, Ranking, Rival, Transition } from "@/features/home";
-import {
-  useActiveQuery,
-  useRankingQuery,
-  useTransitionQuery,
-  useRivalListQuery,
-} from "@/entities/home";
+import { useTransitionQuery } from "@/entities/home";
 import { useMyRivalsQuery } from "@/entities/competition";
 
 export const Home = () => {
   const transitionQuery = useTransitionQuery();
   const myRivalQuery = useMyRivalsQuery();
-  const rivalListQuery = useRivalListQuery();
-  const activeQuery = useActiveQuery("GITHUB");
-  const rankingQuery = useRankingQuery("GITHUB", "DAY");
 
-  const isLoading =
-    transitionQuery.isLoading ||
-    myRivalQuery.isLoading ||
-    rivalListQuery.isLoading ||
-    activeQuery.isLoading ||
-    rankingQuery.isLoading;
+  const isLoading = transitionQuery.isLoading || myRivalQuery.isLoading;
 
   return (
     <>
