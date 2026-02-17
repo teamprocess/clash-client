@@ -23,6 +23,7 @@ export const useRival = (rivalsData: MyRivalsResponse | null) => {
 
   const [modalOpen, setModalOpen] = useState(false);
   const [rivalSelectedId, setRivalSelectedId] = useState<number[]>([]);
+  const [error, setError] = useState<string | null>(null);
 
   const { data: rivalListRes } = useRivalListQuery();
 
@@ -70,8 +71,8 @@ export const useRival = (rivalsData: MyRivalsResponse | null) => {
       await rivalsApi.postRivalApply(payload);
       await qc.invalidateQueries({ queryKey: ["myRivals"] });
     } catch (error: unknown) {
-      const errorMessage = getErrorMessage(error, "라이벌 신청 중 오류가 발생했습니다.");
-      console.error("라이벌 신청 실패:", errorMessage, error);
+      console.error("라이벌 신청 실패:", error);
+      setError(getErrorMessage(error, "라이벌 신청 중 오류가 발생했습니다."));
     } finally {
       handleClose();
     }
@@ -87,5 +88,6 @@ export const useRival = (rivalsData: MyRivalsResponse | null) => {
     rivalSelectedId,
     handleUserSelect,
     handleRivalCreate,
+    error,
   };
 };
