@@ -2,9 +2,14 @@ import * as S from "./Transition.style";
 import { Link } from "react-router-dom";
 import { formatTime } from "@/shared/lib";
 import { useTransition } from "@/features/home/model/useTransition";
+import { TransitionResponse } from "@/entities/home";
 
-export const Transition = () => {
-  const getTransitionData = useTransition();
+interface TransitionProps {
+  data: TransitionResponse | null;
+}
+
+export const Transition = ({ data }: TransitionProps) => {
+  const getTransitionData = useTransition(data);
 
   return (
     <S.TransitionContainer>
