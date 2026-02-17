@@ -70,8 +70,8 @@ export const useRival = (rivalsData: MyRivalsResponse | null) => {
       await rivalsApi.postRivalApply(payload);
       await qc.invalidateQueries({ queryKey: ["myRivals"] });
     } catch (error: unknown) {
-      const msg = getErrorMessage(error, "라이벌 신청 중 오류가 발생했습니다.");
-      console.error("라이벌 신청 실패:", msg, error);
+      const errorMessage = getErrorMessage(error, "라이벌 신청 중 오류가 발생했습니다.");
+      console.error("라이벌 신청 실패:", errorMessage, error);
     } finally {
       handleClose();
     }
