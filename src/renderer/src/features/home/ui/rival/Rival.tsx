@@ -85,6 +85,7 @@ export const Rival = ({ rivalsData }: RivalProps) => {
             <S.ButtonBox>
               <S.CloseButton onClick={getRivalData.handleClose}>취소</S.CloseButton>
               <S.OkayButton onClick={getRivalData.handleRivalCreate}>확인</S.OkayButton>
+              {getRivalData.error && <S.ErrorText>{getRivalData.error}</S.ErrorText>}
             </S.ButtonBox>
           </S.BottomBox>
         </Dialog>

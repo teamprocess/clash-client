@@ -281,3 +281,10 @@ export const UncheckedBox = styled.div`
   cursor: pointer;
   background-color: ${({ theme }) => theme.fill.normal};
 `;
+
+export const ErrorText = styled.span`
+  ${font.caption.medium};
+  color: ${palette.red[60]};
+  margin-top: 0.5rem;
+  display: block;
+`;
