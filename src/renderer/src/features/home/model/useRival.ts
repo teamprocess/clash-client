@@ -68,9 +68,7 @@ export const useRival = (rivalsData: MyRivalsResponse | null) => {
 
     try {
       await rivalsApi.postRivalApply(payload);
-
-      // ✅ "내 라이벌"은 Home에서 쓰니까, myRivals 쿼리 갱신 필수
-      await qc.invalidateQueries({ queryKey: ["myRivals"] }); // 너 프로젝트 키로 맞춰
+      await qc.invalidateQueries({ queryKey: ["myRivals"] });
     } catch (error: unknown) {
       const msg = getErrorMessage(error, "라이벌 신청 중 오류가 발생했습니다.");
       console.error("라이벌 신청 실패:", msg, error);
