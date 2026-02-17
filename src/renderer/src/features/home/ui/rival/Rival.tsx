@@ -4,9 +4,14 @@ import { Dialog } from "@/shared/ui";
 import { Link } from "react-router-dom";
 import { useRival } from "@/features/home/model/useRival";
 import { SearchInput } from "@/shared/ui/search-input";
+import { MyRivalsResponse } from "@/entities/competition";
 
-export const Rival = () => {
-  const getRivalData = useRival();
+interface RivalProps {
+  rivalsData: MyRivalsResponse | null;
+}
+
+export const Rival = ({ rivalsData }: RivalProps) => {
+  const getRivalData = useRival(rivalsData);
 
   return (
     <S.RivalContainer>
