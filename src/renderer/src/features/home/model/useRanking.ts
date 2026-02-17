@@ -5,6 +5,7 @@ import {
 } from "./useRankingDomain";
 import { useRankingView } from "./useRankingView";
 import { CategoryType } from "@/entities/home/model/useRanking.types";
+import { formatTime } from "@/shared/lib/formatTime";
 
 const unitMap: Record<CategoryType, string> = {
   GITHUB: "개",
@@ -18,6 +19,13 @@ export const useRanking = () => {
   const view = useRankingView({ rankings: domain.userList.rankings });
 
   const unit = unitMap[domain.RankingDropdown];
+
+  const formatActiveRankingPoint = (value: number) => {
+    if (domain.RankingDropdown === "ACTIVE_TIME") {
+      return formatTime(value);
+    }
+    return value.toLocaleString();
+  };
 
   return {
     wrapperRef: view.wrapperRef,
@@ -46,5 +54,6 @@ export const useRanking = () => {
     },
 
     unit,
+    formatActiveRankingPoint,
   };
 };

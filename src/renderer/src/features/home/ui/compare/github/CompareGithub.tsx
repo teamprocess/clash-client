@@ -21,7 +21,7 @@ export const Github = ({ today, yesterday }: CompareResponse) => {
                 <S.GitCommitIcon />
                 <S.InfoSubtitleBox>
                   <S.CountText>{yesterday?.commit.count ?? 0}</S.CountText>
-                  <S.InfoSubtitle>commit</S.InfoSubtitle>
+                  <S.InfoSubtitle>Commit</S.InfoSubtitle>
                 </S.InfoSubtitleBox>
               </S.GithubInfoBox>
               <S.CalculateContainer>
@@ -46,9 +46,9 @@ export const Github = ({ today, yesterday }: CompareResponse) => {
                   <S.TimeIcon />
                   <S.ExplainText>
                     첫 커밋{" "}
-                    <S.TimeText>{yesterday?.commit.firstCommit.slice(0, 10) ?? 0}</S.TimeText> ·
+                    <S.TimeText>{yesterday?.commit.firstCommit.slice(11, 16) ?? 0}</S.TimeText> ·
                     마지막 커밋{" "}
-                    <S.TimeText>{yesterday?.commit.lastCommit.slice(0, 10) ?? 0}</S.TimeText>
+                    <S.TimeText>{yesterday?.commit.lastCommit.slice(11, 16) ?? 0}</S.TimeText>
                   </S.ExplainText>
                 </S.CalculateInfoBox>
               </S.CalculateContainer>
@@ -61,7 +61,7 @@ export const Github = ({ today, yesterday }: CompareResponse) => {
                 <S.GitPRIcon />
                 <S.InfoSubtitleBox>
                   <S.CountText>{yesterday?.pullRequest.count ?? 0}</S.CountText>
-                  <S.InfoSubtitle>Pull request</S.InfoSubtitle>
+                  <S.InfoSubtitle>Pull Request</S.InfoSubtitle>
                 </S.InfoSubtitleBox>
               </S.GithubInfoBox>
               <S.CalculateContainer>
@@ -134,7 +134,7 @@ export const Github = ({ today, yesterday }: CompareResponse) => {
                     <S.GitCommitIcon />
                     <S.InfoSubtitleBox>
                       <S.CountText>{today?.commit.count ?? 0}</S.CountText>
-                      <S.InfoSubtitle>commit</S.InfoSubtitle>
+                      <S.InfoSubtitle>Commit</S.InfoSubtitle>
                     </S.InfoSubtitleBox>
                   </S.GithubInfoBox>
                   <GrowthRate
@@ -163,9 +163,9 @@ export const Github = ({ today, yesterday }: CompareResponse) => {
                 <S.CalculateInfoBox>
                   <S.TimeIcon />
                   <S.ExplainText>
-                    첫 커밋 <S.TimeText>{today?.commit.firstCommit.slice(0, 10) ?? 0}</S.TimeText> ·
-                    마지막 커밋{" "}
-                    <S.TimeText>{today?.commit.lastCommit.slice(0, 10) ?? 0}</S.TimeText>
+                    첫 커밋 <S.TimeText>{today?.commit.firstCommit.slice(11, 16) ?? 0}</S.TimeText>{" "}
+                    · 마지막 커밋{" "}
+                    <S.TimeText>{today?.commit.lastCommit.slice(11, 16) ?? 0}</S.TimeText>
                   </S.ExplainText>
                 </S.CalculateInfoBox>
               </S.CalculateContainer>
@@ -180,7 +180,7 @@ export const Github = ({ today, yesterday }: CompareResponse) => {
                     <S.GitPRIcon />
                     <S.InfoSubtitleBox>
                       <S.CountText>{today?.pullRequest.count ?? 0}</S.CountText>
-                      <S.InfoSubtitle>Pull request</S.InfoSubtitle>
+                      <S.InfoSubtitle>Pull Request</S.InfoSubtitle>
                     </S.InfoSubtitleBox>
                   </S.GithubInfoBox>
                   <GrowthRate

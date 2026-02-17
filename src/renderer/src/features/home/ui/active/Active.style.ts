@@ -35,8 +35,9 @@ export const StreakContainer = styled.div`
   width: 100%;
   height: 100%;
   display: flex;
+  gap: 0.625rem;
   flex-direction: column;
-  justify-content: space-around;
+  justify-content: space-between;
 `;
 
 export const StreakBox = styled.div`
@@ -50,8 +51,8 @@ export const StreakTitle = styled.p`
   color: ${({ theme }) => theme.label.normal};
 `;
 
-export const GrassBox = styled.div`
-  min-width: 100%;
+export const GrassScroll = styled.div`
+  width: 100%;
   overflow-x: auto;
   scrollbar-width: none;
 `;
@@ -87,6 +88,7 @@ export const Grass = styled.div<{ $level: number }>`
 
 export const GrassWrapper = styled.div`
   position: relative;
+  overflow: visible;
 
   &:hover div {
     opacity: 1;
@@ -94,25 +96,22 @@ export const GrassWrapper = styled.div`
   }
 `;
 
-export const Tooltip = styled.div`
-  position: absolute;
-  bottom: 120%;
-  left: 50%;
-  transform: translateX(-50%) translateY(0);
+export const ChartWrapper = styled.div`
+  width: 100%;
+  height: 7rem;
+  position: relative;
+`;
+
+export const PortalTooltip = styled.div`
+  position: fixed;
+  transform: translate(-50%, -100%);
   background: ${({ theme }) => theme.background.neutral};
   color: ${({ theme }) => theme.label.normal};
   ${font.caption.bold}
-  padding: 0.35rem 0.5rem;
-  border-radius: 0.35rem;
+  padding: 0.4rem 0.6rem;
+  border-radius: 0.4rem;
   white-space: nowrap;
-  opacity: 0;
-  transition: all 0.2s ease;
   pointer-events: none;
-  z-index: 10;
-`;
-
-export const ChartWrapper = styled.div`
-  width: 100%;
-  height: 8rem;
-  position: relative;
+  z-index: 99;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 `;

@@ -1,0 +1,62 @@
+import styled from "styled-components";
+import Github from "@/shared/ui/assets/github.svg";
+import { palette } from "@/shared/config/theme";
+import { font } from "@/shared/config/font";
+
+export const HomeContainer = styled.div`
+  display: grid;
+  justify-content: space-between;
+  align-items: center;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  grid-gap: 1.5rem;
+  height: 100%;
+  width: 100%;
+`;
+
+export const FallbackWrapper = styled.div`
+  position: relative;
+  min-height: 100vh;
+`;
+
+export const Grid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 1.5rem;
+  padding: 1.5rem;
+`;
+
+export const ConnectingContainer = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+`;
+
+export const GithubIcon = styled(Github)`
+  width: 5rem;
+  height: 5rem;
+  color: ${palette.neutral[99]};
+`;
+
+export const FontBox = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+  gap: 0.25rem;
+`;
+
+export const HugeFont = styled.p`
+  ${font.headline2.bold}
+  color: ${({ theme }) => theme.label.normal};
+`;
+
+export const TinyFont = styled.p`
+  ${font.label.medium}
+  color: ${({ theme }) => theme.label.neutral}
+`;
