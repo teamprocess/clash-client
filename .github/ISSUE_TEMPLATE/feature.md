@@ -3,6 +3,7 @@ name: 기능 요청
 about: 기능 요청
 title: "[FEAT] "
 labels: enhancement
+type: Feature
 assignees: ""
 ---
 
