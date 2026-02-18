@@ -1,19 +1,12 @@
 import { app, session } from "electron";
 import { is } from "@electron-toolkit/utils";
 
-const DEFAULT_SOCKET_ENDPOINT = "wss://api.clash.kr/socket.io";
+const VITE_API_URL = process.env.VITE_API_URL as string;
+const VITE_SOCKET_IO_URL = process.env.VITE_SOCKET_IO_URL as string;
+const API_ORIGIN = new URL(VITE_API_URL).origin;
+const SOCKET_ORIGIN = new URL(VITE_SOCKET_IO_URL).origin;
 
-const resolveSocketOrigins = (socketEndpoint: string) => {
-  const socketOrigin = new URL(socketEndpoint).origin;
-  const wsSocketOrigin = socketOrigin.startsWith("https://")
-    ? socketOrigin.replace("https://", "wss://")
-    : socketOrigin.startsWith("http://")
-      ? socketOrigin.replace("http://", "ws://")
-      : "";
-
-  return { socketOrigin, wsSocketOrigin };
-};
-
+// 개발 환경 인증서 예외 처리 등록
 export const configureCertificateHandling = () => {
   // 개발 환경에서 자체 서명 인증서 허용
   if (is.dev) {
@@ -31,22 +24,16 @@ export const configureCertificateHandling = () => {
   });
 };
 
+// 응답 헤더에 CSP 주입
 export const registerCspHeaders = () => {
-  const apiUrl = process.env.VITE_API_URL;
-  if (!apiUrl) {
-    console.error("VITE_API_URL이 설정되지 않았습니다.");
-  }
-
-  const apiOrigin = apiUrl ? new URL(apiUrl).origin : "";
-  const socketEndpoint = process.env.VITE_SOCKET_IO_URL || DEFAULT_SOCKET_ENDPOINT;
-  const { socketOrigin, wsSocketOrigin } = resolveSocketOrigins(socketEndpoint);
+  const connectSources = ["'self'", API_ORIGIN, SOCKET_ORIGIN, "https://www.google.com"].join(" ");
 
   session.defaultSession.webRequest.onHeadersReceived((details, callback) => {
     callback({
       responseHeaders: {
         ...details.responseHeaders,
         "Content-Security-Policy": [
-          `default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.google.com https://www.gstatic.com; style-src 'self' 'unsafe-inline' https://www.gstatic.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https://www.gstatic.com; frame-src https://www.google.com; connect-src 'self' ${apiOrigin} ${socketOrigin} ${wsSocketOrigin} https://www.google.com`,
+          `default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.google.com https://www.gstatic.com; style-src 'self' 'unsafe-inline' https://www.gstatic.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https://www.gstatic.com; frame-src https://www.google.com; connect-src ${connectSources}`,
         ],
       },
     });
