@@ -1,16 +1,60 @@
 import { Active, Ranking, Rival, Transition } from "@/features/home";
-import { useTransitionQuery } from "@/entities/home";
-import { useMyRivalsQuery } from "@/entities/competition";
+import axios from "axios";
+import { Dialog } from "@/shared/ui";
+import { Skeleton } from "@/shared/ui/skeleton/Skeleton";
+import * as S from "./Home.style";
+import { useActiveQuery, useTransitionQuery } from "@/entities/home";
+
+const isNotFound = (error: unknown) => axios.isAxiosError(error) && error.response?.status === 404;
 
 export const Home = () => {
   const transitionQuery = useTransitionQuery();
-  const myRivalQuery = useMyRivalsQuery();
+  const activeQuery = useActiveQuery("GITHUB");
+
+  const isChecking = transitionQuery.isPending;
+
+  if (isChecking) {
+    return (
+      <>
+        <Skeleton />
+        <Skeleton />
+        <Skeleton />
+        <Skeleton />
+      </>
+    );
+  }
+
+  const isGithubNotReady = transitionQuery.isError && isNotFound(transitionQuery.error);
+
+  if (isGithubNotReady) {
+    return (
+      <>
+        <Skeleton />
+        <Skeleton />
+        <Skeleton />
+        <Skeleton />
+        <Dialog width={21.5} height={21.5} isOpen={true}>
+          <S.ConnectingContainer>
+            <S.GithubIcon />
+            <S.FontBox>
+              <S.HugeFont>깃허브 계정을 연동 중입니다</S.HugeFont>
+              <S.TinyFont>잠시만 기다려주세요.</S.TinyFont>
+            </S.FontBox>
+          </S.ConnectingContainer>
+        </Dialog>
+      </>
+    );
+  }
+
+  if (transitionQuery.isError) {
+    return null;
+  }
 
   return (
     <>
-      <Transition data={transitionQuery.data?.data ?? null} />
-      <Rival rivalsData={myRivalQuery.data?.data ?? null} />
-      <Active />
+      <Transition data={transitionQuery.data?.data || null} />
+      <Rival />
+      <Active activeData={activeQuery.data?.data || null} />
       <Ranking />
     </>
   );
