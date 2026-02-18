@@ -1,25 +1,20 @@
 import * as S from "./Active.style";
 import { ActiveLineChart } from "@/features/home/model/ActiveChart";
 import { toLineChartData } from "@/features/home/model/lineChartData";
-import { useActive } from "@/features/home/model/useActive";
-import { Select } from "@/shared/ui/select";
-import { CategoryType } from "@/entities/home";
-import { useMemo, useRef, useState } from "react";
+import { useMemo, useRef } from "react";
 import { createPortal } from "react-dom";
+import { ActiveResponse } from "@/entities/home";
+import { useActive } from "@/features/home/model/useActive";
 
-export const Active = () => {
+interface ActiveProps {
+  activeData: ActiveResponse | null;
+}
+
+export const Active = ({ activeData }: ActiveProps) => {
   const grassRef = useRef<HTMLDivElement>(null);
-  const active = useActive(grassRef);
+  const active = useActive(grassRef, activeData);
 
   const chartData = toLineChartData(active.variations);
-
-  const [tooltip, setTooltip] = useState({
-    visible: false,
-    x: 0,
-    y: 0,
-    date: "",
-    value: 0,
-  });
 
   const fullChartData = useMemo(() => {
     const now = new Date();
@@ -35,10 +30,7 @@ export const Active = () => {
       return index !== -1 ? Math.round(Number(chartData.data.values[index])) : 0;
     });
 
-    return {
-      labels: fullMonths,
-      values,
-    };
+    return { labels: fullMonths, values };
   }, [chartData]);
 
   return (
@@ -46,11 +38,12 @@ export const Active = () => {
       <S.ActiveContainer>
         <S.TitleBox>
           <S.Title>내 활동 분석</S.Title>
-          <Select<CategoryType>
-            value={active.activeDropdown}
-            options={active.activeDropDownValue}
-            onChange={active.setActiveDropdown}
-          />
+
+          {/* <Select<CategoryType>
+              value={activeDropdown}
+              options={active.activeDropDownValue}
+              onChange={setActiveDropdown}
+            /> */}
         </S.TitleBox>
 
         <S.Line />
@@ -71,23 +64,9 @@ export const Active = () => {
                         style={day.isPadding ? { visibility: "hidden" } : undefined}
                         onMouseEnter={e => {
                           if (day.isPadding) return;
-
-                          const rect = e.currentTarget.getBoundingClientRect();
-
-                          setTooltip({
-                            visible: true,
-                            x: rect.left + rect.width / 2,
-                            y: rect.top,
-                            date: day.date,
-                            value,
-                          });
+                          active.showTooltip(e, day.date, value);
                         }}
-                        onMouseLeave={() =>
-                          setTooltip(prev => ({
-                            ...prev,
-                            visible: false,
-                          }))
-                        }
+                        onMouseLeave={active.hideTooltip}
                       />
                     </S.GrassWrapper>
                   );
@@ -95,6 +74,7 @@ export const Active = () => {
               </S.Grid>
             </S.GrassScroll>
           </S.StreakBox>
+
           <S.StreakBox>
             <S.StreakTitle>Contributions 변화 추이</S.StreakTitle>
             <S.ChartWrapper>
@@ -104,16 +84,11 @@ export const Active = () => {
         </S.StreakContainer>
       </S.ActiveContainer>
 
-      {tooltip.visible &&
+      {active.tooltip.visible &&
         createPortal(
-          <S.PortalTooltip
-            style={{
-              top: tooltip.y - 4,
-              left: tooltip.x,
-            }}
-          >
-            <div>{tooltip.date}</div>
-            <div>{tooltip.value}개</div>
+          <S.PortalTooltip style={{ top: active.tooltip.y - 4, left: active.tooltip.x }}>
+            <div>{active.tooltip.date}</div>
+            <div>{active.tooltip.value}개</div>
           </S.PortalTooltip>,
           document.body
         )}
