@@ -9,20 +9,23 @@ import { bootstrapMainProcess } from "./bootstrap";
 let mainWindow: BrowserWindow | null = null;
 let appMonitor: AppMonitor | null = null;
 
-// 브라우저 윈도우 생성
-function createWindow(): void {
+// 현재 메인 윈도우 조회
+const getMainWindow = () => mainWindow;
+
+// 현재 앱 모니터 조회
+const getAppMonitor = () => appMonitor;
+
+// 메인 윈도우 + AppMonitor 초기화
+const createWindow = () => {
   mainWindow = createMainWindow();
 
-  // AppMonitor 초기화
+  // 윈도우 준비 후 앱 모니터 연결
   appMonitor = new AppMonitor(mainWindow);
 
-  consumePendingDeepLink(() => mainWindow);
-}
+  consumePendingDeepLink(getMainWindow);
+};
 
 configureCertificateHandling();
-registerQuitHandlers({ getAppMonitor: () => appMonitor });
-registerDeepLinkEvents(() => mainWindow);
-bootstrapMainProcess({ createWindow, getAppMonitor: () => appMonitor });
-
-// In this file you can include the rest of your app's specific main process
-// code. You can also put them in separate files and require them here.
+registerQuitHandlers({ getAppMonitor });
+registerDeepLinkEvents(getMainWindow);
+bootstrapMainProcess({ createWindow, getAppMonitor });
