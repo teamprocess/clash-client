@@ -1,9 +1,10 @@
 import { app, BrowserWindow, ipcMain, session } from "electron";
 import { resolve } from "path";
-import { electronApp, is, optimizer } from "@electron-toolkit/utils";
+import { electronApp, optimizer } from "@electron-toolkit/utils";
 import { AppMonitor } from "./services";
 import { createMainWindow } from "./window";
 import { registerIpcHandlers } from "./ipc";
+import { configureCertificateHandling, registerCspHeaders } from "./security";
 
 let mainWindow: BrowserWindow | null = null;
 let appMonitor: AppMonitor | null = null;
@@ -11,7 +12,6 @@ let appMonitor: AppMonitor | null = null;
 const PROTOCOL = "clashapp";
 let pendingDeepLink: string | null = null;
 
-const DEFAULT_SOCKET_ENDPOINT = "wss://api.clash.kr/socket.io";
 const SHUTDOWN_CLEANUP_TIMEOUT_MS = 2500;
 let isShutdownCleanupInProgress = false;
 
@@ -138,20 +138,7 @@ function createWindow(): void {
   }
 }
 
-// 개발 환경에서 자체 서명 인증서 허용
-if (is.dev) {
-  app.commandLine.appendSwitch("ignore-certificate-errors");
-}
-
-// 개발 환경에서는 인증서 오류 무시
-app.on("certificate-error", (event, _webContents, _url, _error, _certificate, callback) => {
-  if (is.dev) {
-    event.preventDefault();
-    callback(true);
-  } else {
-    callback(false);
-  }
-});
+configureCertificateHandling();
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
@@ -162,29 +149,7 @@ app.whenReady().then(() => {
   electronApp.setAppUserModelId("com.electron");
 
   // CSP 설정
-  const apiUrl = process.env.VITE_API_URL;
-  if (!apiUrl) {
-    console.error("VITE_API_URL이 설정되지 않았습니다.");
-  }
-  const apiOrigin = apiUrl ? new URL(apiUrl).origin : "";
-  const socketEndpoint = process.env.VITE_SOCKET_IO_URL || DEFAULT_SOCKET_ENDPOINT;
-  const socketOrigin = new URL(socketEndpoint).origin;
-  const wsSocketOrigin = socketOrigin.startsWith("https://")
-    ? socketOrigin.replace("https://", "wss://")
-    : socketOrigin.startsWith("http://")
-      ? socketOrigin.replace("http://", "ws://")
-      : "";
-
-  session.defaultSession.webRequest.onHeadersReceived((details, callback) => {
-    callback({
-      responseHeaders: {
-        ...details.responseHeaders,
-        "Content-Security-Policy": [
-          `default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.google.com https://www.gstatic.com; style-src 'self' 'unsafe-inline' https://www.gstatic.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https://www.gstatic.com; frame-src https://www.google.com; connect-src 'self' ${apiOrigin} ${socketOrigin} ${wsSocketOrigin} https://www.google.com`,
-        ],
-      },
-    });
-  });
+  registerCspHeaders();
 
   // Default open or close DevTools by F12 in development
   // and ignore CommandOrControl + R in production.
