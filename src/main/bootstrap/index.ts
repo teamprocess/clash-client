@@ -1,5 +1,5 @@
-import { app, BrowserWindow, ipcMain } from "electron";
-import { electronApp, optimizer } from "@electron-toolkit/utils";
+import { app, BrowserWindow } from "electron";
+import { electronApp, is } from "@electron-toolkit/utils";
 import type { AppMonitor } from "../services";
 import { registerIpcHandlers } from "../ipc";
 import { registerCspHeaders } from "../security";
@@ -10,38 +10,66 @@ interface BootstrapMainProcessParams {
   getAppMonitor: () => AppMonitor | null;
 }
 
+// 앱 활성화 시 윈도우가 없으면 재생성
+const registerActivateHandler = (createWindow: () => void) => {
+  app.on("activate", function () {
+    if (BrowserWindow.getAllWindows().length === 0) createWindow();
+  });
+};
+
+// 새로고침 단축키 확인
+const isReloadShortcut = (input: { key: string; meta: boolean }) => {
+  const key = input.key.toLowerCase();
+  return key === "r" && input.meta;
+};
+
+// 개발자 도구 단축키 확인
+const isDevToolsShortcut = (input: { key: string; meta: boolean; alt: boolean }) =>
+  input.key.toLowerCase() === "i" && input.meta && input.alt;
+
+// 환경별 단축키 정책 등록
+const registerWindowShortcuts = () => {
+  app.on("browser-window-created", (_, window) => {
+    window.webContents.on("before-input-event", (event, input) => {
+      if (input.type !== "keyDown") {
+        return;
+      }
+
+      if (is.dev) {
+        if (isDevToolsShortcut(input)) {
+          window.webContents.toggleDevTools();
+          event.preventDefault();
+        }
+        return;
+      }
+
+      if (isReloadShortcut(input)) {
+        window.webContents.reload();
+        event.preventDefault();
+      }
+    });
+  });
+};
+
+// 메인 프로세스 초기 부트스트랩 실행
 export const bootstrapMainProcess = ({
   createWindow,
   getAppMonitor,
 }: BootstrapMainProcessParams) => {
-  // This method will be called when Electron has finished
-  // initialization and is ready to create browser windows.
-  // Some APIs can only be used after this event occurs.
   app.whenReady().then(() => {
     registerProtocol();
-    // Set app user model id for windows
     electronApp.setAppUserModelId("com.electron");
 
     // CSP 설정
     registerCspHeaders();
 
-    // Default open or close DevTools by F12 in development
-    // and ignore CommandOrControl + R in production.
-    // see https://github.com/alex8088/electron-toolkit/tree/master/packages/utils
-    app.on("browser-window-created", (_, window) => {
-      optimizer.watchWindowShortcuts(window);
-    });
+    // 환경별 단축키 동작 등록
+    registerWindowShortcuts();
 
-    // IPC test
-    ipcMain.on("ping", () => console.log("pong"));
+    // 앱 모니터 관련 IPC를 등록합니다.
     registerIpcHandlers({ getAppMonitor });
 
     createWindow();
-
-    app.on("activate", function () {
-      // On macOS it's common to re-create a window in the app when the
-      // dock icon is clicked and there are no other windows open.
-      if (BrowserWindow.getAllWindows().length === 0) createWindow();
-    });
+    registerActivateHandler(createWindow);
   });
 };
