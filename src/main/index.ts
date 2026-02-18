@@ -11,6 +11,56 @@ const PROTOCOL = "clashapp";
 let pendingDeepLink: string | null = null;
 
 const DEFAULT_SOCKET_ENDPOINT = "wss://api.clash.kr/socket.io";
+const SHUTDOWN_CLEANUP_TIMEOUT_MS = 2500;
+let isShutdownCleanupInProgress = false;
+
+const wait = (milliseconds: number) =>
+  new Promise<void>(resolvePromise => {
+    setTimeout(resolvePromise, milliseconds);
+  });
+
+const buildCookieHeader = (
+  cookies: Awaited<ReturnType<typeof session.defaultSession.cookies.get>>
+) => cookies.map(cookie => `${cookie.name}=${cookie.value}`).join("; ");
+
+const buildRecordStopUrl = (apiUrl: string) => {
+  const normalizedApiUrl = apiUrl.endsWith("/") ? apiUrl : `${apiUrl}/`;
+  return new URL("record/stop", normalizedApiUrl).toString();
+};
+
+const stopRecordSessionOnShutdown = async () => {
+  const apiUrl = process.env.VITE_API_URL;
+  if (!apiUrl) {
+    return;
+  }
+
+  try {
+    const apiOrigin = new URL(apiUrl).origin;
+    const cookies = await session.defaultSession.cookies.get({ url: apiOrigin });
+    if (cookies.length === 0) {
+      return;
+    }
+
+    const cookieHeader = buildCookieHeader(cookies);
+    const stopUrl = buildRecordStopUrl(apiUrl);
+
+    const response = await fetch(stopUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Cookie: cookieHeader,
+      },
+    });
+
+    if (!response.ok) {
+      console.error(
+        `앱 종료 중 기록 세션 종료 요청이 실패했습니다. status=${response.status} url=${stopUrl}`
+      );
+    }
+  } catch (error) {
+    console.error("앱 종료 중 기록 세션 종료 요청에 실패했습니다:", error);
+  }
+};
 
 const handleDeepLink = (url: string) => {
   if (!url) {
@@ -222,8 +272,23 @@ app.on("window-all-closed", () => {
   }
 });
 
-app.on("before-quit", () => {
+app.on("before-quit", event => {
   appMonitor?.stop();
+
+  if (isShutdownCleanupInProgress) {
+    return;
+  }
+
+  event.preventDefault();
+  isShutdownCleanupInProgress = true;
+
+  void (async () => {
+    try {
+      await Promise.race([stopRecordSessionOnShutdown(), wait(SHUTDOWN_CLEANUP_TIMEOUT_MS)]);
+    } finally {
+      app.exit(0);
+    }
+  })();
 });
 
 // In this file you can include the rest of your app's specific main process
