@@ -3,7 +3,7 @@ import axios from "axios";
 import { Dialog } from "@/shared/ui";
 import { Skeleton } from "@/shared/ui/skeleton/Skeleton";
 import * as S from "./Home.style";
-import { useActiveQuery, useTransitionQuery } from "@/entities/home";
+import { StreakItem, useActiveQuery, useTransitionQuery } from "@/entities/home";
 
 const isNotFound = (error: unknown) => axios.isAxiosError(error) && error.response?.status === 404;
 
@@ -11,18 +11,7 @@ export const Home = () => {
   const transitionQuery = useTransitionQuery();
   const activeQuery = useActiveQuery("GITHUB");
 
-  const activeStreaks = activeQuery.data?.data?.streaks;
-
-  const isChecking =
-    transitionQuery.isLoading ||
-    activeQuery.isLoading ||
-    transitionQuery.isPending ||
-    activeQuery.isPending;
-
-  const isGithubNotReady =
-    transitionQuery.isError &&
-    isNotFound(transitionQuery.error) &&
-    (!activeStreaks || activeStreaks.length === 0);
+  const isChecking = transitionQuery.isPending || activeQuery.isPending;
 
   if (isChecking) {
     return (
@@ -34,6 +23,11 @@ export const Home = () => {
       </>
     );
   }
+
+  const activeStreaks: StreakItem[] | undefined = activeQuery.data?.data?.streaks;
+
+  const isGithubNotReady =
+    (transitionQuery.isError && isNotFound(transitionQuery.error)) || !activeStreaks?.length;
 
   if (isGithubNotReady) {
     return (
@@ -57,9 +51,9 @@ export const Home = () => {
 
   return (
     <>
-      <Transition data={transitionQuery.data?.data || null} />
+      <Transition data={transitionQuery.data?.data ?? null} />
       <Rival />
-      <Active activeData={activeQuery.data?.data || null} />
+      <Active activeData={activeQuery.data?.data ?? null} />
       <Ranking />
     </>
   );
