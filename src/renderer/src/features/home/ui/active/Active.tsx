@@ -38,12 +38,6 @@ export const Active = ({ activeData }: ActiveProps) => {
       <S.ActiveContainer>
         <S.TitleBox>
           <S.Title>내 활동 분석</S.Title>
-
-          {/* <Select<CategoryType>
-              value={activeDropdown}
-              options={active.activeDropDownValue}
-              onChange={setActiveDropdown}
-            /> */}
         </S.TitleBox>
 
         <S.Line />
