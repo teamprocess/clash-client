@@ -66,8 +66,8 @@ export const bootstrapMainProcess = ({
     // 환경별 단축키 동작 등록
     registerWindowShortcuts();
 
-    // 앱 모니터 관련 IPC를 등록합니다.
-    registerIpcHandlers({ getAppMonitor });
+    // 앱 모니터 관련 IPC 등록
+    registerIpcHandlers(getAppMonitor);
 
     createWindow();
     registerActivateHandler(createWindow);
