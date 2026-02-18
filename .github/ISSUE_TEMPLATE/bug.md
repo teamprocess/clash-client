@@ -1,5 +1,6 @@
 ---
 name: 버그 리포트
+about: 버그 리포트
 title: "[FIX] "
 labels: bug
 assignees: ""
