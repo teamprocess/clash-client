@@ -1,8 +1,9 @@
-import { app, BrowserWindow, ipcMain, session, shell } from "electron";
-import { join, resolve } from "path";
+import { app, BrowserWindow, ipcMain, session } from "electron";
+import { resolve } from "path";
 import { electronApp, is, optimizer } from "@electron-toolkit/utils";
-import ClashIcon from "../../resources/clash-icon.png?asset";
-import { AppMonitor } from "./services/AppMonitor";
+import { AppMonitor } from "./services";
+import { createMainWindow } from "./window";
+import { registerIpcHandlers } from "./ipc";
 
 let mainWindow: BrowserWindow | null = null;
 let appMonitor: AppMonitor | null = null;
@@ -125,74 +126,16 @@ app.on("open-url", (event, url) => {
 
 // 브라우저 윈도우 생성
 function createWindow(): void {
-  mainWindow = new BrowserWindow({
-    width: 900,
-    height: 670,
-    show: false,
-    autoHideMenuBar: true,
-    ...(process.platform === "linux" ? { ClashIcon } : {}),
-    webPreferences: {
-      preload: join(__dirname, "../preload/index.js"),
-      sandbox: false,
-    },
-  });
-
-  // 화면을 보여줄 준비가 되면 전체 화면 사이즈로 창 모드 show
-  mainWindow.on("ready-to-show", () => {
-    mainWindow!.maximize();
-    mainWindow!.show();
-  });
-
-  mainWindow.webContents.setWindowOpenHandler(details => {
-    shell.openExternal(details.url);
-    return { action: "deny" };
-  });
-
-  // HMR for renderer base on electron-vite cli.
-  // Load the remote URL for development or the local html file for production.
-  if (is.dev && process.env["ELECTRON_RENDERER_URL"]) {
-    mainWindow.loadURL(process.env["ELECTRON_RENDERER_URL"]);
-  } else {
-    mainWindow.loadFile(join(__dirname, "../renderer/index.html"));
-  }
+  mainWindow = createMainWindow();
 
   // AppMonitor 초기화
   appMonitor = new AppMonitor(mainWindow);
-  setupAppMonitorHandlers();
 
   if (pendingDeepLink) {
     const url = pendingDeepLink;
     pendingDeepLink = null;
     handleDeepLink(url);
   }
-}
-
-function setupAppMonitorHandlers() {
-  // 모니터링 시작/중지
-  ipcMain.handle("app-monitor:start", async () => {
-    await appMonitor?.start();
-  });
-
-  ipcMain.handle("app-monitor:stop", () => {
-    appMonitor?.stop();
-  });
-
-  // 현재 상태 조회
-  ipcMain.handle("app-monitor:get-active", () => {
-    return appMonitor?.getActiveApp() ?? null;
-  });
-
-  ipcMain.handle("app-monitor:get-sessions", () => {
-    return appMonitor?.getSessions() ?? [];
-  });
-
-  ipcMain.handle("app-monitor:get-frontmost-monitored-app", () => {
-    return appMonitor?.getFrontmostMonitoredAppName() ?? null;
-  });
-
-  ipcMain.handle("open-external-url", async (_, url: string) => {
-    await shell.openExternal(url);
-  });
 }
 
 // 개발 환경에서 자체 서명 인증서 허용
@@ -252,6 +195,7 @@ app.whenReady().then(() => {
 
   // IPC test
   ipcMain.on("ping", () => console.log("pong"));
+  registerIpcHandlers({ getAppMonitor: () => appMonitor });
 
   createWindow();
 
