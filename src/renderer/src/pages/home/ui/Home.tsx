@@ -13,14 +13,12 @@ export const Home = () => {
 
   const activeStreaks = activeQuery.data?.data?.streaks;
 
-  // 일반 적인 로딩 or 펜딩이면 스켈레톤으로 예외처리
   const isChecking =
     transitionQuery.isLoading ||
     activeQuery.isLoading ||
     transitionQuery.isPending ||
     activeQuery.isPending;
 
-  // 초기 사용자 기준: 현재 Transition쿼리는 404이고, Active쿼리는 streak이 빈배열일 때 => 다이얼로그 + 스켈레톤
   const isGithubNotReady =
     transitionQuery.isError &&
     isNotFound(transitionQuery.error) &&
