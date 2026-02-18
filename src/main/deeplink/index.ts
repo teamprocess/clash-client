@@ -5,6 +5,7 @@ const PROTOCOL = "clashapp";
 
 let pendingDeepLink: string | null = null;
 
+// 메인 윈도우를 앞으로 표시
 const focusMainWindow = (mainWindow: BrowserWindow) => {
   if (mainWindow.isMinimized()) {
     mainWindow.restore();
@@ -14,6 +15,7 @@ const focusMainWindow = (mainWindow: BrowserWindow) => {
   mainWindow.focus();
 };
 
+// 딥링크 payload를 렌더러로 전달
 const sendDeepLinkToRenderer = (mainWindow: BrowserWindow, url: string) => {
   try {
     const parsed = new URL(url);
@@ -21,10 +23,11 @@ const sendDeepLinkToRenderer = (mainWindow: BrowserWindow, url: string) => {
     const state = parsed.searchParams.get("state") ?? "";
     mainWindow.webContents.send("deep-link-auth", { code, state, url });
   } catch (error) {
-    console.error("Invalid deep link URL:", url, error);
+    console.error("딥링크 URL이 유효하지 않습니다:", url, error);
   }
 };
 
+// 딥링크 처리 (윈도우 없으면 임시 보관)
 const handleDeepLink = (url: string, getMainWindow: () => BrowserWindow | null) => {
   if (!url) {
     return;
@@ -40,16 +43,23 @@ const handleDeepLink = (url: string, getMainWindow: () => BrowserWindow | null) 
   focusMainWindow(mainWindow);
 };
 
+// single-instance 인자에서 딥링크 URL 추출
+const getDeepLinkFromCommandLine = (commandLine: string[]) =>
+  commandLine.find(argument => argument.startsWith(`${PROTOCOL}://`));
+
+// 앱 프로토콜 등록
 export const registerProtocol = () => {
-  if (process.defaultApp) {
-    if (process.argv.length >= 2) {
-      app.setAsDefaultProtocolClient(PROTOCOL, process.execPath, [resolve(process.argv[1])]);
-    }
-  } else {
+  if (!process.defaultApp) {
     app.setAsDefaultProtocolClient(PROTOCOL);
+    return;
+  }
+
+  if (process.argv.length >= 2) {
+    app.setAsDefaultProtocolClient(PROTOCOL, process.execPath, [resolve(process.argv[1])]);
   }
 };
 
+// 딥링크 이벤트 등록
 export const registerDeepLinkEvents = (getMainWindow: () => BrowserWindow | null) => {
   const gotTheLock = app.requestSingleInstanceLock();
 
@@ -59,7 +69,7 @@ export const registerDeepLinkEvents = (getMainWindow: () => BrowserWindow | null
   }
 
   app.on("second-instance", (_event, commandLine) => {
-    const url = commandLine.find(arg => arg.startsWith(`${PROTOCOL}://`));
+    const url = getDeepLinkFromCommandLine(commandLine);
     if (url) {
       handleDeepLink(url, getMainWindow);
     }
@@ -76,6 +86,7 @@ export const registerDeepLinkEvents = (getMainWindow: () => BrowserWindow | null
   });
 };
 
+// 윈도우 초기화 후 대기 중 딥링크 소비
 export const consumePendingDeepLink = (getMainWindow: () => BrowserWindow | null) => {
   if (!pendingDeepLink) {
     return;
