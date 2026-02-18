@@ -3,6 +3,17 @@ import { join } from "path";
 import { is } from "@electron-toolkit/utils";
 import ClashIcon from "../../../resources/clash-icon.png?asset";
 
+// 개발/배포 환경에 맞는 렌더러 URL 로드
+const loadRenderer = async (mainWindow: BrowserWindow) => {
+  if (is.dev && process.env["ELECTRON_RENDERER_URL"]) {
+    await mainWindow.loadURL(process.env["ELECTRON_RENDERER_URL"]);
+    return;
+  }
+
+  await mainWindow.loadFile(join(__dirname, "../renderer/index.html"));
+};
+
+// 메인 브라우저 윈도우 생성 + 기본 동작 연결
 export const createMainWindow = () => {
   const mainWindow = new BrowserWindow({
     width: 900,
@@ -16,7 +27,7 @@ export const createMainWindow = () => {
     },
   });
 
-  // 화면을 보여줄 준비가 되면 전체 화면 사이즈로 창 모드 show
+  // 준비되면 최대화 후 표시
   mainWindow.on("ready-to-show", () => {
     mainWindow.maximize();
     mainWindow.show();
@@ -27,13 +38,7 @@ export const createMainWindow = () => {
     return { action: "deny" };
   });
 
-  // HMR for renderer base on electron-vite cli.
-  // Load the remote URL for development or the local html file for production.
-  if (is.dev && process.env["ELECTRON_RENDERER_URL"]) {
-    void mainWindow.loadURL(process.env["ELECTRON_RENDERER_URL"]);
-  } else {
-    void mainWindow.loadFile(join(__dirname, "../renderer/index.html"));
-  }
+  void loadRenderer(mainWindow);
 
   return mainWindow;
 };
