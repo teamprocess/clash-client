@@ -1,12 +1,17 @@
 import { useCallback, useEffect, useRef } from "react";
 import type { ActiveApp } from "@/entities/app-monitor";
-import { matchMonitoredApp, recordApi, recordQueryKeys } from "@/entities/record";
+import {
+  matchMonitoredApp,
+  type MonitoredApp,
+  recordApi,
+  recordQueryKeys,
+} from "@/entities/record";
 import { getErrorMessage, queryClient } from "@/shared/lib";
 
 type ServerSessionState =
-  | { type: "NONE"; appName: null }
-  | { type: "TASK"; appName: null }
-  | { type: "ACTIVITY"; appName: string | null };
+  | { type: "NONE"; appId: null }
+  | { type: "TASK"; appId: null }
+  | { type: "ACTIVITY"; appId: MonitoredApp | null };
 
 const SYNC_POLL_MS = 15000;
 const APP_CHANGE_DEBOUNCE_MS = 5000;
@@ -15,16 +20,16 @@ const parseServerSession = (
   data: Awaited<ReturnType<typeof recordApi.getCurrentRecord>>["data"]
 ) => {
   if (!data) {
-    return { type: "NONE", appName: null } satisfies ServerSessionState;
+    return { type: "NONE", appId: null } satisfies ServerSessionState;
   }
 
   if (data.recordType === "TASK") {
-    return { type: "TASK", appName: null } satisfies ServerSessionState;
+    return { type: "TASK", appId: null } satisfies ServerSessionState;
   }
 
   return {
     type: "ACTIVITY",
-    appName: data.activity?.appName ?? null,
+    appId: data.activity?.appId ?? null,
   } satisfies ServerSessionState;
 };
 
@@ -34,8 +39,8 @@ export const useActivityRecordSync = (
   isFrontmostMonitoredApp: boolean
 ) => {
   const pendingTargetsRef = useRef<Array<string | null>>([]);
-  const monitoredAppsRef = useRef<string[] | null>(null);
-  const serverSessionRef = useRef<ServerSessionState>({ type: "NONE", appName: null });
+  const monitoredAppsRef = useRef<MonitoredApp[] | null>(null);
+  const serverSessionRef = useRef<ServerSessionState>({ type: "NONE", appId: null });
   const requiresFrontmostToRestartRef = useRef(false);
   const initializedRef = useRef(false);
   const syncingRef = useRef(false);
@@ -73,13 +78,13 @@ export const useActivityRecordSync = (
     try {
       const response = await recordApi.getCurrentRecord();
       if (!response.success) {
-        return { type: "NONE", appName: null };
+        return { type: "NONE", appId: null };
       }
       return parseServerSession(response.data);
     } catch (error) {
       const errorMessage = getErrorMessage(error, "현재 기록 세션 조회에 실패했습니다.");
       console.error("현재 기록 세션 조회 실패:", errorMessage, error);
-      return { type: "NONE", appName: null };
+      return { type: "NONE", appId: null };
     }
   }, []);
 
@@ -89,7 +94,7 @@ export const useActivityRecordSync = (
     return latestSession;
   }, [loadCurrentSession]);
 
-  const normalizeTargetAppName = useCallback((rawAppName: string | null) => {
+  const normalizeTargetAppId = useCallback((rawAppName: string | null) => {
     if (!rawAppName) {
       return null;
     }
@@ -111,7 +116,7 @@ export const useActivityRecordSync = (
         return;
       }
 
-      serverSessionRef.current = { type: "NONE", appName: null };
+      serverSessionRef.current = { type: "NONE", appId: null };
       await invalidateToday();
     } catch (error) {
       const errorMessage = getErrorMessage(error, "개발 활동 기록 중지에 실패했습니다.");
@@ -121,9 +126,9 @@ export const useActivityRecordSync = (
   }, [invalidateToday, refreshServerSession]);
 
   const switchActivitySession = useCallback(
-    async (targetAppName: string) => {
+    async (targetAppId: MonitoredApp) => {
       try {
-        const switchResponse = await recordApi.switchActivityApp({ appName: targetAppName });
+        const switchResponse = await recordApi.switchActivityApp({ appId: targetAppId });
         const switchedSession = switchResponse.data?.session;
         if (
           !switchResponse.success ||
@@ -139,7 +144,7 @@ export const useActivityRecordSync = (
 
         serverSessionRef.current = {
           type: "ACTIVITY",
-          appName: switchedSession.activity.appName,
+          appId: switchedSession.activity.appId,
         };
         await invalidateToday();
       } catch (error) {
@@ -152,11 +157,12 @@ export const useActivityRecordSync = (
   );
 
   const startActivitySession = useCallback(
-    async (targetAppName: string) => {
+    async (targetAppId: MonitoredApp) => {
       try {
         const startResponse = await recordApi.startRecord({
           recordType: "ACTIVITY",
-          appName: targetAppName,
+          taskId: null,
+          appId: targetAppId,
         });
         const startedSession = startResponse.data?.session;
         if (!startResponse.success || !startedSession || startedSession.recordType !== "ACTIVITY") {
@@ -169,7 +175,7 @@ export const useActivityRecordSync = (
 
         serverSessionRef.current = {
           type: "ACTIVITY",
-          appName: startedSession.activity.appName,
+          appId: startedSession.activity.appId,
         };
         await invalidateToday();
       } catch (error) {
@@ -183,7 +189,7 @@ export const useActivityRecordSync = (
 
   const syncServerSession = useCallback(
     async (rawTargetAppName: string | null) => {
-      const targetAppName = normalizeTargetAppName(rawTargetAppName);
+      const targetAppId = normalizeTargetAppId(rawTargetAppName);
       // 서버 최신 세션을 확인 후 공부 중에는 개발 자동 추적이 동작하지 않게 고정
       const serverSession = await refreshServerSession();
       if (serverSession.type === "TASK") {
@@ -198,7 +204,7 @@ export const useActivityRecordSync = (
         return;
       }
 
-      if (targetAppName === null) {
+      if (targetAppId === null) {
         if (serverSession.type !== "ACTIVITY") {
           return;
         }
@@ -208,10 +214,10 @@ export const useActivityRecordSync = (
       }
 
       if (serverSession.type === "ACTIVITY") {
-        if (serverSession.appName === targetAppName) {
+        if (serverSession.appId === targetAppId) {
           return;
         }
-        await switchActivitySession(targetAppName);
+        await switchActivitySession(targetAppId);
         return;
       }
 
@@ -220,12 +226,12 @@ export const useActivityRecordSync = (
         return;
       }
 
-      await startActivitySession(targetAppName);
+      await startActivitySession(targetAppId);
       requiresFrontmostToRestartRef.current = false;
     },
     [
       isFrontmostMonitoredApp,
-      normalizeTargetAppName,
+      normalizeTargetAppId,
       refreshServerSession,
       startActivitySession,
       stopActivitySession,

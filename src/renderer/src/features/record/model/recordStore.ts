@@ -39,7 +39,7 @@ export const useRecordStore = create<RecordStore>((set, get) => ({
         return;
       }
 
-      const response = await recordApi.startRecord({ recordType: "TASK", taskId });
+      const response = await recordApi.startRecord({ recordType: "TASK", taskId, appId: null });
       if (response.success) {
         set({ activeTaskId: taskId, startTime: Date.now(), currentStudyTime: 0 });
         await queryClient.invalidateQueries({ queryKey: recordQueryKeys.today });
