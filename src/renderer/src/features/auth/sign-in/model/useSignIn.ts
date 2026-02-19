@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useQueryClient } from "@tanstack/react-query";
 import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
-import { authApi } from "@/entities/user";
+import { authApi, startUserProfileSyncWindow } from "@/entities/user";
 import { getErrorMessage } from "@/shared/lib";
 
 interface DeepLinkAuthPayload {
@@ -57,6 +57,7 @@ export const useSignIn = () => {
         );
 
         if (result.success) {
+          startUserProfileSyncWindow();
           await queryClient.invalidateQueries({ queryKey: ["user"] });
           navigate("/");
         } else {
