@@ -1,21 +1,39 @@
-import State from "../state/State";
 import * as S from "./RivalCard.style";
-import type { Status } from "../state/State.style";
+import type { UserStatus } from "../../../model/useRivalContainer";
 
 type Props = {
   profileSrc: string;
+  appIconSrc: string;
   name: string;
-  status: Status;
+  status: UserStatus;
+  time: string;
+  appName: string;
 };
 
-export default function RivalCard({ profileSrc, name, status }: Props) {
+const statusLabelMap: Record<UserStatus, string> = {
+  ONLINE: "온라인",
+  OFFLINE: "오프라인",
+  AWAY: "자리비움",
+};
+
+export default function RivalCard({ profileSrc, appIconSrc, name, status, time, appName }: Props) {
   return (
     <S.RivalBox>
-      <S.RivalInfo>
-        <S.RivalProfileImg src={profileSrc} alt="라이벌 프로필" />
-        <S.NameText>{name}</S.NameText>
-        <State status={status} />
-      </S.RivalInfo>
+      <S.Left>
+        <S.ProfileImg src={profileSrc} alt="라이벌 프로필" />
+        <S.NameStatus>
+          <S.Name>{name}</S.Name>
+          <S.StatusBadge $status={status}>{statusLabelMap[status]}</S.StatusBadge>
+        </S.NameStatus>
+      </S.Left>
+
+      <S.Right>
+        <S.AppRow>
+          <S.AppIcon src={appIconSrc} alt={`${appName} 아이콘`} />
+          <S.AppName>{appName}</S.AppName>
+        </S.AppRow>
+        <S.Time>{time}</S.Time>
+      </S.Right>
     </S.RivalBox>
   );
 }

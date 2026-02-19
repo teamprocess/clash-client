@@ -1,13 +1,7 @@
+import { useMemo } from "react";
 import * as S from "./GithubInfo.style";
-import CommitImg from "@/pages/profile/assets/Commit.svg?url";
-import IssueImg from "@/pages/profile/assets/Issue.svg?url";
-import PullRequestsImg from "@/pages/profile/assets/PullRequests.svg?url";
-import DateImg from "@/pages/profile/assets/Date.svg?url";
-import FireImg from "@/pages/profile/assets/Fire.svg?url";
-import CodeImg from "@/pages/profile/assets/Code.svg?url";
-import ReviewImg from "@/pages/profile/assets/Review.svg?url";
 
-type GithubInfoProps = {
+export type GithubInfoProps = {
   dateText?: string;
   totalContributions?: number;
   commits?: number;
@@ -30,24 +24,22 @@ export const GithubInfo = ({
   dailyAddedLines = 420,
   dailyDeletedLines = 180,
 }: GithubInfoProps) => {
-  const stats = [
-    { key: "commits", icon: CommitImg, alt: "커밋", count: commits, label: "Commits" },
-    { key: "issues", icon: IssueImg, alt: "이슈", count: issues, label: "Issues" },
-    {
-      key: "prs",
-      icon: PullRequestsImg,
-      alt: "풀리퀘",
-      count: pullRequests,
-      label: "Pull requests",
-    },
-    { key: "reviews", icon: ReviewImg, alt: "리뷰", count: reviews, label: "Reviews" },
-  ] as const;
+  const stats = useMemo(
+    () =>
+      [
+        { key: "commits", Icon: S.CommitIcon, count: commits, label: "Commits" },
+        { key: "issues", Icon: S.IssueIcon, count: issues, label: "Issues" },
+        { key: "prs", Icon: S.PullRequestsIcon, count: pullRequests, label: "Pull requests" },
+        { key: "reviews", Icon: S.ReviewIcon, count: reviews, label: "Reviews" },
+      ] as const,
+    [commits, issues, pullRequests, reviews]
+  );
 
   return (
     <S.ActiveContainer>
       <S.Title>
         <S.Date>
-          <S.Icon src={DateImg} alt="날짜" />
+          <S.DateIcon />
           <S.DateText>{dateText}</S.DateText>
         </S.Date>
 
@@ -61,7 +53,7 @@ export const GithubInfo = ({
         <S.Github>
           {stats.map(item => (
             <S.Stat key={item.key}>
-              <S.StatIcon src={item.icon} alt={item.alt} />
+              <item.Icon />
               <S.StatTextGroup>
                 <S.StatCount>{item.count}</S.StatCount>
                 <S.StatLabel>{item.label}</S.StatLabel>
@@ -72,7 +64,7 @@ export const GithubInfo = ({
 
         <S.Info>
           <S.MetaRow>
-            <S.MetaIcon src={FireImg} alt="최다 커밋 레포지토리" />
+            <S.FireIcon />
             <S.MetaText>
               <S.MetaLabel>최다 커밋 레포지토리</S.MetaLabel>
               <S.MetaValue>{topRepoName}</S.MetaValue>
@@ -82,7 +74,7 @@ export const GithubInfo = ({
           <S.HDivider />
 
           <S.MetaRow>
-            <S.MetaIcon src={CodeImg} alt="하루 동안 변경 라인" />
+            <S.CodeIcon />
             <S.MetaText>
               <S.MetaLabel>하루 동안</S.MetaLabel>
               <S.Lines>

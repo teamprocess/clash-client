@@ -1,14 +1,18 @@
 import { useMemo, useState } from "react";
 import * as S from "./ItemPanel.style";
-import MypageProfile from "@/pages/profile/assets/MypageProfile.png";
 import { NameplateModal, NameplateModalContent } from "./nameplate-modal/NameplateModal";
 
-type ItemCategory = "all" | "badge" | "background" | "nameplate";
+export type ItemPreviewPayload =
+  | { kind: "none" }
+  | { kind: "background"; accentColor?: string; bgImageUrl?: string }
+  | { kind: "badge"; accentColor?: string; bgImageUrl?: string }
+  | { kind: "nameplate"; accentColor?: string; bgImageUrl?: string };
+
+export type ItemCategory = "all" | "badge" | "background" | "nameplate";
 
 type BaseItem = {
   id: string;
   title: string;
-  category: Exclude<ItemCategory, "all">;
   accentColor?: string;
   bgImageUrl?: string;
 };
@@ -16,13 +20,15 @@ type BaseItem = {
 type BadgeItem = BaseItem & { category: "badge" };
 type BackgroundItem = BaseItem & { category: "background" };
 type NameplateItem = BaseItem & { category: "nameplate" };
+
 type Item = BadgeItem | BackgroundItem | NameplateItem;
 
-export type ItemPreviewPayload =
-  | { kind: "none" }
-  | { kind: "background"; accentColor?: string; bgImageUrl?: string }
-  | { kind: "badge"; accentColor?: string; bgImageUrl?: string }
-  | { kind: "nameplate"; accentColor?: string; bgImageUrl?: string };
+type CSSVars = React.CSSProperties & Record<`--${string}`, string>;
+
+export type ItemPanelProps = {
+  onPreviewChange?: (payload: ItemPreviewPayload) => void;
+  onStartEdit?: () => void;
+};
 
 const MOCK_ITEMS: Item[] = [
   { id: "bg-1", category: "background", title: "상품명입니다.", accentColor: "#2F547B" },
@@ -48,13 +54,6 @@ const pillLabel: Record<Exclude<ItemCategory, "all">, string> = {
   nameplate: "이름표",
 };
 
-type ItemPanelProps = {
-  onPreviewChange?: (payload: ItemPreviewPayload) => void;
-  onStartEdit?: () => void;
-};
-
-type CSSVars = React.CSSProperties & Record<`--${string}`, string>;
-
 export const ItemPanel = ({ onPreviewChange, onStartEdit }: ItemPanelProps) => {
   const [filter, setFilter] = useState<ItemCategory>("all");
   const [selectedId, setSelectedId] = useState<string | null>(null);
@@ -65,9 +64,7 @@ export const ItemPanel = ({ onPreviewChange, onStartEdit }: ItemPanelProps) => {
     return MOCK_ITEMS.filter(i => i.category === filter);
   }, [filter]);
 
-  const clearPreview = () => {
-    onPreviewChange?.({ kind: "none" });
-  };
+  const clearPreview = () => onPreviewChange?.({ kind: "none" });
 
   const emitPreview = (item: Item) => {
     const payload: ItemPreviewPayload =
@@ -86,9 +83,7 @@ export const ItemPanel = ({ onPreviewChange, onStartEdit }: ItemPanelProps) => {
     setIsNameplateModalOpen(true);
   };
 
-  const closeNameplateModal = () => {
-    setIsNameplateModalOpen(false);
-  };
+  const closeNameplateModal = () => setIsNameplateModalOpen(false);
 
   const handleCardClick = (item: Item) => {
     setSelectedId(item.id);
@@ -151,7 +146,7 @@ export const ItemPanel = ({ onPreviewChange, onStartEdit }: ItemPanelProps) => {
                     {item.category === "badge" && (
                       <S.ThumbBadgeCard>
                         <S.BadgeLeftRing style={styleVars}>
-                          <S.BadgeAvatar src={MypageProfile} alt="profile" />
+                          <S.BadgeAvatar alt="profile" />
                         </S.BadgeLeftRing>
 
                         <S.BadgeRight>
@@ -165,17 +160,17 @@ export const ItemPanel = ({ onPreviewChange, onStartEdit }: ItemPanelProps) => {
                       <>
                         <S.ThumbName>
                           <S.NameSmallRow>
-                            <S.NameSmallAvatar src={MypageProfile} alt="" />
+                            <S.NameSmallAvatar alt="" />
                             <S.NameSmallBar />
                           </S.NameSmallRow>
 
                           <S.NameMainRow>
-                            <S.NameMainAvatar src={MypageProfile} alt="" style={styleVars} />
+                            <S.NameMainAvatar alt="" style={styleVars} />
                             <S.NameMainBar style={styleVars} />
                           </S.NameMainRow>
 
                           <S.NameSmallRow>
-                            <S.NameSmallAvatar src={MypageProfile} alt="" />
+                            <S.NameSmallAvatar alt="" />
                             <S.NameSmallBar />
                           </S.NameSmallRow>
                         </S.ThumbName>

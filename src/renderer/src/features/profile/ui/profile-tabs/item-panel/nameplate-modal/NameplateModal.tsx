@@ -1,10 +1,5 @@
+import React from "react";
 import * as S from "./NameplateModal.style";
-import CloseIcon from "./../../../../assets/Close.svg?url";
-import ProfileImg from "./../../../../assets/RivalProfile.png";
-import FirstFrameIcon from "./../../../../assets/FirstFrame.svg?url";
-import SecondFrameIcon from "./../../../../assets/SecondFrame.svg?url";
-import ThirdFrameIcon from "./../../../../assets/ThirdFrame.svg?url";
-import MyPageProfileImg from "./../../../../assets/MypageProfile.png";
 
 type NameplateModalProps = {
   open: boolean;
@@ -18,7 +13,6 @@ type TopRanker = {
   rank: 1 | 2 | 3;
   name: string;
   completed: number;
-  profileImage?: string;
 };
 
 type Ranker = {
@@ -26,27 +20,20 @@ type Ranker = {
   rank: number;
   name: string;
   completed: number;
-  profileImage?: string;
 };
 
 const TOP3: TopRanker[] = [
-  { id: 1, rank: 2, name: "조상철", completed: 3, profileImage: ProfileImg },
-  { id: 2, rank: 1, name: "조상철", completed: 4, profileImage: ProfileImg },
-  { id: 3, rank: 3, name: "조상철", completed: 2, profileImage: ProfileImg },
+  { id: 1, rank: 2, name: "조상철", completed: 3 },
+  { id: 2, rank: 1, name: "조상철", completed: 4 },
+  { id: 3, rank: 3, name: "조상철", completed: 2 },
 ];
 
 const LIST: Ranker[] = [
-  { id: 4, rank: 4, name: "박승아", completed: 4, profileImage: ProfileImg },
-  { id: 5, rank: 5, name: "박승아", completed: 4, profileImage: ProfileImg },
-  { id: 6, rank: 6, name: "박승아", completed: 4, profileImage: ProfileImg },
-  { id: 7, rank: 7, name: "박승아", completed: 4, profileImage: ProfileImg },
+  { id: 4, rank: 4, name: "박승아", completed: 4 },
+  { id: 5, rank: 5, name: "박승아", completed: 4 },
+  { id: 6, rank: 6, name: "박승아", completed: 4 },
+  { id: 7, rank: 7, name: "박승아", completed: 4 },
 ];
-
-const getFrameByRank = (rank: 1 | 2 | 3) => {
-  if (rank === 1) return FirstFrameIcon;
-  if (rank === 2) return SecondFrameIcon;
-  return ThirdFrameIcon;
-};
 
 type NameplateModalContentProps = {
   onClose: () => void;
@@ -67,8 +54,8 @@ export const NameplateModalContent = ({ onClose, onSave }: NameplateModalContent
           {TOP3.map(u => (
             <S.Top3Card key={u.id}>
               <S.FrameWrap $rank={u.rank}>
-                <S.FrameImg src={getFrameByRank(u.rank)} alt="" />
-                <S.Top3Profile $rank={u.rank} src={u.profileImage || ProfileImg} alt="profile" />
+                <S.FrameImg $rank={u.rank} alt="" />
+                <S.Top3Profile $rank={u.rank} alt="profile" />
               </S.FrameWrap>
 
               <S.Top3Info>
@@ -86,7 +73,7 @@ export const NameplateModalContent = ({ onClose, onSave }: NameplateModalContent
             <S.ListItem key={u.id}>
               <S.ListLeft>
                 <S.RankNum>{u.rank}</S.RankNum>
-                <S.UserAvatar src={u.profileImage || ProfileImg} alt="profile" />
+                <S.UserAvatar alt="profile" />
                 <S.UserPill>
                   <S.UserName>{u.name}</S.UserName>
                   <S.ListRight>
@@ -102,19 +89,19 @@ export const NameplateModalContent = ({ onClose, onSave }: NameplateModalContent
       <S.Right>
         <S.RightTop>
           <S.RightRow>
-            <S.SmallAvatarImg src={MyPageProfileImg} alt="profile" $dim />
+            <S.SmallAvatarImg alt="profile" $dim />
             <S.LongPill $dim />
           </S.RightRow>
 
           <S.RightMainRow>
             <S.MainCard>
-              <S.BigAvatarImg src={MyPageProfileImg} alt="profile" />
+              <S.BigAvatarImg alt="profile" />
               <S.MainPill />
             </S.MainCard>
           </S.RightMainRow>
 
           <S.RightRow>
-            <S.SmallAvatarImg src={MyPageProfileImg} alt="profile" $dim />
+            <S.SmallAvatarImg alt="profile" $dim />
             <S.ShortPill $dim />
           </S.RightRow>
         </S.RightTop>
@@ -141,7 +128,7 @@ export const NameplateModal = ({ open, onClose, onSave, children }: NameplateMod
     <S.Overlay onClick={onClose}>
       <S.Modal onClick={e => e.stopPropagation()}>
         <S.CloseBtn type="button" onClick={onClose} aria-label="닫기">
-          <img src={CloseIcon} alt="닫기" />
+          <S.CloseIconImg alt="닫기" />
         </S.CloseBtn>
 
         <S.Content>
