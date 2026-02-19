@@ -1,34 +1,47 @@
+export type MonitoredAppId =
+  | "VSCODE"
+  | "WEBSTORM"
+  | "INTELLIJ_IDEA"
+  | "PYCHARM"
+  | "GOLAND"
+  | "PHPSTORM"
+  | "RUBYMINE"
+  | "CLION"
+  | "RIDER"
+  | "ANDROID_STUDIO"
+  | "XCODE";
+
 interface MonitoredAppDefinition {
-  id: string;
+  id: MonitoredAppId;
   name: string;
   aliases: string[];
 }
 
 export interface MonitoredAppInfo {
-  id: string;
+  id: MonitoredAppId;
   name: string;
 }
 
 const MONITORED_APPS: MonitoredAppDefinition[] = [
-  { id: "vscode", name: "VS Code", aliases: ["VS Code", "Code", "Visual Studio Code"] },
-  { id: "webstorm", name: "WebStorm", aliases: ["WebStorm"] },
+  { id: "VSCODE", name: "VS Code", aliases: ["VS Code", "Code", "Visual Studio Code"] },
+  { id: "WEBSTORM", name: "WebStorm", aliases: ["WebStorm"] },
   {
-    id: "intellij-idea",
+    id: "INTELLIJ_IDEA",
     name: "IntelliJ IDEA",
     aliases: ["IntelliJ IDEA", "IntelliJ IDEA Ultimate", "IntelliJ IDEA Community"],
   },
   {
-    id: "pycharm",
+    id: "PYCHARM",
     name: "PyCharm",
     aliases: ["PyCharm", "PyCharm Professional", "PyCharm Community", "PyCharm CE"],
   },
-  { id: "goland", name: "GoLand", aliases: ["GoLand"] },
-  { id: "phpstorm", name: "PhpStorm", aliases: ["PhpStorm"] },
-  { id: "rubymine", name: "RubyMine", aliases: ["RubyMine"] },
-  { id: "clion", name: "CLion", aliases: ["CLion"] },
-  { id: "rider", name: "Rider", aliases: ["Rider"] },
-  { id: "android-studio", name: "Android Studio", aliases: ["Android Studio"] },
-  { id: "xcode", name: "Xcode", aliases: ["Xcode"] },
+  { id: "GOLAND", name: "GoLand", aliases: ["GoLand"] },
+  { id: "PHPSTORM", name: "PhpStorm", aliases: ["PhpStorm"] },
+  { id: "RUBYMINE", name: "RubyMine", aliases: ["RubyMine"] },
+  { id: "CLION", name: "CLion", aliases: ["CLion"] },
+  { id: "RIDER", name: "Rider", aliases: ["Rider"] },
+  { id: "ANDROID_STUDIO", name: "Android Studio", aliases: ["Android Studio"] },
+  { id: "XCODE", name: "Xcode", aliases: ["Xcode"] },
 ];
 
 const isAppNameMatch = (left: string, right: string): boolean => {
@@ -55,7 +68,7 @@ export const resolveMonitoredAppName = (appName: string): string | null => {
 };
 
 // 서버 전송용 앱 id 조회
-export const resolveMonitoredAppId = (appName: string): string | null => {
+export const resolveMonitoredAppId = (appName: string): MonitoredAppId | null => {
   return resolveMonitoredApp(appName)?.id ?? null;
 };
 
