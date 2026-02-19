@@ -1,11 +1,10 @@
 import * as S from "./GithubStreak.style";
 import {
   useProfileGithubStreak,
-  type ProfileCommitDay,
-  type ProfileGithubStreakProps,
+  type GithubStreakProps,
 } from "@/features/profile/model/useProfileTabs";
 
-export const GithubStreak = (props: ProfileGithubStreakProps) => {
+export const GithubStreak = (props: GithubStreakProps) => {
   const { daysForView, getLevel, selectedId, handleGrassClick } = useProfileGithubStreak(props);
 
   return (
@@ -14,7 +13,7 @@ export const GithubStreak = (props: ProfileGithubStreakProps) => {
 
       <S.GrassBox>
         <S.Grid>
-          {daysForView.map((day: ProfileCommitDay) => (
+          {daysForView.map(day => (
             <S.Grass
               key={day.id}
               data-grass-cell="true"
