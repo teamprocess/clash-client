@@ -9,6 +9,18 @@ export interface Task {
 
 export type RecordType = "TASK" | "ACTIVITY";
 export type IsoDateTimeString = string;
+export type MonitoredApp =
+  | "VSCODE"
+  | "WEBSTORM"
+  | "INTELLIJ_IDEA"
+  | "PYCHARM"
+  | "GOLAND"
+  | "PHPSTORM"
+  | "RUBYMINE"
+  | "CLION"
+  | "RIDER"
+  | "ANDROID_STUDIO"
+  | "XCODE";
 
 export interface TaskRecordSession {
   id: number;
@@ -29,7 +41,7 @@ export interface ActivityRecordSession {
   endedAt: IsoDateTimeString | null;
   task: null;
   activity: {
-    appName: string;
+    appId: MonitoredApp;
   };
 }
 
@@ -55,11 +67,17 @@ export interface RecordSettingUpdateRequest {
   breakMinute: number;
 }
 
-export interface RecordStartRequest {
-  recordType?: RecordType;
-  taskId?: number;
-  appName?: string;
-}
+export type RecordStartRequest =
+  | {
+      recordType: "TASK";
+      taskId: number;
+      appId: null;
+    }
+  | {
+      recordType: "ACTIVITY";
+      taskId: null;
+      appId: MonitoredApp;
+    };
 
 export interface RecordStartResponse {
   startedTime: IsoDateTimeString;
@@ -72,7 +90,7 @@ export interface RecordStopResponse {
 }
 
 export interface RecordSwitchActivityAppRequest {
-  appName: string;
+  appId: MonitoredApp;
 }
 
 export interface RecordSwitchActivityAppResponse {
@@ -83,7 +101,7 @@ export interface RecordSwitchActivityAppResponse {
 export type RecordCurrentResponse = RecordSession | null;
 
 export interface RecordMonitoredAppsResponse {
-  apps: string[];
+  apps: MonitoredApp[];
 }
 
 export interface RecordTasksResponse {
