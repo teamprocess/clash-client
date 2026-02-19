@@ -2,6 +2,19 @@ import styled from "styled-components";
 import { font } from "@/shared/config/font";
 import { palette } from "@/shared/config/theme";
 
+import CloseIconSrc from "../../../../assets/close.svg?url";
+import RivalProfileSrc from "../../../../assets/rival-profile.png";
+import FirstFrameSrc from "../../../../assets/first-frame.svg?url";
+import SecondFrameSrc from "../../../../assets/second-frame.svg?url";
+import ThirdFrameSrc from "../../../../assets/third-frame.svg?url";
+import MyPageProfileSrc from "../../../../assets/mypage-profile.png";
+
+const FRAME_SRC: Record<1 | 2 | 3, string> = {
+  1: FirstFrameSrc,
+  2: SecondFrameSrc,
+  3: ThirdFrameSrc,
+};
+
 export const Overlay = styled.div`
   position: fixed;
   inset: 0;
@@ -33,15 +46,18 @@ export const CloseBtn = styled.button`
   align-items: center;
   justify-content: center;
 
-  img {
-    width: 3.125rem;
-    height: 3.125rem;
-    object-fit: contain;
-    opacity: 0.85;
-  }
   &:hover img {
     opacity: 1;
   }
+`;
+
+export const CloseIconImg = styled.img.attrs({
+  src: CloseIconSrc,
+})`
+  width: 3.125rem;
+  height: 3.125rem;
+  object-fit: contain;
+  opacity: 0.85;
 `;
 
 export const Content = styled.div`
@@ -94,7 +110,9 @@ export const FrameWrap = styled.div<{ $rank: 1 | 2 | 3 }>`
   height: ${({ $rank }) => ($rank === 1 ? "5.75rem" : "4.75rem")};
 `;
 
-export const FrameImg = styled.img`
+export const FrameImg = styled.img.attrs<{ $rank: 1 | 2 | 3 }>(props => ({
+  src: FRAME_SRC[props.$rank],
+}))`
   position: absolute;
   inset: 0;
   width: 100%;
@@ -104,7 +122,9 @@ export const FrameImg = styled.img`
   pointer-events: none;
 `;
 
-export const Top3Profile = styled.img<{ $rank: 1 | 2 | 3 }>`
+export const Top3Profile = styled.img.attrs({
+  src: RivalProfileSrc,
+})<{ $rank: 1 | 2 | 3 }>`
   position: absolute;
   z-index: 1;
   width: ${({ $rank }) => ($rank === 1 ? "3.625rem" : "2.875rem")};
@@ -179,7 +199,9 @@ export const UserPill = styled.div`
   gap: 6.875rem;
 `;
 
-export const UserAvatar = styled.img`
+export const UserAvatar = styled.img.attrs({
+  src: RivalProfileSrc,
+})`
   width: 2.875rem;
   height: 2.875rem;
   border-radius: 2rem;
@@ -308,7 +330,9 @@ export const PrimaryBtn = styled.button`
   ${font.label.medium};
 `;
 
-export const SmallAvatarImg = styled.img<{ $dim?: boolean }>`
+export const SmallAvatarImg = styled.img.attrs({
+  src: MyPageProfileSrc,
+})<{ $dim?: boolean }>`
   width: 2.375rem;
   height: 2.375rem;
   border-radius: 50%;
@@ -318,7 +342,9 @@ export const SmallAvatarImg = styled.img<{ $dim?: boolean }>`
   opacity: 30%;
 `;
 
-export const BigAvatarImg = styled.img`
+export const BigAvatarImg = styled.img.attrs({
+  src: MyPageProfileSrc,
+})`
   width: 3.5rem;
   height: 3.5rem;
   border-radius: 50%;

@@ -2,6 +2,83 @@ import styled from "styled-components";
 import { font } from "@/shared/config/font";
 import { palette } from "@/shared/config/theme";
 
+// ✅ 아이콘들은 style.ts에서 관리
+import CommitImg from "../../../assets/commit.svg?url";
+import IssueImg from "../../../assets/issue.svg?url";
+import PullRequestsImg from "../../../assets/pull-requests.svg?url";
+import DateImg from "../../../assets/date.svg?url";
+import FireImg from "../../../assets/fire.svg?url";
+import CodeImg from "../../../assets/code.svg?url";
+import ReviewImg from "../../../assets/review.svg?url";
+
+export const DateIcon = styled.img.attrs({
+  src: DateImg,
+  alt: "날짜",
+})`
+  width: 1.25rem;
+  height: 1.25rem;
+`;
+
+export const CommitIcon = styled.img.attrs({
+  src: CommitImg,
+  alt: "커밋",
+})`
+  width: 1.875rem;
+  height: 1.875rem;
+  opacity: 0.9;
+  flex: 0 0 auto;
+`;
+
+export const IssueIcon = styled.img.attrs({
+  src: IssueImg,
+  alt: "이슈",
+})`
+  width: 1.875rem;
+  height: 1.875rem;
+  opacity: 0.9;
+  flex: 0 0 auto;
+`;
+
+export const PullRequestsIcon = styled.img.attrs({
+  src: PullRequestsImg,
+  alt: "풀리퀘",
+})`
+  width: 1.875rem;
+  height: 1.875rem;
+  opacity: 0.9;
+  flex: 0 0 auto;
+`;
+
+export const ReviewIcon = styled.img.attrs({
+  src: ReviewImg,
+  alt: "리뷰",
+})`
+  width: 1.875rem;
+  height: 1.875rem;
+  opacity: 0.9;
+  flex: 0 0 auto;
+`;
+
+export const FireIcon = styled.img.attrs({
+  src: FireImg,
+  alt: "최다 커밋 레포지토리",
+})`
+  width: 1.25rem;
+  height: 1.25rem;
+  opacity: 0.9;
+  flex: 0 0 auto;
+`;
+
+export const CodeIcon = styled.img.attrs({
+  src: CodeImg,
+  alt: "하루 동안 변경 라인",
+})`
+  width: 1.25rem;
+  height: 1.25rem;
+  opacity: 0.9;
+  flex: 0 0 auto;
+`;
+
 export const ActiveContainer = styled.section`
   width: 100%;
   display: flex;
@@ -20,11 +97,6 @@ export const Date = styled.span`
   display: flex;
   align-items: center;
   gap: 0.5rem;
-`;
-
-export const Icon = styled.img`
-  width: 1.25rem;
-  height: 1.25rem;
 `;
 
 export const DateText = styled.p`
@@ -80,13 +152,6 @@ export const Stat = styled.div`
   min-width: 0;
 `;
 
-export const StatIcon = styled.img`
-  width: 1.875rem;
-  height: 1.875rem;
-  opacity: 0.9;
-  flex: 0 0 auto;
-`;
-
 export const StatTextGroup = styled.div`
   display: flex;
   align-items: center;
@@ -110,10 +175,8 @@ export const Info = styled.div`
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-
   flex: 0 1 15.5rem;
   width: 15.5rem;
-
   min-width: 0;
 `;
 
@@ -122,13 +185,6 @@ export const MetaRow = styled.div`
   align-items: center;
   gap: 0.75rem;
   min-width: 0;
-`;
-
-export const MetaIcon = styled.img`
-  width: 1.25rem;
-  height: 1.25rem;
-  opacity: 0.9;
-  flex: 0 0 auto;
 `;
 
 export const MetaText = styled.div`

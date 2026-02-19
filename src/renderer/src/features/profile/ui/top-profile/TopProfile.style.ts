@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { palette } from "@/shared/config/theme";
 import { font } from "@/shared/config/font";
+import MypageProfileSrc from "../../assets/mypage-profile.png";
 
 export const Banner = styled.div<{ $accent?: string; $bgImage?: string }>`
   width: 100%;
@@ -79,7 +80,10 @@ export const ProfileImgWrap = styled.div<{ $accent?: string; $bgImage?: string }
       : ""}
 `;
 
-export const ProfileImg = styled.img`
+export const ProfileImg = styled.img.attrs(() => ({
+  src: MypageProfileSrc,
+  alt: "프로필",
+}))`
   width: 100%;
   height: 100%;
   object-fit: cover;

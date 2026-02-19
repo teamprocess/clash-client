@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { font } from "@/shared/config/font";
 import { palette } from "@/shared/config/theme";
+import ArrowUrl from "../../../assets/arrow.svg?url";
 
 export const Header = styled.div`
   display: flex;
@@ -16,11 +17,21 @@ export const MonthArrowBtn = styled.button`
   display: grid;
   place-items: center;
   cursor: pointer;
+`;
 
-  img {
-    width: 1.1rem;
-    height: 1.1rem;
-  }
+const ArrowBase = styled.img.attrs({
+  src: ArrowUrl,
+  alt: "",
+})`
+  width: 1.1rem;
+  height: 1.1rem;
+  display: block;
+`;
+
+export const ArrowRightIcon = styled(ArrowBase)``;
+
+export const ArrowLeftIcon = styled(ArrowBase)`
+  transform: rotate(180deg);
 `;
 
 export const Title = styled.div`
@@ -41,7 +52,6 @@ export const Weekdays = styled.div`
 
 export const Weekday = styled.div<{ $sun?: boolean; $sat?: boolean }>`
   ${font.title2.medium};
-
   color: ${({ $sun, $sat, theme }) =>
     $sun ? palette.red[50] : $sat ? palette.blue[50] : theme.label.neutral};
 `;
@@ -80,13 +90,7 @@ export const DayCell = styled.div<{ $level?: 0 | 1 | 2 | 3; $dim?: boolean }>`
   justify-content: center;
   background: ${({ theme }) => theme.background.normal};
 
-  ${({ $dim }) =>
-    $dim
-      ? `
-    background: transparent;
-  `
-      : ""}
-
+  ${({ $dim }) => ($dim ? `background: transparent;` : "")}
   ${({ $dim, $level }) => {
     if ($dim) return "";
     if ($level === 1) return `background: #3DCD5F20;`;

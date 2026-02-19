@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { font } from "@/shared/config/font";
 import { palette } from "@/shared/config/theme";
+import MypageProfile from "../../../assets/mypage-profile.png";
 
 export const Wrapper = styled.section`
   -webkit-app-region: no-drag;
@@ -71,6 +72,7 @@ export const CardButton = styled.button<{ $active: boolean }>`
   outline: none;
   -webkit-tap-highlight-color: transparent;
   border-radius: 1.25rem;
+
   &:focus,
   &:focus-visible,
   &:active,
@@ -78,7 +80,6 @@ export const CardButton = styled.button<{ $active: boolean }>`
     outline: none;
     box-shadow: none;
   }
-  onClickCapture={() => console.log("CAPTURE CLICK", item.id)}
 `;
 
 export const CardInner = styled.div`
@@ -130,7 +131,9 @@ export const BadgeLeftRing = styled.div`
   overflow: hidden;
 `;
 
-export const BadgeAvatar = styled.img`
+export const BadgeAvatar = styled.img.attrs({
+  src: MypageProfile,
+})`
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -178,7 +181,9 @@ export const NameSmallRow = styled.div`
   gap: 0.5rem;
 `;
 
-export const NameSmallAvatar = styled.img`
+export const NameSmallAvatar = styled.img.attrs({
+  src: MypageProfile,
+})`
   width: 1.05rem;
   height: 1.05rem;
   object-fit: cover;
@@ -205,7 +210,9 @@ export const NameMainRow = styled.div`
   box-sizing: border-box;
 `;
 
-export const NameMainAvatar = styled.img`
+export const NameMainAvatar = styled.img.attrs({
+  src: MypageProfile,
+})`
   width: 1.625rem;
   height: 1.625rem;
   border-radius: 1.25rem;
@@ -276,6 +283,7 @@ export const ModalCloseButton = styled.button`
   border: none;
   background: transparent;
   cursor: pointer;
+
   img {
     width: 100%;
     height: 100%;

@@ -1,17 +1,5 @@
 import * as S from "./TopProfile.style";
-import ProfileImg from "../../assets/MypageProfile.png";
-
-type TopProfileProps = {
-  bannerAccentColor?: string;
-  bannerBgImageUrl?: string;
-  badgeAccentColor?: string;
-  badgeBgImageUrl?: string;
-  isEditing?: boolean;
-  onCancel?: () => void;
-  onSave?: () => void;
-  onEditProfile?: () => void;
-  onLogout?: () => void;
-};
+import { TopProfileProps } from "@/features/profile/model/useTopProfile";
 
 export const TopProfile = ({
   bannerAccentColor,
@@ -50,7 +38,7 @@ export const TopProfile = ({
 
       <S.ProfileCard>
         <S.ProfileImgWrap $accent={badgeAccentColor} $bgImage={badgeBgImageUrl}>
-          <S.ProfileImg src={ProfileImg} alt="프로필" />
+          <S.ProfileImg />
         </S.ProfileImgWrap>
 
         <S.UserInfo>
