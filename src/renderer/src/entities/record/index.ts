@@ -1,5 +1,5 @@
 export { recordApi } from "./api/recordApi";
-export { matchMonitoredApp } from "./lib/matchMonitoredApp";
+export { getMonitoredAppLabel, matchMonitoredApp } from "./lib/matchMonitoredApp";
 export {
   recordQueryKeys,
   useRecordTasksQuery,
@@ -7,6 +7,7 @@ export {
 } from "./api/query/useRecord.query";
 export type {
   Task,
+  MonitoredApp,
   IsoDateTimeString,
   RecordType,
   TaskRecordSession,

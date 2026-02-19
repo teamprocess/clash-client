@@ -1,8 +1,14 @@
-import { useState, useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useAppMonitor } from "./useAppMonitor";
 import { useActivityRecordSync } from "@/features/record/model/useActivityRecordSync";
 import { formatDuration } from "@/entities/app-monitor";
-import { matchMonitoredApp, recordApi, useRecordTodayQuery } from "@/entities/record";
+import {
+  getMonitoredAppLabel,
+  matchMonitoredApp,
+  type MonitoredApp,
+  recordApi,
+  useRecordTodayQuery,
+} from "@/entities/record";
 
 export const useSidebarMonitor = () => {
   // Electron 환경 체크
@@ -10,7 +16,7 @@ export const useSidebarMonitor = () => {
 
   const { activeApp } = useAppMonitor();
   const { data: todayResponse } = useRecordTodayQuery();
-  const [monitoredApps, setMonitoredApps] = useState<string[]>([]);
+  const [monitoredApps, setMonitoredApps] = useState<MonitoredApp[]>([]);
   const [frontmostMonitoredApp, setFrontmostMonitoredApp] = useState<string | null>(null);
   const [displayTime, setDisplayTime] = useState("00:00:00");
 
@@ -55,8 +61,8 @@ export const useSidebarMonitor = () => {
       return null;
     }
 
-    const matchedAppName = matchMonitoredApp(activeApp.appName, monitoredApps);
-    if (!matchedAppName) {
+    const matchedAppId = matchMonitoredApp(activeApp.appName, monitoredApps);
+    if (!matchedAppId) {
       return null;
     }
 
@@ -67,7 +73,7 @@ export const useSidebarMonitor = () => {
 
     return {
       ...activeApp,
-      appName: matchedAppName,
+      appName: getMonitoredAppLabel(matchedAppId),
       startTime: activeActivityStartedAt ? new Date(activeActivityStartedAt) : activeApp.startTime,
     };
   }, [activeApp, monitoredApps, isActivityRecording, isTaskRecording, activeActivityStartedAt]);
