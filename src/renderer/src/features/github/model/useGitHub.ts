@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
-import { githubApi } from "@/entities/user";
+import { githubApi, startUserProfileSyncWindow } from "@/entities/user";
 import { getErrorMessage } from "@/shared/lib";
 
 interface DeepLinkAuthPayload {
@@ -99,13 +99,16 @@ export const useGitHub = () => {
         const result = await githubApi.linkOAuth({ code: payload.code });
 
         if (result.success) {
+          startUserProfileSyncWindow();
           setPendingStateState(null);
           clearPendingState();
           setError(null);
+
           await Promise.all([
             queryClient.invalidateQueries({ queryKey: ["user"] }),
             queryClient.invalidateQueries({ queryKey: ["compare"] }),
             queryClient.invalidateQueries({ queryKey: ["transition"] }),
+            queryClient.invalidateQueries({ queryKey: ["active"] }),
           ]);
         } else {
           setError(result.message || "GitHub 계정 연동에 실패했습니다.");

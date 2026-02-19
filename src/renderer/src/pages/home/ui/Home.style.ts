@@ -10,7 +10,7 @@ export const ConnectingContainer = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 0.5rem;
+  gap: 1rem;
 `;
 
 export const GithubIcon = styled(Github)`
@@ -24,7 +24,7 @@ export const FontBox = styled.div`
   flex-direction: column;
   justify-content: center;
   text-align: center;
-  gap: 0.25rem;
+  gap: 0.5rem;
 `;
 
 export const HugeFont = styled.p`
