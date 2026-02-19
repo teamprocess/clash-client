@@ -4,12 +4,14 @@ import { Dialog } from "@/shared/ui";
 import { Skeleton } from "@/shared/ui/skeleton/Skeleton";
 import * as S from "./Home.style";
 import { StreakItem, useActiveQuery, useTransitionQuery } from "@/entities/home";
+import { useGetMyProfile } from "@/entities/user";
 
 const isNotFound = (error: unknown) => axios.isAxiosError(error) && error.response?.status === 404;
 
 export const Home = () => {
   const transitionQuery = useTransitionQuery();
   const activeQuery = useActiveQuery("GITHUB");
+  const { data: user } = useGetMyProfile();
 
   const isChecking = transitionQuery.isPending || activeQuery.isPending;
 
@@ -28,6 +30,7 @@ export const Home = () => {
 
   const isGithubNotReady =
     (transitionQuery.isError && isNotFound(transitionQuery.error)) || !activeStreaks?.length;
+  const isGithubNotLinked = Boolean(user && !user.githubLinked);
 
   if (isGithubNotReady) {
     return (
@@ -36,15 +39,17 @@ export const Home = () => {
         <Skeleton />
         <Skeleton />
         <Skeleton />
-        <Dialog width={21.5} height={21.5} isOpen={true}>
-          <S.ConnectingContainer>
-            <S.GithubIcon />
-            <S.FontBox>
-              <S.HugeFont>깃허브 계정을 연동 중입니다</S.HugeFont>
-              <S.TinyFont>잠시만 기다려주세요.</S.TinyFont>
-            </S.FontBox>
-          </S.ConnectingContainer>
-        </Dialog>
+        {!isGithubNotLinked && (
+          <Dialog width={21.5} height={21.5} isOpen={true}>
+            <S.ConnectingContainer>
+              <S.GithubIcon />
+              <S.FontBox>
+                <S.HugeFont>깃허브 계정을 연동 중입니다</S.HugeFont>
+                <S.TinyFont>잠시만 기다려주세요.</S.TinyFont>
+              </S.FontBox>
+            </S.ConnectingContainer>
+          </Dialog>
+        )}
       </>
     );
   }
