@@ -1,4 +1,4 @@
-export type TopProfileProps = {
+export interface TopProfileProps {
   bannerAccentColor?: string;
   bannerBgImageUrl?: string;
   badgeAccentColor?: string;
@@ -8,7 +8,7 @@ export type TopProfileProps = {
   onSave?: () => void;
   onEditProfile?: () => void;
   onLogout?: () => void;
-};
+}
 
 export const useTopProfile = () => {
   return {};

@@ -13,14 +13,14 @@ export type BadgeState = {
 
 export type EditingKind = "background" | "badge" | null;
 
-export type UseProfileReturn = {
+export interface UseProfileReturn {
   appliedBg: BgState;
   appliedBadge: BadgeState;
   isEditing: boolean;
   handlePreviewChange: (payload: ItemPreviewPayload) => void;
   handleCancel: () => void;
   handleSave: () => void;
-};
+}
 
 export const useProfile = (): UseProfileReturn => {
   const [savedBg, setSavedBg] = useState<BgState>({});
