@@ -106,3 +106,29 @@ export const ErrorText = styled.span`
   margin-top: 0.5rem;
   display: block;
 `;
+
+export const AddRivalsContainer = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+`;
+
+export const WarningContainer = styled.div`
+  width: 100%;
+  height: 100%;
+  border-radius: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: ${({ theme }) => theme.fill.alternative};
+`;
+
+export const WarningText = styled.p<{ $state: number }>`
+  ${({ $state }) => ($state === 1 ? font.body.medium : font.caption.medium)};
+
+  color: ${({ theme }) => theme.label.alternative};
+`;
