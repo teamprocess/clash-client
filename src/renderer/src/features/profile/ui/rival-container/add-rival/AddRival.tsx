@@ -4,6 +4,6 @@ type Props = {
   onClick?: () => void;
 };
 
-export default function AddRival({ onClick }: Props) {
+export function AddRival({ onClick }: Props) {
   return <S.AddBox onClick={onClick}>+ 라이벌 추가하기</S.AddBox>;
 }

@@ -16,7 +16,7 @@ const statusLabelMap: Record<UserStatus, string> = {
   AWAY: "자리비움",
 };
 
-export default function RivalCard({ profileSrc, appIconSrc, name, status, time, appName }: Props) {
+export function RivalCard({ profileSrc, appIconSrc, name, status, time, appName }: Props) {
   return (
     <S.RivalBox>
       <S.Left>
