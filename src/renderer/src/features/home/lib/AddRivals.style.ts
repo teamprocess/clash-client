@@ -1,8 +1,8 @@
 import styled from "styled-components";
 import { font } from "@/shared/config/font";
 import { palette } from "@/shared/config/theme";
-import Profile from "../../assets/home/profile.svg";
-import Checked from "../../assets/home/check-box.svg";
+import Profile from "@/features/home/assets/home/profile.svg";
+import Checked from "@/features/home/assets/home/check-box.svg";
 
 export const ProfileContent = styled.div`
   display: flex;
