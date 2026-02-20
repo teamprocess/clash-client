@@ -10,6 +10,6 @@ const label = {
   away: "자리비움",
 } as const;
 
-export default function StateTag({ status }: Props) {
+export function StateTag({ status }: Props) {
   return <S.StateTag $status={status}>{label[status]}</S.StateTag>;
 }
