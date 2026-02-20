@@ -41,7 +41,11 @@ export const CompetitionPage = () => {
       )}
 
       {getRivalData.modalOpen && (
-        <AddRivalsDialog isOpen={getRivalData.modalOpen} onClose={getRivalData.handleClose} />
+        <AddRivalsDialog
+          isOpen={getRivalData.modalOpen}
+          onClose={getRivalData.handleClose}
+          usingState={"competition"}
+        />
       )}
     </S.Wrapper>
   );
