@@ -1,11 +1,14 @@
 import * as S from "./CompetitionPage.style";
 import { useCompetition } from "@/pages/competition/model/useCompetition";
 import { WithMyCompetition, RivalCompetition } from "@/features/competition";
+import { AddRivalsDialog } from "@/features/home/lib/AddRivals";
+import { useRival } from "@/features/home/model/useRival";
+
 export const CompetitionPage = () => {
   const { myRivalsData, competitionTab, setCompetitionTab } = useCompetition();
+  const getRivalData = useRival();
 
-  const rivalsExist = myRivalsData?.data?.myRivals ?? [];
-  const isEmptyRivals = rivalsExist.length === 0;
+  const isEmptyRivals = (myRivalsData?.data?.myRivals.length ?? 0) === 0;
 
   return (
     <S.Wrapper>
@@ -16,7 +19,14 @@ export const CompetitionPage = () => {
 
         <S.WitchCompete
           $isActive={competitionTab === "RIVAL"}
-          onClick={() => setCompetitionTab("RIVAL")}
+          onClick={() => {
+            if (isEmptyRivals) {
+              setCompetitionTab("ME");
+              getRivalData.handleOpen();
+              return;
+            }
+            setCompetitionTab("RIVAL");
+          }}
         >
           라이벌과의 경쟁
         </S.WitchCompete>
@@ -28,6 +38,10 @@ export const CompetitionPage = () => {
         <S.EmptyText>등록된 라이벌이 없습니다.</S.EmptyText>
       ) : (
         <RivalCompetition data={myRivalsData} />
+      )}
+
+      {getRivalData.modalOpen && (
+        <AddRivalsDialog isOpen={getRivalData.modalOpen} onClose={getRivalData.handleClose} />
       )}
     </S.Wrapper>
   );
