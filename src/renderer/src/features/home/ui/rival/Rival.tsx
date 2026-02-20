@@ -5,7 +5,7 @@ import { useRival } from "@/features/home/model/useRival";
 import { AddRivalsDialog } from "@/features/home/lib/AddRivals";
 
 export const Rival = () => {
-  const getRivalData = useRival();
+  const rival = useRival();
 
   return (
     <S.RivalContainer>
@@ -20,11 +20,11 @@ export const Rival = () => {
       </S.TitleBox>
 
       <S.RivalBox>
-        {getRivalData.rivalsData?.myRivals.map(user => (
-          <MyRivalUsers key={user.username} user={user} getStatus={getRivalData.getStatus} />
+        {rival.rivalsData?.myRivals.map(user => (
+          <MyRivalUsers key={user.username} user={user} getStatus={rival.getStatus} />
         ))}
-        {(getRivalData.rivalsData?.myRivals.length ?? 0) < 4 && (
-          <S.ProfileContainer onClick={getRivalData.handleOpen} style={{ cursor: "pointer" }}>
+        {(rival.rivalsData?.myRivals.length ?? 0) < 4 && (
+          <S.ProfileContainer onClick={rival.handleOpen} style={{ cursor: "pointer" }}>
             <S.AddRivalBox>
               <S.PlusIcon />
               <S.AddRivalText>버튼을 눌러 라이벌을 추가할 수 있어요.</S.AddRivalText>
@@ -33,11 +33,12 @@ export const Rival = () => {
         )}
       </S.RivalBox>
 
-      {getRivalData.modalOpen && (
+      {rival.modalOpen && (
         <AddRivalsDialog
-          isOpen={getRivalData.modalOpen}
-          onClose={getRivalData.handleClose}
-          usingState={"home"}
+          isOpen={rival.modalOpen}
+          onClose={rival.handleClose}
+          usingState="home"
+          rival={rival}
         />
       )}
     </S.RivalContainer>
