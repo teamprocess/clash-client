@@ -1,28 +1,34 @@
 import * as S from "./CompetitionPage.style";
 import { useCompetition } from "@/pages/competition/model/useCompetition";
 import { WithMyCompetition, RivalCompetition } from "@/features/competition";
-
 export const CompetitionPage = () => {
-  const { competition } = useCompetition();
+  const { myRivalsData, competitionTab, setCompetitionTab } = useCompetition();
+
+  const rivalsExist = myRivalsData?.data?.myRivals ?? [];
+  const isEmptyRivals = rivalsExist.length === 0;
 
   return (
     <S.Wrapper>
       <S.CompetitionTopBar>
-        <S.WitchCompete
-          $isActive={competition.competitionTab === "ME"}
-          onClick={() => competition.setCompetitionTab("ME")}
-        >
+        <S.WitchCompete $isActive={competitionTab === "ME"} onClick={() => setCompetitionTab("ME")}>
           나와의 경쟁
         </S.WitchCompete>
 
         <S.WitchCompete
-          $isActive={competition.competitionTab === "RIVAL"}
-          onClick={() => competition.setCompetitionTab("RIVAL")}
+          $isActive={competitionTab === "RIVAL"}
+          onClick={() => setCompetitionTab("RIVAL")}
         >
           라이벌과의 경쟁
         </S.WitchCompete>
       </S.CompetitionTopBar>
-      {competition.competitionTab === "ME" ? <WithMyCompetition /> : <RivalCompetition />}
+
+      {competitionTab === "ME" ? (
+        <WithMyCompetition />
+      ) : isEmptyRivals ? (
+        <S.EmptyText>등록된 라이벌이 없습니다.</S.EmptyText>
+      ) : (
+        <RivalCompetition data={myRivalsData} />
+      )}
     </S.Wrapper>
   );
 };
