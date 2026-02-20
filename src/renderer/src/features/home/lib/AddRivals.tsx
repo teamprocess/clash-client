@@ -27,9 +27,6 @@ export const AddRivalsDialog = ({ isOpen, onClose, usingState, rival }: AddRival
         style={{ margin: "1rem 0" }}
         value={rival.searchText}
         onChange={(e: React.ChangeEvent<HTMLInputElement>) => rival.setSearchText(e.target.value)}
-        onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
-          if (e.key === "Enter") rival.applySearch();
-        }}
       />
 
       <S.UserChoiceContainer>
@@ -54,7 +51,7 @@ export const AddRivalsDialog = ({ isOpen, onClose, usingState, rival }: AddRival
 
       <S.BottomBox>
         <S.ButtonBox>
-          <S.CloseButton onClick={rival.handleSelectClose}>취소</S.CloseButton>
+          <S.CloseButton onClick={rival.handleSelectClose}>초기화</S.CloseButton>
 
           <S.OkayButton onClick={rival.handleRivalCreate}>확인</S.OkayButton>
           {rival.error && <S.ErrorText>{rival.error}</S.ErrorText>}
