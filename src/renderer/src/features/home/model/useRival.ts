@@ -69,6 +69,12 @@ export const useRival = () => {
   const handleOpen = () => setModalOpen(true);
 
   const handleClose = () => {
+    setModalOpen(false);
+    setRivalSelectedId([]);
+    resetSearch();
+  };
+
+  const handleSelectClose = () => {
     setRivalSelectedId([]);
     resetSearch();
   };
@@ -116,6 +122,7 @@ export const useRival = () => {
     modalOpen,
     setModalOpen,
     handleOpen,
+    handleSelectClose,
     handleClose,
     rivalSelectedId,
     handleUserSelect,
