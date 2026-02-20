@@ -2,6 +2,7 @@ import { Dialog } from "@/shared/ui";
 import * as S from "./AddRivals.style";
 import { useRival } from "@/features/home/model/useRival";
 import { SearchInput } from "@/shared/ui/search-input";
+import React from "react";
 
 interface AddRivalsDialogProps {
   isOpen: boolean;
@@ -33,9 +34,16 @@ export const AddRivalsDialog = ({ isOpen, onClose, usingState }: AddRivalsDialog
             variant={"light"}
             fullWidth={true}
             style={{ margin: "1rem 0" }}
+            value={getRivalData.searchText}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+              getRivalData.setSearchText(e.target.value)
+            }
+            onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
+              if (e.key === "Enter") getRivalData.applySearch();
+            }}
           />
           <S.UserChoiceContainer>
-            {getRivalData.userList?.users.map(user => (
+            {getRivalData.filteredUsers.map(user => (
               <S.UserChoiceBox
                 key={user.id}
                 $isSelected={getRivalData.rivalSelectedId.includes(user.id)}
@@ -97,9 +105,16 @@ export const AddRivalsDialog = ({ isOpen, onClose, usingState }: AddRivalsDialog
             variant={"light"}
             fullWidth={true}
             style={{ margin: "1rem 0" }}
+            value={getRivalData.searchText}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+              getRivalData.setSearchText(e.target.value)
+            }
+            onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
+              if (e.key === "Enter") getRivalData.applySearch();
+            }}
           />
           <S.UserChoiceContainer>
-            {getRivalData.userList?.users.map(user => (
+            {getRivalData.filteredUsers?.map(user => (
               <S.UserChoiceBox
                 key={user.id}
                 $isSelected={getRivalData.rivalSelectedId.includes(user.id)}

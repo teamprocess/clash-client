@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useMyRivalsQuery, MyRivalsRequest, MyRivalsResponse } from "@/entities/competition";
 import {
   useRivalListQuery,
@@ -45,11 +45,32 @@ export const useRival = () => {
 
   const [modalOpen, setModalOpen] = useState(false);
 
+  const [searchText, setSearchText] = useState("");
+  const [appliedSearchText, setAppliedSearchText] = useState("");
+
+  const applySearch = () => setAppliedSearchText(searchText.trim());
+  const resetSearch = () => {
+    setSearchText("");
+    setAppliedSearchText("");
+  };
+
+  const filteredUsers = useMemo(() => {
+    const users = userList?.users ?? [];
+    const q = appliedSearchText.trim().toLowerCase();
+    if (!q) return users;
+
+    return users.filter(u => {
+      const name = (u.name ?? "").toLowerCase();
+      const username = (u.username ?? "").toLowerCase();
+      return name.includes(q) || username.includes(q);
+    });
+  }, [userList?.users, appliedSearchText]);
+
   const handleOpen = () => setModalOpen(true);
 
   const handleClose = () => {
-    setModalOpen(false);
     setRivalSelectedId([]);
+    resetSearch();
   };
 
   const [rivalSelectedId, setRivalSelectedId] = useState<number[]>([]);
@@ -100,5 +121,9 @@ export const useRival = () => {
     handleUserSelect,
     handleRivalCreate,
     error,
+    searchText,
+    setSearchText,
+    applySearch,
+    filteredUsers,
   };
 };
