@@ -1,10 +1,11 @@
 import * as S from "./Active.style";
 import { ActiveLineChart } from "@/features/home/model/ActiveChart";
 import { toLineChartData } from "@/features/home/model/lineChartData";
-import { useMemo, useRef } from "react";
+import { useRef } from "react";
 import { createPortal } from "react-dom";
 import { ActiveResponse } from "@/entities/home";
 import { useActive } from "@/features/home/model/useActive";
+import { formatChartDateData } from "@/shared/lib/formatChartDateData";
 
 interface ActiveProps {
   activeData: ActiveResponse | null;
@@ -15,23 +16,6 @@ export const Active = ({ activeData }: ActiveProps) => {
   const active = useActive(grassRef, activeData);
 
   const chartData = toLineChartData(active.variations);
-
-  const fullChartData = useMemo(() => {
-    const now = new Date();
-    const currentMonth = now.getMonth() + 1;
-
-    const fullMonths = Array.from({ length: 12 }, (_, i) => {
-      const month = currentMonth - 11 + i;
-      return month <= 0 ? month + 12 : month;
-    });
-
-    const values = fullMonths.map(month => {
-      const index = chartData.data.labels.indexOf(month);
-      return index !== -1 ? Math.round(Number(chartData.data.values[index])) : 0;
-    });
-
-    return { labels: fullMonths, values };
-  }, [chartData]);
 
   return (
     <>
@@ -72,7 +56,7 @@ export const Active = ({ activeData }: ActiveProps) => {
           <S.StreakBox>
             <S.StreakTitle>Contributions 변화 추이</S.StreakTitle>
             <S.ChartWrapper>
-              <ActiveLineChart data={fullChartData} />
+              <ActiveLineChart data={formatChartDateData(chartData)} />
             </S.ChartWrapper>
           </S.StreakBox>
         </S.StreakContainer>
