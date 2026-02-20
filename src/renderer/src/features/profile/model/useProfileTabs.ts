@@ -2,10 +2,10 @@ import { useEffect, useMemo, useState } from "react";
 
 export type CommitDay = { id: number | string; count: number };
 
-export type GithubStreakProps = {
+export interface GithubStreakProps {
   commitDays?: CommitDay[];
   getLevel?: (count: number) => number;
-};
+}
 
 const grass_counts: number[] = [
   0, 1, 2, 3, 0, 4, 7, 1, 0, 3, 2, 0, 8, 4, 2, 1, 0, 7, 3, 0, 4, 0, 2, 3, 1, 0, 9, 4, 1, 0, 4, 2, 0,
