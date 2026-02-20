@@ -34,3 +34,8 @@ export const WitchCompete = styled.button<{ $isActive: boolean }>`
   color: ${({ $isActive, theme }) => ($isActive ? theme.label.normal : theme.label.assistive)};
   cursor: pointer;
 `;
+
+export const EmptyText = styled.p`
+  ${font.headline2.medium}
+  color: ${({ theme }) => theme.label.neutral};
+`;

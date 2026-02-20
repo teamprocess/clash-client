@@ -2,9 +2,14 @@ import * as S from "./MyRivals.style";
 import { UserStatus, getStatus } from "@/features/competition/model/useMyRivals";
 import { useMyRivals } from "@/features/competition/model/useMyRivals";
 import { formatTime } from "@/shared/lib";
+import { MyRivalsResponse } from "@/entities/competition";
 
-export const MyRivals = () => {
-  const { myRivals } = useMyRivals();
+interface MyRivalsProps {
+  data: MyRivalsResponse;
+}
+
+export const MyRivals = (data: MyRivalsProps) => {
+  const { myRivals } = useMyRivals(data);
 
   return (
     <S.ListContent>
