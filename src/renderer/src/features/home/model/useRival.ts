@@ -46,17 +46,14 @@ export const useRival = () => {
   const [modalOpen, setModalOpen] = useState(false);
 
   const [searchText, setSearchText] = useState("");
-  const [appliedSearchText, setAppliedSearchText] = useState("");
 
-  const applySearch = () => setAppliedSearchText(searchText.trim());
   const resetSearch = () => {
     setSearchText("");
-    setAppliedSearchText("");
   };
 
   const filteredUsers = useMemo(() => {
     const users = userList?.users ?? [];
-    const q = appliedSearchText.trim().toLowerCase();
+    const q = searchText.trim().toLowerCase();
     if (!q) return users;
 
     return users.filter(u => {
@@ -64,7 +61,7 @@ export const useRival = () => {
       const username = (u.username ?? "").toLowerCase();
       return name.includes(q) || username.includes(q);
     });
-  }, [userList?.users, appliedSearchText]);
+  }, [userList?.users, searchText]);
 
   const handleOpen = () => setModalOpen(true);
 
@@ -129,7 +126,6 @@ export const useRival = () => {
     error,
     searchText,
     setSearchText,
-    applySearch,
     filteredUsers,
   };
 };
