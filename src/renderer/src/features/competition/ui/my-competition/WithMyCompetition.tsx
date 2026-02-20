@@ -5,6 +5,7 @@ import { toLineChartData } from "@/features/competition/model/my-compete-chart/M
 import { MyCompetitionLineChart } from "@/features/competition/model/my-compete-chart/MyCompetitionLineChart";
 import { CompareStandard, GrowthRateStandard } from "@/entities/competition";
 import { Select } from "@/shared/ui/select";
+import { formatTime } from "@/shared/lib";
 
 export const WithMyCompetition = () => {
   const {
@@ -86,7 +87,7 @@ export const WithMyCompetition = () => {
                     <S.RecordIcon />
                     <S.ExplainText>학습시간</S.ExplainText>
                   </S.ImpressiveBox>
-                  <S.DataText>{oneDecimal(compareData?.studyTime)} 시간</S.DataText>
+                  <S.DataText>{formatTime(oneDecimal(compareData?.studyTime))}</S.DataText>
                 </S.DataBoxing>
               </S.GridBox>
 
@@ -138,8 +139,9 @@ export const WithMyCompetition = () => {
                     <S.ExplainText>학습시간</S.ExplainText>
                   </S.ImpressiveBox>
                   <S.GrowthRateBox>
-                    <S.DataText>{oneDecimal(todayData?.studyTime)} 시간</S.DataText>
+                    <S.DataText>{formatTime(oneDecimal(todayData?.studyTime))}</S.DataText>
                     <GrowthRate
+                      studyState={true}
                       yesterday={oneDecimal(compareData?.studyTime)}
                       today={oneDecimal(todayData?.studyTime)}
                     />
