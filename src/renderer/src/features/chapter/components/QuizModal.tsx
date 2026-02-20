@@ -21,13 +21,14 @@ export const QuizModal = ({
 }: QuizModalProps) => {
   const {
     state,
+    error,
     questions,
     currentQuestion,
     selectedChoiceId,
     handleSelectChoice,
     handleConfirm,
     handleNextOrClose,
-    resetState,
+    handleRestart,
     handleClose,
   } = useQuiz({
     mission: currentMission,
@@ -40,10 +41,11 @@ export const QuizModal = ({
       <Dialog width={25} height={34} isOpen={isOpen} onClose={handleClose} gap={6.5}>
         <QuizResult
           isFinal
-          isPassed={state.correctCount >= 4}
+          isPassed={questions.length > 0 && state.correctCount === questions.length}
           correctCount={state.correctCount}
           total={questions.length}
-          onRestart={resetState}
+          errorMessage={error}
+          onRestart={handleRestart}
           onClose={handleClose}
         />
       </Dialog>
@@ -107,6 +109,12 @@ export const QuizModal = ({
           >
             선택 완료하기
           </Button>
+          {error && <S.ErrorMessage>{error}</S.ErrorMessage>}
+          {error && (
+            <Button variant="secondary" size="md" onClick={handleRestart} fullWidth>
+              미션 다시 시작하기
+            </Button>
+          )}
         </S.ButtonGroup>
       </S.ModalBody>
     </Dialog>

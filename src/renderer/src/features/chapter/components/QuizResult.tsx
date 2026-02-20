@@ -9,6 +9,7 @@ interface QuizResultProps {
   total: number;
   explanation?: string;
   correctCount?: number;
+  errorMessage?: string | null;
   onNext?: () => void;
   onRestart?: () => void;
   onClose?: () => void;
@@ -22,6 +23,7 @@ export const QuizResult = ({
   total,
   explanation,
   correctCount,
+  errorMessage,
   onNext,
   onRestart,
   onClose,
@@ -51,17 +53,20 @@ export const QuizResult = ({
                   : `${total}문제 중 ${correctCount}문제를 맞추어 미션을 클리어하지 못했습니다`}
               </S.LastResultTitle>
               <S.LastResultSubTitle>
-                ※ 4문제 이상 맞추었을 시에 미션 클리어됩니다
+                ※ {total}문제 모두 맞추었을 시에 미션 클리어됩니다
               </S.LastResultSubTitle>
+              {errorMessage && <S.ErrorMessage>{errorMessage}</S.ErrorMessage>}
             </S.ResultLabelGroup>
           </S.LastResultWrapper>
         </S.ModalBody>
 
         <S.ModalBottom>
           <S.ResultButtonGroup>
-            <Button variant="secondary" size="md" fullWidth onClick={onRestart}>
-              다시하기
-            </Button>
+            {!isPassed && (
+              <Button variant="secondary" size="md" fullWidth onClick={onRestart}>
+                다시하기
+              </Button>
+            )}
 
             <Button variant="primary" size="md" fullWidth onClick={onClose}>
               끝내기

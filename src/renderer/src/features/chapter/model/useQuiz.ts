@@ -36,10 +36,14 @@ export const useQuiz = ({ mission, onMissionComplete, onClose }: UseQuizParams) 
   const isClosingRef = useRef(false);
   const isRequestingMissionResultRef = useRef(false);
   const missionResultDoneRef = useRef(false);
+  const isResettingMissionRef = useRef(false);
 
   const questions = mission.questions;
   const currentQuestion = questions[state.currentIndex];
   const selectedChoiceId = state.answers[state.currentIndex];
+
+  const isLocallyPassed = (correctCount: number) =>
+    questions.length > 0 && correctCount === questions.length;
 
   const requestMissionResult = async (fallbackCorrectCount?: number) => {
     if (missionResultDoneRef.current) return;
@@ -49,7 +53,8 @@ export const useQuiz = ({ mission, onMissionComplete, onClose }: UseQuizParams) 
     try {
       const response = await chapterApi.submitMissionResult(mission.id);
       const passedByServer = response.success && response.data?.isCleared === true;
-      const passedByLocal = fallbackCorrectCount != null ? fallbackCorrectCount >= 4 : undefined;
+      const passedByLocal =
+        fallbackCorrectCount != null ? isLocallyPassed(fallbackCorrectCount) : undefined;
 
       setError(null);
 
@@ -77,7 +82,7 @@ export const useQuiz = ({ mission, onMissionComplete, onClose }: UseQuizParams) 
     } catch (error: unknown) {
       console.error("미션 결과 저장/조회 요청에 실패했습니다.", error);
       setError(getErrorMessage(error, "미션 결과 저장에 실패했습니다."));
-      if (fallbackCorrectCount != null && fallbackCorrectCount >= 4) {
+      if (fallbackCorrectCount != null && isLocallyPassed(fallbackCorrectCount)) {
         onMissionComplete?.(mission.id);
       }
     } finally {
@@ -118,6 +123,7 @@ export const useQuiz = ({ mission, onMissionComplete, onClose }: UseQuizParams) 
       const result = response.data;
       const isLastQuestion = state.currentIndex === questions.length - 1;
       const nextCorrectCount = result.isCorrect ? state.correctCount + 1 : state.correctCount;
+      const nextPassed = isLocallyPassed(nextCorrectCount);
 
       setState(prev => ({
         ...prev,
@@ -128,9 +134,7 @@ export const useQuiz = ({ mission, onMissionComplete, onClose }: UseQuizParams) 
         isSubmitting: false,
       }));
 
-      if (isLastQuestion) {
-        await requestMissionResult(nextCorrectCount);
-      }
+      if (isLastQuestion && nextPassed) await requestMissionResult(nextCorrectCount);
     } catch (error: unknown) {
       console.error("정답 제출 요청에 실패했습니다.", error);
       setError(getErrorMessage(error, "정답 제출에 실패했습니다."));
@@ -158,12 +162,33 @@ export const useQuiz = ({ mission, onMissionComplete, onClose }: UseQuizParams) 
     setError(null);
   };
 
+  const handleRestart = async () => {
+    if (isResettingMissionRef.current) return;
+    isResettingMissionRef.current = true;
+
+    try {
+      const response = await chapterApi.resetMission(mission.id);
+      if (!response.success) {
+        setError(response.message || "미션 초기화에 실패했습니다.");
+        return;
+      }
+
+      resetState();
+    } catch (error: unknown) {
+      setError(getErrorMessage(error, "미션 초기화에 실패했습니다."));
+    } finally {
+      isResettingMissionRef.current = false;
+    }
+  };
+
   const handleClose = async () => {
     if (isClosingRef.current) return;
     isClosingRef.current = true;
 
     try {
-      if (state.view === "final") await requestMissionResult();
+      if (state.view === "final" && isLocallyPassed(state.correctCount)) {
+        await requestMissionResult(state.correctCount);
+      }
     } finally {
       resetState();
       onClose();
@@ -181,6 +206,7 @@ export const useQuiz = ({ mission, onMissionComplete, onClose }: UseQuizParams) 
     handleConfirm,
     handleNextOrClose,
     resetState,
+    handleRestart,
     handleClose,
   };
 };
