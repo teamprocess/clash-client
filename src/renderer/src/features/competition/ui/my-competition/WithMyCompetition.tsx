@@ -99,23 +99,23 @@ export const WithMyCompetition = () => {
                   <S.DataText>{formatTime(oneDecimal(compareData?.studyTime))}</S.DataText>
                 </S.DataBoxing>
               </S.GridBox>
-
-              <S.GridBox>
-                <S.DataBoxing>
-                  <S.ImpressiveBox>
-                    <S.GithubIcon />
-                    <S.ExplainText>
-                      Github
-                      <br />
-                      기여수
-                    </S.ExplainText>
-                  </S.ImpressiveBox>
-                  <S.GrowthRateBox>
-                    <S.DataText>{oneDecimal(compareData?.gitHubAttribution)}개</S.DataText>
-                  </S.GrowthRateBox>
-                </S.DataBoxing>
-              </S.GridBox>
             </S.GridContainer>
+
+            <S.GridBox>
+              <S.DataBoxing>
+                <S.ImpressiveBox>
+                  <S.GithubIcon />
+                  <S.ExplainText>
+                    Github
+                    <br />
+                    기여수
+                  </S.ExplainText>
+                </S.ImpressiveBox>
+                <S.GrowthRateBox>
+                  <S.DataText>{oneDecimal(compareData?.gitHubAttribution)}개</S.DataText>
+                </S.GrowthRateBox>
+              </S.DataBoxing>
+            </S.GridBox>
           </S.CompareBox>
 
           <S.CompareBox>
@@ -157,27 +157,27 @@ export const WithMyCompetition = () => {
                   </S.GrowthRateBox>
                 </S.DataBoxing>
               </S.GridBox>
-
-              <S.GridBox>
-                <S.DataBoxing>
-                  <S.ImpressiveBox>
-                    <S.GithubIcon />
-                    <S.ExplainText>
-                      Github
-                      <br />
-                      기여수
-                    </S.ExplainText>
-                  </S.ImpressiveBox>
-                  <S.GrowthRateBox>
-                    <S.DataText>{oneDecimal(todayData?.gitHubAttribution)}개</S.DataText>
-                    <GrowthRate
-                      yesterday={oneDecimal(compareData?.gitHubAttribution)}
-                      today={oneDecimal(todayData?.gitHubAttribution)}
-                    />
-                  </S.GrowthRateBox>
-                </S.DataBoxing>
-              </S.GridBox>
             </S.GridContainer>
+
+            <S.GridBox>
+              <S.DataBoxing>
+                <S.ImpressiveBox>
+                  <S.GithubIcon />
+                  <S.ExplainText>
+                    Github
+                    <br />
+                    기여수
+                  </S.ExplainText>
+                </S.ImpressiveBox>
+                <S.GrowthRateBox>
+                  <S.DataText>{oneDecimal(todayData?.gitHubAttribution)}개</S.DataText>
+                  <GrowthRate
+                    yesterday={oneDecimal(compareData?.gitHubAttribution)}
+                    today={oneDecimal(todayData?.gitHubAttribution)}
+                  />
+                </S.GrowthRateBox>
+              </S.DataBoxing>
+            </S.GridBox>
           </S.CompareBox>
         </S.CompareContainer>
       </S.GraphWrapper>

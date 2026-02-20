@@ -86,7 +86,6 @@ export const DateText = styled.p`
 export const GridContainer = styled.div`
   display: grid;
   grid-template-columns: repeat(2, 1fr); /* 2 × 2 그리드 */
-  grid-template-rows: repeat(2, 1fr);
   grid-gap: 0.75rem;
   height: 100%;
   width: 100%;
