@@ -24,7 +24,7 @@ export const AddRivalsDialog = ({ isOpen, onClose, usingState }: AddRivalsDialog
       width={21.625}
       height={25.175}
       isOpen={isOpen}
-      onClose={handleClose}
+      onClose={getRivalData.handleSelectClose}
     >
       <div style={{ display: "flex", flexDirection: "column" }}>
         <div>
@@ -141,7 +141,7 @@ export const AddRivalsDialog = ({ isOpen, onClose, usingState }: AddRivalsDialog
 
       <S.BottomBox>
         <S.ButtonBox>
-          <S.CloseButton onClick={handleClose}>취소</S.CloseButton>
+          <S.CloseButton onClick={getRivalData.handleSelectClose}>취소</S.CloseButton>
           <S.OkayButton onClick={getRivalData.handleRivalCreate}>확인</S.OkayButton>
           {getRivalData.error && <S.ErrorText>{getRivalData.error}</S.ErrorText>}
         </S.ButtonBox>
