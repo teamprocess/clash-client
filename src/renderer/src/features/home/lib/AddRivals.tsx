@@ -1,22 +1,67 @@
 import { Dialog } from "@/shared/ui";
 import * as S from "./AddRivals.style";
-import { useRival } from "@/features/home/model/useRival";
 import { SearchInput } from "@/shared/ui/search-input";
 import React from "react";
+import { useRival } from "@/features/home/model/useRival";
 
 interface AddRivalsDialogProps {
   isOpen: boolean;
   onClose: () => void;
   usingState?: "home" | "competition";
+  rival: ReturnType<typeof useRival>;
 }
 
-export const AddRivalsDialog = ({ isOpen, onClose, usingState }: AddRivalsDialogProps) => {
-  const getRivalData = useRival();
-
+export const AddRivalsDialog = ({ isOpen, onClose, usingState, rival }: AddRivalsDialogProps) => {
   const handleClose = () => {
-    getRivalData.handleClose();
+    rival.handleClose();
     onClose();
   };
+
+  const content = (
+    <>
+      <SearchInput
+        placeholder={"이름 또는 아이디 검색"}
+        inputSize={"md"}
+        variant={"light"}
+        fullWidth={true}
+        style={{ margin: "1rem 0" }}
+        value={rival.searchText}
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) => rival.setSearchText(e.target.value)}
+        onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
+          if (e.key === "Enter") rival.applySearch();
+        }}
+      />
+
+      <S.UserChoiceContainer>
+        {rival.filteredUsers.map(user => (
+          <S.UserChoiceBox
+            key={user.id}
+            $isSelected={rival.rivalSelectedId.includes(user.id)}
+            onClick={() => rival.handleUserSelect(user.id)}
+          >
+            <S.ProfileContent style={{ height: "3rem" }}>
+              <S.ProfileIcon />
+              <S.ProfileTagBox>
+                <S.ProfileName>{user.name}</S.ProfileName>
+                <S.ProfileMention>@{user.username}</S.ProfileMention>
+              </S.ProfileTagBox>
+            </S.ProfileContent>
+
+            {rival.rivalSelectedId.includes(user.id) ? <S.CheckedIcon /> : <S.UncheckedBox />}
+          </S.UserChoiceBox>
+        ))}
+      </S.UserChoiceContainer>
+
+      <S.BottomBox>
+        <S.ButtonBox>
+          <S.CloseButton onClick={rival.handleSelectClose}>취소</S.CloseButton>
+
+          <S.OkayButton onClick={rival.handleRivalCreate}>확인</S.OkayButton>
+          {rival.error && <S.ErrorText>{rival.error}</S.ErrorText>}
+        </S.ButtonBox>
+      </S.BottomBox>
+    </>
+  );
 
   return usingState === "home" ? (
     <Dialog
@@ -27,54 +72,8 @@ export const AddRivalsDialog = ({ isOpen, onClose, usingState }: AddRivalsDialog
       onClose={handleClose}
     >
       <div style={{ display: "flex", flexDirection: "column" }}>
-        <div>
-          <SearchInput
-            placeholder={"이름 또는 아이디 검색"}
-            inputSize={"md"}
-            variant={"light"}
-            fullWidth={true}
-            style={{ margin: "1rem 0" }}
-            value={getRivalData.searchText}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-              getRivalData.setSearchText(e.target.value)
-            }
-            onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
-              if (e.key === "Enter") getRivalData.applySearch();
-            }}
-          />
-          <S.UserChoiceContainer>
-            {getRivalData.filteredUsers.map(user => (
-              <S.UserChoiceBox
-                key={user.id}
-                $isSelected={getRivalData.rivalSelectedId.includes(user.id)}
-                onClick={() => getRivalData.handleUserSelect(user.id)}
-              >
-                <S.ProfileContent style={{ height: "3rem" }}>
-                  <S.ProfileIcon />
-                  <S.ProfileTagBox>
-                    <S.ProfileName>{user.name}</S.ProfileName>
-                    <S.ProfileMention>@{user.username}</S.ProfileMention>
-                  </S.ProfileTagBox>
-                </S.ProfileContent>
-
-                {getRivalData.rivalSelectedId.includes(user.id) ? (
-                  <S.CheckedIcon />
-                ) : (
-                  <S.UncheckedBox />
-                )}
-              </S.UserChoiceBox>
-            ))}
-          </S.UserChoiceContainer>
-        </div>
+        <div>{content}</div>
       </div>
-
-      <S.BottomBox>
-        <S.ButtonBox>
-          <S.CloseButton onClick={getRivalData.handleSelectClose}>취소</S.CloseButton>
-          <S.OkayButton onClick={getRivalData.handleRivalCreate}>확인</S.OkayButton>
-          {getRivalData.error && <S.ErrorText>{getRivalData.error}</S.ErrorText>}
-        </S.ButtonBox>
-      </S.BottomBox>
     </Dialog>
   ) : (
     <Dialog
@@ -98,54 +97,9 @@ export const AddRivalsDialog = ({ isOpen, onClose, usingState }: AddRivalsDialog
             <S.WarningText $state={2}>지금 바로 라이벌을 추가해보세요!</S.WarningText>
           </S.WarningContainer>
         </S.AddRivalsContainer>
-        <S.AddRivalsContainer>
-          <SearchInput
-            placeholder={"이름 또는 아이디 검색"}
-            inputSize={"md"}
-            variant={"light"}
-            fullWidth={true}
-            style={{ margin: "1rem 0" }}
-            value={getRivalData.searchText}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-              getRivalData.setSearchText(e.target.value)
-            }
-            onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
-              if (e.key === "Enter") getRivalData.applySearch();
-            }}
-          />
-          <S.UserChoiceContainer>
-            {getRivalData.filteredUsers?.map(user => (
-              <S.UserChoiceBox
-                key={user.id}
-                $isSelected={getRivalData.rivalSelectedId.includes(user.id)}
-                onClick={() => getRivalData.handleUserSelect(user.id)}
-              >
-                <S.ProfileContent style={{ height: "3rem" }}>
-                  <S.ProfileIcon />
-                  <S.ProfileTagBox>
-                    <S.ProfileName>{user.name}</S.ProfileName>
-                    <S.ProfileMention>@{user.username}</S.ProfileMention>
-                  </S.ProfileTagBox>
-                </S.ProfileContent>
 
-                {getRivalData.rivalSelectedId.includes(user.id) ? (
-                  <S.CheckedIcon />
-                ) : (
-                  <S.UncheckedBox />
-                )}
-              </S.UserChoiceBox>
-            ))}
-          </S.UserChoiceContainer>
-        </S.AddRivalsContainer>
+        <S.AddRivalsContainer>{content}</S.AddRivalsContainer>
       </div>
-
-      <S.BottomBox>
-        <S.ButtonBox>
-          <S.CloseButton onClick={getRivalData.handleSelectClose}>취소</S.CloseButton>
-          <S.OkayButton onClick={getRivalData.handleRivalCreate}>확인</S.OkayButton>
-          {getRivalData.error && <S.ErrorText>{getRivalData.error}</S.ErrorText>}
-        </S.ButtonBox>
-      </S.BottomBox>
     </Dialog>
   );
 };

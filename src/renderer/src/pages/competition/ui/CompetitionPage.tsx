@@ -6,7 +6,7 @@ import { useRival } from "@/features/home/model/useRival";
 
 export const CompetitionPage = () => {
   const { myRivalsData, competitionTab, setCompetitionTab } = useCompetition();
-  const getRivalData = useRival();
+  const rival = useRival();
 
   const isEmptyRivals = (myRivalsData?.data?.myRivals.length ?? 0) === 0;
 
@@ -22,7 +22,7 @@ export const CompetitionPage = () => {
           onClick={() => {
             if (isEmptyRivals) {
               setCompetitionTab("ME");
-              getRivalData.handleOpen();
+              rival.handleOpen();
               return;
             }
             setCompetitionTab("RIVAL");
@@ -40,11 +40,12 @@ export const CompetitionPage = () => {
         <RivalCompetition data={myRivalsData} />
       )}
 
-      {getRivalData.modalOpen && (
+      {rival.modalOpen && (
         <AddRivalsDialog
-          isOpen={getRivalData.modalOpen}
-          onClose={getRivalData.handleClose}
-          usingState={"competition"}
+          isOpen={rival.modalOpen}
+          onClose={rival.handleClose}
+          usingState="competition"
+          rival={rival}
         />
       )}
     </S.Wrapper>

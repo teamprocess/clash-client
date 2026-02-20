@@ -107,11 +107,10 @@ export const useRival = () => {
 
     try {
       await rivalsApi.postRivalApply(payload);
+      handleClose();
     } catch (error: unknown) {
       console.error("라이벌 신청 실패:", error);
       setError(getErrorMessage(error, "라이벌 신청 중 오류가 발생했습니다."));
-    } finally {
-      handleClose();
     }
   };
 
