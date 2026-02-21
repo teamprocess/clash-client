@@ -1,6 +1,6 @@
 import * as S from "./RivalContainer.style";
 import { useRivalContainer } from "../../model/useRivalContainer";
-import RivalCard from "./rival-card/RivalCard";
+import { RivalCard } from "./rival-card/RivalCard";
 
 export const RivalContainer = () => {
   const { rivals, maxRivals } = useRivalContainer();
