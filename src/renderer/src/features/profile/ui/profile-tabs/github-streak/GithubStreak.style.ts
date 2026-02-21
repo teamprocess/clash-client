@@ -1,9 +1,9 @@
 import styled from "styled-components";
 import { font } from "@/shared/config/font";
 
-const CELL = 19.5;
-const GAP = 5;
-const RADIUS = 3.9;
+const CELL = 1.25;
+const GAP = 0.375;
+const RADIUS = 0.25;
 
 export const ActiveContainer = styled.div`
   width: 100%;
@@ -27,17 +27,17 @@ export const GrassBox = styled.div`
 
 export const Grid = styled.div`
   display: grid;
-  grid-template-rows: repeat(7, ${CELL}px);
+  grid-template-rows: repeat(7, ${CELL}rem);
   grid-auto-flow: column;
-  grid-auto-columns: ${CELL}px;
-  gap: ${GAP}px;
+  grid-auto-columns: ${CELL}rem;
+  gap: ${GAP}rem;
   width: fit-content;
 `;
 
 export const Grass = styled.div<{ $level: number; $dimmed?: boolean; $selected?: boolean }>`
-  width: ${CELL}px;
-  height: ${CELL}px;
-  border-radius: ${RADIUS}px;
+  width: ${CELL}rem;
+  height: ${CELL}rem;
+  border-radius: ${RADIUS}rem;
 
   opacity: ${({ $dimmed }) => ($dimmed ? 0.25 : 1)};
 
