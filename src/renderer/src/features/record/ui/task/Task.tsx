@@ -113,8 +113,8 @@ export const Task = () => {
               </S.TaskRightBox>
             </S.TaskItem>
           )}
+          <S.AddTaskButton onClick={handleAddClick}>+ 과목 추가</S.AddTaskButton>
         </S.TaskBox>
-        <S.AddTaskButton onClick={handleAddClick}>+ 과목 추가</S.AddTaskButton>
       </S.TaskContainer>
       <ConfirmDialog
         isOpen={deleteTargetId !== null}
