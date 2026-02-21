@@ -1,14 +1,14 @@
 import * as S from "./RivalCard.style";
 import type { UserStatus } from "../../../model/useRivalContainer";
 
-type Props = {
+interface RivalCardProps {
   profileSrc: string;
   appIconSrc: string;
   name: string;
   status: UserStatus;
   time: string;
   appName: string;
-};
+}
 
 const statusLabelMap: Record<UserStatus, string> = {
   ONLINE: "온라인",
@@ -16,7 +16,7 @@ const statusLabelMap: Record<UserStatus, string> = {
   AWAY: "자리비움",
 };
 
-export function RivalCard({ profileSrc, appIconSrc, name, status, time, appName }: Props) {
+export function RivalCard({ profileSrc, appIconSrc, name, status, time, appName }: RivalCardProps) {
   return (
     <S.RivalBox>
       <S.Left>

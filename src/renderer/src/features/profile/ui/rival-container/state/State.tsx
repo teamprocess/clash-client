@@ -1,8 +1,8 @@
 import * as S from "./State.style";
 
-type Props = {
+interface StateTagProps {
   status: S.Status;
-};
+}
 
 const label = {
   online: "온라인",
@@ -10,6 +10,6 @@ const label = {
   away: "자리비움",
 } as const;
 
-export function StateTag({ status }: Props) {
+export function StateTag({ status }: StateTagProps) {
   return <S.StateTag $status={status}>{label[status]}</S.StateTag>;
 }
