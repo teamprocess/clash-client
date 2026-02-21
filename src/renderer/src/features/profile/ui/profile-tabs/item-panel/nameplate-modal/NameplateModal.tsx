@@ -22,23 +22,23 @@ type Ranker = {
   completed: number;
 };
 
-const TOP3: TopRanker[] = [
+const top3: TopRanker[] = [
   { id: 1, rank: 2, name: "조상철", completed: 3 },
   { id: 2, rank: 1, name: "조상철", completed: 4 },
   { id: 3, rank: 3, name: "조상철", completed: 2 },
 ];
 
-const LIST: Ranker[] = [
+const list: Ranker[] = [
   { id: 4, rank: 4, name: "박승아", completed: 4 },
   { id: 5, rank: 5, name: "박승아", completed: 4 },
   { id: 6, rank: 6, name: "박승아", completed: 4 },
   { id: 7, rank: 7, name: "박승아", completed: 4 },
 ];
 
-type NameplateModalContentProps = {
+interface NameplateModalContentProps {
   onClose: () => void;
   onSave?: () => void;
-};
+}
 
 export const NameplateModalContent = ({ onClose, onSave }: NameplateModalContentProps) => {
   const handleCancel = () => onClose();
@@ -51,7 +51,7 @@ export const NameplateModalContent = ({ onClose, onSave }: NameplateModalContent
     <S.Root>
       <S.Left>
         <S.Top3Row>
-          {TOP3.map(u => (
+          {top3.map(u => (
             <S.Top3Card key={u.id}>
               <S.FrameWrap $rank={u.rank}>
                 <S.FrameImg $rank={u.rank} alt="" />
@@ -69,7 +69,7 @@ export const NameplateModalContent = ({ onClose, onSave }: NameplateModalContent
         </S.Top3Row>
 
         <S.List>
-          {LIST.map(u => (
+          {list.map(u => (
             <S.ListItem key={u.id}>
               <S.ListLeft>
                 <S.RankNum>{u.rank}</S.RankNum>
