@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { font } from "@/shared/config/font";
 import { palette } from "@/shared/config/theme";
-import ArrowUrl from "../../../assets/arrow.svg?url";
+import Arrow from "./../../../assets/arrow.svg";
 
 export const Header = styled.div`
   display: flex;
@@ -19,18 +19,15 @@ export const MonthArrowBtn = styled.button`
   cursor: pointer;
 `;
 
-const ArrowBase = styled.img.attrs({
-  src: ArrowUrl,
-  alt: "",
-})`
+export const ArrowIcon = styled(Arrow)`
   width: 1.1rem;
   height: 1.1rem;
   display: block;
 `;
 
-export const ArrowRightIcon = styled(ArrowBase)``;
+export const ArrowRightIcon = styled(ArrowIcon)``;
 
-export const ArrowLeftIcon = styled(ArrowBase)`
+export const ArrowLeftIcon = styled(ArrowIcon)`
   transform: rotate(180deg);
 `;
 

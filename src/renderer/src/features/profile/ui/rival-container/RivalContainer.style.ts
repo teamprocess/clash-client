@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import ProfileIcon from "../../assets/rival-profile.png";
-import VscodeIcon from "../../assets/Vscode.svg?url";
+import Vscode from "../../assets/vscode.svg";
 
 export const Container = styled.div`
   width: 100%;
@@ -14,6 +14,7 @@ export const profileSrcMap = {
   default: ProfileIcon,
 } as const;
 
-export const appIconMap = {
-  vscode: VscodeIcon,
-} as const;
+export const VscodeIcon = styled(Vscode)`
+  width: 0.875rem;
+  height: 0.875rem;
+`;
