@@ -17,6 +17,7 @@ export const TopContainer = styled.div`
 export const BottomContainer = styled.div`
   width: 100%;
   height: 64%;
+  min-height: 0;
   display: flex;
   gap: 1.5rem;
   justify-content: space-between;
