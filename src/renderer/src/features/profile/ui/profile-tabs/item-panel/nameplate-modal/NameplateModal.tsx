@@ -1,12 +1,12 @@
 import React from "react";
 import * as S from "./NameplateModal.style";
 
-type NameplateModalProps = {
+interface NameplateModalProps {
   open: boolean;
   onClose: () => void;
   onSave?: () => void;
   children?: React.ReactNode;
-};
+}
 
 type TopRanker = {
   id: number;
