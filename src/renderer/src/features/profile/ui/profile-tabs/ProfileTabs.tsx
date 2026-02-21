@@ -21,7 +21,17 @@ export const ProfileTabs = ({ onPreviewChange }: ProfileTabsProps) => {
         {active === "github" && (
           <>
             <GithubStreak />
-            <GithubInfo />
+            <GithubInfo
+              dateText="2026년 2월 3일"
+              totalContributions={1333}
+              commits={12}
+              issues={3}
+              pullRequests={5}
+              reviews={2}
+              topRepoName="TeamProcess"
+              dailyAddedLines={420}
+              dailyDeletedLines={180}
+            />
           </>
         )}
 
