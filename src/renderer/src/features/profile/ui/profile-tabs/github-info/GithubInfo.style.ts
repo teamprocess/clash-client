@@ -2,7 +2,6 @@ import styled from "styled-components";
 import { font } from "@/shared/config/font";
 import { palette } from "@/shared/config/theme";
 
-// ✅ 아이콘들은 style.ts에서 관리
 import CommitImg from "../../../assets/commit.svg?url";
 import IssueImg from "../../../assets/issue.svg?url";
 import PullRequestsImg from "../../../assets/pull-requests.svg?url";
@@ -208,7 +207,7 @@ export const MetaValue = styled.p`
 
 export const HDivider = styled.div`
   width: 17.5rem;
-  height: 1px;
+  height: 0.1rem;
   background: ${({ theme }) => theme.line.neutral};
 `;
 
