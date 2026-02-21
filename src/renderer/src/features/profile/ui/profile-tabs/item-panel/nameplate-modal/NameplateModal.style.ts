@@ -292,7 +292,7 @@ export const MainPill = styled.div`
   width: 20rem;
   height: 2.5rem;
   border-radius: 1.1rem;
-  background: #2f547b;
+  background: #2f547b; // 더미데이터
 `;
 
 export const ProductName = styled.div`
