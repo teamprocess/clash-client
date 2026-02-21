@@ -2,15 +2,15 @@ import { useMemo } from "react";
 import * as S from "./GithubInfo.style";
 
 export type GithubInfoProps = {
-  dateText?: string;
-  totalContributions?: number;
-  commits?: number;
-  issues?: number;
-  pullRequests?: number;
-  reviews?: number;
-  topRepoName?: string;
-  dailyAddedLines?: number;
-  dailyDeletedLines?: number;
+  dateText: string;
+  totalContributions: number;
+  commits: number;
+  issues: number;
+  pullRequests: number;
+  reviews: number;
+  topRepoName: string;
+  dailyAddedLines: number;
+  dailyDeletedLines: number;
 };
 
 export const GithubInfo = ({
