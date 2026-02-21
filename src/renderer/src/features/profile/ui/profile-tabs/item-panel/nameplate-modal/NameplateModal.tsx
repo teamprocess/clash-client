@@ -35,10 +35,10 @@ const list: Ranker[] = [
   { id: 7, rank: 7, name: "박승아", completed: 4 },
 ];
 
-interface NameplateModalContentProps {
+type NameplateModalContentProps = {
   onClose: () => void;
   onSave?: () => void;
-}
+};
 
 export const NameplateModalContent = ({ onClose, onSave }: NameplateModalContentProps) => {
   const handleCancel = () => onClose();
@@ -128,7 +128,7 @@ export const NameplateModal = ({ open, onClose, onSave, children }: NameplateMod
     <S.Overlay onClick={onClose}>
       <S.Modal onClick={e => e.stopPropagation()}>
         <S.CloseBtn type="button" onClick={onClose} aria-label="닫기">
-          <S.CloseIconImg alt="닫기" />
+          <S.CloseIcon />
         </S.CloseBtn>
 
         <S.Content>
