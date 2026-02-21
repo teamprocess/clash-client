@@ -111,7 +111,8 @@ export const Legend = styled.div`
   justify-content: flex-end;
 `;
 
-export const LegendPill = styled.div<{ $tone: "low" | "mid" | "high" }>`
+type Tone = "low" | "mid" | "high";
+export const LegendPill = styled.div<{ $tone: Tone }>`
   width: 1.5rem;
   height: 0.875rem;
   padding: 0 0.5rem;
