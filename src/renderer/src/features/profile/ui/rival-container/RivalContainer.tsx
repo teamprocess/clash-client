@@ -1,6 +1,7 @@
 import * as S from "./RivalContainer.style";
 import { useRivalContainer } from "../../model/useRivalContainer";
 import { RivalCard } from "./rival-card/RivalCard";
+import { VscodeIcon } from "./RivalContainer.style";
 
 export const RivalContainer = () => {
   const { rivals, maxRivals } = useRivalContainer();
@@ -16,7 +17,7 @@ export const RivalContainer = () => {
           time={rival.time}
           appName={rival.appName}
           profileSrc={S.profileSrcMap[rival.profileKey]}
-          appIconSrc={S.appIconMap[rival.appKey]}
+          appIconSrc={VscodeIcon[rival.appKey]}
         />
       ))}
     </S.Container>

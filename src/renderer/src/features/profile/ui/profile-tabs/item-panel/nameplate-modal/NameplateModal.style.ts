@@ -2,17 +2,17 @@ import styled from "styled-components";
 import { font } from "@/shared/config/font";
 import { palette } from "@/shared/config/theme";
 
-import CloseIconSrc from "../../../../assets/close.svg?url";
-import RivalProfileSrc from "../../../../assets/rival-profile.png";
-import FirstFrameSrc from "../../../../assets/first-frame.svg?url";
-import SecondFrameSrc from "../../../../assets/second-frame.svg?url";
-import ThirdFrameSrc from "../../../../assets/third-frame.svg?url";
-import MyPageProfileSrc from "../../../../assets/mypage-profile.png";
+import RivalProfileImg from "../../../../assets/rival-profile.png";
+import MyPageProfileImg from "../../../../assets/mypage-profile.png";
+import Close from "../../../../assets/close.svg";
+import FirstFrame from "../../../../assets/first-frame.svg";
+import SecondFrame from "../../../../assets/second-frame.svg";
+import ThirdFrame from "../../../../assets/third-frame.svg";
 
 const FRAME_SRC: Record<1 | 2 | 3, string> = {
-  1: FirstFrameSrc,
-  2: SecondFrameSrc,
-  3: ThirdFrameSrc,
+  1: FirstFrame,
+  2: SecondFrame,
+  3: ThirdFrame,
 };
 
 export const Overlay = styled.div`
@@ -51,9 +51,7 @@ export const CloseBtn = styled.button`
   }
 `;
 
-export const CloseIconImg = styled.img.attrs({
-  src: CloseIconSrc,
-})`
+export const CloseIcon = styled(Close)`
   width: 3.125rem;
   height: 3.125rem;
   object-fit: contain;
@@ -123,7 +121,7 @@ export const FrameImg = styled.img.attrs<{ $rank: 1 | 2 | 3 }>(props => ({
 `;
 
 export const Top3Profile = styled.img.attrs({
-  src: RivalProfileSrc,
+  src: RivalProfileImg,
 })<{ $rank: 1 | 2 | 3 }>`
   position: absolute;
   z-index: 1;
@@ -200,7 +198,7 @@ export const UserPill = styled.div`
 `;
 
 export const UserAvatar = styled.img.attrs({
-  src: RivalProfileSrc,
+  src: RivalProfileImg,
 })`
   width: 2.875rem;
   height: 2.875rem;
@@ -331,7 +329,7 @@ export const PrimaryBtn = styled.button`
 `;
 
 export const SmallAvatarImg = styled.img.attrs({
-  src: MyPageProfileSrc,
+  src: MyPageProfileImg,
 })<{ $dim?: boolean }>`
   width: 2.375rem;
   height: 2.375rem;
@@ -343,7 +341,7 @@ export const SmallAvatarImg = styled.img.attrs({
 `;
 
 export const BigAvatarImg = styled.img.attrs({
-  src: MyPageProfileSrc,
+  src: MyPageProfileImg,
 })`
   width: 3.5rem;
   height: 3.5rem;
