@@ -1,21 +1,21 @@
 import styled from "styled-components";
 import { font } from "@/shared/config/font";
-import Alarm from "../assets/alarm.svg";
-import AlarmOn from "../assets/alarm-on.svg";
-import Profile from "../assets/profile.svg";
-import Close from "../assets/no.svg";
-import Search from "../assets/search.svg";
+import Alarm from "./assets/alarm.svg";
+import AlarmOn from "./assets/alarm-on.svg";
+import Profile from "./assets/profile.svg";
+import Close from "./assets/no.svg";
+import Search from "./assets/search.svg";
 import Cry from "@/shared/ui/assets/cry-emoji.svg";
-import Confirm from "../assets/confirm.svg";
-import Deny from "../assets/deny.svg";
-import Trash from "../assets/delete.svg";
+import Confirm from "./assets/confirm.svg";
+import Deny from "./assets/deny.svg";
+import Trash from "./assets/delete.svg";
 
-export const AlertTriggerWrapper = styled.div`
+export const NoticeTriggerWrapper = styled.div`
   display: flex;
   align-items: center;
 `;
 
-export const AlertButton = styled.button`
+export const NoticeButton = styled.button`
   display: flex;
   align-items: center;
   padding: 0;
@@ -25,36 +25,53 @@ export const AlertButton = styled.button`
   cursor: pointer;
 `;
 
-export const AlertIcon = styled(Alarm)`
+export const NoticeIcon = styled(Alarm)`
   color: ${({ theme }) => theme.label.alternative};
   width: 1.5rem;
   height: 1.5rem;
 `;
 
-export const AlertOnIcon = styled(AlarmOn)`
+export const NoticeOnIcon = styled(AlarmOn)`
   width: 1.5rem;
   height: 1.5rem;
 `;
 
-export const AlertPanel = styled.div`
-  width: 22rem;
+export const NoticePanel = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 24rem;
   padding: 1.5rem;
   border-radius: 2rem;
   min-height: 16rem;
   max-height: 32rem;
   overflow-y: auto;
+  scrollbar-gutter: stable;
   background-color: ${({ theme }) => theme.label.disable};
+
+  &::-webkit-scrollbar {
+    width: 0.625rem;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: ${({ theme }) => theme.line.normal};
+    border-radius: 0.625rem;
+  }
 `;
 
-export const AlertHeader = styled.div`
+export const NoticeHeader = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
   width: 100%;
+  flex-shrink: 0;
 `;
 
-export const AlertTitle = styled.p`
+export const NoticeTitle = styled.p`
   ${font.title2.medium}
 `;
 
@@ -76,6 +93,7 @@ export const SearchBox = styled.div`
   position: relative;
   margin-top: 1rem;
   gap: 0.75rem;
+  flex-shrink: 0;
 `;
 
 export const SearchUsers = styled.input`
@@ -111,16 +129,16 @@ export const SearchIcon = styled(Search)`
   pointer-events: none;
 `;
 
-export const AlertContainer = styled.div`
+export const NoticeContainer = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
   gap: 1rem;
-  overflow-y: auto;
+  overflow: visible;
   margin-top: 0.75rem;
 `;
 
-export const AlertBox = styled.div`
+export const NoticeBox = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -128,23 +146,40 @@ export const AlertBox = styled.div`
   gap: 0.75rem;
 `;
 
-export const AlertProfileIcon = styled(Profile)``;
+export const NoticeProfileIcon = styled(Profile)``;
 
-export const AlertTextWrapper = styled.div`
+export const NoticeProfileImage = styled.img`
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+`;
+
+export const NoticeTextWrapper = styled.div`
   display: flex;
   flex-direction: column;
   flex: 1;
   min-width: 11rem;
+  gap: 0.2rem;
 `;
 
 export const NameRow = styled.div`
   display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 0.25rem;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.5rem;
 `;
 
-export const AlertName = styled.p`
+export const IdentityRow = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  min-width: 0;
+  flex-wrap: wrap;
+`;
+
+export const NoticeName = styled.p`
   ${font.headline2.medium}
 `;
 
@@ -158,13 +193,22 @@ export const Explain = styled.p`
   color: ${({ theme }) => theme.label.normal};
 `;
 
-export const NoneAlert = styled.div`
+export const NoticeMeta = styled.p`
+  ${font.caption.regular}
+  color: ${({ theme }) => theme.label.assistive};
+  flex-shrink: 0;
+  white-space: nowrap;
+  text-align: right;
+`;
+
+export const NoneNotice = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   width: 100%;
-  height: 80%;
+  flex: 1;
+  min-height: 0;
   gap: 0.75rem;
   color: ${({ theme }) => theme.label.assistive};
 `;
@@ -175,12 +219,21 @@ export const CryIcon = styled(Cry)`
 
 export const ChoiceBox = styled.div`
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: flex-end;
+  align-self: stretch;
+  flex-shrink: 0;
+  gap: 0.25rem;
+  min-width: 5.5rem;
+`;
+
+export const ChoiceActions = styled.div`
+  display: flex;
   align-items: center;
   justify-content: flex-end;
-  height: 100%;
-  flex: 1;
   gap: 0.75rem;
+  min-height: 2rem;
 `;
 
 export const ChoiceButton = styled.button`
@@ -190,6 +243,11 @@ export const ChoiceButton = styled.button`
   border: none;
   background: none;
   cursor: pointer;
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
 `;
 
 export const ConfirmIcon = styled(Confirm)``;

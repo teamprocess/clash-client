@@ -1,7 +1,7 @@
 import * as S from "./Topbar.style";
 import { useGetMyProfile } from "@/entities/user";
+import { TopbarNotice } from "@/features/notice";
 import { formatPrice } from "@/shared/lib";
-import { Alert } from "./ui/Alert";
 
 interface TopbarProps {
   onToggleSidebar: () => void;
@@ -33,7 +33,7 @@ export const Topbar = ({ onToggleSidebar }: TopbarProps) => {
           <S.CookieIcon />
           <span>{formatPrice(user?.totalCookie || 0)}</span>
         </S.GoodsBox>
-        <Alert />
+        <TopbarNotice />
         <S.ProfileBox to="/profile">
           <S.ProfileIcon />
           <S.NameBox>
