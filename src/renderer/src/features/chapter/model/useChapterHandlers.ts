@@ -5,6 +5,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import type { GetChapterDetailsResponse } from "@/entities/roadmap/chapter/model/chapter.types";
 import { chapterQueryKeys } from "@/entities/roadmap/chapter/api/query/chapterQueryKeys";
 import { chapterApi } from "@/entities/roadmap/chapter/api/chapterApi";
+import { getErrorMessage } from "@/shared/lib";
 
 type UseChapterHandlersParams = {
   stages: Stage[];
@@ -47,9 +48,13 @@ export const useChapterHandlers = ({
 
     isOpeningMissionRef.current = true;
     try {
-      await chapterApi.resetMission(mission.id);
-    } catch (error) {
-      console.error("미션 초기화 요청에 실패했습니다.", error);
+      const response = await chapterApi.resetMission(mission.id);
+      if (!response.success) {
+        console.error("미션 초기화에 실패했습니다.", response.message);
+      }
+    } catch (error: unknown) {
+      const errorMessage = getErrorMessage(error, "미션 초기화 요청에 실패했습니다.");
+      console.error("미션 초기화 요청에 실패했습니다.", errorMessage, error);
     } finally {
       isOpeningMissionRef.current = false;
       setCurrentMission(mission);
