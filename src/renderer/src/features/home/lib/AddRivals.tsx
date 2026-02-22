@@ -89,10 +89,8 @@ export const AddRivalsDialog = ({ isOpen, onClose, usingState, rival }: AddRival
         }}
       >
         <S.AddRivalsContainer style={{ paddingTop: "1rem" }}>
-          <S.WarningContainer>
-            <S.WarningText $state={1}>현재 라이벌이 존재하지 않습니다.</S.WarningText>
-            <S.WarningText $state={2}>지금 바로 라이벌을 추가해보세요!</S.WarningText>
-          </S.WarningContainer>
+          <S.WarningText $state={1}>현재 라이벌이 존재하지 않습니다.</S.WarningText>
+          <S.WarningText $state={2}>지금 바로 라이벌을 추가해보세요!</S.WarningText>
         </S.AddRivalsContainer>
 
         <S.AddRivalsContainer>{content}</S.AddRivalsContainer>
