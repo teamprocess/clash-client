@@ -42,7 +42,7 @@ export const chapterApi = {
   },
   // 미션 초기화
   resetMission: async (missionId: number) => {
-    const result = await api.post<ApiResponse<null>>(`/missions/${missionId}/reset`, {});
+    const result = await api.post<ApiResponse<void>>(`/missions/${missionId}/reset`, {});
     return result.data;
   },
 };
