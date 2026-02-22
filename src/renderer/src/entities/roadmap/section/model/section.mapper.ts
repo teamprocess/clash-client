@@ -1,44 +1,24 @@
 import type { ApiResponse } from "@/shared/api";
-import type { getAllSectionsResponse } from "./section.types";
-
-const isRecord = (value: unknown): value is Record<string, unknown> =>
-  typeof value === "object" && value !== null;
-
-const asString = (value: unknown): string | null => {
-  if (typeof value === "string") return value;
-  if (typeof value === "number") return String(value);
-  return null;
-};
-
-const asBoolean = (value: unknown): boolean => (typeof value === "boolean" ? value : false);
+import type { getAllSectionsResponse, getAllSectionsServerResponse } from "./section.types";
 
 export const normalizeMajorSectionsResponse = (
-  response: ApiResponse<unknown>
+  response: ApiResponse<getAllSectionsServerResponse>
 ): ApiResponse<getAllSectionsResponse> => {
   const rawData = response.data;
-  const rawSections = isRecord(rawData) && Array.isArray(rawData.sections) ? rawData.sections : [];
-  const rawCategories =
-    isRecord(rawData) && Array.isArray(rawData.categories) ? rawData.categories : null;
+  const rawSections = rawData?.sections ?? [];
+  const rawCategories = rawData?.categories ?? null;
 
-  const normalizedSections = rawSections
-    .map(section => {
-      if (!isRecord(section)) return null;
+  const normalizedSections = rawSections.map(section => {
+    const category = section.category ?? section.categoryId ?? "0";
 
-      const id = asString(section.id);
-      const title = asString(section.title);
-      const category = asString(section.category ?? section.categoryId) ?? "0";
-
-      if (id == null || title == null) return null;
-
-      return {
-        id,
-        title,
-        category,
-        completed: asBoolean(section.completed),
-        locked: asBoolean(section.locked),
-      };
-    })
-    .filter((section): section is getAllSectionsResponse["sections"][number] => section != null);
+    return {
+      id: String(section.id),
+      title: section.title,
+      category: String(category),
+      completed: section.completed,
+      locked: section.locked,
+    };
+  });
 
   const normalizedCategories =
     rawCategories && rawCategories.length > 0
