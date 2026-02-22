@@ -59,7 +59,9 @@ const normalizeMajorSectionsResponse = (
 
 export const sectionApi = {
   // 전공별 섹션 조회
-  getMajorSection: async (data: getMajorSectionRequest) => {
+  getMajorSection: async (
+    data: getMajorSectionRequest
+  ): Promise<ApiResponse<getAllSectionsResponse>> => {
     const result = await api.get<ApiResponse<unknown>>("/sections", {
       params: data,
     });
