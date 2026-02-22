@@ -8,8 +8,8 @@ interface MyRivalsProps {
   data: MyRivalsResponse;
 }
 
-export const MyRivals = (data: MyRivalsProps) => {
-  const { myRivals } = useMyRivals(data);
+export const MyRivals = ({ data }: MyRivalsProps) => {
+  const { myRivals } = useMyRivals({ data });
 
   return (
     <S.ListContent>

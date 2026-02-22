@@ -19,8 +19,8 @@ export const getStatus = (status: UserStatus) => {
   }
 };
 
-export const useMyRivals = (data: UseMyRivalsProps) => {
-  const myRivalsData: MyRivalsResponse | null = data.data ?? null;
+export const useMyRivals = ({ data }: UseMyRivalsProps) => {
+  const myRivalsData: MyRivalsResponse | null = data ?? null;
 
   return {
     myRivals: { myRivalsData },
