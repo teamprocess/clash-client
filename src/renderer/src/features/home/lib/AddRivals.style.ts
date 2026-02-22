@@ -52,9 +52,9 @@ export const UserChoiceBox = styled.div<{ $isSelected: boolean }>`
   padding: 0.5rem;
   border-bottom: 1px solid ${({ theme }) => theme.line.alternative};
   cursor: pointer;
-  border-radius: 0.75rem;
   transition: 0.1s ease-in-out;
   &:hover {
+    border-radius: 0.75rem;
     padding: 0.5rem 0.75rem;
     background-color: ${({ theme }) => theme.fill.alternative};
   }
