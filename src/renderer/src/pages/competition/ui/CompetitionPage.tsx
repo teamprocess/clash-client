@@ -36,9 +36,9 @@ export const CompetitionPage = () => {
         <WithMyCompetition />
       ) : isEmptyRivals ? (
         <S.EmptyText>등록된 라이벌이 없습니다.</S.EmptyText>
-      ) : (
-        <RivalCompetition data={myRivalsData} />
-      )}
+      ) : myRivalsData?.data ? (
+        <RivalCompetition data={myRivalsData.data} />
+      ) : null}
 
       {rival.modalOpen && (
         <AddRivalsDialog
