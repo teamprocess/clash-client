@@ -1,12 +1,16 @@
 import { api, ApiResponse } from "@/shared/api";
 import {
-  BattleResponse,
-  BattleDetailResponse,
-  AnalyzeBattleResponse,
   AnalyzeBattleRequest,
+  AnalyzeBattleResponse,
+  BattleDetailResponse,
   BattleListResponse,
+  BattleResponse,
   PostBattleRequest,
 } from "@/entities/competition/model/rival-competition/battle.types";
+
+interface ModifyBattleRequest {
+  id: number;
+}
 
 export const battleApi = {
   // 전체 배틀 정보 조회
@@ -40,6 +44,20 @@ export const battleApi = {
   // 배틀 신청하기
   postCreateBattle: async (data: PostBattleRequest) => {
     const result = await api.post<ApiResponse<PostBattleRequest>>(`/compete/rivals/battles/apply`, {
+      ...data,
+    });
+    return result.data;
+  },
+
+  postAcceptBattle: async (data: ModifyBattleRequest) => {
+    const result = await api.post<ApiResponse<void>>(`/compete/rivals/battles/accept`, {
+      ...data,
+    });
+    return result.data;
+  },
+
+  postRejectBattle: async (data: ModifyBattleRequest) => {
+    const result = await api.post<ApiResponse<void>>(`/compete/rivals/battles/reject`, {
       ...data,
     });
     return result.data;
