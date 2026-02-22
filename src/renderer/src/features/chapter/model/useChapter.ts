@@ -16,11 +16,19 @@ export const useChapter = (sectionId: number) => {
     const completedCount = Math.max(0, domain.currentStage.currentProgress ?? 0);
 
     const orderedMissions = [...missions].sort((a, b) => {
-      const aOrder = (a as Mission & { orderIndex?: number }).orderIndex;
-      const bOrder = (b as Mission & { orderIndex?: number }).orderIndex;
+      const getOrderIndex = (mission: Mission) => {
+        const raw = (mission as Mission & { orderIndex?: unknown }).orderIndex;
+        const num = typeof raw === "number" ? raw : typeof raw === "string" ? Number(raw) : NaN;
+        return Number.isFinite(num) ? num : null;
+      };
 
-      if (typeof aOrder === "number" && typeof bOrder === "number") return aOrder - bOrder;
-      return 0;
+      const aOrder = getOrderIndex(a);
+      const bOrder = getOrderIndex(b);
+
+      if (aOrder == null && bOrder == null) return 0;
+      if (aOrder == null) return 1;
+      if (bOrder == null) return -1;
+      return aOrder - bOrder;
     });
 
     return orderedMissions.map((mission, index) => {
