@@ -6,6 +6,15 @@ export interface section {
   locked: boolean;
 }
 
+export interface sectionServer {
+  id: string | number;
+  title: string;
+  category?: string | number;
+  categoryId?: string | number;
+  completed: boolean;
+  locked: boolean;
+}
+
 export enum MajorEnum {
   SERVER = "SERVER",
   WEB = "WEB",
@@ -22,4 +31,9 @@ export interface getMajorSectionRequest {
 export interface getAllSectionsResponse {
   sections: section[];
   categories: string[];
+}
+
+export interface getAllSectionsServerResponse {
+  sections: sectionServer[];
+  categories?: Array<string | number>;
 }
