@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { io, type Socket } from "socket.io-client";
 import { groupQueryKeys } from "@/entities/group";
+import { noticeQueryKeys } from "@/entities/notice";
 import { realtimeApi } from "@/shared/api";
 import { socketConfig } from "@/shared/config/socket";
 import { queryClient } from "@/shared/lib";
@@ -34,7 +35,10 @@ const invalidateCompeteQueries = async () => {
 };
 
 const invalidateUserQueries = async () => {
-  await queryClient.invalidateQueries({ queryKey: ["user"] });
+  await Promise.all([
+    queryClient.invalidateQueries({ queryKey: ["user"] }),
+    queryClient.invalidateQueries({ queryKey: noticeQueryKeys.all }),
+  ]);
 };
 
 const invalidateByDomain = async (domain?: string) => {
