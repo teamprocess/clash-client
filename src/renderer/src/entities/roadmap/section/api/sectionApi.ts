@@ -4,43 +4,48 @@ import {
   getMajorSectionRequest,
 } from "@/entities/roadmap/section/model/section.types";
 
+const isRecord = (value: unknown): value is Record<string, unknown> =>
+  typeof value === "object" && value !== null;
+
+const asString = (value: unknown): string | null => {
+  if (typeof value === "string") return value;
+  if (typeof value === "number") return String(value);
+  return null;
+};
+
+const asBoolean = (value: unknown): boolean => (typeof value === "boolean" ? value : false);
+
 const normalizeMajorSectionsResponse = (
   response: ApiResponse<unknown>
 ): ApiResponse<getAllSectionsResponse> => {
-  const rawData = response.data as {
-    sections?: Array<{
-      id?: string | number;
-      title?: string;
-      category?: string | number;
-      categoryId?: string | number;
-      completed?: boolean;
-      locked?: boolean;
-    }>;
-    categories?: Array<string | number>;
-  } | null;
+  const rawData = response.data;
+  const rawSections = isRecord(rawData) && Array.isArray(rawData.sections) ? rawData.sections : [];
+  const rawCategories =
+    isRecord(rawData) && Array.isArray(rawData.categories) ? rawData.categories : null;
 
-  const rawSections = rawData?.sections ?? [];
   const normalizedSections = rawSections
     .map(section => {
-      const category = section.category ?? section.categoryId ?? "0";
-      const id = section.id;
-      const title = section.title;
+      if (!isRecord(section)) return null;
+
+      const id = asString(section.id);
+      const title = asString(section.title);
+      const category = asString(section.category ?? section.categoryId) ?? "0";
 
       if (id == null || title == null) return null;
 
       return {
-        id: String(id),
-        title: String(title),
-        category: String(category),
-        completed: Boolean(section.completed),
-        locked: Boolean(section.locked),
+        id,
+        title,
+        category,
+        completed: asBoolean(section.completed),
+        locked: asBoolean(section.locked),
       };
     })
     .filter((section): section is getAllSectionsResponse["sections"][number] => section != null);
 
   const normalizedCategories =
-    rawData?.categories && rawData.categories.length > 0
-      ? rawData.categories.map(category => String(category))
+    rawCategories && rawCategories.length > 0
+      ? rawCategories.map(category => String(category))
       : Array.from(new Set(normalizedSections.map(section => section.category)));
 
   return {
