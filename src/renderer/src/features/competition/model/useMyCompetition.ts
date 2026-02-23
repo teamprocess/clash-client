@@ -21,7 +21,7 @@ const growthRateDropDownValue: { key: GrowthRateStandard; label: string }[] = [
 ];
 
 export const useMyCompetition = () => {
-  const [competitionDropdown, setCompetitionDropdown] = useState<CompareStandard>("TODAY");
+  const [competitionDropdown, setCompetitionDropdown] = useState<CompareStandard>("YESTERDAY");
 
   const [growthRateDropdown, setGrowthRateDropdown] = useState<GrowthRateStandard>("DAY");
 
