@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { font } from "@/shared/config/font";
-import Cry from "./assets/cry-emoji.svg";
+import Cry from "@/shared/ui/assets/cry-emoji.svg";
 import Home from "./assets/home.svg";
 import Competition from "./assets/competition.svg";
 import Record from "./assets/record.svg";

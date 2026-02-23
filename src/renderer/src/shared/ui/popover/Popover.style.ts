@@ -1,9 +1,19 @@
 import styled from "styled-components";
 
-export const PopoverContainer = styled.div<{ $align: "start" | "end"; $offset: number }>`
+const resolveOffsetValue = (value: number | string) =>
+  typeof value === "number" ? `${value}px` : value;
+
+export const PopoverContainer = styled.div<{
+  $align: "start" | "end";
+  $offset: number;
+  $alignOffset: number | string;
+}>`
   position: absolute;
   top: calc(100% + ${({ $offset }) => $offset}px);
-  ${({ $align }) => ($align === "end" ? "right: 0;" : "left: 0;")}
+  ${({ $align, $alignOffset }) =>
+    $align === "end"
+      ? `right: ${resolveOffsetValue($alignOffset)};`
+      : `left: ${resolveOffsetValue($alignOffset)};`}
   min-width: 7rem;
   background-color: ${({ theme }) => theme.label.disable};
   border-radius: 0.5rem;
