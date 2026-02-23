@@ -7,7 +7,7 @@ export type StreakItem = {
 
 export interface VariationItem {
   month: number;
-  avgVariationPerMonth: number;
+  totalVariationPerMonth: number;
 }
 
 export type ActiveResponse = {
