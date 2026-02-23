@@ -91,7 +91,7 @@ export const ProfileMention = styled.span`
   color: ${({ theme }) => theme.label.alternative};
 `;
 
-export const Status = styled.div<{ $status }>`
+export const Status = styled.div<{ $status: "ONLINE" | "AWAY" | "OFFLINE" }>`
   ${font.caption.bold};
   display: flex;
   justify-content: center;
