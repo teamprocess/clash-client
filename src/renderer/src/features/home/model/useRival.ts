@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useMyRivalsQuery, MyRivalsRequest, MyRivalsResponse } from "@/entities/competition";
 import {
   useRivalListQuery,
@@ -45,11 +45,35 @@ export const useRival = () => {
 
   const [modalOpen, setModalOpen] = useState(false);
 
+  const [searchText, setSearchText] = useState("");
+
+  const resetSearch = () => {
+    setSearchText("");
+  };
+
+  const filteredUsers = useMemo(() => {
+    const users = userList?.users ?? [];
+    const q = searchText.trim().toLowerCase();
+    if (!q) return users;
+
+    return users.filter(u => {
+      const name = (u.name ?? "").toLowerCase();
+      const username = (u.username ?? "").toLowerCase();
+      return name.includes(q) || username.includes(q);
+    });
+  }, [userList?.users, searchText]);
+
   const handleOpen = () => setModalOpen(true);
 
   const handleClose = () => {
     setModalOpen(false);
     setRivalSelectedId([]);
+    resetSearch();
+  };
+
+  const handleSelectClose = () => {
+    setRivalSelectedId([]);
+    resetSearch();
   };
 
   const [rivalSelectedId, setRivalSelectedId] = useState<number[]>([]);
@@ -80,11 +104,10 @@ export const useRival = () => {
 
     try {
       await rivalsApi.postRivalApply(payload);
+      handleClose();
     } catch (error: unknown) {
       console.error("라이벌 신청 실패:", error);
       setError(getErrorMessage(error, "라이벌 신청 중 오류가 발생했습니다."));
-    } finally {
-      handleClose();
     }
   };
 
@@ -95,10 +118,14 @@ export const useRival = () => {
     modalOpen,
     setModalOpen,
     handleOpen,
+    handleSelectClose,
     handleClose,
     rivalSelectedId,
     handleUserSelect,
     handleRivalCreate,
     error,
+    searchText,
+    setSearchText,
+    filteredUsers,
   };
 };
