@@ -34,12 +34,7 @@ export const Rival = () => {
       </S.RivalBox>
 
       {rival.modalOpen && (
-        <AddRivalsDialog
-          isOpen={rival.modalOpen}
-          onClose={rival.handleClose}
-          usingState="home"
-          rival={rival}
-        />
+        <AddRivalsDialog isOpen={rival.modalOpen} onClose={rival.handleClose} rival={rival} />
       )}
     </S.RivalContainer>
   );
