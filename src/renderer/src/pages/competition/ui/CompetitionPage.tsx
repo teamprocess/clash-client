@@ -10,7 +10,7 @@ export const CompetitionPage = () => {
   const { myRivalsData, competitionTab, setCompetitionTab } = useCompetition();
   const rival = useRival();
 
-  const isEmptyRivals = (myRivalsData?.data?.myRivals.length ?? 0) === 1;
+  const isEmptyRivals = (myRivalsData?.data?.myRivals.length ?? 0) === 0;
 
   const [isPreDialogOpen, setIsPreDialogOpen] = useState(false);
 
