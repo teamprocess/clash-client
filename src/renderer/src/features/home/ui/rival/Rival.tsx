@@ -13,7 +13,7 @@ export const Rival = () => {
       <S.TitleBox>
         <S.ActiveBox style={{ flexDirection: "row", gap: "1rem" }}>
           <S.Title>내 라이벌</S.Title>
-          {rival.rivalsData?.myRivals.length !== 0 && (
+          {(rival.rivalsData?.myRivals.length ?? 0) > 0 && (
             <Button size={"sm"} variant={"primary"} onClick={rival.handleDeleteModalOpen}>
               라이벌 끊기
             </Button>
@@ -45,7 +45,7 @@ export const Rival = () => {
         <AddRivalsDialog isOpen={rival.modalOpen} onClose={rival.handleClose} rival={rival} />
       )}
 
-      {rival.rivalsData?.myRivals.length !== 0 && rival.rivalDeleteOpen && (
+      {rival.rivalDeleteOpen && (
         <DeleteRivalsDialog
           isOpen={rival.rivalDeleteOpen}
           onClose={rival.handleDeleteModalClose}
