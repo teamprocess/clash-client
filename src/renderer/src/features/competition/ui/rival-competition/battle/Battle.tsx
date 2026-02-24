@@ -77,7 +77,7 @@ export const Battle = () => {
                             $isRival
                             style={{ justifyContent: "flex-start" }}
                           >
-                            <S.PercentText>
+                            <S.PercentText style={{ paddingLeft: "0.5rem" }}>
                               {battle.rivalPercent != null ? Math.round(battle.rivalPercent) : 0}%
                             </S.PercentText>
                           </S.UpperHandBar>
@@ -87,7 +87,7 @@ export const Battle = () => {
                             $isRival={false}
                             style={{ justifyContent: "flex-end" }}
                           >
-                            <S.PercentText>
+                            <S.PercentText style={{ paddingRight: "0.5rem" }}>
                               {battle.myPercent != null ? Math.round(battle.myPercent) : 0}%
                             </S.PercentText>
                           </S.UpperHandBar>
@@ -148,7 +148,7 @@ export const Battle = () => {
 
                           <S.AnalyzeContent style={{ width: "100%" }}>
                             <S.AnalyzeBar $width={battle.rivalAnalyzeRate ?? 0} $isRival>
-                              <S.AnalyzeLabel>
+                              <S.AnalyzeLabel style={{ padding: " 0 0.5rem" }}>
                                 <div>
                                   {Math.round(battle.rivalAnalyzePoint ?? 0)}{" "}
                                   {battle.detailTextTranslate(battle.category)}
@@ -160,7 +160,7 @@ export const Battle = () => {
                             </S.AnalyzeBar>
 
                             <S.AnalyzeBar $width={battle.myAnalyzeRate ?? 0} $isRival={false}>
-                              <S.AnalyzeLabel>
+                              <S.AnalyzeLabel style={{ padding: " 0 0.5rem" }}>
                                 <div>
                                   {Math.round(battle.myAnalyzePoint ?? 0)}{" "}
                                   {battle.detailTextTranslate(battle.category)}
