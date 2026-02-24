@@ -34,7 +34,7 @@ export const rivalsApi = {
     return result.data;
   },
 
-  postRivalDelete: async (id: number) => {
+  deleteRival: async (id: number) => {
     const result = await api.delete(`/compete/rivals/remove/${id}`);
     return result.data;
   },

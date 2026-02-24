@@ -6,6 +6,7 @@ import {
   RivalApplyRequest,
   rivalsApi,
 } from "@/entities/home";
+import { queryClient } from "@/shared/lib";
 import { getErrorMessage } from "@/shared/lib";
 
 export interface MyRivalItem {
@@ -126,7 +127,8 @@ export const useRival = () => {
     if (!selectedId) return;
 
     try {
-      await rivalsApi.postRivalDelete(selectedId);
+      await rivalsApi.deleteRival(selectedId);
+      await queryClient.invalidateQueries({ queryKey: ["myRivals"] });
       handleDeleteModalClose();
     } catch (error: unknown) {
       console.error("라이벌 삭제 실패:", error);
