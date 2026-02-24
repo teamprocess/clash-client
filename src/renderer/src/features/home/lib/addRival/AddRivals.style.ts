@@ -106,8 +106,7 @@ export const UncheckedBox = styled.div`
 export const ErrorText = styled.span`
   ${font.caption.medium};
   color: ${palette.red[60]};
-  margin-top: 0.5rem;
-  display: block;
+  width: 100%;
 `;
 
 export const AddRivalsContainer = styled.div`
