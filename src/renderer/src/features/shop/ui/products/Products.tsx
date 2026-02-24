@@ -131,9 +131,12 @@ export const Products = ({ products, isLoading }: ProductsProps) => {
               </S.MajorInfoWrapper>
             </S.InfoContainer>
 
-            <S.PurchaseBtn onClick={handleOpenPurchase}>
-              {selectedProduct.type === "TOKEN" ? <S.TokenIcon /> : <S.CookieIcon />}
-              {`${calculateDiscountedPrice(selectedProduct.price, selectedProduct.discount)}에 구매하기`}
+            <S.PurchaseBtn $isBought={selectedProduct.isBought} onClick={handleOpenPurchase}>
+              {!selectedProduct.isBought &&
+                (selectedProduct.type === "TOKEN" ? <S.TokenIcon /> : <S.CookieIcon />)}
+              {selectedProduct.isBought
+                ? "이미 구매한 상품입니다."
+                : `${calculateDiscountedPrice(selectedProduct.price, selectedProduct.discount)}에 구매하기`}
             </S.PurchaseBtn>
           </S.DetailPanel>
         )}

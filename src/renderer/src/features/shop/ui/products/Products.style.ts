@@ -159,7 +159,7 @@ export const DescriptionTitle = styled.h3`
   ${font.body.medium};
 `;
 
-export const PurchaseBtn = styled.div`
+export const PurchaseBtn = styled.div<{ $isBought?: boolean }>`
   display: flex;
   height: 3rem;
   width: 100%;
@@ -167,7 +167,9 @@ export const PurchaseBtn = styled.div`
   justify-content: center;
   align-items: center;
   border-radius: 0.5rem;
-  background-color: ${({ theme }) => theme.primary.normal};
+  background-color: ${({ theme, $isBought }) =>
+    $isBought ? theme.fill.neutral : theme.primary.normal};
   ${font.headline2.bold};
-  cursor: pointer;
+  cursor: ${({ $isBought }) => ($isBought ? "default" : "pointer")};
+  pointer-events: ${({ $isBought }) => ($isBought ? "none" : "auto")};
 `;
