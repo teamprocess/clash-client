@@ -41,7 +41,9 @@ export const useBattle = () => {
   const analyzeData: AnalyzeBattleResponse | null = analyzeRes?.data ?? null;
   const battleList: BattleListResponse | null = battleListRes?.data ?? null;
 
-  const myPercent = battleDetailData?.myOverallPercentage ?? 50;
+  const raw = battleDetailData?.myOverallPercentage;
+
+  const myPercent = raw == null || raw === 0 ? 50 : raw;
   const rivalPercent = 100 - myPercent;
 
   const judgeUpperHand = (result: string) => {
