@@ -180,6 +180,7 @@ export const BattleProfileBox = styled.button`
 
 export const BattleName = styled.p`
   ${font.headline1.medium};
+  color: ${({ theme }) => theme.label.normal};
 `;
 
 export const DateBox = styled.div`
@@ -279,7 +280,7 @@ export const UpperHandBar = styled.div<{
   $isRival: boolean;
 }>`
   display: flex;
-  padding: 0 0.5rem;
+  padding: 0;
   width: ${({ $width }) => `${$width}%`};
   height: 100%;
   transition: width 0.4s ease;
@@ -344,7 +345,7 @@ export const AnalyzeName = styled.p`
 
 export const AnalyzeBar = styled.div<{ $width: number; $isRival: boolean }>`
   display: flex;
-  padding: 0.5rem;
+  padding: 0.5rem 0;
   width: ${({ $width }) => `${$width}%`};
   ${({ $isRival, theme }) =>
     $isRival
@@ -472,13 +473,6 @@ export const CompareDiff = styled.span`
   ${font.caption.bold}
   color: ${palette.neutral[99]};
   white-space: nowrap;
-`;
-
-export const ModalBox = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
 `;
 
 export const ModalContent = styled.div`

@@ -3,6 +3,9 @@ import { UserStatus, getStatus } from "@/features/competition/model/useMyRivals"
 import { useMyRivals } from "@/features/competition/model/useMyRivals";
 import { formatTime } from "@/shared/lib";
 import { MyRivalsResponse } from "@/entities/competition";
+import { useRival } from "@/features/home/model/useRival";
+import { DeleteRivalsDialog } from "@/features/home/lib";
+import { Button } from "@/shared/ui";
 
 interface MyRivalsProps {
   data: MyRivalsResponse;
@@ -10,12 +13,18 @@ interface MyRivalsProps {
 
 export const MyRivals = ({ data }: MyRivalsProps) => {
   const { myRivals } = useMyRivals({ data });
+  const rival = useRival();
 
   return (
     <S.ListContent>
       <S.RivalList>
         <S.TitleBox>
           <S.Title>내 라이벌</S.Title>
+          {(rival.rivalsData?.myRivals.length ?? 0) > 0 && (
+            <Button size={"sm"} variant={"primary"} onClick={rival.handleDeleteModalOpen}>
+              라이벌 끊기
+            </Button>
+          )}
         </S.TitleBox>
         <S.GaroLine />
         <S.ProfileWrapper>
@@ -56,6 +65,14 @@ export const MyRivals = ({ data }: MyRivalsProps) => {
           )}
         </S.ProfileWrapper>
       </S.RivalList>
+
+      {rival.rivalDeleteOpen && (
+        <DeleteRivalsDialog
+          isOpen={rival.rivalDeleteOpen}
+          onClose={rival.handleDeleteModalClose}
+          rival={rival}
+        />
+      )}
     </S.ListContent>
   );
 };
