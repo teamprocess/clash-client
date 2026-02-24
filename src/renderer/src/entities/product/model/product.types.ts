@@ -31,6 +31,7 @@ export interface Product {
   seasonName: string;
   isSeasonal: boolean;
   createdAt: string;
+  isBought: boolean;
 }
 
 export interface GetProductsRequest {
