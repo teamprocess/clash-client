@@ -6,6 +6,9 @@ import { useBattle } from "@/features/competition/model/useBattle";
 export const Battle = () => {
   const battle = useBattle();
 
+  const battles = battle.battleData?.battles ?? [];
+  const hasBattles = battles.length > 0;
+
   return (
     <>
       <S.ContentBox>
@@ -18,176 +21,176 @@ export const Battle = () => {
               </S.BattleTextBox>
               <S.MakeBattle onClick={battle.openModal}>배틀 생성하기</S.MakeBattle>
             </S.TitleBox>
+
             <S.GaroLine />
-            <S.BattleListContainer>
-              {battle.battleData?.battles && battle.battleData.battles.length > 0 ? (
-                battle.battleData.battles.slice(0, 4).map(battleItem => (
-                  <S.BattleProfileBox
-                    key={battleItem.id}
-                    onClick={() => battle.selectBattleTarget(battleItem.id)}
-                  >
-                    <S.ProfileContent>
-                      <S.NameBox>
-                        <S.UpperHandJudge $type={battle.judgeUpperHand(battleItem.result)}>
-                          {battle.judgeUpperHand(battleItem.result)}
-                        </S.UpperHandJudge>
 
-                        <S.BattleName>vs {battleItem.enemy.name}</S.BattleName>
-
-                        <S.DateBox>
-                          <S.DateIcon />
-                          <S.DateText>{battleItem.expireDate}</S.DateText>
-                        </S.DateBox>
-                      </S.NameBox>
-                    </S.ProfileContent>
-
-                    <S.DetailBox>
-                      <S.DetailButton>
-                        {battleItem.result === MATCHVALUE.WON ||
-                        battleItem.result === MATCHVALUE.LOST
-                          ? "결과 보기"
-                          : "상세 내용 보기"}
-                      </S.DetailButton>
-                      <S.BackArrowIcon />
-                    </S.DetailBox>
-                  </S.BattleProfileBox>
-                ))
-              ) : (
-                <S.DetailWrapper
-                  style={{
-                    height: "18rem",
-                  }}
-                >
-                  <S.DefaultBattleBox>
-                    <S.DefaultBattleText>
-                      현재 배틀에 관한 데이터가 없습니다. 배틀을 생성해보세요!
-                    </S.DefaultBattleText>
-                  </S.DefaultBattleBox>
-                </S.DetailWrapper>
-              )}
-            </S.BattleListContainer>
-
-            {battle.isBattleSelected ? (
-              <S.DetailWrapper>
-                <S.UpperHandContainer>
-                  <S.UpperHandProfile>
-                    <S.UpperHandProfileIcon />
-                    <S.UpperHandName>{battle.battleDetailData?.enemy.name}</S.UpperHandName>
-                  </S.UpperHandProfile>
-
-                  <S.TransitionBox>
-                    <S.UpperHandTransition>
-                      <S.UpperHandBar
-                        $width={battle.rivalPercent ?? 0}
-                        $isRival
-                        style={{
-                          justifyContent: "flex-start",
-                        }}
-                      >
-                        <S.PercentText>
-                          {battle.rivalPercent !== null ? Math.round(battle.rivalPercent) : 0}%
-                        </S.PercentText>
-                      </S.UpperHandBar>
-
-                      <S.UpperHandBar
-                        $width={battle.myPercent ?? 0}
-                        $isRival={false}
-                        style={{
-                          justifyContent: "flex-end",
-                        }}
-                      >
-                        <S.PercentText>
-                          {battle.myPercent !== null ? Math.round(battle.myPercent) : 0}%
-                        </S.PercentText>
-                      </S.UpperHandBar>
-                    </S.UpperHandTransition>
-
-                    <S.WarPeriodText>
-                      {battle.remainDays !== null && battle.remainDays > 0
-                        ? `종료 ${battle.battleDetailData?.expireDate} · ${battle.remainDays}일 남음`
-                        : `종료된 배틀입니다!`}
-                    </S.WarPeriodText>
-                  </S.TransitionBox>
-
-                  <S.UpperHandProfile>
-                    <S.UpperHandProfileIcon />
-                    <S.UpperHandName>나</S.UpperHandName>
-                  </S.UpperHandProfile>
-                </S.UpperHandContainer>
-
-                <S.GaroLine />
-
-                <S.DetailAnalyzeContainer>
-                  <S.TitleBox>
-                    <S.AnalyzeText>세부 분석</S.AnalyzeText>
-                    <S.DropDownBox>
-                      <S.SelectWrapper>
-                        <S.Select
-                          value={battle.category}
-                          onChange={e => battle.setCategory(e.target.value as AnalyzeCategory)}
-                        >
-                          {battle.analyzeCategoryOptions.map(option => (
-                            <S.Option key={option.key} value={option.key}>
-                              {option.label}
-                            </S.Option>
-                          ))}
-                        </S.Select>
-                        <S.ArrowIcon />
-                      </S.SelectWrapper>
-                    </S.DropDownBox>
-                  </S.TitleBox>
-
-                  <S.AnalyzeBox>
-                    <div
-                      style={{
-                        display: "flex",
-                        flexDirection: "row",
-                        alignItems: "center",
-                        gap: "1.5rem",
-                        width: "100%",
-                        height: "100%",
-                      }}
+            {hasBattles ? (
+              <>
+                {/* 배틀 리스트 */}
+                <S.BattleListContainer>
+                  {battles.map(battleItem => (
+                    <S.BattleProfileBox
+                      key={battleItem.id}
+                      onClick={() => battle.selectBattleTarget(battleItem.id)}
                     >
-                      <S.AnalyzeContent>
-                        <S.AnalyzeName>{battle.battleDetailData?.enemy.name}</S.AnalyzeName>
-                        <S.AnalyzeName>나</S.AnalyzeName>
-                      </S.AnalyzeContent>
-                      <S.SeroLine />
-                      <S.AnalyzeContent style={{ width: "100%" }}>
-                        <S.AnalyzeBar $width={battle.rivalAnalyzeRate ?? 0} $isRival>
-                          <S.AnalyzeLabel>
-                            <div>
-                              {Math.round(battle.rivalAnalyzePoint)}{" "}
-                              {battle.detailTextTranslate(battle.category)}
-                            </div>
-                            {battle.isRivalHigher && battle.diff !== null && battle.diff > 0 && (
-                              <S.CompareDiff>+{Math.round(battle.diff)}%</S.CompareDiff>
-                            )}
-                          </S.AnalyzeLabel>
-                        </S.AnalyzeBar>
+                      <S.ProfileContent>
+                        <S.NameBox>
+                          <S.UpperHandJudge $type={battle.judgeUpperHand(battleItem.result)}>
+                            {battle.judgeUpperHand(battleItem.result)}
+                          </S.UpperHandJudge>
 
-                        <S.AnalyzeBar $width={battle.myAnalyzeRate ?? 0} $isRival={false}>
-                          <S.AnalyzeLabel>
-                            <div>
-                              {Math.round(battle.myAnalyzePoint)}{" "}
-                              {battle.detailTextTranslate(battle.category)}
-                            </div>
-                            {!battle.isRivalHigher && battle.diff !== null && battle.diff > 0 && (
-                              <S.CompareDiff>+{Math.round(battle.diff)}%</S.CompareDiff>
-                            )}
-                          </S.AnalyzeLabel>
-                        </S.AnalyzeBar>
-                      </S.AnalyzeContent>
-                    </div>
-                  </S.AnalyzeBox>
-                </S.DetailAnalyzeContainer>
-              </S.DetailWrapper>
+                          <S.BattleName>vs {battleItem.enemy.name}</S.BattleName>
+
+                          <S.DateBox>
+                            <S.DateIcon />
+                            <S.DateText>{battleItem.expireDate}</S.DateText>
+                          </S.DateBox>
+                        </S.NameBox>
+                      </S.ProfileContent>
+
+                      <S.DetailBox>
+                        <S.DetailButton>
+                          {battleItem.result === MATCHVALUE.WON ||
+                          battleItem.result === MATCHVALUE.LOST
+                            ? "결과 보기"
+                            : "상세 내용 보기"}
+                        </S.DetailButton>
+                        <S.BackArrowIcon />
+                      </S.DetailBox>
+                    </S.BattleProfileBox>
+                  ))}
+                </S.BattleListContainer>
+
+                {/* 상세 영역 */}
+                {battle.isBattleSelected ? (
+                  <S.DetailWrapper>
+                    <S.UpperHandContainer>
+                      <S.UpperHandProfile>
+                        <S.UpperHandProfileIcon />
+                        <S.UpperHandName>{battle.battleDetailData?.enemy.name}</S.UpperHandName>
+                      </S.UpperHandProfile>
+
+                      <S.TransitionBox>
+                        <S.UpperHandTransition>
+                          <S.UpperHandBar
+                            $width={battle.rivalPercent ?? 0}
+                            $isRival
+                            style={{ justifyContent: "flex-start" }}
+                          >
+                            <S.PercentText>
+                              {battle.rivalPercent != null ? Math.round(battle.rivalPercent) : 0}%
+                            </S.PercentText>
+                          </S.UpperHandBar>
+
+                          <S.UpperHandBar
+                            $width={battle.myPercent ?? 0}
+                            $isRival={false}
+                            style={{ justifyContent: "flex-end" }}
+                          >
+                            <S.PercentText>
+                              {battle.myPercent != null ? Math.round(battle.myPercent) : 0}%
+                            </S.PercentText>
+                          </S.UpperHandBar>
+                        </S.UpperHandTransition>
+
+                        <S.WarPeriodText>
+                          {battle.remainDays != null && battle.remainDays > 0
+                            ? `종료 ${battle.battleDetailData?.expireDate} · ${battle.remainDays}일 남음`
+                            : `종료된 배틀입니다!`}
+                        </S.WarPeriodText>
+                      </S.TransitionBox>
+
+                      <S.UpperHandProfile>
+                        <S.UpperHandProfileIcon />
+                        <S.UpperHandName>나</S.UpperHandName>
+                      </S.UpperHandProfile>
+                    </S.UpperHandContainer>
+
+                    <S.GaroLine />
+
+                    <S.DetailAnalyzeContainer>
+                      <S.TitleBox>
+                        <S.AnalyzeText>세부 분석</S.AnalyzeText>
+                        <S.DropDownBox>
+                          <S.SelectWrapper>
+                            <S.Select
+                              value={battle.category}
+                              onChange={e => battle.setCategory(e.target.value as AnalyzeCategory)}
+                            >
+                              {battle.analyzeCategoryOptions.map(option => (
+                                <S.Option key={option.key} value={option.key}>
+                                  {option.label}
+                                </S.Option>
+                              ))}
+                            </S.Select>
+                            <S.ArrowIcon />
+                          </S.SelectWrapper>
+                        </S.DropDownBox>
+                      </S.TitleBox>
+
+                      <S.AnalyzeBox>
+                        <div
+                          style={{
+                            display: "flex",
+                            flexDirection: "row",
+                            alignItems: "center",
+                            gap: "1.5rem",
+                            width: "100%",
+                            height: "100%",
+                          }}
+                        >
+                          <S.AnalyzeContent>
+                            <S.AnalyzeName>{battle.battleDetailData?.enemy.name}</S.AnalyzeName>
+                            <S.AnalyzeName>나</S.AnalyzeName>
+                          </S.AnalyzeContent>
+
+                          <S.SeroLine />
+
+                          <S.AnalyzeContent style={{ width: "100%" }}>
+                            <S.AnalyzeBar $width={battle.rivalAnalyzeRate ?? 0} $isRival>
+                              <S.AnalyzeLabel>
+                                <div>
+                                  {Math.round(battle.rivalAnalyzePoint ?? 0)}{" "}
+                                  {battle.detailTextTranslate(battle.category)}
+                                </div>
+                                {battle.isRivalHigher && (battle.diff ?? 0) > 0 && (
+                                  <S.CompareDiff>+{Math.round(battle.diff ?? 0)}%</S.CompareDiff>
+                                )}
+                              </S.AnalyzeLabel>
+                            </S.AnalyzeBar>
+
+                            <S.AnalyzeBar $width={battle.myAnalyzeRate ?? 0} $isRival={false}>
+                              <S.AnalyzeLabel>
+                                <div>
+                                  {Math.round(battle.myAnalyzePoint ?? 0)}{" "}
+                                  {battle.detailTextTranslate(battle.category)}
+                                </div>
+                                {!battle.isRivalHigher && (battle.diff ?? 0) > 0 && (
+                                  <S.CompareDiff>+{Math.round(battle.diff ?? 0)}%</S.CompareDiff>
+                                )}
+                              </S.AnalyzeLabel>
+                            </S.AnalyzeBar>
+                          </S.AnalyzeContent>
+                        </div>
+                      </S.AnalyzeBox>
+                    </S.DetailAnalyzeContainer>
+                  </S.DetailWrapper>
+                ) : (
+                  <S.DetailWrapper>
+                    <S.DefaultBattleBox>
+                      <S.FireIcon />
+                      <S.DefaultBattleText>
+                        위 배틀을 선택하여 배틀의 상세 내용을 확인해보세요!
+                      </S.DefaultBattleText>
+                    </S.DefaultBattleBox>
+                  </S.DetailWrapper>
+                )}
+              </>
             ) : (
               <S.DetailWrapper>
                 <S.DefaultBattleBox>
-                  <S.FireIcon />
                   <S.DefaultBattleText>
-                    위 배틀을 선택하여 배틀의 상세 내용을 확인해보세요!
+                    현재 배틀에 관한 데이터가 없습니다. 배틀을 생성해보세요!
                   </S.DefaultBattleText>
                 </S.DefaultBattleBox>
               </S.DetailWrapper>
@@ -196,6 +199,7 @@ export const Battle = () => {
         </S.Content>
       </S.ContentBox>
 
+      {/* 배틀 생성 모달 */}
       {battle.isModalOpen && (
         <Dialog
           title={"배틀 생성하기"}
@@ -223,13 +227,8 @@ export const Battle = () => {
                 </S.UserChoiceBox>
               ))}
             </S.UserChoiceContainer>
-            <div
-              style={{
-                display: "flex",
-                width: "100%",
-                justifyContent: "space-between",
-              }}
-            >
+
+            <div style={{ display: "flex", width: "100%", justifyContent: "space-between" }}>
               {battle.periodOptions.map(day => (
                 <S.DateChoiceBox
                   key={day}
@@ -243,6 +242,7 @@ export const Battle = () => {
                 </S.DateChoiceBox>
               ))}
             </div>
+
             <S.BottomBox>
               <S.ButtonBox>
                 <S.CloseButton onClick={battle.closeModal}>취소</S.CloseButton>
