@@ -54,7 +54,7 @@ export const Github = ({ today, yesterday }: CompareResponse) => {
               </S.CalculateContainer>
             </S.CalculateBox>
           </S.InfoContent>
-          <S.InfoContent>
+          <S.InfoContent style={{ marginBottom: "1rem" }}>
             <S.InfoTitle>PR 수</S.InfoTitle>
             <S.CalculateBox>
               <S.GithubInfoBox>
@@ -80,15 +80,6 @@ export const Github = ({ today, yesterday }: CompareResponse) => {
                     Merged <S.TimeText>{yesterday?.pullRequest.mergedCount ?? 0}</S.TimeText> · Open{" "}
                     <S.TimeText>{yesterday?.pullRequest.openCount ?? 0}</S.TimeText> · Closed{" "}
                     <S.TimeText>{yesterday?.pullRequest.closedCount ?? 0}</S.TimeText>
-                  </S.ExplainText>
-                </S.CalculateInfoBox>
-                <S.WidthLine />
-                <S.CalculateInfoBox>
-                  <S.ReviewIcon $width={1.25} />
-                  <S.ExplainText>
-                    리뷰 요청 <S.TimeText>{yesterday?.pullRequest.inReviewCount ?? 0}</S.TimeText> ·
-                    승인 <S.TimeText>{yesterday?.pullRequest.approvedCount ?? 0}</S.TimeText> ·
-                    변경요청 <S.TimeText>{yesterday?.pullRequest.requestCount ?? 0}</S.TimeText>
                   </S.ExplainText>
                 </S.CalculateInfoBox>
               </S.CalculateContainer>
@@ -171,7 +162,7 @@ export const Github = ({ today, yesterday }: CompareResponse) => {
               </S.CalculateContainer>
             </S.CalculateBox>
           </S.InfoContent>
-          <S.InfoContent>
+          <S.InfoContent style={{ marginBottom: "1rem" }}>
             <S.InfoTitle>PR 수</S.InfoTitle>
             <S.CalculateBox>
               <S.GrowthBox>
@@ -204,15 +195,6 @@ export const Github = ({ today, yesterday }: CompareResponse) => {
                     Merged <S.TimeText>{today?.pullRequest.mergedCount ?? 0}</S.TimeText> · Open{" "}
                     <S.TimeText>{today?.pullRequest.openCount ?? 0}</S.TimeText> · Closed{" "}
                     <S.TimeText>{today?.pullRequest.closedCount ?? 0}</S.TimeText>
-                  </S.ExplainText>
-                </S.CalculateInfoBox>
-                <S.WidthLine />
-                <S.CalculateInfoBox>
-                  <S.ReviewIcon $width={1.25} />
-                  <S.ExplainText>
-                    리뷰 요청 <S.TimeText>{today?.pullRequest.inReviewCount ?? 0}</S.TimeText> ·
-                    승인 <S.TimeText>{today?.pullRequest.approvedCount ?? 0}</S.TimeText> · 변경요청{" "}
-                    <S.TimeText>{today?.pullRequest.requestCount ?? 0}</S.TimeText>
                   </S.ExplainText>
                 </S.CalculateInfoBox>
               </S.CalculateContainer>
