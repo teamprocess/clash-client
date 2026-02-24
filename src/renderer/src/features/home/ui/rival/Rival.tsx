@@ -2,7 +2,8 @@ import * as S from "./Rival.style";
 import { MyRivalUsers } from "@/features/home/ui/rival/myrival-users/MyRivalUsers";
 import { Link } from "react-router-dom";
 import { useRival } from "@/features/home/model/useRival";
-import { AddRivalsDialog } from "@/features/home/lib/AddRivals";
+import { AddRivalsDialog, DeleteRivalsDialog } from "@/features/home/lib";
+import { Button } from "@/shared/ui";
 
 export const Rival = () => {
   const rival = useRival();
@@ -10,7 +11,14 @@ export const Rival = () => {
   return (
     <S.RivalContainer>
       <S.TitleBox>
-        <S.Title>내 라이벌</S.Title>
+        <S.ActiveBox style={{ flexDirection: "row", gap: "1rem" }}>
+          <S.Title>내 라이벌</S.Title>
+          {(rival.rivalsData?.myRivals.length ?? 0) > 0 && (
+            <Button size={"sm"} variant={"primary"} onClick={rival.handleDeleteModalOpen}>
+              라이벌 끊기
+            </Button>
+          )}
+        </S.ActiveBox>
         <Link to="/competition">
           <S.ArrowBox style={{ cursor: "pointer" }}>
             자세히보기
@@ -35,6 +43,14 @@ export const Rival = () => {
 
       {rival.modalOpen && (
         <AddRivalsDialog isOpen={rival.modalOpen} onClose={rival.handleClose} rival={rival} />
+      )}
+
+      {rival.rivalDeleteOpen && (
+        <DeleteRivalsDialog
+          isOpen={rival.rivalDeleteOpen}
+          onClose={rival.handleDeleteModalClose}
+          rival={rival}
+        />
       )}
     </S.RivalContainer>
   );
