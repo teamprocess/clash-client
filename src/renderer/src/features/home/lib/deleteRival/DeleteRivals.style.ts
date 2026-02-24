@@ -38,9 +38,7 @@ export const UserChoiceContainer = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
-  height: 12rem;
-  overflow-y: auto;
-  scrollbar-width: none;
+  margin: 1rem 0;
 `;
 
 export const UserChoiceBox = styled.div<{ $isSelected: boolean }>`
@@ -57,10 +55,6 @@ export const UserChoiceBox = styled.div<{ $isSelected: boolean }>`
     padding: 0.5rem 0.75rem;
     background-color: ${({ theme }) => theme.fill.alternative};
   }
-`;
-
-export const BottomBox = styled.div`
-  margin-top: 0.9rem;
 `;
 
 export const ButtonBox = styled.div`
