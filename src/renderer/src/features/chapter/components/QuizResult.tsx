@@ -7,12 +7,12 @@ interface QuizResultProps {
   isCorrect?: boolean;
   currentIndex?: number;
   total: number;
-  explanation?: string;
+  explanation: string;
   correctCount?: number;
   errorMessage?: string | null;
-  onNext?: () => void;
-  onRestart?: () => void;
-  onClose?: () => void;
+  onNext: () => void;
+  onRestart: () => void;
+  onClose: () => void;
 }
 
 export const QuizResult = ({
