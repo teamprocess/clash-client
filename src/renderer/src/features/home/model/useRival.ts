@@ -128,9 +128,9 @@ export const useRival = () => {
     try {
       await rivalsApi.postRivalDelete(selectedId);
       handleDeleteModalClose();
-    } catch (err: unknown) {
-      console.error("라이벌 삭제 실패:", err);
-      setError(getErrorMessage(err, "라이벌 삭제 중 오류가 발생했습니다."));
+    } catch (error: unknown) {
+      console.error("라이벌 삭제 실패:", error);
+      setError(getErrorMessage(error, "라이벌 삭제 중 오류가 발생했습니다."));
     }
   };
 
