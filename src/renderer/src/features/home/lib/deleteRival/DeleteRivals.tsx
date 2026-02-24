@@ -16,9 +16,9 @@ export const DeleteRivalsDialog = ({ isOpen, onClose, rival }: DeleteRivalsDialo
         <S.UserChoiceContainer>
           {rival.rivalsData?.myRivals.map(user => (
             <S.UserChoiceBox
-              key={user.username}
-              $isSelected={rival.rivalSelectedId.includes(user.id)}
-              onClick={() => rival.handleDeleteUserSelect(user.id)}
+              key={user.rivalId}
+              $isSelected={rival.rivalSelectedId.includes(user.rivalId)}
+              onClick={() => rival.handleDeleteUserSelect(user.rivalId)}
             >
               <S.ProfileContent style={{ height: "3rem" }}>
                 <S.ProfileIcon />
@@ -27,8 +27,11 @@ export const DeleteRivalsDialog = ({ isOpen, onClose, rival }: DeleteRivalsDialo
                   <S.ProfileMention>@{user.username}</S.ProfileMention>
                 </S.ProfileTagBox>
               </S.ProfileContent>
-
-              {rival.rivalSelectedId.includes(user.id) ? <S.CheckedIcon /> : <S.UncheckedBox />}
+              {rival.rivalSelectedId.includes(user.rivalId) ? (
+                <S.CheckedIcon />
+              ) : (
+                <S.UncheckedBox />
+              )}
             </S.UserChoiceBox>
           ))}
         </S.UserChoiceContainer>
