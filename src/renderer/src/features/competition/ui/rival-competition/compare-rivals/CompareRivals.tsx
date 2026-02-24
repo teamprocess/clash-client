@@ -19,7 +19,10 @@ export const RivalCompare = () => {
     buildMultiLineData,
   } = useCompareRival();
 
+  const totalData = compareRivals?.totalData ?? [];
   const chartData = buildMultiLineData(compareRivals?.totalData ?? []);
+
+  const hasValidPoint = totalData.some(u => (u.dataPoint?.length ?? 0) > 0);
 
   return (
     <S.Content>
@@ -39,10 +42,22 @@ export const RivalCompare = () => {
             />
           </S.DropDownBox>
         </S.TitleBox>
+
         <S.GaroLine />
-        <S.ChartWrapper>
-          <RivalCompetitionLineChart chartData={chartData} />
-        </S.ChartWrapper>
+
+        {hasValidPoint ? (
+          <S.ChartWrapper>
+            <RivalCompetitionLineChart chartData={chartData} />
+          </S.ChartWrapper>
+        ) : (
+          <S.DetailWrapper>
+            <S.DefaultBattleBox>
+              <S.DefaultBattleText>
+                죄송합니다. 현재 {competitionDropdown}에 관한 데이터가 없습니다.
+              </S.DefaultBattleText>
+            </S.DefaultBattleBox>
+          </S.DetailWrapper>
+        )}
       </S.RivalCompareWrapper>
     </S.Content>
   );
