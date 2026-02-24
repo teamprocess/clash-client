@@ -4,6 +4,7 @@ import { font } from "@/shared/config/font";
 export const ShopContainer = styled.div`
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: 1rem;
 `;
 
@@ -22,7 +23,7 @@ export const MenuButton = styled.button<{ $isActive: boolean }>`
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 37rem;
+  flex: 1;
   height: 2.5rem;
   border-radius: 0.5rem;
   background-color: ${({ theme, $isActive }) =>
