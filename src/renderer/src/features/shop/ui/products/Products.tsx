@@ -28,6 +28,7 @@ const getCategoryLabel = (category: Product["category"]) => {
 
 export const Products = ({ products, isLoading }: ProductsProps) => {
   const selectedId = useProductDetailStore(s => s.selectedProductId);
+  const pendingProduct = useProductDetailStore(s => s.pendingProduct);
   const toggle = useProductDetailStore(s => s.toggle);
   const close = useProductDetailStore(s => s.close);
 
@@ -35,8 +36,10 @@ export const Products = ({ products, isLoading }: ProductsProps) => {
 
   const selectedProduct = useMemo(() => {
     if (selectedId == null) return null;
-    return products.find(product => String(product.id) === String(selectedId)) ?? null;
-  }, [products, selectedId]);
+    return (
+      products.find(product => String(product.id) === String(selectedId)) ?? pendingProduct ?? null
+    );
+  }, [products, selectedId, pendingProduct]);
 
   const isPanelOpen = selectedId !== null;
 
@@ -69,9 +72,11 @@ export const Products = ({ products, isLoading }: ProductsProps) => {
 
   useEffect(() => {
     if (selectedId == null) return;
+    if (isLoading) return;
+    if (pendingProduct !== null) return;
     const exists = products.some(p => String(p.id) === String(selectedId));
     if (!exists) close();
-  }, [products, selectedId, close]);
+  }, [products, selectedId, close, isLoading, pendingProduct]);
 
   if (isLoading) {
     return (
