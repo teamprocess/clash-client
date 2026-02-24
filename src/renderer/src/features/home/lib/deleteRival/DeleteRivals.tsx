@@ -12,7 +12,7 @@ interface DeleteRivalsDialogProps {
 export const DeleteRivalsDialog = ({ isOpen, onClose, rival }: DeleteRivalsDialogProps) => {
   return (
     <Dialog title={"라이벌 삭제"} width={21.625} height={25.175} isOpen={isOpen} onClose={onClose}>
-      <div style={{ display: "flex", flexDirection: "column", marginTop: "auto" }}>
+      <div style={{ display: "flex", flexDirection: "column" }}>
         <S.UserChoiceContainer>
           {rival.rivalsData?.myRivals.map(user => (
             <S.UserChoiceBox
@@ -36,14 +36,12 @@ export const DeleteRivalsDialog = ({ isOpen, onClose, rival }: DeleteRivalsDialo
           ))}
         </S.UserChoiceContainer>
 
-        <S.BottomBox>
-          <S.ButtonBox>
-            <Button fullWidth={true} variant={"primary"} onClick={rival.handleRivalDelete}>
-              라이벌 끊기
-            </Button>
-            {rival.error && <S.ErrorText>{rival.error}</S.ErrorText>}
-          </S.ButtonBox>
-        </S.BottomBox>
+        <S.ButtonBox>
+          <Button fullWidth={true} variant={"primary"} onClick={rival.handleRivalDelete}>
+            라이벌 끊기
+          </Button>
+          {rival.error && <S.ErrorText>{rival.error}</S.ErrorText>}
+        </S.ButtonBox>
       </div>
     </Dialog>
   );
