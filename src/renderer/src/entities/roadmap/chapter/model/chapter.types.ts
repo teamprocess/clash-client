@@ -80,3 +80,7 @@ export interface SubmitResultResponse {
   nextChapterId: number | null;
   nextChapterOrderIndex: number | null;
 }
+
+export interface ResetMissionRequest {
+  missionId: number;
+}
