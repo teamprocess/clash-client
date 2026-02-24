@@ -66,24 +66,34 @@ export const Grid = styled.div`
 `;
 
 // 고정 잔디색 (깃허브 기준)
-export const Grass = styled.div<{ $level: number }>`
+// export const Grass = styled.div<{ $level: number }>`
+//   width: 0.75rem;
+//   height: 0.75rem;
+//   border-radius: 0.15rem;
+//   background-color: ${({ $level, theme }) => {
+//     switch ($level) {
+//       case 4:
+//         return "#3DCD5FFF";
+//       case 3:
+//         return "#3DCD5FBF";
+//       case 2:
+//         return "#3DCD5F80";
+//       case 1:
+//         return "#3DCD5F40";
+//       default:
+//         return theme.fill.neutral;
+//     }
+//   }};
+// `;
+
+const GRASS_COLORS = ["", "#3DCD5F40", "#3DCD5F80", "#3DCD5FBF", "#3DCD5FFF"] as const;
+
+export const Grass = styled.div<{ $level: 0 | 1 | 2 | 3 | 4 }>`
   width: 0.75rem;
   height: 0.75rem;
   border-radius: 0.15rem;
-  background-color: ${({ $level, theme }) => {
-    switch ($level) {
-      case 4:
-        return "#3DCD5FFF";
-      case 3:
-        return "#3DCD5FBF";
-      case 2:
-        return "#3DCD5F80";
-      case 1:
-        return "#3DCD5F40";
-      default:
-        return theme.fill.neutral;
-    }
-  }};
+  background-color: ${({ $level, theme }) =>
+    $level === 0 ? theme.fill.neutral : GRASS_COLORS[$level]};
 `;
 
 export const GrassWrapper = styled.div`

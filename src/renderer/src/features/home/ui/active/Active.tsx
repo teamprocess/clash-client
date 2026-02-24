@@ -50,11 +50,12 @@ export const Active = ({ activeData }: ActiveProps) => {
               <S.Grid>
                 {active.paddedStreaks.map(day => {
                   const value = day.detailedInfo ?? 0;
+                  const level = day.isPadding ? 0 : active.levelFromRatio100(day.colorRatio);
 
                   return (
                     <S.GrassWrapper key={day.date}>
                       <S.Grass
-                        $level={active.getLevel(value)}
+                        $level={level}
                         style={day.isPadding ? { visibility: "hidden" } : undefined}
                         onMouseEnter={e => {
                           if (day.isPadding) return;

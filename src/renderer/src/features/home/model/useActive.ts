@@ -2,6 +2,8 @@ import React, { RefObject, useLayoutEffect, useMemo, useState } from "react";
 import { ActiveResponse, CategoryType } from "@/entities/home";
 import { buildPaddedStreak } from "@/shared/lib/buildPaddedStreaks";
 
+type GrassLevel = 0 | 1 | 2 | 3 | 4;
+
 const activeDropDownValue: { key: CategoryType; label: string }[] = [
   { key: "GITHUB", label: "Github" },
   { key: "EXP", label: "EXP" },
@@ -56,6 +58,15 @@ export const useActive = (
 
   const hideTooltip = () => setTooltip(prev => ({ ...prev, visible: false }));
 
+  const clamp = (n: number, min: number, max: number) => Math.max(min, Math.min(max, n));
+
+  const levelFromRatio100 = (ratio: number): GrassLevel => {
+    const r = clamp(Math.round(ratio), 0, 100);
+
+    if (r === 0) return 0; // default
+    return Math.ceil(r / 25) as GrassLevel; // 1~25=1, 26~50=2, 51~75=3, 76~100=4
+  };
+
   return {
     activeDropDownValue,
     paddedStreaks,
@@ -64,5 +75,6 @@ export const useActive = (
     tooltip,
     showTooltip,
     hideTooltip,
+    levelFromRatio100,
   };
 };
