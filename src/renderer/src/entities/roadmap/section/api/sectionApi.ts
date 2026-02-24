@@ -6,9 +6,7 @@ import {
 
 export const sectionApi = {
   // 전공별 섹션 조회
-  getMajorSection: async (
-    data: getMajorSectionRequest
-  ): Promise<ApiResponse<getAllSectionsServerResponse>> => {
+  getMajorSection: async (data: getMajorSectionRequest) => {
     const result = await api.get<ApiResponse<getAllSectionsServerResponse>>("/sections", {
       params: data,
     });
