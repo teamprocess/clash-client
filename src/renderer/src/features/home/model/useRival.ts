@@ -106,7 +106,10 @@ export const useRival = () => {
     setRivalSelectedId(prev => (prev[0] === id ? [] : [id]));
   };
 
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const handleRivalCreate = async () => {
+    if (isSubmitting) return;
     if (rivalSelectedId.length === 0) return;
 
     const payload: RivalApplyRequest = {
@@ -114,11 +117,14 @@ export const useRival = () => {
     };
 
     try {
+      setIsSubmitting(true);
       await rivalsApi.postRivalApply(payload);
       handleClose();
     } catch (error: unknown) {
       console.error("라이벌 신청 실패:", error);
       setError(getErrorMessage(error, "라이벌 신청 중 오류가 발생했습니다."));
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -129,6 +135,7 @@ export const useRival = () => {
     try {
       await rivalsApi.deleteRival(selectedId);
       await queryClient.invalidateQueries({ queryKey: ["myRivals"] });
+      await queryClient.invalidateQueries({ queryKey: ["rivalList"] });
       handleDeleteModalClose();
     } catch (error: unknown) {
       console.error("라이벌 삭제 실패:", error);

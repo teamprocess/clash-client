@@ -45,7 +45,7 @@ export const Rival = () => {
         <AddRivalsDialog isOpen={rival.modalOpen} onClose={rival.handleClose} rival={rival} />
       )}
 
-      {rival.rivalDeleteOpen && (
+      {rival.rivalsData?.myRivals.length !== 0 && rival.rivalDeleteOpen && (
         <DeleteRivalsDialog
           isOpen={rival.rivalDeleteOpen}
           onClose={rival.handleDeleteModalClose}
