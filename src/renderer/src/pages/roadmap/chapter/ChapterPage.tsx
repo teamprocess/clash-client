@@ -17,7 +17,7 @@ export const ChapterPage = () => {
   const { chapterRef, domain, view, handlers } = useChapter(numericSectionId);
 
   const { data: myProfile } = useGetMyProfile();
-  const major = myProfile?.major as MajorEnum | undefined;
+  const major = myProfile?.major as MajorEnum;
 
   const { data: sectionData } = useMajorSectionQuery(major);
 
