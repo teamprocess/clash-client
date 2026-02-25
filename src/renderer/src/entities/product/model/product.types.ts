@@ -41,6 +41,12 @@ export interface GetProductsRequest {
   category?: ProductCategory;
 }
 
+export interface SearchProductsRequest {
+  keyword: string;
+  sort?: ProductSort;
+  category?: ProductCategory;
+}
+
 export interface ProductListData {
   products: Product[];
 }
