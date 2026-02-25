@@ -1,6 +1,7 @@
 import * as S from "./Test.style";
 import { TestProps } from "@/features/major-choice/model/useMajorChoice";
 import { Button } from "@/shared/ui/button";
+import { Link } from "react-router-dom";
 
 const answerBoxData = [
   { id: 1, content: "매우 그렇지 않다", size: "Large" },
@@ -16,18 +17,28 @@ export const Test = ({
   handleSelect,
   handleComplete,
   getTestQuestion,
+  totalCount,
+  answeredCount,
 }: TestProps) => {
   const questionData = getTestQuestion();
+  const progress = totalCount > 0 ? (answeredCount / totalCount) * 100 : 0;
 
   return (
     <>
       <S.TestContainer>
         <S.QuestionWrapper>
+          <Link to="/roadmap">
+            <S.PreviousBox>
+              <S.PreviousIcon />
+              <S.PreviousLabel>이전으로</S.PreviousLabel>
+            </S.PreviousBox>
+          </Link>
           {questionData.map(({ id, content }, idx) => (
             <S.QuestionBox key={id}>
               <S.QuestionTitleBox>
                 <S.QuestionTitle>
-                  {id}. {content}
+                  <S.QuestionNumber>{id}.</S.QuestionNumber>
+                  {content}
                 </S.QuestionTitle>
               </S.QuestionTitleBox>
               <S.AnswerContainer>
@@ -62,6 +73,14 @@ export const Test = ({
           >
             결과 확인하기
           </Button>
+          <S.ProgressBarWrapper>
+            <S.ProgressTrack>
+              <S.ProgressFill $progress={progress} />
+            </S.ProgressTrack>
+            <S.ProgressLabel>
+              {answeredCount} / {totalCount}
+            </S.ProgressLabel>
+          </S.ProgressBarWrapper>
         </S.QuestionWrapper>
       </S.TestContainer>
     </>
