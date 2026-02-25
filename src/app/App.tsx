@@ -2,8 +2,21 @@ import { HashRouter, Navigate, Route, Routes, useLocation } from "react-router-d
 import { GoogleReCaptchaProvider } from "react-google-recaptcha-v3";
 import { SignInPage, SignUpPage } from "@/pages/auth";
 import { AuthLayout } from "@/app/layouts/auth";
+import { OnboardingPage } from "@/pages/onboarding";
 
-const AuthRedirect = () => {
+const RootRoute = () => {
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const hasAuthParams = searchParams.has("state") || searchParams.has("redirectUri");
+
+  if (hasAuthParams) {
+    return <Navigate to={`/sign-in${location.search}`} replace />;
+  }
+
+  return <OnboardingPage />;
+};
+
+const SignInRedirect = () => {
   const location = useLocation();
   return <Navigate to={`/sign-in${location.search}`} replace />;
 };
@@ -14,10 +27,10 @@ function App() {
       <HashRouter>
         <Routes>
           <Route element={<AuthLayout />}>
-            <Route path="/" element={<AuthRedirect />} />
+            <Route path="/" element={<RootRoute />} />
             <Route path="/sign-in" element={<SignInPage />} />
             <Route path="/sign-up" element={<SignUpPage />} />
-            <Route path="*" element={<AuthRedirect />} />
+            <Route path="*" element={<SignInRedirect />} />
           </Route>
         </Routes>
       </HashRouter>
