@@ -48,7 +48,9 @@ export const useChapterHandlers = ({
 
     isOpeningMissionRef.current = true;
     try {
-      const response = await chapterApi.resetMission(mission.id);
+      const response = await chapterApi.resetMission({
+        missionId: mission.id,
+      });
       if (!response.success) {
         console.error("미션 초기화에 실패했습니다.", response.message);
       }
