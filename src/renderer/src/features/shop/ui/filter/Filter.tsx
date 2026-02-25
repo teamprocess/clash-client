@@ -3,14 +3,24 @@ import { SearchInput } from "@/shared/ui/search-input";
 import { Select } from "@/shared/ui/select";
 import { ProductCategory, ProductSort } from "@/entities/product";
 
-const sortOptions: { key: ProductSort; label: string }[] = [
+interface SortOption {
+  key: ProductSort;
+  label: string;
+}
+
+interface CategoryOption {
+  key: ProductCategory | "";
+  label: string;
+}
+
+const sortOptions: SortOption[] = [
   { key: ProductSort.LATEST, label: "최신 순" },
   { key: ProductSort.POPULAR, label: "인기 순" },
   { key: ProductSort.EXPENSIVE, label: "가격 높은 순" },
   { key: ProductSort.CHEAPEST, label: "가격 낮은 순" },
 ];
 
-const categoryOptions: { key: ProductCategory | ""; label: string }[] = [
+const categoryOptions: CategoryOption[] = [
   { key: "", label: "전체" },
   { key: ProductCategory.BANNER, label: "배너" },
   { key: ProductCategory.NAMEPLATE, label: "이름표" },
