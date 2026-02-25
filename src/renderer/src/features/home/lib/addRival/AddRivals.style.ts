@@ -1,20 +1,47 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import { font } from "@/shared/config/font";
 import { palette } from "@/shared/config/theme";
 import Profile from "@/features/home/assets/home/profile.svg";
 import Checked from "@/features/home/assets/home/check-box.svg";
 
-export const ProfileContent = styled.div`
+const flexRow = css`
   display: flex;
   flex-direction: row;
+`;
+
+const flexCol = css`
+  display: flex;
+  flex-direction: column;
+`;
+
+export const DialogLayout = styled.div`
+  ${flexCol};
+  height: 100%;
+  justify-content: space-between;
+`;
+
+export const TopSection = styled.div``;
+
+export const SearchInputBox = styled.div`
+  margin: 1rem 0;
+`;
+
+export const BottomRow = styled.div`
+  ${flexRow};
+  justify-content: space-between;
+  align-items: center;
+`;
+
+export const ProfileContent = styled.div<{ $height?: string }>`
+  ${flexRow};
   align-items: center;
   justify-content: flex-start;
   gap: 0.75rem;
+  height: ${({ $height }) => $height ?? "auto"};
 `;
 
 export const ProfileTagBox = styled.div`
-  display: flex;
-  flex-direction: row;
+  ${flexRow};
   align-items: center;
   gap: 0.125rem;
 `;
@@ -35,8 +62,7 @@ export const ProfileMention = styled.p`
 `;
 
 export const UserChoiceContainer = styled.div`
-  display: flex;
-  flex-direction: column;
+  ${flexCol};
   width: 100%;
   height: 12rem;
   overflow-y: auto;
@@ -44,8 +70,7 @@ export const UserChoiceContainer = styled.div`
 `;
 
 export const UserChoiceBox = styled.div<{ $isSelected: boolean }>`
-  display: flex;
-  flex-direction: row;
+  ${flexRow};
   align-items: center;
   justify-content: space-between;
   width: 100%;
@@ -53,6 +78,7 @@ export const UserChoiceBox = styled.div<{ $isSelected: boolean }>`
   border-bottom: 1px solid ${({ theme }) => theme.line.alternative};
   cursor: pointer;
   transition: 0.1s ease-in-out;
+
   &:hover {
     border-radius: 0.75rem;
     padding: 0.5rem 0.75rem;
@@ -60,14 +86,9 @@ export const UserChoiceBox = styled.div<{ $isSelected: boolean }>`
   }
 `;
 
-export const BottomBox = styled.div`
-  margin-top: 0.9rem;
-`;
-
 export const ButtonBox = styled.div`
   width: 100%;
-  display: flex;
-  flex-direction: row;
+  ${flexRow};
   align-items: center;
   justify-content: flex-end;
   gap: 0.75rem;
@@ -107,30 +128,4 @@ export const ErrorText = styled.span`
   ${font.caption.medium};
   color: ${palette.red[60]};
   width: 100%;
-`;
-
-export const AddRivalsContainer = styled.div`
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-`;
-
-export const WarningContainer = styled.div`
-  width: 100%;
-  height: 100%;
-  border-radius: 1rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  background-color: ${({ theme }) => theme.fill.alternative};
-`;
-
-export const WarningText = styled.p<{ $state: number }>`
-  ${({ $state }) => ($state === 1 ? font.body.medium : font.caption.medium)};
-
-  color: ${({ theme }) => theme.label.alternative};
 `;

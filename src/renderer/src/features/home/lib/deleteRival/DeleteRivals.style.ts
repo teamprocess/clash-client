@@ -1,20 +1,33 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import { font } from "@/shared/config/font";
 import { palette } from "@/shared/config/theme";
 import Profile from "@/features/home/assets/home/profile.svg";
 import Checked from "@/features/home/assets/home/check-box.svg";
 
-export const ProfileContent = styled.div`
+const flexRow = css`
   display: flex;
   flex-direction: row;
+`;
+
+const flexCol = css`
+  display: flex;
+  flex-direction: column;
+`;
+
+export const DialogBody = styled.div`
+  ${flexCol};
+`;
+
+export const ProfileContent = styled.div<{ $height?: string }>`
+  ${flexRow};
   align-items: center;
   justify-content: flex-start;
   gap: 0.75rem;
+  height: ${({ $height }) => $height ?? "auto"};
 `;
 
 export const ProfileTagBox = styled.div`
-  display: flex;
-  flex-direction: row;
+  ${flexRow};
   align-items: center;
   gap: 0.125rem;
 `;
@@ -35,21 +48,20 @@ export const ProfileMention = styled.p`
 `;
 
 export const UserChoiceContainer = styled.div`
-  display: flex;
-  flex-direction: column;
+  ${flexCol};
   width: 100%;
   margin: 1rem 0;
 `;
 
 export const UserChoiceBox = styled.div<{ $isSelected: boolean }>`
-  display: flex;
-  flex-direction: row;
+  ${flexRow};
   align-items: center;
   justify-content: space-between;
   width: 100%;
   padding: 0.5rem;
   cursor: pointer;
   transition: 0.1s ease-in-out;
+
   &:hover {
     border-radius: 0.75rem;
     padding: 0.5rem 0.75rem;
@@ -59,8 +71,7 @@ export const UserChoiceBox = styled.div<{ $isSelected: boolean }>`
 
 export const ButtonBox = styled.div`
   width: 100%;
-  display: flex;
-  flex-direction: row;
+  ${flexRow};
   align-items: center;
   justify-content: flex-end;
   gap: 0.75rem;

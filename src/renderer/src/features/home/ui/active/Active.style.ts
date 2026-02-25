@@ -1,9 +1,18 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import { font } from "@/shared/config/font";
 
-export const ActiveContainer = styled.div`
+const flexCol = css`
   display: flex;
   flex-direction: column;
+`;
+
+const flexRow = css`
+  display: flex;
+  flex-direction: row;
+`;
+
+export const ActiveContainer = styled.div`
+  ${flexCol};
   align-items: center;
   padding: 1.5rem;
   width: 100%;
@@ -14,8 +23,7 @@ export const ActiveContainer = styled.div`
 
 export const TitleBox = styled.div`
   width: 100%;
-  display: flex;
-  flex-direction: row;
+  ${flexRow};
   justify-content: space-between;
   align-items: center;
 `;
@@ -34,9 +42,8 @@ export const Line = styled.div`
 export const StreakContainer = styled.div`
   width: 100%;
   height: 100%;
-  display: flex;
+  ${flexCol};
   gap: 0.625rem;
-  flex-direction: column;
   justify-content: space-between;
 `;
 
@@ -67,10 +74,11 @@ export const Grid = styled.div`
 
 const GRASS_COLORS = ["", "#3DCD5F40", "#3DCD5F80", "#3DCD5FBF", "#3DCD5FFF"] as const;
 
-export const Grass = styled.div<{ $level: 0 | 1 | 2 | 3 | 4 }>`
+export const Grass = styled.div<{ $level: 0 | 1 | 2 | 3 | 4; $hidden?: boolean }>`
   width: 0.75rem;
   height: 0.75rem;
   border-radius: 0.15rem;
+  visibility: ${({ $hidden }) => ($hidden ? "hidden" : "visible")};
   background-color: ${({ $level, theme }) =>
     $level === 0 ? theme.fill.neutral : GRASS_COLORS[$level]};
 `;
@@ -91,8 +99,10 @@ export const ChartWrapper = styled.div`
   position: relative;
 `;
 
-export const PortalTooltip = styled.div`
+export const PortalTooltip = styled.div<{ $top: number; $left: number }>`
   position: fixed;
+  top: ${({ $top }) => `${$top}px`};
+  left: ${({ $left }) => `${$left}px`};
   transform: translate(-50%, -100%);
   background: ${({ theme }) => theme.background.neutral};
   color: ${({ theme }) => theme.label.normal};

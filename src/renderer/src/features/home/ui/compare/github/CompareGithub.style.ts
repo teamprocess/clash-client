@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import Date from "@/features/home/assets/home/date.svg";
 import GitCommits from "@/features/home/assets/home/git-commit.svg";
 import Fire from "@/features/home/assets/home/fire.svg";
@@ -12,17 +12,25 @@ import { font } from "@/shared/config/font";
 import { palette } from "@/shared/config/theme";
 import { Line } from "@/features/home/ui/active/Active.style";
 
-export const TitleBox = styled.div`
+const flexRow = css`
   display: flex;
   flex-direction: row;
+`;
+
+const flexCol = css`
+  display: flex;
+  flex-direction: column;
+`;
+
+export const TitleBox = styled.div`
+  ${flexRow};
   gap: 0.75rem;
   width: 100%;
   align-items: center;
 `;
 
 export const ContentBox = styled.div`
-  display: flex;
-  flex-direction: row;
+  ${flexRow};
   justify-content: space-between;
   width: 100%;
   flex: 1;
@@ -30,8 +38,7 @@ export const ContentBox = styled.div`
 `;
 
 export const Content = styled.div`
-  display: flex;
-  flex-direction: column;
+  ${flexCol};
   width: 100%;
   height: 100%;
   flex: 1;
@@ -41,8 +48,7 @@ export const Content = styled.div`
 `;
 
 export const SubtitleBox = styled.div`
-  display: flex;
-  flex-direction: row;
+  ${flexRow};
   align-items: center;
   justify-content: space-between;
   width: 100%;
@@ -58,8 +64,7 @@ export const Subtitle = styled.p`
 `;
 
 export const DateBox = styled.div`
-  display: flex;
-  flex-direction: row;
+  ${flexRow};
   align-items: center;
   gap: 0.25rem;
 `;
@@ -72,19 +77,18 @@ export const DateText = styled.p`
 `;
 
 export const InfoContainer = styled.div`
-  display: flex;
-  flex-direction: column;
+  ${flexCol};
   padding: 0.75rem;
   gap: 0.625rem;
   height: 100%;
 `;
 
-export const InfoContent = styled.div`
-  display: flex;
-  flex-direction: column;
+export const InfoContent = styled.div<{ $mb?: string }>`
+  ${flexCol};
   padding: 0.75rem;
   gap: 0.625rem;
   border-bottom: 1px solid ${({ theme }) => theme.line.neutral};
+  margin-bottom: ${({ $mb }) => $mb ?? 0};
 `;
 
 export const InfoTitle = styled.p`
@@ -94,15 +98,13 @@ export const InfoTitle = styled.p`
 `;
 
 export const GithubInfoBox = styled(TitleBox)`
-  display: flex;
   align-items: center;
   width: 100%;
   height: 100%;
 `;
 
 export const InfoSubtitleBox = styled.div`
-  display: flex;
-  flex-direction: row;
+  ${flexRow};
   align-items: center;
   gap: 0.5rem;
 `;
@@ -116,21 +118,18 @@ export const InfoSubtitle = styled.p`
 `;
 
 export const CalculateBox = styled.div`
-  display: flex;
-  flex-direction: row;
+  ${flexRow};
   align-items: center;
   justify-content: center;
 `;
 
 export const CalculateContainer = styled.div`
-  display: flex;
-  flex-direction: column;
+  ${flexCol};
   width: 100%;
 `;
 
 export const CalculateInfoBox = styled.div`
-  display: flex;
-  flex-direction: row;
+  ${flexRow};
   align-items: center;
   gap: 0.25rem;
   padding: 0.625rem;
@@ -164,19 +163,23 @@ export const TimeText = styled.span`
 `;
 
 export const GridFooter = styled.div`
-  display: flex;
-  flex-direction: row;
+  ${flexRow};
   width: 100%;
   height: 100%;
 `;
 
 export const FooterItem = styled.div`
-  display: flex;
-  flex-direction: column;
+  ${flexCol};
   flex: 1;
   height: 100%;
   padding: 0.75rem;
   gap: 0.625rem;
+`;
+
+export const FooterCenter = styled.div`
+  ${flexRow};
+  align-items: center;
+  height: 100%;
 `;
 
 export const GroupTitle = styled.p`
@@ -186,8 +189,7 @@ export const GroupTitle = styled.p`
 `;
 
 export const MainStat = styled.div`
-  display: flex;
-  flex-direction: row;
+  ${flexRow};
   align-items: center;
   gap: 0.5rem;
   height: 100%;
@@ -214,33 +216,38 @@ export const HeightLine = styled.div`
 `;
 
 export const GrowthBox = styled.div`
-  display: flex;
-  flex-direction: column;
+  ${flexCol};
   align-items: flex-start;
   width: 100%;
 `;
 
 export const RateBox = styled.div`
-  display: flex;
-  flex-direction: column;
+  ${flexCol};
   align-items: flex-end;
 `;
 
 export const GitCommitIcon = styled(GitCommits)``;
+
 export const FireIcon = styled(Fire)`
   color: ${({ theme }) => theme.label.alternative};
   width: 1.25rem;
   height: 1.25rem;
 `;
+
 export const CodeIcon = styled(Code)``;
+
 export const TimeIcon = styled(Time)`
   width: 1.25rem;
   height: 1.25rem;
 `;
+
 export const GitPRIcon = styled(GitPR)``;
+
 export const StatusIcon = styled(Status)``;
+
 export const ReviewIcon = styled(Review)<{ $width: number }>`
   width: ${({ $width }) => ($width ? `${$width}rem` : "1rem")};
   height: ${({ $width }) => ($width ? `${$width}rem` : "1rem")};
 `;
+
 export const GitIssueIcon = styled(GitIssue)``;

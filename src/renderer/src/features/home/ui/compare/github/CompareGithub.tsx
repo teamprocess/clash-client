@@ -54,7 +54,8 @@ export const Github = ({ today, yesterday }: CompareResponse) => {
               </S.CalculateContainer>
             </S.CalculateBox>
           </S.InfoContent>
-          <S.InfoContent style={{ marginBottom: "1rem" }}>
+
+          <S.InfoContent $mb="1rem">
             <S.InfoTitle>PR 수</S.InfoTitle>
             <S.CalculateBox>
               <S.GithubInfoBox>
@@ -85,6 +86,7 @@ export const Github = ({ today, yesterday }: CompareResponse) => {
               </S.CalculateContainer>
             </S.CalculateBox>
           </S.InfoContent>
+
           <S.GridFooter>
             <S.FooterItem>
               <S.GroupTitle>이슈 수</S.GroupTitle>
@@ -162,7 +164,8 @@ export const Github = ({ today, yesterday }: CompareResponse) => {
               </S.CalculateContainer>
             </S.CalculateBox>
           </S.InfoContent>
-          <S.InfoContent style={{ marginBottom: "1rem" }}>
+
+          <S.InfoContent $mb="1rem">
             <S.InfoTitle>PR 수</S.InfoTitle>
             <S.CalculateBox>
               <S.GrowthBox>
@@ -200,10 +203,11 @@ export const Github = ({ today, yesterday }: CompareResponse) => {
               </S.CalculateContainer>
             </S.CalculateBox>
           </S.InfoContent>
+
           <S.GridFooter>
             <S.FooterItem>
               <S.GroupTitle>이슈 수</S.GroupTitle>
-              <div style={{ display: "flex", alignItems: "center", height: "100%" }}>
+              <S.FooterCenter>
                 <S.GrowthBox>
                   <S.RateBox>
                     <S.MainStat>
@@ -217,12 +221,12 @@ export const Github = ({ today, yesterday }: CompareResponse) => {
                     />
                   </S.RateBox>
                 </S.GrowthBox>
-              </div>
+              </S.FooterCenter>
             </S.FooterItem>
             <S.HeightLine />
             <S.FooterItem>
               <S.GroupTitle>리뷰 수</S.GroupTitle>
-              <div style={{ display: "flex", alignItems: "center", height: "100%" }}>
+              <S.FooterCenter>
                 <S.GrowthBox>
                   <S.RateBox>
                     <S.MainStat>
@@ -236,7 +240,7 @@ export const Github = ({ today, yesterday }: CompareResponse) => {
                     />
                   </S.RateBox>
                 </S.GrowthBox>
-              </div>
+              </S.FooterCenter>
             </S.FooterItem>
           </S.GridFooter>
         </S.InfoContainer>
