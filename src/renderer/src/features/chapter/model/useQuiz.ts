@@ -167,7 +167,7 @@ export const useQuiz = ({ mission, onMissionComplete, onClose }: UseQuizParams) 
     isResettingMissionRef.current = true;
 
     try {
-      const response = await chapterApi.resetMission(mission.id);
+      const response = await chapterApi.resetMission({ missionId: mission.id });
       if (!response.success) {
         setError(response.message || "미션 초기화에 실패했습니다.");
         return;
