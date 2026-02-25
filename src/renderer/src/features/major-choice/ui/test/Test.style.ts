@@ -87,6 +87,12 @@ export const AnswerItem = styled.div<{ $itemSize: string; $isActive: boolean }>`
     ${({ theme, $isActive }) => ($isActive ? theme.primary.normal : theme.line.normal)};
   flex-shrink: 0;
   cursor: pointer;
+  transition: border-color 0.2s ease;
+
+  &:hover {
+    border-color: ${({ theme, $isActive }) =>
+      $isActive ? theme.primary.normal : theme.background.neutral};
+  }
 `;
 
 export const AnswerItemTitle = styled.div`
