@@ -26,10 +26,14 @@ export const SectionIconWrapper = styled.button`
   align-items: center;
   width: 8rem;
   height: 8rem;
-  background: ${({ theme }) => theme.label.disable};
+  background: ${({ theme }) => theme.line.neutral};
   border-radius: 50%;
   position: relative;
   cursor: pointer;
+
+  &:hover {
+    background: ${({ theme }) => theme.label.disable};
+  }
 `;
 
 export const SectionIcon = styled.img``;
