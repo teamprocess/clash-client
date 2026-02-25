@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { font } from "@/shared/config/font";
+import Cry from "@/shared/ui/assets/cry-emoji.svg";
 
 export const CategoryContainer = styled.div`
   display: flex;
@@ -24,4 +25,24 @@ export const CardContainer = styled.div`
   margin: 0;
   width: 100%;
   box-sizing: border-box;
+`;
+
+export const EmptyBox = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 2rem 0;
+`;
+
+export const CryIcon = styled(Cry)`
+  width: 2.5rem;
+  height: 2.5rem;
+`;
+
+export const EmptyText = styled.p`
+  color: ${({ theme }) => theme.label.alternative};
+  ${font.body.regular};
 `;
