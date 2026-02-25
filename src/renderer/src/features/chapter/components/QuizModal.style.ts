@@ -218,3 +218,10 @@ export const LastResultSubTitle = styled.span`
   ${font.caption.regular}
   color: ${({ theme }) => theme.label.neutral};
 `;
+
+export const ErrorMessage = styled.p`
+  ${font.caption.regular}
+  color: ${palette.red[50]};
+  text-align: center;
+  margin: 0;
+`;
