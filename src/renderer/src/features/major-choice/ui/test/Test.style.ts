@@ -41,11 +41,6 @@ export const QuestionTitle = styled.span`
   color: ${({ theme }) => theme.label.normal};
 `;
 
-export const QuestionSubTitle = styled.div`
-  ${font.body.medium}
-  color: ${({ theme }) => theme.label.assistive}
-`;
-
 export const AnswerContainer = styled.div`
   display: flex;
   flex-direction: column;
