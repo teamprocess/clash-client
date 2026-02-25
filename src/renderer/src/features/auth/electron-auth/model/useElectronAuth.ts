@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useQueryClient } from "@tanstack/react-query";
-import { authApi } from "@/entities/user";
+import { authApi, startUserProfileSyncWindow } from "@/entities/user";
 import { getErrorMessage } from "@/shared/lib";
 
 interface DeepLinkAuthPayload {
@@ -45,6 +45,7 @@ export const useElectronAuth = () => {
         });
 
         if (result.success) {
+          startUserProfileSyncWindow();
           await queryClient.invalidateQueries({ queryKey: ["user"] });
           navigate("/");
         } else {

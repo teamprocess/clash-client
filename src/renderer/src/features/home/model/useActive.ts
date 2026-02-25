@@ -1,48 +1,80 @@
-import { useState } from "react";
-import { useActiveQuery, ActiveResponse, CategoryType } from "@/entities/home";
+import React, { RefObject, useLayoutEffect, useMemo, useState } from "react";
+import { ActiveResponse, CategoryType } from "@/entities/home";
+import { buildPaddedStreak } from "@/shared/lib/buildPaddedStreaks";
 
-const activeDropDownValue: {
-  key: CategoryType;
-  label: string;
-}[] = [
+type GrassLevel = 0 | 1 | 2 | 3 | 4;
+
+const activeDropDownValue: { key: CategoryType; label: string }[] = [
   { key: "GITHUB", label: "Github" },
   { key: "EXP", label: "EXP" },
   { key: "ACTIVE_TIME", label: "총 학습 시간" },
 ];
 
-export const useActive = () => {
-  const [activeDropdown, setActiveDropdown] = useState<CategoryType>("GITHUB");
+export const useActive = (
+  grassRef: RefObject<HTMLDivElement | null>,
+  activeData: ActiveResponse | null
+) => {
+  const streaks = activeData?.streaks ?? null;
 
-  const { data } = useActiveQuery(activeDropdown);
+  const maxContribute = useMemo(() => {
+    if (!streaks?.length) return 0;
+    return Math.max(...streaks.map(v => v.detailedInfo));
+  }, [streaks]);
 
-  const activeData: ActiveResponse | null = data?.data ?? null;
-
-  const maxContribute = activeData?.streaks?.length
-    ? Math.max(...activeData.streaks.map(v => v.detailedInfo))
-    : 0;
-
-  const getLevel = (count: number) => {
-    if (!maxContribute || maxContribute === 0) return 0;
-    if (count === 0) return 0;
-
+  const getLevel = (count: number): number => {
+    if (!maxContribute || count <= 0) return 0;
     const ratio = count / maxContribute;
-    const ratioResult = ratio * 10;
-
-    if (ratioResult >= 8) return 4;
-    if (ratioResult >= 6) return 3;
-    if (ratioResult >= 2) return 2;
-    if (ratioResult > 0) return 1;
-    return 0;
+    if (ratio >= 0.75) return 4;
+    if (ratio >= 0.5) return 3;
+    if (ratio >= 0.25) return 2;
+    return 1;
   };
+
+  const paddedStreaks = useMemo(() => {
+    if (!streaks) return [];
+    return buildPaddedStreak(streaks);
+  }, [streaks]);
 
   const variations = activeData?.variations ?? [];
 
+  useLayoutEffect(() => {
+    const el = grassRef.current;
+    if (!el) return;
+    el.scrollLeft = el.scrollWidth - el.clientWidth;
+  }, [grassRef, paddedStreaks]);
+
+  const [tooltip, setTooltip] = useState({
+    visible: false,
+    x: 0,
+    y: 0,
+    date: "",
+    value: 0,
+  });
+
+  const showTooltip = (e: React.MouseEvent<HTMLDivElement>, date: string, value: number) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    setTooltip({ visible: true, x: rect.left + rect.width / 2, y: rect.top, date, value });
+  };
+
+  const hideTooltip = () => setTooltip(prev => ({ ...prev, visible: false }));
+
+  const clamp = (n: number, min: number, max: number) => Math.max(min, Math.min(max, n));
+
+  const levelFromRatio100 = (ratio: number): GrassLevel => {
+    const r = clamp(Math.round(ratio), 0, 100);
+
+    if (r === 0) return 0; // default
+    return Math.ceil(r / 25) as GrassLevel; // 1~25=1, 26~50=2, 51~75=3, 76~100=4
+  };
+
   return {
-    activeData,
     activeDropDownValue,
-    activeDropdown,
-    setActiveDropdown,
-    getLevel,
+    paddedStreaks,
     variations,
+    getLevel,
+    tooltip,
+    showTooltip,
+    hideTooltip,
+    levelFromRatio100,
   };
 };

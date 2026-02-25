@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { useRecordStore } from "./recordStore";
+import type { TaskRecordSession } from "@/entities/record";
 import { useRecordTasksQuery, useRecordTodayQuery } from "@/entities/record";
 
 export const useRecord = () => {
@@ -18,21 +19,24 @@ export const useRecord = () => {
       return;
     }
 
-    // 앱 재진입 시에도 현재 진행 중인 공부 세션 복원
-    const activeSession = todayResponse.data.sessions.find(session => session.endedAt === null);
+    // 앱 재진입 시에도 현재 진행 중인 TASK 세션 복원
+    const activeTaskSession = todayResponse.data.sessions.find(
+      (session): session is TaskRecordSession =>
+        session.endedAt === null && session.recordType === "TASK"
+    );
 
     // 활성 공부 세션이 없으면 공부 중 아님 상태 명확하게 고정
-    if (!activeSession) {
+    if (!activeTaskSession) {
       setActiveSession(null, null);
       setCurrentStudyTime(0);
       return;
     }
 
-    const serverStartTime = new Date(activeSession.startedAt).getTime();
+    const serverStartTime = new Date(activeTaskSession.startedAt).getTime();
     const now = Date.now();
     const elapsedSeconds = Math.floor((now - serverStartTime) / 1000);
 
-    setActiveSession(activeSession.task.id, now - elapsedSeconds * 1000);
+    setActiveSession(activeTaskSession.task.id, now - elapsedSeconds * 1000);
     setCurrentStudyTime(0);
   }, [setActiveSession, setCurrentStudyTime, todayResponse]);
 

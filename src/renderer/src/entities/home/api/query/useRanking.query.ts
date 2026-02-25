@@ -9,10 +9,8 @@ export const rankingQueryKeys = {
 export const useRankingQuery = (category: CategoryType, period: PeriodType) => {
   return useQuery({
     queryKey: rankingQueryKeys.rankings(category, period),
-    queryFn: () =>
-      rankingApi.getRanking({
-        category,
-        period,
-      }),
+    queryFn: () => rankingApi.getRanking({ category, period }),
+    placeholderData: prev => prev,
+    retry: 1,
   });
 };

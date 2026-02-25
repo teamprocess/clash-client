@@ -43,6 +43,7 @@ export const Line = styled.div`
 
 export const UserWrapper = styled.div`
   width: 100%;
+  max-height: 17.725rem;
   flex: 1;
   display: flex;
   flex-direction: column;

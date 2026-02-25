@@ -1,32 +1,31 @@
 import * as S from "./QuizModal.style";
 import { Button } from "@/shared/ui/button";
 
-interface QuizResultProps {
-  isFinal: boolean;
-  isPassed?: boolean;
-  isCorrect?: boolean;
-  currentIndex?: number;
+interface QuizResultFinalProps {
+  isFinal: true;
+  isPassed: boolean;
   total: number;
-  explanation?: string;
-  correctCount?: number;
-  onNext?: () => void;
-  onRestart?: () => void;
-  onClose?: () => void;
+  correctCount: number;
+  errorMessage?: string | null;
+  onRestart: () => void;
+  onClose: () => void;
 }
 
-export const QuizResult = ({
-  isFinal,
-  isPassed,
-  isCorrect,
-  currentIndex,
-  total,
-  explanation,
-  correctCount,
-  onNext,
-  onRestart,
-  onClose,
-}: QuizResultProps) => {
-  if (isFinal) {
+interface QuizResultOngoingProps {
+  isFinal: false;
+  isCorrect: boolean;
+  currentIndex: number;
+  total: number;
+  explanation: string;
+  onNext: () => void;
+}
+
+type QuizResultProps = QuizResultFinalProps | QuizResultOngoingProps;
+
+export const QuizResult = (props: QuizResultProps) => {
+  if (props.isFinal) {
+    const { isPassed, total, correctCount, errorMessage, onRestart, onClose } = props;
+
     return (
       <>
         <S.ModalTop>
@@ -51,18 +50,20 @@ export const QuizResult = ({
                   : `${total}문제 중 ${correctCount}문제를 맞추어 미션을 클리어하지 못했습니다`}
               </S.LastResultTitle>
               <S.LastResultSubTitle>
-                ※ 4문제 이상 맞추었을 시에 미션 클리어됩니다
+                ※ {total}문제 모두 맞추었을 시에 미션 클리어됩니다
               </S.LastResultSubTitle>
+              {errorMessage && <S.ErrorMessage>{errorMessage}</S.ErrorMessage>}
             </S.ResultLabelGroup>
           </S.LastResultWrapper>
         </S.ModalBody>
 
         <S.ModalBottom>
           <S.ResultButtonGroup>
-            <Button variant="secondary" size="md" fullWidth onClick={onRestart}>
-              다시하기
-            </Button>
-
+            {!isPassed && (
+              <Button variant="secondary" size="md" fullWidth onClick={onRestart}>
+                다시하기
+              </Button>
+            )}
             <Button variant="primary" size="md" fullWidth onClick={onClose}>
               끝내기
             </Button>
@@ -72,15 +73,17 @@ export const QuizResult = ({
     );
   }
 
+  const { isCorrect, currentIndex, total, explanation, onNext } = props;
+
   return (
     <>
       <S.ModalTop>
         <S.ProgressBarWrapper>
           <S.BarBackground>
-            <S.BarActive $fill={((currentIndex! + 1) / total) * 100} />
+            <S.BarActive $fill={((currentIndex + 1) / total) * 100} />
           </S.BarBackground>
           <S.ProgressLabelBox>
-            <S.CurrentProgress>{currentIndex! + 1}</S.CurrentProgress>/
+            <S.CurrentProgress>{currentIndex + 1}</S.CurrentProgress>/
             <S.TotalQuestions>{total}</S.TotalQuestions>
           </S.ProgressLabelBox>
         </S.ProgressBarWrapper>

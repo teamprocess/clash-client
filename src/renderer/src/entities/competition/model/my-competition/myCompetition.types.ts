@@ -13,6 +13,7 @@ export type MyCompareResponse = {
   earnedExp: number;
   studyTime: number;
   gitHubAttribution: number;
+  commitCount: number;
 };
 
 export interface MyDataPoint {

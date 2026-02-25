@@ -7,7 +7,8 @@ import {
   SubmitAnswerRequest,
   SubmitAnswerResponse,
   SubmitResultResponse,
-} from "../model/chapter.types";
+} from "@/entities/roadmap";
+import { ResetMissionRequest } from "@/entities/roadmap/chapter/model/chapter.types";
 
 export const chapterApi = {
   // 로드맵 상세 조회
@@ -38,6 +39,11 @@ export const chapterApi = {
       `/missions/${missionId}/result`,
       {}
     );
+    return result.data;
+  },
+  // 미션 초기화
+  resetMission: async (data: ResetMissionRequest) => {
+    const result = await api.post<ApiResponse<void>>(`/missions/${data.missionId}/reset`, {});
     return result.data;
   },
 };

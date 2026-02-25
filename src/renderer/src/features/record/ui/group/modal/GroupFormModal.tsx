@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { Dialog, ModalActions } from "@/shared/ui";
 import { GROUP_CATEGORY_LABELS } from "@/entities/group";
 import type { GroupFormModalProps } from "../../../model/useGroup";
@@ -22,6 +22,10 @@ export const GroupFormModal = ({
   setSelectedGroupId,
 }: GroupFormModalProps) => {
   const [activeTab, setActiveTab] = useState<"join" | "create">("join");
+  const tabsRef = useRef<HTMLDivElement>(null);
+  const joinTabRef = useRef<HTMLButtonElement>(null);
+  const createTabRef = useRef<HTMLButtonElement>(null);
+  const [activeRail, setActiveRail] = useState({ left: 0, width: 0 });
   const {
     groups,
     pagination,
@@ -33,18 +37,66 @@ export const GroupFormModal = ({
     handleCategoryChange,
   } = useGroupList();
 
+  const updateActiveRail = useCallback(() => {
+    const tabsElement = tabsRef.current;
+    const activeTabElement = activeTab === "join" ? joinTabRef.current : createTabRef.current;
+
+    if (!tabsElement || !activeTabElement) {
+      return;
+    }
+
+    const tabsRect = tabsElement.getBoundingClientRect();
+    const activeRect = activeTabElement.getBoundingClientRect();
+
+    setActiveRail({
+      left: activeRect.left - tabsRect.left,
+      width: activeRect.width,
+    });
+  }, [activeTab]);
+
+  useLayoutEffect(() => {
+    if (!isOpen) {
+      return;
+    }
+
+    const frameId = requestAnimationFrame(updateActiveRail);
+    return () => cancelAnimationFrame(frameId);
+  }, [isOpen, updateActiveRail]);
+
+  useEffect(() => {
+    if (!isOpen) {
+      return;
+    }
+
+    const handleResize = () => updateActiveRail();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, [isOpen, updateActiveRail]);
+
   return (
     <Dialog width={64} height={42} isOpen={isOpen} onClose={onClose} gap={3}>
       <S.ModalContent>
-        <S.Tabs>
-          <S.Tab $isActive={activeTab === "join"} onClick={() => setActiveTab("join")}>
-            그룹 참여
-          </S.Tab>
-          <S.Tab $isActive={activeTab === "create"} onClick={() => setActiveTab("create")}>
-            그룹 생성
-          </S.Tab>
-        </S.Tabs>
-        <S.Hr />
+        <S.TabHeader>
+          <S.Tabs ref={tabsRef}>
+            <S.Tab
+              ref={joinTabRef}
+              $isActive={activeTab === "join"}
+              onClick={() => setActiveTab("join")}
+            >
+              그룹 참여
+            </S.Tab>
+            <S.Tab
+              ref={createTabRef}
+              $isActive={activeTab === "create"}
+              onClick={() => setActiveTab("create")}
+            >
+              그룹 생성
+            </S.Tab>
+          </S.Tabs>
+          <S.TabRail>
+            <S.TabActiveRail $left={activeRail.left} $width={activeRail.width} />
+          </S.TabRail>
+        </S.TabHeader>
 
         {activeTab === "join" ? (
           <S.JoinContainer>
@@ -71,7 +123,8 @@ export const GroupFormModal = ({
                     <S.GroupContainer
                       key={group.id}
                       $isSelected={selectedGroupId === group.id}
-                      onClick={() => setSelectedGroupId(group.id)}
+                      $isMember={group.isMember}
+                      onClick={group.isMember ? undefined : () => setSelectedGroupId(group.id)}
                     >
                       <S.GroupHeader>
                         <S.GroupHeaderTextBox>
@@ -97,6 +150,7 @@ export const GroupFormModal = ({
                             }
                           }}
                           disabled={isJoining || group.isMember}
+                          $isMember={group.isMember}
                         >
                           {group.isMember ? "가입됨" : isJoining ? "가입 중..." : "가입"}
                         </S.GroupJoinButton>

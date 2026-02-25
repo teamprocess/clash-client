@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Outlet } from "react-router-dom";
+import { useRealtimeSync } from "@/features/app-monitor";
 import { GitHubGuard } from "@/features/github";
 import { Topbar } from "@/widgets/topbar";
 import { Sidebar } from "@/widgets/sidebar";
@@ -12,6 +13,7 @@ interface MainLayoutProps {
 
 export const MainLayout = ({ variant = "default" }: MainLayoutProps) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  useRealtimeSync();
 
   const toggleSidebar = () => {
     setIsSidebarOpen(prev => !prev);

@@ -1,11 +1,12 @@
 import * as S from "./Timer.style";
 import { formatTime } from "@/shared/lib";
 import { useRecordStore } from "../../model/recordStore";
+import { useLiveRecordStudyTime } from "../../model/useLiveRecordStudyTime";
 
 export const Timer = () => {
-  const { activeTaskId, tasks, currentStudyTime, stop } = useRecordStore();
+  const { activeTaskId, stop } = useRecordStore();
+  const { totalStudyTime } = useLiveRecordStudyTime();
   const currentDate = new Date().toISOString().split("T")[0];
-  const totalStudyTime = tasks.reduce((sum, task) => sum + task.studyTime, 0) + currentStudyTime;
 
   const Timer = (
     <>

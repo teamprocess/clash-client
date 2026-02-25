@@ -7,6 +7,7 @@ export interface PopoverProps {
   anchorRef?: RefObject<HTMLElement | null>;
   align?: "start" | "end";
   offset?: number;
+  alignOffset?: number | string;
   children: ReactNode;
 }
 
@@ -16,6 +17,7 @@ export const Popover = ({
   anchorRef,
   align = "end",
   offset = 8,
+  alignOffset = 0,
   children,
 }: PopoverProps) => {
   const popoverRef = useRef<HTMLDivElement>(null);
@@ -59,7 +61,7 @@ export const Popover = ({
   }
 
   return (
-    <S.PopoverContainer ref={popoverRef} $align={align} $offset={offset}>
+    <S.PopoverContainer ref={popoverRef} $align={align} $offset={offset} $alignOffset={alignOffset}>
       {children}
     </S.PopoverContainer>
   );

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useEffect, useMemo, useState } from "react";
 import * as S from "./Products.style";
 import { calculateDiscountedPrice } from "@/features/shop/lib/calculateDiscountedPrice";
 import { ProductCard } from "@/features/shop/ui/card/ProductCard";
@@ -6,6 +6,7 @@ import { Filter } from "@/features/shop/ui/filter/Filter";
 import { Product } from "@/entities/product";
 import { PurchaseModal } from "@/features/shop/ui/purchase/PurchaseModal";
 import { usePurchaseProduct } from "@/entities/shop/model/usePurchaseProduct";
+import { useProductDetailStore } from "@/entities/shop/model/productDetailStore";
 
 interface ProductsProps {
   products: Product[];
@@ -26,15 +27,21 @@ const getCategoryLabel = (category: Product["category"]) => {
 };
 
 export const Products = ({ products, isLoading }: ProductsProps) => {
-  const [selectedId, setSelectedId] = useState<number | null>(null);
+  const selectedId = useProductDetailStore(s => s.selectedProductId);
+  const toggle = useProductDetailStore(s => s.toggle);
+  const close = useProductDetailStore(s => s.close);
 
   const [isPurchaseOpen, setIsPurchaseOpen] = useState(false);
 
-  const selectedProduct = products.find(product => product.id === selectedId);
+  const selectedProduct = useMemo(() => {
+    if (selectedId == null) return null;
+    return products.find(product => String(product.id) === String(selectedId)) ?? null;
+  }, [products, selectedId]);
+
   const isPanelOpen = selectedId !== null;
 
   const handleCardClick = (id: number) => {
-    setSelectedId(selectedId === id ? null : id);
+    toggle(id);
   };
 
   const handleOpenPurchase = () => {
@@ -49,7 +56,7 @@ export const Products = ({ products, isLoading }: ProductsProps) => {
   const purchaseMutation = usePurchaseProduct();
 
   const handlePurchase = async (product: Product) => {
-    await purchaseMutation.mutateAsync({ productId: product.id });
+    await purchaseMutation.mutateAsync({ productId: Number(product.id) });
   };
 
   useEffect(() => {
@@ -59,6 +66,12 @@ export const Products = ({ products, isLoading }: ProductsProps) => {
       document.body.style.overflow = "unset";
     };
   }, [isPanelOpen, isPurchaseOpen]);
+
+  useEffect(() => {
+    if (selectedId == null) return;
+    const exists = products.some(p => String(p.id) === String(selectedId));
+    if (!exists) close();
+  }, [products, selectedId, close]);
 
   if (isLoading) {
     return (
@@ -83,7 +96,7 @@ export const Products = ({ products, isLoading }: ProductsProps) => {
               price={product.price}
               discount={product.discount}
               type={product.type}
-              onClick={() => handleCardClick(product.id)}
+              onClick={() => handleCardClick(Number(product.id))}
             />
           ))}
         </S.CardContainer>

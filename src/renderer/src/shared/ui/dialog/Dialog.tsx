@@ -29,7 +29,9 @@ export const Dialog = ({
       <S.DialogContainer $width={width} $height={height} role="dialog" aria-modal="true">
         {title && <S.DialogTitle>{title}</S.DialogTitle>}
         {showClose && onClose && (
-          <S.CloseButton type="button" onClick={onClose} aria-label="닫기" />
+          <S.CloseButton type="button" onClick={onClose} aria-label="닫기">
+            <S.CloseIcon aria-hidden />
+          </S.CloseButton>
         )}
         <S.DialogContent $gap={gap}>{children}</S.DialogContent>
       </S.DialogContainer>
