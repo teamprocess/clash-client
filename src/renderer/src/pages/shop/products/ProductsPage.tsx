@@ -4,7 +4,8 @@ import { useNavigate } from "react-router-dom";
 import { useProducts } from "@/features/shop/model/useProducts";
 
 export const ProductsPage = () => {
-  const { products, isLoading } = useProducts();
+  const { products, isLoading, keyword, setKeyword, sort, setSort, category, setCategory } =
+    useProducts();
 
   const navigate = useNavigate();
   const handleGoShopMain = () => {
@@ -19,7 +20,16 @@ export const ProductsPage = () => {
         </S.MenuButton>
         <S.MenuButton $isActive={true}>전체 상품 목록</S.MenuButton>
       </S.MenuBox>
-      <Products products={products?.products ?? []} isLoading={isLoading} />
+      <Products
+        products={products?.products ?? []}
+        isLoading={isLoading}
+        keyword={keyword}
+        onKeywordChange={setKeyword}
+        sort={sort}
+        onSortChange={setSort}
+        category={category}
+        onCategoryChange={setCategory}
+      />
     </S.ShopContainer>
   );
 };

@@ -1,47 +1,44 @@
-import { useEffect, useMemo, useState } from "react";
-import { productApi, ProductPaginationData } from "@/entities/product";
+import { useEffect, useState } from "react";
+import {
+  productApi,
+  ProductCategory,
+  ProductPaginationData,
+  ProductSort,
+} from "@/entities/product";
 
-export const useProducts = (initialSelectedId?: number | null) => {
+export const useProducts = () => {
   const [products, setProducts] = useState<ProductPaginationData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-
-  const [internalSelectedId, setInternalSelectedId] = useState<number | null>(null);
-
-  const selectedId = internalSelectedId ?? initialSelectedId ?? null;
+  const [keyword, setKeyword] = useState("");
+  const [sort, setSort] = useState<ProductSort>(ProductSort.LATEST);
+  const [category, setCategory] = useState<ProductCategory | "">("");
 
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true);
-      const response = await productApi.getProducts({ page: 1, size: 10 });
+      const params = {
+        sort,
+        category: category || undefined,
+      };
+      const response = keyword.trim()
+        ? await productApi.searchProducts({ keyword: keyword.trim(), ...params })
+        : await productApi.getProducts({ page: 1, size: 100, ...params });
       setProducts(response.data);
       setIsLoading(false);
     };
 
-    fetchData();
-  }, []);
-
-  const selectedProduct = useMemo(() => {
-    const list = products?.products ?? [];
-    return list.find(p => p.id === selectedId) ?? null;
-  }, [products, selectedId]);
-
-  const isPanelOpen = selectedId !== null;
-
-  const handleCardClick = (id: number) => {
-    setInternalSelectedId(prev => (prev === id ? null : id));
-  };
-
-  const closePanel = () => {
-    setInternalSelectedId(null);
-  };
+    const debounceTimer = setTimeout(fetchData, 300);
+    return () => clearTimeout(debounceTimer);
+  }, [keyword, sort, category]);
 
   return {
     products,
     isLoading,
-    selectedId,
-    selectedProduct,
-    isPanelOpen,
-    handleCardClick,
-    closePanel,
+    keyword,
+    setKeyword,
+    sort,
+    setSort,
+    category,
+    setCategory,
   };
 };
