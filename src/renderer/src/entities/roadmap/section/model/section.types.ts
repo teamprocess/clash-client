@@ -26,7 +26,7 @@ export enum MajorEnum {
 }
 
 export interface getMajorSectionRequest {
-  major: MajorEnum | undefined;
+  major: MajorEnum;
 }
 
 export interface getAllSectionsResponse {
