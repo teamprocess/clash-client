@@ -2,6 +2,7 @@ export interface section {
   id: string;
   title: string;
   category: string;
+  categoryId?: string | number;
   completed: boolean;
   locked: boolean;
 }
