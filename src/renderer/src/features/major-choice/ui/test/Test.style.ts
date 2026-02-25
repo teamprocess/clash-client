@@ -11,7 +11,7 @@ export const TestContainer = styled.div`
   min-height: 100%;
   background-color: ${({ theme }) => theme.background.normal};
   border-radius: 1rem;
-  padding: 0 11rem;
+  padding: 0 11rem 3rem;
   position: relative;
 `;
 
