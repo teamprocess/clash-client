@@ -1,7 +1,7 @@
 {
   "name": "clash-client",
   "productName": "Process Clash",
-  "version": "0.0.1",
+  "version": "0.0.4",
   "description": "학습 기록을 통한 경쟁 애플리케이션, Clash",
   "private": true,
   "license": "SEE LICENSE IN LICENSE",
@@ -22,10 +22,7 @@
     "dev": "electron-vite dev",
     "build": "npm run typecheck && electron-vite build",
     "postinstall": "electron-builder install-app-deps",
-    "build:unpack": "npm run build && electron-builder --dir",
-    "build:win": "npm run build && electron-builder --win",
-    "build:mac": "electron-vite build && electron-builder --mac",
-    "build:linux": "electron-vite build && electron-builder --linux",
+    "build:mac": "node ./scripts/build-mac.mjs",
     "prepare": "husky"
   },
   "dependencies": {
