@@ -56,7 +56,7 @@ export const Active = ({ activeData }: ActiveProps) => {
                     <S.GrassWrapper key={day.date}>
                       <S.Grass
                         $level={level}
-                        style={day.isPadding ? { visibility: "hidden" } : undefined}
+                        $hidden={!!day.isPadding}
                         onMouseEnter={e => {
                           if (day.isPadding) return;
                           active.showTooltip(e, day.date, value);
@@ -81,7 +81,7 @@ export const Active = ({ activeData }: ActiveProps) => {
 
       {active.tooltip.visible &&
         createPortal(
-          <S.PortalTooltip style={{ top: active.tooltip.y - 4, left: active.tooltip.x }}>
+          <S.PortalTooltip $top={active.tooltip.y - 4} $left={active.tooltip.x}>
             <div>{active.tooltip.date}</div>
             <div>{active.tooltip.value}개</div>
           </S.PortalTooltip>,
