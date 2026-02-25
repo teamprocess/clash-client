@@ -142,6 +142,8 @@ export const useMajorChoice = () => {
       handleSelect,
       handleComplete,
       getTestQuestion,
+      totalCount: questionData.length,
+      answeredCount: answers.filter(a => a != null).length,
     },
     result: {
       analyzedMajor,
