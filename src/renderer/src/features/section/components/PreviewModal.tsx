@@ -33,21 +33,7 @@ export const PreviewModal = ({
 
   const activeStep = previewData?.steps.find(step => step.id === currentStep);
 
-  const handlePrev = () => {
-    if (currentStep > 1) {
-      setCurrentStep(currentStep - 1);
-    }
-  };
-
-  const handleNext = () => {
-    if (currentStep < totalSteps) {
-      setCurrentStep(currentStep + 1);
-    }
-  };
-
-  const handleStepClick = (stepId: number) => {
-    setCurrentStep(stepId);
-
+  const scrollToStep = (stepId: number) => {
     const container = stepsContainerRef.current;
     const stepEl = stepRefs.current[stepId - 1];
     if (!container || !stepEl) return;
@@ -57,11 +43,26 @@ export const PreviewModal = ({
     const stepWidth = stepEl.clientWidth;
 
     const targetScroll = stepLeft - containerWidth / 2.2 + stepWidth / 2;
-    if (targetScroll > 0) {
-      container.scrollTo({ left: targetScroll, behavior: "smooth" });
-    } else {
-      container.scrollTo({ left: 0, behavior: "smooth" });
+    container.scrollTo({ left: Math.max(0, targetScroll), behavior: "smooth" });
+  };
+
+  const handlePrev = () => {
+    if (currentStep > 1) {
+      setCurrentStep(currentStep - 1);
+      scrollToStep(currentStep - 1);
     }
+  };
+
+  const handleNext = () => {
+    if (currentStep < totalSteps) {
+      setCurrentStep(currentStep + 1);
+      scrollToStep(currentStep + 1);
+    }
+  };
+
+  const handleStepClick = (stepId: number) => {
+    setCurrentStep(stepId);
+    scrollToStep(stepId);
   };
 
   if (loading) {
