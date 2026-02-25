@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import { font } from "@/shared/config/font";
 import { palette } from "@/shared/config/theme";
 import Profile from "@/features/home/assets/home/profile.svg";
@@ -7,6 +7,16 @@ import Date from "@/features/home/assets/home/date.svg";
 import BackArrow from "@/features/home/assets/home/back.svg";
 import Fire from "@/features/home/assets/home/fire.svg";
 import Checked from "@/features/home/assets/home/check-box.svg";
+
+const flexRow = css`
+  display: flex;
+  flex-direction: row;
+`;
+
+const flexCol = css`
+  display: flex;
+  flex-direction: column;
+`;
 
 export const GaroLine = styled.div`
   width: 100%;
@@ -21,8 +31,7 @@ export const SeroLine = styled.div`
 `;
 
 export const ContentBox = styled.div`
-  display: flex;
-  flex-direction: column;
+  ${flexCol};
   width: 100%;
   height: 100%;
   gap: 1rem;
@@ -37,8 +46,7 @@ export const Content = styled.div`
 `;
 
 export const TitleBox = styled.div`
-  display: flex;
-  flex-direction: row;
+  ${flexRow};
   align-items: center;
   justify-content: space-between;
   width: 100%;
@@ -49,12 +57,12 @@ export const Title = styled.p`
   color: ${({ theme }) => theme.label.normal};
 `;
 
-export const ProfileContent = styled.div`
-  display: flex;
-  flex-direction: row;
+export const ProfileContent = styled.div<{ $height?: string }>`
+  ${flexRow};
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
+  height: ${({ $height }) => $height ?? "auto"};
 `;
 
 export const ProfileIcon = styled(Profile)`
@@ -63,8 +71,7 @@ export const ProfileIcon = styled(Profile)`
 `;
 
 export const NameBox = styled.div`
-  display: flex;
-  flex-direction: row;
+  ${flexRow};
   align-items: center;
   justify-content: center;
   gap: 0.75rem;
@@ -76,8 +83,7 @@ export const ProfileName = styled.span`
 `;
 
 export const SelectWrapper = styled.div`
-  display: flex;
-  flex-direction: row;
+  ${flexRow};
   position: relative;
 `;
 
@@ -116,23 +122,20 @@ export const Option = styled.option`
 `;
 
 export const DropDownBox = styled.div`
-  display: flex;
-  flex-direction: row;
+  ${flexRow};
   align-items: center;
   gap: 0.75rem;
 `;
 
 export const BattleWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
+  ${flexCol};
   gap: 0.75rem;
   width: 100%;
   height: 100%;
 `;
 
 export const BattleTextBox = styled.div`
-  display: flex;
-  flex-direction: row;
+  ${flexRow};
   gap: 0.5rem;
   align-items: center;
 `;
@@ -147,8 +150,7 @@ export const MakeBattle = styled.button`
 `;
 
 export const BattleListContainer = styled.div`
-  display: flex;
-  flex-direction: column;
+  ${flexCol};
 `;
 
 export const UpperHandJudge = styled.div<{ $type: string }>`
@@ -165,10 +167,9 @@ export const UpperHandJudge = styled.div<{ $type: string }>`
 `;
 
 export const BattleProfileBox = styled.button`
-  display: flex;
+  ${flexRow};
   align-items: center;
   justify-content: space-between;
-  flex-direction: row;
   padding: 0.8rem 0.5rem;
   border-bottom: 1px solid ${({ theme }) => theme.line.alternative};
   cursor: pointer;
@@ -184,8 +185,7 @@ export const BattleName = styled.p`
 `;
 
 export const DateBox = styled.div`
-  display: flex;
-  flex-direction: row;
+  ${flexRow};
   align-items: center;
   gap: 0.25rem;
 `;
@@ -198,8 +198,7 @@ export const DateText = styled.span`
 `;
 
 export const DetailBox = styled.div`
-  display: flex;
-  flex-direction: row;
+  ${flexRow};
   gap: 0.25rem;
   align-items: center;
 `;
@@ -221,8 +220,7 @@ export const SubText = styled.p`
 `;
 
 export const DetailWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
+  ${flexCol};
   padding: 1.5rem;
   gap: 1rem;
   border-radius: 0.5rem;
@@ -232,15 +230,13 @@ export const DetailWrapper = styled.div`
 `;
 
 export const UpperHandContainer = styled.div`
-  display: flex;
-  flex-direction: row;
+  ${flexRow};
   align-items: center;
   justify-content: space-between;
 `;
 
 export const UpperHandProfile = styled.div`
-  display: flex;
-  flex-direction: column;
+  ${flexCol};
   gap: 0.5rem;
   justify-content: center;
   align-items: center;
@@ -257,8 +253,7 @@ export const UpperHandName = styled.p`
 `;
 
 export const TransitionBox = styled.div`
-  display: flex;
-  flex-direction: column;
+  ${flexCol};
   align-items: center;
   justify-content: space-around;
   width: 100%;
@@ -267,8 +262,7 @@ export const TransitionBox = styled.div`
 `;
 
 export const UpperHandTransition = styled.div`
-  display: flex;
-  flex-direction: row;
+  ${flexRow};
   width: 90%;
   background-color: ${({ theme }) => theme.fill.normal};
   border-radius: 0.75rem;
@@ -279,7 +273,8 @@ export const UpperHandBar = styled.div<{
   $width: number;
   $isRival: boolean;
 }>`
-  display: flex;
+  ${flexRow};
+  justify-content: ${({ $isRival }) => ($isRival ? "flex-start" : "flex-end")};
   padding: 0;
   width: ${({ $width }) => `${$width}%`};
   height: 100%;
@@ -297,17 +292,18 @@ export const UpperHandBar = styled.div<{
       `}
 `;
 
-export const PercentText = styled.p`
+export const PercentText = styled.p<{ $isRival: boolean }>`
   ${font.title2.bold}
   ${palette.neutral[99]}
   position: absolute;
   opacity: 0.6;
   z-index: 1000;
+  padding-left: ${({ $isRival }) => ($isRival ? "0.5rem" : "0")};
+  padding-right: ${({ $isRival }) => ($isRival ? "0" : "0.5rem")};
 `;
 
 export const DetailAnalyzeContainer = styled.div`
-  display: flex;
-  flex-direction: column;
+  ${flexCol};
   padding: 0.75rem 1rem;
   width: 100%;
   height: 100%;
@@ -321,8 +317,7 @@ export const AnalyzeText = styled.p`
 `;
 
 export const AnalyzeBox = styled.div`
-  display: flex;
-  flex-direction: row;
+  ${flexRow};
   justify-content: flex-start;
   align-items: center;
   gap: 2rem;
@@ -330,11 +325,18 @@ export const AnalyzeBox = styled.div`
   height: 100%;
 `;
 
-export const AnalyzeContent = styled.div`
-  display: flex;
-  flex-direction: column;
+export const AnalyzeRow = styled.div`
+  ${flexRow};
+  align-items: center;
+  gap: 1.5rem;
+  width: 100%;
+  height: 100%;
+`;
+
+export const AnalyzeContent = styled.div<{ $width?: string }>`
+  ${flexCol};
   justify-content: space-around;
-  width: 2.5rem;
+  width: ${({ $width }) => $width ?? "2.5rem"};
   height: 70%;
 `;
 
@@ -344,7 +346,7 @@ export const AnalyzeName = styled.p`
 `;
 
 export const AnalyzeBar = styled.div<{ $width: number; $isRival: boolean }>`
-  display: flex;
+  ${flexRow};
   padding: 0.5rem 0;
   width: ${({ $width }) => `${$width}%`};
   ${({ $isRival, theme }) =>
@@ -361,9 +363,8 @@ export const AnalyzeBar = styled.div<{ $width: number; $isRival: boolean }>`
 `;
 
 export const DefaultBattleBox = styled.div`
-  display: flex;
+  ${flexCol};
   height: 100%;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
@@ -373,10 +374,10 @@ export const AnalyzeLabel = styled.div`
   ${font.label.bold}
   color: ${palette.neutral[99]};
   width: 100%;
-  display: flex;
-  flex-direction: row;
+  ${flexRow};
   align-items: center;
   justify-content: space-between;
+  padding: 0 0.5rem;
 `;
 
 export const FireIcon = styled(Fire)`
@@ -391,8 +392,7 @@ export const DefaultBattleText = styled.p`
 `;
 
 export const UserChoiceContainer = styled.div`
-  display: flex;
-  flex-direction: column;
+  ${flexCol};
   width: 100%;
   height: 20rem;
   overflow-y: auto;
@@ -400,8 +400,7 @@ export const UserChoiceContainer = styled.div`
 `;
 
 export const UserChoiceBox = styled.div<{ $isSelected: boolean }>`
-  display: flex;
-  flex-direction: row;
+  ${flexRow};
   align-items: center;
   justify-content: space-between;
   width: 100%;
@@ -427,8 +426,7 @@ export const UncheckedBox = styled.div`
 `;
 
 export const ProfileTagBox = styled.div`
-  display: flex;
-  flex-direction: row;
+  ${flexRow};
   align-items: center;
   gap: 0.5rem;
 `;
@@ -439,8 +437,7 @@ export const BottomBox = styled.div`
 
 export const ButtonBox = styled.div`
   width: 100%;
-  display: flex;
-  flex-direction: row;
+  ${flexRow};
   align-items: center;
   justify-content: flex-end;
   gap: 0.75rem;
@@ -476,11 +473,16 @@ export const CompareDiff = styled.span`
 `;
 
 export const ModalContent = styled.div`
-  display: flex;
-  flex-direction: column;
+  ${flexCol};
   height: 100%;
   padding-top: 1.5rem;
   align-items: flex-end;
+  justify-content: space-between;
+`;
+
+export const DateChoiceRow = styled.div`
+  ${flexRow};
+  width: 100%;
   justify-content: space-between;
 `;
 
@@ -493,7 +495,7 @@ export const DateChoiceBox = styled.div<{ $active: boolean }>`
   color: ${({ theme }) => theme.label.normal};
   ${font.headline2.medium}
   cursor: pointer;
-  display: flex;
+  ${flexRow};
   align-items: center;
   justify-content: center;
   &:hover {

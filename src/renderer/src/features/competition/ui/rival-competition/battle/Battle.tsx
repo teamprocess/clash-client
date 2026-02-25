@@ -28,37 +28,39 @@ export const Battle = () => {
               <>
                 {/* 배틀 리스트 */}
                 <S.BattleListContainer>
-                  {battles.map(battleItem => (
-                    <S.BattleProfileBox
-                      key={battleItem.id}
-                      onClick={() => battle.selectBattleTarget(battleItem.id)}
-                    >
-                      <S.ProfileContent>
-                        <S.NameBox>
-                          <S.UpperHandJudge $type={battle.judgeUpperHand(battleItem.result)}>
-                            {battle.judgeUpperHand(battleItem.result)}
-                          </S.UpperHandJudge>
+                  {battles.map(battleItem => {
+                    const judge = battle.judgeUpperHand(battleItem.result);
 
-                          <S.BattleName>vs {battleItem.enemy.name}</S.BattleName>
+                    return (
+                      <S.BattleProfileBox
+                        key={battleItem.id}
+                        onClick={() => battle.selectBattleTarget(battleItem.id)}
+                      >
+                        <S.ProfileContent>
+                          <S.NameBox>
+                            <S.UpperHandJudge $type={judge}>{judge}</S.UpperHandJudge>
 
-                          <S.DateBox>
-                            <S.DateIcon />
-                            <S.DateText>{battleItem.expireDate}</S.DateText>
-                          </S.DateBox>
-                        </S.NameBox>
-                      </S.ProfileContent>
+                            <S.BattleName>vs {battleItem.enemy.name}</S.BattleName>
 
-                      <S.DetailBox>
-                        <S.DetailButton>
-                          {battleItem.result === MATCHVALUE.WON ||
-                          battleItem.result === MATCHVALUE.LOST
-                            ? "결과 보기"
-                            : "상세 내용 보기"}
-                        </S.DetailButton>
-                        <S.BackArrowIcon />
-                      </S.DetailBox>
-                    </S.BattleProfileBox>
-                  ))}
+                            <S.DateBox>
+                              <S.DateIcon />
+                              <S.DateText>{battleItem.expireDate}</S.DateText>
+                            </S.DateBox>
+                          </S.NameBox>
+                        </S.ProfileContent>
+
+                        <S.DetailBox>
+                          <S.DetailButton>
+                            {battleItem.result === MATCHVALUE.WON ||
+                            battleItem.result === MATCHVALUE.LOST
+                              ? "결과 보기"
+                              : "상세 내용 보기"}
+                          </S.DetailButton>
+                          <S.BackArrowIcon />
+                        </S.DetailBox>
+                      </S.BattleProfileBox>
+                    );
+                  })}
                 </S.BattleListContainer>
 
                 {/* 상세 영역 */}
@@ -72,22 +74,14 @@ export const Battle = () => {
 
                       <S.TransitionBox>
                         <S.UpperHandTransition>
-                          <S.UpperHandBar
-                            $width={battle.rivalPercent ?? 0}
-                            $isRival
-                            style={{ justifyContent: "flex-start" }}
-                          >
-                            <S.PercentText style={{ paddingLeft: "0.5rem" }}>
+                          <S.UpperHandBar $width={battle.rivalPercent ?? 0} $isRival>
+                            <S.PercentText $isRival>
                               {battle.rivalPercent != null ? Math.round(battle.rivalPercent) : 0}%
                             </S.PercentText>
                           </S.UpperHandBar>
 
-                          <S.UpperHandBar
-                            $width={battle.myPercent ?? 0}
-                            $isRival={false}
-                            style={{ justifyContent: "flex-end" }}
-                          >
-                            <S.PercentText style={{ paddingRight: "0.5rem" }}>
+                          <S.UpperHandBar $width={battle.myPercent ?? 0} $isRival={false}>
+                            <S.PercentText $isRival={false}>
                               {battle.myPercent != null ? Math.round(battle.myPercent) : 0}%
                             </S.PercentText>
                           </S.UpperHandBar>
@@ -129,16 +123,7 @@ export const Battle = () => {
                       </S.TitleBox>
 
                       <S.AnalyzeBox>
-                        <div
-                          style={{
-                            display: "flex",
-                            flexDirection: "row",
-                            alignItems: "center",
-                            gap: "1.5rem",
-                            width: "100%",
-                            height: "100%",
-                          }}
-                        >
+                        <S.AnalyzeRow>
                           <S.AnalyzeContent>
                             <S.AnalyzeName>{battle.battleDetailData?.enemy.name}</S.AnalyzeName>
                             <S.AnalyzeName>나</S.AnalyzeName>
@@ -146,9 +131,9 @@ export const Battle = () => {
 
                           <S.SeroLine />
 
-                          <S.AnalyzeContent style={{ width: "100%" }}>
+                          <S.AnalyzeContent $width="100%">
                             <S.AnalyzeBar $width={battle.rivalAnalyzeRate ?? 0} $isRival>
-                              <S.AnalyzeLabel style={{ padding: " 0 0.5rem" }}>
+                              <S.AnalyzeLabel>
                                 <div>
                                   {Math.round(battle.rivalAnalyzePoint ?? 0)}{" "}
                                   {battle.detailTextTranslate(battle.category)}
@@ -160,7 +145,7 @@ export const Battle = () => {
                             </S.AnalyzeBar>
 
                             <S.AnalyzeBar $width={battle.myAnalyzeRate ?? 0} $isRival={false}>
-                              <S.AnalyzeLabel style={{ padding: " 0 0.5rem" }}>
+                              <S.AnalyzeLabel>
                                 <div>
                                   {Math.round(battle.myAnalyzePoint ?? 0)}{" "}
                                   {battle.detailTextTranslate(battle.category)}
@@ -171,7 +156,7 @@ export const Battle = () => {
                               </S.AnalyzeLabel>
                             </S.AnalyzeBar>
                           </S.AnalyzeContent>
-                        </div>
+                        </S.AnalyzeRow>
                       </S.AnalyzeBox>
                     </S.DetailAnalyzeContainer>
                   </S.DetailWrapper>
@@ -210,25 +195,29 @@ export const Battle = () => {
         >
           <S.ModalContent>
             <S.UserChoiceContainer>
-              {battle.battleList?.rivals.map(user => (
-                <S.UserChoiceBox
-                  key={user.id}
-                  $isSelected={battle.rivalSelectedId === user.id}
-                  onClick={() => battle.handleUserSelect(user.id)}
-                >
-                  <S.ProfileContent style={{ height: "3rem" }}>
-                    <S.ProfileIcon />
-                    <S.ProfileTagBox>
-                      <S.ProfileName>{user.name}</S.ProfileName>
-                    </S.ProfileTagBox>
-                  </S.ProfileContent>
+              {battle.battleList?.rivals.map(user => {
+                const isSelected = battle.rivalSelectedId === user.id;
 
-                  {battle.rivalSelectedId === user.id ? <S.CheckedIcon /> : <S.UncheckedBox />}
-                </S.UserChoiceBox>
-              ))}
+                return (
+                  <S.UserChoiceBox
+                    key={user.id}
+                    $isSelected={isSelected}
+                    onClick={() => battle.handleUserSelect(user.id)}
+                  >
+                    <S.ProfileContent $height="3rem">
+                      <S.ProfileIcon />
+                      <S.ProfileTagBox>
+                        <S.ProfileName>{user.name}</S.ProfileName>
+                      </S.ProfileTagBox>
+                    </S.ProfileContent>
+
+                    {isSelected ? <S.CheckedIcon /> : <S.UncheckedBox />}
+                  </S.UserChoiceBox>
+                );
+              })}
             </S.UserChoiceContainer>
 
-            <div style={{ display: "flex", width: "100%", justifyContent: "space-between" }}>
+            <S.DateChoiceRow>
               {battle.periodOptions.map(day => (
                 <S.DateChoiceBox
                   key={day}
@@ -241,7 +230,7 @@ export const Battle = () => {
                   {day}일
                 </S.DateChoiceBox>
               ))}
-            </div>
+            </S.DateChoiceRow>
 
             <S.BottomBox>
               <S.ButtonBox>

@@ -46,7 +46,7 @@ export const WithMyCompetition = () => {
   return (
     <S.ContentArea>
       <S.GraphWrapper>
-        <S.TitleBox style={{ justifyContent: "space-between" }}>
+        <S.TitleBox $justify="space-between">
           <S.AnalyzeTitle>내 성장도 분석</S.AnalyzeTitle>
           <Select<GrowthRateStandard>
             value={growthRateDropdown}
@@ -107,7 +107,7 @@ export const WithMyCompetition = () => {
                   <S.GithubIcon />
                   <S.ExplainText>Github</S.ExplainText>
                 </S.ImpressiveBox>
-                <S.GrowthRateBox style={{ flexDirection: "row", gap: "2rem" }}>
+                <S.GrowthRateBox $direction="row" $gap="2rem">
                   <S.DataText>
                     <S.SubText>Commit</S.SubText>
                     {oneDecimal(compareData?.commitCount)}개
@@ -168,30 +168,28 @@ export const WithMyCompetition = () => {
                   <S.GithubIcon />
                   <S.ExplainText>Github</S.ExplainText>
                 </S.ImpressiveBox>
-                <S.GrowthRateBox style={{ flexDirection: "row", gap: "2rem" }}>
+
+                <S.GrowthRateBox $direction="row" $gap="2rem">
                   <S.GithubCompareBox>
                     <S.SubText>Commit</S.SubText>
-                    <div
-                      style={{ display: "flex", justifyContent: "space-between", gap: "0.5rem" }}
-                    >
+                    <S.StatCompareRow>
                       <S.DataText>{oneDecimal(todayData?.commitCount)}개</S.DataText>
                       <GrowthRate
                         yesterday={oneDecimal(compareData?.commitCount)}
                         today={oneDecimal(todayData?.commitCount)}
                       />
-                    </div>
+                    </S.StatCompareRow>
                   </S.GithubCompareBox>
+
                   <S.GithubCompareBox>
                     <S.SubText>Contributions</S.SubText>
-                    <div
-                      style={{ display: "flex", justifyContent: "space-between", gap: "0.5rem" }}
-                    >
+                    <S.StatCompareRow>
                       <S.DataText>{oneDecimal(todayData?.gitHubAttribution)}개</S.DataText>
                       <GrowthRate
                         yesterday={oneDecimal(compareData?.gitHubAttribution)}
                         today={oneDecimal(todayData?.gitHubAttribution)}
                       />
-                    </div>
+                    </S.StatCompareRow>
                   </S.GithubCompareBox>
                 </S.GrowthRateBox>
               </S.DataBoxing>
