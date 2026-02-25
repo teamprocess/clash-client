@@ -3,7 +3,7 @@ import * as S from "./Products.style";
 import { calculateDiscountedPrice } from "@/features/shop/lib/calculateDiscountedPrice";
 import { ProductCard } from "@/features/shop/ui/card/ProductCard";
 import { Filter } from "@/features/shop/ui/filter/Filter";
-import { Product } from "@/entities/product";
+import { Product, ProductCategory, ProductSort } from "@/entities/product";
 import { PurchaseModal } from "@/features/shop/ui/purchase/PurchaseModal";
 import { usePurchaseProduct } from "@/entities/shop/model/usePurchaseProduct";
 import { useProductDetailStore } from "@/entities/shop/model/productDetailStore";
@@ -11,6 +11,12 @@ import { useProductDetailStore } from "@/entities/shop/model/productDetailStore"
 interface ProductsProps {
   products: Product[];
   isLoading?: boolean;
+  keyword: string;
+  onKeywordChange: (keyword: string) => void;
+  sort: ProductSort;
+  onSortChange: (sort: ProductSort) => void;
+  category: ProductCategory | "";
+  onCategoryChange: (category: ProductCategory | "") => void;
 }
 
 const getCategoryLabel = (category: Product["category"]) => {
@@ -26,7 +32,16 @@ const getCategoryLabel = (category: Product["category"]) => {
   }
 };
 
-export const Products = ({ products, isLoading }: ProductsProps) => {
+export const Products = ({
+  products,
+  isLoading,
+  keyword,
+  onKeywordChange,
+  sort,
+  onSortChange,
+  category,
+  onCategoryChange,
+}: ProductsProps) => {
   const selectedId = useProductDetailStore(s => s.selectedProductId);
   const pendingProduct = useProductDetailStore(s => s.pendingProduct);
   const toggle = useProductDetailStore(s => s.toggle);
@@ -81,7 +96,14 @@ export const Products = ({ products, isLoading }: ProductsProps) => {
   if (isLoading) {
     return (
       <S.MainContainer>
-        <Filter />
+        <Filter
+          sort={sort}
+          onSortChange={onSortChange}
+          category={category}
+          onCategoryChange={onCategoryChange}
+          keyword={keyword}
+          onKeywordChange={onKeywordChange}
+        />
         <S.ContentWrapper $isPanelOpen={false}>
           <div>로딩 중...</div>
         </S.ContentWrapper>
@@ -91,7 +113,14 @@ export const Products = ({ products, isLoading }: ProductsProps) => {
 
   return (
     <S.MainContainer>
-      <Filter />
+      <Filter
+        sort={sort}
+        onSortChange={onSortChange}
+        category={category}
+        onCategoryChange={onCategoryChange}
+        keyword={keyword}
+        onKeywordChange={onKeywordChange}
+      />
       <S.ContentWrapper $isPanelOpen={isPanelOpen}>
         <S.CardContainer $isPanelOpen={isPanelOpen}>
           {products.map(product => (
