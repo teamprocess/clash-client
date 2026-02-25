@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { font } from "@/shared/config/font";
+import Previous from "@/pages/roadmap/chapter/assets/previous.svg";
 
 export const TestContainer = styled.div`
   display: flex;
@@ -10,7 +11,8 @@ export const TestContainer = styled.div`
   min-height: 100%;
   background-color: ${({ theme }) => theme.background.normal};
   border-radius: 1rem;
-  padding: 6rem 11rem;
+  padding: 0 11rem;
+  position: relative;
 `;
 
 export const QuestionWrapper = styled.div`
@@ -125,4 +127,20 @@ export const ProgressLabel = styled.span`
   ${font.body.medium}
   color: ${({ theme }) => theme.label.alternative};
   white-space: nowrap;
+`;
+
+export const PreviousBox = styled.div`
+  display: flex;
+  gap: 0.75rem;
+  position: absolute;
+  top: 2rem;
+  left: 2.5rem;
+  cursor: pointer;
+`;
+
+export const PreviousIcon = styled(Previous)``;
+
+export const PreviousLabel = styled.span`
+  ${font.title2.medium}
+  color: ${({ theme }) => theme.label.neutral};
 `;

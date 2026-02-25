@@ -1,6 +1,7 @@
 import * as S from "./Test.style";
 import { TestProps } from "@/features/major-choice/model/useMajorChoice";
 import { Button } from "@/shared/ui/button";
+import { Link } from "react-router-dom";
 
 const answerBoxData = [
   { id: 1, content: "매우 그렇지 않다", size: "Large" },
@@ -26,6 +27,12 @@ export const Test = ({
     <>
       <S.TestContainer>
         <S.QuestionWrapper>
+          <Link to="/roadmap">
+            <S.PreviousBox>
+              <S.PreviousIcon />
+              <S.PreviousLabel>이전으로</S.PreviousLabel>
+            </S.PreviousBox>
+          </Link>
           {questionData.map(({ id, content }, idx) => (
             <S.QuestionBox key={id}>
               <S.QuestionTitleBox>
