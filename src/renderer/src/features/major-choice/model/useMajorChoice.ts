@@ -64,7 +64,7 @@ export const useMajorChoice = () => {
   // 전공 성향 검사에서 답을 선택받는 함수
   const handleSelect = (questionId: number, answerId: number) => {
     const newAnswers = [...answers];
-    newAnswers[questionId] = answerId;
+    newAnswers[questionId] = newAnswers[questionId] === answerId ? null : answerId;
     setAnswers(newAnswers);
   };
 
