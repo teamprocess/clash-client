@@ -1,7 +1,7 @@
 import * as S from "./PreviewModal.style";
 import { Dialog } from "@/shared/ui";
 import { usePreview } from "../model/usePreview";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Button } from "@/shared/ui/button/Button";
 
 interface PreviewModalProps {
@@ -23,6 +23,8 @@ export const PreviewModal = ({
 
   const [currentStep, setCurrentStep] = useState(1);
   const [prevSectionId, setPrevSectionId] = useState(sectionId);
+  const stepsContainerRef = useRef<HTMLDivElement>(null);
+  const stepRefs = useRef<(HTMLDivElement | null)[]>([]);
 
   if (prevSectionId !== sectionId) {
     setPrevSectionId(sectionId);
@@ -31,20 +33,36 @@ export const PreviewModal = ({
 
   const activeStep = previewData?.steps.find(step => step.id === currentStep);
 
+  const scrollToStep = (stepId: number) => {
+    const container = stepsContainerRef.current;
+    const stepEl = stepRefs.current[stepId - 1];
+    if (!container || !stepEl) return;
+
+    const containerWidth = container.clientWidth;
+    const stepLeft = stepEl.offsetLeft;
+    const stepWidth = stepEl.clientWidth;
+
+    const targetScroll = stepLeft - containerWidth / 2.2 + stepWidth / 2;
+    container.scrollTo({ left: Math.max(0, targetScroll), behavior: "smooth" });
+  };
+
   const handlePrev = () => {
     if (currentStep > 1) {
       setCurrentStep(currentStep - 1);
+      scrollToStep(currentStep - 1);
     }
   };
 
   const handleNext = () => {
     if (currentStep < totalSteps) {
       setCurrentStep(currentStep + 1);
+      scrollToStep(currentStep + 1);
     }
   };
 
   const handleStepClick = (stepId: number) => {
     setCurrentStep(stepId);
+    scrollToStep(stepId);
   };
 
   if (loading) {
@@ -102,10 +120,16 @@ export const PreviewModal = ({
               </S.RoadmapTop>
 
               <S.RoadmapBottom>
-                <S.RoadmapStepsContainer>
+                <S.RoadmapStepsContainer ref={stepsContainerRef}>
                   <S.RoadmapSteps>
-                    {previewData.steps.map(step => (
-                      <S.StepWrapper key={step.id} onClick={() => handleStepClick(step.id)}>
+                    {previewData.steps.map((step, index) => (
+                      <S.StepWrapper
+                        key={step.id}
+                        ref={el => {
+                          stepRefs.current[index] = el;
+                        }}
+                        onClick={() => handleStepClick(step.id)}
+                      >
                         <S.StepCircle $active={step.id === currentStep}>{step.id}</S.StepCircle>
                         {step.id === currentStep && <S.StepTooltip>{step.tooltip}</S.StepTooltip>}
                       </S.StepWrapper>

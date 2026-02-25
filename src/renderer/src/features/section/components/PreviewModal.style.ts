@@ -162,21 +162,7 @@ export const RoadmapStepsContainer = styled.div`
   margin: 0 -2rem;
 
   &::-webkit-scrollbar {
-    height: 0.5rem;
-  }
-
-  &::-webkit-scrollbar-track {
-    background: ${({ theme }) => theme.background.neutral};
-    border-radius: 0.25rem;
-  }
-
-  &::-webkit-scrollbar-thumb {
-    background: ${({ theme }) => theme.line.normal};
-    border-radius: 0.25rem;
-  }
-
-  &::-webkit-scrollbar-thumb:hover {
-    background: ${({ theme }) => theme.label.alternative};
+    height: 0;
   }
 `;
 
