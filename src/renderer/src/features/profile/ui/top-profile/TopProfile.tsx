@@ -1,5 +1,6 @@
 import * as S from "./TopProfile.style";
 import { TopProfileProps } from "@/features/profile/model/useTopProfile";
+import { useSignOut } from "@/features/auth";
 
 export const TopProfile = ({
   bannerAccentColor,
@@ -10,8 +11,9 @@ export const TopProfile = ({
   onCancel,
   onSave,
   onEditProfile,
-  onLogout,
 }: TopProfileProps) => {
+  const { signOut, isLoading } = useSignOut();
+
   return (
     <S.Banner $accent={bannerAccentColor} $bgImage={bannerBgImageUrl}>
       <S.Button>
@@ -29,8 +31,8 @@ export const TopProfile = ({
             <S.ButtonEdit type="button" onClick={onEditProfile}>
               수정
             </S.ButtonEdit>
-            <S.ButtonLogout type="button" onClick={onLogout}>
-              로그아웃
+            <S.ButtonLogout type="button" onClick={signOut} disabled={isLoading}>
+              {isLoading ? "로그아웃 중.." : "로그아웃"}
             </S.ButtonLogout>
           </>
         )}

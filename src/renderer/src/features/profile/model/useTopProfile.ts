@@ -7,7 +7,6 @@ export interface TopProfileProps {
   onCancel?: () => void;
   onSave?: () => void;
   onEditProfile?: () => void;
-  onLogout?: () => void;
 }
 
 export const useTopProfile = () => {
