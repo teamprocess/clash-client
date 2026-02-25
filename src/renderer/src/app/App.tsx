@@ -17,6 +17,7 @@ import { SignInPage, SignUpPage } from "@/pages/auth";
 import { NotFoundPage } from "@/pages/not-found/NotFoundPage";
 import { RoadmapPage } from "@/pages/roadmap/section/RoadmapPage";
 import { ComparePage } from "@/pages/home/compare/ComparePage";
+import { ProfilePage } from "@/pages/profile";
 import { OfflinePage } from "@/pages/offline";
 
 const RECAPTCHA_SITE_KEY = import.meta.env.VITE_RECAPTCHA_SITE_KEY || "";
@@ -49,6 +50,7 @@ function App() {
                 <Route path="/roadmap" element={<RoadmapPage />} />
                 <Route path="/roadmap/major-choice" element={<RoadmapMajorChoicePage />} />
                 <Route path="/roadmap/:sectionId" element={<ChapterPage />} />
+                <Route path="/profile" element={<ProfilePage />} />
               </Route>
               <Route element={<MainLayout variant="scrollable" />}>
                 <Route path="/shop" element={<ShopPage />} />
