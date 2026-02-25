@@ -3,22 +3,29 @@ import { useNavigate } from "react-router-dom";
 import { majorApi } from "@/entities/major/api/majorApi";
 import { useMajorQuestionsQuery } from "@/entities/major/api/query/useMajorQuestions.query";
 import { Major } from "@/entities/major/model/major.types";
+import { useQueryClient } from "@tanstack/react-query";
+import { useGetMyProfile } from "@/entities/user";
 
 export type FeatureItem = "TEST" | "CHOICE" | null;
-export type MajorItem = "WEB" | "APP" | "SERVER" | "AI" | "GAME" | null;
+export type MajorItem = "WEB" | "SERVER" | null;
+export type AnalyzedMajorItem = "Web" | "Server" | null;
 export type StepType = "FEATURE" | "TEST" | "LOADING" | "RESULT" | "CHOICE";
 
-const majorNames: Record<string, string> = {
+type MajorScoreKey = "web" | "server";
+
+const majorNames: Record<MajorScoreKey, Exclude<AnalyzedMajorItem, null>> = {
   web: "Web",
-  app: "App",
   server: "Server",
-  ai: "AI",
-  game: "Game",
 };
 
 export const useMajorChoice = () => {
+  const queryClient = useQueryClient();
+
   // 로드맵 페이지 컴포넌트 step useState
   const [step, setStep] = useState<StepType>("FEATURE");
+
+  const { data: myProfile } = useGetMyProfile();
+  const username = myProfile?.name ?? "";
 
   // Feature Choice 컴포넌트
   const [selected, setSelected] = useState<FeatureItem>(null);
@@ -48,7 +55,7 @@ export const useMajorChoice = () => {
   const selectedMajor = (path: MajorItem) => setMajor(path);
 
   // Test 컴포넌트
-  const [analyzedMajor, setAnalyzedMajor] = useState<MajorItem>(null);
+  const [analyzedMajor, setAnalyzedMajor] = useState<AnalyzedMajorItem>(null);
   const isAllAnswered =
     questionData.length > 0 &&
     answers.length === questionData.length &&
@@ -66,22 +73,20 @@ export const useMajorChoice = () => {
   const handleComplete = () => {
     if (!isAllAnswered) return;
 
-    const scores = { web: 0, app: 0, server: 0, ai: 0, game: 0 };
+    const scores: Record<MajorScoreKey, number> = { web: 0, server: 0 };
     answers.forEach((answer, index) => {
       if (answer == null) return;
       const question = questionData[index];
       const multiplier = answer - 3;
-      Object.keys(scores).forEach(key => {
-        const major = key as keyof typeof scores;
-        scores[major] += (question.weight[major] || 0) * multiplier;
-      });
+
+      scores.web += (question.weight.web || 0) * multiplier;
+      scores.server += (question.weight.server || 0) * multiplier;
     });
 
-    const resultMajorKey = Object.entries(scores).reduce((a, b) => (a[1] > b[1] ? a : b))[0];
-
+    const resultMajorKey: MajorScoreKey = scores.web > scores.server ? "web" : "server";
     const finalMajor = majorNames[resultMajorKey];
 
-    setAnalyzedMajor(finalMajor as MajorItem);
+    setAnalyzedMajor(finalMajor);
     // 임시로 2초 로딩
     setStep("LOADING");
     setTimeout(() => {
@@ -95,7 +100,13 @@ export const useMajorChoice = () => {
     postMyMajor({
       major: major as Major,
     }).then(() => {
-      navigate("/roadmap");
+      queryClient
+        .invalidateQueries({
+          queryKey: ["user"],
+        })
+        .then(() => {
+          navigate("/roadmap");
+        });
     });
   };
 
@@ -109,7 +120,7 @@ export const useMajorChoice = () => {
     feature: {
       selected,
       select,
-      username: "조상철",
+      username,
       isValid: selected !== null,
       setStep,
       handleFeatureChoiceSubmit,
@@ -120,7 +131,7 @@ export const useMajorChoice = () => {
       selectedMajor,
       isValid: major !== null,
       major,
-      username: "조상철",
+      username,
       onSubmit,
     },
     test: {
@@ -134,7 +145,7 @@ export const useMajorChoice = () => {
     },
     result: {
       analyzedMajor,
-      username: "조상철",
+      username,
       setStep,
     },
   };

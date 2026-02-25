@@ -33,6 +33,10 @@ export const StepCount = styled.span`
   color: ${({ theme }) => theme.label.alternative};
 `;
 
+export const CompletedCount = styled.span`
+  color: ${({ theme }) => theme.primary.normal};
+`;
+
 export const ProgressBarWrapper = styled.div`
   display: flex;
   justify-content: space-between;

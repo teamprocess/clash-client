@@ -16,8 +16,7 @@ export const Section = () => {
   const [isSelectedSectionLocked, setIsSelectedSectionLocked] = useState(false);
   const { data: myProfile } = useGetMyProfile();
   const major = myProfile?.major as MajorEnum | undefined;
-  const { data: sectionResponse } = useMajorSectionQuery(major);
-  const sectionData = sectionResponse?.data ?? undefined;
+  const { data: sectionData } = useMajorSectionQuery(major);
 
   const handleClick = (item: section) => {
     setSelectedSectionId(+item.id);
