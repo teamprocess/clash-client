@@ -1,12 +1,21 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import { font } from "@/shared/config/font";
 import EXP from "@/features/competition/assets/exp.svg";
 import Record from "@/features/competition/assets/record.svg";
 import Github from "@/shared/ui/assets/github.svg";
 
-export const ContentArea = styled.div`
+const flexRow = css`
+  display: flex;
+  flex-direction: row;
+`;
+
+const flexCol = css`
   display: flex;
   flex-direction: column;
+`;
+
+export const ContentArea = styled.div`
+  ${flexCol};
   justify-content: space-between;
   height: 100%;
   border-radius: 1rem;
@@ -15,8 +24,7 @@ export const ContentArea = styled.div`
 `;
 
 export const GraphWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
+  ${flexCol};
   padding: 0.75rem;
   width: 100%;
   gap: 0.625rem;
@@ -34,11 +42,11 @@ export const Line = styled.div`
   background: ${({ theme }) => theme.line.neutral};
 `;
 
-export const TitleBox = styled.div`
-  display: flex;
-  flex-direction: row;
+export const TitleBox = styled.div<{ $justify?: string }>`
+  ${flexRow};
   align-items: center;
   gap: 0.5rem;
+  justify-content: ${({ $justify }) => $justify ?? "flex-start"};
 `;
 
 export const SubText = styled.p`
@@ -47,8 +55,7 @@ export const SubText = styled.p`
 `;
 
 export const CompareContainer = styled.div`
-  display: flex;
-  flex-direction: row;
+  ${flexRow};
   gap: 1rem;
   height: 100%;
 `;
@@ -57,8 +64,7 @@ export const CompareBox = styled.div`
   padding: 1rem;
   height: 100%;
   width: 100%;
-  display: flex;
-  flex-direction: column;
+  ${flexCol};
   gap: 1rem;
   justify-content: space-between;
   background-color: ${({ theme }) => theme.background.alternative};
@@ -95,8 +101,7 @@ export const GridBox = styled.div`
   border-radius: 0.75rem;
   background: ${({ theme }) => theme.background.normal};
   border: 1px solid ${({ theme }) => theme.line.alternative};
-  display: flex;
-  flex-direction: row;
+  ${flexRow};
   align-items: center;
   justify-content: center;
 `;
@@ -107,15 +112,13 @@ export const ExplainText = styled.div`
 `;
 
 export const ImpressiveBox = styled.div`
-  display: flex;
-  flex-direction: row;
+  ${flexRow};
   align-items: center;
   gap: 0.25rem;
 `;
 
 export const DataBoxing = styled.div`
-  display: flex;
-  flex-direction: row;
+  ${flexRow};
   align-items: center;
   justify-content: space-between;
   width: 100%;
@@ -127,11 +130,13 @@ export const DataText = styled.div`
   ${font.headline1.bold}
 `;
 
-export const GrowthRateBox = styled.div`
-  display: flex;
-  flex-direction: column;
+type GrowthDirection = "row" | "column";
+
+export const GrowthRateBox = styled.div<{ $direction?: GrowthDirection; $gap?: string }>`
+  ${flexCol};
+  flex-direction: ${({ $direction }) => $direction ?? "column"};
   align-items: flex-end;
-  gap: 0.25rem;
+  gap: ${({ $gap }) => $gap ?? "0.25rem"};
 `;
 
 export const ChartWrapper = styled.div`
@@ -141,10 +146,15 @@ export const ChartWrapper = styled.div`
 `;
 
 export const GithubCompareBox = styled.div`
-  display: flex;
-  flex-direction: column;
+  ${flexCol};
   align-items: start;
   gap: 0.25rem;
+`;
+
+export const StatCompareRow = styled.div`
+  ${flexRow};
+  justify-content: space-between;
+  gap: 0.5rem;
 `;
 
 export const EXPIcon = styled(EXP)``;
