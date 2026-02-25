@@ -1,6 +1,5 @@
 import * as S from "./Rival.style";
 import { MyRivalUsers } from "@/features/home/ui/rival/myrival-users/MyRivalUsers";
-import { Link } from "react-router-dom";
 import { useRival } from "@/features/home/model/useRival";
 import { AddRivalsDialog, DeleteRivalsDialog } from "@/features/home/lib";
 import { Button } from "@/shared/ui";
@@ -8,36 +7,40 @@ import { Button } from "@/shared/ui";
 export const Rival = () => {
   const rival = useRival();
 
+  const rivals = rival.rivalsData?.myRivals ?? [];
+  const hasRivals = rivals.length > 0;
+  const canAddMore = rivals.length < 4;
+
   return (
     <S.RivalContainer>
       <S.TitleBox>
-        <S.ActiveBox style={{ flexDirection: "row", gap: "1rem" }}>
+        <S.TitleLeft>
           <S.Title>내 라이벌</S.Title>
-          {(rival.rivalsData?.myRivals.length ?? 0) > 0 && (
-            <Button size={"sm"} variant={"primary"} onClick={rival.handleDeleteModalOpen}>
+          {hasRivals && (
+            <Button size="sm" variant="primary" onClick={rival.handleDeleteModalOpen}>
               라이벌 끊기
             </Button>
           )}
-        </S.ActiveBox>
-        <Link to="/competition">
-          <S.ArrowBox style={{ cursor: "pointer" }}>
-            자세히보기
-            <S.DetailArrowIcon />
-          </S.ArrowBox>
-        </Link>
+        </S.TitleLeft>
+
+        <S.MoreLink to="/competition">
+          자세히보기
+          <S.DetailArrowIcon />
+        </S.MoreLink>
       </S.TitleBox>
 
       <S.RivalBox>
-        {rival.rivalsData?.myRivals.map(user => (
+        {rivals.map(user => (
           <MyRivalUsers key={user.username} user={user} getStatus={rival.getStatus} />
         ))}
-        {(rival.rivalsData?.myRivals.length ?? 0) < 4 && (
-          <S.ProfileContainer onClick={rival.handleOpen} style={{ cursor: "pointer" }}>
+
+        {canAddMore && (
+          <S.AddRivalButton type="button" onClick={rival.handleOpen}>
             <S.AddRivalBox>
               <S.PlusIcon />
               <S.AddRivalText>버튼을 눌러 라이벌을 추가할 수 있어요.</S.AddRivalText>
             </S.AddRivalBox>
-          </S.ProfileContainer>
+          </S.AddRivalButton>
         )}
       </S.RivalBox>
 
