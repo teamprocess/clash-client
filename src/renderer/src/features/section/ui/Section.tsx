@@ -7,6 +7,7 @@ import { PreviewModal } from "@/features/section/components/PreviewModal";
 import { useMajorSectionQuery } from "@/entities/roadmap/section/api/query/useMajorSection.query";
 import { MajorEnum, section } from "@/entities/roadmap/section/model/section.types";
 import { useGetMyProfile } from "@/entities/user";
+import { SectionItemBox } from "../components/SectionItemBox";
 
 export const Section = () => {
   const navigate = useNavigate();
@@ -15,7 +16,7 @@ export const Section = () => {
   const [selectedSectionId, setSelectedSectionId] = useState<number | null>(null);
   const [isSelectedSectionLocked, setIsSelectedSectionLocked] = useState(false);
   const { data: myProfile } = useGetMyProfile();
-  const major = myProfile?.major as MajorEnum | undefined;
+  const major = myProfile?.major as MajorEnum;
   const { data: sectionData } = useMajorSectionQuery(major);
 
   const handleClick = (item: section) => {
@@ -43,21 +44,12 @@ export const Section = () => {
       <S.RoadmapScrollable>
         <S.SectionItemWrapper>
           {sectionData?.categories.map(category => (
-            <S.SectionItemBox key={category}>
-              {sectionData.sections
-                .filter(item => item.category === category)
-                .map(item => (
-                  <S.SectionItem key={item.id} style={{ opacity: item.locked ? 0.5 : 1 }}>
-                    <S.SectionIconWrapper onClick={() => handleClick(item)}>
-                      {/*서버로부터 사진 연결 전 임시로 null*/}
-                      <S.SectionIcon src={"null"} />
-                      {item.completed && <S.SectionComplete />}
-                      {item.locked && <S.SectionLock />}
-                    </S.SectionIconWrapper>
-                    <S.SectionTitle>{item.title}</S.SectionTitle>
-                  </S.SectionItem>
-                ))}
-            </S.SectionItemBox>
+            <SectionItemBox
+              key={category}
+              category={category}
+              sections={sectionData.sections}
+              onItemClick={handleClick}
+            />
           ))}
         </S.SectionItemWrapper>
 

@@ -5,7 +5,7 @@ import { useMajorSectionQuery } from "@/entities/roadmap/section/api/query/useMa
 
 export const SectionProgress = () => {
   const { data: myProfile } = useGetMyProfile();
-  const major = myProfile?.major as MajorEnum | undefined;
+  const major = myProfile?.major as MajorEnum;
 
   const { data: sectionData } = useMajorSectionQuery(major);
   const sections = sectionData?.sections ?? [];
