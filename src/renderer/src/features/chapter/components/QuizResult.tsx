@@ -1,34 +1,31 @@
 import * as S from "./QuizModal.style";
 import { Button } from "@/shared/ui/button";
 
-interface QuizResultProps {
-  isFinal: boolean;
-  isPassed?: boolean;
-  isCorrect?: boolean;
-  currentIndex?: number;
+interface QuizResultFinalProps {
+  isFinal: true;
+  isPassed: boolean;
   total: number;
-  explanation: string;
-  correctCount?: number;
+  correctCount: number;
   errorMessage?: string | null;
-  onNext: () => void;
   onRestart: () => void;
   onClose: () => void;
 }
 
-export const QuizResult = ({
-  isFinal,
-  isPassed,
-  isCorrect,
-  currentIndex,
-  total,
-  explanation,
-  correctCount,
-  errorMessage,
-  onNext,
-  onRestart,
-  onClose,
-}: QuizResultProps) => {
-  if (isFinal) {
+interface QuizResultOngoingProps {
+  isFinal: false;
+  isCorrect: boolean;
+  currentIndex: number;
+  total: number;
+  explanation: string;
+  onNext: () => void;
+}
+
+type QuizResultProps = QuizResultFinalProps | QuizResultOngoingProps;
+
+export const QuizResult = (props: QuizResultProps) => {
+  if (props.isFinal) {
+    const { isPassed, total, correctCount, errorMessage, onRestart, onClose } = props;
+
     return (
       <>
         <S.ModalTop>
@@ -67,7 +64,6 @@ export const QuizResult = ({
                 다시하기
               </Button>
             )}
-
             <Button variant="primary" size="md" fullWidth onClick={onClose}>
               끝내기
             </Button>
@@ -77,15 +73,17 @@ export const QuizResult = ({
     );
   }
 
+  const { isCorrect, currentIndex, total, explanation, onNext } = props;
+
   return (
     <>
       <S.ModalTop>
         <S.ProgressBarWrapper>
           <S.BarBackground>
-            <S.BarActive $fill={((currentIndex! + 1) / total) * 100} />
+            <S.BarActive $fill={((currentIndex + 1) / total) * 100} />
           </S.BarBackground>
           <S.ProgressLabelBox>
-            <S.CurrentProgress>{currentIndex! + 1}</S.CurrentProgress>/
+            <S.CurrentProgress>{currentIndex + 1}</S.CurrentProgress>/
             <S.TotalQuestions>{total}</S.TotalQuestions>
           </S.ProgressLabelBox>
         </S.ProgressBarWrapper>
