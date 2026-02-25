@@ -107,8 +107,8 @@ export const ProgressBarWrapper = styled.div`
 
 export const ProgressTrack = styled.div`
   width: 0.75rem;
-  height: 20rem;
-  background-color: ${({ theme }) => theme.line.normal};
+  height: 25rem;
+  background-color: ${({ theme }) => theme.label.disable};
   border-radius: 9999px;
   overflow: hidden;
 `;
@@ -116,7 +116,7 @@ export const ProgressTrack = styled.div`
 export const ProgressFill = styled.div<{ $progress: number }>`
   width: 100%;
   height: ${({ $progress }) => $progress}%;
-  background-color: ${({ theme }) => theme.primary.normal};
+  background-color: ${({ theme }) => theme.line.normal};
   border-radius: 9999px;
   transition: height 0.4s ease;
 `;
