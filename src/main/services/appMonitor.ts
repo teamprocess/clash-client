@@ -10,11 +10,10 @@ const INACTIVE_THRESHOLD_MS = 5 * 60 * 1000;
 const CHECK_INTERVAL_MS = 2000;
 const APP_QUERY_ERROR_LOG_INTERVAL_MS = 30 * 1000;
 const MAX_SESSION_COUNT = 100;
+const OSA_SCRIPT_BIN = "/usr/bin/osascript";
 
-const ACTIVE_APP_SCRIPT =
-  "osascript -e 'tell application \"System Events\" to get name of first application process whose frontmost is true'";
-const RUNNING_APPS_SCRIPT =
-  "osascript -e 'tell application \"System Events\" to get name of every application process'";
+const ACTIVE_APP_SCRIPT = `${OSA_SCRIPT_BIN} -e 'tell application "System Events" to get name of first application process whose frontmost is true'`;
+const RUNNING_APPS_SCRIPT = `${OSA_SCRIPT_BIN} -e 'tell application "System Events" to get name of every application process'`;
 
 export class AppMonitor {
   private activeApps: Map<string, TrackedApp> = new Map();
@@ -24,6 +23,7 @@ export class AppMonitor {
   private lastSentAppName: string | null = null;
   private frontmostMonitoredAppName: string | null = null;
   private isChecking = false;
+  private lastActiveAppErrorLoggedAt = 0;
   private lastRunningAppsErrorLoggedAt = 0;
 
   constructor(mainWindow: BrowserWindow) {
@@ -98,7 +98,7 @@ export class AppMonitor {
       const { stdout } = await execAsync(ACTIVE_APP_SCRIPT);
       return stdout.trim();
     } catch (error) {
-      console.error("활성 상태의 앱 정보를 가져오는데 실패했습니다:", error);
+      this.logActiveAppQueryError(error);
       return null;
     }
   }
@@ -112,13 +112,55 @@ export class AppMonitor {
         .map(name => name.trim())
         .filter(Boolean);
     } catch (error) {
-      const now = Date.now();
-      if (now - this.lastRunningAppsErrorLoggedAt >= APP_QUERY_ERROR_LOG_INTERVAL_MS) {
-        console.error("실행 중인 앱 정보를 가져오는데 실패했습니다:", error);
-        this.lastRunningAppsErrorLoggedAt = now;
-      }
+      this.logRunningAppsQueryError(error);
       return null;
     }
+  }
+
+  // Apple Events 권한 거부/스크립트 실패 로그를 제한해서 출력
+  private logActiveAppQueryError(error: unknown) {
+    const now = Date.now();
+    if (now - this.lastActiveAppErrorLoggedAt < APP_QUERY_ERROR_LOG_INTERVAL_MS) {
+      return;
+    }
+
+    console.error("활성 상태의 앱 정보를 가져오는데 실패했습니다:", error);
+    if (this.isAppleEventsPermissionError(error)) {
+      console.error(
+        "macOS 설정 > 개인정보 보호 및 보안 > 자동화(Automation)에서 Clash의 System Events 제어 권한을 허용해주세요."
+      );
+    }
+
+    this.lastActiveAppErrorLoggedAt = now;
+  }
+
+  // 실행 중 앱 조회 실패 로그를 제한해서 출력
+  private logRunningAppsQueryError(error: unknown) {
+    const now = Date.now();
+    if (now - this.lastRunningAppsErrorLoggedAt < APP_QUERY_ERROR_LOG_INTERVAL_MS) {
+      return;
+    }
+
+    console.error("실행 중인 앱 정보를 가져오는데 실패했습니다:", error);
+    if (this.isAppleEventsPermissionError(error)) {
+      console.error(
+        "macOS 설정 > 개인정보 보호 및 보안 > 자동화(Automation)에서 Clash의 System Events 제어 권한을 허용해주세요."
+      );
+    }
+
+    this.lastRunningAppsErrorLoggedAt = now;
+  }
+
+  // Apple Events 자동화 권한 거부(-1743) 여부 판별
+  private isAppleEventsPermissionError(error: unknown): boolean {
+    if (!(error instanceof Error)) {
+      return false;
+    }
+
+    return (
+      error.message.includes("Not authorized to send Apple events") ||
+      error.message.includes("(-1743)")
+    );
   }
 
   // 대상 앱 활성 시간 갱신
