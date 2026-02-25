@@ -20,18 +20,25 @@ export const Recommend = ({ products }: RecommendProps) => {
   return (
     <S.CategoryContainer>
       <S.CategoryTitle>추천</S.CategoryTitle>
-      <S.CardContainer>
-        {products.map(product => (
-          <ProductCard
-            key={product.id}
-            title={product.title}
-            price={product.price}
-            discount={product.discount}
-            type={product.type}
-            onClick={() => handleCardClick(product)}
-          />
-        ))}
-      </S.CardContainer>
+      {products.length === 0 ? (
+        <S.EmptyBox>
+          <S.CryIcon />
+          <S.EmptyText>추천 상품이 없어요.</S.EmptyText>
+        </S.EmptyBox>
+      ) : (
+        <S.CardContainer>
+          {products.map(product => (
+            <ProductCard
+              key={product.id}
+              title={product.title}
+              price={product.price}
+              discount={product.discount}
+              type={product.type}
+              onClick={() => handleCardClick(product)}
+            />
+          ))}
+        </S.CardContainer>
+      )}
     </S.CategoryContainer>
   );
 };
