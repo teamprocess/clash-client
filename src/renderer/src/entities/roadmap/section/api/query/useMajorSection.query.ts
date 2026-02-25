@@ -6,7 +6,7 @@ export const sectionQueryKeys = {
   major: (major: MajorEnum | undefined) => ["sections", "major", major] as const,
 };
 
-export const useMajorSectionQuery = (major: MajorEnum | undefined) => {
+export const useMajorSectionQuery = (major: MajorEnum) => {
   return useQuery({
     queryKey: sectionQueryKeys.major(major),
     queryFn: async (): Promise<getAllSectionsResponse> => {
