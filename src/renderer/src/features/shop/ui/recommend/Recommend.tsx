@@ -12,26 +12,33 @@ export const Recommend = ({ products }: RecommendProps) => {
   const navigate = useNavigate();
   const open = useProductDetailStore(s => s.open);
 
-  const handleCardClick = (productId: number) => {
-    open(productId);
+  const handleCardClick = (product: Product) => {
+    open(product.id, product);
     navigate("/shop/products");
   };
 
   return (
     <S.CategoryContainer>
       <S.CategoryTitle>추천</S.CategoryTitle>
-      <S.CardContainer>
-        {products.map(product => (
-          <ProductCard
-            key={product.id}
-            title={product.title}
-            price={product.price}
-            discount={product.discount}
-            type={product.type}
-            onClick={() => handleCardClick(product.id)}
-          />
-        ))}
-      </S.CardContainer>
+      {products.length === 0 ? (
+        <S.EmptyBox>
+          <S.CryIcon />
+          <S.EmptyText>추천 상품이 없어요.</S.EmptyText>
+        </S.EmptyBox>
+      ) : (
+        <S.CardContainer>
+          {products.map(product => (
+            <ProductCard
+              key={product.id}
+              title={product.title}
+              price={product.price}
+              discount={product.discount}
+              type={product.type}
+              onClick={() => handleCardClick(product)}
+            />
+          ))}
+        </S.CardContainer>
+      )}
     </S.CategoryContainer>
   );
 };

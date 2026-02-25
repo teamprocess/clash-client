@@ -12,8 +12,8 @@ export const Popularity = ({ products }: PopularityProps) => {
   const navigate = useNavigate();
   const open = useProductDetailStore(s => s.open);
 
-  const handleCardClick = (productId: number) => {
-    open(productId);
+  const handleCardClick = (product: Product) => {
+    open(product.id, product);
     navigate("/shop/products");
   };
 
@@ -28,7 +28,7 @@ export const Popularity = ({ products }: PopularityProps) => {
             price={product.price}
             discount={product.discount}
             type={product.type}
-            onClick={() => handleCardClick(product.id)}
+            onClick={() => handleCardClick(product)}
           />
         ))}
       </S.CardContainer>

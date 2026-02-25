@@ -10,7 +10,7 @@ export const CardContainer = styled.div`
   justify-content: flex-end;
   align-items: flex-start;
   gap: 0.625rem;
-  width: 13.5rem;
+  width: 100%;
   height: 13.75rem;
   background-color: ${({ theme }) => theme.fill.neutral};
   border: 1px solid ${({ theme }) => theme.line.neutral};
