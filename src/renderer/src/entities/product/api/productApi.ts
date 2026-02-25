@@ -4,12 +4,21 @@ import {
   GetProductsRequest,
   ProductListData,
   ProductPaginationData,
+  SearchProductsRequest,
 } from "@/entities/product/model/product.types";
 
 export const productApi = {
   // 전체 상품 목록 조회
   getProducts: async (data: GetProductsRequest) => {
     const result = await api.get<ApiResponse<ProductPaginationData>>("/shop/products", {
+      params: data,
+    });
+    return result.data;
+  },
+
+  // 상품 검색
+  searchProducts: async (data: SearchProductsRequest) => {
+    const result = await api.get<ApiResponse<ProductPaginationData>>("/shop/products/search", {
       params: data,
     });
     return result.data;

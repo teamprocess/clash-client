@@ -1,42 +1,57 @@
 import * as S from "./Filter.style";
 import { SearchInput } from "@/shared/ui/search-input";
 import { Select } from "@/shared/ui/select";
-import { useState } from "react";
+import { ProductCategory, ProductSort } from "@/entities/product";
 
-type SortType = "LATEST" | "POPULAR" | "EXPENSIVE" | "CHEAPEST";
-type CategoryType = "BANNER" | "NAMETAG" | "INSIGNIA";
-
-const sortOptions: {
-  key: SortType;
-  label: string;
-}[] = [
-  { key: "LATEST", label: "최신 순" },
-  { key: "POPULAR", label: "인기 순" },
-  { key: "EXPENSIVE", label: "가격 높은 순" },
-  { key: "CHEAPEST", label: "가격 낮은 순" },
+const sortOptions: { key: ProductSort; label: string }[] = [
+  { key: ProductSort.LATEST, label: "최신 순" },
+  { key: ProductSort.POPULAR, label: "인기 순" },
+  { key: ProductSort.EXPENSIVE, label: "가격 높은 순" },
+  { key: ProductSort.CHEAPEST, label: "가격 낮은 순" },
 ];
 
-const categoryOptions: {
-  key: CategoryType;
-  label: string;
-}[] = [
-  { key: "BANNER", label: "배너" },
-  { key: "NAMETAG", label: "이름표" },
-  { key: "INSIGNIA", label: "휘장" },
+const categoryOptions: { key: ProductCategory | ""; label: string }[] = [
+  { key: "", label: "전체" },
+  { key: ProductCategory.BANNER, label: "배너" },
+  { key: ProductCategory.NAMEPLATE, label: "이름표" },
+  { key: ProductCategory.INSIGNIA, label: "휘장" },
 ];
 
-export const Filter = () => {
-  const [sort, setSort] = useState<SortType>("LATEST");
-  const [category, setCategory] = useState<CategoryType>("BANNER");
+interface FilterProps {
+  sort: ProductSort;
+  onSortChange: (sort: ProductSort) => void;
+  category: ProductCategory | "";
+  onCategoryChange: (category: ProductCategory | "") => void;
+  keyword: string;
+  onKeywordChange: (keyword: string) => void;
+}
 
+export const Filter = ({
+  sort,
+  onSortChange,
+  category,
+  onCategoryChange,
+  keyword,
+  onKeywordChange,
+}: FilterProps) => {
   return (
     <S.FilterContainer>
       <S.FilterBox>
-        <Select<SortType> value={sort} options={sortOptions} onChange={setSort} />
-        <Select<CategoryType> value={category} options={categoryOptions} onChange={setCategory} />
+        <Select<ProductSort> value={sort} options={sortOptions} onChange={onSortChange} />
+        <Select<ProductCategory | "">
+          value={category}
+          options={categoryOptions}
+          onChange={onCategoryChange}
+        />
       </S.FilterBox>
 
-      <SearchInput placeholder="상품명으로 검색" inputSize="sm" variant="dark" />
+      <SearchInput
+        placeholder="상품명으로 검색"
+        inputSize="sm"
+        variant="dark"
+        value={keyword}
+        onChange={e => onKeywordChange(e.target.value)}
+      />
     </S.FilterContainer>
   );
 };
