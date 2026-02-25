@@ -16,7 +16,7 @@ export const MainContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 74.5rem;
+  width: 100%;
   height: 50rem;
   border-radius: 0.75rem;
   background-color: ${({ theme }) => theme.background.normal};
@@ -37,7 +37,7 @@ export const ContentWrapper = styled.div<LayoutProps>`
 
 export const CardContainer = styled.div<LayoutProps>`
   display: grid;
-  grid-template-columns: repeat(${({ $isPanelOpen }) => ($isPanelOpen ? 3 : 5)}, 1fr);
+  grid-template-columns: repeat(auto-fill, minmax(13.5rem, 1fr));
   align-content: start;
   gap: 1rem;
   padding: 1.5rem;
