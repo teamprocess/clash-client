@@ -8,7 +8,7 @@ protocols:
 productName: Clash
 directories:
   buildResources: build
-icon: build/icon.icns
+icon: resources/clash-icon.icns
 files:
   - "!**/.vscode/*"
   - "!src/*"
@@ -39,8 +39,7 @@ mac:
 dmg:
   artifactName: ${name}-${version}.${ext}
   title: ${productName} ${version}
-  icon: build/icon.icns
-  background: build/dmg-background.png
+  icon: resources/clash-icon.icns
   contents:
     - x: 130
       y: 220
