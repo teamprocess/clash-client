@@ -7,8 +7,8 @@ export const SectionProgress = () => {
   const { data: myProfile } = useGetMyProfile();
   const major = myProfile?.major as MajorEnum | undefined;
 
-  const { data: sectionResponse } = useMajorSectionQuery(major);
-  const sections = sectionResponse?.data?.sections ?? [];
+  const { data: sectionData } = useMajorSectionQuery(major);
+  const sections = sectionData?.sections ?? [];
 
   const total = sections.length;
   const completed = sections.filter(section => section.completed).length;
