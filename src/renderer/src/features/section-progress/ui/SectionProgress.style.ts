@@ -25,7 +25,7 @@ export const ProgressInfoBox = styled.div`
 `;
 
 export const RoadmapIcon = styled(Roadmap)`
-  width: 1rem;
+  width: 2rem;
 `;
 
 export const StepCount = styled.span`
