@@ -35,6 +35,8 @@ export const EmptyBox = styled.div`
   gap: 0.5rem;
   width: 100%;
   padding: 2rem 0;
+  background-color: ${({ theme }) => theme.fill.neutral};
+  border-radius: 0.5rem;
 `;
 
 export const CryIcon = styled(Cry)`
