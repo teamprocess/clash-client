@@ -2,6 +2,7 @@ import * as S from "./Battle.style";
 import { Dialog } from "@/shared/ui";
 import { AnalyzeCategory, MATCHVALUE } from "@/entities/competition";
 import { useBattle } from "@/features/competition/model/useBattle";
+import { formatTime } from "@/shared/lib";
 
 export const Battle = () => {
   const battle = useBattle();
@@ -135,7 +136,9 @@ export const Battle = () => {
                             <S.AnalyzeBar $width={battle.rivalAnalyzeRate ?? 0} $isRival>
                               <S.AnalyzeLabel>
                                 <div>
-                                  {Math.round(battle.rivalAnalyzePoint ?? 0)}{" "}
+                                  {battle.category === "ACTIVE_TIME"
+                                    ? formatTime(Math.round(battle.rivalAnalyzePoint) ?? 0)
+                                    : Math.round(battle.rivalAnalyzePoint ?? 0)}{" "}
                                   {battle.detailTextTranslate(battle.category)}
                                 </div>
                                 {battle.isRivalHigher && (battle.diff ?? 0) > 0 && (
@@ -147,7 +150,9 @@ export const Battle = () => {
                             <S.AnalyzeBar $width={battle.myAnalyzeRate ?? 0} $isRival={false}>
                               <S.AnalyzeLabel>
                                 <div>
-                                  {Math.round(battle.myAnalyzePoint ?? 0)}{" "}
+                                  {battle.category === "ACTIVE_TIME"
+                                    ? formatTime(Math.round(battle.myAnalyzePoint) ?? 0)
+                                    : Math.round(battle.myAnalyzePoint ?? 0)}{" "}
                                   {battle.detailTextTranslate(battle.category)}
                                 </div>
                                 {!battle.isRivalHigher && (battle.diff ?? 0) > 0 && (
