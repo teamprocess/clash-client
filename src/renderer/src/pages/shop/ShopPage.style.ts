@@ -4,7 +4,7 @@ import { font } from "@/shared/config/font";
 export const ShopContainer = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: center;
+  width: 100%;
   gap: 1rem;
 `;
 
@@ -13,7 +13,7 @@ export const MenuBox = styled.div`
   justify-content: center;
   gap: 0.5rem;
   height: 3rem;
-  width: 74.5rem;
+  width: 100%;
   padding: 0.25rem;
   border-radius: 0.75rem;
   background-color: ${({ theme }) => theme.background.normal};

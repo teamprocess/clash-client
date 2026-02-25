@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Outlet } from "react-router-dom";
+import { useRef, useEffect, useState } from "react";
+import { Outlet, useLocation } from "react-router-dom";
 import { useRealtimeSync } from "@/features/app-monitor";
 import { GitHubGuard } from "@/features/github";
 import { Topbar } from "@/widgets/topbar";
@@ -13,7 +13,13 @@ interface MainLayoutProps {
 
 export const MainLayout = ({ variant = "default" }: MainLayoutProps) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const mainContentRef = useRef<HTMLElement>(null);
+  const { pathname } = useLocation();
   useRealtimeSync();
+
+  useEffect(() => {
+    mainContentRef.current?.scrollTo(0, 0);
+  }, [pathname]);
 
   const toggleSidebar = () => {
     setIsSidebarOpen(prev => !prev);
@@ -24,7 +30,7 @@ export const MainLayout = ({ variant = "default" }: MainLayoutProps) => {
       <Topbar onToggleSidebar={toggleSidebar} />
       <S.ContentWrapper>
         <Sidebar isOpen={isSidebarOpen} />
-        <S.MainContent $variant={variant}>
+        <S.MainContent ref={mainContentRef} $variant={variant}>
           <Outlet />
         </S.MainContent>
       </S.ContentWrapper>
