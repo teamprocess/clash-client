@@ -96,7 +96,7 @@ export const AnswerItemTitle = styled.div`
 
 export const ProgressBarWrapper = styled.div`
   position: fixed;
-  right: 2rem;
+  right: 5%;
   top: 50%;
   transform: translateY(-50%);
   display: flex;
@@ -106,7 +106,7 @@ export const ProgressBarWrapper = styled.div`
 `;
 
 export const ProgressTrack = styled.div`
-  width: 0.5rem;
+  width: 0.75rem;
   height: 20rem;
   background-color: ${({ theme }) => theme.line.normal};
   border-radius: 9999px;
