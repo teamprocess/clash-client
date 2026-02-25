@@ -3,14 +3,14 @@ import { getAllSectionsResponse, MajorEnum } from "@/entities/roadmap/section/mo
 import { sectionApi } from "@/entities/roadmap/section/api/sectionApi";
 
 export const sectionQueryKeys = {
-  major: (major: MajorEnum | undefined) => ["sections", "major", major] as const,
+  major: (major: MajorEnum) => ["sections", "major", major] as const,
 };
 
 export const useMajorSectionQuery = (major: MajorEnum) => {
   return useQuery({
     queryKey: sectionQueryKeys.major(major),
     queryFn: async (): Promise<getAllSectionsResponse> => {
-      const response = await sectionApi.getMajorSection({ major });
+      const response = await sectionApi.getMajorSection({ major: major! });
 
       if (!response.success || !response.data) {
         throw new Error(response.message ?? "로드맵 목록을 불러오지 못했습니다.");
