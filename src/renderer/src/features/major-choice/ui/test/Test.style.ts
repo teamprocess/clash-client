@@ -1,6 +1,5 @@
 import styled from "styled-components";
 import { font } from "@/shared/config/font";
-import { palette } from "@/shared/config/theme";
 
 export const TestContainer = styled.div`
   display: flex;
@@ -93,15 +92,4 @@ export const AnswerItemTitle = styled.div`
   color: ${({ theme }) => theme.label.alternative};
   text-align: center;
   white-space: nowrap;
-`;
-
-export const SubmitButton = styled.button<{ $isActive: boolean }>`
-  width: 32rem;
-  height: 3.75rem;
-  cursor: ${props => (props.$isActive ? "pointer" : "not-allowed")};
-  background-color: ${({ theme, $isActive }) =>
-    $isActive ? theme.primary.normal : theme.line.normal};
-  ${font.headline1.medium}
-  color: ${palette.neutral[97]};
-  border-radius: 1rem;
 `;
