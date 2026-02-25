@@ -30,15 +30,24 @@ export const QuestionBox = styled.div`
   gap: 3rem;
 `;
 
+export const QuestionTitle = styled.span`
+  ${font.display2.bold}
+  color: ${({ theme }) => theme.label.normal};
+  display: flex;
+  gap: 1rem;
+`;
+
+export const QuestionNumber = styled.span`
+  ${font.display2.bold}
+  color: ${({ theme }) => theme.label.normal};
+  flex-shrink: 0;
+  margin-left: -2rem;
+`;
+
 export const QuestionTitleBox = styled.div`
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
-`;
-
-export const QuestionTitle = styled.span`
-  ${font.display2.bold}
-  color: ${({ theme }) => theme.label.normal};
 `;
 
 export const AnswerContainer = styled.div`

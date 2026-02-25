@@ -37,7 +37,8 @@ export const Test = ({
             <S.QuestionBox key={id}>
               <S.QuestionTitleBox>
                 <S.QuestionTitle>
-                  {id}. {content}
+                  <S.QuestionNumber>{id}.</S.QuestionNumber>
+                  {content}
                 </S.QuestionTitle>
               </S.QuestionTitleBox>
               <S.AnswerContainer>
