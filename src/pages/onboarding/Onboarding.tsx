@@ -1,6 +1,6 @@
 import * as S from "./Onboarding.style";
 
-const CLASH_CLIENT_DOWNLOAD_URL = "http://d2vi97ev0g2iq7.cloudfront.net/clash-client-0.0.1.dmg";
+const CLASH_CLIENT_DOWNLOAD_URL = "https://d2vi97ev0g2iq7.cloudfront.net/clash-client-0.0.1.dmg";
 
 export const OnboardingPage = () => {
   return (
