@@ -18,7 +18,7 @@ export const CategoryTitle = styled.h2`
 
 export const CardContainer = styled.div`
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(auto-fill, minmax(13.5rem, 1fr));
   gap: 1rem;
   padding: 0;
   margin: 0;
