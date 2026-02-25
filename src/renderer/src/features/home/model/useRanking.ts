@@ -8,9 +8,9 @@ import { CategoryType } from "@/entities/home/model/useRanking.types";
 import { formatTime } from "@/shared/lib/formatTime";
 
 const unitMap: Record<CategoryType, string> = {
-  GITHUB: "개",
+  GITHUB: "점",
   ACTIVE_TIME: "",
-  EXP: "포인트",
+  EXP: "EXP",
   SOLVED_AC: "개",
 };
 
