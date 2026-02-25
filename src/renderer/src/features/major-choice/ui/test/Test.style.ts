@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { font } from "@/shared/config/font";
-import { palette } from "@/shared/config/theme";
+import Previous from "@/pages/roadmap/chapter/assets/previous.svg";
 
 export const TestContainer = styled.div`
   display: flex;
@@ -11,7 +11,8 @@ export const TestContainer = styled.div`
   min-height: 100%;
   background-color: ${({ theme }) => theme.background.normal};
   border-radius: 1rem;
-  padding: 6rem 11rem;
+  padding: 0 11rem 3rem;
+  position: relative;
 `;
 
 export const QuestionWrapper = styled.div`
@@ -29,20 +30,24 @@ export const QuestionBox = styled.div`
   gap: 3rem;
 `;
 
+export const QuestionTitle = styled.span`
+  ${font.display2.bold}
+  color: ${({ theme }) => theme.label.normal};
+  display: flex;
+  gap: 1rem;
+`;
+
+export const QuestionNumber = styled.span`
+  ${font.display2.bold}
+  color: ${({ theme }) => theme.label.normal};
+  flex-shrink: 0;
+  margin-left: -2rem;
+`;
+
 export const QuestionTitleBox = styled.div`
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
-`;
-
-export const QuestionTitle = styled.span`
-  ${font.display2.bold}
-  color: ${({ theme }) => theme.label.normal};
-`;
-
-export const QuestionSubTitle = styled.div`
-  ${font.body.medium}
-  color: ${({ theme }) => theme.label.assistive}
 `;
 
 export const AnswerContainer = styled.div`
@@ -86,6 +91,12 @@ export const AnswerItem = styled.div<{ $itemSize: string; $isActive: boolean }>`
     ${({ theme, $isActive }) => ($isActive ? theme.primary.normal : theme.line.normal)};
   flex-shrink: 0;
   cursor: pointer;
+  transition: border-color 0.2s ease;
+
+  &:hover {
+    border-color: ${({ theme, $isActive }) =>
+      $isActive ? theme.primary.normal : theme.background.neutral};
+  }
 `;
 
 export const AnswerItemTitle = styled.div`
@@ -95,13 +106,51 @@ export const AnswerItemTitle = styled.div`
   white-space: nowrap;
 `;
 
-export const SubmitButton = styled.button<{ $isActive: boolean }>`
-  width: 32rem;
-  height: 3.75rem;
-  cursor: ${props => (props.$isActive ? "pointer" : "not-allowed")};
-  background-color: ${({ theme, $isActive }) =>
-    $isActive ? theme.primary.normal : theme.line.normal};
-  ${font.headline1.medium}
-  color: ${palette.neutral[97]};
-  border-radius: 1rem;
+export const ProgressBarWrapper = styled.div`
+  position: fixed;
+  right: 5%;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+`;
+
+export const ProgressTrack = styled.div`
+  width: 0.75rem;
+  height: 25rem;
+  background-color: ${({ theme }) => theme.label.disable};
+  border-radius: 9999px;
+  overflow: hidden;
+`;
+
+export const ProgressFill = styled.div<{ $progress: number }>`
+  width: 100%;
+  height: ${({ $progress }) => $progress}%;
+  background-color: ${({ theme }) => theme.line.normal};
+  border-radius: 9999px;
+  transition: height 0.4s ease;
+`;
+
+export const ProgressLabel = styled.span`
+  ${font.body.medium}
+  color: ${({ theme }) => theme.label.alternative};
+  white-space: nowrap;
+`;
+
+export const PreviousBox = styled.div`
+  display: flex;
+  gap: 0.75rem;
+  position: absolute;
+  top: 2rem;
+  left: 2.5rem;
+  cursor: pointer;
+`;
+
+export const PreviousIcon = styled(Previous)``;
+
+export const PreviousLabel = styled.span`
+  ${font.title2.medium}
+  color: ${({ theme }) => theme.label.neutral};
 `;
