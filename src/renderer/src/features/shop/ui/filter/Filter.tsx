@@ -3,15 +3,15 @@ import { SearchInput } from "@/shared/ui/search-input";
 import { Select } from "@/shared/ui/select";
 import { ProductCategory, ProductSort } from "@/entities/product";
 
-interface SortOption {
+type SortOption = {
   key: ProductSort;
   label: string;
-}
+};
 
-interface CategoryOption {
+type CategoryOption = {
   key: ProductCategory | "";
   label: string;
-}
+};
 
 const sortOptions: SortOption[] = [
   { key: ProductSort.LATEST, label: "최신 순" },
