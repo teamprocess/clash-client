@@ -9,6 +9,7 @@ import { MajorEnum } from "@/entities/roadmap/section/model/section.types";
 import { useEffect, useMemo } from "react";
 import { useGetMyProfile } from "@/entities/user";
 import { useMajorSectionQuery } from "@/entities/roadmap/section/api/query/useMajorSection.query";
+import { MissionContainer } from "@/features/chapter/components/MissionContainer";
 
 export const ChapterPage = () => {
   const { sectionId } = useParams<{ sectionId: string }>();
@@ -132,31 +133,11 @@ export const ChapterPage = () => {
       </S.CurrentSectionBox>
 
       {view.missionModalOpen && (
-        <S.MissionContainer>
-          <S.MissionBoxTop>
-            <S.MissionTitle>{domain.currentStage.title}</S.MissionTitle>
-            <S.MissionProgress>
-              <S.MissionCurrentProgress>
-                {domain.currentStage.currentProgress}
-              </S.MissionCurrentProgress>
-              /<S.MissionTotalMissions>{domain.currentStage.totalMissions}</S.MissionTotalMissions>
-            </S.MissionProgress>
-          </S.MissionBoxTop>
-          <S.MissionList>
-            {domain.currentStageMissions.map(mission => (
-              <S.MissionBox
-                key={mission.id}
-                onClick={() => {
-                  if (domain.currentStage.status === "locked") return;
-                  handlers.handleMissionClick(mission.id);
-                }}
-              >
-                {mission.completed ? <S.CompletedLogo /> : <S.NotCompletedLogo />}
-                <S.MissionLabel>{mission.title}</S.MissionLabel>
-              </S.MissionBox>
-            ))}
-          </S.MissionList>
-        </S.MissionContainer>
+        <MissionContainer
+          currentStage={domain.currentStage}
+          currentStageMissions={domain.currentStageMissions}
+          onMissionClick={handlers.handleMissionClick}
+        />
       )}
 
       {view.currentMission && (
