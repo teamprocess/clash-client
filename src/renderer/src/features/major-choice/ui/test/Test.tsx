@@ -16,8 +16,11 @@ export const Test = ({
   handleSelect,
   handleComplete,
   getTestQuestion,
+  totalCount,
+  answeredCount,
 }: TestProps) => {
   const questionData = getTestQuestion();
+  const progress = totalCount > 0 ? (answeredCount / totalCount) * 100 : 0;
 
   return (
     <>
@@ -62,6 +65,14 @@ export const Test = ({
           >
             결과 확인하기
           </Button>
+          <S.ProgressBarWrapper>
+            <S.ProgressTrack>
+              <S.ProgressFill $progress={progress} />
+            </S.ProgressTrack>
+            <S.ProgressLabel>
+              {answeredCount} / {totalCount}
+            </S.ProgressLabel>
+          </S.ProgressBarWrapper>
         </S.QuestionWrapper>
       </S.TestContainer>
     </>

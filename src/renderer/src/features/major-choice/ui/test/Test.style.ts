@@ -93,3 +93,36 @@ export const AnswerItemTitle = styled.div`
   text-align: center;
   white-space: nowrap;
 `;
+
+export const ProgressBarWrapper = styled.div`
+  position: fixed;
+  right: 2rem;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+`;
+
+export const ProgressTrack = styled.div`
+  width: 0.5rem;
+  height: 20rem;
+  background-color: ${({ theme }) => theme.line.normal};
+  border-radius: 9999px;
+  overflow: hidden;
+`;
+
+export const ProgressFill = styled.div<{ $progress: number }>`
+  width: 100%;
+  height: ${({ $progress }) => $progress}%;
+  background-color: ${({ theme }) => theme.primary.normal};
+  border-radius: 9999px;
+  transition: height 0.4s ease;
+`;
+
+export const ProgressLabel = styled.span`
+  ${font.body.medium}
+  color: ${({ theme }) => theme.label.alternative};
+  white-space: nowrap;
+`;
