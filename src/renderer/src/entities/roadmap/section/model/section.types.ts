@@ -32,8 +32,3 @@ export interface getAllSectionsResponse {
   sections: section[];
   categories: string[];
 }
-
-export interface getAllSectionsServerResponse {
-  sections: sectionServer[];
-  categories?: Array<string | number>;
-}
