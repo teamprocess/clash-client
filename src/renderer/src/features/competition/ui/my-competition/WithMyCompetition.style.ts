@@ -2,9 +2,7 @@ import styled from "styled-components";
 import { font } from "@/shared/config/font";
 import EXP from "@/features/competition/assets/exp.svg";
 import Record from "@/features/competition/assets/record.svg";
-import Github from "@/features/competition/assets/github.svg";
-import SolvedAc from "@/features/home/assets/home/solved-logo.svg";
-import Arrow from "@/shared/ui/assets/arrow.svg";
+import Github from "@/shared/ui/assets/github.svg";
 
 export const ContentArea = styled.div`
   display: flex;
@@ -86,7 +84,6 @@ export const DateText = styled.p`
 export const GridContainer = styled.div`
   display: grid;
   grid-template-columns: repeat(2, 1fr); /* 2 × 2 그리드 */
-  grid-template-rows: repeat(2, 1fr);
   grid-gap: 0.75rem;
   height: 100%;
   width: 100%;
@@ -125,46 +122,9 @@ export const DataBoxing = styled.div`
   padding: 1rem;
 `;
 
-export const DataText = styled.p`
-  ${font.headline1.bold}
-`;
-
-export const ArrowIcon = styled(Arrow)`
-  position: absolute;
-  top: 32%;
-  right: 1rem;
-  width: 0.75rem;
-  height: 0.75rem;
-`;
-
-export const SelectWrapper = styled.div`
-  display: flex;
-  flex-direction: row;
-  position: relative;
-`;
-
-export const Select = styled.select`
-  ${font.body.regular};
-  width: 7.5rem;
-  height: 2rem;
-  padding: 0 0.75rem;
-  border-radius: 0.5rem;
-  background-color: ${({ theme }) => theme.fill.neutral};
+export const DataText = styled.div`
   color: ${({ theme }) => theme.label.normal};
-  border: none;
-  appearance: none;
-  cursor: pointer;
-  background-repeat: no-repeat;
-  background-position: right 0.5rem center;
-  background-size: 0.75rem;
-  &:focus {
-    outline: none;
-  }
-`;
-
-export const Option = styled.option`
-  ${font.body.regular};
-  background-color: ${({ theme }) => theme.line.neutral};
+  ${font.headline1.bold}
 `;
 
 export const GrowthRateBox = styled.div`
@@ -180,7 +140,13 @@ export const ChartWrapper = styled.div`
   position: relative;
 `;
 
+export const GithubCompareBox = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  gap: 0.25rem;
+`;
+
 export const EXPIcon = styled(EXP)``;
 export const GithubIcon = styled(Github)``;
 export const RecordIcon = styled(Record)``;
-export const SolvedAcIcon = styled(SolvedAc)``;

@@ -1,4 +1,8 @@
-import { useMyRivalsQuery, MyRivalsResponse } from "@/entities/competition";
+import { MyRivalsResponse } from "@/entities/competition";
+
+interface UseMyRivalsProps {
+  data: MyRivalsResponse;
+}
 
 export type UserStatus = "ONLINE" | "AWAY" | "OFFLINE";
 
@@ -15,10 +19,8 @@ export const getStatus = (status: UserStatus) => {
   }
 };
 
-export const useMyRivals = () => {
-  const { data } = useMyRivalsQuery();
-
-  const myRivalsData: MyRivalsResponse | null = data?.data ?? null;
+export const useMyRivals = ({ data }: UseMyRivalsProps) => {
+  const myRivalsData: MyRivalsResponse | null = data ?? null;
 
   return {
     myRivals: { myRivalsData },

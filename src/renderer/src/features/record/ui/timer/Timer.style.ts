@@ -27,7 +27,7 @@ export const Date = styled.span`
 export const TimeBox = styled.div`
   display: flex;
   align-items: center;
-  gap: 1.5rem;
+  gap: 1rem;
 `;
 
 export const Time = styled.span`
@@ -37,6 +37,8 @@ export const Time = styled.span`
 
 export const PauseIcon = styled(Pause)`
   cursor: pointer;
+  width: 2.25rem;
+  height: 2.25rem;
 `;
 
 export const PlayButton = styled.button`

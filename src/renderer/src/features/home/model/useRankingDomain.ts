@@ -16,7 +16,7 @@ export const rankingPeriodDropDownValue: { key: PeriodType; label: string }[] = 
 ];
 
 export const useRankingDomain = () => {
-  const [RankingDropdown, setRankingDropdown] = useState<CategoryType>("EXP");
+  const [RankingDropdown, setRankingDropdown] = useState<CategoryType>("GITHUB");
   const [RankingPeriodDropdown, setRankingPeriodDropdown] = useState<PeriodType>("DAY");
 
   const { data: rankingResponse } = useRankingQuery(RankingDropdown, RankingPeriodDropdown);

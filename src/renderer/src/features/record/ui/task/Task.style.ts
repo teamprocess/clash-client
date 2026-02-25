@@ -9,9 +9,25 @@ export const TaskContainer = styled.div`
   flex: 1;
   flex-direction: column;
   justify-content: flex-start;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
   gap: 1rem;
   border-radius: 1rem;
   background-color: ${({ theme }) => theme.background.alternative};
+
+  &::-webkit-scrollbar {
+    width: 0.5rem;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: ${({ theme }) => theme.line.normal};
+    border-radius: 10px;
+  }
 `;
 
 export const TaskBox = styled.div`
@@ -23,7 +39,8 @@ export const TaskItem = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 1.25rem 2.5rem;
+  flex-shrink: 0;
+  padding: 1.25rem 1.5rem;
   border-bottom: 2px solid ${({ theme }) => theme.fill.alternative};
 `;
 
@@ -95,7 +112,7 @@ export const TaskTextInput = styled.input`
   padding: 0.5rem 0.5rem 0.5rem 1rem;
   border: 1px solid ${({ theme }) => theme.line.normal};
   border-radius: 0.5rem;
-  ${font.title2.medium};
+  ${font.headline1.medium};
   color: ${({ theme }) => theme.label.alternative};
   background-color: ${({ theme }) => theme.background.normal};
   outline: none;
@@ -114,8 +131,9 @@ export const ButtonBox = styled.div`
 export const AddTaskButton = styled.button`
   display: flex;
   justify-content: center;
+  flex-shrink: 0;
   padding: 0.5rem;
-  margin-left: 1rem;
+  margin: 1rem 0 1rem 1rem;
   width: 6.5rem;
   border-radius: 0.75rem;
   color: ${({ theme }) => theme.label.alternative};

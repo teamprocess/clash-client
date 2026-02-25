@@ -1,4 +1,5 @@
 export { recordApi } from "./api/recordApi";
+export { getMonitoredAppLabel, matchMonitoredApp } from "./lib/matchMonitoredApp";
 export {
   recordQueryKeys,
   useRecordTasksQuery,
@@ -6,13 +7,22 @@ export {
 } from "./api/query/useRecord.query";
 export type {
   Task,
-  Session,
+  MonitoredApp,
+  IsoDateTimeString,
+  RecordType,
+  TaskRecordSession,
+  ActivityRecordSession,
+  RecordSession,
   RecordTodayResponse,
   RecordSettingResponse,
   RecordSettingUpdateRequest,
   RecordStartRequest,
   RecordStartResponse,
   RecordStopResponse,
+  RecordSwitchActivityAppRequest,
+  RecordSwitchActivityAppResponse,
+  RecordCurrentResponse,
+  RecordMonitoredAppsResponse,
   RecordTasksResponse,
   RecordTaskCreateRequest,
   RecordTaskUpdateRequest,

@@ -1,22 +1,18 @@
-import { useTransitionQuery, TransitionResponse } from "@/entities/home";
+import { TransitionResponse } from "@/entities/home";
 
-export const useTransition = () => {
-  const { data } = useTransitionQuery();
-
-  const transitionData: TransitionResponse | null = data?.data ?? null;
-
+export const useTransition = (data: TransitionResponse | null) => {
   const maxActive = Math.max(
-    transitionData?.activeTime.yesterdayActiveTime ?? 0,
-    transitionData?.activeTime.todayActiveTime ?? 0
+    data?.activeTime?.yesterdayActiveTime ?? 0,
+    data?.activeTime?.todayActiveTime ?? 0
   );
 
   const maxContributors = Math.max(
-    transitionData?.contributors.yesterdayContributors ?? 0,
-    transitionData?.contributors.todayContributors ?? 0
+    data?.contributors?.yesterdayContributors ?? 0,
+    data?.contributors?.todayContributors ?? 0
   );
 
   return {
-    transitionData,
+    transitionData: data,
     maxActive,
     maxContributors,
   };

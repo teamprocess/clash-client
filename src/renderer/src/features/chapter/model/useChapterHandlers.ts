@@ -1,9 +1,11 @@
-import type { Dispatch, SetStateAction } from "react";
+import { useRef, type Dispatch, type SetStateAction } from "react";
 import type { Stage, Mission, StageStatus } from "@/features/chapter/model/chapter.types";
 import type { Node, NodeStatus } from "@/features/chapter/roadmapData";
 import { useQueryClient } from "@tanstack/react-query";
 import type { GetChapterDetailsResponse } from "@/entities/roadmap/chapter/model/chapter.types";
 import { chapterQueryKeys } from "@/entities/roadmap/chapter/api/query/chapterQueryKeys";
+import { chapterApi } from "@/entities/roadmap/chapter/api/chapterApi";
+import { getErrorMessage } from "@/shared/lib";
 
 type UseChapterHandlersParams = {
   stages: Stage[];
@@ -31,18 +33,35 @@ export const useChapterHandlers = ({
   setMissionModalOpen,
 }: UseChapterHandlersParams) => {
   const queryClient = useQueryClient();
+  const isOpeningMissionRef = useRef(false);
 
   const handleCloseQuizModal = () => {
     setModalOpen(false);
     setCurrentMission(null);
   };
 
-  const handleMissionClick = (missionId: number) => {
+  const handleMissionClick = async (missionId: number) => {
+    if (isOpeningMissionRef.current) return;
+
     const mission = currentStageMissions.find(m => m.id === missionId);
     if (!mission || mission.completed) return;
 
-    setCurrentMission(mission);
-    setModalOpen(true);
+    isOpeningMissionRef.current = true;
+    try {
+      const response = await chapterApi.resetMission({
+        missionId: mission.id,
+      });
+      if (!response.success) {
+        console.error("미션 초기화에 실패했습니다.", response.message);
+      }
+    } catch (error: unknown) {
+      const errorMessage = getErrorMessage(error, "미션 초기화 요청에 실패했습니다.");
+      console.error("미션 초기화 요청에 실패했습니다.", errorMessage, error);
+    } finally {
+      isOpeningMissionRef.current = false;
+      setCurrentMission(mission);
+      setModalOpen(true);
+    }
   };
 
   const handleMissionComplete = (missionId: number) => {

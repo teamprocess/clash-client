@@ -2,15 +2,13 @@ import { Line } from "react-chartjs-2";
 import "chart.js/auto";
 
 interface MyCompetitionLineChartProps {
-  data: {
-    dataPoint: {
-      labels: string[];
-      values: number[];
-    };
+  dataPoint: {
+    labels: string[];
+    values: number[];
   };
 }
 
-export const MyCompetitionLineChart = ({ data }: MyCompetitionLineChartProps) => {
+export const MyCompetitionLineChart = (data: MyCompetitionLineChartProps) => {
   const labels = data.dataPoint.labels.map(v => v);
   const values = data.dataPoint.values.map(v => v);
 

@@ -21,7 +21,7 @@ export const Github = ({ today, yesterday }: CompareResponse) => {
                 <S.GitCommitIcon />
                 <S.InfoSubtitleBox>
                   <S.CountText>{yesterday?.commit.count ?? 0}</S.CountText>
-                  <S.InfoSubtitle>commit</S.InfoSubtitle>
+                  <S.InfoSubtitle>Commit</S.InfoSubtitle>
                 </S.InfoSubtitleBox>
               </S.GithubInfoBox>
               <S.CalculateContainer>
@@ -46,22 +46,22 @@ export const Github = ({ today, yesterday }: CompareResponse) => {
                   <S.TimeIcon />
                   <S.ExplainText>
                     첫 커밋{" "}
-                    <S.TimeText>{yesterday?.commit.firstCommit.slice(0, 10) ?? 0}</S.TimeText> ·
+                    <S.TimeText>{yesterday?.commit.firstCommit?.slice(11, 16) ?? 0}</S.TimeText> ·
                     마지막 커밋{" "}
-                    <S.TimeText>{yesterday?.commit.lastCommit.slice(0, 10) ?? 0}</S.TimeText>
+                    <S.TimeText>{yesterday?.commit.lastCommit?.slice(11, 16) ?? 0}</S.TimeText>
                   </S.ExplainText>
                 </S.CalculateInfoBox>
               </S.CalculateContainer>
             </S.CalculateBox>
           </S.InfoContent>
-          <S.InfoContent>
+          <S.InfoContent style={{ marginBottom: "1rem" }}>
             <S.InfoTitle>PR 수</S.InfoTitle>
             <S.CalculateBox>
               <S.GithubInfoBox>
                 <S.GitPRIcon />
                 <S.InfoSubtitleBox>
                   <S.CountText>{yesterday?.pullRequest.count ?? 0}</S.CountText>
-                  <S.InfoSubtitle>Pull request</S.InfoSubtitle>
+                  <S.InfoSubtitle>Pull Request</S.InfoSubtitle>
                 </S.InfoSubtitleBox>
               </S.GithubInfoBox>
               <S.CalculateContainer>
@@ -80,15 +80,6 @@ export const Github = ({ today, yesterday }: CompareResponse) => {
                     Merged <S.TimeText>{yesterday?.pullRequest.mergedCount ?? 0}</S.TimeText> · Open{" "}
                     <S.TimeText>{yesterday?.pullRequest.openCount ?? 0}</S.TimeText> · Closed{" "}
                     <S.TimeText>{yesterday?.pullRequest.closedCount ?? 0}</S.TimeText>
-                  </S.ExplainText>
-                </S.CalculateInfoBox>
-                <S.WidthLine />
-                <S.CalculateInfoBox>
-                  <S.ReviewIcon $width={1.25} />
-                  <S.ExplainText>
-                    리뷰 요청 <S.TimeText>{yesterday?.pullRequest.inReviewCount ?? 0}</S.TimeText> ·
-                    승인 <S.TimeText>{yesterday?.pullRequest.approvedCount ?? 0}</S.TimeText> ·
-                    변경요청 <S.TimeText>{yesterday?.pullRequest.requestCount ?? 0}</S.TimeText>
                   </S.ExplainText>
                 </S.CalculateInfoBox>
               </S.CalculateContainer>
@@ -134,7 +125,7 @@ export const Github = ({ today, yesterday }: CompareResponse) => {
                     <S.GitCommitIcon />
                     <S.InfoSubtitleBox>
                       <S.CountText>{today?.commit.count ?? 0}</S.CountText>
-                      <S.InfoSubtitle>commit</S.InfoSubtitle>
+                      <S.InfoSubtitle>Commit</S.InfoSubtitle>
                     </S.InfoSubtitleBox>
                   </S.GithubInfoBox>
                   <GrowthRate
@@ -155,7 +146,7 @@ export const Github = ({ today, yesterday }: CompareResponse) => {
                 <S.CalculateInfoBox>
                   <S.CodeIcon />
                   <S.CodeGap>
-                    하루 동안 <S.PlusText>{today?.commit.addLines ?? 0}</S.PlusText> /{" "}
+                    하루 동안 <S.PlusText>+{today?.commit.addLines ?? 0}</S.PlusText> /{" "}
                     <S.MinusText>-{today?.commit.removeLines ?? 0}</S.MinusText> lines
                   </S.CodeGap>
                 </S.CalculateInfoBox>
@@ -163,15 +154,15 @@ export const Github = ({ today, yesterday }: CompareResponse) => {
                 <S.CalculateInfoBox>
                   <S.TimeIcon />
                   <S.ExplainText>
-                    첫 커밋 <S.TimeText>{today?.commit.firstCommit.slice(0, 10) ?? 0}</S.TimeText> ·
-                    마지막 커밋{" "}
-                    <S.TimeText>{today?.commit.lastCommit.slice(0, 10) ?? 0}</S.TimeText>
+                    첫 커밋 <S.TimeText>{today?.commit.firstCommit?.slice(11, 16) ?? 0}</S.TimeText>{" "}
+                    · 마지막 커밋{" "}
+                    <S.TimeText>{today?.commit.lastCommit?.slice(11, 16) ?? 0}</S.TimeText>
                   </S.ExplainText>
                 </S.CalculateInfoBox>
               </S.CalculateContainer>
             </S.CalculateBox>
           </S.InfoContent>
-          <S.InfoContent>
+          <S.InfoContent style={{ marginBottom: "1rem" }}>
             <S.InfoTitle>PR 수</S.InfoTitle>
             <S.CalculateBox>
               <S.GrowthBox>
@@ -180,7 +171,7 @@ export const Github = ({ today, yesterday }: CompareResponse) => {
                     <S.GitPRIcon />
                     <S.InfoSubtitleBox>
                       <S.CountText>{today?.pullRequest.count ?? 0}</S.CountText>
-                      <S.InfoSubtitle>Pull request</S.InfoSubtitle>
+                      <S.InfoSubtitle>Pull Request</S.InfoSubtitle>
                     </S.InfoSubtitleBox>
                   </S.GithubInfoBox>
                   <GrowthRate
@@ -204,15 +195,6 @@ export const Github = ({ today, yesterday }: CompareResponse) => {
                     Merged <S.TimeText>{today?.pullRequest.mergedCount ?? 0}</S.TimeText> · Open{" "}
                     <S.TimeText>{today?.pullRequest.openCount ?? 0}</S.TimeText> · Closed{" "}
                     <S.TimeText>{today?.pullRequest.closedCount ?? 0}</S.TimeText>
-                  </S.ExplainText>
-                </S.CalculateInfoBox>
-                <S.WidthLine />
-                <S.CalculateInfoBox>
-                  <S.ReviewIcon $width={1.25} />
-                  <S.ExplainText>
-                    리뷰 요청 <S.TimeText>{today?.pullRequest.inReviewCount ?? 0}</S.TimeText> ·
-                    승인 <S.TimeText>{today?.pullRequest.approvedCount ?? 0}</S.TimeText> · 변경요청{" "}
-                    <S.TimeText>{today?.pullRequest.requestCount ?? 0}</S.TimeText>
                   </S.ExplainText>
                 </S.CalculateInfoBox>
               </S.CalculateContainer>

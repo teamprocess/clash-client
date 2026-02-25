@@ -1,17 +1,24 @@
 import * as S from "./Rival.style";
 import { MyRivalUsers } from "@/features/home/ui/rival/myrival-users/MyRivalUsers";
-import { Dialog } from "@/shared/ui";
 import { Link } from "react-router-dom";
 import { useRival } from "@/features/home/model/useRival";
-import { SearchInput } from "@/shared/ui/search-input";
+import { AddRivalsDialog, DeleteRivalsDialog } from "@/features/home/lib";
+import { Button } from "@/shared/ui";
 
 export const Rival = () => {
-  const getRivalData = useRival();
+  const rival = useRival();
 
   return (
     <S.RivalContainer>
       <S.TitleBox>
-        <S.Title>내 라이벌</S.Title>
+        <S.ActiveBox style={{ flexDirection: "row", gap: "1rem" }}>
+          <S.Title>내 라이벌</S.Title>
+          {(rival.rivalsData?.myRivals.length ?? 0) > 0 && (
+            <Button size={"sm"} variant={"primary"} onClick={rival.handleDeleteModalOpen}>
+              라이벌 끊기
+            </Button>
+          )}
+        </S.ActiveBox>
         <Link to="/competition">
           <S.ArrowBox style={{ cursor: "pointer" }}>
             자세히보기
@@ -21,11 +28,11 @@ export const Rival = () => {
       </S.TitleBox>
 
       <S.RivalBox>
-        {getRivalData.rivalsData?.myRivals.map(user => (
-          <MyRivalUsers key={user.username} user={user} getStatus={getRivalData.getStatus} />
+        {rival.rivalsData?.myRivals.map(user => (
+          <MyRivalUsers key={user.username} user={user} getStatus={rival.getStatus} />
         ))}
-        {(getRivalData.rivalsData?.myRivals.length ?? 0) < 4 && (
-          <S.ProfileContainer onClick={getRivalData.handleOpen} style={{ cursor: "pointer" }}>
+        {(rival.rivalsData?.myRivals.length ?? 0) < 4 && (
+          <S.ProfileContainer onClick={rival.handleOpen} style={{ cursor: "pointer" }}>
             <S.AddRivalBox>
               <S.PlusIcon />
               <S.AddRivalText>버튼을 눌러 라이벌을 추가할 수 있어요.</S.AddRivalText>
@@ -34,55 +41,16 @@ export const Rival = () => {
         )}
       </S.RivalBox>
 
-      {getRivalData.modalOpen && (
-        <Dialog
-          title={"라이벌 추가"}
-          width={21.625}
-          height={25.175}
-          isOpen={getRivalData.modalOpen}
-          onClose={getRivalData.handleClose}
-        >
-          <div style={{ display: "flex", flexDirection: "column" }}>
-            <div>
-              <SearchInput
-                placeholder={"이름 또는 아이디 검색"}
-                inputSize={"md"}
-                variant={"light"}
-                fullWidth={true}
-                style={{ margin: "1rem 0" }}
-              />
-              <S.UserChoiceContainer>
-                {getRivalData.userList?.users.map(user => (
-                  <S.UserChoiceBox
-                    key={user.id}
-                    $isSelected={getRivalData.rivalSelectedId.includes(user.id)}
-                    onClick={() => getRivalData.handleUserSelect(user.id)}
-                  >
-                    <S.ProfileContent style={{ height: "3rem" }}>
-                      <S.ProfileIcon />
-                      <S.ProfileTagBox>
-                        <S.ProfileName>{user.name}</S.ProfileName>
-                        <S.ProfileMention>@{user.username}</S.ProfileMention>
-                      </S.ProfileTagBox>
-                    </S.ProfileContent>
+      {rival.modalOpen && (
+        <AddRivalsDialog isOpen={rival.modalOpen} onClose={rival.handleClose} rival={rival} />
+      )}
 
-                    {getRivalData.rivalSelectedId.includes(user.id) ? (
-                      <S.CheckedIcon />
-                    ) : (
-                      <S.UncheckedBox />
-                    )}
-                  </S.UserChoiceBox>
-                ))}
-              </S.UserChoiceContainer>
-            </div>
-          </div>
-          <S.BottomBox>
-            <S.ButtonBox>
-              <S.CloseButton onClick={getRivalData.handleClose}>취소</S.CloseButton>
-              <S.OkayButton onClick={getRivalData.handleRivalCreate}>확인</S.OkayButton>
-            </S.ButtonBox>
-          </S.BottomBox>
-        </Dialog>
+      {rival.rivalDeleteOpen && (
+        <DeleteRivalsDialog
+          isOpen={rival.rivalDeleteOpen}
+          onClose={rival.handleDeleteModalClose}
+          rival={rival}
+        />
       )}
     </S.RivalContainer>
   );
