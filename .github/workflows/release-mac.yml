@@ -18,6 +18,13 @@ jobs:
     runs-on: macos-14
     timeout-minutes: 90
     env:
+      VITE_API_URL: ${{ vars.VITE_API_URL }}
+      VITE_SOCKET_IO_URL: ${{ vars.VITE_SOCKET_IO_URL }}
+      VITE_RECAPTCHA_SITE_KEY: ${{ vars.VITE_RECAPTCHA_SITE_KEY }}
+      VITE_GITHUB_CLIENT_ID: ${{ vars.VITE_GITHUB_CLIENT_ID }}
+      VITE_GITHUB_OAUTH_SCOPE: ${{ vars.VITE_GITHUB_OAUTH_SCOPE }}
+      VITE_GITHUB_OAUTH_BASE_URL: ${{ vars.VITE_GITHUB_OAUTH_BASE_URL }}
+      VITE_GITHUB_OAUTH_REDIRECT_URI: ${{ vars.VITE_GITHUB_OAUTH_REDIRECT_URI }}
       APPLE_ID: ${{ secrets.APPLE_ID }}
       APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
       APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
@@ -57,6 +64,12 @@ jobs:
       - name: Validate required release env
         run: |
           test -n "$S3_BUCKET" || (echo "S3_BUCKET is required" && exit 1)
+          test -n "$VITE_API_URL" || (echo "VITE_API_URL is required" && exit 1)
+          test -n "$VITE_SOCKET_IO_URL" || (echo "VITE_SOCKET_IO_URL is required" && exit 1)
+          test -n "$VITE_RECAPTCHA_SITE_KEY" || (echo "VITE_RECAPTCHA_SITE_KEY is required" && exit 1)
+          test -n "$VITE_GITHUB_CLIENT_ID" || (echo "VITE_GITHUB_CLIENT_ID is required" && exit 1)
+          test -n "$VITE_GITHUB_OAUTH_BASE_URL" || (echo "VITE_GITHUB_OAUTH_BASE_URL is required" && exit 1)
+          test -n "$VITE_GITHUB_OAUTH_REDIRECT_URI" || (echo "VITE_GITHUB_OAUTH_REDIRECT_URI is required" && exit 1)
 
       - name: Import Apple code-signing certificate
         uses: apple-actions/import-codesign-certs@v2
