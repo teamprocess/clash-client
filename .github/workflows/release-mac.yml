@@ -51,8 +51,8 @@ jobs:
           VERSION="${GITHUB_REF_NAME#v}"
           echo "RELEASE_VERSION=$VERSION" >> "$GITHUB_ENV"
 
-      - name: Apply release version in CI workspace
-        run: npm version "$RELEASE_VERSION" --no-git-tag-version --allow-same-version
+      - name: Show release version
+        run: echo "RELEASE_VERSION=${RELEASE_VERSION}"
 
       - name: Validate required release env
         run: |
@@ -72,7 +72,9 @@ jobs:
           aws-region: ${{ secrets.AWS_REGION }}
 
       - name: Build and notarize
-        run: pnpm exec electron-vite build && pnpm exec electron-builder --mac
+        run: |
+          pnpm exec electron-vite build
+          pnpm exec electron-builder --mac --config.extraMetadata.version="${RELEASE_VERSION}"
 
       - name: Upload artifacts to S3
         run: |
