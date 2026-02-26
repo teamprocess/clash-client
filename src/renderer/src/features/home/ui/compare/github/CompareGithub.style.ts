@@ -143,6 +143,48 @@ export const ExplainText = styled.p`
 export const RepositorieName = styled.p`
   ${font.label.bold};
   color: ${({ theme }) => theme.label.alternative};
+
+  position: relative;
+  display: block;
+  max-width: 39%;
+  min-width: 0;
+  overflow: visible;
+
+  > span {
+    display: block;
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &::after {
+    width: max-content;
+    max-width: min(10rem, 90vw);
+    content: attr(data-tooltip);
+    position: absolute;
+    left: 88%;
+    top: 1.3rem;
+    transform: translate(-50%, -100%);
+    background: ${({ theme }) => theme.background.neutral};
+    color: ${({ theme }) => theme.label.normal};
+    ${font.caption.bold}
+    padding: 0.4rem 0.6rem;
+    border-radius: 0.4rem;
+    box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.15);
+    z-index: 99;
+    pointer-events: none;
+    white-space: normal;
+    opacity: 0;
+    transition: opacity 0.15s ease;
+    word-break: normal;
+    overflow-wrap: break-word;
+  }
+
+  &:hover::after,
+  &:focus-visible::after {
+    opacity: 1;
+  }
 `;
 
 export const CodeGap = styled.div`
