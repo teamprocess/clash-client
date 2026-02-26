@@ -1,10 +1,17 @@
 import { app, session } from "electron";
 import { is } from "@electron-toolkit/utils";
 
-const VITE_API_URL = process.env.VITE_API_URL as string;
-const VITE_SOCKET_IO_URL = process.env.VITE_SOCKET_IO_URL as string;
-const API_ORIGIN = new URL(VITE_API_URL).origin;
-const SOCKET_ORIGIN = new URL(VITE_SOCKET_IO_URL).origin;
+const parseOrigin = (rawUrl: string | undefined) => {
+  if (!rawUrl) {
+    return null;
+  }
+
+  try {
+    return new URL(rawUrl).origin;
+  } catch {
+    return null;
+  }
+};
 
 // 개발 환경 인증서 예외 처리 등록
 export const configureCertificateHandling = () => {
@@ -26,7 +33,19 @@ export const configureCertificateHandling = () => {
 
 // 응답 헤더에 CSP 주입
 export const registerCspHeaders = () => {
-  const connectSources = ["'self'", API_ORIGIN, SOCKET_ORIGIN, "https://www.google.com"].join(" ");
+  const connectSourceSet = new Set(["'self'", "https://www.google.com"]);
+  const apiOrigin = parseOrigin(process.env.VITE_API_URL);
+  const socketOrigin = parseOrigin(process.env.VITE_SOCKET_IO_URL);
+
+  if (apiOrigin) {
+    connectSourceSet.add(apiOrigin);
+  }
+
+  if (socketOrigin) {
+    connectSourceSet.add(socketOrigin);
+  }
+
+  const connectSources = Array.from(connectSourceSet).join(" ");
 
   session.defaultSession.webRequest.onHeadersReceived((details, callback) => {
     callback({
