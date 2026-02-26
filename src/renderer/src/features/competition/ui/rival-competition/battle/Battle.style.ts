@@ -341,7 +341,8 @@ export const AnalyzeContent = styled.div<{ $width?: string }>`
 `;
 
 export const AnalyzeName = styled.p`
-  ${font.caption.bold}
+  width: 100%;
+  ${font.body.bold}
   color: ${({ theme }) => theme.label.normal};
 `;
 
