@@ -117,6 +117,12 @@ export const registerQuitHandlers = ({ getAppMonitor }: RegisterQuitHandlersPara
   app.on("before-quit", event => {
     getAppMonitor()?.stop();
 
+    if (
+      (globalThis as { __CLASH_SKIP_SHUTDOWN_CLEANUP__?: boolean }).__CLASH_SKIP_SHUTDOWN_CLEANUP__
+    ) {
+      return;
+    }
+
     if (isShutdownCleanupInProgress) {
       return;
     }

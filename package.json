@@ -1,16 +1,16 @@
 {
   "name": "clash-client",
-  "productName": "Process Clash",
-  "version": "0.0.6",
+  "productName": "Clash",
+  "version": "0.0.9",
   "description": "학습 기록을 통한 경쟁 애플리케이션, Clash",
   "private": true,
   "license": "SEE LICENSE IN LICENSE",
   "main": "./out/main/index.js",
   "author": "PROCESS",
-  "homepage": "https://github.com/TeamProcess",
+  "homepage": "https://github.com/teamprocess",
   "repository": {
     "type": "git",
-    "url": "https://github.com/TeamProcess/clash-client.git"
+    "url": "https://github.com/teamprocess/clash-client.git"
   },
   "scripts": {
     "format": "prettier --write .",
@@ -20,9 +20,8 @@
     "typecheck": "npm run typecheck:node && npm run typecheck:web",
     "start": "electron-vite preview",
     "dev": "electron-vite dev",
-    "build": "npm run typecheck && electron-vite build",
-    "postinstall": "electron-builder install-app-deps",
-    "build:mac": "node ./scripts/build-mac.mjs",
+    "build": "node ./scripts/build-mac.mjs --test-build",
+    "publish": "node ./scripts/build-mac.mjs --bump-version --publish-s3",
     "prepare": "husky"
   },
   "dependencies": {
@@ -33,6 +32,8 @@
     "@tanstack/react-query-devtools": "^5.91.2",
     "axios": "^1.13.2",
     "chart.js": "^4.5.1",
+    "electron-updater": "^6.8.3",
+    "ms": "^2.1.3",
     "pretendard": "^1.3.9",
     "react-chartjs-2": "^5.3.1",
     "react-google-recaptcha-v3": "^1.11.0",
@@ -52,7 +53,6 @@
     "@types/node": "^22.19.1",
     "@types/react": "^19.2.7",
     "@types/react-dom": "^19.2.3",
-    "@types/styled-components": "^5.1.36",
     "@vitejs/plugin-react": "^5.1.1",
     "electron": "^39.2.6",
     "electron-builder": "^26.0.12",
