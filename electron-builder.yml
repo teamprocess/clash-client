@@ -26,6 +26,9 @@ nsis:
   uninstallDisplayName: ${productName}
   createDesktopShortcut: always
 mac:
+  target:
+    - zip
+    - dmg
   hardenedRuntime: true
   gatekeeperAssess: false
   entitlements: resources/entitlements.mac.plist
@@ -35,7 +38,6 @@ mac:
     NSMicrophoneUsageDescription: Application requests access to the device's microphone.
     NSDocumentsFolderUsageDescription: Application requests access to the user's Documents folder.
     NSDownloadsFolderUsageDescription: Application requests access to the user's Downloads folder.
-    NSAppleEventsUsageDescription: Application requests access to monitor frontmost apps through System Events.
   notarize: true
 dmg:
   artifactName: ${name}-${version}.${ext}
@@ -64,4 +66,4 @@ appImage:
 npmRebuild: false
 publish:
   provider: generic
-  url: https://example.com/auto-updates
+  url: https://cdn.clash.kr/updates/mac
