@@ -103,7 +103,7 @@ export const DownloadButton = styled.a`
   gap: 0.55rem;
   width: fit-content;
   padding: 0.95rem 1.5rem;
-  border-radius: 999px;
+  border-radius: 2rem;
   color: ${({ theme }) => theme.label.normal};
   background-color: ${({ theme }) => theme.primary.normal};
   border: 1px solid ${({ theme }) => theme.primary.normal};
