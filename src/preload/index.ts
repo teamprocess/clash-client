@@ -10,6 +10,7 @@ const api = {
   getFrontmostMonitoredApp: () => ipcRenderer.invoke("app-monitor:get-frontmost-monitored-app"),
 
   openExternalUrl: (url: string) => ipcRenderer.invoke("open-external-url", url),
+  clearAuthSession: () => ipcRenderer.invoke("auth:clear-session"),
 
   onAppChanged: callback => {
     const subscription = (_, app) => callback(app);

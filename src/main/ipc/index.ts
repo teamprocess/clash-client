@@ -1,4 +1,4 @@
-import { ipcMain, shell } from "electron";
+import { ipcMain, session, shell } from "electron";
 import type { AppMonitor } from "../services";
 
 // AppMonitor 및 외부 URL 열기 관련 IPC를 등록합니다.
@@ -23,5 +23,10 @@ export const registerIpcHandlers = (getAppMonitor: () => AppMonitor | null) => {
   });
   ipcMain.handle("open-external-url", async (_, url: string) => {
     await shell.openExternal(url);
+  });
+
+  // 인증 세션(쿠키) 정리
+  ipcMain.handle("auth:clear-session", async () => {
+    await session.defaultSession.clearStorageData({ storages: ["cookies"] });
   });
 };
