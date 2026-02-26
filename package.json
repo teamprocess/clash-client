@@ -1,7 +1,7 @@
 {
   "name": "clash-client",
   "productName": "Clash",
-  "version": "0.0.0-dev",
+  "version": "0.0.0",
   "description": "학습 기록을 통한 경쟁 애플리케이션, Clash",
   "private": true,
   "license": "SEE LICENSE IN LICENSE",
