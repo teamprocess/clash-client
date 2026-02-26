@@ -10,10 +10,10 @@ const INACTIVE_THRESHOLD_MS = 5 * 60 * 1000;
 const CHECK_INTERVAL_MS = 2000;
 const APP_QUERY_ERROR_LOG_INTERVAL_MS = 30 * 1000;
 const MAX_SESSION_COUNT = 100;
-const OSA_SCRIPT_BIN = "/usr/bin/osascript";
 
-const ACTIVE_APP_SCRIPT = `${OSA_SCRIPT_BIN} -e 'tell application "System Events" to get name of first application process whose frontmost is true'`;
-const RUNNING_APPS_SCRIPT = `${OSA_SCRIPT_BIN} -e 'tell application "System Events" to get name of every application process'`;
+const FRONT_APP_ASN_SCRIPT = "lsappinfo front";
+const RUNNING_APPS_SCRIPT = "lsappinfo processList";
+const APP_NAME_KEY = "kCFBundleNameKey";
 
 export class AppMonitor {
   private activeApps: Map<string, TrackedApp> = new Map();
@@ -23,7 +23,7 @@ export class AppMonitor {
   private lastSentAppName: string | null = null;
   private frontmostMonitoredAppName: string | null = null;
   private isChecking = false;
-  private lastActiveAppErrorLoggedAt = 0;
+  private lastFrontAppErrorLoggedAt = 0;
   private lastRunningAppsErrorLoggedAt = 0;
 
   constructor(mainWindow: BrowserWindow) {
@@ -74,7 +74,7 @@ export class AppMonitor {
   private async checkActiveApp() {
     const now = Date.now();
     const [rawAppName, runningAppNames] = await Promise.all([
-      this.getActiveAppName(),
+      this.getFrontmostAppName(),
       this.getRunningAppNames(),
     ]);
 
@@ -92,46 +92,46 @@ export class AppMonitor {
     this.sendUpdateToRenderer(primaryApp, hadForceClosedApps || hadInactiveApps);
   }
 
-  // macOS 현재 전면 앱 이름 조회
-  private async getActiveAppName(): Promise<string | null> {
+  // 전면 앱 이름 조회
+  private async getFrontmostAppName(): Promise<string | null> {
     try {
-      const { stdout } = await execAsync(ACTIVE_APP_SCRIPT);
-      return stdout.trim();
+      const { stdout: asnOutput } = await execAsync(FRONT_APP_ASN_SCRIPT);
+      const asn = asnOutput.trim();
+      if (!asn) {
+        return null;
+      }
+
+      const { stdout: infoOutput } = await execAsync(
+        `lsappinfo info -only ${APP_NAME_KEY} "${asn}"`
+      );
+      const appName = this.parseBundleName(infoOutput);
+      return appName ? this.normalizeLsappinfoName(appName) : null;
     } catch (error) {
-      this.logActiveAppQueryError(error);
+      this.logFrontAppQueryError(error);
       return null;
     }
   }
 
-  // 현재 실행 중인 앱 목록 조회
+  // 현재 실행 중 앱 목록 조회
   private async getRunningAppNames(): Promise<string[] | null> {
     try {
       const { stdout } = await execAsync(RUNNING_APPS_SCRIPT);
-      return stdout
-        .split(",")
-        .map(name => name.trim())
-        .filter(Boolean);
+      return this.parseRunningAppNames(stdout);
     } catch (error) {
       this.logRunningAppsQueryError(error);
       return null;
     }
   }
 
-  // Apple Events 권한 거부/스크립트 실패 로그를 제한해서 출력
-  private logActiveAppQueryError(error: unknown) {
+  // front 앱 조회 실패 로그를 제한해서 출력
+  private logFrontAppQueryError(error: unknown) {
     const now = Date.now();
-    if (now - this.lastActiveAppErrorLoggedAt < APP_QUERY_ERROR_LOG_INTERVAL_MS) {
+    if (now - this.lastFrontAppErrorLoggedAt < APP_QUERY_ERROR_LOG_INTERVAL_MS) {
       return;
     }
 
-    console.error("활성 상태의 앱 정보를 가져오는데 실패했습니다:", error);
-    if (this.isAppleEventsPermissionError(error)) {
-      console.error(
-        "macOS 설정 > 개인정보 보호 및 보안 > 자동화(Automation)에서 Clash의 System Events 제어 권한을 허용해주세요."
-      );
-    }
-
-    this.lastActiveAppErrorLoggedAt = now;
+    console.error("전면 앱 정보를 가져오는데 실패했습니다:", error);
+    this.lastFrontAppErrorLoggedAt = now;
   }
 
   // 실행 중 앱 조회 실패 로그를 제한해서 출력
@@ -142,25 +142,34 @@ export class AppMonitor {
     }
 
     console.error("실행 중인 앱 정보를 가져오는데 실패했습니다:", error);
-    if (this.isAppleEventsPermissionError(error)) {
-      console.error(
-        "macOS 설정 > 개인정보 보호 및 보안 > 자동화(Automation)에서 Clash의 System Events 제어 권한을 허용해주세요."
-      );
-    }
-
     this.lastRunningAppsErrorLoggedAt = now;
   }
 
-  // Apple Events 자동화 권한 거부(-1743) 여부 판별
-  private isAppleEventsPermissionError(error: unknown): boolean {
-    if (!(error instanceof Error)) {
-      return false;
-    }
+  private parseBundleName(output: string): string | null {
+    const matched = output.match(/"CFBundleName"="(.+?)"/);
+    return matched?.[1]?.trim() ?? null;
+  }
 
-    return (
-      error.message.includes("Not authorized to send Apple events") ||
-      error.message.includes("(-1743)")
-    );
+  private parseRunningAppNames(output: string): string[] {
+    const appNames: string[] = [];
+    const namePattern = /-"([^"]+)":/g;
+
+    for (const match of output.matchAll(namePattern)) {
+      const rawName = match[1];
+      if (!rawName) {
+        continue;
+      }
+
+      const normalized = this.normalizeLsappinfoName(rawName);
+      if (normalized) {
+        appNames.push(normalized);
+      }
+    }
+    return appNames;
+  }
+
+  private normalizeLsappinfoName(name: string): string {
+    return name.replaceAll("_", " ").trim();
   }
 
   // 대상 앱 활성 시간 갱신
@@ -201,7 +210,7 @@ export class AppMonitor {
     return appsToDelete.length > 0;
   }
 
-  // 강제 종료된 앱 세션 종료
+  // 종료된 앱 세션 종료
   private checkForceClosedApps(now: number, runningAppNames: string[]): boolean {
     if (runningAppNames.length === 0) {
       return false;
