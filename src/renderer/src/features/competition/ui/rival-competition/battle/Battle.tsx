@@ -133,33 +133,37 @@ export const Battle = () => {
                           <S.SeroLine />
 
                           <S.AnalyzeContent $width="100%">
-                            <S.AnalyzeBar $width={battle.rivalAnalyzeRate ?? 0} $isRival>
-                              <S.AnalyzeLabel>
-                                <div>
-                                  {battle.category === "ACTIVE_TIME"
-                                    ? formatTime(Math.round(battle.rivalAnalyzePoint) ?? 0)
-                                    : Math.round(battle.rivalAnalyzePoint ?? 0)}{" "}
-                                  {battle.detailTextTranslate(battle.category)}
-                                </div>
-                                {battle.isRivalHigher && (battle.diff ?? 0) > 0 && (
-                                  <S.CompareDiff>+{Math.round(battle.diff ?? 0)}%</S.CompareDiff>
-                                )}
-                              </S.AnalyzeLabel>
-                            </S.AnalyzeBar>
+                            <S.DataBox>
+                              <div>
+                                {battle.category === "ACTIVE_TIME"
+                                  ? formatTime(Math.round(battle.rivalAnalyzePoint) ?? 0)
+                                  : Math.round(battle.rivalAnalyzePoint ?? 0)}{" "}
+                                {battle.detailTextTranslate(battle.category)}
+                              </div>
+                              <S.AnalyzeBar $width={battle.rivalAnalyzeRate ?? 0} $isRival>
+                                <S.AnalyzeLabel>
+                                  {battle.isRivalHigher && (battle.diff ?? 0) > 0 && (
+                                    <S.CompareDiff>+{Math.round(battle.diff ?? 0)}%</S.CompareDiff>
+                                  )}
+                                </S.AnalyzeLabel>
+                              </S.AnalyzeBar>
+                            </S.DataBox>
 
-                            <S.AnalyzeBar $width={battle.myAnalyzeRate ?? 0} $isRival={false}>
-                              <S.AnalyzeLabel>
-                                <div>
-                                  {battle.category === "ACTIVE_TIME"
-                                    ? formatTime(Math.round(battle.myAnalyzePoint) ?? 0)
-                                    : Math.round(battle.myAnalyzePoint ?? 0)}{" "}
-                                  {battle.detailTextTranslate(battle.category)}
-                                </div>
-                                {!battle.isRivalHigher && (battle.diff ?? 0) > 0 && (
-                                  <S.CompareDiff>+{Math.round(battle.diff ?? 0)}%</S.CompareDiff>
-                                )}
-                              </S.AnalyzeLabel>
-                            </S.AnalyzeBar>
+                            <S.DataBox>
+                              <div>
+                                {battle.category === "ACTIVE_TIME"
+                                  ? formatTime(Math.round(battle.myAnalyzePoint) ?? 0)
+                                  : Math.round(battle.myAnalyzePoint ?? 0)}{" "}
+                                {battle.detailTextTranslate(battle.category)}
+                              </div>
+                              <S.AnalyzeBar $width={battle.myAnalyzeRate ?? 0} $isRival={false}>
+                                <S.AnalyzeLabel>
+                                  {!battle.isRivalHigher && (battle.diff ?? 0) > 0 && (
+                                    <S.CompareDiff>+{Math.round(battle.diff ?? 0)}%</S.CompareDiff>
+                                  )}
+                                </S.AnalyzeLabel>
+                              </S.AnalyzeBar>
+                            </S.DataBox>
                           </S.AnalyzeContent>
                         </S.AnalyzeRow>
                       </S.AnalyzeBox>
