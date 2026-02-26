@@ -304,7 +304,7 @@ export const PercentText = styled.p<{ $isRival: boolean }>`
 
 export const DetailAnalyzeContainer = styled.div`
   ${flexCol};
-  padding: 0.75rem 1rem;
+  padding: 1rem;
   width: 100%;
   height: 100%;
   border-radius: 0.75rem;
@@ -372,12 +372,12 @@ export const DefaultBattleBox = styled.div`
 `;
 
 export const AnalyzeLabel = styled.div`
-  ${font.label.bold}
   color: ${palette.neutral[99]};
   width: 100%;
+  min-height: 1rem;
   ${flexRow};
   align-items: center;
-  justify-content: space-between;
+  justify-content: end;
   padding: 0 0.5rem;
 `;
 
@@ -502,4 +502,12 @@ export const DateChoiceBox = styled.div<{ $active: boolean }>`
   &:hover {
     background-color: ${palette.red[40]};
   }
+`;
+
+export const DataBox = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 0.25rem;
+  ${font.label.bold}
 `;
