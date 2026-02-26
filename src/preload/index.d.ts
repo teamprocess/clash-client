@@ -26,6 +26,7 @@ interface AppMonitorAPI {
   getSessions: () => Promise<MonitoringSession[]>;
   getFrontmostMonitoredApp: () => Promise<string | null>;
   openExternalUrl: (url: string) => Promise<void>;
+  clearAuthSession: () => Promise<void>;
   onDeepLinkAuth: (callback: (payload: DeepLinkAuthPayload) => void) => () => void;
   onAppChanged: (callback: (app: ActiveApp | null) => void) => () => void;
   onSessionUpdated: (callback: (session: MonitoringSession) => void) => () => void;
