@@ -1,7 +1,6 @@
 import { BrowserWindow, shell } from "electron";
 import { join } from "path";
 import { is } from "@electron-toolkit/utils";
-import ClashIcon from "../../../resources/clash-icon.png?asset";
 
 // 개발/배포 환경에 맞는 렌더러 URL 로드
 const loadRenderer = async (mainWindow: BrowserWindow) => {
@@ -20,7 +19,6 @@ export const createMainWindow = () => {
     height: 670,
     show: false,
     autoHideMenuBar: true,
-    ...(process.platform === "linux" ? { ClashIcon } : {}),
     webPreferences: {
       preload: join(__dirname, "../preload/index.js"),
       sandbox: false,
