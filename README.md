@@ -125,15 +125,15 @@ pnpm dev
 ## 주요 스크립트
 
 ```bash
-# 개발
+# 개발 서버 실행
 pnpm dev
 
 # 정적 검사
 pnpm lint
 pnpm typecheck
 
-# 빌드
-pnpm build:mac
+# 로컬 테스트 빌드
+pnpm build
 ```
 
 ## 개발 규칙

@@ -1,0 +1,112 @@
+name: Release Mac
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+  workflow_dispatch:
+
+concurrency:
+  group: release-mac-${{ github.ref }}
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  release-mac:
+    runs-on: macos-14
+    timeout-minutes: 90
+    env:
+      APPLE_ID: ${{ secrets.APPLE_ID }}
+      APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
+      APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+      APPLE_API_KEY: ${{ secrets.APPLE_API_KEY }}
+      APPLE_API_KEY_ID: ${{ secrets.APPLE_API_KEY_ID }}
+      APPLE_API_ISSUER: ${{ secrets.APPLE_API_ISSUER }}
+      S3_BUCKET: ${{ secrets.S3_BUCKET }}
+      S3_UPDATES_PREFIX: ${{ vars.S3_UPDATES_PREFIX }}
+      S3_DOWNLOADS_PREFIX: ${{ vars.S3_DOWNLOADS_PREFIX }}
+      CLOUDFRONT_DISTRIBUTION_ID: ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Resolve version from tag
+        run: |
+          VERSION="${GITHUB_REF_NAME#v}"
+          echo "RELEASE_VERSION=$VERSION" >> "$GITHUB_ENV"
+
+      - name: Apply release version in CI workspace
+        run: npm version "$RELEASE_VERSION" --no-git-tag-version --allow-same-version
+
+      - name: Validate required release env
+        run: |
+          test -n "$S3_BUCKET" || (echo "S3_BUCKET is required" && exit 1)
+
+      - name: Import Apple code-signing certificate
+        uses: apple-actions/import-codesign-certs@v2
+        with:
+          p12-file-base64: ${{ secrets.APPLE_CERTIFICATE_P12_BASE64 }}
+          p12-password: ${{ secrets.APPLE_CERTIFICATE_PASSWORD }}
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Build and notarize
+        run: pnpm exec electron-vite build && pnpm exec electron-builder --mac
+
+      - name: Upload artifacts to S3
+        run: |
+          set -euo pipefail
+
+          UPDATES_PREFIX="${S3_UPDATES_PREFIX:-updates/mac}"
+          DOWNLOADS_PREFIX="${S3_DOWNLOADS_PREFIX:-downloads/mac}"
+
+          ZIP_FILE="Clash-${RELEASE_VERSION}-arm64-mac.zip"
+          BLOCKMAP_FILE="${ZIP_FILE}.blockmap"
+          DMG_FILE="clash-client-${RELEASE_VERSION}.dmg"
+
+          test -f "dist/latest-mac.yml" || (echo "dist/latest-mac.yml not found" && exit 1)
+          test -f "dist/${ZIP_FILE}" || (echo "dist/${ZIP_FILE} not found" && exit 1)
+          test -f "dist/${BLOCKMAP_FILE}" || (echo "dist/${BLOCKMAP_FILE} not found" && exit 1)
+          test -f "dist/${DMG_FILE}" || (echo "dist/${DMG_FILE} not found" && exit 1)
+
+          aws s3 cp "dist/latest-mac.yml" "s3://${S3_BUCKET}/${UPDATES_PREFIX}/latest-mac.yml" \
+            --cache-control "public,max-age=60,must-revalidate"
+          aws s3 cp "dist/${ZIP_FILE}" "s3://${S3_BUCKET}/${UPDATES_PREFIX}/${ZIP_FILE}" \
+            --cache-control "public,max-age=31536000,immutable"
+          aws s3 cp "dist/${BLOCKMAP_FILE}" "s3://${S3_BUCKET}/${UPDATES_PREFIX}/${BLOCKMAP_FILE}" \
+            --cache-control "public,max-age=31536000,immutable"
+          aws s3 cp "dist/${DMG_FILE}" "s3://${S3_BUCKET}/${DOWNLOADS_PREFIX}/latest" \
+            --content-type "application/x-apple-diskimage" \
+            --content-disposition "attachment; filename=Clash.dmg" \
+            --cache-control "public,max-age=60,must-revalidate"
+
+      - name: Invalidate CloudFront cache
+        if: ${{ env.CLOUDFRONT_DISTRIBUTION_ID != '' }}
+        run: |
+          set -euo pipefail
+          UPDATES_PREFIX="${S3_UPDATES_PREFIX:-updates/mac}"
+          DOWNLOADS_PREFIX="${S3_DOWNLOADS_PREFIX:-downloads/mac}"
+          aws cloudfront create-invalidation \
+            --distribution-id "$CLOUDFRONT_DISTRIBUTION_ID" \
+            --paths "/${UPDATES_PREFIX}/latest-mac.yml" "/${DOWNLOADS_PREFIX}/latest"
