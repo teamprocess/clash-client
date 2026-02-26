@@ -1,3 +1,4 @@
+export { Select } from "./select";
 export { Button } from "./button";
 export type { ButtonProps, ButtonSize, ButtonVariant } from "./button";
 export { ConfirmDialog } from "./confirm-dialog";
