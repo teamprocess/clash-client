@@ -27,8 +27,15 @@ export const useBattle = () => {
   const [category, setCategory] = useState<AnalyzeCategory>("EXP");
 
   const selectBattleTarget = (id: number) => {
-    setBattleTargetId(id);
-    setIsBattleSelected(true);
+    setBattleTargetId(prevId => {
+      if (prevId === id) {
+        setIsBattleSelected(prev => !prev);
+        return prevId;
+      }
+
+      setIsBattleSelected(true);
+      return id;
+    });
   };
 
   const { data: battleInfoRes } = useBattleInfoQuery();
