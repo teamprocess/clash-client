@@ -54,55 +54,71 @@ export const useCompareRival = () => {
     };
   }, [compareRivalsResponse, myProfile?.id]);
 
-  // Multi Axis Line Chart 구조에 맞게 변환
+  const parseMonthDay = (raw: string): { m: number; d: number } | null => {
+    const parts = raw.split("-");
+    if (parts.length !== 2) return null;
+
+    const m = Number(parts[0]);
+    const d = Number(parts[1]);
+
+    if (!Number.isFinite(m) || !Number.isFinite(d)) return null;
+    if (m < 1 || m > 12 || d < 1 || d > 31) return null;
+
+    return { m, d };
+  };
+
+  const formatLabelKR = (raw: string): string => {
+    const md = parseMonthDay(raw);
+    if (!md) return raw;
+    return `${md.m}월 ${md.d}일`;
+  };
+
   const buildMultiLineData = (totalData: RivalCompeteUser[]) => {
     const defaultLabels = Array.from({ length: 7 }, (_, i) => `Data ${i + 1}`);
 
     if (!totalData || totalData.length === 0) {
       return {
         labels: defaultLabels,
-        datasets: [
-          {
-            label: "기본값",
-            data: Array(defaultLabels.length).fill(0),
-          },
-        ],
+        datasets: [{ label: "기본값", data: Array(defaultLabels.length).fill(0) }],
       };
     }
 
-    const labels = Array.from(
-      new Set(totalData.flatMap(user => user.dataPoint?.map(p => p.date) ?? []))
-    ).sort();
+    const rawLabels: string[] = [];
+    const seen = new Set<string>();
 
-    const finalLabels = labels.length > 0 ? labels : defaultLabels;
+    for (const user of totalData) {
+      for (const p of user.dataPoint ?? []) {
+        if (!seen.has(p.date)) {
+          seen.add(p.date);
+          rawLabels.push(p.date);
+        }
+      }
+    }
+
+    const finalRawLabels = rawLabels.length > 0 ? rawLabels : defaultLabels;
 
     const datasets = totalData.map(user => {
       const map = new Map(user.dataPoint?.map(p => [p.date, p.point]) ?? []);
 
       return {
         label: user.name,
-        // 해당 사용자의 날짜별 결과값 반올림
-        data: finalLabels.map(date => {
+        data: finalRawLabels.map(date => {
           const value = map.get(date) ?? 0;
           return value == null ? 0 : Math.round(value * 10) / 10;
         }),
       };
     });
 
+    const displayLabels = finalRawLabels.map(formatLabelKR);
+
     return {
-      labels: finalLabels,
+      labels: displayLabels,
       datasets:
         datasets.length > 0
           ? datasets
-          : [
-              {
-                label: "기본값",
-                data: Array(finalLabels.length).fill(0),
-              },
-            ],
+          : [{ label: "기본값", data: Array(displayLabels.length).fill(0) }],
     };
   };
-
   return {
     compareRivals: sortedCompareRivals,
     isLoading,
