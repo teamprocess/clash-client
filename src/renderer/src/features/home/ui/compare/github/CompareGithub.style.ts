@@ -140,7 +140,7 @@ export const ExplainText = styled.p`
   color: ${({ theme }) => theme.label.alternative};
 `;
 
-export const RepositorieName = styled.p`
+export const RepositoryName = styled.p`
   ${font.label.bold};
   color: ${({ theme }) => theme.label.alternative};
 
