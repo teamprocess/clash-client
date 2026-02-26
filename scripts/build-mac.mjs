@@ -11,6 +11,7 @@ const rootDir = path.resolve(__dirname, "..");
 const envFilePath = path.join(rootDir, ".env");
 const shouldPublishS3 = process.argv.includes("--publish-s3");
 const shouldBumpVersion = process.argv.includes("--bump-version");
+const isTestBuild = process.argv.includes("--test-build");
 const distDir = path.join(rootDir, "dist");
 
 process.chdir(rootDir);
@@ -19,13 +20,20 @@ if (existsSync(envFilePath)) {
   process.loadEnvFile(envFilePath);
 }
 
-validateNotarizationEnv();
+if (!isTestBuild) {
+  validateNotarizationEnv();
+}
 if (shouldBumpVersion) {
   run("npm", ["version", "patch", "--no-git-tag-version"]);
 }
 detachMountedClashVolumes();
 run("electron-vite", ["build"]);
-run("electron-builder", ["--mac"]);
+if (isTestBuild) {
+  process.env.CSC_IDENTITY_AUTO_DISCOVERY = "false";
+  run("electron-builder", ["--mac", "--dir", "--publish", "never", "--config.mac.notarize=false"]);
+} else {
+  run("electron-builder", ["--mac"]);
+}
 if (shouldPublishS3) {
   uploadMacUpdateToS3();
 }

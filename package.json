@@ -1,7 +1,7 @@
 {
   "name": "clash-client",
   "productName": "Clash",
-  "version": "0.0.7",
+  "version": "0.0.9",
   "description": "학습 기록을 통한 경쟁 애플리케이션, Clash",
   "private": true,
   "license": "SEE LICENSE IN LICENSE",
@@ -20,7 +20,7 @@
     "typecheck": "npm run typecheck:node && npm run typecheck:web",
     "start": "electron-vite preview",
     "dev": "electron-vite dev",
-    "build": "node ./scripts/build-mac.mjs",
+    "build": "node ./scripts/build-mac.mjs --test-build",
     "publish": "node ./scripts/build-mac.mjs --bump-version --publish-s3",
     "prepare": "husky"
   },
