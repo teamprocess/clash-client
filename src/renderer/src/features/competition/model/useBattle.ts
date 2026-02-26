@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useRef } from "react";
 import {
   battleApi,
   useBattleInfoQuery,
@@ -71,10 +71,13 @@ export const useBattle = () => {
 
   const rivalAnalyzeRate = analyzeTotal > 0 ? (rivalAnalyzePoint / analyzeTotal) * 100 : null;
 
-  const diff =
-    myAnalyzeRate !== null && rivalAnalyzeRate !== null
-      ? Math.abs(rivalAnalyzeRate - myAnalyzeRate)
-      : null;
+  const diff = useMemo(() => {
+    const max = Math.max(myAnalyzePoint, rivalAnalyzePoint);
+    if (max <= 0) return 0;
+
+    const percent = (Math.abs(myAnalyzePoint - rivalAnalyzePoint) / max) * 100;
+    return Math.round(percent);
+  }, [myAnalyzePoint, rivalAnalyzePoint]);
 
   const isRivalHigher =
     myAnalyzeRate !== null && rivalAnalyzeRate !== null ? rivalAnalyzeRate > myAnalyzeRate : false;
@@ -113,8 +116,28 @@ export const useBattle = () => {
   const periodOptions: PeriodDay[] = [3, 5, 7];
   const [selectedDay, setSelectedDay] = useState<number | null>(null);
 
+  const submittingRef = useRef(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const closeModal = () => {
+    if (submittingRef.current) return;
+
+    setIsModalOpen(false);
+    setRivalSelectedId(null);
+    setDuration(3);
+    setSelectedDay(null);
+
+    setIsSubmitting(false);
+  };
+
   const createBattle = async () => {
     if (!rivalSelectedId) return;
+
+    if (submittingRef.current) return;
+
+    submittingRef.current = true;
+    setIsSubmitting(true);
+
     try {
       await battleApi.postCreateBattle({
         id: rivalSelectedId,
@@ -124,22 +147,15 @@ export const useBattle = () => {
       const errorMessage = getErrorMessage(error, "배틀 신청 중 오류가 발생했습니다.");
       console.error("배틀 신청 실패", errorMessage, error);
     } finally {
-      setRivalSelectedId(null);
+      submittingRef.current = false;
+      closeModal();
     }
-
-    closeModal();
-  };
-
-  const closeModal = () => {
-    setIsModalOpen(false);
-    setRivalSelectedId(null);
-    setDuration(3);
-    setSelectedDay(null);
   };
 
   return {
     isModalOpen,
     openModal,
+    isSubmitting,
     closeModal,
     duration,
     setDuration,
