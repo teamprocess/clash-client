@@ -15,7 +15,7 @@ import {
 } from "@/entities/competition";
 import { getErrorMessage } from "@/shared/lib";
 
-const analyzeCategoryOptions = [
+const analyzeCategoryOptions: { key: AnalyzeCategory; label: string }[] = [
   { key: "EXP", label: "EXP" },
   { key: "GITHUB", label: "Github" },
   { key: "ACTIVE_TIME", label: "총 학습 시간" },

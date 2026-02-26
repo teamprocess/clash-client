@@ -3,6 +3,7 @@ import { Dialog } from "@/shared/ui";
 import { AnalyzeCategory, MATCHVALUE } from "@/entities/competition";
 import { useBattle } from "@/features/competition/model/useBattle";
 import { formatTime } from "@/shared/lib";
+import { Select } from "@/shared/ui";
 
 export const Battle = () => {
   const battle = useBattle();
@@ -107,19 +108,11 @@ export const Battle = () => {
                       <S.TitleBox>
                         <S.AnalyzeText>세부 분석</S.AnalyzeText>
                         <S.DropDownBox>
-                          <S.SelectWrapper>
-                            <S.Select
-                              value={battle.category}
-                              onChange={e => battle.setCategory(e.target.value as AnalyzeCategory)}
-                            >
-                              {battle.analyzeCategoryOptions.map(option => (
-                                <S.Option key={option.key} value={option.key}>
-                                  {option.label}
-                                </S.Option>
-                              ))}
-                            </S.Select>
-                            <S.ArrowIcon />
-                          </S.SelectWrapper>
+                          <Select<AnalyzeCategory>
+                            value={battle.category}
+                            options={battle.analyzeCategoryOptions}
+                            onChange={battle.setCategory}
+                          />
                         </S.DropDownBox>
                       </S.TitleBox>
 
