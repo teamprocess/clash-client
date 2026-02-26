@@ -28,10 +28,18 @@ export const Github = ({ today, yesterday }: CompareResponse) => {
                 <S.CalculateInfoBox>
                   <S.FireIcon />
                   <S.ExplainText>최다 커밋 레포지토리</S.ExplainText>
-                  <S.RepositorieName>
-                    {yesterday?.commit.representationRepo ??
-                      "현재 최다 커밋 레포지토리가 없습니다."}
-                  </S.RepositorieName>
+                  <S.RepositoryName
+                    data-tooltip={
+                      yesterday?.commit.representationRepo ??
+                      "현재 최다 커밋 레포지토리가 없습니다."
+                    }
+                    tabIndex={0}
+                  >
+                    <span>
+                      {yesterday?.commit.representationRepo ??
+                        "현재 최다 커밋 레포지토리가 없습니다."}
+                    </span>
+                  </S.RepositoryName>
                 </S.CalculateInfoBox>
                 <S.WidthLine />
                 <S.CalculateInfoBox>
@@ -69,10 +77,18 @@ export const Github = ({ today, yesterday }: CompareResponse) => {
                 <S.CalculateInfoBox>
                   <S.FireIcon />
                   <S.ExplainText>최다 PR 레포지토리</S.ExplainText>
-                  <S.RepositorieName>
-                    {yesterday?.pullRequest.representationRepo ??
-                      "현재 최다 PR 레포지토리가 없습니다."}
-                  </S.RepositorieName>
+                  <S.RepositoryName
+                    data-tooltip={
+                      yesterday?.pullRequest.representationRepo ??
+                      "현재 최다 PR 레포지토리가 없습니다."
+                    }
+                    tabIndex={0}
+                  >
+                    <span>
+                      {yesterday?.pullRequest.representationRepo ??
+                        "현재 최다 PR 레포지토리가 없습니다."}
+                    </span>
+                  </S.RepositoryName>
                 </S.CalculateInfoBox>
                 <S.WidthLine />
                 <S.CalculateInfoBox>
@@ -140,9 +156,16 @@ export const Github = ({ today, yesterday }: CompareResponse) => {
                 <S.CalculateInfoBox>
                   <S.FireIcon />
                   <S.ExplainText>최다 커밋 레포지토리</S.ExplainText>
-                  <S.RepositorieName>
-                    {today?.commit.representationRepo ?? "현재 최다 커밋 레포지토리가 없습니다."}
-                  </S.RepositorieName>
+                  <S.RepositoryName
+                    data-tooltip={
+                      today?.commit.representationRepo ?? "현재 최다 커밋 레포지토리가 없습니다."
+                    }
+                    tabIndex={0}
+                  >
+                    <span>
+                      {today?.commit.representationRepo ?? "현재 최다 커밋 레포지토리가 없습니다."}
+                    </span>
+                  </S.RepositoryName>
                 </S.CalculateInfoBox>
                 <S.WidthLine />
                 <S.CalculateInfoBox>
@@ -187,9 +210,17 @@ export const Github = ({ today, yesterday }: CompareResponse) => {
                 <S.CalculateInfoBox>
                   <S.FireIcon />
                   <S.ExplainText>최다 PR 레포지토리</S.ExplainText>
-                  <S.RepositorieName>
-                    {today?.pullRequest.representationRepo ?? "현재 최다 PR 레포지토리가 없습니다."}
-                  </S.RepositorieName>
+                  <S.RepositoryName
+                    data-tooltip={
+                      today?.pullRequest.representationRepo ?? "현재 최다 PR 레포지토리가 없습니다."
+                    }
+                    tabIndex={0}
+                  >
+                    <span>
+                      {today?.pullRequest.representationRepo ??
+                        "현재 최다 PR 레포지토리가 없습니다."}
+                    </span>
+                  </S.RepositoryName>
                 </S.CalculateInfoBox>
                 <S.WidthLine />
                 <S.CalculateInfoBox>
