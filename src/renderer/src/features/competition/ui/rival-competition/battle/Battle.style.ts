@@ -312,7 +312,7 @@ export const DetailAnalyzeContainer = styled.div`
 `;
 
 export const AnalyzeText = styled.p`
-  ${font.body.bold}
+  ${font.headline1.bold};
   color: ${({ theme }) => theme.label.normal};
 `;
 
@@ -341,7 +341,8 @@ export const AnalyzeContent = styled.div<{ $width?: string }>`
 `;
 
 export const AnalyzeName = styled.p`
-  ${font.caption.bold}
+  width: 100%;
+  ${font.body.bold}
   color: ${({ theme }) => theme.label.normal};
 `;
 

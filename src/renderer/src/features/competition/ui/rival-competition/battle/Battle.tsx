@@ -125,7 +125,7 @@ export const Battle = () => {
 
                       <S.AnalyzeBox>
                         <S.AnalyzeRow>
-                          <S.AnalyzeContent>
+                          <S.AnalyzeContent $width="4rem">
                             <S.AnalyzeName>{battle.battleDetailData?.enemy.name}</S.AnalyzeName>
                             <S.AnalyzeName>나</S.AnalyzeName>
                           </S.AnalyzeContent>
