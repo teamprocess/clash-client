@@ -6,7 +6,6 @@ export { NameplateModal } from "./ui/profile-tabs/item-panel/nameplate-modal/Nam
 export { MenuTabs } from "./ui/profile-tabs/menu-tabs/MenuTabs";
 export { TimePanel } from "./ui/profile-tabs/time-panel/TimePanel";
 export { RivalContainer } from "./ui/rival-container/RivalContainer";
-export { AddRival } from "./ui/rival-container/add-rival/AddRival";
 export { RivalCard } from "./ui/rival-container/rival-card/RivalCard";
 export { StateTag } from "./ui/rival-container/state/State";
 export { TopProfile } from "./ui/top-profile/TopProfile";
