@@ -90,16 +90,17 @@ export const ProfileImg = styled.img.attrs(() => ({
 `;
 
 export const UserInfo = styled.div`
-  width: 102%;
+  width: 100%;
   display: flex;
   align-items: center;
-  gap: 2rem;
-  margin-top: 0.625rem;
+  gap: 1rem;
+  margin-top: 0.875rem;
 `;
 
 export const Name = styled.div`
   color: ${({ theme }) => theme.label.normal};
   ${font.title1.medium};
+  margin-left: 1.5rem;
 `;
 
 export const BadgeDot = styled.div<{ $accent?: string }>`
