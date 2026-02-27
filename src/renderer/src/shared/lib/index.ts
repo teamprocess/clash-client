@@ -5,3 +5,4 @@ export { useTheme } from "./useTheme";
 export { useNetworkStatus } from "./useNetworkStatus";
 export { queryClient } from "./queryClient";
 export { getErrorMessage } from "./error";
+export { useRival } from "./useRival";

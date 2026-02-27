@@ -1,9 +1,9 @@
 import * as S from "./RivalContainer.style";
 import { RivalCard } from "@/features/profile";
 import { VscodeIcon } from "./RivalContainer.style";
-import { useRival } from "@/shared/lib/useRival";
+import { useRival } from "@/shared/lib";
 import { PlusIcon } from "@/features/home/ui/rival/Rival.style";
-import { AddRivalsDialog } from "@/shared/lib/rival-management";
+import { AddRivalsDialog } from "@/shared/ui";
 
 export const RivalContainer = () => {
   const rival = useRival();
