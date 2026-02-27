@@ -1,5 +1,7 @@
 import * as S from "./RivalCard.style";
-import type { UserStatus } from "../../../model/useRivalContainer";
+import type { UserStatus } from "@/features/competition/model/useMyRivals";
+import { formatTime } from "@/shared/lib";
+import { useEffect, useState } from "react";
 
 interface RivalCardProps {
   profileSrc: string;
@@ -17,6 +19,18 @@ const statusLabelMap: Record<UserStatus, string> = {
 };
 
 export function RivalCard({ profileSrc, appIconSrc, name, status, time, appName }: RivalCardProps) {
+  const [displayActiveTime, setDisplayActiveTime] = useState<number>(Number(time) || 0);
+
+  useEffect(() => {
+    if (status !== "ONLINE") return;
+
+    const timerId = setInterval(() => {
+      setDisplayActiveTime(prev => prev + 1);
+    }, 1000);
+
+    return () => clearInterval(timerId);
+  }, [status]);
+
   return (
     <S.RivalBox>
       <S.Left>
@@ -32,7 +46,7 @@ export function RivalCard({ profileSrc, appIconSrc, name, status, time, appName 
           <S.AppIcon src={appIconSrc} alt={`${appName} 아이콘`} />
           <S.AppName>{appName}</S.AppName>
         </S.AppRow>
-        <S.Time>{time}</S.Time>
+        <S.Time>{formatTime(displayActiveTime)}</S.Time>
       </S.Right>
     </S.RivalBox>
   );

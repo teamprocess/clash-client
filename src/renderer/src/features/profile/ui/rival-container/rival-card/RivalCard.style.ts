@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import type { UserStatus } from "../../../model/useRivalContainer";
+import type { UserStatus } from "@/features/competition/model/useMyRivals";
 import { font } from "@/shared/config/font";
 import { palette } from "@/shared/config/theme";
 
