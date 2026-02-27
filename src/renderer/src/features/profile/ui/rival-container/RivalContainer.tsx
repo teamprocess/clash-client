@@ -1,7 +1,7 @@
 import * as S from "./RivalContainer.style";
 import { RivalCard } from "@/features/profile";
 import { VscodeIcon } from "./RivalContainer.style";
-import { useRival } from "@/features/home/model/useRival";
+import { useRival } from "@/shared/lib/useRival";
 import { PlusIcon } from "@/features/home/ui/rival/Rival.style";
 import { AddRivalsDialog } from "@/features/home/lib";
 
