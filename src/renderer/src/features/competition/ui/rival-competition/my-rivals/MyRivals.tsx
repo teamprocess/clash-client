@@ -57,7 +57,9 @@ const RivalRow = ({ user, index }: { user: RivalUser; index: number }) => {
             <S.Point>·</S.Point>
           </>
         )}
-        {formatTime(displayActiveTime)}
+        <S.ActiveTime $status={user.status as UserStatus}>
+          {formatTime(displayActiveTime)}
+        </S.ActiveTime>
       </S.PlayTime>
     </S.ProfileContainer>
   );
