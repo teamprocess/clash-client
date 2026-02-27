@@ -2,7 +2,6 @@ import { Line } from "react-chartjs-2";
 import "chart.js/auto";
 import { colorsOfMultiLine } from "@/features/competition/model/useCompareRivals";
 
-// 멀티차트 변환 후 props Type
 interface RivalCompetitionLineChartProps {
   chartData: {
     labels: string[];
@@ -11,9 +10,13 @@ interface RivalCompetitionLineChartProps {
       data: (number | null)[];
     }[];
   };
+  valueFormatter?: (value: number) => string;
 }
 
-export const RivalCompetitionLineChart = ({ chartData }: RivalCompetitionLineChartProps) => {
+export const RivalCompetitionLineChart = ({
+  chartData,
+  valueFormatter,
+}: RivalCompetitionLineChartProps) => {
   return (
     <Line
       data={{
@@ -34,28 +37,44 @@ export const RivalCompetitionLineChart = ({ chartData }: RivalCompetitionLineCha
         plugins: {
           legend: {
             display: true,
-
-            // 언더스코어 안쓰는 데이터 무시 -> 멀티차트에서만 사용
             onClick: (_, legendItem, legend) => {
               const index = legendItem.datasetIndex;
               if (index === undefined) return;
 
               const chart = legend.chart;
-              const meta = chart.getDatasetMeta(index);
 
-              const visibleCount = chart.data.datasets.filter(
-                (_, i) => !chart.getDatasetMeta(i).hidden
-              ).length;
+              const anyHidden = chart.data.datasets.some((_, i) => chart.getDatasetMeta(i).hidden);
 
-              const isSolo = !meta.hidden && visibleCount === 1;
+              if (index === 0) {
+                if (anyHidden) {
+                  chart.data.datasets.forEach((_, i) => {
+                    chart.getDatasetMeta(i).hidden = false;
+                  });
+                } else {
+                  chart.data.datasets.forEach((_, i) => {
+                    chart.getDatasetMeta(i).hidden = i !== 0;
+                  });
+                }
+                chart.update();
+                return;
+              }
 
-              if (isSolo) {
+              const visibleIndices = chart.data.datasets
+                .map((_, i) => i)
+                .filter(i => !chart.getDatasetMeta(i).hidden);
+
+              const isCompareMode =
+                visibleIndices.length === 2 &&
+                visibleIndices.includes(0) &&
+                visibleIndices.includes(index);
+
+              if (isCompareMode) {
                 chart.data.datasets.forEach((_, i) => {
                   chart.getDatasetMeta(i).hidden = false;
                 });
               } else {
                 chart.data.datasets.forEach((_, i) => {
-                  chart.getDatasetMeta(i).hidden = i !== index;
+                  chart.getDatasetMeta(i).hidden = i !== 0 && i !== index;
                 });
               }
 
@@ -73,6 +92,7 @@ export const RivalCompetitionLineChart = ({ chartData }: RivalCompetitionLineCha
               label: tooltipItem => {
                 const value = tooltipItem.raw;
                 if (value === null || value === undefined) return "";
+                if (typeof value === "number" && valueFormatter) return valueFormatter(value);
                 return value.toString();
               },
             },
