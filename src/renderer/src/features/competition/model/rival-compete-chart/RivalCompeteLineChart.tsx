@@ -1,4 +1,3 @@
-// RivalCompeteLineChart.tsx
 import { Line } from "react-chartjs-2";
 import "chart.js/auto";
 import { colorsOfMultiLine } from "@/features/competition/model/useCompareRivals";

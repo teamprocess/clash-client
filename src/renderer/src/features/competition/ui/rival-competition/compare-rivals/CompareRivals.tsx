@@ -1,4 +1,3 @@
-// RivalCompare.tsx
 import * as S from "./CompareRivals.style";
 import { useCompareRival } from "@/features/competition/model/useCompareRivals";
 import {
@@ -8,7 +7,6 @@ import {
 import { RivalCompetitionLineChart } from "@/features/competition/model/rival-compete-chart/RivalCompeteLineChart";
 import { Select } from "@/shared/ui/select";
 
-// formatTime import 경로는 프로젝트에 맞게
 import { formatTime } from "@/shared/lib/formatTime";
 
 export const RivalCompare = () => {
