@@ -186,11 +186,11 @@ export const ActiveTime = styled.p<StatusProps>`
   color: ${({ theme, $status }) => {
     switch ($status) {
       case "ONLINE":
-        return theme.primary.normal;
+        return theme.label.normal;
       case "AWAY":
-        return theme.label.neutral;
-      case "OFFLINE":
         return theme.label.assistive;
+      case "OFFLINE":
+        return theme.line.normal;
     }
   }};
 `;
