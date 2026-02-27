@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import * as S from "@/features/home/ui/rival/Rival.style";
 import { formatTime } from "@/shared/lib";
-import { MyRivalItem } from "@/features/home/model/useRival"; // 단독 props
+import { MyRivalItem } from "@/shared/lib/useRival"; // 단독 props
 
 export const MyRivalUsers = ({ user, getStatus }: MyRivalItem) => {
   const [displayActiveTime, setDisplayActiveTime] = useState<number>(Number(user.activeTime) || 0);
