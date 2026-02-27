@@ -9,3 +9,5 @@ export { Popover } from "./popover";
 export type { PopoverProps } from "./popover";
 export { ModalActions } from "./dialog-actions";
 export type { ModalActionsProps } from "./dialog-actions";
+export { AddRivalsDialog, DeleteRivalsDialog } from "./rival-management";
+export { SearchInput } from "./search-input";

@@ -4,7 +4,7 @@ import { useMyRivals } from "@/features/competition/model/useMyRivals";
 import { formatTime } from "@/shared/lib";
 import { MyRivalsResponse } from "@/entities/competition";
 import { useRival } from "@/shared/lib/useRival";
-import { DeleteRivalsDialog } from "@/shared/lib/rival-management";
+import { DeleteRivalsDialog } from "@/shared/ui/rival-management";
 import { Button } from "@/shared/ui";
 import { useEffect, useState } from "react";
 

@@ -1,8 +1,8 @@
 import { Dialog } from "@/shared/ui";
 import * as S from "./AddRivals.style";
-import { SearchInput } from "@/shared/ui/search-input";
+import { SearchInput } from "@/shared/ui";
 import React from "react";
-import { useRival } from "@/shared/lib/useRival";
+import { useRival } from "@/shared/lib";
 
 interface AddRivalsDialogProps {
   isOpen: boolean;
