@@ -5,7 +5,8 @@ import {
   PeriodType,
 } from "@/entities/competition/model/rival-competition/compareRivals.types";
 import { RivalCompetitionLineChart } from "@/features/competition/model/rival-compete-chart/RivalCompeteLineChart";
-import { Select } from "@/shared/ui/select";
+import { Select } from "@/shared/ui";
+import { formatTime } from "@/shared/lib";
 
 export const RivalCompare = () => {
   const {
@@ -23,6 +24,8 @@ export const RivalCompare = () => {
   const chartData = buildMultiLineData(compareRivals?.totalData ?? []);
 
   const hasValidPoint = totalData.some(u => (u.dataPoint?.length ?? 0) > 0);
+
+  const valueFormatter = competitionDropdown === "ACTIVE_TIME" ? formatTime : undefined;
 
   return (
     <S.Content>
@@ -47,7 +50,7 @@ export const RivalCompare = () => {
 
         {hasValidPoint ? (
           <S.ChartWrapper>
-            <RivalCompetitionLineChart chartData={chartData} />
+            <RivalCompetitionLineChart chartData={chartData} valueFormatter={valueFormatter} />
           </S.ChartWrapper>
         ) : (
           <S.DetailWrapper>
