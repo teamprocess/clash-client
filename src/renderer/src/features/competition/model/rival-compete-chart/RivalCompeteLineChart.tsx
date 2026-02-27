@@ -41,21 +41,39 @@ export const RivalCompetitionLineChart = ({ chartData }: RivalCompetitionLineCha
               if (index === undefined) return;
 
               const chart = legend.chart;
-              const meta = chart.getDatasetMeta(index);
 
-              const visibleCount = chart.data.datasets.filter(
-                (_, i) => !chart.getDatasetMeta(i).hidden
-              ).length;
+              const anyHidden = chart.data.datasets.some((_, i) => chart.getDatasetMeta(i).hidden);
 
-              const isSolo = !meta.hidden && visibleCount === 1;
+              if (index === 0) {
+                if (anyHidden) {
+                  chart.data.datasets.forEach((_, i) => {
+                    chart.getDatasetMeta(i).hidden = false;
+                  });
+                } else {
+                  chart.data.datasets.forEach((_, i) => {
+                    chart.getDatasetMeta(i).hidden = i !== 0;
+                  });
+                }
+                chart.update();
+                return;
+              }
 
-              if (isSolo) {
+              const visibleIndices = chart.data.datasets
+                .map((_, i) => i)
+                .filter(i => !chart.getDatasetMeta(i).hidden);
+
+              const isCompareMode =
+                visibleIndices.length === 2 &&
+                visibleIndices.includes(0) &&
+                visibleIndices.includes(index);
+
+              if (isCompareMode) {
                 chart.data.datasets.forEach((_, i) => {
                   chart.getDatasetMeta(i).hidden = false;
                 });
               } else {
                 chart.data.datasets.forEach((_, i) => {
-                  chart.getDatasetMeta(i).hidden = i !== index;
+                  chart.getDatasetMeta(i).hidden = i !== 0 && i !== index;
                 });
               }
 
