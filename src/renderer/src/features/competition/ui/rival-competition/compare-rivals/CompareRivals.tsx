@@ -5,9 +5,8 @@ import {
   PeriodType,
 } from "@/entities/competition/model/rival-competition/compareRivals.types";
 import { RivalCompetitionLineChart } from "@/features/competition/model/rival-compete-chart/RivalCompeteLineChart";
-import { Select } from "@/shared/ui/select";
-
-import { formatTime } from "@/shared/lib/formatTime";
+import { Select } from "@/shared/ui";
+import { formatTime } from "@/shared/lib";
 
 export const RivalCompare = () => {
   const {
