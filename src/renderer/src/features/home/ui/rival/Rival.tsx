@@ -1,7 +1,7 @@
 import * as S from "./Rival.style";
 import { MyRivalUsers } from "@/features/home/ui/rival/myrival-users/MyRivalUsers";
 import { useRival } from "@/shared/lib/useRival";
-import { AddRivalsDialog, DeleteRivalsDialog } from "@/features/home/lib";
+import { AddRivalsDialog, DeleteRivalsDialog } from "@/shared/lib/rival-management";
 import { Button } from "@/shared/ui";
 
 export const Rival = () => {

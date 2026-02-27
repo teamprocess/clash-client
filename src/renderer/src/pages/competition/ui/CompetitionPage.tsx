@@ -1,7 +1,7 @@
 import * as S from "./CompetitionPage.style";
 import { useCompetition } from "@/pages/competition/model/useCompetition";
 import { WithMyCompetition, RivalCompetition } from "@/features/competition";
-import { AddRivalsDialog } from "@/features/home/lib/addRival/AddRivals";
+import { AddRivalsDialog } from "@/shared/lib/rival-management/addRival/AddRivals";
 import { useRival } from "@/shared/lib/useRival";
 import { useState } from "react";
 import { Button, Dialog } from "@/shared/ui";

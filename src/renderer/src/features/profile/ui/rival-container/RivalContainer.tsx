@@ -3,7 +3,7 @@ import { RivalCard } from "@/features/profile";
 import { VscodeIcon } from "./RivalContainer.style";
 import { useRival } from "@/shared/lib/useRival";
 import { PlusIcon } from "@/features/home/ui/rival/Rival.style";
-import { AddRivalsDialog } from "@/features/home/lib";
+import { AddRivalsDialog } from "@/shared/lib/rival-management";
 
 export const RivalContainer = () => {
   const rival = useRival();
