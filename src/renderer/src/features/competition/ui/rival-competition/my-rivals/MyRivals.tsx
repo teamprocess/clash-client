@@ -3,8 +3,8 @@ import { UserStatus, getStatus } from "@/features/competition/model/useMyRivals"
 import { useMyRivals } from "@/features/competition/model/useMyRivals";
 import { formatTime } from "@/shared/lib";
 import { MyRivalsResponse } from "@/entities/competition";
-import { useRival } from "@/features/home/model/useRival";
-import { DeleteRivalsDialog } from "@/features/home/lib";
+import { useRival } from "@/shared/lib/useRival";
+import { DeleteRivalsDialog } from "@/shared/ui/rival-management";
 import { Button } from "@/shared/ui";
 import { useEffect, useState } from "react";
 
