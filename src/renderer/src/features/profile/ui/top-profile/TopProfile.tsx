@@ -1,6 +1,7 @@
 import * as S from "./TopProfile.style";
 import { TopProfileProps } from "@/features/profile/model/useTopProfile";
 import { useSignOut } from "@/features/auth";
+import { useGetMyProfile } from "@/entities/user";
 
 export const TopProfile = ({
   bannerAccentColor,
@@ -13,6 +14,7 @@ export const TopProfile = ({
   onEditProfile,
 }: TopProfileProps) => {
   const { signOut, isLoading } = useSignOut();
+  const { data: user } = useGetMyProfile();
 
   return (
     <S.Banner $accent={bannerAccentColor} $bgImage={bannerBgImageUrl}>
@@ -44,7 +46,7 @@ export const TopProfile = ({
         </S.ProfileImgWrap>
 
         <S.UserInfo>
-          <S.Name>whtkdcjf</S.Name>
+          <S.Name>{user?.name}</S.Name>
           <S.BadgeDot />
         </S.UserInfo>
       </S.ProfileCard>
