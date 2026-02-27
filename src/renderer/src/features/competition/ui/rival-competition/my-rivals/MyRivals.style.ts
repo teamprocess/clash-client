@@ -151,3 +151,21 @@ export const DefaultBattleText = styled.p`
   ${font.label.medium};
   color: ${({ theme }) => theme.label.assistive};
 `;
+
+type StatusProps = {
+  $status: "ONLINE" | "AWAY" | "OFFLINE";
+};
+
+export const ActiveTime = styled.p<StatusProps>`
+  ${font.headline1.bold};
+  color: ${({ theme, $status }) => {
+    switch ($status) {
+      case "ONLINE":
+        return theme.label.normal;
+      case "AWAY":
+        return theme.label.assistive;
+      case "OFFLINE":
+        return theme.line.normal;
+    }
+  }};
+`;
