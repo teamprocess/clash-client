@@ -1,8 +1,8 @@
+// RivalCompeteLineChart.tsx
 import { Line } from "react-chartjs-2";
 import "chart.js/auto";
 import { colorsOfMultiLine } from "@/features/competition/model/useCompareRivals";
 
-// 멀티차트 변환 후 props Type
 interface RivalCompetitionLineChartProps {
   chartData: {
     labels: string[];
@@ -11,9 +11,13 @@ interface RivalCompetitionLineChartProps {
       data: (number | null)[];
     }[];
   };
+  valueFormatter?: (value: number) => string;
 }
 
-export const RivalCompetitionLineChart = ({ chartData }: RivalCompetitionLineChartProps) => {
+export const RivalCompetitionLineChart = ({
+  chartData,
+  valueFormatter,
+}: RivalCompetitionLineChartProps) => {
   return (
     <Line
       data={{
@@ -34,8 +38,6 @@ export const RivalCompetitionLineChart = ({ chartData }: RivalCompetitionLineCha
         plugins: {
           legend: {
             display: true,
-
-            // 언더스코어 안쓰는 데이터 무시 -> 멀티차트에서만 사용
             onClick: (_, legendItem, legend) => {
               const index = legendItem.datasetIndex;
               if (index === undefined) return;
@@ -91,6 +93,7 @@ export const RivalCompetitionLineChart = ({ chartData }: RivalCompetitionLineCha
               label: tooltipItem => {
                 const value = tooltipItem.raw;
                 if (value === null || value === undefined) return "";
+                if (typeof value === "number" && valueFormatter) return valueFormatter(value);
                 return value.toString();
               },
             },
