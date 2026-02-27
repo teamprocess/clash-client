@@ -3,6 +3,7 @@ import { RivalCard } from "@/features/profile";
 import { VscodeIcon } from "./RivalContainer.style";
 import { useRival } from "@/features/home/model/useRival";
 import { PlusIcon } from "@/features/home/ui/rival/Rival.style";
+import { AddRivalsDialog } from "@/features/home/lib";
 
 export const RivalContainer = () => {
   const rival = useRival();
@@ -29,6 +30,10 @@ export const RivalContainer = () => {
             <PlusIcon />
           </S.AddRivalBox>
         </S.AddRivalButton>
+      )}
+
+      {rival.modalOpen && (
+        <AddRivalsDialog isOpen={rival.modalOpen} onClose={rival.handleClose} rival={rival} />
       )}
     </S.Container>
   );
