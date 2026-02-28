@@ -34,6 +34,10 @@ export const GroupFormModal = ({
     handlePageChange,
     handleCategoryChange,
   } = useGroupList();
+  const emptyTitle =
+    selectedCategory === "ALL"
+      ? "현재 참여 가능한 그룹이 없습니다."
+      : `${GROUP_CATEGORY_LABELS[selectedCategory]} 카테고리 그룹이 없습니다.`;
 
   const updateActiveRail = useCallback(() => {
     const tabsElement = tabsRef.current;
@@ -111,55 +115,63 @@ export const GroupFormModal = ({
             </S.CategoryFilters>
 
             <S.GroupsWrapper>
-              <S.Groups>
-                {isLoading ? (
-                  <div>로딩 중...</div>
-                ) : groups.length === 0 ? (
-                  <div>그룹이 없습니다.</div>
-                ) : (
-                  <>
-                    {groups.map(group => (
-                      <S.GroupContainer key={group.id} $isMember={group.isMember}>
-                        <S.GroupHeader>
-                          <S.GroupHeaderTextBox>
-                            <S.GroupBadge>{GROUP_CATEGORY_LABELS[group.category]}</S.GroupBadge>
-                            <S.GroupName>{group.name}</S.GroupName>
-                          </S.GroupHeaderTextBox>
-                          <S.GroupDescription>{group.description}</S.GroupDescription>
-                        </S.GroupHeader>
-                        <S.GroupFooter>
-                          <S.GroupMembers>
-                            <span>{group.currentMemberCount}</span> / {group.maxMembers}
-                          </S.GroupMembers>
-                          <S.GroupJoinButton
-                            onClick={async e => {
-                              e.stopPropagation();
-                              if (group.passwordRequired) {
-                                const password = prompt("비밀번호를 입력하세요:");
-                                if (password) {
-                                  await onJoinSubmit(group.id, password);
-                                }
-                              } else {
-                                await onJoinSubmit(group.id);
+              {isLoading ? (
+                <S.EmptyState>
+                  <S.EmptyTitle>로딩 중...</S.EmptyTitle>
+                </S.EmptyState>
+              ) : groups.length === 0 ? (
+                <S.EmptyState>
+                  <S.EmptyIcon />
+                  <S.EmptyTextBox>
+                    <S.EmptyTitle>{emptyTitle}</S.EmptyTitle>
+                    <S.EmptyDescription>
+                      다른 카테고리를 선택하거나 그룹을 생성해보세요.
+                    </S.EmptyDescription>
+                  </S.EmptyTextBox>
+                </S.EmptyState>
+              ) : (
+                <S.Groups>
+                  {groups.map(group => (
+                    <S.GroupContainer key={group.id} $isMember={group.isMember}>
+                      <S.GroupHeader>
+                        <S.GroupHeaderTextBox>
+                          <S.GroupBadge>{GROUP_CATEGORY_LABELS[group.category]}</S.GroupBadge>
+                          <S.GroupName>{group.name}</S.GroupName>
+                        </S.GroupHeaderTextBox>
+                        <S.GroupDescription>{group.description}</S.GroupDescription>
+                      </S.GroupHeader>
+                      <S.GroupFooter>
+                        <S.GroupMembers>
+                          <span>{group.currentMemberCount}</span> / {group.maxMembers}
+                        </S.GroupMembers>
+                        <S.GroupJoinButton
+                          onClick={async e => {
+                            e.stopPropagation();
+                            if (group.passwordRequired) {
+                              const password = prompt("비밀번호를 입력하세요:");
+                              if (password) {
+                                await onJoinSubmit(group.id, password);
                               }
-                            }}
-                            disabled={isJoining || group.isMember}
-                            $isMember={group.isMember}
-                          >
-                            {group.isMember ? "가입됨" : isJoining ? "가입 중..." : "가입"}
-                          </S.GroupJoinButton>
-                        </S.GroupFooter>
-                      </S.GroupContainer>
-                    ))}
-                    {Array.from({ length: Math.max(0, 6 - groups.length) }).map((_, index) => (
-                      <S.GroupPlaceholder key={`group-placeholder-${index}`} aria-hidden />
-                    ))}
-                  </>
-                )}
-              </S.Groups>
+                            } else {
+                              await onJoinSubmit(group.id);
+                            }
+                          }}
+                          disabled={isJoining || group.isMember}
+                          $isMember={group.isMember}
+                        >
+                          {group.isMember ? "가입됨" : isJoining ? "가입 중..." : "가입"}
+                        </S.GroupJoinButton>
+                      </S.GroupFooter>
+                    </S.GroupContainer>
+                  ))}
+                  {Array.from({ length: Math.max(0, 6 - groups.length) }).map((_, index) => (
+                    <S.GroupPlaceholder key={`group-placeholder-${index}`} aria-hidden />
+                  ))}
+                </S.Groups>
+              )}
             </S.GroupsWrapper>
 
-            {pagination && (
+            {pagination && groups.length > 0 && (
               <S.Pagination>
                 <S.PageButton
                   disabled={!pagination.hasPrevious}
