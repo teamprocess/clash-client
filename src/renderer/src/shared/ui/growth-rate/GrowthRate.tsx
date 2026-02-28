@@ -1,5 +1,5 @@
-import * as S from "@/features/home/ui/compare/growth-rate/GrowRate.style";
-import { getGrowthInfo } from "@/features/home/model/useCompare";
+import * as S from "@/shared/ui/growth-rate/GrowRate.style";
+import { getGrowthInfo } from "@/shared/lib";
 import { formatTime } from "@/shared/lib";
 
 interface GrowthRateProps {

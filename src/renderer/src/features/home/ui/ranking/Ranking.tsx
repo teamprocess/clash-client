@@ -1,8 +1,7 @@
 import * as S from "./Ranking.style";
 import { useRanking } from "@/features/home/model/useRanking";
-import { UserRanking } from "@/features/home/ui/ranking/user/UserRanking";
-import { CategoryType, RankingItem, PeriodType } from "@/entities/home/model/useRanking.types";
-import { Select } from "@/shared/ui/select";
+import { UserRanking, Select } from "@/shared/ui";
+import { CategoryType, RankingItem, PeriodType } from "@/entities/home";
 
 export const Ranking = () => {
   const {

@@ -1,5 +1,5 @@
 import * as S from "./WithMyCompetition.style";
-import { GrowthRate } from "@/features/home/ui/compare/growth-rate/GrowthRate";
+import { GrowthRate } from "@/shared/ui/growth-rate/GrowthRate";
 import { useMyCompetition } from "@/features/competition/model/useMyCompetition";
 import { toLineChartData } from "@/features/competition/model/my-compete-chart/MyCompeteChartData";
 import { MyCompetitionLineChart } from "@/features/competition/model/my-compete-chart/MyCompetitionLineChart";
