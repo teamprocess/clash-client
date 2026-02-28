@@ -39,8 +39,8 @@ export const NoticeOnIcon = styled(AlarmOn)`
 export const NoticePanel = styled.div`
   display: flex;
   flex-direction: column;
-  width: 24rem;
-  padding: 1.5rem;
+  width: 28rem;
+  padding: 1.5rem 1rem 1.5rem 1.5rem;
   border-radius: 2rem;
   min-height: 16rem;
   max-height: 32rem;
