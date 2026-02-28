@@ -1,10 +1,8 @@
 import * as S from "./WithMyCompetition.style";
-import { GrowthRate } from "@/shared/ui/growth-rate/GrowthRate";
+import { GrowthRate, Select, MyCompetitionLineChart } from "@/shared/ui";
 import { useMyCompetition } from "@/features/competition/model/useMyCompetition";
-import { toLineChartData } from "@/features/competition/model/my-compete-chart/MyCompeteChartData";
-import { MyCompetitionLineChart } from "@/features/competition/model/my-compete-chart/MyCompetitionLineChart";
+import { toLineChartData } from "@/shared/ui/my-compete-chart/formatMyCompeteChartData";
 import { CompareStandard, GrowthRateStandard } from "@/entities/competition";
-import { Select } from "@/shared/ui/select";
 import { formatTime } from "@/shared/lib";
 import { useMemo } from "react";
 

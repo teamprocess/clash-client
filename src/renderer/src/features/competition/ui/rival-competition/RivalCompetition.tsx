@@ -1,7 +1,5 @@
 import * as S from "./RivalCompetition.style";
-import { MyRivals } from "@/features/competition/ui/rival-competition/my-rivals/MyRivals";
-import { RivalCompare } from "@/features/competition/ui/rival-competition/compare-rivals/CompareRivals";
-import { Battle } from "@/features/competition/ui/rival-competition/battle/Battle";
+import { MyRivals, Battle, RivalCompare } from "@/features/competition";
 import { MyRivalsResponse } from "@/entities/competition";
 
 interface RivalCompetitionProps {

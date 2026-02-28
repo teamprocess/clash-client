@@ -1,5 +1,4 @@
 import * as S from "./Rival.style";
-import {} from "@/shared/ui";
 import { useRival } from "@/shared/lib";
 import { AddRivalsDialog, DeleteRivalsDialog, Button, MyRivalUsers } from "@/shared/ui";
 

@@ -1,11 +1,8 @@
 import * as S from "./MyRivals.style";
-import { UserStatus, getStatus } from "@/features/competition/model/useMyRivals";
-import { useMyRivals } from "@/features/competition/model/useMyRivals";
-import { formatTime } from "@/shared/lib";
+import { UserStatus, getStatus, useMyRivals } from "@/features/competition/model/useMyRivals";
+import { useRival, formatTime } from "@/shared/lib";
+import { Button, DeleteRivalsDialog } from "@/shared/ui";
 import { MyRivalsResponse } from "@/entities/competition";
-import { useRival } from "@/shared/lib/useRival";
-import { DeleteRivalsDialog } from "@/shared/ui/rival-management";
-import { Button } from "@/shared/ui";
 import { useEffect, useState } from "react";
 
 interface MyRivalsProps {
