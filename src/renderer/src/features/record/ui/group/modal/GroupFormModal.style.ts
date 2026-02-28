@@ -5,7 +5,7 @@ import Cry from "../../../assets/cry.svg";
 export const ModalContent = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 2.5rem;
+  gap: 2rem;
   padding: 1rem 1rem 0 1rem;
   height: 100%;
   width: 100%;
@@ -67,7 +67,7 @@ export const Groups = styled.div`
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   grid-auto-rows: minmax(10rem, auto);
-  align-content: flex-start;
+  align-content: center;
   gap: 2rem;
   width: 100%;
   height: 100%;
@@ -228,7 +228,7 @@ export const Pagination = styled.div`
   gap: 0.5rem;
   align-items: center;
   justify-content: center;
-  padding: 1rem 0;
+  padding: 0;
 `;
 
 export const PageButton = styled.button<{ $isActive?: boolean }>`
