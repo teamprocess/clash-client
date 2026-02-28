@@ -21,13 +21,14 @@ export const AddRivalsDialog = ({ isOpen, onClose, rival }: AddRivalsDialogProps
 
   const [activeTab, setActiveTab] = useState<"addRival" | "rivalList">("addRival");
   const tabsRef = useRef<HTMLDivElement>(null);
-  const joinTabRef = useRef<HTMLButtonElement>(null);
-  const createTabRef = useRef<HTMLButtonElement>(null);
+  const addRivalTabRef = useRef<HTMLButtonElement>(null);
+  const rivalListTabRef = useRef<HTMLButtonElement>(null);
   const [activeRail, setActiveRail] = useState({ left: 0, width: 0 });
 
   const updateActiveRail = useCallback(() => {
     const tabsElement = tabsRef.current;
-    const activeTabElement = activeTab === "addRival" ? joinTabRef.current : createTabRef.current;
+    const activeTabElement =
+      activeTab === "addRival" ? addRivalTabRef.current : rivalListTabRef.current;
 
     if (!tabsElement || !activeTabElement) {
       return;
@@ -67,14 +68,14 @@ export const AddRivalsDialog = ({ isOpen, onClose, rival }: AddRivalsDialogProps
         <S.TabHeader>
           <S.Tabs ref={tabsRef}>
             <S.Tab
-              ref={joinTabRef}
+              ref={addRivalTabRef}
               $isActive={activeTab === "addRival"}
               onClick={() => setActiveTab("addRival")}
             >
               라이벌 추가
             </S.Tab>
             <S.Tab
-              ref={createTabRef}
+              ref={rivalListTabRef}
               $isActive={activeTab === "rivalList"}
               onClick={() => setActiveTab("rivalList")}
             >
@@ -85,52 +86,58 @@ export const AddRivalsDialog = ({ isOpen, onClose, rival }: AddRivalsDialogProps
             <S.TabActiveRail $left={activeRail.left} $width={activeRail.width} />
           </S.TabRail>
         </S.TabHeader>
-        <S.TopSection>
-          <S.SearchInputBox>
-            <SearchInput
-              placeholder={"이름 또는 아이디 검색"}
-              inputSize={"md"}
-              variant={"light"}
-              fullWidth={true}
-              value={rival.searchText}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                rival.setSearchText(e.target.value)
-              }
-            />
-          </S.SearchInputBox>
+        {activeTab === "addRival" ? (
+          <>
+            <S.TopSection>
+              <S.SearchInputBox>
+                <SearchInput
+                  placeholder={"이름 또는 아이디 검색"}
+                  inputSize={"md"}
+                  variant={"light"}
+                  fullWidth={true}
+                  value={rival.searchText}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                    rival.setSearchText(e.target.value)
+                  }
+                />
+              </S.SearchInputBox>
 
-          <S.UserChoiceContainer>
-            {users.map(user => {
-              const isSelected = rival.rivalSelectedId.includes(user.id);
+              <S.UserChoiceContainer>
+                {users.map(user => {
+                  const isSelected = rival.rivalSelectedId.includes(user.id);
 
-              return (
-                <S.UserChoiceBox
-                  key={user.id}
-                  $isSelected={isSelected}
-                  onClick={() => rival.handleUserSelect(user.id)}
-                >
-                  <S.ProfileContent $height="3rem">
-                    <S.ProfileIcon />
-                    <S.ProfileTagBox>
-                      <S.ProfileName>{user.name}</S.ProfileName>
-                      <S.ProfileMention>@{user.username}</S.ProfileMention>
-                    </S.ProfileTagBox>
-                  </S.ProfileContent>
+                  return (
+                    <S.UserChoiceBox
+                      key={user.id}
+                      $isSelected={isSelected}
+                      onClick={() => rival.handleUserSelect(user.id)}
+                    >
+                      <S.ProfileContent $height="3rem">
+                        <S.ProfileIcon />
+                        <S.ProfileTagBox>
+                          <S.ProfileName>{user.name}</S.ProfileName>
+                          <S.ProfileMention>@{user.username}</S.ProfileMention>
+                        </S.ProfileTagBox>
+                      </S.ProfileContent>
 
-                  {isSelected ? <S.CheckedIcon /> : <S.UncheckedBox />}
-                </S.UserChoiceBox>
-              );
-            })}
-          </S.UserChoiceContainer>
-        </S.TopSection>
+                      {isSelected ? <S.CheckedIcon /> : <S.UncheckedBox />}
+                    </S.UserChoiceBox>
+                  );
+                })}
+              </S.UserChoiceContainer>
+            </S.TopSection>
 
-        <S.BottomRow>
-          {rival.error && <S.ErrorText>{rival.error}</S.ErrorText>}
-          <S.ButtonBox>
-            <S.CloseButton onClick={rival.handleSelectClose}>초기화</S.CloseButton>
-            <S.OkayButton onClick={rival.handleRivalCreate}>확인</S.OkayButton>
-          </S.ButtonBox>
-        </S.BottomRow>
+            <S.BottomRow>
+              {rival.error && <S.ErrorText>{rival.error}</S.ErrorText>}
+              <S.ButtonBox>
+                <S.CloseButton onClick={rival.handleSelectClose}>초기화</S.CloseButton>
+                <S.OkayButton onClick={rival.handleRivalCreate}>확인</S.OkayButton>
+              </S.ButtonBox>
+            </S.BottomRow>
+          </>
+        ) : (
+          <></>
+        )}
       </S.DialogLayout>
     </Dialog>
   );

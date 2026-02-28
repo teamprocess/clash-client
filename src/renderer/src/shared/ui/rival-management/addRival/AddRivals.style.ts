@@ -18,6 +18,7 @@ export const DialogLayout = styled.div`
   ${flexCol};
   height: 100%;
   justify-content: flex-start;
+  padding: 0.5rem;
 `;
 
 export const TopSection = styled.div`
@@ -79,14 +80,14 @@ export const UserChoiceBox = styled.div<{ $isSelected: boolean }>`
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  padding: 0.5rem;
+  padding: 0.5rem 0.75rem;
   border-bottom: 1px solid ${({ theme }) => theme.line.alternative};
   cursor: pointer;
   transition: 0.1s ease-in-out;
 
   &:hover {
     border-radius: 0.75rem;
-    padding: 0.5rem 0.75rem;
+    padding: 0.5rem 1.25rem;
     background-color: ${({ theme }) => theme.fill.alternative};
   }
 `;
