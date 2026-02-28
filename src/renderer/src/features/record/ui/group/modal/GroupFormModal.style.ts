@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { font } from "@/shared/config/font";
+import Cry from "../../../assets/cry.svg";
 
 export const ModalContent = styled.div`
   display: flex;
@@ -186,6 +187,40 @@ export const JoinContainer = styled.div`
 export const GroupsWrapper = styled.div`
   flex: 1;
   overflow-y: auto;
+`;
+
+export const EmptyState = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 1rem;
+  width: 100%;
+  height: 100%;
+`;
+
+export const EmptyIcon = styled(Cry)`
+  width: 3.25rem;
+  height: 3.25rem;
+`;
+
+export const EmptyTextBox = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+`;
+
+export const EmptyTitle = styled.p`
+  margin: 0;
+  ${font.headline1.bold};
+  color: ${({ theme }) => theme.label.normal};
+`;
+
+export const EmptyDescription = styled.p`
+  margin: 0;
+  ${font.body.medium};
+  color: ${({ theme }) => theme.label.assistive};
 `;
 
 export const Pagination = styled.div`
