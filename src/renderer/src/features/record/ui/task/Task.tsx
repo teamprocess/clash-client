@@ -42,6 +42,17 @@ export const Task = () => {
     setIsTaskNameTooltipOpen(!isSaved);
   };
 
+  const handleTaskNameKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.nativeEvent.isComposing) {
+      return;
+    }
+
+    if (event.key === "Enter") {
+      event.preventDefault();
+      void handleSaveClick();
+    }
+  };
+
   const handleCancelEditClick = () => {
     setIsTaskNameTooltipOpen(false);
     handleCancelEdit();
@@ -77,6 +88,7 @@ export const Task = () => {
             setIsTaskNameTooltipOpen(false);
           }
         }}
+        onKeyDown={handleTaskNameKeyDown}
       />
     </Tooltip>
   );
