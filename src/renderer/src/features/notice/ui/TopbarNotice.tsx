@@ -34,7 +34,7 @@ export const TopbarNotice = () => {
         anchorRef={anchorRef}
         align="end"
         offset={14}
-        alignOffset="2rem"
+        alignOffset="1rem"
       >
         <S.NoticePanel>
           <S.NoticeHeader>
