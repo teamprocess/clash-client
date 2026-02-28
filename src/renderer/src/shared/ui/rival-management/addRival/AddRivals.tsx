@@ -1,8 +1,8 @@
 import { Dialog } from "@/shared/ui";
 import * as S from "./AddRivals.style";
 import { SearchInput } from "@/shared/ui";
-import React from "react";
 import { useRival } from "@/shared/lib";
+import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 
 interface AddRivalsDialogProps {
   isOpen: boolean;
@@ -19,15 +19,72 @@ export const AddRivalsDialog = ({ isOpen, onClose, rival }: AddRivalsDialogProps
 
   const users = rival.filteredUsers ?? [];
 
+  const [activeTab, setActiveTab] = useState<"addRival" | "rivalList">("addRival");
+  const tabsRef = useRef<HTMLDivElement>(null);
+  const joinTabRef = useRef<HTMLButtonElement>(null);
+  const createTabRef = useRef<HTMLButtonElement>(null);
+  const [activeRail, setActiveRail] = useState({ left: 0, width: 0 });
+
+  const updateActiveRail = useCallback(() => {
+    const tabsElement = tabsRef.current;
+    const activeTabElement = activeTab === "addRival" ? joinTabRef.current : createTabRef.current;
+
+    if (!tabsElement || !activeTabElement) {
+      return;
+    }
+
+    const tabsRect = tabsElement.getBoundingClientRect();
+    const activeRect = activeTabElement.getBoundingClientRect();
+
+    setActiveRail({
+      left: activeRect.left - tabsRect.left,
+      width: activeRect.width,
+    });
+  }, [activeTab]);
+
+  useLayoutEffect(() => {
+    if (!isOpen) {
+      return;
+    }
+
+    const frameId = requestAnimationFrame(updateActiveRail);
+    return () => cancelAnimationFrame(frameId);
+  }, [isOpen, updateActiveRail]);
+
+  useEffect(() => {
+    if (!isOpen) {
+      return;
+    }
+
+    const handleResize = () => updateActiveRail();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, [isOpen, updateActiveRail]);
+
   return (
-    <Dialog
-      title={"라이벌 추가"}
-      width={21.625}
-      height={25.175}
-      isOpen={isOpen}
-      onClose={handleClose}
-    >
+    <Dialog width={43} height={34} isOpen={isOpen} onClose={handleClose}>
       <S.DialogLayout>
+        <S.TabHeader>
+          <S.Tabs ref={tabsRef}>
+            <S.Tab
+              ref={joinTabRef}
+              $isActive={activeTab === "addRival"}
+              onClick={() => setActiveTab("addRival")}
+            >
+              라이벌 추가
+            </S.Tab>
+            <S.Tab
+              ref={createTabRef}
+              $isActive={activeTab === "rivalList"}
+              onClick={() => setActiveTab("rivalList")}
+            >
+              신청 목록
+            </S.Tab>
+          </S.Tabs>
+          <S.TabRail>
+            <S.TabActiveRail $left={activeRail.left} $width={activeRail.width} />
+          </S.TabRail>
+        </S.TabHeader>
         <S.TopSection>
           <S.SearchInputBox>
             <SearchInput

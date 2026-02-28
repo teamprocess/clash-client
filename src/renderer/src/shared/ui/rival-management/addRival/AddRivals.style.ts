@@ -17,10 +17,14 @@ const flexCol = css`
 export const DialogLayout = styled.div`
   ${flexCol};
   height: 100%;
-  justify-content: space-between;
+  justify-content: flex-start;
 `;
 
-export const TopSection = styled.div``;
+export const TopSection = styled.div`
+  ${flexCol};
+  flex: 1;
+  min-height: 0;
+`;
 
 export const SearchInputBox = styled.div`
   margin: 1rem 0;
@@ -30,6 +34,7 @@ export const BottomRow = styled.div`
   ${flexRow};
   justify-content: space-between;
   align-items: center;
+  margin-top: auto;
 `;
 
 export const ProfileContent = styled.div<{ $height?: string }>`
@@ -64,7 +69,7 @@ export const ProfileMention = styled.p`
 export const UserChoiceContainer = styled.div`
   ${flexCol};
   width: 100%;
-  height: 12rem;
+  height: 75%;
   overflow-y: auto;
   scrollbar-width: none;
 `;
@@ -128,4 +133,47 @@ export const ErrorText = styled.span`
   ${font.caption.medium};
   color: ${palette.red[60]};
   width: 100%;
+`;
+
+export const TabHeader = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+`;
+
+export const Tabs = styled.div`
+  display: grid;
+  grid-template-columns: repeat(2, max-content);
+  align-items: center;
+  gap: 1rem;
+`;
+
+export const Tab = styled.button<{ $isActive: boolean }>`
+  ${font.title2.medium}
+  color: ${({ $isActive, theme }) => ($isActive ? theme.label.normal : theme.label.assistive)};
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+`;
+
+export const TabRail = styled.div`
+  position: relative;
+  height: 0.25rem;
+  width: 100%;
+  background-color: ${({ theme }) => theme.line.neutral};
+  border-radius: 1rem;
+  overflow: hidden;
+`;
+
+export const TabActiveRail = styled.div<{ $left: number; $width: number }>`
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: ${({ $left }) => `${$left}px`};
+  width: ${({ $width }) => `${$width}px`};
+  background-color: ${({ theme }) => theme.primary.normal};
+  transition:
+    left 0.2s ease,
+    width 0.2s ease;
 `;
