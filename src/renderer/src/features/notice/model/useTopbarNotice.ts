@@ -23,6 +23,34 @@ export const formatNoticeDate = (createdAt: string | null) => {
   return `${year}.${month}.${day} ${hour}.${minute}`;
 };
 
+const markNoticeAsReadInCache = (notices: NoticeItem[], noticeId: number) => {
+  return notices.map(notice => (notice.id === noticeId ? { ...notice, isRead: true } : notice));
+};
+
+const applyReadNoticeOptimisticUpdate = async (noticeId: number) => {
+  await queryClient.cancelQueries({ queryKey: noticeQueryKeys.all });
+
+  const previousNotices = queryClient.getQueryData<NoticeItem[]>(noticeQueryKeys.all);
+  if (!previousNotices) {
+    return previousNotices;
+  }
+
+  queryClient.setQueryData<NoticeItem[]>(
+    noticeQueryKeys.all,
+    markNoticeAsReadInCache(previousNotices, noticeId)
+  );
+
+  return previousNotices;
+};
+
+const rollbackNoticeOptimisticUpdate = (previousNotices: NoticeItem[] | undefined) => {
+  if (!previousNotices) {
+    return;
+  }
+
+  queryClient.setQueryData<NoticeItem[]>(noticeQueryKeys.all, previousNotices);
+};
+
 const invalidateNoticeRelatedQueries = async () => {
   await Promise.all([
     queryClient.invalidateQueries({ queryKey: noticeQueryKeys.all }),
@@ -118,9 +146,11 @@ export const useTopbarNotice = () => {
     }
 
     setProcessingNoticeId(notice.id);
+    const previousNotices = await applyReadNoticeOptimisticUpdate(notice.id);
     try {
       await readNoticeAndRefresh(notice);
     } catch (error) {
+      rollbackNoticeOptimisticUpdate(previousNotices);
       const errorMessage = getErrorMessage(error, "알림 읽음 처리에 실패했습니다.");
       console.error("알림 읽음 처리 실패:", errorMessage, error);
     } finally {
@@ -134,11 +164,13 @@ export const useTopbarNotice = () => {
     }
 
     setProcessingNoticeId(notice.id);
+    const previousNotices = await applyReadNoticeOptimisticUpdate(notice.id);
     try {
       await runNoticeAction(notice, "accept");
       await noticeApi.readNotice(notice.id);
       await invalidateNoticeRelatedQueries();
     } catch (error) {
+      rollbackNoticeOptimisticUpdate(previousNotices);
       const errorMessage = getErrorMessage(error, "알림 수락 처리에 실패했습니다.");
       console.error("알림 수락 처리 실패:", errorMessage, error);
     } finally {
@@ -152,11 +184,13 @@ export const useTopbarNotice = () => {
     }
 
     setProcessingNoticeId(notice.id);
+    const previousNotices = await applyReadNoticeOptimisticUpdate(notice.id);
     try {
       await runNoticeAction(notice, "reject");
       await noticeApi.readNotice(notice.id);
       await invalidateNoticeRelatedQueries();
     } catch (error) {
+      rollbackNoticeOptimisticUpdate(previousNotices);
       const errorMessage = getErrorMessage(error, "알림 거절 처리에 실패했습니다.");
       console.error("알림 거절 처리 실패:", errorMessage, error);
     } finally {
