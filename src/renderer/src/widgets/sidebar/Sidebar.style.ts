@@ -29,7 +29,7 @@ export const TimeTracker = styled.div`
   gap: 1.5rem;
 `;
 
-export const IDEText = styled.span`
+export const SessionNameText = styled.span`
   display: flex;
   ${font.body.regular}
   color: ${({ theme }) => theme.label.alternative};
@@ -41,7 +41,7 @@ export const TimeText = styled.span`
   color: ${({ theme }) => theme.label.normal};
 `;
 
-export const ActiveIDEBox = styled.div`
+export const ActiveSessionBox = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;

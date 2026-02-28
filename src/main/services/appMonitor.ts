@@ -2,7 +2,7 @@ import { exec } from "child_process";
 import { BrowserWindow } from "electron";
 import { promisify } from "util";
 import type { ActiveApp, MonitoringSession, TrackedApp } from "./types";
-import { isSameMonitoredAppName, resolveMonitoredAppName } from "./monitoredApps";
+import { resolveMonitoredAppName } from "./monitoredApps";
 
 const execAsync = promisify(exec);
 
@@ -12,11 +12,10 @@ const APP_QUERY_ERROR_LOG_INTERVAL_MS = 30 * 1000;
 const MAX_SESSION_COUNT = 100;
 
 const FRONT_APP_ASN_SCRIPT = "lsappinfo front";
-const RUNNING_APPS_SCRIPT = "lsappinfo processList";
 const APP_NAME_KEY = "kCFBundleNameKey";
 
 export class AppMonitor {
-  private activeApps: Map<string, TrackedApp> = new Map();
+  private currentApp: TrackedApp | null = null;
   private sessions: MonitoringSession[] = [];
   private intervalId: NodeJS.Timeout | null = null;
   private mainWindow: BrowserWindow | null = null;
@@ -24,7 +23,7 @@ export class AppMonitor {
   private frontmostMonitoredAppName: string | null = null;
   private isChecking = false;
   private lastFrontAppErrorLoggedAt = 0;
-  private lastRunningAppsErrorLoggedAt = 0;
+  private noMonitoredSince: number | null = null;
 
   constructor(mainWindow: BrowserWindow) {
     this.mainWindow = mainWindow;
@@ -59,37 +58,67 @@ export class AppMonitor {
       this.intervalId = null;
     }
 
-    const stoppedAt = new Date();
-    for (const [appName, app] of this.activeApps.entries()) {
-      this.endSession(appName, app, stoppedAt);
+    if (this.currentApp) {
+      this.endSession(this.currentApp.appName, this.currentApp, new Date());
+      this.currentApp = null;
     }
 
-    this.activeApps.clear();
-    this.lastSentAppName = null;
+    this.sendUpdateToRenderer(null, true);
     this.frontmostMonitoredAppName = null;
+    this.lastSentAppName = null;
     this.isChecking = false;
+    this.noMonitoredSince = null;
   }
 
   // 현재 앱 상태를 한 주기 점검
   private async checkActiveApp() {
     const now = Date.now();
-    const [rawAppName, runningAppNames] = await Promise.all([
-      this.getFrontmostAppName(),
-      this.getRunningAppNames(),
-    ]);
+    const rawAppName = await this.getFrontmostAppName();
 
     const frontmostApp = rawAppName ? resolveMonitoredAppName(rawAppName) : null;
     this.frontmostMonitoredAppName = frontmostApp;
-    if (frontmostApp) {
-      this.updateAppActivity(frontmostApp, now);
+    if (!frontmostApp) {
+      if (!this.currentApp) {
+        this.noMonitoredSince = null;
+        this.sendUpdateToRenderer(null);
+        return;
+      }
+
+      if (this.noMonitoredSince === null) {
+        this.noMonitoredSince = now;
+      }
+
+      // IDE 전환 사이의 짧은 공백(launcher/transition)은 같은 세션으로 유지
+      if (now - this.noMonitoredSince < INACTIVE_THRESHOLD_MS) {
+        this.sendUpdateToRenderer(this.toActiveApp(this.currentApp, now));
+        return;
+      }
+
+      this.endSession(this.currentApp.appName, this.currentApp, new Date(this.noMonitoredSince));
+      this.currentApp = null;
+      this.noMonitoredSince = null;
+      this.sendUpdateToRenderer(null, true);
+      return;
     }
 
-    const hadForceClosedApps =
-      runningAppNames !== null ? this.checkForceClosedApps(now, runningAppNames) : false;
-    const hadInactiveApps = this.checkInactiveApps(now);
-    const primaryApp = this.getMostRecentlyActiveApp(now);
+    this.noMonitoredSince = null;
 
-    this.sendUpdateToRenderer(primaryApp, hadForceClosedApps || hadInactiveApps);
+    if (!this.currentApp) {
+      this.currentApp = this.createTrackedApp(frontmostApp, now);
+      this.sendUpdateToRenderer(this.toActiveApp(this.currentApp, now), true);
+      return;
+    }
+
+    if (this.currentApp.appName !== frontmostApp) {
+      // IDE만 바뀐 경우 세션은 유지하고 앱만 전환 처리
+      this.currentApp.appName = frontmostApp;
+      this.currentApp.lastActiveTime = new Date(now);
+      this.sendUpdateToRenderer(this.toActiveApp(this.currentApp, now), true);
+      return;
+    }
+
+    this.currentApp.lastActiveTime = new Date(now);
+    this.sendUpdateToRenderer(this.toActiveApp(this.currentApp, now));
   }
 
   // 전면 앱 이름 조회
@@ -112,17 +141,6 @@ export class AppMonitor {
     }
   }
 
-  // 현재 실행 중 앱 목록 조회
-  private async getRunningAppNames(): Promise<string[] | null> {
-    try {
-      const { stdout } = await execAsync(RUNNING_APPS_SCRIPT);
-      return this.parseRunningAppNames(stdout);
-    } catch (error) {
-      this.logRunningAppsQueryError(error);
-      return null;
-    }
-  }
-
   // front 앱 조회 실패 로그를 제한해서 출력
   private logFrontAppQueryError(error: unknown) {
     const now = Date.now();
@@ -134,102 +152,23 @@ export class AppMonitor {
     this.lastFrontAppErrorLoggedAt = now;
   }
 
-  // 실행 중 앱 조회 실패 로그를 제한해서 출력
-  private logRunningAppsQueryError(error: unknown) {
-    const now = Date.now();
-    if (now - this.lastRunningAppsErrorLoggedAt < APP_QUERY_ERROR_LOG_INTERVAL_MS) {
-      return;
-    }
-
-    console.error("실행 중인 앱 정보를 가져오는데 실패했습니다:", error);
-    this.lastRunningAppsErrorLoggedAt = now;
-  }
-
   private parseBundleName(output: string): string | null {
-    const matched = output.match(/"CFBundleName"="(.+?)"/);
+    const matched =
+      output.match(/"(?:CFBundleName|kCFBundleNameKey)"="(.+?)"/) ??
+      output.match(/(?:CFBundleName|kCFBundleNameKey)="(.+?)"/);
     return matched?.[1]?.trim() ?? null;
-  }
-
-  private parseRunningAppNames(output: string): string[] {
-    const appNames: string[] = [];
-    const namePattern = /-"([^"]+)":/g;
-
-    for (const match of output.matchAll(namePattern)) {
-      const rawName = match[1];
-      if (!rawName) {
-        continue;
-      }
-
-      const normalized = this.normalizeLsappinfoName(rawName);
-      if (normalized) {
-        appNames.push(normalized);
-      }
-    }
-    return appNames;
   }
 
   private normalizeLsappinfoName(name: string): string {
     return name.replaceAll("_", " ").trim();
   }
 
-  // 대상 앱 활성 시간 갱신
-  private updateAppActivity(appName: string, now: number) {
-    const existing = this.activeApps.get(appName);
-    if (existing) {
-      existing.lastActiveTime = new Date(now);
-      return;
-    }
-
-    this.activeApps.set(appName, {
+  private createTrackedApp(appName: string, now: number): TrackedApp {
+    return {
       appName,
       sessionStartTime: new Date(now),
       lastActiveTime: new Date(now),
-    });
-  }
-
-  // 지정한 앱들을 추적 목록에서 제거
-  private removeTrackedApps(appNames: string[]) {
-    for (const appName of appNames) {
-      this.activeApps.delete(appName);
-    }
-  }
-
-  // 오래 비활성인 앱 세션 종료
-  private checkInactiveApps(now: number): boolean {
-    const appsToDelete: string[] = [];
-
-    for (const [appName, app] of this.activeApps.entries()) {
-      const timeSinceLastActive = now - app.lastActiveTime.getTime();
-      if (timeSinceLastActive > INACTIVE_THRESHOLD_MS) {
-        this.endSession(appName, app);
-        appsToDelete.push(appName);
-      }
-    }
-
-    this.removeTrackedApps(appsToDelete);
-    return appsToDelete.length > 0;
-  }
-
-  // 종료된 앱 세션 종료
-  private checkForceClosedApps(now: number, runningAppNames: string[]): boolean {
-    if (runningAppNames.length === 0) {
-      return false;
-    }
-
-    const appsToDelete: string[] = [];
-    for (const [appName, app] of this.activeApps.entries()) {
-      const isStillRunning = runningAppNames.some(runningAppName =>
-        isSameMonitoredAppName(appName, runningAppName)
-      );
-
-      if (!isStillRunning) {
-        this.endSession(appName, app, new Date(now));
-        appsToDelete.push(appName);
-      }
-    }
-
-    this.removeTrackedApps(appsToDelete);
-    return appsToDelete.length > 0;
+    };
   }
 
   // 내부 추적 정보를 렌더러 전달용 구조로 변환
@@ -241,27 +180,9 @@ export class AppMonitor {
     };
   }
 
-  // 가장 최근에 활성화된 앱 반환
-  private getMostRecentlyActiveApp(now: number): ActiveApp | null {
-    let latest: TrackedApp | null = null;
-
-    for (const app of this.activeApps.values()) {
-      if (!latest || app.lastActiveTime.getTime() > latest.lastActiveTime.getTime()) {
-        latest = app;
-      }
-    }
-
-    if (!latest) {
-      return null;
-    }
-
-    return this.toActiveApp(latest, now);
-  }
-
   // 단일 앱 세션 종료 기록
   private endSession(appName: string, app: TrackedApp, endTime: Date | null = null) {
-    const resolvedEndTime =
-      endTime ?? new Date(app.lastActiveTime.getTime() + INACTIVE_THRESHOLD_MS);
+    const resolvedEndTime = endTime ?? app.lastActiveTime;
     const duration = Math.max(0, resolvedEndTime.getTime() - app.sessionStartTime.getTime());
 
     const session: MonitoringSession = {
@@ -290,7 +211,11 @@ export class AppMonitor {
 
   // 현재 활성 앱 반환
   getActiveApp(): ActiveApp | null {
-    return this.getMostRecentlyActiveApp(Date.now());
+    if (!this.currentApp) {
+      return null;
+    }
+
+    return this.toActiveApp(this.currentApp, Date.now());
   }
 
   // 전면 모니터링 대상 앱 이름 반환
