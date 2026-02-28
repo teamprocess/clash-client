@@ -18,8 +18,6 @@ export const GroupFormModal = ({
   isJoining,
   selectedType,
   onTypeSelect,
-  selectedGroupId,
-  setSelectedGroupId,
 }: GroupFormModalProps) => {
   const [activeTab, setActiveTab] = useState<"join" | "create">("join");
   const tabsRef = useRef<HTMLDivElement>(null);
@@ -119,44 +117,44 @@ export const GroupFormModal = ({
                 ) : groups.length === 0 ? (
                   <div>그룹이 없습니다.</div>
                 ) : (
-                  groups.map(group => (
-                    <S.GroupContainer
-                      key={group.id}
-                      $isSelected={selectedGroupId === group.id}
-                      $isMember={group.isMember}
-                      onClick={group.isMember ? undefined : () => setSelectedGroupId(group.id)}
-                    >
-                      <S.GroupHeader>
-                        <S.GroupHeaderTextBox>
-                          <S.GroupBadge>{GROUP_CATEGORY_LABELS[group.category]}</S.GroupBadge>
-                          <S.GroupName>{group.name}</S.GroupName>
-                        </S.GroupHeaderTextBox>
-                        <S.GroupDescription>{group.description}</S.GroupDescription>
-                      </S.GroupHeader>
-                      <S.GroupFooter>
-                        <S.GroupMembers>
-                          <span>{group.currentMemberCount}</span> / {group.maxMembers}
-                        </S.GroupMembers>
-                        <S.GroupJoinButton
-                          onClick={async e => {
-                            e.stopPropagation();
-                            if (group.passwordRequired) {
-                              const password = prompt("비밀번호를 입력하세요:");
-                              if (password) {
-                                await onJoinSubmit(group.id, password);
+                  <>
+                    {groups.map(group => (
+                      <S.GroupContainer key={group.id} $isMember={group.isMember}>
+                        <S.GroupHeader>
+                          <S.GroupHeaderTextBox>
+                            <S.GroupBadge>{GROUP_CATEGORY_LABELS[group.category]}</S.GroupBadge>
+                            <S.GroupName>{group.name}</S.GroupName>
+                          </S.GroupHeaderTextBox>
+                          <S.GroupDescription>{group.description}</S.GroupDescription>
+                        </S.GroupHeader>
+                        <S.GroupFooter>
+                          <S.GroupMembers>
+                            <span>{group.currentMemberCount}</span> / {group.maxMembers}
+                          </S.GroupMembers>
+                          <S.GroupJoinButton
+                            onClick={async e => {
+                              e.stopPropagation();
+                              if (group.passwordRequired) {
+                                const password = prompt("비밀번호를 입력하세요:");
+                                if (password) {
+                                  await onJoinSubmit(group.id, password);
+                                }
+                              } else {
+                                await onJoinSubmit(group.id);
                               }
-                            } else {
-                              await onJoinSubmit(group.id);
-                            }
-                          }}
-                          disabled={isJoining || group.isMember}
-                          $isMember={group.isMember}
-                        >
-                          {group.isMember ? "가입됨" : isJoining ? "가입 중..." : "가입"}
-                        </S.GroupJoinButton>
-                      </S.GroupFooter>
-                    </S.GroupContainer>
-                  ))
+                            }}
+                            disabled={isJoining || group.isMember}
+                            $isMember={group.isMember}
+                          >
+                            {group.isMember ? "가입됨" : isJoining ? "가입 중..." : "가입"}
+                          </S.GroupJoinButton>
+                        </S.GroupFooter>
+                      </S.GroupContainer>
+                    ))}
+                    {Array.from({ length: Math.max(0, 6 - groups.length) }).map((_, index) => (
+                      <S.GroupPlaceholder key={`group-placeholder-${index}`} aria-hidden />
+                    ))}
+                  </>
                 )}
               </S.Groups>
             </S.GroupsWrapper>
