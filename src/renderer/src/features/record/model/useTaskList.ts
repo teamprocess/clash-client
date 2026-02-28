@@ -1,6 +1,7 @@
 import { useRef, useState } from "react";
 import { useRecordStore } from "./recordStore";
 import { recordApi, recordQueryKeys, useRecordTodayQuery } from "@/entities/record";
+import type { TaskRecordSession } from "@/entities/record";
 import { getErrorMessage, queryClient } from "@/shared/lib";
 
 type EditMode = "none" | "add" | "edit";
@@ -25,6 +26,19 @@ export const useTaskList = () => {
     todayResponse.data?.sessions.some(
       session => session.endedAt === null && session.recordType === "ACTIVITY"
     )
+  );
+  const activeTaskSessionId =
+    todayResponse?.success && todayResponse.data
+      ? ((
+          todayResponse.data.sessions.find(
+            (session): session is TaskRecordSession =>
+              session.endedAt === null && session.recordType === "TASK"
+          ) ?? null
+        )?.task.id ?? null)
+      : null;
+  const isDeletingActiveTask = Boolean(
+    deleteTargetId !== null &&
+    (activeTaskId === deleteTargetId || activeTaskSessionId === deleteTargetId)
   );
 
   const handlePlayPauseClick = async (taskId: number) => {
@@ -149,6 +163,7 @@ export const useTaskList = () => {
     taskName,
     openMenuTaskId,
     deleteTargetId,
+    isDeletingActiveTask,
     activitySwitchTargetTaskId,
     isSwitchingFromActivity,
     menuRef,

@@ -1,12 +1,13 @@
 import { Dialog } from "@/shared/ui";
 import type { ButtonVariant } from "@/shared/ui/button";
 import { ModalActions } from "@/shared/ui/dialog-actions";
+import type { ReactNode } from "react";
 import * as S from "./ConfirmDialog.style";
 
 export interface ConfirmDialogProps {
   isOpen: boolean;
   title: string;
-  description: string;
+  description: ReactNode;
   confirmMessage?: string;
   confirmLabel?: string;
   cancelLabel?: string;
@@ -43,7 +44,7 @@ export const ConfirmDialog = ({
           confirmLabel={isConfirming ? `${confirmLabel} 중...` : confirmLabel}
           confirmDisabled={isConfirming}
           confirmVariant={confirmVariant}
-          size="md"
+          size="sm"
         />
       </S.Content>
     </Dialog>
