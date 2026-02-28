@@ -23,7 +23,7 @@ export const ModalActions = ({
   confirmDisabled = false,
   confirmType = "button",
   confirmVariant = "primary",
-  size = "md",
+  size = "sm",
 }: ModalActionsProps) => {
   return (
     <S.ActionRow>
