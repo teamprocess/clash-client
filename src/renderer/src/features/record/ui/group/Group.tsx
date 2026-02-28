@@ -77,64 +77,74 @@ export const Group = () => {
     <>
       <S.GroupContainer>
         <S.GroupWrapper>
-          <S.GroupHeader>
-            <S.MemberCountBox>
-              <S.ActiveMemberCount>
-                {currentGroup ? currentGroup.currentMemberCount : 0}
-              </S.ActiveMemberCount>
-              &nbsp;/ {currentGroup ? currentGroup.maxMembers : 0}
-            </S.MemberCountBox>
-            <S.GroupNameBox>
-              {groups.length > 1 && (
-                <S.IconButton type="button" onClick={handlePrevGroup}>
-                  <S.ReverseArrowIcon />
-                </S.IconButton>
-              )}
-              <S.GroupName>{currentGroup ? currentGroup.name : "소속된 그룹 없음"}</S.GroupName>
-              {groups.length > 1 && (
-                <S.IconButton type="button" onClick={handleNextGroup}>
-                  <S.ArrowIcon />
-                </S.IconButton>
-              )}
-              {currentGroup && (
-                <S.MoreIconWrapper ref={isMenuOpen ? menuRef : null}>
-                  <S.IconButton onClick={() => handleMoreClick()}>
-                    <S.MoreIcon />
-                  </S.IconButton>
-                  <Popover isOpen={isMenuOpen} onClose={handleCloseMenu} anchorRef={menuRef}>
-                    <S.MenuList>
-                      {isOwner ? (
-                        <>
-                          <S.MenuItem onClick={handleEditGroupRequest}>그룹 수정</S.MenuItem>
-                          <S.MenuItem onClick={() => handleDeleteGroupRequest("delete")}>
-                            그룹 삭제
+          {!currentGroup ? (
+            <S.EmptyGroupState>
+              <S.EmptyGroupIcon />
+              <S.EmptyGroupTextBox>
+                <S.EmptyGroupTitle>현재 그룹이 존재하지 않습니다.</S.EmptyGroupTitle>
+                <S.EmptyGroupDescription>
+                  그룹을 추가하여 함께 경쟁하며 성장해보세요!
+                </S.EmptyGroupDescription>
+              </S.EmptyGroupTextBox>
+            </S.EmptyGroupState>
+          ) : (
+            <>
+              <S.GroupHeader>
+                <S.MemberCountBox>
+                  <S.ActiveMemberCount>{currentGroup.currentMemberCount}</S.ActiveMemberCount>
+                  &nbsp;/ {currentGroup.maxMembers}
+                </S.MemberCountBox>
+                <S.GroupNameBox>
+                  {groups.length > 1 && (
+                    <S.IconButton type="button" onClick={handlePrevGroup}>
+                      <S.ReverseArrowIcon />
+                    </S.IconButton>
+                  )}
+                  <S.GroupName>{currentGroup.name}</S.GroupName>
+                  {groups.length > 1 && (
+                    <S.IconButton type="button" onClick={handleNextGroup}>
+                      <S.ArrowIcon />
+                    </S.IconButton>
+                  )}
+                  <S.MoreIconWrapper ref={isMenuOpen ? menuRef : null}>
+                    <S.IconButton onClick={() => handleMoreClick()}>
+                      <S.MoreIcon />
+                    </S.IconButton>
+                    <Popover isOpen={isMenuOpen} onClose={handleCloseMenu} anchorRef={menuRef}>
+                      <S.MenuList>
+                        {isOwner ? (
+                          <>
+                            <S.MenuItem onClick={handleEditGroupRequest}>그룹 수정</S.MenuItem>
+                            <S.MenuItem onClick={() => handleDeleteGroupRequest("delete")}>
+                              그룹 삭제
+                            </S.MenuItem>
+                          </>
+                        ) : (
+                          <S.MenuItem onClick={() => handleDeleteGroupRequest("quit")}>
+                            그룹 탈퇴
                           </S.MenuItem>
-                        </>
-                      ) : (
-                        <S.MenuItem onClick={() => handleDeleteGroupRequest("quit")}>
-                          그룹 탈퇴
-                        </S.MenuItem>
-                      )}
-                    </S.MenuList>
-                  </Popover>
-                </S.MoreIconWrapper>
-              )}
-            </S.GroupNameBox>
-          </S.GroupHeader>
-          <S.MemberContent>
-            {groupMembers.map(member => (
-              <S.MemberBox key={member.id} $isActive={member.isStudying}>
-                <S.FireIon />
-                <S.MemberTextBox>
-                  <S.MemberName>{member.name}</S.MemberName>
-                  <S.MemberStudyTime>{formatTime(member.studyTime)}</S.MemberStudyTime>
-                </S.MemberTextBox>
-              </S.MemberBox>
-            ))}
-            <S.PlusIconWrapper onClick={handleOpenFormModal}>
-              <S.PlusIcon />
-            </S.PlusIconWrapper>
-          </S.MemberContent>
+                        )}
+                      </S.MenuList>
+                    </Popover>
+                  </S.MoreIconWrapper>
+                </S.GroupNameBox>
+              </S.GroupHeader>
+              <S.MemberContent>
+                {groupMembers.map(member => (
+                  <S.MemberBox key={member.id} $isActive={member.isStudying}>
+                    <S.FireIon />
+                    <S.MemberTextBox>
+                      <S.MemberName>{member.name}</S.MemberName>
+                      <S.MemberStudyTime>{formatTime(member.studyTime)}</S.MemberStudyTime>
+                    </S.MemberTextBox>
+                  </S.MemberBox>
+                ))}
+              </S.MemberContent>
+            </>
+          )}
+          <S.PlusIconWrapper onClick={handleOpenFormModal}>
+            <S.PlusIcon />
+          </S.PlusIconWrapper>
         </S.GroupWrapper>
       </S.GroupContainer>
       <GroupFormModal {...formModal} />
