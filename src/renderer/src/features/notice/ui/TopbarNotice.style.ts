@@ -245,7 +245,7 @@ export const ChoiceButton = styled.button`
   cursor: pointer;
 
   &:disabled {
-    cursor: not-allowed;
+    cursor: default;
     opacity: 0.5;
   }
 `;
