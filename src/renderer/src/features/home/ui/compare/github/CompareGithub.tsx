@@ -1,6 +1,27 @@
 import * as S from "./CompareGithub.style";
 import { GrowthRate } from "@/features/home/ui/compare/growth-rate/GrowthRate";
 import { CompareResponse } from "@/entities/home/model/useCompare.types";
+import { Tooltip } from "@/shared/ui";
+
+const renderRepositoryName = (
+  name: string | null | undefined,
+  emptyText: "현재 최다 커밋 레포지토리가 없습니다." | "현재 최다 PR 레포지토리가 없습니다."
+) => {
+  const repositoryText = name ?? emptyText;
+
+  return (
+    <Tooltip
+      content={repositoryText}
+      position="top"
+      maxWidth="10rem"
+      wrapperStyle={{ maxWidth: "39%", minWidth: 0 }}
+    >
+      <S.RepositoryName>
+        <span>{repositoryText}</span>
+      </S.RepositoryName>
+    </Tooltip>
+  );
+};
 
 export const Github = ({ today, yesterday }: CompareResponse) => {
   return (
@@ -28,18 +49,10 @@ export const Github = ({ today, yesterday }: CompareResponse) => {
                 <S.CalculateInfoBox>
                   <S.FireIcon />
                   <S.ExplainText>최다 커밋 레포지토리</S.ExplainText>
-                  <S.RepositoryName
-                    data-tooltip={
-                      yesterday?.commit.representationRepo ??
-                      "현재 최다 커밋 레포지토리가 없습니다."
-                    }
-                    tabIndex={0}
-                  >
-                    <span>
-                      {yesterday?.commit.representationRepo ??
-                        "현재 최다 커밋 레포지토리가 없습니다."}
-                    </span>
-                  </S.RepositoryName>
+                  {renderRepositoryName(
+                    yesterday?.commit.representationRepo,
+                    "현재 최다 커밋 레포지토리가 없습니다."
+                  )}
                 </S.CalculateInfoBox>
                 <S.WidthLine />
                 <S.CalculateInfoBox>
@@ -77,18 +90,10 @@ export const Github = ({ today, yesterday }: CompareResponse) => {
                 <S.CalculateInfoBox>
                   <S.FireIcon />
                   <S.ExplainText>최다 PR 레포지토리</S.ExplainText>
-                  <S.RepositoryName
-                    data-tooltip={
-                      yesterday?.pullRequest.representationRepo ??
-                      "현재 최다 PR 레포지토리가 없습니다."
-                    }
-                    tabIndex={0}
-                  >
-                    <span>
-                      {yesterday?.pullRequest.representationRepo ??
-                        "현재 최다 PR 레포지토리가 없습니다."}
-                    </span>
-                  </S.RepositoryName>
+                  {renderRepositoryName(
+                    yesterday?.pullRequest.representationRepo,
+                    "현재 최다 PR 레포지토리가 없습니다."
+                  )}
                 </S.CalculateInfoBox>
                 <S.WidthLine />
                 <S.CalculateInfoBox>
@@ -156,16 +161,10 @@ export const Github = ({ today, yesterday }: CompareResponse) => {
                 <S.CalculateInfoBox>
                   <S.FireIcon />
                   <S.ExplainText>최다 커밋 레포지토리</S.ExplainText>
-                  <S.RepositoryName
-                    data-tooltip={
-                      today?.commit.representationRepo ?? "현재 최다 커밋 레포지토리가 없습니다."
-                    }
-                    tabIndex={0}
-                  >
-                    <span>
-                      {today?.commit.representationRepo ?? "현재 최다 커밋 레포지토리가 없습니다."}
-                    </span>
-                  </S.RepositoryName>
+                  {renderRepositoryName(
+                    today?.commit.representationRepo,
+                    "현재 최다 커밋 레포지토리가 없습니다."
+                  )}
                 </S.CalculateInfoBox>
                 <S.WidthLine />
                 <S.CalculateInfoBox>
@@ -210,17 +209,10 @@ export const Github = ({ today, yesterday }: CompareResponse) => {
                 <S.CalculateInfoBox>
                   <S.FireIcon />
                   <S.ExplainText>최다 PR 레포지토리</S.ExplainText>
-                  <S.RepositoryName
-                    data-tooltip={
-                      today?.pullRequest.representationRepo ?? "현재 최다 PR 레포지토리가 없습니다."
-                    }
-                    tabIndex={0}
-                  >
-                    <span>
-                      {today?.pullRequest.representationRepo ??
-                        "현재 최다 PR 레포지토리가 없습니다."}
-                    </span>
-                  </S.RepositoryName>
+                  {renderRepositoryName(
+                    today?.pullRequest.representationRepo,
+                    "현재 최다 PR 레포지토리가 없습니다."
+                  )}
                 </S.CalculateInfoBox>
                 <S.WidthLine />
                 <S.CalculateInfoBox>
