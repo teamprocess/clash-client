@@ -1,11 +1,12 @@
 import styled from "styled-components";
 import { font } from "@/shared/config/font";
+import Cry from "../../../assets/cry.svg";
 
 export const ModalContent = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
-  padding: 1rem;
+  gap: 2rem;
+  padding: 1rem 1rem 0 1rem;
   height: 100%;
   width: 100%;
 `;
@@ -64,34 +65,30 @@ export const FormContainer = styled.div`
 
 export const Groups = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(16rem, 16rem));
-  grid-auto-rows: minmax(8rem, auto);
-  justify-content: flex-start;
-  align-content: flex-start;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-auto-rows: minmax(10rem, auto);
+  align-content: center;
   gap: 2rem;
   width: 100%;
   height: 100%;
 `;
 
-export const GroupContainer = styled.div<{ $isSelected?: boolean; $isMember?: boolean }>`
+export const GroupContainer = styled.div<{ $isMember?: boolean }>`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  min-height: 8rem;
   border-radius: 1rem;
   padding: 1rem;
-  border: 3px solid
-    ${({ theme, $isSelected }) => ($isSelected ? theme.primary.normal : "transparent")};
   background-color: ${({ theme }) => theme.label.disable};
-  cursor: ${({ $isMember }) => ($isMember ? "default" : "pointer")};
+  opacity: ${({ $isMember }) => ($isMember ? 0.5 : 1)};
+`;
 
-  &:hover {
-    border-color: ${({ theme, $isMember, $isSelected }) => {
-      if ($isMember) {
-        return $isSelected ? theme.primary.normal : "transparent";
-      }
-      return theme.primary.normal;
-    }};
-  }
+export const GroupPlaceholder = styled.div`
+  min-height: 8rem;
+  border-radius: 1rem;
+  visibility: hidden;
+  pointer-events: none;
 `;
 
 export const GroupHeader = styled.div`
@@ -148,15 +145,11 @@ export const GroupJoinButton = styled.button<{ $isMember?: boolean }>`
   ${font.body.medium};
   padding: 0.25rem 0.75rem;
   border-radius: 0.5rem;
-  background-color: ${({ theme }) => theme.line.normal};
+  background-color: ${({ theme, $isMember }) =>
+    $isMember ? theme.line.normal : theme.primary.normal};
   color: ${({ theme }) => theme.label.normal};
   border: none;
   cursor: ${({ $isMember }) => ($isMember ? "default" : "pointer")};
-
-  &:hover {
-    background-color: ${({ theme, $isMember }) =>
-      $isMember ? theme.line.normal : theme.primary.normal};
-  }
 `;
 
 export const CategoryFilters = styled.div`
@@ -196,12 +189,46 @@ export const GroupsWrapper = styled.div`
   overflow-y: auto;
 `;
 
+export const EmptyState = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 1rem;
+  width: 100%;
+  height: 100%;
+`;
+
+export const EmptyIcon = styled(Cry)`
+  width: 3.25rem;
+  height: 3.25rem;
+`;
+
+export const EmptyTextBox = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+`;
+
+export const EmptyTitle = styled.p`
+  margin: 0;
+  ${font.headline1.bold};
+  color: ${({ theme }) => theme.label.normal};
+`;
+
+export const EmptyDescription = styled.p`
+  margin: 0;
+  ${font.body.medium};
+  color: ${({ theme }) => theme.label.assistive};
+`;
+
 export const Pagination = styled.div`
   display: flex;
   gap: 0.5rem;
   align-items: center;
   justify-content: center;
-  padding: 1rem 0;
+  padding: 0;
 `;
 
 export const PageButton = styled.button<{ $isActive?: boolean }>`
