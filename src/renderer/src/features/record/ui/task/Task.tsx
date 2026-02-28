@@ -11,6 +11,7 @@ export const Task = () => {
     taskName,
     openMenuTaskId,
     deleteTargetId,
+    isDeletingActiveTask,
     activitySwitchTargetTaskId,
     isSwitchingFromActivity,
     menuRef,
@@ -118,10 +119,20 @@ export const Task = () => {
       </S.TaskContainer>
       <ConfirmDialog
         isOpen={deleteTargetId !== null}
-        title="과목 삭제"
-        description="정말 해당 과목을 삭제하시겠습니까?"
+        title={isDeletingActiveTask ? "진행 중 과목 삭제" : "과목 삭제"}
+        description={
+          isDeletingActiveTask ? (
+            <>
+              현재 진행 중인 세션이 있습니다.
+              <br />
+              과목을 삭제하면 세션이 종료됩니다.
+            </>
+          ) : (
+            "정말 해당 과목을 삭제하시겠습니까?"
+          )
+        }
         confirmMessage="삭제 시 해당 과목의 데이터가 모두 삭제됩니다"
-        confirmLabel="삭제"
+        confirmLabel={isDeletingActiveTask ? "종료 후 삭제" : "삭제"}
         confirmVariant="danger"
         onClose={handleCancelDelete}
         onConfirm={handleConfirmDelete}
