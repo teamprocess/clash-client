@@ -42,6 +42,17 @@ export const Input = styled.input`
   &::placeholder {
     color: ${({ theme }) => theme.label.assistive};
   }
+
+  &[type="number"] {
+    appearance: textfield;
+    -moz-appearance: textfield;
+  }
+
+  &[type="number"]::-webkit-outer-spin-button,
+  &[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
 `;
 
 export const PasswordInputWrapper = styled.div<{ $hasAction?: boolean }>`
@@ -79,23 +90,42 @@ export const PasswordChangeButtonInside = styled.button`
 `;
 
 export const SlideButtonBox = styled.div`
+  position: relative;
+  isolation: isolate;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 0.5rem 1rem;
+  justify-content: stretch;
+  padding: 0.25rem;
   height: 3rem;
   background-color: ${({ theme }) => theme.label.disable};
   border-radius: 0.5rem;
 `;
 
+export const SlideActiveIndicator = styled.span<{ $activeIndex: number; $count: number }>`
+  position: absolute;
+  top: 0.25rem;
+  bottom: 0.25rem;
+  left: 0.25rem;
+  width: ${({ $count }) => `calc((100% - 0.5rem) / ${$count})`};
+  border-radius: 0.5rem;
+  background-color: ${({ theme }) => theme.line.normal};
+  transform: translateX(${({ $activeIndex }) => `${$activeIndex * 100}%`});
+  transition: transform 0.2s ease;
+  z-index: 0;
+`;
+
 export const SlideButton = styled.button<{ $isActive?: boolean }>`
+  position: relative;
+  z-index: 1;
+  flex: 1;
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: ${({ theme, $isActive }) => ($isActive ? theme.line.normal : "transparent")};
-  color: ${palette.neutral[97]};
+  background-color: transparent;
+  border: none;
+  color: ${({ theme, $isActive }) => ($isActive ? theme.label.normal : theme.label.assistive)};
   ${font.headline2.medium};
-  min-width: 5rem;
+  min-width: 0;
   padding: 0.25rem 0.75rem;
   border-radius: 0.5rem;
   cursor: pointer;

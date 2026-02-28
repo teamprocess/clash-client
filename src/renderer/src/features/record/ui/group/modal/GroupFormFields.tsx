@@ -39,6 +39,9 @@ export const GroupFormFields = ({
   const typeInputId = `${idPrefix}-type-input`;
   const maxMembersInputId = `${idPrefix}-max-members-input`;
   const descriptionInputId = `${idPrefix}-description-input`;
+  const activeCategory = selectedType ?? GROUP_CATEGORIES[0];
+  const activeCategoryIndex = Math.max(0, GROUP_CATEGORIES.indexOf(activeCategory));
+  const categoryCount = GROUP_CATEGORIES.length;
 
   return (
     <S.FieldsContainer>
@@ -81,6 +84,7 @@ export const GroupFormFields = ({
         <S.InputBox>
           <S.Label htmlFor={typeInputId}>{typeLabel}</S.Label>
           <S.SlideButtonBox id={typeInputId}>
+            <S.SlideActiveIndicator $activeIndex={activeCategoryIndex} $count={categoryCount} />
             {GROUP_CATEGORIES.map(category => (
               <S.SlideButton
                 key={category}
