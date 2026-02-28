@@ -1,7 +1,7 @@
 import * as S from "./Task.style";
 import { formatTime } from "@/shared/lib";
 import { useTaskList } from "../../model/useTaskList";
-import { Button, ConfirmDialog, Popover } from "@/shared/ui";
+import { Button, ConfirmDialog, Popover, Tooltip } from "@/shared/ui";
 
 export const Task = () => {
   const {
@@ -9,6 +9,11 @@ export const Task = () => {
     editMode,
     editingTaskId,
     taskName,
+    taskNameInputRef,
+    taskNameInputMaxLength,
+    taskNameErrorMessage,
+    isTaskNameInvalid,
+    shouldShowTaskNameTooltip,
     openMenuTaskId,
     deleteTargetId,
     isDeletingActiveTask,
@@ -17,7 +22,9 @@ export const Task = () => {
     menuRef,
     isTaskActive,
     getTaskStudyTime,
-    setTaskName,
+    handleTaskNameChange,
+    handleTaskNameKeyDown,
+    handleSaveClick,
     handlePlayPauseClick,
     handleCloseActivitySwitchDialog,
     handleConfirmActivitySwitch,
@@ -27,10 +34,29 @@ export const Task = () => {
     handleDeleteRequest,
     handleAddClick,
     handleCancelEdit,
-    handleSaveTask,
     handleCancelDelete,
     handleConfirmDelete,
   } = useTaskList();
+
+  const renderTaskNameInput = () => (
+    <Tooltip
+      content={taskNameErrorMessage ?? ""}
+      position="top"
+      open={shouldShowTaskNameTooltip}
+      triggerOnHover={false}
+      wrapperStyle={{ width: "100%", maxWidth: "100%" }}
+    >
+      <S.TaskTextInput
+        ref={taskNameInputRef}
+        placeholder="과목명을 입력하세요."
+        value={taskName}
+        maxLength={taskNameInputMaxLength}
+        aria-invalid={isTaskNameInvalid}
+        onChange={handleTaskNameChange}
+        onKeyDown={handleTaskNameKeyDown}
+      />
+    </Tooltip>
+  );
 
   return (
     <>
@@ -45,19 +71,13 @@ export const Task = () => {
             if (isEditing) {
               return (
                 <S.TaskItem key={task.id}>
-                  <S.TaskLeftBox>
-                    <S.TaskTextInput
-                      placeholder="과목명을 입력하세요."
-                      value={taskName}
-                      onChange={e => setTaskName(e.target.value)}
-                    />
-                  </S.TaskLeftBox>
+                  <S.TaskInputBox>{renderTaskNameInput()}</S.TaskInputBox>
                   <S.TaskRightBox>
                     <S.ButtonBox>
                       <Button variant="secondary" size="sm" onClick={handleCancelEdit}>
                         취소
                       </Button>
-                      <Button variant="primary" size="sm" onClick={handleSaveTask}>
+                      <Button variant="primary" size="sm" onClick={handleSaveClick}>
                         저장
                       </Button>
                     </S.ButtonBox>
@@ -95,19 +115,13 @@ export const Task = () => {
           })}
           {editMode === "add" && (
             <S.TaskItem>
-              <S.TaskLeftBox>
-                <S.TaskTextInput
-                  placeholder="과목명을 입력하세요."
-                  value={taskName}
-                  onChange={e => setTaskName(e.target.value)}
-                />
-              </S.TaskLeftBox>
+              <S.TaskInputBox>{renderTaskNameInput()}</S.TaskInputBox>
               <S.TaskRightBox>
                 <S.ButtonBox>
                   <Button variant="secondary" size="sm" onClick={handleCancelEdit}>
                     취소
                   </Button>
-                  <Button variant="primary" size="sm" onClick={handleSaveTask}>
+                  <Button variant="primary" size="sm" onClick={handleSaveClick}>
                     저장
                   </Button>
                 </S.ButtonBox>
