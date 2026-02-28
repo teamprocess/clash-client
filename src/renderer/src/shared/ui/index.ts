@@ -16,3 +16,5 @@ export { SearchInput } from "./search-input";
 export { MyRivalUsers } from "./myrival-users/MyRivalUsers";
 export { UserRanking } from "./home-ranking-user/UserRanking";
 export { GrowthRate } from "./growth-rate/GrowthRate";
+export { RivalCompetitionLineChart } from "./rival-compete-chart/RivalCompeteLineChart";
+export { MyCompetitionLineChart } from "./my-compete-chart/MyCompetitionLineChart";
