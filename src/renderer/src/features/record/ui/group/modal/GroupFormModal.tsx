@@ -160,7 +160,7 @@ export const GroupFormModal = ({
 
   return (
     <>
-      <Dialog width={64} height={42} isOpen={isOpen} onClose={handleCloseGroupFormModal} gap={3}>
+      <Dialog width={64} height={40} isOpen={isOpen} onClose={handleCloseGroupFormModal} gap={3}>
         <S.ModalContent>
           <S.TabHeader>
             <S.Tabs ref={tabsRef}>
