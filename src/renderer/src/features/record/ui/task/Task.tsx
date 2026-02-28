@@ -1,4 +1,3 @@
-import { useEffect, useRef, useState } from "react";
 import * as S from "./Task.style";
 import { formatTime } from "@/shared/lib";
 import { useTaskList } from "../../model/useTaskList";
@@ -10,8 +9,11 @@ export const Task = () => {
     editMode,
     editingTaskId,
     taskName,
+    taskNameInputRef,
+    taskNameInputMaxLength,
     taskNameErrorMessage,
     isTaskNameInvalid,
+    shouldShowTaskNameTooltip,
     openMenuTaskId,
     deleteTargetId,
     isDeletingActiveTask,
@@ -20,7 +22,9 @@ export const Task = () => {
     menuRef,
     isTaskActive,
     getTaskStudyTime,
-    setTaskName,
+    handleTaskNameChange,
+    handleTaskNameKeyDown,
+    handleSaveClick,
     handlePlayPauseClick,
     handleCloseActivitySwitchDialog,
     handleConfirmActivitySwitch,
@@ -30,72 +34,25 @@ export const Task = () => {
     handleDeleteRequest,
     handleAddClick,
     handleCancelEdit,
-    handleSaveTask,
     handleCancelDelete,
     handleConfirmDelete,
   } = useTaskList();
-  const [isTaskNameTooltipOpen, setIsTaskNameTooltipOpen] = useState(false);
-  const isTaskNameTooLong = taskName.trim().length > 13;
-  const taskNameInputRef = useRef<HTMLInputElement>(null);
 
-  useEffect(() => {
-    if (editMode !== "none") {
-      taskNameInputRef.current?.focus();
-    }
-  }, [editMode, editingTaskId]);
-
-  const handleSaveClick = async () => {
-    const isSaved = await handleSaveTask();
-    setIsTaskNameTooltipOpen(!isSaved);
-  };
-
-  const handleTaskNameKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.nativeEvent.isComposing) {
-      return;
-    }
-
-    if (event.key === "Enter") {
-      event.preventDefault();
-      void handleSaveClick();
-    }
-  };
-
-  const handleCancelEditClick = () => {
-    setIsTaskNameTooltipOpen(false);
-    handleCancelEdit();
-  };
-
-  const handleAddClickWithReset = () => {
-    setIsTaskNameTooltipOpen(false);
-    handleAddClick();
-  };
-
-  const handleEditClickWithReset = (taskId: number) => {
-    setIsTaskNameTooltipOpen(false);
-    handleEditClick(taskId);
-  };
-
-  const renderTaskNameInput = (inputRef?: React.Ref<HTMLInputElement>) => (
+  const renderTaskNameInput = () => (
     <Tooltip
       content={taskNameErrorMessage ?? ""}
       position="top"
-      open={Boolean(taskNameErrorMessage) && (isTaskNameTooltipOpen || isTaskNameTooLong)}
+      open={shouldShowTaskNameTooltip}
       triggerOnHover={false}
       wrapperStyle={{ width: "100%", maxWidth: "100%" }}
     >
       <S.TaskTextInput
-        ref={inputRef}
+        ref={taskNameInputRef}
         placeholder="과목명을 입력하세요."
         value={taskName}
-        maxLength={14}
+        maxLength={taskNameInputMaxLength}
         aria-invalid={isTaskNameInvalid}
-        onChange={e => {
-          const nextTaskName = e.target.value;
-          setTaskName(nextTaskName);
-          if (nextTaskName.trim().length <= 13) {
-            setIsTaskNameTooltipOpen(false);
-          }
-        }}
+        onChange={handleTaskNameChange}
         onKeyDown={handleTaskNameKeyDown}
       />
     </Tooltip>
@@ -114,10 +71,10 @@ export const Task = () => {
             if (isEditing) {
               return (
                 <S.TaskItem key={task.id}>
-                  <S.TaskInputBox>{renderTaskNameInput(taskNameInputRef)}</S.TaskInputBox>
+                  <S.TaskInputBox>{renderTaskNameInput()}</S.TaskInputBox>
                   <S.TaskRightBox>
                     <S.ButtonBox>
-                      <Button variant="secondary" size="sm" onClick={handleCancelEditClick}>
+                      <Button variant="secondary" size="sm" onClick={handleCancelEdit}>
                         취소
                       </Button>
                       <Button variant="primary" size="sm" onClick={handleSaveClick}>
@@ -145,9 +102,7 @@ export const Task = () => {
                     </S.IconButton>
                     <Popover isOpen={isMenuOpen} onClose={handleCloseMenu} anchorRef={menuRef}>
                       <S.MenuList>
-                        <S.MenuItem onClick={() => handleEditClickWithReset(task.id)}>
-                          과목 수정
-                        </S.MenuItem>
+                        <S.MenuItem onClick={() => handleEditClick(task.id)}>과목 수정</S.MenuItem>
                         <S.MenuItem onClick={() => handleDeleteRequest(task.id)}>
                           과목 삭제
                         </S.MenuItem>
@@ -160,10 +115,10 @@ export const Task = () => {
           })}
           {editMode === "add" && (
             <S.TaskItem>
-              <S.TaskInputBox>{renderTaskNameInput(taskNameInputRef)}</S.TaskInputBox>
+              <S.TaskInputBox>{renderTaskNameInput()}</S.TaskInputBox>
               <S.TaskRightBox>
                 <S.ButtonBox>
-                  <Button variant="secondary" size="sm" onClick={handleCancelEditClick}>
+                  <Button variant="secondary" size="sm" onClick={handleCancelEdit}>
                     취소
                   </Button>
                   <Button variant="primary" size="sm" onClick={handleSaveClick}>
@@ -173,7 +128,7 @@ export const Task = () => {
               </S.TaskRightBox>
             </S.TaskItem>
           )}
-          <S.AddTaskButton onClick={handleAddClickWithReset}>+ 과목 추가</S.AddTaskButton>
+          <S.AddTaskButton onClick={handleAddClick}>+ 과목 추가</S.AddTaskButton>
         </S.TaskBox>
       </S.TaskContainer>
       <ConfirmDialog
