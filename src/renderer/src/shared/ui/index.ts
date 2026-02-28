@@ -7,6 +7,8 @@ export { Dialog } from "./dialog";
 export type { DialogProps } from "./dialog";
 export { Popover } from "./popover";
 export type { PopoverProps } from "./popover";
+export { Tooltip } from "./tooltip";
+export type { TooltipPosition, TooltipProps } from "./tooltip";
 export { ModalActions } from "./dialog-actions";
 export type { ModalActionsProps } from "./dialog-actions";
 export { AddRivalsDialog, DeleteRivalsDialog } from "./rival-management";
