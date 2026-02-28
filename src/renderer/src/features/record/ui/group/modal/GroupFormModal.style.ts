@@ -4,8 +4,8 @@ import { font } from "@/shared/config/font";
 export const ModalContent = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
-  padding: 1rem;
+  gap: 2.5rem;
+  padding: 1rem 1rem 0 1rem;
   height: 100%;
   width: 100%;
 `;
@@ -64,34 +64,30 @@ export const FormContainer = styled.div`
 
 export const Groups = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(16rem, 16rem));
-  grid-auto-rows: minmax(8rem, auto);
-  justify-content: flex-start;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-auto-rows: minmax(10rem, auto);
   align-content: flex-start;
   gap: 2rem;
   width: 100%;
   height: 100%;
 `;
 
-export const GroupContainer = styled.div<{ $isSelected?: boolean; $isMember?: boolean }>`
+export const GroupContainer = styled.div<{ $isMember?: boolean }>`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  min-height: 8rem;
   border-radius: 1rem;
   padding: 1rem;
-  border: 3px solid
-    ${({ theme, $isSelected }) => ($isSelected ? theme.primary.normal : "transparent")};
   background-color: ${({ theme }) => theme.label.disable};
-  cursor: ${({ $isMember }) => ($isMember ? "default" : "pointer")};
+  opacity: ${({ $isMember }) => ($isMember ? 0.5 : 1)};
+`;
 
-  &:hover {
-    border-color: ${({ theme, $isMember, $isSelected }) => {
-      if ($isMember) {
-        return $isSelected ? theme.primary.normal : "transparent";
-      }
-      return theme.primary.normal;
-    }};
-  }
+export const GroupPlaceholder = styled.div`
+  min-height: 8rem;
+  border-radius: 1rem;
+  visibility: hidden;
+  pointer-events: none;
 `;
 
 export const GroupHeader = styled.div`
@@ -148,15 +144,11 @@ export const GroupJoinButton = styled.button<{ $isMember?: boolean }>`
   ${font.body.medium};
   padding: 0.25rem 0.75rem;
   border-radius: 0.5rem;
-  background-color: ${({ theme }) => theme.line.normal};
+  background-color: ${({ theme, $isMember }) =>
+    $isMember ? theme.line.normal : theme.primary.normal};
   color: ${({ theme }) => theme.label.normal};
   border: none;
   cursor: ${({ $isMember }) => ($isMember ? "default" : "pointer")};
-
-  &:hover {
-    background-color: ${({ theme, $isMember }) =>
-      $isMember ? theme.line.normal : theme.primary.normal};
-  }
 `;
 
 export const CategoryFilters = styled.div`
