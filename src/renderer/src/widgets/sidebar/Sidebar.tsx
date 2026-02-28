@@ -16,26 +16,26 @@ const menuItems = [
 
 export const Sidebar = ({ isOpen }: SidebarProps) => {
   const location = useLocation();
-  const { isElectron, activeApp, displayTime } = useSidebarMonitor();
+  const { isElectron, activeSession, displayTime } = useSidebarMonitor();
 
   return (
     <S.SidebarContainer $isOpen={isOpen}>
-      {/* 개발 시간 트래커 */}
+      {/* 현재 기록 세션 트래커 */}
       <S.TimeTracker>
         {!isElectron ? (
           <S.ActiveNoneBox>
             <S.CryIcon />
             <S.ActiveNoneText>macOS 환경에서 접속해주세요.</S.ActiveNoneText>
           </S.ActiveNoneBox>
-        ) : activeApp ? (
-          <S.ActiveIDEBox>
-            <S.IDEText>{activeApp.appName}</S.IDEText>
+        ) : activeSession ? (
+          <S.ActiveSessionBox>
+            <S.SessionNameText>{activeSession.appName}</S.SessionNameText>
             <S.TimeText>{displayTime}</S.TimeText>
-          </S.ActiveIDEBox>
+          </S.ActiveSessionBox>
         ) : (
           <S.ActiveNoneBox>
             <S.CryIcon />
-            <S.ActiveNoneText>현재 감지된 활동이 없어요.</S.ActiveNoneText>
+            <S.ActiveNoneText>현재 진행 중인 기록이 없어요.</S.ActiveNoneText>
           </S.ActiveNoneBox>
         )}
         <S.Divider />
