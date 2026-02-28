@@ -1,10 +1,19 @@
-import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
+import {
+  type ChangeEvent,
+  type FormEvent,
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
 import { Dialog, ModalActions } from "@/shared/ui";
 import { GROUP_CATEGORY_LABELS } from "@/entities/group";
 import type { GroupFormModalProps } from "../../../model/useGroup";
 import { useGroupList } from "../../../model/useGroupList";
 import { getPageNumbers } from "@/shared/lib";
 import { GroupFormFields } from "./GroupFormFields";
+import { GroupJoinPassword } from "./GroupJoinPassword";
 import * as S from "./GroupFormModal.style";
 
 export const GroupFormModal = ({
@@ -18,6 +27,8 @@ export const GroupFormModal = ({
   isJoining,
   selectedType,
   onTypeSelect,
+  joinPassword,
+  setJoinPassword,
 }: GroupFormModalProps) => {
   const [activeTab, setActiveTab] = useState<"join" | "create">("join");
   const tabsRef = useRef<HTMLDivElement>(null);
@@ -38,6 +49,11 @@ export const GroupFormModal = ({
     selectedCategory === "ALL"
       ? "현재 참여 가능한 그룹이 없습니다."
       : `${GROUP_CATEGORY_LABELS[selectedCategory]} 카테고리 그룹이 없습니다.`;
+  const [passwordTargetGroup, setPasswordTargetGroup] = useState<{
+    id: number;
+    name: string;
+  } | null>(null);
+  const [joinPasswordError, setJoinPasswordError] = useState("");
 
   const updateActiveRail = useCallback(() => {
     const tabsElement = tabsRef.current;
@@ -75,151 +91,220 @@ export const GroupFormModal = ({
     return () => window.removeEventListener("resize", handleResize);
   }, [isOpen, updateActiveRail]);
 
+  const resetJoinPasswordDialog = useCallback(() => {
+    setPasswordTargetGroup(null);
+    setJoinPassword("");
+    setJoinPasswordError("");
+  }, [setJoinPassword]);
+
+  const handleOpenJoinPasswordDialog = (groupId: number, groupName: string) => {
+    setPasswordTargetGroup({ id: groupId, name: groupName });
+    setJoinPassword("");
+    setJoinPasswordError("");
+  };
+
+  const handleCloseJoinPasswordDialog = () => {
+    if (isJoining) {
+      return;
+    }
+    resetJoinPasswordDialog();
+  };
+
+  const handleJoinPasswordChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setJoinPassword(event.target.value);
+    if (joinPasswordError) {
+      setJoinPasswordError("");
+    }
+  };
+
+  const handleJoinWithPassword = async (event?: FormEvent<HTMLFormElement>) => {
+    event?.preventDefault();
+
+    if (!passwordTargetGroup) {
+      return;
+    }
+
+    const password = joinPassword.trim();
+    if (!password) {
+      setJoinPasswordError("비밀번호를 입력하세요.");
+      return;
+    }
+
+    const isJoined = await onJoinSubmit(passwordTargetGroup.id, password);
+    if (isJoined) {
+      resetJoinPasswordDialog();
+      return;
+    }
+
+    setJoinPasswordError("그룹 참여에 실패했습니다. 비밀번호를 확인해주세요.");
+  };
+
+  const handleTabChange = (tab: "join" | "create") => {
+    setActiveTab(tab);
+    if (tab !== "join") {
+      resetJoinPasswordDialog();
+    }
+  };
+
+  const handleCloseGroupFormModal = () => {
+    resetJoinPasswordDialog();
+    onClose();
+  };
+
   return (
-    <Dialog width={64} height={42} isOpen={isOpen} onClose={onClose} gap={3}>
-      <S.ModalContent>
-        <S.TabHeader>
-          <S.Tabs ref={tabsRef}>
-            <S.Tab
-              ref={joinTabRef}
-              $isActive={activeTab === "join"}
-              onClick={() => setActiveTab("join")}
-            >
-              그룹 참여
-            </S.Tab>
-            <S.Tab
-              ref={createTabRef}
-              $isActive={activeTab === "create"}
-              onClick={() => setActiveTab("create")}
-            >
-              그룹 생성
-            </S.Tab>
-          </S.Tabs>
-          <S.TabRail>
-            <S.TabActiveRail $left={activeRail.left} $width={activeRail.width} />
-          </S.TabRail>
-        </S.TabHeader>
+    <>
+      <Dialog width={64} height={42} isOpen={isOpen} onClose={handleCloseGroupFormModal} gap={3}>
+        <S.ModalContent>
+          <S.TabHeader>
+            <S.Tabs ref={tabsRef}>
+              <S.Tab
+                ref={joinTabRef}
+                $isActive={activeTab === "join"}
+                onClick={() => handleTabChange("join")}
+              >
+                그룹 참여
+              </S.Tab>
+              <S.Tab
+                ref={createTabRef}
+                $isActive={activeTab === "create"}
+                onClick={() => handleTabChange("create")}
+              >
+                그룹 생성
+              </S.Tab>
+            </S.Tabs>
+            <S.TabRail>
+              <S.TabActiveRail $left={activeRail.left} $width={activeRail.width} />
+            </S.TabRail>
+          </S.TabHeader>
 
-        {activeTab === "join" ? (
-          <S.JoinContainer>
-            <S.CategoryFilters>
-              {categoryOptions.map(category => (
-                <S.CategoryButton
-                  key={category}
-                  $isActive={selectedCategory === category}
-                  onClick={() => handleCategoryChange(category)}
-                >
-                  {category === "ALL" ? "전체" : GROUP_CATEGORY_LABELS[category]}
-                </S.CategoryButton>
-              ))}
-            </S.CategoryFilters>
-
-            <S.GroupsWrapper>
-              {isLoading ? (
-                <S.EmptyState>
-                  <S.EmptyTitle>로딩 중...</S.EmptyTitle>
-                </S.EmptyState>
-              ) : groups.length === 0 ? (
-                <S.EmptyState>
-                  <S.EmptyIcon />
-                  <S.EmptyTextBox>
-                    <S.EmptyTitle>{emptyTitle}</S.EmptyTitle>
-                    <S.EmptyDescription>
-                      다른 카테고리를 선택하거나 그룹을 생성해보세요.
-                    </S.EmptyDescription>
-                  </S.EmptyTextBox>
-                </S.EmptyState>
-              ) : (
-                <S.Groups>
-                  {groups.map(group => (
-                    <S.GroupContainer key={group.id} $isMember={group.isMember}>
-                      <S.GroupHeader>
-                        <S.GroupHeaderTextBox>
-                          <S.GroupBadge>{GROUP_CATEGORY_LABELS[group.category]}</S.GroupBadge>
-                          <S.GroupName>{group.name}</S.GroupName>
-                        </S.GroupHeaderTextBox>
-                        <S.GroupDescription>{group.description}</S.GroupDescription>
-                      </S.GroupHeader>
-                      <S.GroupFooter>
-                        <S.GroupMembers>
-                          <span>{group.currentMemberCount}</span> / {group.maxMembers}
-                        </S.GroupMembers>
-                        <S.GroupJoinButton
-                          onClick={async e => {
-                            e.stopPropagation();
-                            if (group.passwordRequired) {
-                              const password = prompt("비밀번호를 입력하세요:");
-                              if (password) {
-                                await onJoinSubmit(group.id, password);
-                              }
-                            } else {
-                              await onJoinSubmit(group.id);
-                            }
-                          }}
-                          disabled={isJoining || group.isMember}
-                          $isMember={group.isMember}
-                        >
-                          {group.isMember ? "가입됨" : isJoining ? "가입 중..." : "가입"}
-                        </S.GroupJoinButton>
-                      </S.GroupFooter>
-                    </S.GroupContainer>
-                  ))}
-                  {Array.from({ length: Math.max(0, 6 - groups.length) }).map((_, index) => (
-                    <S.GroupPlaceholder key={`group-placeholder-${index}`} aria-hidden />
-                  ))}
-                </S.Groups>
-              )}
-            </S.GroupsWrapper>
-
-            {pagination && groups.length > 0 && (
-              <S.Pagination>
-                <S.PageButton
-                  disabled={!pagination.hasPrevious}
-                  onClick={() => handlePageChange(currentPage - 1)}
-                >
-                  ◀
-                </S.PageButton>
-                {getPageNumbers(currentPage, pagination.totalPages).map(page => (
-                  <S.PageButton
-                    key={page}
-                    $isActive={currentPage === page}
-                    onClick={() => handlePageChange(page)}
+          {activeTab === "join" ? (
+            <S.JoinContainer>
+              <S.CategoryFilters>
+                {categoryOptions.map(category => (
+                  <S.CategoryButton
+                    key={category}
+                    $isActive={selectedCategory === category}
+                    onClick={() => handleCategoryChange(category)}
                   >
-                    {page}
-                  </S.PageButton>
+                    {category === "ALL" ? "전체" : GROUP_CATEGORY_LABELS[category]}
+                  </S.CategoryButton>
                 ))}
-                <S.PageButton
-                  disabled={!pagination.hasNext}
-                  onClick={() => handlePageChange(currentPage + 1)}
-                >
-                  ▶
-                </S.PageButton>
-              </S.Pagination>
-            )}
-          </S.JoinContainer>
-        ) : (
-          <S.FormContainer as="form" onSubmit={onCreateSubmit}>
-            <GroupFormFields
-              idPrefix="create-group"
-              register={createRegister}
-              errors={createErrors}
-              selectedType={selectedType}
-              onTypeSelect={onTypeSelect}
-              typeLabel="카테고리"
-              maxMembersLabel="최대 인원"
-              descriptionPlaceholder="어떤 그룹인지 설명해주세요"
-              passwordPlaceholder="그룹 비밀번호를 입력하세요."
-            />
-            <ModalActions
-              onCancel={onClose}
-              confirmLabel={isCreating ? "생성 중..." : "저장"}
-              confirmType="submit"
-              confirmDisabled={isCreating}
-              size="md"
-            />
-          </S.FormContainer>
-        )}
-      </S.ModalContent>
-    </Dialog>
+              </S.CategoryFilters>
+
+              <S.GroupsWrapper>
+                {isLoading ? (
+                  <S.EmptyState>
+                    <S.EmptyTitle>로딩 중...</S.EmptyTitle>
+                  </S.EmptyState>
+                ) : groups.length === 0 ? (
+                  <S.EmptyState>
+                    <S.EmptyIcon />
+                    <S.EmptyTextBox>
+                      <S.EmptyTitle>{emptyTitle}</S.EmptyTitle>
+                      <S.EmptyDescription>
+                        다른 카테고리를 선택하거나 그룹을 생성해보세요.
+                      </S.EmptyDescription>
+                    </S.EmptyTextBox>
+                  </S.EmptyState>
+                ) : (
+                  <S.Groups>
+                    {groups.map(group => (
+                      <S.GroupContainer key={group.id} $isMember={group.isMember}>
+                        <S.GroupHeader>
+                          <S.GroupHeaderTextBox>
+                            <S.GroupBadge>{GROUP_CATEGORY_LABELS[group.category]}</S.GroupBadge>
+                            <S.GroupName>{group.name}</S.GroupName>
+                          </S.GroupHeaderTextBox>
+                          <S.GroupDescription>{group.description}</S.GroupDescription>
+                        </S.GroupHeader>
+                        <S.GroupFooter>
+                          <S.GroupMembers>
+                            <span>{group.currentMemberCount}</span> / {group.maxMembers}
+                          </S.GroupMembers>
+                          <S.GroupJoinButton
+                            onClick={async e => {
+                              e.stopPropagation();
+                              if (group.passwordRequired) {
+                                handleOpenJoinPasswordDialog(group.id, group.name);
+                                return;
+                              }
+                              await onJoinSubmit(group.id);
+                            }}
+                            disabled={isJoining || group.isMember}
+                            $isMember={group.isMember}
+                          >
+                            {group.isMember ? "가입됨" : isJoining ? "가입 중..." : "가입"}
+                          </S.GroupJoinButton>
+                        </S.GroupFooter>
+                      </S.GroupContainer>
+                    ))}
+                    {Array.from({ length: Math.max(0, 6 - groups.length) }).map((_, index) => (
+                      <S.GroupPlaceholder key={`group-placeholder-${index}`} aria-hidden />
+                    ))}
+                  </S.Groups>
+                )}
+              </S.GroupsWrapper>
+
+              {pagination && groups.length > 0 && (
+                <S.Pagination>
+                  <S.PageButton
+                    disabled={!pagination.hasPrevious}
+                    onClick={() => handlePageChange(currentPage - 1)}
+                  >
+                    ◀
+                  </S.PageButton>
+                  {getPageNumbers(currentPage, pagination.totalPages).map(page => (
+                    <S.PageButton
+                      key={page}
+                      $isActive={currentPage === page}
+                      onClick={() => handlePageChange(page)}
+                    >
+                      {page}
+                    </S.PageButton>
+                  ))}
+                  <S.PageButton
+                    disabled={!pagination.hasNext}
+                    onClick={() => handlePageChange(currentPage + 1)}
+                  >
+                    ▶
+                  </S.PageButton>
+                </S.Pagination>
+              )}
+            </S.JoinContainer>
+          ) : (
+            <S.FormContainer as="form" onSubmit={onCreateSubmit}>
+              <GroupFormFields
+                idPrefix="create-group"
+                register={createRegister}
+                errors={createErrors}
+                selectedType={selectedType}
+                onTypeSelect={onTypeSelect}
+                typeLabel="카테고리"
+                maxMembersLabel="최대 인원"
+                descriptionPlaceholder="어떤 그룹인지 설명해주세요"
+                passwordPlaceholder="그룹 비밀번호를 입력하세요."
+              />
+              <ModalActions
+                onCancel={handleCloseGroupFormModal}
+                confirmLabel={isCreating ? "생성 중..." : "저장"}
+                confirmType="submit"
+                confirmDisabled={isCreating}
+                size="md"
+              />
+            </S.FormContainer>
+          )}
+        </S.ModalContent>
+      </Dialog>
+      <GroupJoinPassword
+        isOpen={!!passwordTargetGroup}
+        groupName={passwordTargetGroup?.name ?? null}
+        isJoining={isJoining}
+        password={joinPassword}
+        errorMessage={joinPasswordError}
+        onClose={handleCloseJoinPasswordDialog}
+        onPasswordChange={handleJoinPasswordChange}
+        onSubmit={handleJoinWithPassword}
+      />
+    </>
   );
 };

@@ -235,12 +235,15 @@ export const useGroup = () => {
       if (result.success) {
         setIsFormModalOpen(false);
         setJoinPassword("");
+        return true;
       } else {
         console.error("그룹 참여 실패:", result.message);
+        return false;
       }
     } catch (error: unknown) {
       const errorMessage = getErrorMessage(error, "그룹 참여 중 오류가 발생했습니다.");
       console.error("그룹 참여 실패:", errorMessage, error);
+      return false;
     } finally {
       setIsJoining(false);
     }
