@@ -54,6 +54,7 @@ export const GroupFormModal = ({
     name: string;
   } | null>(null);
   const [joinPasswordError, setJoinPasswordError] = useState("");
+  const [joiningGroupId, setJoiningGroupId] = useState<number | null>(null);
 
   const updateActiveRail = useCallback(() => {
     const tabsElement = tabsRef.current;
@@ -95,6 +96,7 @@ export const GroupFormModal = ({
     setPasswordTargetGroup(null);
     setJoinPassword("");
     setJoinPasswordError("");
+    setJoiningGroupId(null);
   }, [setJoinPassword]);
 
   const handleOpenJoinPasswordDialog = (groupId: number, groupName: string) => {
@@ -130,10 +132,15 @@ export const GroupFormModal = ({
       return;
     }
 
-    const isJoined = await onJoinSubmit(passwordTargetGroup.id, password);
-    if (isJoined) {
-      resetJoinPasswordDialog();
-      return;
+    setJoiningGroupId(passwordTargetGroup.id);
+    try {
+      const isJoined = await onJoinSubmit(passwordTargetGroup.id, password);
+      if (isJoined) {
+        resetJoinPasswordDialog();
+        return;
+      }
+    } finally {
+      setJoiningGroupId(null);
     }
 
     setJoinPasswordError("그룹 참여에 실패했습니다. 비밀번호를 확인해주세요.");
@@ -208,36 +215,45 @@ export const GroupFormModal = ({
                   </S.EmptyState>
                 ) : (
                   <S.Groups>
-                    {groups.map(group => (
-                      <S.GroupContainer key={group.id} $isMember={group.isMember}>
-                        <S.GroupHeader>
-                          <S.GroupHeaderTextBox>
-                            <S.GroupBadge>{GROUP_CATEGORY_LABELS[group.category]}</S.GroupBadge>
-                            <S.GroupName>{group.name}</S.GroupName>
-                          </S.GroupHeaderTextBox>
-                          <S.GroupDescription>{group.description}</S.GroupDescription>
-                        </S.GroupHeader>
-                        <S.GroupFooter>
-                          <S.GroupMembers>
-                            <span>{group.currentMemberCount}</span> / {group.maxMembers}
-                          </S.GroupMembers>
-                          <S.GroupJoinButton
-                            onClick={async e => {
-                              e.stopPropagation();
-                              if (group.passwordRequired) {
-                                handleOpenJoinPasswordDialog(group.id, group.name);
-                                return;
-                              }
-                              await onJoinSubmit(group.id);
-                            }}
-                            disabled={isJoining || group.isMember}
-                            $isMember={group.isMember}
-                          >
-                            {group.isMember ? "가입됨" : isJoining ? "가입 중..." : "가입"}
-                          </S.GroupJoinButton>
-                        </S.GroupFooter>
-                      </S.GroupContainer>
-                    ))}
+                    {groups.map(group => {
+                      const isCurrentJoining = isJoining && joiningGroupId === group.id;
+
+                      return (
+                        <S.GroupContainer key={group.id} $isMember={group.isMember}>
+                          <S.GroupHeader>
+                            <S.GroupHeaderTextBox>
+                              <S.GroupBadge>{GROUP_CATEGORY_LABELS[group.category]}</S.GroupBadge>
+                              <S.GroupName>{group.name}</S.GroupName>
+                            </S.GroupHeaderTextBox>
+                            <S.GroupDescription>{group.description}</S.GroupDescription>
+                          </S.GroupHeader>
+                          <S.GroupFooter>
+                            <S.GroupMembers>
+                              <span>{group.currentMemberCount}</span> / {group.maxMembers}
+                            </S.GroupMembers>
+                            <S.GroupJoinButton
+                              onClick={async e => {
+                                e.stopPropagation();
+                                if (group.passwordRequired) {
+                                  handleOpenJoinPasswordDialog(group.id, group.name);
+                                  return;
+                                }
+                                setJoiningGroupId(group.id);
+                                try {
+                                  await onJoinSubmit(group.id);
+                                } finally {
+                                  setJoiningGroupId(null);
+                                }
+                              }}
+                              disabled={isJoining || group.isMember}
+                              $isMember={group.isMember}
+                            >
+                              {group.isMember ? "가입됨" : isCurrentJoining ? "가입 중..." : "가입"}
+                            </S.GroupJoinButton>
+                          </S.GroupFooter>
+                        </S.GroupContainer>
+                      );
+                    })}
                     {Array.from({ length: Math.max(0, 6 - groups.length) }).map((_, index) => (
                       <S.GroupPlaceholder key={`group-placeholder-${index}`} aria-hidden />
                     ))}
