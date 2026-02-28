@@ -6,6 +6,20 @@ import { getErrorMessage, queryClient } from "@/shared/lib";
 
 type EditMode = "none" | "add" | "edit";
 
+const getTaskNameErrorMessage = (name: string) => {
+  const trimmedLength = name.trim().length;
+
+  if (trimmedLength < 1) {
+    return "과목명은 최소 1자 이상 입력해주세요.";
+  }
+
+  if (trimmedLength > 13) {
+    return "과목명은 14자 미만으로 입력해주세요.";
+  }
+
+  return null;
+};
+
 export const useTaskList = () => {
   const { tasks, activeTaskId, currentStudyTime, start, stop, addTask, updateTask, deleteTask } =
     useRecordStore();
@@ -18,6 +32,8 @@ export const useTaskList = () => {
   const [deleteTargetId, setDeleteTargetId] = useState<number | null>(null);
   const [activitySwitchTargetTaskId, setActivitySwitchTargetTaskId] = useState<number | null>(null);
   const [isSwitchingFromActivity, setIsSwitchingFromActivity] = useState(false);
+  const taskNameErrorMessage = getTaskNameErrorMessage(taskName);
+  const isTaskNameInvalid = taskNameErrorMessage !== null;
 
   const menuRef = useRef<HTMLDivElement>(null);
 
@@ -121,15 +137,20 @@ export const useTaskList = () => {
   };
 
   const handleSaveTask = async () => {
-    if (!taskName.trim()) return;
+    if (isTaskNameInvalid) return false;
+    const trimmedTaskName = taskName.trim();
 
     if (editMode === "add") {
-      await addTask(taskName);
+      await addTask(trimmedTaskName);
+      handleCancelEdit();
+      return true;
     } else if (editMode === "edit" && editingTaskId !== null) {
-      await updateTask(editingTaskId, taskName);
+      await updateTask(editingTaskId, trimmedTaskName);
+      handleCancelEdit();
+      return true;
     }
 
-    handleCancelEdit();
+    return false;
   };
 
   const handleDeleteRequest = (taskId: number) => {
@@ -161,6 +182,8 @@ export const useTaskList = () => {
     editMode,
     editingTaskId,
     taskName,
+    taskNameErrorMessage,
+    isTaskNameInvalid,
     openMenuTaskId,
     deleteTargetId,
     isDeletingActiveTask,

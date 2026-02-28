@@ -9,6 +9,8 @@ export interface TooltipProps {
   offset?: number;
   maxWidth?: string;
   disabled?: boolean;
+  open?: boolean;
+  triggerOnHover?: boolean;
   className?: string;
   wrapperStyle?: CSSProperties;
 }
@@ -20,6 +22,8 @@ export const Tooltip = ({
   offset = 8,
   maxWidth,
   disabled = false,
+  open = false,
+  triggerOnHover = true,
   className,
   wrapperStyle,
 }: TooltipProps) => {
@@ -28,7 +32,7 @@ export const Tooltip = ({
   }
 
   return (
-    <S.TooltipWrapper className={className} style={wrapperStyle}>
+    <S.TooltipWrapper className={className} style={wrapperStyle} $triggerOnHover={triggerOnHover}>
       {children}
       <S.TooltipBubble
         role="tooltip"
@@ -36,6 +40,7 @@ export const Tooltip = ({
         $position={position}
         $offset={offset}
         $maxWidth={maxWidth}
+        $open={open}
       >
         {content}
         <S.TooltipArrow $position={position} />
