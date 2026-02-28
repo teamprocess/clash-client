@@ -1,7 +1,6 @@
 import * as S from "./CompareGithub.style";
-import { GrowthRate } from "@/features/home/ui/compare/growth-rate/GrowthRate";
+import { GrowthRate, Tooltip } from "@/shared/ui";
 import { CompareResponse } from "@/entities/home/model/useCompare.types";
-import { Tooltip } from "@/shared/ui";
 
 const renderRepositoryName = (
   name: string | null | undefined,

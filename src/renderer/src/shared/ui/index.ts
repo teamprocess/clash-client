@@ -13,3 +13,6 @@ export { ModalActions } from "./dialog-actions";
 export type { ModalActionsProps } from "./dialog-actions";
 export { AddRivalsDialog, DeleteRivalsDialog } from "./rival-management";
 export { SearchInput } from "./search-input";
+export { MyRivalUsers } from "./myrival-users/MyRivalUsers";
+export { UserRanking } from "./home-ranking-user/UserRanking";
+export { GrowthRate } from "./growth-rate/GrowthRate";
