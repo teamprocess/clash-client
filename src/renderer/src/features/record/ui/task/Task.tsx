@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import * as S from "./Task.style";
 import { formatTime } from "@/shared/lib";
 import { useTaskList } from "../../model/useTaskList";
@@ -36,6 +36,13 @@ export const Task = () => {
   } = useTaskList();
   const [isTaskNameTooltipOpen, setIsTaskNameTooltipOpen] = useState(false);
   const isTaskNameTooLong = taskName.trim().length > 13;
+  const taskNameInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (editMode !== "none") {
+      taskNameInputRef.current?.focus();
+    }
+  }, [editMode, editingTaskId]);
 
   const handleSaveClick = async () => {
     const isSaved = await handleSaveTask();
@@ -68,7 +75,7 @@ export const Task = () => {
     handleEditClick(taskId);
   };
 
-  const renderTaskNameInput = () => (
+  const renderTaskNameInput = (inputRef?: React.Ref<HTMLInputElement>) => (
     <Tooltip
       content={taskNameErrorMessage ?? ""}
       position="top"
@@ -77,6 +84,7 @@ export const Task = () => {
       wrapperStyle={{ width: "100%", maxWidth: "100%" }}
     >
       <S.TaskTextInput
+        ref={inputRef}
         placeholder="과목명을 입력하세요."
         value={taskName}
         maxLength={14}
@@ -106,7 +114,7 @@ export const Task = () => {
             if (isEditing) {
               return (
                 <S.TaskItem key={task.id}>
-                  <S.TaskInputBox>{renderTaskNameInput()}</S.TaskInputBox>
+                  <S.TaskInputBox>{renderTaskNameInput(taskNameInputRef)}</S.TaskInputBox>
                   <S.TaskRightBox>
                     <S.ButtonBox>
                       <Button variant="secondary" size="sm" onClick={handleCancelEditClick}>
@@ -152,7 +160,7 @@ export const Task = () => {
           })}
           {editMode === "add" && (
             <S.TaskItem>
-              <S.TaskInputBox>{renderTaskNameInput()}</S.TaskInputBox>
+              <S.TaskInputBox>{renderTaskNameInput(taskNameInputRef)}</S.TaskInputBox>
               <S.TaskRightBox>
                 <S.ButtonBox>
                   <Button variant="secondary" size="sm" onClick={handleCancelEditClick}>
