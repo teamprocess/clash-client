@@ -1,10 +1,26 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState, type ChangeEvent, type KeyboardEvent } from "react";
 import { useRecordStore } from "./recordStore";
 import { recordApi, recordQueryKeys, useRecordTodayQuery } from "@/entities/record";
 import type { TaskRecordSession } from "@/entities/record";
 import { getErrorMessage, queryClient } from "@/shared/lib";
 
 type EditMode = "none" | "add" | "edit";
+const MAX_TASK_NAME_LENGTH = 13;
+const TASK_NAME_INPUT_MAX_LENGTH = 14;
+
+const getTaskNameErrorMessage = (name: string) => {
+  const trimmedLength = name.trim().length;
+
+  if (trimmedLength < 1) {
+    return "과목명은 최소 1자 이상 입력해주세요.";
+  }
+
+  if (trimmedLength > 13) {
+    return "과목명은 14자 미만으로 입력해주세요.";
+  }
+
+  return null;
+};
 
 export const useTaskList = () => {
   const { tasks, activeTaskId, currentStudyTime, start, stop, addTask, updateTask, deleteTask } =
@@ -18,8 +34,20 @@ export const useTaskList = () => {
   const [deleteTargetId, setDeleteTargetId] = useState<number | null>(null);
   const [activitySwitchTargetTaskId, setActivitySwitchTargetTaskId] = useState<number | null>(null);
   const [isSwitchingFromActivity, setIsSwitchingFromActivity] = useState(false);
+  const [isTaskNameTooltipOpen, setIsTaskNameTooltipOpen] = useState(false);
+  const taskNameErrorMessage = getTaskNameErrorMessage(taskName);
+  const isTaskNameInvalid = taskNameErrorMessage !== null;
+  const isTaskNameTooLong = taskName.trim().length > MAX_TASK_NAME_LENGTH;
+  const shouldShowTaskNameTooltip =
+    Boolean(taskNameErrorMessage) && (isTaskNameTooltipOpen || isTaskNameTooLong);
 
   const menuRef = useRef<HTMLDivElement>(null);
+  const taskNameInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (editMode === "none") return;
+    taskNameInputRef.current?.focus();
+  }, [editMode, editingTaskId]);
 
   const isActivityRecording = Boolean(
     todayResponse?.success &&
@@ -91,9 +119,14 @@ export const useTaskList = () => {
     }
   };
 
+  const closeTaskNameTooltip = () => {
+    setIsTaskNameTooltipOpen(false);
+  };
+
   const handleAddClick = () => {
     setEditMode("add");
     setTaskName("");
+    closeTaskNameTooltip();
   };
 
   const handleEditClick = (taskId: number) => {
@@ -103,6 +136,7 @@ export const useTaskList = () => {
       setEditingTaskId(taskId);
       setTaskName(task.name);
       setOpenMenuTaskId(null);
+      closeTaskNameTooltip();
     }
   };
 
@@ -118,18 +152,45 @@ export const useTaskList = () => {
     setEditMode("none");
     setEditingTaskId(null);
     setTaskName("");
+    closeTaskNameTooltip();
   };
 
   const handleSaveTask = async () => {
-    if (!taskName.trim()) return;
+    if (isTaskNameInvalid) return false;
+    const trimmedTaskName = taskName.trim();
 
     if (editMode === "add") {
-      await addTask(taskName);
+      await addTask(trimmedTaskName);
+      handleCancelEdit();
+      return true;
     } else if (editMode === "edit" && editingTaskId !== null) {
-      await updateTask(editingTaskId, taskName);
+      await updateTask(editingTaskId, trimmedTaskName);
+      handleCancelEdit();
+      return true;
     }
 
-    handleCancelEdit();
+    return false;
+  };
+
+  const handleSaveClick = async () => {
+    const isSaved = await handleSaveTask();
+    setIsTaskNameTooltipOpen(!isSaved);
+  };
+
+  const handleTaskNameChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const nextTaskName = event.target.value;
+    setTaskName(nextTaskName);
+
+    if (nextTaskName.trim().length <= MAX_TASK_NAME_LENGTH) {
+      closeTaskNameTooltip();
+    }
+  };
+
+  const handleTaskNameKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
+    if (event.nativeEvent.isComposing) return;
+    if (event.key !== "Enter") return;
+    event.preventDefault();
+    void handleSaveClick();
   };
 
   const handleDeleteRequest = (taskId: number) => {
@@ -161,6 +222,11 @@ export const useTaskList = () => {
     editMode,
     editingTaskId,
     taskName,
+    taskNameInputRef,
+    taskNameInputMaxLength: TASK_NAME_INPUT_MAX_LENGTH,
+    taskNameErrorMessage,
+    isTaskNameInvalid,
+    shouldShowTaskNameTooltip,
     openMenuTaskId,
     deleteTargetId,
     isDeletingActiveTask,
@@ -169,7 +235,9 @@ export const useTaskList = () => {
     menuRef,
     isTaskActive,
     getTaskStudyTime,
-    setTaskName,
+    handleTaskNameChange,
+    handleTaskNameKeyDown,
+    handleSaveClick,
     handlePlayPauseClick,
     handleCloseActivitySwitchDialog,
     handleConfirmActivitySwitch,
@@ -179,7 +247,6 @@ export const useTaskList = () => {
     handleDeleteRequest,
     handleAddClick,
     handleCancelEdit,
-    handleSaveTask,
     handleCancelDelete,
     handleConfirmDelete,
   };
