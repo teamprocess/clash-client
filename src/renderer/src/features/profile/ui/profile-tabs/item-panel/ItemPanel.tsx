@@ -1,6 +1,8 @@
-import { useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
 import * as S from "./ItemPanel.style";
 import { NameplateModal, NameplateModalContent } from "./nameplate-modal/NameplateModal";
+import { useOwnedItemsQuery } from "@/entities/profile/api/query/useOwnedItems.query";
+import { OwnedItemCategory } from "@/entities/profile/model/ownedItems.types";
 
 export type ItemPreviewPayload =
   | { kind: "none" }
@@ -30,17 +32,6 @@ export type ItemPanelProps = {
   onStartEdit?: () => void;
 };
 
-const MOCK_ITEMS: Item[] = [
-  { id: "bg-1", category: "background", title: "상품명입니다.", accentColor: "#2F547B" },
-  { id: "badge-1", category: "badge", title: "상품명", accentColor: "#2F547B" },
-  { id: "bg-2", category: "background", title: "상품명입니다.", accentColor: "#2F547B" },
-  { id: "name-1", category: "nameplate", title: "상품명입니다.", accentColor: "#2F547B" },
-  { id: "bg-3", category: "background", title: "상품명입니다.", accentColor: "#2F547B" },
-  { id: "name-2", category: "nameplate", title: "상품명입니다.", accentColor: "#2F547B" },
-  { id: "badge-2", category: "badge", title: "상품명", accentColor: "#2F547B" },
-  { id: "bg-4", category: "background", title: "상품명입니다.", accentColor: "#2F547B" },
-];
-
 const chipLabel: Record<ItemCategory, string> = {
   all: "전체",
   badge: "휘장",
@@ -54,15 +45,51 @@ const pillLabel: Record<Exclude<ItemCategory, "all">, string> = {
   nameplate: "이름표",
 };
 
+const uiToApiCategory: Record<ItemCategory, OwnedItemCategory> = {
+  all: OwnedItemCategory.ALL,
+  badge: OwnedItemCategory.INSIGNIA,
+  nameplate: OwnedItemCategory.NAMEPLATE,
+  background: OwnedItemCategory.BANNER,
+};
+
+const apiToUiCategory = (category: string): Item["category"] | null => {
+  switch (category) {
+    case OwnedItemCategory.INSIGNIA:
+      return "badge";
+    case OwnedItemCategory.NAMEPLATE:
+      return "nameplate";
+    case OwnedItemCategory.BANNER:
+      return "background";
+    default:
+      return null;
+  }
+};
+
 export const ItemPanel = ({ onPreviewChange, onStartEdit }: ItemPanelProps) => {
   const [filter, setFilter] = useState<ItemCategory>("all");
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [isNameplateModalOpen, setIsNameplateModalOpen] = useState(false);
 
-  const items = useMemo(() => {
-    if (filter === "all") return MOCK_ITEMS;
-    return MOCK_ITEMS.filter(i => i.category === filter);
-  }, [filter]);
+  const { data, isLoading, error, setCategory } = useOwnedItemsQuery();
+
+  const items: Item[] = useMemo(() => {
+    const apiItems = data?.data?.items ?? [];
+
+    return apiItems
+      .map(apiItem => {
+        const uiCategory = apiToUiCategory(apiItem.category);
+        if (!uiCategory) return null;
+
+        return {
+          id: String(apiItem.id),
+          title: apiItem.title,
+          category: uiCategory,
+          accentColor: undefined,
+          bgImageUrl: undefined,
+        } as Item;
+      })
+      .filter((v): v is Item => v !== null);
+  }, [data]);
 
   const clearPreview = () => onPreviewChange?.({ kind: "none" });
 
@@ -96,6 +123,22 @@ export const ItemPanel = ({ onPreviewChange, onStartEdit }: ItemPanelProps) => {
     emitPreview(item);
   };
 
+  const handleFilterClick = (key: ItemCategory) => {
+    setFilter(key);
+    setSelectedId(null);
+    clearPreview();
+
+    setCategory(uiToApiCategory[key]);
+  };
+
+  if (isLoading) {
+    return <S.Wrapper>로딩 중...</S.Wrapper>;
+  }
+
+  if (error) {
+    return <S.Wrapper>아이템을 불러오지 못했어요.</S.Wrapper>;
+  }
+
   return (
     <>
       <S.Wrapper>
@@ -107,7 +150,7 @@ export const ItemPanel = ({ onPreviewChange, onStartEdit }: ItemPanelProps) => {
               <S.FilterChip
                 key={key}
                 $active={filter === key}
-                onClick={() => setFilter(key)}
+                onClick={() => handleFilterClick(key)}
                 type="button"
               >
                 {chipLabel[key]}
