@@ -26,13 +26,23 @@ export const Test = ({
   return (
     <>
       <S.TestContainer>
-        <S.QuestionWrapper>
+        <S.TestHeader>
           <Link to="/roadmap">
             <S.PreviousBox>
               <S.PreviousIcon />
               <S.PreviousLabel>이전으로</S.PreviousLabel>
             </S.PreviousBox>
           </Link>
+          <S.ProgressBarWrapper>
+            <S.ProgressTrack>
+              <S.ProgressFill $progress={progress} />
+            </S.ProgressTrack>
+            <S.ProgressLabel>
+              {answeredCount}/{totalCount}
+            </S.ProgressLabel>
+          </S.ProgressBarWrapper>
+        </S.TestHeader>
+        <S.QuestionWrapper>
           {questionData.map(({ id, content }, idx) => (
             <S.QuestionBox key={id}>
               <S.QuestionTitleBox>
@@ -73,14 +83,6 @@ export const Test = ({
           >
             결과 확인하기
           </Button>
-          <S.ProgressBarWrapper>
-            <S.ProgressTrack>
-              <S.ProgressFill $progress={progress} />
-            </S.ProgressTrack>
-            <S.ProgressLabel>
-              {answeredCount} / {totalCount}
-            </S.ProgressLabel>
-          </S.ProgressBarWrapper>
         </S.QuestionWrapper>
       </S.TestContainer>
     </>
