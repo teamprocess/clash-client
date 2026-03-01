@@ -1,28 +1,16 @@
 import { useEffect, useMemo, useState } from "react";
+import { useActiveQuery } from "@/entities/home";
+import type { StreakItem } from "@/entities/home";
 
-export type CommitDay = { id: number | string; count: number };
+export type CommitDay = { id: number | string; count: number; ratio?: number };
 
 export interface GithubStreakProps {
   commitDays?: CommitDay[];
-  getLevel?: (count: number) => number;
+  getLevel?: (count: number, ratio?: number) => 0 | 1 | 2 | 3;
 }
 
-const grass_counts: number[] = [
-  0, 1, 2, 3, 0, 4, 7, 1, 0, 3, 2, 0, 8, 4, 2, 1, 0, 7, 3, 0, 4, 0, 2, 3, 1, 0, 9, 4, 1, 0, 4, 2, 0,
-  7, 3, 0, 2, 1, 0, 4, 8, 0, 3, 0, 2, 7, 1, 0, 4, 2, 0, 3, 0, 6, 1, 0, 0, 2, 3, 0, 5, 1, 7, 2, 0, 4,
-  1, 0, 6, 3, 0, 1, 2, 0, 8, 4, 0, 3, 0, 2, 7, 1, 0, 4, 2, 0, 3, 1, 0, 9, 4, 0, 1, 2, 3, 0, 6, 0, 4,
-  1, 0, 7, 2, 0, 5, 0, 3, 2, 0, 8, 1, 0, 1, 0, 4, 0, 7, 2, 3, 0, 2, 0, 6, 1, 0, 4, 3, 0, 1, 7, 0, 2,
-  4, 0, 3, 1, 0, 8, 2, 0, 0, 2, 3, 1, 0, 5, 7, 2, 0, 4, 0, 6, 1, 0, 3, 1, 0, 7, 2, 0, 4, 0, 3, 0, 8,
-  1, 0, 2, 1, 0, 4, 2, 0, 7, 3, 0, 2, 1, 0, 4, 8, 0, 3, 0, 2, 7, 1, 0, 4, 2, 0, 3, 0, 6, 1, 0,
-];
-
-const demoCommitCounts: CommitDay[] = grass_counts.slice(0, 28 * 7).map((count, i) => ({
-  id: `demo-${i}`,
-  count,
-}));
-
 export const useGithubStreak = ({
-  commitDays,
+  commitDays = [],
   getLevel = (count: number) => {
     if (count >= 7) return 3;
     if (count >= 4) return 2;
@@ -30,12 +18,13 @@ export const useGithubStreak = ({
     return 0;
   },
 }: GithubStreakProps = {}) => {
-  const daysForView = useMemo(
-    () => (commitDays && commitDays.length > 0 ? commitDays : demoCommitCounts),
-    [commitDays]
-  );
-
+  const daysForView = useMemo(() => commitDays, [commitDays]);
   const [selectedId, setSelectedId] = useState<string | number | null>(null);
+
+  const selectedDay = useMemo(() => {
+    if (selectedId === null) return null;
+    return daysForView.find(d => d.id === selectedId) ?? null;
+  }, [daysForView, selectedId]);
 
   useEffect(() => {
     const onPointerDown = (e: PointerEvent) => {
@@ -58,7 +47,36 @@ export const useGithubStreak = ({
     setSelectedId(prev => (prev === id ? null : id));
   };
 
-  return { daysForView, getLevel, selectedId, handleGrassClick };
+  return { daysForView, getLevel, selectedId, selectedDay, handleGrassClick };
+};
+
+const toCommitDays = (streaks?: StreakItem[]): CommitDay[] => {
+  if (!streaks?.length) return [];
+  return streaks.map(s => ({
+    id: s.date,
+    count: s.detailedInfo ?? 0,
+    ratio: s.colorRatio,
+  }));
+};
+
+export const useProfileGithubStreak = (props: GithubStreakProps = {}) => {
+  const activeQuery = useActiveQuery("GITHUB");
+
+  const streaks: StreakItem[] | undefined = activeQuery?.data?.data?.streaks;
+
+  const commitDaysFromApi = useMemo(() => toCommitDays(streaks), [streaks]);
+
+  const mergedProps: GithubStreakProps = {
+    ...props,
+    commitDays:
+      props.commitDays && props.commitDays.length > 0 ? props.commitDays : commitDaysFromApi,
+  };
+
+  return {
+    ...useGithubStreak(mergedProps),
+    isLoading: activeQuery?.isLoading,
+    error: activeQuery?.error,
+  };
 };
 
 export type DayCell = {
@@ -83,13 +101,10 @@ const buildCalendar = (base: Date) => {
   const days: DayCell[] = Array.from({ length: total }, (_, i) => {
     const n = i - startDow + 1;
 
-    if (n <= 0) {
+    if (n <= 0)
       return { key: `p-${y}-${m}-${i}`, day: prevDays + n, isCurrentMonth: false, level: 0 };
-    }
-
-    if (n > daysInMonth) {
+    if (n > daysInMonth)
       return { key: `n-${y}-${m}-${i}`, day: n - daysInMonth, isCurrentMonth: false, level: 0 };
-    }
 
     const demoCount = (n * 3) % 10;
     const level: 0 | 1 | 2 | 3 = demoCount >= 8 ? 3 : demoCount >= 4 ? 2 : demoCount >= 1 ? 1 : 0;
@@ -99,8 +114,6 @@ const buildCalendar = (base: Date) => {
 
   return { title: `${y}년 ${m + 1}월`, days };
 };
-
-export const useProfileGithubStreak = useGithubStreak;
 
 export const useProfileTabs = () => {
   const [cursor, setCursor] = useState(() => new Date());

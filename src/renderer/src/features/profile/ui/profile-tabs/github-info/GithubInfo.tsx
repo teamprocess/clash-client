@@ -14,15 +14,15 @@ export type GithubInfoProps = {
 };
 
 export const GithubInfo = ({
-  dateText = "2026년 2월 2일",
-  totalContributions = 1333,
-  commits = 12,
-  issues = 3,
-  pullRequests = 5,
-  reviews = 2,
-  topRepoName = "TeamProcess",
-  dailyAddedLines = 420,
-  dailyDeletedLines = 180,
+  dateText,
+  totalContributions,
+  commits,
+  issues,
+  pullRequests,
+  reviews,
+  topRepoName,
+  dailyAddedLines,
+  dailyDeletedLines,
 }: GithubInfoProps) => {
   const stats = useMemo(
     () =>
