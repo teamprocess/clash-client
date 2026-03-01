@@ -17,6 +17,7 @@ export const MainContent = styled.main<{ $variant: LayoutVariant }>`
   flex: 1;
   padding: ${({ $variant }) => ($variant === "default" ? "2.5rem" : "2.5rem 2.5rem 0 2.5rem")};
   overflow: ${({ $variant }) => ($variant === "fixed" ? "hidden" : "auto")};
+  scrollbar-gutter: stable;
   background-color: ${({ theme }) => theme.background.alternative};
 
   &::-webkit-scrollbar {
