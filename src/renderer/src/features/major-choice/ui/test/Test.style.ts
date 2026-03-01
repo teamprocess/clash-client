@@ -15,18 +15,19 @@ export const TestContainer = styled.div`
   position: relative;
 `;
 
-export const TestHeader = styled.div`
+export const ProgressSticky = styled.div`
   position: sticky;
   top: 1.5rem;
   z-index: 10;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-end;
   box-sizing: border-box;
   width: calc(100% + 22rem);
   margin: 0 -11rem;
-  padding: 0.75rem 2.5rem;
-  background-color: ${({ theme }) => theme.background.normal};
+  padding: 0 2.5rem;
+  height: 0;
+  pointer-events: none;
 `;
 
 export const QuestionWrapper = styled.div`
@@ -124,6 +125,7 @@ export const ProgressBarWrapper = styled.div`
   display: flex;
   align-items: center;
   gap: 0.75rem;
+  pointer-events: auto;
 `;
 
 export const ProgressTrack = styled.div`
@@ -151,6 +153,9 @@ export const ProgressLabel = styled.span`
 export const PreviousBox = styled.div`
   display: flex;
   gap: 0.75rem;
+  position: absolute;
+  top: 2rem;
+  left: 2.5rem;
   cursor: pointer;
 `;
 
