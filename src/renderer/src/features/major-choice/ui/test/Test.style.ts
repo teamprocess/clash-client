@@ -15,6 +15,20 @@ export const TestContainer = styled.div`
   position: relative;
 `;
 
+export const TestHeader = styled.div`
+  position: sticky;
+  top: 1.5rem;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-sizing: border-box;
+  width: calc(100% + 22rem);
+  margin: 0 -11rem;
+  padding: 0.75rem 2.5rem;
+  background-color: ${({ theme }) => theme.background.normal};
+`;
+
 export const QuestionWrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -107,30 +121,25 @@ export const AnswerItemTitle = styled.div`
 `;
 
 export const ProgressBarWrapper = styled.div`
-  position: fixed;
-  right: 5%;
-  top: 50%;
-  transform: translateY(-50%);
   display: flex;
-  flex-direction: column;
   align-items: center;
-  gap: 1rem;
+  gap: 0.75rem;
 `;
 
 export const ProgressTrack = styled.div`
-  width: 0.75rem;
-  height: 25rem;
+  width: 10rem;
+  height: 0.4rem;
   background-color: ${({ theme }) => theme.label.disable};
   border-radius: 9999px;
   overflow: hidden;
 `;
 
 export const ProgressFill = styled.div<{ $progress: number }>`
-  width: 100%;
-  height: ${({ $progress }) => $progress}%;
-  background-color: ${({ theme }) => theme.line.normal};
+  height: 100%;
+  width: ${({ $progress }) => $progress}%;
+  background-color: ${({ theme }) => theme.primary.normal};
   border-radius: 9999px;
-  transition: height 0.4s ease;
+  transition: width 0.4s ease;
 `;
 
 export const ProgressLabel = styled.span`
@@ -142,9 +151,6 @@ export const ProgressLabel = styled.span`
 export const PreviousBox = styled.div`
   display: flex;
   gap: 0.75rem;
-  position: absolute;
-  top: 2rem;
-  left: 2.5rem;
   cursor: pointer;
 `;
 
