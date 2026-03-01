@@ -136,7 +136,7 @@ export const AddRivalsDialog = ({ isOpen, onClose, rival }: AddRivalsDialogProps
             </S.BottomRow>
           </>
         ) : (
-          <></>
+          <>{/* 라이벌 신청 목록 UI 입니다. */}</>
         )}
       </S.DialogLayout>
     </Dialog>
