@@ -26,13 +26,7 @@ export const Test = ({
   return (
     <>
       <S.TestContainer>
-        <S.TestHeader>
-          <Link to="/roadmap">
-            <S.PreviousBox>
-              <S.PreviousIcon />
-              <S.PreviousLabel>이전으로</S.PreviousLabel>
-            </S.PreviousBox>
-          </Link>
+        <S.ProgressSticky>
           <S.ProgressBarWrapper>
             <S.ProgressTrack>
               <S.ProgressFill $progress={progress} />
@@ -41,8 +35,14 @@ export const Test = ({
               {answeredCount}/{totalCount}
             </S.ProgressLabel>
           </S.ProgressBarWrapper>
-        </S.TestHeader>
+        </S.ProgressSticky>
         <S.QuestionWrapper>
+          <Link to="/roadmap">
+            <S.PreviousBox>
+              <S.PreviousIcon />
+              <S.PreviousLabel>이전으로</S.PreviousLabel>
+            </S.PreviousBox>
+          </Link>
           {questionData.map(({ id, content }, idx) => (
             <S.QuestionBox key={id}>
               <S.QuestionTitleBox>
