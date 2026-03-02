@@ -24,6 +24,22 @@ export const RoadmapTitle = styled.span`
   color: ${({ theme }) => theme.label.neutral};
 `;
 
+export const ChangeButton = styled.button`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  pointer-events: auto;
+  transition: opacity 0.2s ease;
+
+  &:hover {
+    opacity: 0.8;
+  }
+`;
+
 export const RoadmapTitleArrowIcon = styled(Change)`
   color: ${({ theme }) => theme.label.neutral};
   width: 1.75rem;
