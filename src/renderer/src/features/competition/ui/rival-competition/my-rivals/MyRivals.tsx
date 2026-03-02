@@ -3,7 +3,7 @@ import { UserStatus, getStatus, useMyRivals } from "@/features/competition/model
 import { formatTime, useRival } from "@/shared/lib";
 import { MyRivalsResponse } from "@/entities/competition";
 import { useEffect, useState } from "react";
-import { AddRivalsDialog, Button } from "@/shared/ui";
+import { RivalsManagementDialog, Button } from "@/shared/ui";
 
 interface MyRivalsProps {
   data: MyRivalsResponse;
@@ -102,7 +102,11 @@ export const MyRivals = ({ data }: MyRivalsProps) => {
       </S.ListContent>
 
       {rival.modalOpen && (
-        <AddRivalsDialog isOpen={rival.modalOpen} onClose={rival.handleClose} rival={rival} />
+        <RivalsManagementDialog
+          isOpen={rival.modalOpen}
+          onClose={rival.handleClose}
+          rival={rival}
+        />
       )}
     </>
   );

@@ -1,6 +1,6 @@
 import * as S from "./Rival.style";
 import { useRival } from "@/shared/lib";
-import { AddRivalsDialog, Button, MyRivalUsers } from "@/shared/ui";
+import { RivalsManagementDialog, Button, MyRivalUsers } from "@/shared/ui";
 
 export const Rival = () => {
   const rival = useRival();
@@ -42,7 +42,11 @@ export const Rival = () => {
       </S.RivalBox>
 
       {rival.modalOpen && (
-        <AddRivalsDialog isOpen={rival.modalOpen} onClose={rival.handleClose} rival={rival} />
+        <RivalsManagementDialog
+          isOpen={rival.modalOpen}
+          onClose={rival.handleClose}
+          rival={rival}
+        />
       )}
     </S.RivalContainer>
   );

@@ -1,2 +1,2 @@
-export { AddRivalsDialog } from "@/shared/ui/rival-management/rivals-management/RivalsManagement";
-export { DeleteRivalsDialog } from "@/shared/ui/rival-management/delete-rival-confirm/DeleteRivalsConfirm";
+export { RivalsManagementDialog } from "@/shared/ui/rival-management/rivals-management/RivalsManagement";
+export { DeleteRivalsConfirmDialog } from "@/shared/ui/rival-management/delete-rival-confirm/DeleteRivalsConfirm";
