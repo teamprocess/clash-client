@@ -1,4 +1,4 @@
-import { Button, DeleteRivalsDialog, Dialog } from "@/shared/ui";
+import { Button, DeleteRivalsConfirmDialog, Dialog } from "@/shared/ui";
 import * as S from "./RivalsManagement.style";
 import { SearchInput } from "@/shared/ui";
 import { useRival } from "@/shared/lib";
@@ -11,7 +11,7 @@ interface AddRivalsDialogProps {
   rival: ReturnType<typeof useRival>;
 }
 
-export const AddRivalsDialog = ({ isOpen, onClose, rival }: AddRivalsDialogProps) => {
+export const RivalsManagementDialog = ({ isOpen, onClose, rival }: AddRivalsDialogProps) => {
   const handleClose = () => {
     rival.handleClose();
     onClose();
@@ -167,7 +167,7 @@ export const AddRivalsDialog = ({ isOpen, onClose, rival }: AddRivalsDialogProps
             </S.UserChoiceContainer>
 
             {rival.deleteConfirmOpen && rival.pendingDelete?.id != null && (
-              <DeleteRivalsDialog
+              <DeleteRivalsConfirmDialog
                 isOpen={rival.deleteConfirmOpen}
                 onClose={rival.closeDeleteConfirm}
                 rival={rival}

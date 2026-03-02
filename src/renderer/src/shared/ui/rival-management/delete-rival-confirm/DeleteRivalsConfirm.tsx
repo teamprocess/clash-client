@@ -10,7 +10,7 @@ interface DeleteRivalsDialogProps {
   userName?: string;
 }
 
-export const DeleteRivalsDialog = ({
+export const DeleteRivalsConfirmDialog = ({
   isOpen,
   onClose,
   rival,
