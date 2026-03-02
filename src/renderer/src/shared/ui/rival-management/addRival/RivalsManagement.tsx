@@ -1,5 +1,5 @@
-import { Dialog } from "@/shared/ui";
-import * as S from "./AddRivals.style";
+import { Button, DeleteRivalsDialog, Dialog } from "@/shared/ui";
+import * as S from "./RivalsManagement.style";
 import { SearchInput } from "@/shared/ui";
 import { useRival } from "@/shared/lib";
 import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
@@ -136,7 +136,46 @@ export const AddRivalsDialog = ({ isOpen, onClose, rival }: AddRivalsDialogProps
             </S.BottomRow>
           </>
         ) : (
-          <>{/* 라이벌 신청 목록 UI 입니다. */}</>
+          <S.ApplyContainer>
+            <S.DetermineTitle>현재 라이벌</S.DetermineTitle>
+
+            <S.UserChoiceContainer>
+              {rival.rivalsData?.myRivals.map(user => (
+                <S.UserChoiceBox key={user.rivalId ?? user.id} $isRival={true}>
+                  <S.ProfileContent $height="3rem">
+                    <S.ProfileIcon />
+                    <S.ProfileTagBox>
+                      <S.ProfileName>{user.name}</S.ProfileName>
+                      <S.ProfileMention>@{user.username}</S.ProfileMention>
+                    </S.ProfileTagBox>
+                  </S.ProfileContent>
+
+                  <Button
+                    size="sm"
+                    variant="primary"
+                    onClick={e => {
+                      e.stopPropagation();
+                      rival.openDeleteConfirm(user.rivalId ?? user.id, user.name);
+                    }}
+                  >
+                    끊기
+                  </Button>
+                </S.UserChoiceBox>
+              ))}
+            </S.UserChoiceContainer>
+
+            {rival.deleteConfirmOpen && rival.pendingDelete?.id != null && (
+              <DeleteRivalsDialog
+                isOpen={rival.deleteConfirmOpen}
+                onClose={rival.closeDeleteConfirm}
+                rival={rival}
+                rivalId={rival.pendingDelete.id}
+                userName={rival.pendingDelete.name}
+              />
+            )}
+
+            {rival.error && <S.ErrorText>{rival.error}</S.ErrorText>}
+          </S.ApplyContainer>
         )}
       </S.DialogLayout>
     </Dialog>

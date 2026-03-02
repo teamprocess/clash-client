@@ -6,19 +6,18 @@ import {
   RivalApplyRequest,
   rivalsApi,
 } from "@/entities/home";
-import { queryClient } from "@/shared/lib";
-import { getErrorMessage } from "@/shared/lib";
-
-export interface MyRivalItem {
-  user: MyRivalsRequest;
-  getStatus: (status: UserStatus) => StatusType;
-}
+import { queryClient, getErrorMessage } from "@/shared/lib";
 
 const USER_STATUS = {
   ONLINE: "ONLINE",
   AWAY: "AWAY",
   OFFLINE: "OFFLINE",
 } as const;
+
+export interface MyRivalItem {
+  user: MyRivalsRequest;
+  getStatus: (status: UserStatus) => StatusType;
+}
 
 type UserStatus = (typeof USER_STATUS)[keyof typeof USER_STATUS];
 type StatusType = "온라인" | "자리비움" | "오프라인" | "";
@@ -46,10 +45,10 @@ export const useRival = () => {
   };
 
   const [modalOpen, setModalOpen] = useState(false);
-  const [rivalDeleteOpen, setRivalDeleteOpen] = useState(false);
 
   const [searchText, setSearchText] = useState("");
   const [rivalSelectedId, setRivalSelectedId] = useState<number[]>([]);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const resetSearch = () => setSearchText("");
 
@@ -80,17 +79,6 @@ export const useRival = () => {
     setError(null);
   };
 
-  const handleDeleteModalOpen = () => {
-    setRivalDeleteOpen(true);
-    setError(null);
-  };
-
-  const handleDeleteModalClose = () => {
-    setRivalDeleteOpen(false);
-    setRivalSelectedId([]);
-    setError(null);
-  };
-
   const handleUserSelect = (id: number) => {
     const currentRivalCount = rivalsData?.myRivals.length ?? 0;
     const maxAvailableSlots = 4 - currentRivalCount;
@@ -102,12 +90,6 @@ export const useRival = () => {
     });
   };
 
-  const handleDeleteUserSelect = (id: number) => {
-    setRivalSelectedId(prev => (prev[0] === id ? [] : [id]));
-  };
-
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
   const handleRivalCreate = async () => {
     if (isSubmitting) return;
     if (rivalSelectedId.length === 0) return;
@@ -118,7 +100,10 @@ export const useRival = () => {
 
     try {
       setIsSubmitting(true);
+      setError(null);
+
       await rivalsApi.postRivalApply(payload);
+
       handleClose();
     } catch (error: unknown) {
       console.error("라이벌 신청 실패:", error);
@@ -128,20 +113,51 @@ export const useRival = () => {
     }
   };
 
-  const handleRivalDelete = async () => {
-    const selectedId = rivalSelectedId[0];
-    if (!selectedId) return;
+  const handleRivalDelete = async (rivalId: number) => {
+    if (!rivalId) return;
 
     try {
-      await rivalsApi.deleteRival(selectedId);
-      await queryClient.invalidateQueries({ queryKey: ["myRivals"] });
-      await queryClient.invalidateQueries({ queryKey: ["rivalList"] });
-      handleDeleteModalClose();
+      setError(null);
+
+      await rivalsApi.deleteRival(rivalId);
+
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: ["myRivals"] }),
+        queryClient.invalidateQueries({ queryKey: ["rivalList"] }),
+      ]);
     } catch (error: unknown) {
       console.error("라이벌 삭제 실패:", error);
       setError(getErrorMessage(error, "라이벌 삭제 중 오류가 발생했습니다."));
     }
   };
+
+  const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
+  const [pendingDelete, setPendingDelete] = useState<{ id: number; name?: string } | null>(null);
+
+  const openDeleteConfirm = (id: number, name?: string) => {
+    setPendingDelete({ id, name });
+    setDeleteConfirmOpen(true);
+    setError(null);
+  };
+
+  const closeDeleteConfirm = () => {
+    setDeleteConfirmOpen(false);
+    setPendingDelete(null);
+    setError(null);
+  };
+
+  const confirmDeleteRival = async () => {
+    const id = pendingDelete?.id;
+    if (!id) return;
+
+    await handleRivalDelete(id);
+
+    if (!error) {
+      closeDeleteConfirm();
+    }
+  };
+
+  const [pendingDeleteId, setPendingDeleteId] = useState<number | null>(null);
 
   return {
     userList,
@@ -155,19 +171,22 @@ export const useRival = () => {
     handleClose,
     handleSelectClose,
 
-    // delete modal
-    rivalDeleteOpen,
-    handleDeleteModalOpen,
-    handleDeleteModalClose,
-
     // selection
     rivalSelectedId,
     handleUserSelect,
-    handleDeleteUserSelect,
 
     // actions
     handleRivalCreate,
     handleRivalDelete,
+
+    // delete confirm
+    deleteConfirmOpen,
+    pendingDelete,
+    openDeleteConfirm,
+    closeDeleteConfirm,
+    confirmDeleteRival,
+    pendingDeleteId,
+    setPendingDeleteId,
 
     // search
     searchText,
