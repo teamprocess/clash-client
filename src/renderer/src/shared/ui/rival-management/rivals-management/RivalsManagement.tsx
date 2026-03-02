@@ -19,7 +19,9 @@ export const AddRivalsDialog = ({ isOpen, onClose, rival }: AddRivalsDialogProps
 
   const users = rival.filteredUsers ?? [];
 
-  const [activeTab, setActiveTab] = useState<"addRival" | "rivalList">("addRival");
+  const [activeTab, setActiveTab] = useState<"rivals-management" | "rivalList">(
+    "rivals-management"
+  );
   const tabsRef = useRef<HTMLDivElement>(null);
   const addRivalTabRef = useRef<HTMLButtonElement>(null);
   const rivalListTabRef = useRef<HTMLButtonElement>(null);
@@ -28,7 +30,7 @@ export const AddRivalsDialog = ({ isOpen, onClose, rival }: AddRivalsDialogProps
   const updateActiveRail = useCallback(() => {
     const tabsElement = tabsRef.current;
     const activeTabElement =
-      activeTab === "addRival" ? addRivalTabRef.current : rivalListTabRef.current;
+      activeTab === "rivals-management" ? addRivalTabRef.current : rivalListTabRef.current;
 
     if (!tabsElement || !activeTabElement) {
       return;
@@ -69,8 +71,8 @@ export const AddRivalsDialog = ({ isOpen, onClose, rival }: AddRivalsDialogProps
           <S.Tabs ref={tabsRef}>
             <S.Tab
               ref={addRivalTabRef}
-              $isActive={activeTab === "addRival"}
-              onClick={() => setActiveTab("addRival")}
+              $isActive={activeTab === "rivals-management"}
+              onClick={() => setActiveTab("rivals-management")}
             >
               라이벌 추가
             </S.Tab>
@@ -86,7 +88,7 @@ export const AddRivalsDialog = ({ isOpen, onClose, rival }: AddRivalsDialogProps
             <S.TabActiveRail $left={activeRail.left} $width={activeRail.width} />
           </S.TabRail>
         </S.TabHeader>
-        {activeTab === "addRival" ? (
+        {activeTab === "rivals-management" ? (
           <>
             <S.TopSection>
               <S.SearchInputBox>
