@@ -7,7 +7,7 @@ export const TestContainer = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 5rem;
+  gap: 3.5rem;
   min-height: 100%;
   background-color: ${({ theme }) => theme.background.normal};
   border-radius: 1rem;
@@ -34,7 +34,7 @@ export const QuestionWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 9rem;
+  gap: 4rem;
 `;
 
 export const QuestionBox = styled.div`
@@ -167,4 +167,11 @@ export const PreviousIcon = styled(Previous)``;
 export const PreviousLabel = styled.span`
   ${font.title2.medium}
   color: ${({ theme }) => theme.label.neutral};
+`;
+
+export const QuestionBoxWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 9rem;
 `;
