@@ -126,6 +126,9 @@ export const ProgressBarWrapper = styled.div`
   align-items: center;
   gap: 0.75rem;
   pointer-events: auto;
+  background-color: ${({ theme }) => theme.background.normal};
+  border-radius: 1rem;
+  padding: 0 1rem;
 `;
 
 export const ProgressTrack = styled.div`
