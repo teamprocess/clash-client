@@ -43,37 +43,39 @@ export const Test = ({
               <S.PreviousLabel>이전으로</S.PreviousLabel>
             </S.PreviousBox>
           </Link>
-          {questionData.map(({ id, content }, idx) => (
-            <S.QuestionBox key={id}>
-              <S.QuestionTitleBox>
-                <S.QuestionTitle>
-                  <S.QuestionNumber>{id}.</S.QuestionNumber>
-                  {content}
-                </S.QuestionTitle>
-              </S.QuestionTitleBox>
-              <S.AnswerContainer>
-                <S.AnswerBox>
-                  {answerBoxData.map(answer => (
-                    <S.ItemWrapper key={answer.id}>
-                      <S.AnswerItem
-                        $itemSize={answer.size}
-                        $isActive={answers[idx] === answer.id}
-                        onClick={() => handleSelect(idx, answer.id)}
-                      />
-                    </S.ItemWrapper>
-                  ))}
-                </S.AnswerBox>
+          <S.QuestionBoxWrapper>
+            {questionData.map(({ id, content }, idx) => (
+              <S.QuestionBox key={id}>
+                <S.QuestionTitleBox>
+                  <S.QuestionTitle>
+                    <S.QuestionNumber>{id}.</S.QuestionNumber>
+                    {content}
+                  </S.QuestionTitle>
+                </S.QuestionTitleBox>
+                <S.AnswerContainer>
+                  <S.AnswerBox>
+                    {answerBoxData.map(answer => (
+                      <S.ItemWrapper key={answer.id}>
+                        <S.AnswerItem
+                          $itemSize={answer.size}
+                          $isActive={answers[idx] === answer.id}
+                          onClick={() => handleSelect(idx, answer.id)}
+                        />
+                      </S.ItemWrapper>
+                    ))}
+                  </S.AnswerBox>
 
-                <S.LabelBox>
-                  {answerBoxData.map(({ id, content }) => (
-                    <S.LabelWrapper key={id}>
-                      <S.AnswerItemTitle>{content}</S.AnswerItemTitle>
-                    </S.LabelWrapper>
-                  ))}
-                </S.LabelBox>
-              </S.AnswerContainer>
-            </S.QuestionBox>
-          ))}
+                  <S.LabelBox>
+                    {answerBoxData.map(({ id, content }) => (
+                      <S.LabelWrapper key={id}>
+                        <S.AnswerItemTitle>{content}</S.AnswerItemTitle>
+                      </S.LabelWrapper>
+                    ))}
+                  </S.LabelBox>
+                </S.AnswerContainer>
+              </S.QuestionBox>
+            ))}
+          </S.QuestionBoxWrapper>
           <Button
             variant="primary"
             size="lg"
