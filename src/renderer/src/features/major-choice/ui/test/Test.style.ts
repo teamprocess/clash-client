@@ -7,7 +7,7 @@ export const TestContainer = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 5rem;
+  gap: 3.5rem;
   min-height: 100%;
   background-color: ${({ theme }) => theme.background.normal};
   border-radius: 1rem;
@@ -15,11 +15,26 @@ export const TestContainer = styled.div`
   position: relative;
 `;
 
+export const ProgressSticky = styled.div`
+  position: sticky;
+  top: 2.75rem;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  box-sizing: border-box;
+  width: calc(100% + 22rem);
+  margin: 0 -11rem;
+  padding: 0 2.5rem;
+  height: 0;
+  pointer-events: none;
+`;
+
 export const QuestionWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 9rem;
+  gap: 4rem;
 `;
 
 export const QuestionBox = styled.div`
@@ -107,30 +122,29 @@ export const AnswerItemTitle = styled.div`
 `;
 
 export const ProgressBarWrapper = styled.div`
-  position: fixed;
-  right: 5%;
-  top: 50%;
-  transform: translateY(-50%);
   display: flex;
-  flex-direction: column;
   align-items: center;
-  gap: 1rem;
+  gap: 0.75rem;
+  pointer-events: auto;
+  background-color: ${({ theme }) => theme.background.normal};
+  border-radius: 1rem;
+  padding: 0 1rem;
 `;
 
 export const ProgressTrack = styled.div`
-  width: 0.75rem;
-  height: 25rem;
+  width: 10rem;
+  height: 0.4rem;
   background-color: ${({ theme }) => theme.label.disable};
   border-radius: 9999px;
   overflow: hidden;
 `;
 
 export const ProgressFill = styled.div<{ $progress: number }>`
-  width: 100%;
-  height: ${({ $progress }) => $progress}%;
-  background-color: ${({ theme }) => theme.line.normal};
+  height: 100%;
+  width: ${({ $progress }) => $progress}%;
+  background-color: ${({ theme }) => theme.primary.normal};
   border-radius: 9999px;
-  transition: height 0.4s ease;
+  transition: width 0.4s ease;
 `;
 
 export const ProgressLabel = styled.span`
@@ -153,4 +167,11 @@ export const PreviousIcon = styled(Previous)``;
 export const PreviousLabel = styled.span`
   ${font.title2.medium}
   color: ${({ theme }) => theme.label.neutral};
+`;
+
+export const QuestionBoxWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 9rem;
 `;
