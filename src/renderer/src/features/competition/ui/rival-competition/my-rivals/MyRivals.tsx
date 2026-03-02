@@ -1,8 +1,9 @@
 import * as S from "./MyRivals.style";
 import { UserStatus, getStatus, useMyRivals } from "@/features/competition/model/useMyRivals";
-import { formatTime } from "@/shared/lib";
+import { formatTime, useRival } from "@/shared/lib";
 import { MyRivalsResponse } from "@/entities/competition";
 import { useEffect, useState } from "react";
+import { AddRivalsDialog, Button } from "@/shared/ui";
 
 interface MyRivalsProps {
   data: MyRivalsResponse;
@@ -62,37 +63,47 @@ const RivalRow = ({ user, index }: { user: RivalUser; index: number }) => {
 };
 
 export const MyRivals = ({ data }: MyRivalsProps) => {
+  const rival = useRival();
   const { myRivals } = useMyRivals({ data });
 
   return (
-    <S.ListContent>
-      <S.RivalList>
-        <S.TitleBox>
-          <S.Title>내 라이벌</S.Title>
-        </S.TitleBox>
+    <>
+      <S.ListContent>
+        <S.RivalList>
+          <S.TitleBox>
+            <S.Title>내 라이벌</S.Title>
+            <Button size={"sm"} variant={"secondary"} onClick={rival.handleOpen}>
+              라이벌 관리하러 가기!
+            </Button>
+          </S.TitleBox>
 
-        <S.GaroLine />
+          <S.GaroLine />
 
-        <S.ProfileWrapper>
-          {myRivals.myRivalsData?.myRivals && myRivals.myRivalsData.myRivals.length > 0 ? (
-            myRivals.myRivalsData.myRivals.map((user, index) => (
-              <RivalRow
-                key={user.username ?? index}
-                user={user as unknown as RivalUser}
-                index={index}
-              />
-            ))
-          ) : (
-            <S.DetailWrapper>
-              <S.DefaultBattleBox>
-                <S.DefaultBattleText>
-                  위 배틀을 선택하여 배틀의 상세 내용을 확인해보세요!
-                </S.DefaultBattleText>
-              </S.DefaultBattleBox>
-            </S.DetailWrapper>
-          )}
-        </S.ProfileWrapper>
-      </S.RivalList>
-    </S.ListContent>
+          <S.ProfileWrapper>
+            {myRivals.myRivalsData?.myRivals && myRivals.myRivalsData.myRivals.length > 0 ? (
+              myRivals.myRivalsData.myRivals.map((user, index) => (
+                <RivalRow
+                  key={user.username ?? index}
+                  user={user as unknown as RivalUser}
+                  index={index}
+                />
+              ))
+            ) : (
+              <S.DetailWrapper>
+                <S.DefaultBattleBox>
+                  <S.DefaultBattleText>
+                    위 배틀을 선택하여 배틀의 상세 내용을 확인해보세요!
+                  </S.DefaultBattleText>
+                </S.DefaultBattleBox>
+              </S.DetailWrapper>
+            )}
+          </S.ProfileWrapper>
+        </S.RivalList>
+      </S.ListContent>
+
+      {rival.modalOpen && (
+        <AddRivalsDialog isOpen={rival.modalOpen} onClose={rival.handleClose} rival={rival} />
+      )}
+    </>
   );
 };
