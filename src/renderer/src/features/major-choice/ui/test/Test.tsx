@@ -26,6 +26,16 @@ export const Test = ({
   return (
     <>
       <S.TestContainer>
+        <S.ProgressSticky>
+          <S.ProgressBarWrapper>
+            <S.ProgressTrack>
+              <S.ProgressFill $progress={progress} />
+            </S.ProgressTrack>
+            <S.ProgressLabel>
+              {answeredCount}/{totalCount}
+            </S.ProgressLabel>
+          </S.ProgressBarWrapper>
+        </S.ProgressSticky>
         <S.QuestionWrapper>
           <Link to="/roadmap">
             <S.PreviousBox>
@@ -33,37 +43,39 @@ export const Test = ({
               <S.PreviousLabel>이전으로</S.PreviousLabel>
             </S.PreviousBox>
           </Link>
-          {questionData.map(({ id, content }, idx) => (
-            <S.QuestionBox key={id}>
-              <S.QuestionTitleBox>
-                <S.QuestionTitle>
-                  <S.QuestionNumber>{id}.</S.QuestionNumber>
-                  {content}
-                </S.QuestionTitle>
-              </S.QuestionTitleBox>
-              <S.AnswerContainer>
-                <S.AnswerBox>
-                  {answerBoxData.map(answer => (
-                    <S.ItemWrapper key={answer.id}>
-                      <S.AnswerItem
-                        $itemSize={answer.size}
-                        $isActive={answers[idx] === answer.id}
-                        onClick={() => handleSelect(idx, answer.id)}
-                      />
-                    </S.ItemWrapper>
-                  ))}
-                </S.AnswerBox>
+          <S.QuestionBoxWrapper>
+            {questionData.map(({ id, content }, idx) => (
+              <S.QuestionBox key={id}>
+                <S.QuestionTitleBox>
+                  <S.QuestionTitle>
+                    <S.QuestionNumber>{id}.</S.QuestionNumber>
+                    {content}
+                  </S.QuestionTitle>
+                </S.QuestionTitleBox>
+                <S.AnswerContainer>
+                  <S.AnswerBox>
+                    {answerBoxData.map(answer => (
+                      <S.ItemWrapper key={answer.id}>
+                        <S.AnswerItem
+                          $itemSize={answer.size}
+                          $isActive={answers[idx] === answer.id}
+                          onClick={() => handleSelect(idx, answer.id)}
+                        />
+                      </S.ItemWrapper>
+                    ))}
+                  </S.AnswerBox>
 
-                <S.LabelBox>
-                  {answerBoxData.map(({ id, content }) => (
-                    <S.LabelWrapper key={id}>
-                      <S.AnswerItemTitle>{content}</S.AnswerItemTitle>
-                    </S.LabelWrapper>
-                  ))}
-                </S.LabelBox>
-              </S.AnswerContainer>
-            </S.QuestionBox>
-          ))}
+                  <S.LabelBox>
+                    {answerBoxData.map(({ id, content }) => (
+                      <S.LabelWrapper key={id}>
+                        <S.AnswerItemTitle>{content}</S.AnswerItemTitle>
+                      </S.LabelWrapper>
+                    ))}
+                  </S.LabelBox>
+                </S.AnswerContainer>
+              </S.QuestionBox>
+            ))}
+          </S.QuestionBoxWrapper>
           <Button
             variant="primary"
             size="lg"
@@ -73,14 +85,6 @@ export const Test = ({
           >
             결과 확인하기
           </Button>
-          <S.ProgressBarWrapper>
-            <S.ProgressTrack>
-              <S.ProgressFill $progress={progress} />
-            </S.ProgressTrack>
-            <S.ProgressLabel>
-              {answeredCount} / {totalCount}
-            </S.ProgressLabel>
-          </S.ProgressBarWrapper>
         </S.QuestionWrapper>
       </S.TestContainer>
     </>
