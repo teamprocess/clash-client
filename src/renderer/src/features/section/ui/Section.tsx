@@ -19,6 +19,15 @@ export const Section = () => {
   const major = myProfile?.major as MajorEnum;
   const { data: sectionData } = useMajorSectionQuery(major);
 
+  const majorLabelMap: Partial<Record<MajorEnum, string>> = {
+    [MajorEnum.WEB]: "웹",
+    [MajorEnum.SERVER]: "서버",
+    [MajorEnum.APP]: "앱",
+    [MajorEnum.AI]: "AI",
+    [MajorEnum.GAME]: "게임",
+  };
+  const roadmapTitle = majorLabelMap[major] ? `${majorLabelMap[major]} 로드맵` : "로드맵";
+
   const handleClick = (item: section) => {
     setSelectedSectionId(+item.id);
     setIsSelectedSectionLocked(item.locked);
@@ -52,10 +61,14 @@ export const Section = () => {
             />
           ))}
         </S.SectionItemWrapper>
-
-        <ChapterRanking page="section" />
-        <SectionProgress />
       </S.RoadmapScrollable>
+
+      <S.RoadmapTitleBox>
+        <S.RoadmapTitle>{roadmapTitle}</S.RoadmapTitle>
+        <S.RoadmapTitleArrowIcon />
+      </S.RoadmapTitleBox>
+      <ChapterRanking page="chapter" />
+      <SectionProgress />
 
       {selectedSectionId !== null && (
         <PreviewModal
