@@ -75,7 +75,7 @@ export const UserChoiceContainer = styled.div`
   scrollbar-width: none;
 `;
 
-export const UserChoiceBox = styled.div<{ $isSelected: boolean }>`
+export const UserChoiceBox = styled.div<{ $isSelected?: boolean; $isRival?: boolean }>`
   ${flexRow};
   align-items: center;
   justify-content: space-between;
@@ -85,11 +85,21 @@ export const UserChoiceBox = styled.div<{ $isSelected: boolean }>`
   cursor: pointer;
   transition: 0.1s ease-in-out;
 
-  &:hover {
-    border-radius: 0.75rem;
-    padding: 0.5rem 1.25rem;
-    background-color: ${({ theme }) => theme.fill.alternative};
-  }
+  ${({ $isRival, theme }) =>
+    !$isRival &&
+    css`
+      &:hover {
+        border-radius: 0.75rem;
+        padding: 0.5rem 1.25rem;
+        background-color: ${theme.fill.alternative};
+      }
+    `}
+
+  ${({ $isRival }) =>
+    $isRival &&
+    css`
+      cursor: default;
+    `}
 `;
 
 export const ButtonBox = styled.div`
@@ -177,4 +187,16 @@ export const TabActiveRail = styled.div<{ $left: number; $width: number }>`
   transition:
     left 0.2s ease,
     width 0.2s ease;
+`;
+
+export const ApplyContainer = styled.div`
+  ${flexCol};
+  width: 100%;
+  height: 100%;
+  padding: 1rem;
+`;
+
+export const DetermineTitle = styled.p`
+  ${font.title2.medium};
+  color: ${palette.neutral[97]};
 `;
