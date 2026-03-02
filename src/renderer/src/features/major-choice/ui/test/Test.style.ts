@@ -17,7 +17,7 @@ export const TestContainer = styled.div`
 
 export const ProgressSticky = styled.div`
   position: sticky;
-  top: 1.5rem;
+  top: 2.75rem;
   z-index: 10;
   display: flex;
   align-items: center;
