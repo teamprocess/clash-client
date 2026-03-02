@@ -52,10 +52,6 @@ export const MoreLink = styled(Link)`
   gap: 0.25rem;
   cursor: pointer;
   text-decoration: none;
-
-  &:hover {
-    text-decoration: underline;
-  }
 `;
 
 export const DetailArrowIcon = styled(DetailArrow)`
