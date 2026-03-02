@@ -1,2 +1,2 @@
-export { AddRivalsDialog } from "./addRival/AddRivals";
-export { DeleteRivalsDialog } from "./deleteRival/DeleteRivals";
+export { AddRivalsDialog } from "./addRival/RivalsManagement";
+export { DeleteRivalsDialog } from "./deleteRival/DeleteRivalsConfirm";
