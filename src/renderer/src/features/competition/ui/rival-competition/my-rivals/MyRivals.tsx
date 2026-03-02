@@ -1,7 +1,6 @@
 import * as S from "./MyRivals.style";
 import { UserStatus, getStatus, useMyRivals } from "@/features/competition/model/useMyRivals";
-import { useRival, formatTime } from "@/shared/lib";
-import { Button, DeleteRivalsDialog } from "@/shared/ui";
+import { formatTime } from "@/shared/lib";
 import { MyRivalsResponse } from "@/entities/competition";
 import { useEffect, useState } from "react";
 
@@ -65,19 +64,11 @@ const RivalRow = ({ user, index }: { user: RivalUser; index: number }) => {
 export const MyRivals = ({ data }: MyRivalsProps) => {
   const { myRivals } = useMyRivals({ data });
 
-  // 라이벌 추가, 끊기를 위해 존재하는 함수 호출 그외 사용하지 않음
-  const rival = useRival();
-
   return (
     <S.ListContent>
       <S.RivalList>
         <S.TitleBox>
           <S.Title>내 라이벌</S.Title>
-          {(rival.rivalsData?.myRivals.length ?? 0) > 0 && (
-            <Button size={"sm"} variant={"primary"} onClick={rival.handleDeleteModalOpen}>
-              라이벌 끊기
-            </Button>
-          )}
         </S.TitleBox>
 
         <S.GaroLine />
@@ -102,14 +93,6 @@ export const MyRivals = ({ data }: MyRivalsProps) => {
           )}
         </S.ProfileWrapper>
       </S.RivalList>
-
-      {rival.rivalDeleteOpen && (
-        <DeleteRivalsDialog
-          isOpen={rival.rivalDeleteOpen}
-          onClose={rival.handleDeleteModalClose}
-          rival={rival}
-        />
-      )}
     </S.ListContent>
   );
 };
