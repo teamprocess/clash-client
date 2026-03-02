@@ -10,6 +10,8 @@ export interface DialogProps {
   showClose?: boolean;
   children?: ReactNode;
   gap?: number;
+  fullWidth?: boolean;
+  fullHeight?: boolean;
 }
 
 export const Dialog = ({
@@ -21,12 +23,21 @@ export const Dialog = ({
   children,
   gap = 0,
   showClose = true,
+  fullWidth = false,
+  fullHeight = false,
 }: DialogProps) => {
   if (!isOpen) return null;
 
   return (
     <S.DialogOverlay>
-      <S.DialogContainer $width={width} $height={height} role="dialog" aria-modal="true">
+      <S.DialogContainer
+        $width={width}
+        $height={height}
+        $fullWidth={fullWidth}
+        $fullHeight={fullHeight}
+        role="dialog"
+        aria-modal="true"
+      >
         {title && <S.DialogTitle>{title}</S.DialogTitle>}
         {showClose && onClose && (
           <S.CloseButton type="button" onClick={onClose} aria-label="닫기">
