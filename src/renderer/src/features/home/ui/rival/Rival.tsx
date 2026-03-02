@@ -1,12 +1,11 @@
 import * as S from "./Rival.style";
 import { useRival } from "@/shared/lib";
-import { AddRivalsDialog, DeleteRivalsDialog, Button, MyRivalUsers } from "@/shared/ui";
+import { AddRivalsDialog, Button, MyRivalUsers } from "@/shared/ui";
 
 export const Rival = () => {
   const rival = useRival();
 
   const rivals = rival.rivalsData?.myRivals ?? [];
-  const hasRivals = rivals.length > 0;
   const canAddMore = rivals.length < 4;
 
   return (
@@ -14,17 +13,17 @@ export const Rival = () => {
       <S.TitleBox>
         <S.TitleLeft>
           <S.Title>내 라이벌</S.Title>
-          {hasRivals && (
-            <Button size="sm" variant="primary" onClick={rival.handleDeleteModalOpen}>
-              라이벌 끊기
-            </Button>
-          )}
         </S.TitleLeft>
 
-        <S.MoreLink to="/competition">
-          자세히보기
-          <S.DetailArrowIcon />
-        </S.MoreLink>
+        <S.RightSIde>
+          <Button size={"sm"} variant={"secondary"} onClick={rival.handleOpen}>
+            라이벌 관리하러 가기!
+          </Button>
+          <S.MoreLink to="/competition">
+            자세히보기
+            <S.DetailArrowIcon />
+          </S.MoreLink>
+        </S.RightSIde>
       </S.TitleBox>
 
       <S.RivalBox>
@@ -44,14 +43,6 @@ export const Rival = () => {
 
       {rival.modalOpen && (
         <AddRivalsDialog isOpen={rival.modalOpen} onClose={rival.handleClose} rival={rival} />
-      )}
-
-      {rival.rivalDeleteOpen && (
-        <DeleteRivalsDialog
-          isOpen={rival.rivalDeleteOpen}
-          onClose={rival.handleDeleteModalClose}
-          rival={rival}
-        />
       )}
     </S.RivalContainer>
   );
