@@ -195,6 +195,12 @@ export const ActiveTime = styled.p<StatusProps>`
   }};
 `;
 
+export const RightSIde = styled.div`
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+`;
+
 export const AddRivalBox = styled.div`
   ${flexCol};
   align-items: center;
