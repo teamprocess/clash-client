@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { profileGithubDetailApi } from "@/entities/profile/api/profileGithubDetailApi";
 
 export const useProfileGithubDetailQuery = (date: string) => {
-  const { data, isLoading, isFetching, error, refetch } = useQuery({
+  const { data } = useQuery({
     queryKey: ["profileGithubDetail", date],
     queryFn: () => profileGithubDetailApi.getProfileGithubDetail({ date }),
     enabled: Boolean(date),
@@ -10,9 +10,5 @@ export const useProfileGithubDetailQuery = (date: string) => {
 
   return {
     data,
-    isLoading,
-    isFetching,
-    error,
-    refetch,
   };
 };
