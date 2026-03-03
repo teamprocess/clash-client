@@ -7,12 +7,29 @@ import { registerProtocol } from "../deeplink";
 
 interface BootstrapMainProcessParams {
   createWindow: () => void;
+  getMainWindow: () => BrowserWindow | null;
   getAppMonitor: () => AppMonitor | null;
 }
 
 // 앱 활성화 시 윈도우가 없으면 재생성
-const registerActivateHandler = (createWindow: () => void) => {
+const registerActivateHandler = (
+  createWindow: () => void,
+  getMainWindow: () => BrowserWindow | null
+) => {
   app.on("activate", function () {
+    const mainWindow = getMainWindow();
+    if (mainWindow && !mainWindow.isDestroyed()) {
+      if (mainWindow.isMinimized()) {
+        mainWindow.restore();
+      }
+
+      if (!mainWindow.isVisible()) {
+        mainWindow.show();
+      }
+      mainWindow.focus();
+      return;
+    }
+
     if (BrowserWindow.getAllWindows().length === 0) createWindow();
   });
 };
@@ -54,6 +71,7 @@ const registerWindowShortcuts = () => {
 // 메인 프로세스 초기 부트스트랩 실행
 export const bootstrapMainProcess = ({
   createWindow,
+  getMainWindow,
   getAppMonitor,
 }: BootstrapMainProcessParams) => {
   app.whenReady().then(() => {
@@ -70,6 +88,6 @@ export const bootstrapMainProcess = ({
     registerIpcHandlers(getAppMonitor);
 
     createWindow();
-    registerActivateHandler(createWindow);
+    registerActivateHandler(createWindow, getMainWindow);
   });
 };
