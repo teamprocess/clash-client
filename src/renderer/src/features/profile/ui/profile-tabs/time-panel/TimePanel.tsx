@@ -21,7 +21,7 @@ export const TimePanel = () => {
       </S.Header>
 
       <S.Weekdays>
-        {WEEKDAYS.map((d: (typeof WEEKDAYS)[number], i: number) => (
+        {WEEKDAYS.map((d, i) => (
           <S.Weekday key={d} $sun={i === 0} $sat={i === 6}>
             {d}
           </S.Weekday>
