@@ -1,0 +1,10 @@
+{
+  "name": "@clash/tsconfig",
+  "private": true,
+  "version": "0.0.0",
+  "exports": {
+    "./base": "./base.json",
+    "./react-vite": "./react-vite.json",
+    "./node": "./node.json"
+  }
+}
