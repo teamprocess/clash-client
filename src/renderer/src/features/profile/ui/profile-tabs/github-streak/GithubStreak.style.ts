@@ -34,25 +34,24 @@ export const Grid = styled.div`
   width: fit-content;
 `;
 
-export const Grass = styled.div<{ $level: number; $dimmed?: boolean; $selected?: boolean }>`
+const GRASS_COLORS = ["", "#3DCD5F40", "#3DCD5F80", "#3DCD5FBF", "#3DCD5FFF"] as const;
+
+export const Grass = styled.div<{
+  $level: 0 | 1 | 2 | 3 | 4;
+  $dimmed?: boolean;
+  $selected?: boolean;
+}>`
   width: ${CELL}rem;
   height: ${CELL}rem;
   border-radius: ${RADIUS}rem;
 
   opacity: ${({ $dimmed }) => ($dimmed ? 0.25 : 1)};
 
-  background-color: ${({ $selected, $level, theme }) => {
-    if ($selected) return "#3DCD5F";
-
-    switch ($level) {
-      case 3:
-        return "#3DCD5F";
-      case 2:
-        return "#3DCD5F50";
-      case 1:
-        return "#3DCD5F20";
-      default:
-        return theme.fill.neutral;
-    }
+  background-color: ${({ $level, theme }) => {
+    if ($level === 0) return theme.fill.neutral;
+    return GRASS_COLORS[$level];
   }};
+
+  outline: ${({ $selected }) => ($selected ? "2px solid rgba(61, 205, 95, 0.9)" : "none")};
+  outline-offset: 2px;
 `;
