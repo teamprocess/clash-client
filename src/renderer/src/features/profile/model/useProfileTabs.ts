@@ -2,21 +2,30 @@ import { useEffect, useMemo, useState } from "react";
 import { useActiveQuery } from "@/entities/home";
 import type { StreakItem } from "@/entities/home";
 
+export type Level = 0 | 1 | 2 | 3 | 4;
+
 export type CommitDay = { id: number | string; count: number; ratio?: number };
 
 export interface GithubStreakProps {
   commitDays?: CommitDay[];
-  getLevel?: (count: number, ratio?: number) => 0 | 1 | 2 | 3;
+  getLevel?: (count: number, ratio?: number) => Level;
 }
+
+const clamp = (v: number, min: number, max: number) => Math.max(min, Math.min(max, v));
+
+const ratioToLevel = (ratio?: number): Level => {
+  const r = typeof ratio === "number" && !Number.isNaN(ratio) ? clamp(ratio, 0, 100) : 0;
+
+  if (r === 0) return 0;
+  if (r <= 25) return 1;
+  if (r <= 50) return 2;
+  if (r <= 75) return 3;
+  return 4;
+};
 
 export const useGithubStreak = ({
   commitDays = [],
-  getLevel = (count: number) => {
-    if (count >= 7) return 3;
-    if (count >= 4) return 2;
-    if (count >= 1) return 1;
-    return 0;
-  },
+  getLevel = (_count: number, ratio?: number) => ratioToLevel(ratio),
 }: GithubStreakProps = {}) => {
   const daysForView = useMemo(() => commitDays, [commitDays]);
   const [selectedId, setSelectedId] = useState<string | number | null>(null);
@@ -83,7 +92,7 @@ export type DayCell = {
   key: string;
   day: number;
   isCurrentMonth: boolean;
-  level: 0 | 1 | 2 | 3;
+  level: Level;
 };
 
 export const WEEKDAYS = ["일", "월", "화", "수", "목", "금", "토"] as const;
@@ -106,8 +115,8 @@ const buildCalendar = (base: Date) => {
     if (n > daysInMonth)
       return { key: `n-${y}-${m}-${i}`, day: n - daysInMonth, isCurrentMonth: false, level: 0 };
 
-    const demoCount = (n * 3) % 10;
-    const level: 0 | 1 | 2 | 3 = demoCount >= 8 ? 3 : demoCount >= 4 ? 2 : demoCount >= 1 ? 1 : 0;
+    const demoRatio = ((n * 7) % 101) as number;
+    const level: Level = ratioToLevel(demoRatio);
 
     return { key: `c-${y}-${m}-${n}`, day: n, isCurrentMonth: true, level };
   });
