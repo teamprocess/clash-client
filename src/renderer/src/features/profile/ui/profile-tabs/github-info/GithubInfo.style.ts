@@ -237,3 +237,29 @@ export const LinesUnit = styled.span`
   ${font.label.medium}
   color: ${({ theme }) => theme.label.alternative};
 `;
+
+export const EmptyBox = styled.div`
+  width: 100%;
+  height: 6.625rem;
+  border-radius: 1.25rem;
+  padding: 1.25rem;
+  background: ${({ theme }) => theme.label.disable};
+  box-sizing: border-box;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.35rem;
+`;
+
+export const EmptyTitle = styled.p`
+  ${font.body.medium}
+  color: ${({ theme }) => theme.label.strong};
+  margin: 0;
+`;
+
+export const EmptyDesc = styled.p`
+  ${font.label.medium}
+  color: ${({ theme }) => theme.label.assistive};
+  margin: 0;
+`;

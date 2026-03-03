@@ -11,6 +11,7 @@ export type GithubInfoProps = {
   topRepoName: string;
   dailyAddedLines: number;
   dailyDeletedLines: number;
+  hasDetail?: boolean;
 };
 
 export const GithubInfo = ({
@@ -23,6 +24,7 @@ export const GithubInfo = ({
   topRepoName,
   dailyAddedLines,
   dailyDeletedLines,
+  hasDetail = true,
 }: GithubInfoProps) => {
   const stats = useMemo(
     () =>
@@ -34,6 +36,31 @@ export const GithubInfo = ({
       ] as const,
     [commits, issues, pullRequests, reviews]
   );
+
+  if (!hasDetail) {
+    return (
+      <S.ActiveContainer>
+        <S.Title>
+          <S.Date>
+            <S.DateIcon />
+            <S.DateText>{dateText}</S.DateText>
+          </S.Date>
+
+          <S.Total>
+            <S.Number>{totalContributions.toLocaleString("ko-KR")}</S.Number>
+            <S.TotalText>Contributions</S.TotalText>
+          </S.Total>
+        </S.Title>
+
+        <S.EmptyBox>
+          <S.EmptyTitle>잔디를 눌러 상세정보를 확인해보세요</S.EmptyTitle>
+          <S.EmptyDesc>
+            스트릭(잔디)에서 날짜를 선택하면 커밋/이슈/PR 등의 상세 활동이 표시돼요.
+          </S.EmptyDesc>
+        </S.EmptyBox>
+      </S.ActiveContainer>
+    );
+  }
 
   return (
     <S.ActiveContainer>
