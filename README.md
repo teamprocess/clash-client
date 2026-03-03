@@ -2,7 +2,7 @@
 
 ## Workspace
 
-- apps/desktop: Electron desktop client
+- apps/mac: Electron macOS client
 - apps/web: Web frontend
 - packages/tsconfig: Shared TypeScript config presets
 - packages/eslint-config: Shared ESLint flat config presets
