@@ -6,7 +6,12 @@
   "scripts": {
     "prepare": "husky",
     "dev": "turbo run dev --parallel",
+    "dev:mac": "pnpm --filter @clash/mac dev",
+    "dev:web": "pnpm --filter @clash/web dev",
     "build": "turbo run build",
+    "build:mac": "pnpm --filter @clash/mac build",
+    "build:web": "pnpm --filter @clash/web build",
+    "release:mac": "pnpm --filter @clash/mac run release:mac",
     "lint": "turbo run lint",
     "typecheck": "turbo run typecheck",
     "test": "turbo run test"

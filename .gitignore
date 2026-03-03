@@ -5,9 +5,9 @@ out
 .DS_Store
 .eslintcache
 *.log*
-build
+apps/mac/build
 .idea
 .env
 CLAUDE.md
 AGENTS.md
-certs
+apps/mac/certs

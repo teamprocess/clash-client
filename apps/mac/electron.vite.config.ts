@@ -7,12 +7,10 @@ import svgr from "vite-plugin-svgr";
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd());
   const isDev = mode === "development";
-  const certBaseDir = [resolve(__dirname, "certs"), resolve(__dirname, "../../certs")].find(
-    (baseDir) =>
-      existsSync(resolve(baseDir, "local.clash.kr+3-key.pem")) &&
-      existsSync(resolve(baseDir, "local.clash.kr+3.pem"))
-  );
-  const hasLocalHttpsCert = Boolean(certBaseDir);
+  const certBaseDir = resolve(__dirname, "certs");
+  const hasLocalHttpsCert =
+    existsSync(resolve(certBaseDir, "local.clash.kr+3-key.pem")) &&
+    existsSync(resolve(certBaseDir, "local.clash.kr+3.pem"));
 
   return {
     main: {
@@ -45,8 +43,8 @@ export default defineConfig(({ mode }) => {
             server: hasLocalHttpsCert
               ? {
                   https: {
-                    key: readFileSync(resolve(certBaseDir!, "local.clash.kr+3-key.pem")),
-                    cert: readFileSync(resolve(certBaseDir!, "local.clash.kr+3.pem")),
+                    key: readFileSync(resolve(certBaseDir, "local.clash.kr+3-key.pem")),
+                    cert: readFileSync(resolve(certBaseDir, "local.clash.kr+3.pem")),
                   },
                   host: "local.clash.kr",
                   port: 5173,
