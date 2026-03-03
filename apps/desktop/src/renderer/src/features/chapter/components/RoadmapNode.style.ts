@@ -12,8 +12,8 @@ interface NodeCircleProps {
 }
 
 interface IconProps {
-  $width: number;
-  $height: number;
+  $width?: number;
+  $height?: number;
 }
 
 export const NodeGroup = styled.g`
@@ -46,37 +46,32 @@ export const NodeNumber = styled.text`
   pointer-events: none;
 `;
 
-export const CheckIcon = styled(CheckImg).attrs((props: IconProps) => ({
-  width: props.$width,
-  height: props.$height,
-}))<IconProps>`
+export const CheckIcon = styled(CheckImg)<IconProps>`
+  width: ${({ $width = 0 }) => `${$width}px`};
+  height: ${({ $height = 0 }) => `${$height}px`};
   pointer-events: none;
 `;
 
-export const LockIcon = styled(LockImg).attrs((props: IconProps) => ({
-  width: props.$width,
-  height: props.$height,
-}))<IconProps>`
+export const LockIcon = styled(LockImg)<IconProps>`
+  width: ${({ $width = 0 }) => `${$width}px`};
+  height: ${({ $height = 0 }) => `${$height}px`};
   pointer-events: none;
 `;
 
-export const Star1Icon = styled(Star1Img).attrs((props: IconProps) => ({
-  width: props.$width,
-  height: props.$height,
-}))<IconProps>`
+export const Star1Icon = styled(Star1Img)<IconProps>`
+  width: ${({ $width = 0 }) => `${$width}px`};
+  height: ${({ $height = 0 }) => `${$height}px`};
   pointer-events: none;
 `;
 
-export const Star2Icon = styled(Star2Img).attrs((props: IconProps) => ({
-  width: props.$width,
-  height: props.$height,
-}))<IconProps>`
+export const Star2Icon = styled(Star2Img)<IconProps>`
+  width: ${({ $width = 0 }) => `${$width}px`};
+  height: ${({ $height = 0 }) => `${$height}px`};
   pointer-events: none;
 `;
 
-export const Star3Icon = styled(Star3Img).attrs((props: IconProps) => ({
-  width: props.$width,
-  height: props.$height,
-}))<IconProps>`
+export const Star3Icon = styled(Star3Img)<IconProps>`
+  width: ${({ $width = 0 }) => `${$width}px`};
+  height: ${({ $height = 0 }) => `${$height}px`};
   pointer-events: none;
 `;
