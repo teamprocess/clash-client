@@ -10,6 +10,16 @@ export type RivalUsersResponse = {
   users: UserType[];
 };
 
+export type RivalSignAllResponse = {
+  rivals: {
+    rivalId: number;
+    gitHubId: string;
+    name: string;
+    profileImage: string;
+    rivalLinkingStatus: "ACCEPTED" | "REJECTED" | "PENDING";
+  }[];
+};
+
 type IdType = {
   id: number;
 };
