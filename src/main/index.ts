@@ -7,6 +7,7 @@ import { registerQuitHandlers } from "./lifecycle";
 import { consumePendingDeepLink, registerDeepLinkEvents } from "./deeplink";
 import { bootstrapMainProcess } from "./bootstrap";
 import { registerApplicationMenu } from "./menu";
+import { registerTray } from "./tray";
 
 let mainWindow: BrowserWindow | null = null;
 let appMonitor: AppMonitor | null = null;
@@ -189,5 +190,6 @@ app.whenReady().then(() => {
   registerApplicationMenu({
     onCheckForUpdates: () => checkForUpdates("manual"),
   });
+  registerTray({ getMainWindow });
 });
-bootstrapMainProcess({ createWindow, getAppMonitor });
+bootstrapMainProcess({ createWindow, getMainWindow, getAppMonitor });
