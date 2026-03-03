@@ -1,0 +1,148 @@
+name: Quality
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - "apps/**"
+      - "packages/**"
+      - "package.json"
+      - "pnpm-lock.yaml"
+      - "pnpm-workspace.yaml"
+      - "turbo.json"
+
+permissions:
+  contents: read
+
+jobs:
+  detect-changes:
+    runs-on: ubuntu-latest
+    outputs:
+      desktop: ${{ steps.filter.outputs.desktop }}
+      web: ${{ steps.filter.outputs.web }}
+      status: ${{ steps.filter.outputs.status }}
+      shared: ${{ steps.filter.outputs.shared }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Detect changed paths
+        id: filter
+        uses: dorny/paths-filter@v3
+        with:
+          filters: |
+            desktop:
+              - 'apps/desktop/**'
+            web:
+              - 'apps/web/**'
+            status:
+              - 'apps/status/**'
+            shared:
+              - 'packages/**'
+              - 'package.json'
+              - 'pnpm-lock.yaml'
+              - 'pnpm-workspace.yaml'
+              - 'turbo.json'
+
+  desktop-quality:
+    name: Desktop quality
+    runs-on: ubuntu-latest
+    needs: detect-changes
+    if: needs.detect-changes.outputs.desktop == 'true' || needs.detect-changes.outputs.shared == 'true'
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Lint
+        run: pnpm turbo run lint --filter=@clash/desktop
+
+      - name: Typecheck
+        run: pnpm turbo run typecheck --filter=@clash/desktop
+
+      - name: Build
+        run: pnpm turbo run build --filter=@clash/desktop
+
+  web-quality:
+    name: Web quality
+    runs-on: ubuntu-latest
+    needs: detect-changes
+    if: needs.detect-changes.outputs.web == 'true' || needs.detect-changes.outputs.shared == 'true'
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Lint
+        run: pnpm turbo run lint --filter=@clash/web
+
+      - name: Typecheck
+        run: pnpm turbo run typecheck --filter=@clash/web
+
+      - name: Build
+        run: pnpm turbo run build --filter=@clash/web
+
+  status-quality:
+    name: Status quality
+    runs-on: ubuntu-latest
+    needs: detect-changes
+    if: needs.detect-changes.outputs.status == 'true' || needs.detect-changes.outputs.shared == 'true'
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Lint
+        run: pnpm turbo run lint --filter=@clash/status
+
+      - name: Typecheck
+        run: pnpm turbo run typecheck --filter=@clash/status
+
+      - name: Build
+        run: pnpm turbo run build --filter=@clash/status

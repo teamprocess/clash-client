@@ -1,0 +1,70 @@
+name: Web Deploy
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "apps/web/**"
+
+permissions:
+  contents: read
+
+jobs:
+  deploy-web:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build and Push Frontend Image
+        env:
+          WEB_IMAGE_TAG: ${{ github.sha }}
+          FRONTEND_ENV_FILE: ${{ secrets.FRONTEND_ENV_FILE }}
+        run: |
+          docker buildx build \
+            --platform linux/arm64 \
+            -f apps/web/Dockerfile \
+            -t ${{ secrets.WEB_DOCKER_IMAGE }}:${WEB_IMAGE_TAG} \
+            --secret id=frontend_env,env=FRONTEND_ENV_FILE \
+            --cache-from type=gha \
+            --cache-to type=gha,mode=max \
+            --push \
+            apps/web
+
+      - name: Deploy Web on EC2
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SERVER_IP }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script_stop: true
+          script: |
+            set -eu
+            cd /home/ubuntu/app
+
+            touch .deploy.env
+
+            sed -i "s|^WEB_DOCKER_IMAGE=.*|WEB_DOCKER_IMAGE=${{ secrets.WEB_DOCKER_IMAGE }}|" .deploy.env || true
+            grep -q "^WEB_DOCKER_IMAGE=" .deploy.env || echo "WEB_DOCKER_IMAGE=${{ secrets.WEB_DOCKER_IMAGE }}" >> .deploy.env
+
+            sed -i "s|^WEB_IMAGE_TAG=.*|WEB_IMAGE_TAG=${{ github.sha }}|" .deploy.env || true
+            grep -q "^WEB_IMAGE_TAG=" .deploy.env || echo "WEB_IMAGE_TAG=${{ github.sha }}" >> .deploy.env
+
+            export $(cat .deploy.env | xargs)
+
+            docker compose pull clash-web
+            docker compose up -d --no-deps clash-web
