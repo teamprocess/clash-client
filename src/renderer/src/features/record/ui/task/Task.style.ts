@@ -41,6 +41,7 @@ export const TaskItem = styled.div`
   justify-content: space-between;
   flex-shrink: 0;
   padding: 1.25rem 1.5rem;
+  gap: 1rem;
   border-bottom: 2px solid ${({ theme }) => theme.fill.alternative};
 `;
 
@@ -69,6 +70,12 @@ export const TaskLeftBox = styled.div`
 `;
 
 export const TaskRightBox = styled(TaskLeftBox)``;
+
+export const TaskInputBox = styled.div`
+  display: flex;
+  flex: 1;
+  min-width: 0;
+`;
 
 export const TaskText = styled.span`
   ${font.title2.medium};
@@ -109,6 +116,7 @@ export const MenuItem = styled.button`
 `;
 
 export const TaskTextInput = styled.input`
+  width: 100%;
   padding: 0.5rem 0.5rem 0.5rem 1rem;
   border: 1px solid ${({ theme }) => theme.line.normal};
   border-radius: 0.5rem;

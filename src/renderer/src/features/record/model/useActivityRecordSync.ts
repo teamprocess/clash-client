@@ -14,7 +14,6 @@ type ServerSessionState =
   | { type: "ACTIVITY"; appId: MonitoredApp | null };
 
 const SYNC_POLL_MS = 15000;
-const APP_CHANGE_DEBOUNCE_MS = 5000;
 
 const parseServerSession = (
   data: Awaited<ReturnType<typeof recordApi.getCurrentRecord>>["data"]
@@ -47,8 +46,7 @@ export const useActivityRecordSync = (
 
   const enqueueTarget = useCallback((targetAppName: string | null) => {
     const queue = pendingTargetsRef.current;
-    const lastTarget = queue.length > 0 ? queue[queue.length - 1] : null;
-    if (lastTarget === targetAppName) {
+    if (queue.length > 0 && queue[queue.length - 1] === targetAppName) {
       return;
     }
 
@@ -268,20 +266,8 @@ export const useActivityRecordSync = (
     }
 
     const currentObservedAppName = activeApp?.appName ?? null;
-    // IDE/모니터링 대상 앱이 잡히면 즉시 반영 (전환 누락 방지)
-    if (currentObservedAppName !== null) {
-      enqueueTarget(currentObservedAppName);
-      void flushSync();
-      return;
-    }
-
-    // IDE를 벗어난 경우(null)만 5초 유예 후 중지 처리
-    const debounceTimer = setTimeout(() => {
-      enqueueTarget(currentObservedAppName);
-      void flushSync();
-    }, APP_CHANGE_DEBOUNCE_MS);
-
-    return () => clearTimeout(debounceTimer);
+    enqueueTarget(currentObservedAppName);
+    void flushSync();
   }, [activeApp?.appName, enqueueTarget, flushSync, isElectron]);
 
   useEffect(() => {

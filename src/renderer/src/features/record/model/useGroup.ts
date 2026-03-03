@@ -33,7 +33,6 @@ export const useGroup = () => {
   const [hasEditPassword, setHasEditPassword] = useState(false);
   const [isFormModalOpen, setIsFormModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const [selectedGroupId, setSelectedGroupId] = useState<number | null>(null);
   const [joinPassword, setJoinPassword] = useState<string>("");
   const [currentGroupId, setCurrentGroupId] = useState<number | null>(null);
   const [isJoining, setIsJoining] = useState(false);
@@ -235,14 +234,16 @@ export const useGroup = () => {
 
       if (result.success) {
         setIsFormModalOpen(false);
-        setSelectedGroupId(null);
         setJoinPassword("");
+        return true;
       } else {
         console.error("그룹 참여 실패:", result.message);
+        return false;
       }
     } catch (error: unknown) {
       const errorMessage = getErrorMessage(error, "그룹 참여 중 오류가 발생했습니다.");
       console.error("그룹 참여 실패:", errorMessage, error);
+      return false;
     } finally {
       setIsJoining(false);
     }
@@ -289,8 +290,6 @@ export const useGroup = () => {
     isJoining: isJoining,
     selectedType: createSelectedType,
     onTypeSelect: handleCreateTypeSelect,
-    selectedGroupId,
-    setSelectedGroupId,
     joinPassword,
     setJoinPassword,
   };

@@ -44,10 +44,28 @@ const MONITORED_APPS: MonitoredAppDefinition[] = [
   { id: "XCODE", name: "Xcode", aliases: ["Xcode"] },
 ];
 
-const isAppNameMatch = (left: string, right: string): boolean => {
-  const normalizedLeft = left.toLowerCase();
-  const normalizedRight = right.toLowerCase();
-  return normalizedLeft.includes(normalizedRight) || normalizedRight.includes(normalizedLeft);
+const normalize = (name: string) => name.toLowerCase().trim().replace(/\s+/g, " ");
+
+const isAppNameMatch = (appName: string, alias: string): boolean => {
+  const normalizedAppName = normalize(appName);
+  const normalizedAlias = normalize(alias);
+
+  if (normalizedAlias === "code") {
+    return (
+      normalizedAppName === "code" ||
+      normalizedAppName.startsWith("code (") ||
+      normalizedAppName.startsWith("code -") ||
+      normalizedAppName.startsWith("code-")
+    );
+  }
+
+  return (
+    normalizedAppName === normalizedAlias ||
+    normalizedAppName.startsWith(`${normalizedAlias} (`) ||
+    normalizedAppName.startsWith(`${normalizedAlias} -`) ||
+    normalizedAppName.startsWith(`${normalizedAlias}-`) ||
+    normalizedAppName.startsWith(`${normalizedAlias} `)
+  );
 };
 
 // 원본 앱 이름을 모니터링 앱 정보(id/name)로 정규화
@@ -65,20 +83,4 @@ export const resolveMonitoredApp = (appName: string): MonitoredAppInfo | null =>
 // 기존 호출부 호환을 위한 이름 조회
 export const resolveMonitoredAppName = (appName: string): string | null => {
   return resolveMonitoredApp(appName)?.name ?? null;
-};
-
-// 서버 전송용 앱 id 조회
-export const resolveMonitoredAppId = (appName: string): MonitoredAppId | null => {
-  return resolveMonitoredApp(appName)?.id ?? null;
-};
-
-// 추적 이름과 실행 중 이름이 같은 앱인지 비교
-export const isSameMonitoredAppName = (trackedAppName: string, runningAppName: string): boolean => {
-  const trackedApp = resolveMonitoredApp(trackedAppName);
-  const runningApp = resolveMonitoredApp(runningAppName);
-  if (!trackedApp || !runningApp) {
-    return false;
-  }
-
-  return trackedApp.id === runningApp.id;
 };

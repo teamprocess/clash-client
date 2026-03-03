@@ -42,12 +42,13 @@ export const ProgressBarWrapper = styled.div`
   justify-content: space-between;
   align-items: center;
   gap: 2.5rem;
+  width: 50rem;
 `;
 
 export const BarBackground = styled.div`
   display: flex;
   justify-content: flex-start;
-  width: 24rem;
+  width: 100%;
   height: 0.5rem;
   background-color: ${({ theme }) => theme.label.assistive};
   border-radius: 0.75rem;
