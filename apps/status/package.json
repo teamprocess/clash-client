@@ -1,0 +1,16 @@
+{
+  "name": "@clash/status",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "lint": "echo \"TODO: status lint rules\"",
+    "typecheck": "echo \"TODO: status typecheck\"",
+    "test": "echo \"TODO: status tests\""
+  },
+  "devDependencies": {
+    "vite": "^7.2.6"
+  }
+}

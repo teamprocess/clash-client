@@ -1,18 +1,19 @@
 {
-  "name": "clash-web",
+  "name": "@clash/web",
   "private": true,
   "version": "0.0.1",
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
-    "lint": "eslint .",
+    "build": "pnpm run typecheck && vite build",
+    "lint": "eslint --cache .",
+    "typecheck": "tsc -b --pretty false",
+    "test": "echo \"No tests yet\"",
     "preview": "vite preview"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
     "axios": "^1.13.4",
-    "husky": "^9.1.7",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "react-google-recaptcha-v3": "^1.11.0",
@@ -23,6 +24,8 @@
     "zod": "^4.3.6"
   },
   "devDependencies": {
+    "@clash/eslint-config": "workspace:*",
+    "@clash/tsconfig": "workspace:*",
     "@eslint/js": "^9.39.1",
     "@types/node": "^24.10.1",
     "@types/react": "^19.2.5",
