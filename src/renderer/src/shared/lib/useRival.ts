@@ -117,20 +117,22 @@ export const useRival = () => {
   };
 
   const handleRivalDelete = async (rivalId: number) => {
-    if (!rivalId) return;
+    if (!rivalId) return false;
 
     try {
       setError(null);
-
       await rivalsApi.deleteRival(rivalId);
 
       await Promise.all([
         queryClient.invalidateQueries({ queryKey: ["myRivals"] }),
         queryClient.invalidateQueries({ queryKey: ["rivalList"] }),
       ]);
+
+      return true;
     } catch (error: unknown) {
       console.error("라이벌 삭제 실패:", error);
       setError(getErrorMessage(error, "라이벌 삭제 중 오류가 발생했습니다."));
+      return false;
     }
   };
 

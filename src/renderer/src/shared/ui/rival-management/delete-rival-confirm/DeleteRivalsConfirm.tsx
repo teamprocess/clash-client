@@ -18,8 +18,9 @@ export const DeleteRivalsConfirmDialog = ({
   userName,
 }: DeleteRivalsDialogProps) => {
   const handleConfirm = async () => {
-    await rival.handleRivalDelete(rivalId);
-    onClose();
+    const ok = await rival.handleRivalDelete(rivalId);
+    if (!ok) return;
+    window.location.reload();
   };
 
   return (
