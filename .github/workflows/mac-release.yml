@@ -1,4 +1,4 @@
-name: Desktop Release
+name: Mac Release
 
 on:
   push:
@@ -7,14 +7,14 @@ on:
   workflow_dispatch:
 
 concurrency:
-  group: desktop-release-${{ github.ref }}
+  group: mac-release-${{ github.ref }}
   cancel-in-progress: false
 
 permissions:
   contents: read
 
 jobs:
-  desktop-release:
+  mac-release:
     runs-on: macos-14
     timeout-minutes: 90
     env:
@@ -86,7 +86,7 @@ jobs:
 
       - name: Build and notarize
         run: |
-          pnpm --filter @clash/desktop run release:mac -- --config.extraMetadata.version="${RELEASE_VERSION}"
+          pnpm --filter @clash/mac run release:mac -- --config.extraMetadata.version="${RELEASE_VERSION}"
 
       - name: Upload artifacts to S3
         run: |
@@ -99,18 +99,18 @@ jobs:
           BLOCKMAP_FILE="${ZIP_FILE}.blockmap"
           DMG_FILE="clash-client-${RELEASE_VERSION}.dmg"
 
-          test -f "apps/desktop/dist/latest-mac.yml" || (echo "apps/desktop/dist/latest-mac.yml not found" && exit 1)
-          test -f "apps/desktop/dist/${ZIP_FILE}" || (echo "apps/desktop/dist/${ZIP_FILE} not found" && exit 1)
-          test -f "apps/desktop/dist/${BLOCKMAP_FILE}" || (echo "apps/desktop/dist/${BLOCKMAP_FILE} not found" && exit 1)
-          test -f "apps/desktop/dist/${DMG_FILE}" || (echo "apps/desktop/dist/${DMG_FILE} not found" && exit 1)
+          test -f "apps/mac/dist/latest-mac.yml" || (echo "apps/mac/dist/latest-mac.yml not found" && exit 1)
+          test -f "apps/mac/dist/${ZIP_FILE}" || (echo "apps/mac/dist/${ZIP_FILE} not found" && exit 1)
+          test -f "apps/mac/dist/${BLOCKMAP_FILE}" || (echo "apps/mac/dist/${BLOCKMAP_FILE} not found" && exit 1)
+          test -f "apps/mac/dist/${DMG_FILE}" || (echo "apps/mac/dist/${DMG_FILE} not found" && exit 1)
 
-          aws s3 cp "apps/desktop/dist/latest-mac.yml" "s3://${S3_BUCKET}/${UPDATES_PREFIX}/latest-mac.yml" \
+          aws s3 cp "apps/mac/dist/latest-mac.yml" "s3://${S3_BUCKET}/${UPDATES_PREFIX}/latest-mac.yml" \
             --cache-control "public,max-age=60,must-revalidate"
-          aws s3 cp "apps/desktop/dist/${ZIP_FILE}" "s3://${S3_BUCKET}/${UPDATES_PREFIX}/${ZIP_FILE}" \
+          aws s3 cp "apps/mac/dist/${ZIP_FILE}" "s3://${S3_BUCKET}/${UPDATES_PREFIX}/${ZIP_FILE}" \
             --cache-control "public,max-age=31536000,immutable"
-          aws s3 cp "apps/desktop/dist/${BLOCKMAP_FILE}" "s3://${S3_BUCKET}/${UPDATES_PREFIX}/${BLOCKMAP_FILE}" \
+          aws s3 cp "apps/mac/dist/${BLOCKMAP_FILE}" "s3://${S3_BUCKET}/${UPDATES_PREFIX}/${BLOCKMAP_FILE}" \
             --cache-control "public,max-age=31536000,immutable"
-          aws s3 cp "apps/desktop/dist/${DMG_FILE}" "s3://${S3_BUCKET}/${DOWNLOADS_PREFIX}/latest" \
+          aws s3 cp "apps/mac/dist/${DMG_FILE}" "s3://${S3_BUCKET}/${DOWNLOADS_PREFIX}/latest" \
             --content-type "application/x-apple-diskimage" \
             --content-disposition "attachment; filename=Clash.dmg" \
             --cache-control "public,max-age=60,must-revalidate"
