@@ -5,9 +5,9 @@ import { ItemPanel, ItemPreviewPayload } from "./item-panel/ItemPanel";
 import { TimePanel } from "@/features/profile";
 import { GithubActivityPanel } from "@/features/profile/ui/profile-tabs/github-activity-panel/GithubAcivityPanel";
 
-type ProfileTabsProps = {
+interface ProfileTabsProps {
   onPreviewChange?: (payload: ItemPreviewPayload) => void;
-};
+}
 
 export const ProfileTabs = ({ onPreviewChange }: ProfileTabsProps) => {
   const [active, setActive] = useState<TabKey>("github");
