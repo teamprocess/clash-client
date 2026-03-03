@@ -1,15 +1,12 @@
 import { useEffect } from "react";
 import * as S from "./GithubStreak.style";
-import {
-  useProfileGithubStreak,
-  type GithubStreakProps,
-} from "@/features/profile/model/useProfileTabs";
+import { useProfileGithubStreak } from "@/features/profile/model/useProfileTabs";
 
-type Props = GithubStreakProps & {
+interface GithubStreakProps {
   onSelectDate?: (date: string, count: number) => void;
-};
+}
 
-export const GithubStreak = ({ onSelectDate, ...streakProps }: Props) => {
+export const GithubStreak = ({ onSelectDate, ...streakProps }: GithubStreakProps) => {
   const { daysForView, getLevel, selectedId, selectedDay, handleGrassClick } =
     useProfileGithubStreak(streakProps);
 
