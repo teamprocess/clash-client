@@ -30,6 +30,36 @@ export class AppMonitor {
     this.mainWindow = mainWindow;
   }
 
+  private getSafeMainWindow() {
+    if (!this.mainWindow || this.mainWindow.isDestroyed()) {
+      this.mainWindow = null;
+      return null;
+    }
+
+    if (this.mainWindow.webContents.isDestroyed()) {
+      return null;
+    }
+
+    return this.mainWindow;
+  }
+
+  private sendToRenderer(channel: string, payload: unknown) {
+    const window = this.getSafeMainWindow();
+    if (!window) {
+      return;
+    }
+
+    try {
+      window.webContents.send(channel, payload);
+    } catch (error) {
+      if (error instanceof Error && error.message.includes("Object has been destroyed")) {
+        return;
+      }
+
+      console.error(`${channel} 이벤트 전송에 실패했습니다:`, error);
+    }
+  }
+
   async start() {
     if (this.intervalId) {
       return;
@@ -199,7 +229,7 @@ export class AppMonitor {
       this.sessions.shift();
     }
 
-    this.mainWindow?.webContents.send("app-monitor:session-updated", session);
+    this.sendToRenderer("app-monitor:session-updated", session);
   }
 
   // 앱 상태 변경 이벤트를 렌더러로 전송
@@ -207,7 +237,7 @@ export class AppMonitor {
     const currentAppName = primaryApp?.appName ?? null;
     if (currentAppName !== this.lastSentAppName || forceUpdate) {
       this.lastSentAppName = currentAppName;
-      this.mainWindow?.webContents.send("app-monitor:app-changed", primaryApp);
+      this.sendToRenderer("app-monitor:app-changed", primaryApp);
     }
   }
 
