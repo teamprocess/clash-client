@@ -1,4 +1,8 @@
-import { RivalApplyRequest, RivalUsersResponse } from "@/entities/home/model/useRival.types";
+import {
+  RivalApplyRequest,
+  RivalSignAllResponse,
+  RivalUsersResponse,
+} from "@/entities/home/model/useRival.types";
 import { api, ApiResponse } from "@/shared/api";
 
 interface ModifyRivalRequest {
@@ -36,6 +40,11 @@ export const rivalsApi = {
 
   deleteRival: async (id: number) => {
     const result = await api.delete(`/compete/rivals/remove/${id}`);
+    return result.data;
+  },
+
+  rivalSignAll: async () => {
+    const result = await api.get<ApiResponse<RivalSignAllResponse>>(`/compete/rivals/all`);
     return result.data;
   },
 };

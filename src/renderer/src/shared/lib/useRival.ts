@@ -7,6 +7,7 @@ import {
   rivalsApi,
 } from "@/entities/home";
 import { queryClient, getErrorMessage } from "@/shared/lib";
+import { useRivalSignAllQuery } from "@/entities/home";
 
 const USER_STATUS = {
   ONLINE: "ONLINE",
@@ -24,12 +25,14 @@ type StatusType = "온라인" | "자리비움" | "오프라인" | "";
 
 export const useRival = () => {
   const { data: myRivalsRes } = useMyRivalsQuery();
+  const { data: rivalSignAllRes } = useRivalSignAllQuery();
   const { data: rivalListRes } = useRivalListQuery();
 
   const [error, setError] = useState<string | null>(null);
 
   const rivalsData: MyRivalsResponse | null = myRivalsRes?.data ?? null;
   const userList: RivalUsersResponse | null = rivalListRes?.data ?? null;
+  const rivalSignAll = rivalSignAllRes?.data ?? null;
 
   const getStatus = (status: UserStatus): StatusType => {
     switch (status) {
@@ -162,6 +165,7 @@ export const useRival = () => {
   return {
     userList,
     rivalsData,
+    rivalSignAll,
     getStatus,
 
     // add modal
