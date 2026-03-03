@@ -78,7 +78,7 @@ export const Grid = styled.div`
   margin: 0.625rem auto;
 `;
 
-export const DayCell = styled.div<{ $level?: 0 | 1 | 2 | 3; $dim?: boolean }>`
+export const DayCell = styled.div<{ $level?: 0 | 1 | 2 | 3 | 4; $dim?: boolean }>`
   width: 3.125rem;
   height: 2.375rem;
   border-radius: 0.625rem;

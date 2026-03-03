@@ -7,7 +7,7 @@ export const Banner = styled.div`
   width: 43.25rem;
   margin-left: 0;
   margin-top: 3.125rem;
-  align-items: stretch;
+  align-items: center;
   flex: 0 0 43.25rem;
   min-width: 0;
 `;
