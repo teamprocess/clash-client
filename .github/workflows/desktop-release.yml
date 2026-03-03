@@ -3,7 +3,7 @@ name: Desktop Release
 on:
   push:
     tags:
-      - "desktop-v*.*.*"
+      - "v*.*.*"
   workflow_dispatch:
 
 concurrency:
@@ -55,7 +55,7 @@ jobs:
 
       - name: Resolve version from tag
         run: |
-          VERSION="${GITHUB_REF_NAME#desktop-v}"
+          VERSION="${GITHUB_REF_NAME#v}"
           echo "RELEASE_VERSION=$VERSION" >> "$GITHUB_ENV"
 
       - name: Show release version
