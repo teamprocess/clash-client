@@ -148,12 +148,6 @@ importers:
         specifier: ^4.5.0
         version: 4.5.0(rollup@4.59.0)(typescript@5.9.3)(vite@7.3.1(@types/node@22.19.3)(jiti@2.6.1)(yaml@2.8.2))
 
-  apps/status:
-    devDependencies:
-      vite:
-        specifier: ^7.2.6
-        version: 7.3.1(@types/node@24.11.0)(jiti@2.6.1)(yaml@2.8.2)
-
   apps/web:
     dependencies:
       '@hookform/resolvers':
