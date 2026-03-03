@@ -4,6 +4,7 @@ import Arrow from "../../assets/arrow.svg";
 import Fire from "../../assets/fire.svg";
 import Plus from "../../assets/plus.svg";
 import More from "../../assets/more.svg";
+import Cry from "../../assets/cry.svg";
 
 export const GroupContainer = styled.div`
   display: flex;
@@ -54,6 +55,37 @@ export const GroupNameBox = styled.div`
 export const GroupName = styled.span`
   ${font.headline2.medium}
   color: ${({ theme }) => theme.label.neutral};
+`;
+
+export const EmptyGroupState = styled.div`
+  display: flex;
+  flex: 1;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
+  gap: 0.875rem;
+`;
+
+export const EmptyGroupIcon = styled(Cry)``;
+
+export const EmptyGroupTextBox = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+`;
+
+export const EmptyGroupTitle = styled.p`
+  margin: 0;
+  ${font.headline1.bold}
+  color: ${({ theme }) => theme.label.normal};
+`;
+
+export const EmptyGroupDescription = styled.p`
+  margin: 0;
+  ${font.label.medium}
+  color: ${({ theme }) => theme.label.assistive};
 `;
 
 export const MemberContent = styled.div`

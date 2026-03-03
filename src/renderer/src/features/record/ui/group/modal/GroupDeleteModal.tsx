@@ -19,7 +19,7 @@ export const GroupDeleteModal = ({ isOpen, onClose, onConfirm, action }: GroupDe
       description={description}
       confirmMessage={warning}
       confirmLabel={confirmLabel}
-      confirmVariant="danger"
+      confirmVariant="primary"
       onClose={onClose}
       onConfirm={onConfirm}
     />

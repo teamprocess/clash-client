@@ -8,9 +8,12 @@ import { useMajorSectionQuery } from "@/entities/roadmap/section/api/query/useMa
 import { MajorEnum, section } from "@/entities/roadmap/section/model/section.types";
 import { useGetMyProfile } from "@/entities/user";
 import { SectionItemBox } from "../components/SectionItemBox";
+import { majorApi, Major } from "@/entities/major";
+import { useQueryClient } from "@tanstack/react-query";
 
 export const Section = () => {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
   const [isTutorialModalOpen, setIsTutorialModalOpen] = useState(false);
   const [selectedSectionId, setSelectedSectionId] = useState<number | null>(null);
@@ -18,6 +21,26 @@ export const Section = () => {
   const { data: myProfile } = useGetMyProfile();
   const major = myProfile?.major as MajorEnum;
   const { data: sectionData } = useMajorSectionQuery(major);
+
+  const majorLabelMap: Partial<Record<MajorEnum, string>> = {
+    [MajorEnum.WEB]: "웹",
+    [MajorEnum.SERVER]: "서버",
+    [MajorEnum.APP]: "앱",
+    [MajorEnum.AI]: "AI",
+    [MajorEnum.GAME]: "게임",
+  };
+  const roadmapTitle = majorLabelMap[major] ? `${majorLabelMap[major]} 로드맵` : "로드맵";
+
+  const handleChangeMajor = async () => {
+    try {
+      await majorApi.postMyMajor({ major: Major.NONE });
+      await queryClient.invalidateQueries({ queryKey: ["user"] });
+    } catch (error) {
+      console.error("Failed to reset major", error);
+    } finally {
+      navigate("/roadmap/major-choice");
+    }
+  };
 
   const handleClick = (item: section) => {
     setSelectedSectionId(+item.id);
@@ -52,10 +75,16 @@ export const Section = () => {
             />
           ))}
         </S.SectionItemWrapper>
-
-        <ChapterRanking page="section" />
-        <SectionProgress />
       </S.RoadmapScrollable>
+
+      <S.RoadmapTitleBox>
+        <S.RoadmapTitle>{roadmapTitle}</S.RoadmapTitle>
+        <S.ChangeButton type="button" onClick={handleChangeMajor} aria-label="전공 변경">
+          <S.RoadmapTitleArrowIcon />
+        </S.ChangeButton>
+      </S.RoadmapTitleBox>
+      <ChapterRanking page="chapter" />
+      <SectionProgress />
 
       {selectedSectionId !== null && (
         <PreviewModal

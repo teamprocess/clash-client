@@ -2,7 +2,7 @@ import styled, { css } from "styled-components";
 import { font } from "@/shared/config/font";
 import { palette } from "@/shared/config/theme";
 
-export type ButtonVariant = "primary" | "secondary" | "danger";
+export type ButtonVariant = "primary" | "secondary";
 export type ButtonSize = "sm" | "md" | "lg";
 
 interface ButtonProps {
@@ -55,13 +55,11 @@ export const Button = styled.button<ButtonProps>`
         return theme.primary.normal;
       case "secondary":
         return theme.line.normal;
-      case "danger":
-        return palette.red[60];
     }
   }};
 
   color: ${({ theme, $variant }) =>
-    $variant === "danger" || $variant === "primary" ? palette.neutral[99] : theme.label.normal};
+    $variant === "primary" ? palette.neutral[99] : theme.label.normal};
 
   &:disabled {
     cursor: not-allowed;

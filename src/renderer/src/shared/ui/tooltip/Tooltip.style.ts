@@ -7,6 +7,11 @@ interface TooltipBubbleProps {
   $position: TooltipPosition;
   $offset: number;
   $maxWidth?: string;
+  $open: boolean;
+}
+
+interface TooltipWrapperProps {
+  $triggerOnHover: boolean;
 }
 
 const bubblePositionStyleMap = {
@@ -63,16 +68,20 @@ const arrowPositionStyleMap = {
   `,
 } as const;
 
-export const TooltipWrapper = styled.span`
+export const TooltipWrapper = styled.span<TooltipWrapperProps>`
   position: relative;
   display: inline-flex;
   max-width: 100%;
 
-  &:hover > [data-role="tooltip-bubble"],
-  &:focus-within > [data-role="tooltip-bubble"] {
-    opacity: 1;
-    visibility: visible;
-  }
+  ${({ $triggerOnHover }) =>
+    $triggerOnHover &&
+    css`
+      &:hover > [data-role="tooltip-bubble"],
+      &:focus-within > [data-role="tooltip-bubble"] {
+        opacity: 1;
+        visibility: visible;
+      }
+    `}
 `;
 
 export const TooltipBubble = styled.span<TooltipBubbleProps>`
@@ -89,8 +98,8 @@ export const TooltipBubble = styled.span<TooltipBubbleProps>`
   word-break: break-word;
   overflow-wrap: break-word;
   pointer-events: none;
-  opacity: 0;
-  visibility: hidden;
+  opacity: ${({ $open }) => ($open ? 1 : 0)};
+  visibility: ${({ $open }) => ($open ? "visible" : "hidden")};
   transition:
     opacity 0.15s ease,
     visibility 0.15s ease;

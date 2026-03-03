@@ -29,7 +29,7 @@ export const useMajorChoice = () => {
 
   // Feature Choice 컴포넌트
   const [selected, setSelected] = useState<FeatureItem>(null);
-  const select = (path: FeatureItem) => setSelected(path);
+  const select = (path: FeatureItem) => setSelected(prev => (prev === path ? null : path));
 
   const [answers, setAnswers] = useState<(number | null | undefined)[]>([]);
 
@@ -52,7 +52,7 @@ export const useMajorChoice = () => {
 
   const [major, setMajor] = useState<MajorItem>(null);
 
-  const selectedMajor = (path: MajorItem) => setMajor(path);
+  const selectedMajor = (path: MajorItem) => setMajor(prev => (prev === path ? null : path));
 
   // Test 컴포넌트
   const [analyzedMajor, setAnalyzedMajor] = useState<AnalyzedMajorItem>(null);
