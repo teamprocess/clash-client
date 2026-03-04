@@ -21,3 +21,9 @@
 - `pnpm lint`
 - `pnpm typecheck`
 - `pnpm test`
+
+## Environment
+
+- mac 앱: `cp apps/mac/.env.example apps/mac/.env`
+- web 앱: `cp apps/web/.env.example apps/web/.env`
+- 앱 런타임 환경변수는 각 앱 디렉터리의 `.env`만 사용합니다.
