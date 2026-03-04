@@ -3,6 +3,7 @@ import * as S from "./RivalsManagement.style";
 import { SearchInput } from "@/shared/ui";
 import { useRival } from "@/shared/lib";
 import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
+import { RivalLinkingStatusButton } from "@/shared/ui/rival-management";
 
 interface AddRivalsDialogProps {
   isOpen: boolean;
@@ -197,9 +198,7 @@ export const RivalsManagementDialog = ({ isOpen, onClose, rival }: AddRivalsDial
                       </S.ProfileTagBox>
                     </S.ProfileContent>
 
-                    <Button size="sm" variant="primary">
-                      none
-                    </Button>
+                    <RivalLinkingStatusButton status={user.rivalLinkingStatus} />
                   </S.UserChoiceBox>
                 ))}
               </S.UserChoiceContainer>
