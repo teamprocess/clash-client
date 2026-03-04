@@ -2,7 +2,7 @@ import styled, { css } from "styled-components";
 import { font } from "@/shared/config/font";
 import { palette } from "@/shared/config/theme";
 
-export type ButtonVariant = "primary" | "secondary";
+export type ButtonVariant = "primary" | "secondary" | "accept" | "pending";
 export type ButtonSize = "sm" | "md" | "lg";
 
 interface ButtonProps {
@@ -55,6 +55,10 @@ export const Button = styled.button<ButtonProps>`
         return theme.primary.normal;
       case "secondary":
         return theme.line.normal;
+      case "accept":
+        return palette.green[50];
+      case "pending":
+        return palette.yellow?.[50];
     }
   }};
 
