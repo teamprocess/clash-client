@@ -16,7 +16,7 @@ export type RivalSignAllResponse = {
     githubId: string;
     name: string;
     profileImage: string;
-    rivalLinkingStatus: "ACCEPTED" | "REJECTED" | "PENDING";
+    rivalLinkingStatus: "ACCEPTED" | "REJECTED" | "PENDING" | "CANCELED";
   }[];
 };
 
