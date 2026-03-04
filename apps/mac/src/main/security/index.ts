@@ -1,6 +1,8 @@
 import { app, session } from "electron";
 import { is } from "@electron-toolkit/utils";
 
+const FALLBACK_SOCKET_ENDPOINT = "wss://api.clash.kr/socket.io";
+
 const parseOrigin = (rawUrl: string | undefined) => {
   if (!rawUrl) {
     return null;
@@ -35,7 +37,8 @@ export const configureCertificateHandling = () => {
 export const registerCspHeaders = () => {
   const connectSourceSet = new Set(["'self'", "https://www.google.com"]);
   const apiOrigin = parseOrigin(process.env.VITE_API_URL);
-  const socketOrigin = parseOrigin(process.env.VITE_SOCKET_IO_URL);
+  const socketOrigin =
+    parseOrigin(process.env.VITE_SOCKET_IO_URL) ?? parseOrigin(FALLBACK_SOCKET_ENDPOINT);
 
   if (apiOrigin) {
     connectSourceSet.add(apiOrigin);
