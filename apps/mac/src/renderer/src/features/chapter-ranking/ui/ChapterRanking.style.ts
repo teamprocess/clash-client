@@ -1,9 +1,9 @@
 import styled from "styled-components";
-import { font } from "@/shared/config/font";
+import { font } from "@clash/design-tokens/font";
 import FirstFrameIcon from "../assets/first-frame.svg";
 import SecondFrameIcon from "../assets/second-frame.svg";
 import ThirdFrameIcon from "../assets/third-frame.svg";
-import { palette } from "@/shared/config/theme";
+import { palette } from "@clash/design-tokens/theme";
 
 export type RankingPageEnum = "section" | "chapter";
 export type RankingPositionEnum = "top" | "bottom";

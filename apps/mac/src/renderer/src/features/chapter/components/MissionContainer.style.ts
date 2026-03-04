@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import Completed from "../assets/completed.svg";
 import NotCompleted from "../assets/not-completed.svg";
-import { font } from "@/shared/config/font";
+import { font } from "@clash/design-tokens/font";
 
 export const MissionContainer = styled.div`
   display: flex;

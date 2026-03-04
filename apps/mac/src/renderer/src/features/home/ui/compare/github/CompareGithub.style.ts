@@ -8,8 +8,8 @@ import GitPR from "@/features/home/assets/home/git-pr.svg";
 import Status from "@/features/home/assets/home/status.svg";
 import Review from "@/features/home/assets/home/review.svg";
 import GitIssue from "@/features/home/assets/home/git-issue.svg";
-import { font } from "@/shared/config/font";
-import { palette } from "@/shared/config/theme";
+import { font } from "@clash/design-tokens/font";
+import { palette } from "@clash/design-tokens/theme";
 import { Line } from "@/features/home/ui/active/Active.style";
 
 const flexRow = css`

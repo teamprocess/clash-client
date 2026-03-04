@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { font } from "@/shared/config/font";
+import { font } from "@clash/design-tokens/font";
 import Cry from "@/shared/ui/assets/cry-emoji.svg";
 
 export const CategoryContainer = styled.div`

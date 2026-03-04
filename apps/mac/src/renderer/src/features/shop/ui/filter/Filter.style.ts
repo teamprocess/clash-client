@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import Arrow from "@/features/shop/assets/arrow.svg";
-import { font } from "@/shared/config/font";
+import { font } from "@clash/design-tokens/font";
 
 export const FilterContainer = styled.div`
   flex-shrink: 0;

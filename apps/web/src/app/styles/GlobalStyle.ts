@@ -1,5 +1,5 @@
 import { createGlobalStyle } from "styled-components";
-import { font } from "@/shared/config/font";
+import { font } from "@clash/design-tokens/font";
 import "pretendard/dist/web/static/pretendard.css";
 
 export const GlobalStyle = createGlobalStyle`

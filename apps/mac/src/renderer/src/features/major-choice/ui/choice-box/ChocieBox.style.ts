@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import Check from "@/features/major-choice/assets/check.svg";
 import NotCheck from "@/features/major-choice/assets/not-check.svg";
-import { font } from "@/shared/config/font";
+import { font } from "@clash/design-tokens/font";
 
 export type ChoiceBoxSize = "sm" | "md" | "lg";
 

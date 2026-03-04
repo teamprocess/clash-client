@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import Roadmap from "@/features/section/assets/roadmap.svg";
-import { font } from "@/shared/config/font";
+import { font } from "@clash/design-tokens/font";
 
 export const SectionProgressContainer = styled.div`
   display: flex;

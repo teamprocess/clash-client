@@ -1,7 +1,7 @@
 import styled, { css } from "styled-components";
-import { font } from "@/shared/config/font";
+import { font } from "@clash/design-tokens/font";
 import { ButtonSize } from "@/shared/ui";
-import { palette } from "@/shared/config/theme";
+import { palette } from "@clash/design-tokens/theme";
 import Search from "@/features/home/assets/home/search.svg";
 
 export const SearchIcon = styled(Search)`

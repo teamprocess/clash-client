@@ -1,5 +1,5 @@
 import styled, { css } from "styled-components";
-import { font } from "@/shared/config/font";
+import { font } from "@clash/design-tokens/font";
 
 export type TooltipPosition = "top" | "right" | "bottom" | "left";
 

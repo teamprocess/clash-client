@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { font } from "@/shared/config/font";
+import { font } from "@clash/design-tokens/font";
 import Test from "@/features/major-choice/assets/test.svg";
 import Choice from "@/features/major-choice/assets/choice.svg";
 

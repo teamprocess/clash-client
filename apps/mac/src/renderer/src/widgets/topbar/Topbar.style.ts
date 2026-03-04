@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { font } from "@/shared/config/font";
+import { font } from "@clash/design-tokens/font";
 import { Link } from "react-router-dom";
 import ClashLogo from "@/widgets/topbar/assets/clash-logo.svg";
 import Menu from "@/widgets/topbar/assets/menu.svg";

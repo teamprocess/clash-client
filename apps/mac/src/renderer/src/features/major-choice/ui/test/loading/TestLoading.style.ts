@@ -1,6 +1,6 @@
 import styled, { keyframes } from "styled-components";
 import Loading from "../../../assets/loding.svg";
-import { font } from "@/shared/config/font";
+import { font } from "@clash/design-tokens/font";
 
 export const LoadingContainer = styled.div`
   display: flex;

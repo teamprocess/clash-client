@@ -1,8 +1,8 @@
 import Cookie from "@/features/shop/assets/cookie.svg";
-import { palette } from "@/shared/config/theme";
+import { palette } from "@clash/design-tokens/theme";
 import Token from "@/features/shop/assets/token.svg";
 import styled, { css } from "styled-components";
-import { font } from "@/shared/config/font";
+import { font } from "@clash/design-tokens/font";
 
 export const CookieIcon = styled(Cookie)`
   margin-left: -0.25rem;

@@ -1,6 +1,6 @@
 import styled, { css } from "styled-components";
-import { font } from "@/shared/config/font";
-import { palette } from "@/shared/config/theme";
+import { font } from "@clash/design-tokens/font";
+import { palette } from "@clash/design-tokens/theme";
 import Profile from "@/features/home/assets/home/profile.svg";
 import Checked from "@/features/home/assets/home/check-box.svg";
 

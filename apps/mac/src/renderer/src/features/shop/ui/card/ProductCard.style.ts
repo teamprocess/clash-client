@@ -1,8 +1,8 @@
 import styled from "styled-components";
-import { font } from "@/shared/config/font";
+import { font } from "@clash/design-tokens/font";
 import Cookie from "@/features/shop/assets/cookie.svg";
 import Token from "@/features/shop/assets/token.svg";
-import { palette } from "@/shared/config/theme";
+import { palette } from "@clash/design-tokens/theme";
 
 export const CardContainer = styled.div`
   display: flex;

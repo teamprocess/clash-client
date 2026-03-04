@@ -1,6 +1,6 @@
 import styled, { css } from "styled-components";
-import { palette } from "@/shared/config/theme";
-import { font } from "@/shared/config/font";
+import { palette } from "@clash/design-tokens/theme";
+import { font } from "@clash/design-tokens/font";
 
 export type Status = "online" | "offline" | "away";
 

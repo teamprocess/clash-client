@@ -1,5 +1,5 @@
 import styled, { css } from "styled-components";
-import { font } from "@/shared/config/font";
+import { font } from "@clash/design-tokens/font";
 import EXP from "@/features/competition/assets/exp.svg";
 import Record from "@/features/competition/assets/record.svg";
 import Github from "@/shared/ui/assets/github.svg";
