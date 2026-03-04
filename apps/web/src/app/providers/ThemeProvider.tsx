@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 import { ThemeProvider as StyledThemeProvider } from "styled-components";
-import { darkTheme } from "@/shared/config/theme";
+import { darkTheme } from "@clash/design-tokens/theme";
 
 interface Props {
   children: ReactNode;

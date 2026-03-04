@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import Clash from "../assets/clash-logo.svg";
-import { font } from "@/shared/config/font";
-import { palette } from "@/shared/config/theme";
+import { font } from "@clash/design-tokens/font";
+import { palette } from "@clash/design-tokens/theme";
 
 export const SignInCompleteContainer = styled.div`
   display: flex;

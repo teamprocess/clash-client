@@ -2,7 +2,7 @@
 // import styled from "styled-components";
 // import Date from "@/features/home/assets/home/date.svg";
 // import SolvedAc from "@/features/home/assets/home/solved-logo.svg";
-// import { font } from "@/shared/config/font";
+// import { font } from "@clash/design-tokens/font";
 //
 // export const TitleBox = styled.div`
 //   display: flex;

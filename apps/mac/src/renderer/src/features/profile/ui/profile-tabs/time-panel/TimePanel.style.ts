@@ -1,6 +1,6 @@
 import styled from "styled-components";
-import { font } from "@/shared/config/font";
-import { palette } from "@/shared/config/theme";
+import { font } from "@clash/design-tokens/font";
+import { palette } from "@clash/design-tokens/theme";
 import Arrow from "./../../../assets/arrow.svg";
 
 export const Header = styled.div`

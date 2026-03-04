@@ -1,6 +1,6 @@
 import styled from "styled-components";
-import { font } from "@/shared/config/font";
-import { palette } from "@/shared/config/theme";
+import { font } from "@clash/design-tokens/font";
+import { palette } from "@clash/design-tokens/theme";
 import Check from "../assets/check.svg";
 import Roadmap from "../assets/roadmap.svg";
 import Flag from "../assets/flag.svg";

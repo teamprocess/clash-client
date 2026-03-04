@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import Play from "../../assets/play.svg";
 import Pause from "../../assets/pause.svg";
-import { font } from "@/shared/config/font";
+import { font } from "@clash/design-tokens/font";
 import More from "../../assets/more.svg";
 
 export const TaskContainer = styled.div`

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import styled from "styled-components";
-import { palette } from "@/shared/config/theme";
+import { palette } from "@clash/design-tokens/theme";
 
 interface ToggleBoxProps {
   $isOn: boolean;

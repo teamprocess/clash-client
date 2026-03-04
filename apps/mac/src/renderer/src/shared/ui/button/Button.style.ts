@@ -1,6 +1,6 @@
 import styled, { css } from "styled-components";
-import { font } from "@/shared/config/font";
-import { palette } from "@/shared/config/theme";
+import { font } from "@clash/design-tokens/font";
+import { palette } from "@clash/design-tokens/theme";
 
 export type ButtonVariant = "primary" | "secondary" | "accept" | "pending";
 export type ButtonSize = "sm" | "md" | "lg";

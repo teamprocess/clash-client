@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { font } from "@/shared/config/font";
+import { font } from "@clash/design-tokens/font";
 import Arrow from "../../assets/arrow.svg";
 import Fire from "../../assets/fire.svg";
 import Plus from "../../assets/plus.svg";

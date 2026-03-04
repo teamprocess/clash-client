@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import Profile from "@/features/home/assets/home/profile.svg";
-import { font } from "@/shared/config/font";
-import { palette } from "@/shared/config/theme";
+import { font } from "@clash/design-tokens/font";
+import { palette } from "@clash/design-tokens/theme";
 
 export const UserContainer = styled.div<{ $sticky?: boolean }>`
   padding: 1rem;

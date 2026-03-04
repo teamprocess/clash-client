@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import BackArrow from "../../assets/home/back.svg";
 import Arrow from "@/shared/ui/assets/arrow.svg";
-import { font } from "@/shared/config/font";
+import { font } from "@clash/design-tokens/font";
 
 export const Wrapper = styled.div`
   display: flex;

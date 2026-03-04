@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { font } from "@/shared/config/font";
+import { font } from "@clash/design-tokens/font";
 import Alarm from "./assets/alarm.svg";
 import AlarmOn from "./assets/alarm-on.svg";
 import Profile from "./assets/profile.svg";

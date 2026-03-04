@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { font } from "@/shared/config/font";
+import { font } from "@clash/design-tokens/font";
 import Close from "@/features/shop/assets/no.svg";
 import Cookie from "@/features/shop/assets/cookie.svg";
 import Token from "@/features/shop/assets/token.svg";
