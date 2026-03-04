@@ -24,6 +24,7 @@
     "zod": "^4.3.6"
   },
   "devDependencies": {
+    "@clash/design-tokens": "workspace:*",
     "@clash/eslint-config": "workspace:*",
     "@clash/tsconfig": "workspace:*",
     "@eslint/js": "^9.39.1",

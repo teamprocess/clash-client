@@ -1,2 +1,2 @@
-export * from "./types";
-export { font } from "./font";
+export type * from "@clash/design-tokens/font";
+export { font } from "@clash/design-tokens/font";
