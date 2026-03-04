@@ -1,0 +1,14 @@
+{
+  "name": "@clash/design-tokens",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "exports": {
+    ".": "./index.ts",
+    "./font": "./font/index.ts",
+    "./theme": "./theme/index.ts"
+  },
+  "peerDependencies": {
+    "styled-components": "^6.1.19"
+  }
+}

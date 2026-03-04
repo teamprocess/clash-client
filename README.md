@@ -4,6 +4,7 @@
 
 - apps/mac: Electron macOS client
 - apps/web: Web frontend
+- packages/design-tokens: shared design tokens (theme, palette, typography)
 - packages/tsconfig: Shared TypeScript config presets
 - packages/eslint-config: Shared ESLint flat config presets
 

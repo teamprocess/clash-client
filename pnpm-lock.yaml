@@ -87,6 +87,9 @@ importers:
         specifier: ^5.0.10
         version: 5.0.10(@types/react@19.2.7)(react@19.2.3)
     devDependencies:
+      '@clash/design-tokens':
+        specifier: workspace:*
+        version: link:../../packages/design-tokens
       '@electron-toolkit/eslint-config-prettier':
         specifier: ^3.0.0
         version: 3.0.0(eslint@9.39.3(jiti@2.6.1))(prettier@3.8.1)
@@ -181,6 +184,9 @@ importers:
         specifier: ^4.3.6
         version: 4.3.6
     devDependencies:
+      '@clash/design-tokens':
+        specifier: workspace:*
+        version: link:../../packages/design-tokens
       '@clash/eslint-config':
         specifier: workspace:*
         version: link:../../packages/eslint-config
@@ -229,6 +235,12 @@ importers:
       vite-plugin-svgr:
         specifier: ^4.5.0
         version: 4.5.0(rollup@4.59.0)(typescript@5.9.3)(vite@7.3.1(@types/node@24.11.0)(jiti@2.6.1)(yaml@2.8.2))
+
+  packages/design-tokens:
+    dependencies:
+      styled-components:
+        specifier: ^6.1.19
+        version: 6.3.11(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
 
   packages/eslint-config:
     dependencies:

@@ -1,4 +1,2 @@
-export * from './types'
-export { palette } from './palette'
-export { lightTheme } from './light'
-export { darkTheme } from './dark'
+export type * from "@clash/design-tokens/theme";
+export { darkTheme, lightTheme, palette } from "@clash/design-tokens/theme";
