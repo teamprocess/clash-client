@@ -204,4 +204,17 @@ export const DetermineTitle = styled.p`
 export const DetermineContent = styled.div`
   display: flex;
   flex-direction: column;
+  min-height: 0;
+`;
+
+export const DetermineList = styled.div`
+  ${flexCol};
+  min-height: 0;
+  max-height: 12.5rem;
+  overflow-y: auto;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `;

@@ -1,4 +1,5 @@
-import { Button, ButtonVariant } from "@/shared/ui";
+import * as S from "./StatusOfRivalsManagement.style";
+import { ButtonVariant } from "@/shared/ui";
 
 type RivalLinkingStatus = "ACCEPTED" | "REJECTED" | "PENDING" | "CANCELED";
 
@@ -29,7 +30,7 @@ const STATUS_UI: Record<
   },
   PENDING: {
     title: "대기중",
-    variant: "primary",
+    variant: "pending",
   },
   CANCELED: {
     title: "취소됨",
@@ -41,20 +42,19 @@ const STATUS_UI: Record<
 export const RivalLinkingStatusButton = ({
   status,
   onClick,
-  size = "sm",
   className,
 }: ButtonOfRivalsManagementProps) => {
   const ui = STATUS_UI[status];
 
   return (
-    <Button
-      size={size}
-      variant={ui.variant}
+    <S.RivalStatusButton
+      type="button"
+      $variant={ui.variant}
       disabled={ui.disabled}
       onClick={ui.disabled ? undefined : onClick}
       className={className}
     >
       {ui.title}
-    </Button>
+    </S.RivalStatusButton>
   );
 };

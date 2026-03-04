@@ -187,21 +187,22 @@ export const RivalsManagementDialog = ({ isOpen, onClose, rival }: AddRivalsDial
             <S.DetermineContent>
               <S.DetermineTitle>라이벌 신청 목록</S.DetermineTitle>
 
-              <S.UserChoiceContainer>
-                {filteredSignRivals.map(user => (
-                  <S.UserChoiceBox key={user.rivalId} $isRival={true}>
-                    <S.ProfileContent $height="3rem">
-                      <S.ProfileIcon />
-                      <S.ProfileTagBox>
-                        <S.ProfileName>{user.name}</S.ProfileName>
-                        <S.ProfileMention>@{user.githubId}</S.ProfileMention>
-                      </S.ProfileTagBox>
-                    </S.ProfileContent>
-
-                    <RivalLinkingStatusButton status={user.rivalLinkingStatus} />
-                  </S.UserChoiceBox>
-                ))}
-              </S.UserChoiceContainer>
+              <S.DetermineList>
+                <S.UserChoiceContainer>
+                  {filteredSignRivals.map(user => (
+                    <S.UserChoiceBox key={user.rivalId} $isRival={true}>
+                      <S.ProfileContent $height="3rem">
+                        <S.ProfileIcon />
+                        <S.ProfileTagBox>
+                          <S.ProfileName>{user.name}</S.ProfileName>
+                          <S.ProfileMention>@{user.githubId}</S.ProfileMention>
+                        </S.ProfileTagBox>
+                        <RivalLinkingStatusButton status={user.rivalLinkingStatus} />
+                      </S.ProfileContent>
+                    </S.UserChoiceBox>
+                  ))}
+                </S.UserChoiceContainer>
+              </S.DetermineList>
             </S.DetermineContent>
 
             {rival.deleteConfirmOpen && rival.pendingDelete?.id != null && (
