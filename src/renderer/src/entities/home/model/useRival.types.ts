@@ -20,7 +20,7 @@ export type RivalSignAllResponse = {
   }[];
 };
 
-type IdType = {
+export type IdType = {
   id: number;
 };
 

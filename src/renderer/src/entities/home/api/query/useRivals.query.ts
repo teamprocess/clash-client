@@ -11,6 +11,6 @@ export const useRivalListQuery = () => {
 export const useRivalSignAllQuery = () => {
   return useSuspenseQuery({
     queryKey: ["rivalSignAll"],
-    queryFn: rivalsApi.rivalSignAll,
+    queryFn: rivalsApi.getRivalSignAll,
   });
 };
