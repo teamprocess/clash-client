@@ -8,6 +8,7 @@ import {
 } from "@/entities/home";
 import { queryClient, getErrorMessage } from "@/shared/lib";
 import { useRivalSignAllQuery } from "@/entities/home";
+import { RivalSignAllResponse } from "@/entities/home/model/useRival.types";
 
 const USER_STATUS = {
   ONLINE: "ONLINE",
@@ -32,7 +33,7 @@ export const useRival = () => {
 
   const rivalsData: MyRivalsResponse | null = myRivalsRes?.data ?? null;
   const userList: RivalUsersResponse | null = rivalListRes?.data ?? null;
-  const rivalSignAll = rivalSignAllRes?.data ?? null;
+  const rivalSignAll: RivalSignAllResponse | null = rivalSignAllRes?.data ?? null;
 
   const getStatus = (status: UserStatus): StatusType => {
     switch (status) {

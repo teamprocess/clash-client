@@ -13,7 +13,7 @@ export type RivalUsersResponse = {
 export type RivalSignAllResponse = {
   rivals: {
     rivalId: number;
-    gitHubId: string;
+    githubId: string;
     name: string;
     profileImage: string;
     rivalLinkingStatus: "ACCEPTED" | "REJECTED" | "PENDING";

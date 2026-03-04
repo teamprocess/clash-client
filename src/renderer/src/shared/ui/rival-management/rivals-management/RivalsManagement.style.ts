@@ -70,7 +70,6 @@ export const ProfileMention = styled.p`
 export const UserChoiceContainer = styled.div`
   ${flexCol};
   width: 100%;
-  height: 75%;
   overflow-y: auto;
   scrollbar-width: none;
 `;
@@ -194,9 +193,15 @@ export const ApplyContainer = styled.div`
   width: 100%;
   height: 100%;
   padding: 1rem;
+  gap: 2rem;
 `;
 
 export const DetermineTitle = styled.p`
   ${font.title2.medium};
   color: ${palette.neutral[97]};
+`;
+
+export const DetermineContent = styled.div`
+  display: flex;
+  flex-direction: column;
 `;

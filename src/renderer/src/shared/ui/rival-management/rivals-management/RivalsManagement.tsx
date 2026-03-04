@@ -64,6 +64,20 @@ export const RivalsManagementDialog = ({ isOpen, onClose, rival }: AddRivalsDial
     return () => window.removeEventListener("resize", handleResize);
   }, [isOpen, updateActiveRail]);
 
+  // rivalData를 rivalSignAll에 동일한 id 타입으로 정의
+  const myRivalIdSet = React.useMemo(() => {
+    const list = rival.rivalsData?.myRivals ?? [];
+
+    return new Set(list.map(u => u.rivalId ?? u.id).filter((_): _ is number => true));
+  }, [rival.rivalsData?.myRivals]);
+
+  // 교집합인 라이벌 정보는 삭제하도록 필터
+  const filteredSignRivals = React.useMemo(() => {
+    const list = rival.rivalSignAll?.rivals ?? [];
+
+    return list.filter(u => !myRivalIdSet.has(u.rivalId));
+  }, [rival.rivalSignAll?.rivals, myRivalIdSet]);
+
   return (
     <Dialog width={43} height={34} isOpen={isOpen} onClose={handleClose}>
       <S.DialogLayout>
@@ -139,32 +153,57 @@ export const RivalsManagementDialog = ({ isOpen, onClose, rival }: AddRivalsDial
           </>
         ) : (
           <S.ApplyContainer>
-            <S.DetermineTitle>현재 라이벌</S.DetermineTitle>
+            {/* 현재 라이벌 목록 */}
+            <S.DetermineContent>
+              <S.DetermineTitle>현재 라이벌</S.DetermineTitle>
 
-            <S.UserChoiceContainer>
-              {rival.rivalsData?.myRivals.map(user => (
-                <S.UserChoiceBox key={user.rivalId ?? user.id} $isRival={true}>
-                  <S.ProfileContent $height="3rem">
-                    <S.ProfileIcon />
-                    <S.ProfileTagBox>
-                      <S.ProfileName>{user.name}</S.ProfileName>
-                      <S.ProfileMention>@{user.username}</S.ProfileMention>
-                    </S.ProfileTagBox>
-                  </S.ProfileContent>
+              <S.UserChoiceContainer>
+                {rival.rivalsData?.myRivals.map(user => (
+                  <S.UserChoiceBox key={user.rivalId ?? user.id} $isRival={true}>
+                    <S.ProfileContent $height="3rem">
+                      <S.ProfileIcon />
+                      <S.ProfileTagBox>
+                        <S.ProfileName>{user.name}</S.ProfileName>
+                        <S.ProfileMention>@{user.username}</S.ProfileMention>
+                      </S.ProfileTagBox>
+                    </S.ProfileContent>
 
-                  <Button
-                    size="sm"
-                    variant="primary"
-                    onClick={e => {
-                      e.stopPropagation();
-                      rival.openDeleteConfirm(user.rivalId ?? user.id, user.name);
-                    }}
-                  >
-                    끊기
-                  </Button>
-                </S.UserChoiceBox>
-              ))}
-            </S.UserChoiceContainer>
+                    <Button
+                      size="sm"
+                      variant="primary"
+                      onClick={e => {
+                        e.stopPropagation();
+                        rival.openDeleteConfirm(user.rivalId ?? user.id, user.name);
+                      }}
+                    >
+                      끊기
+                    </Button>
+                  </S.UserChoiceBox>
+                ))}
+              </S.UserChoiceContainer>
+            </S.DetermineContent>
+
+            <S.DetermineContent>
+              <S.DetermineTitle>라이벌 신청 목록</S.DetermineTitle>
+
+              <S.UserChoiceContainer>
+                {filteredSignRivals.map(user => (
+                  <S.UserChoiceBox key={user.rivalId} $isRival={true}>
+                    <S.ProfileContent $height="3rem">
+                      <S.ProfileIcon />
+                      <S.ProfileTagBox>
+                        <S.ProfileName>{user.name}</S.ProfileName>
+                        <S.ProfileMention>@{user.githubId}</S.ProfileMention>
+                      </S.ProfileTagBox>
+                    </S.ProfileContent>
+
+                    <Button size="sm" variant="primary">
+                      none
+                    </Button>
+                  </S.UserChoiceBox>
+                ))}
+              </S.UserChoiceContainer>
+            </S.DetermineContent>
 
             {rival.deleteConfirmOpen && rival.pendingDelete?.id != null && (
               <DeleteRivalsConfirmDialog
