@@ -5,9 +5,9 @@ import { palette } from "@clash/design-tokens/theme";
 import RivalProfileImg from "../../../../assets/rival-profile.png";
 import MyPageProfileImg from "../../../../assets/mypage-profile.png";
 import Close from "../../../../assets/close.svg";
-import FirstFrame from "../../../../assets/first-frame.svg";
-import SecondFrame from "../../../../assets/second-frame.svg";
-import ThirdFrame from "../../../../assets/third-frame.svg";
+import FirstFrame from "../../../../assets/first-frame.svg?url";
+import SecondFrame from "../../../../assets/second-frame.svg?url";
+import ThirdFrame from "../../../../assets/third-frame.svg?url";
 
 const FRAME_SRC: Record<1 | 2 | 3, string> = {
   1: FirstFrame,
