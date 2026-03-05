@@ -75,12 +75,20 @@ export const ProfileMention = styled.p`
   color: ${({ theme }) => theme.label.alternative};
 `;
 
-export const UserChoiceContainer = styled.div`
+export const UserChoiceContainer = styled.div<{ $uiStatus?: "create" }>`
   ${flexCol};
   width: 100%;
-  height: 23rem;
-  overflow-y: auto;
-  scrollbar-width: none;
+  height: ${({ $uiStatus }) => ($uiStatus === "create" ? "26rem" : "100%")};
+
+  ${({ $uiStatus }) =>
+    $uiStatus === "create"
+      ? `
+        overflow-y: auto;
+        scrollbar-width: none;
+      `
+      : `
+      height: 100%;
+      `}
 `;
 
 export const UserChoiceBox = styled.div<{ $isSelected?: boolean; $isRival?: boolean }>`
@@ -202,9 +210,17 @@ export const TabActiveRail = styled.div<{ $left: number; $width: number }>`
 export const ApplyContainer = styled.div`
   ${flexCol};
   width: 100%;
-  height: 100%;
+  flex: 1;
+  min-height: 0;
   padding: 1rem;
   gap: 2rem;
+
+  overflow-y: auto;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `;
 
 export const DetermineTitle = styled.p`
@@ -215,17 +231,8 @@ export const DetermineTitle = styled.p`
 export const DetermineContent = styled.div`
   display: flex;
   flex-direction: column;
-  min-height: 0;
 `;
 
 export const DetermineList = styled.div`
   ${flexCol};
-  min-height: 0;
-  max-height: 12.5rem;
-  overflow-y: auto;
-  scrollbar-width: none;
-
-  &::-webkit-scrollbar {
-    display: none;
-  }
 `;
