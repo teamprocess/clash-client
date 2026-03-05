@@ -2,7 +2,7 @@ import * as S from "./MyRivals.style";
 import { UserStatus, getStatus, useMyRivals } from "@/features/competition/model/useMyRivals";
 import { formatTime, useRival } from "@/shared/lib";
 import { MyRivalsResponse } from "@/entities/competition";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { RivalsManagementDialog, Button } from "@/shared/ui";
 
 interface MyRivalsProps {
@@ -15,6 +15,21 @@ type RivalUser = {
   status: string;
   usingApp?: string | null;
   activeTime?: string | number | null;
+};
+
+type UsingAppType = "INTELLIJ_IDEA" | "WEBSTORM" | "VSCODE" | null | undefined;
+
+const getUsingAppMeta = (usingApp: UsingAppType) => {
+  switch (usingApp) {
+    case "INTELLIJ_IDEA":
+      return { Icon: S.InteliJIcon, label: "IntelliJ IDEA" };
+    case "WEBSTORM":
+      return { Icon: S.WebStormIcon, label: "WebStorm" };
+    case "VSCODE":
+      return { Icon: S.VSCodeIcon, label: "Visual Studio Code" };
+    default:
+      return { Icon: null, label: "자리비움" };
+  }
 };
 
 const RivalRow = ({ user, index }: { user: RivalUser; index: number }) => {
@@ -33,6 +48,11 @@ const RivalRow = ({ user, index }: { user: RivalUser; index: number }) => {
     return () => window.clearInterval(timerId);
   }, [user.status]);
 
+  const { Icon, label } = useMemo(
+    () => getUsingAppMeta(user.usingApp as UsingAppType),
+    [user.usingApp]
+  );
+
   return (
     <S.ProfileContainer key={user.username ?? index}>
       <S.ProfileContent>
@@ -50,7 +70,10 @@ const RivalRow = ({ user, index }: { user: RivalUser; index: number }) => {
       <S.PlayTime>
         {getStatus(user.status as UserStatus) === "온라인" && (
           <>
-            <S.UsingAppText>{user.usingApp}</S.UsingAppText>
+            <S.UsingBox>
+              {Icon ? <Icon /> : null}
+              <S.UsingAppText>{label}</S.UsingAppText>
+            </S.UsingBox>
             <S.Point>·</S.Point>
           </>
         )}

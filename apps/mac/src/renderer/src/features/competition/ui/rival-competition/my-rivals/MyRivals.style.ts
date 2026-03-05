@@ -2,6 +2,9 @@ import styled from "styled-components";
 import { font } from "@clash/design-tokens/font";
 import { palette } from "@clash/design-tokens/theme";
 import Profile from "@/features/home/assets/home/profile.svg";
+import InteliJ from "@/shared/ui/assets/ide-intellij-idea.svg";
+import WebStorm from "@/shared/ui/assets/ide-webstorm.svg";
+import VSCode from "@/shared/ui/assets/ide-vscode.svg";
 
 export const GaroLine = styled.div`
   width: 100%;
@@ -168,4 +171,26 @@ export const ActiveTime = styled.p<StatusProps>`
         return theme.line.normal;
     }
   }};
+`;
+
+export const UsingBox = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.25rem;
+`;
+
+export const InteliJIcon = styled(InteliJ)`
+  width: 1.25rem;
+  height: 1.25rem;
+`;
+
+export const WebStormIcon = styled(WebStorm)`
+  width: 1.25rem;
+  height: 1.25rem;
+`;
+
+export const VSCodeIcon = styled(VSCode)`
+  width: 1.25rem;
+  height: 1.25rem;
 `;
