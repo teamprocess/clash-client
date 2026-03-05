@@ -73,7 +73,7 @@ export const MyRivals = ({ data }: MyRivalsProps) => {
           <S.TitleBox>
             <S.Title>내 라이벌</S.Title>
             <Button size={"sm"} variant={"secondary"} onClick={rival.handleOpen}>
-              라이벌 관리하러 가기!
+              라이벌 관리
             </Button>
           </S.TitleBox>
 
