@@ -1,7 +1,7 @@
 import styled, { css } from "styled-components";
-import { font } from "/design-tokens/font";
+import { font } from "@clash/design-tokens/font";
 import DetailArrow from "../../assets/home/front.svg";
-import { palette } from "/design-tokens/theme";
+import { palette } from "@clash/design-tokens/theme";
 import VSCode from "../../assets/home/vscode.svg";
 import Profile from "../../assets/home/profile.svg";
 import Plus from "../../assets/home/plus.svg";
