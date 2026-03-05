@@ -5,6 +5,7 @@ import Profile from "@/features/home/assets/home/profile.svg";
 import InteliJ from "@/shared/ui/assets/ide-intellij-idea.svg";
 import WebStorm from "@/shared/ui/assets/ide-webstorm.svg";
 import VSCode from "@/shared/ui/assets/ide-vscode.svg";
+import DetailArrow from "@/features/home/assets/home/front.svg";
 
 export const GaroLine = styled.div`
   width: 100%;
@@ -193,4 +194,19 @@ export const WebStormIcon = styled(WebStorm)`
 export const VSCodeIcon = styled(VSCode)`
   width: 1.25rem;
   height: 1.25rem;
+`;
+
+export const DetailArrowIcon = styled(DetailArrow)`
+  width: 0.5rem;
+  height: 1rem;
+`;
+
+export const ArrowBox = styled.button`
+  ${font.label.medium}
+  color: ${({ theme }) => theme.label.alternative};
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.25rem;
+  cursor: pointer;
 `;
