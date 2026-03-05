@@ -1,9 +1,8 @@
 import * as S from "./Battle.style";
-import { Dialog } from "@/shared/ui";
+import { Dialog, Select } from "@/shared/ui";
 import { AnalyzeCategory, MATCHVALUE } from "@/entities/competition";
 import { useBattle } from "@/features/competition/model/useBattle";
 import { formatTime } from "@/shared/lib";
-import { Select } from "@/shared/ui";
 
 export const Battle = () => {
   const battle = useBattle();

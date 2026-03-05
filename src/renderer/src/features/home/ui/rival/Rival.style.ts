@@ -1,5 +1,4 @@
 import styled, { css } from "styled-components";
-import { Link } from "react-router-dom";
 import { font } from "@/shared/config/font";
 import DetailArrow from "../../assets/home/front.svg";
 import { palette } from "@/shared/config/theme";
@@ -44,18 +43,14 @@ export const Title = styled.div`
   ${font.title2.bold}
 `;
 
-export const MoreLink = styled(Link)`
+export const ArrowBox = styled.div`
   ${font.label.medium}
   color: ${({ theme }) => theme.label.alternative};
-  ${flexRow};
+  display: flex;
+  flex-direction: row;
   align-items: center;
   gap: 0.25rem;
   cursor: pointer;
-  text-decoration: none;
-
-  &:hover {
-    text-decoration: underline;
-  }
 `;
 
 export const DetailArrowIcon = styled(DetailArrow)`
@@ -193,6 +188,12 @@ export const ActiveTime = styled.p<StatusProps>`
         return theme.line.normal;
     }
   }};
+`;
+
+export const RightSIde = styled.div`
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
 `;
 
 export const AddRivalBox = styled.div`

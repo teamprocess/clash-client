@@ -4,8 +4,8 @@ import {
   rankingPeriodDropDownValue,
 } from "./useRankingDomain";
 import { useRankingView } from "./useRankingView";
-import { CategoryType } from "@/entities/home/model/useRanking.types";
-import { formatTime } from "@/shared/lib/formatTime";
+import { CategoryType } from "@/entities/home";
+import { formatTime } from "@/shared/lib";
 
 const unitMap: Record<CategoryType, string> = {
   GITHUB: "점",

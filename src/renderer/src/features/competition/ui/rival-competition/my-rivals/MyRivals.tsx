@@ -1,12 +1,9 @@
 import * as S from "./MyRivals.style";
-import { UserStatus, getStatus } from "@/features/competition/model/useMyRivals";
-import { useMyRivals } from "@/features/competition/model/useMyRivals";
-import { formatTime } from "@/shared/lib";
+import { UserStatus, getStatus, useMyRivals } from "@/features/competition/model/useMyRivals";
+import { formatTime, useRival } from "@/shared/lib";
 import { MyRivalsResponse } from "@/entities/competition";
-import { useRival } from "@/shared/lib/useRival";
-import { DeleteRivalsDialog } from "@/shared/ui/rival-management";
-import { Button } from "@/shared/ui";
 import { useEffect, useState } from "react";
+import { RivalsManagementDialog, Button } from "@/shared/ui";
 
 interface MyRivalsProps {
   data: MyRivalsResponse;
@@ -66,53 +63,51 @@ const RivalRow = ({ user, index }: { user: RivalUser; index: number }) => {
 };
 
 export const MyRivals = ({ data }: MyRivalsProps) => {
+  const rival = useRival();
   const { myRivals } = useMyRivals({ data });
 
-  // 라이벌 추가, 끊기를 위해 존재하는 함수 호출 그외 사용하지 않음
-  const rival = useRival();
-
   return (
-    <S.ListContent>
-      <S.RivalList>
-        <S.TitleBox>
-          <S.Title>내 라이벌</S.Title>
-          {(rival.rivalsData?.myRivals.length ?? 0) > 0 && (
-            <Button size={"sm"} variant={"primary"} onClick={rival.handleDeleteModalOpen}>
-              라이벌 끊기
+    <>
+      <S.ListContent>
+        <S.RivalList>
+          <S.TitleBox>
+            <S.Title>내 라이벌</S.Title>
+            <Button size={"sm"} variant={"secondary"} onClick={rival.handleOpen}>
+              라이벌 관리
             </Button>
-          )}
-        </S.TitleBox>
+          </S.TitleBox>
 
-        <S.GaroLine />
+          <S.GaroLine />
 
-        <S.ProfileWrapper>
-          {myRivals.myRivalsData?.myRivals && myRivals.myRivalsData.myRivals.length > 0 ? (
-            myRivals.myRivalsData.myRivals.map((user, index) => (
-              <RivalRow
-                key={user.username ?? index}
-                user={user as unknown as RivalUser}
-                index={index}
-              />
-            ))
-          ) : (
-            <S.DetailWrapper>
-              <S.DefaultBattleBox>
-                <S.DefaultBattleText>
-                  위 배틀을 선택하여 배틀의 상세 내용을 확인해보세요!
-                </S.DefaultBattleText>
-              </S.DefaultBattleBox>
-            </S.DetailWrapper>
-          )}
-        </S.ProfileWrapper>
-      </S.RivalList>
+          <S.ProfileWrapper>
+            {myRivals.myRivalsData?.myRivals && myRivals.myRivalsData.myRivals.length > 0 ? (
+              myRivals.myRivalsData.myRivals.map((user, index) => (
+                <RivalRow
+                  key={user.username ?? index}
+                  user={user as unknown as RivalUser}
+                  index={index}
+                />
+              ))
+            ) : (
+              <S.DetailWrapper>
+                <S.DefaultBattleBox>
+                  <S.DefaultBattleText>
+                    위 배틀을 선택하여 배틀의 상세 내용을 확인해보세요!
+                  </S.DefaultBattleText>
+                </S.DefaultBattleBox>
+              </S.DetailWrapper>
+            )}
+          </S.ProfileWrapper>
+        </S.RivalList>
+      </S.ListContent>
 
-      {rival.rivalDeleteOpen && (
-        <DeleteRivalsDialog
-          isOpen={rival.rivalDeleteOpen}
-          onClose={rival.handleDeleteModalClose}
+      {rival.modalOpen && (
+        <RivalsManagementDialog
+          isOpen={rival.modalOpen}
+          onClose={rival.handleClose}
           rival={rival}
         />
       )}
-    </S.ListContent>
+    </>
   );
 };

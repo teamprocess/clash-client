@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { authApi } from "../api/authApi";
 
-const PROFILE_SYNC_UNTIL_KEY = "clash:user:profile-sync-until";
+const PROFILE_SYNC_UNTIL_KEY = "clash:home-ranking-user:profile-sync-until";
 const PROFILE_SYNC_WINDOW_MS = 3 * 60 * 1000;
 const PROFILE_SYNC_INTERVAL_MS = 3000;
 

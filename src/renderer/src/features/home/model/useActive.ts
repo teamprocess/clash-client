@@ -1,6 +1,6 @@
 import React, { RefObject, useLayoutEffect, useMemo, useState } from "react";
 import { ActiveResponse, CategoryType } from "@/entities/home";
-import { buildPaddedStreak } from "@/shared/lib/buildPaddedStreaks";
+import { buildPaddedStreak } from "@/shared/lib";
 
 type GrassLevel = 0 | 1 | 2 | 3 | 4;
 
