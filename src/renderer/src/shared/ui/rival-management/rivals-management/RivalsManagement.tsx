@@ -130,11 +130,13 @@ export const RivalsManagementDialog = ({ isOpen, onClose, rival }: AddRivalsDial
                       onClick={() => rival.handleUserSelect(user.id)}
                     >
                       <S.ProfileContent $height="3rem">
-                        <S.ProfileIcon />
-                        <S.ProfileTagBox>
-                          <S.ProfileName>{user.name}</S.ProfileName>
-                          <S.ProfileMention>@{user.username}</S.ProfileMention>
-                        </S.ProfileTagBox>
+                        <S.ProfileBox>
+                          <S.ProfileIcon />
+                          <S.ProfileTagBox>
+                            <S.ProfileName>{user.name}</S.ProfileName>
+                            <S.ProfileMention>@{user.username}</S.ProfileMention>
+                          </S.ProfileTagBox>
+                        </S.ProfileBox>
                       </S.ProfileContent>
 
                       {isSelected ? <S.CheckedIcon /> : <S.UncheckedBox />}
@@ -162,11 +164,13 @@ export const RivalsManagementDialog = ({ isOpen, onClose, rival }: AddRivalsDial
                 {rival.rivalsData?.myRivals.map(user => (
                   <S.UserChoiceBox key={user.rivalId ?? user.id} $isRival={true}>
                     <S.ProfileContent $height="3rem">
-                      <S.ProfileIcon />
-                      <S.ProfileTagBox>
-                        <S.ProfileName>{user.name}</S.ProfileName>
-                        <S.ProfileMention>@{user.username}</S.ProfileMention>
-                      </S.ProfileTagBox>
+                      <S.ProfileBox>
+                        <S.ProfileIcon />
+                        <S.ProfileTagBox>
+                          <S.ProfileName>{user.name}</S.ProfileName>
+                          <S.ProfileMention>@{user.username}</S.ProfileMention>
+                        </S.ProfileTagBox>
+                      </S.ProfileBox>
                     </S.ProfileContent>
 
                     <Button
@@ -192,12 +196,26 @@ export const RivalsManagementDialog = ({ isOpen, onClose, rival }: AddRivalsDial
                   {filteredSignRivals.map(user => (
                     <S.UserChoiceBox key={user.rivalId} $isRival={true}>
                       <S.ProfileContent $height="3rem">
-                        <S.ProfileIcon />
-                        <S.ProfileTagBox>
-                          <S.ProfileName>{user.name}</S.ProfileName>
-                          <S.ProfileMention>@{user.githubId}</S.ProfileMention>
-                        </S.ProfileTagBox>
-                        <RivalLinkingStatusButton status={user.rivalLinkingStatus} />
+                        <S.ProfileBox>
+                          <S.ProfileIcon />
+                          <S.ProfileTagBox>
+                            <S.ProfileName>{user.name}</S.ProfileName>
+                            <S.ProfileMention>@{user.githubId}</S.ProfileMention>
+                          </S.ProfileTagBox>
+                          <RivalLinkingStatusButton status={user.rivalLinkingStatus} />
+                        </S.ProfileBox>
+
+                        {user.rivalLinkingStatus === "PENDING" ? (
+                          <Button
+                            size="sm"
+                            variant={"primary"}
+                            onClick={() => rival.handleRivalSignCancel(user.rivalId)}
+                          >
+                            취소
+                          </Button>
+                        ) : (
+                          <></>
+                        )}
                       </S.ProfileContent>
                     </S.UserChoiceBox>
                   ))}

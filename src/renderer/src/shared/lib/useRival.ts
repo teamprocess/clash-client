@@ -137,6 +137,20 @@ export const useRival = () => {
     }
   };
 
+  const handleRivalSignCancel = async (rivalId: number) => {
+    if (!rivalId) return false;
+
+    try {
+      setError(null);
+      await rivalsApi.postRivalCancel({ id: rivalId });
+      return true;
+    } catch (error: unknown) {
+      console.error("라이벌 신청 취소 실패:", error);
+      setError(getErrorMessage(error, "라이벌 신청 취소 중 오류가 발생했습니다."));
+      return false;
+    }
+  };
+
   const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
   const [pendingDelete, setPendingDelete] = useState<{ id: number; name?: string } | null>(null);
 
@@ -194,6 +208,7 @@ export const useRival = () => {
     confirmDeleteRival,
     pendingDeleteId,
     setPendingDeleteId,
+    handleRivalSignCancel,
 
     // search
     searchText,
