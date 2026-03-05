@@ -17,12 +17,8 @@ export const Rival = () => {
 
         <S.RightSIde>
           <Button size={"sm"} variant={"secondary"} onClick={rival.handleOpen}>
-            라이벌 관리하러 가기!
+            라이벌 관리
           </Button>
-          <S.MoreLink to="/competition">
-            자세히보기
-            <S.DetailArrowIcon />
-          </S.MoreLink>
         </S.RightSIde>
       </S.TitleBox>
 
