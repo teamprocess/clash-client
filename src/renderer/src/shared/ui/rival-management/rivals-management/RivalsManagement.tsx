@@ -80,7 +80,7 @@ export const RivalsManagementDialog = ({ isOpen, onClose, rival }: AddRivalsDial
   }, [rival.rivalSignAll?.rivals, myRivalIdSet]);
 
   return (
-    <Dialog width={43} height={37} isOpen={isOpen} onClose={handleClose}>
+    <Dialog width={43} height={40} isOpen={isOpen} onClose={handleClose}>
       <S.DialogLayout>
         <S.TabHeader>
           <S.Tabs ref={tabsRef}>
@@ -119,7 +119,7 @@ export const RivalsManagementDialog = ({ isOpen, onClose, rival }: AddRivalsDial
                 />
               </S.SearchInputBox>
 
-              <S.UserChoiceContainer>
+              <S.UserChoiceContainer $uiStatus={"create"}>
                 {users.map(user => {
                   const isSelected = rival.rivalSelectedId.includes(user.id);
 
@@ -190,6 +190,19 @@ export const RivalsManagementDialog = ({ isOpen, onClose, rival }: AddRivalsDial
 
             <S.DetermineContent>
               <S.DetermineTitle>라이벌 신청 목록</S.DetermineTitle>
+
+              <S.SearchInputBox>
+                <SearchInput
+                  placeholder={"이름 또는 아이디 검색"}
+                  inputSize={"md"}
+                  variant={"light"}
+                  fullWidth={true}
+                  value={rival.searchText}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                    rival.setSearchText(e.target.value)
+                  }
+                />
+              </S.SearchInputBox>
 
               <S.DetermineList>
                 <S.UserChoiceContainer>
