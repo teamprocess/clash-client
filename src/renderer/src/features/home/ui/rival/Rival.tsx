@@ -1,6 +1,6 @@
 import * as S from "./Rival.style";
 import { useRival } from "@/shared/lib";
-import { RivalsManagementDialog, Button, MyRivalUsers } from "@/shared/ui";
+import { RivalsManagementDialog, MyRivalUsers } from "@/shared/ui";
 
 export const Rival = () => {
   const rival = useRival();
@@ -16,9 +16,10 @@ export const Rival = () => {
         </S.TitleLeft>
 
         <S.RightSIde>
-          <Button size={"sm"} variant={"secondary"} onClick={rival.handleOpen}>
+          <S.ArrowBox onClick={() => rival.handleOpen}>
             라이벌 관리
-          </Button>
+            <S.DetailArrowIcon />
+          </S.ArrowBox>
         </S.RightSIde>
       </S.TitleBox>
 
