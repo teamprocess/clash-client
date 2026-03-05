@@ -3,7 +3,7 @@ import { UserStatus, getStatus, useMyRivals } from "@/features/competition/model
 import { formatTime, useRival } from "@/shared/lib";
 import { MyRivalsResponse } from "@/entities/competition";
 import { useEffect, useMemo, useState } from "react";
-import { RivalsManagementDialog, Button } from "@/shared/ui";
+import { RivalsManagementDialog } from "@/shared/ui";
 
 interface MyRivalsProps {
   data: MyRivalsResponse;
@@ -95,9 +95,10 @@ export const MyRivals = ({ data }: MyRivalsProps) => {
         <S.RivalList>
           <S.TitleBox>
             <S.Title>내 라이벌</S.Title>
-            <Button size={"sm"} variant={"secondary"} onClick={rival.handleOpen}>
+            <S.ArrowBox onClick={rival.handleOpen}>
               라이벌 관리
-            </Button>
+              <S.DetailArrowIcon />
+            </S.ArrowBox>
           </S.TitleBox>
 
           <S.GaroLine />
