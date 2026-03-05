@@ -1,5 +1,4 @@
 export const getGrowthInfo = (yesterday: number, today: number) => {
-  // const [compareDropdown, setCompareDropdown] = useState("Github");
   const diff = today - yesterday;
 
   if (diff > 0) return { status: "up", deg: 180, value: Math.round(diff * 10) / 10 };
