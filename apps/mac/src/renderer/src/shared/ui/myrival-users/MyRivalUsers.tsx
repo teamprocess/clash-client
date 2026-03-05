@@ -1,7 +1,22 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import * as S from "@/features/home/ui/rival/Rival.style";
 import { formatTime } from "@/shared/lib";
 import { MyRivalItem } from "@/shared/lib/useRival";
+
+type UsingAppType = "INTELLIJ_IDEA" | "WEBSTORM" | "VSCODE" | null | undefined;
+
+const getUsingAppMeta = (usingApp: UsingAppType) => {
+  switch (usingApp) {
+    case "INTELLIJ_IDEA":
+      return { Icon: S.InteliJIcon, label: "IntelliJ IDEA" };
+    case "WEBSTORM":
+      return { Icon: S.WebStormIcon, label: "WebStorm" };
+    case "VSCODE":
+      return { Icon: S.VSCodeIcon, label: "Visual Studio Code" };
+    default:
+      return { Icon: null, label: "Clash" };
+  }
+};
 
 export const MyRivalUsers = ({ user, getStatus }: MyRivalItem) => {
   const [displayActiveTime, setDisplayActiveTime] = useState<number>(Number(user.activeTime) || 0);
@@ -15,6 +30,11 @@ export const MyRivalUsers = ({ user, getStatus }: MyRivalItem) => {
 
     return () => clearInterval(timerId);
   }, [user.status]);
+
+  const { Icon, label } = useMemo(
+    () => getUsingAppMeta(user.usingApp as UsingAppType),
+    [user.usingApp]
+  );
 
   return (
     <S.ProfileContainer>
@@ -31,8 +51,8 @@ export const MyRivalUsers = ({ user, getStatus }: MyRivalItem) => {
 
       <S.ActiveBox>
         <S.UsingAppContainer>
-          <S.UsingApp />
-          <S.UsingAppText>{user.usingApp}</S.UsingAppText>
+          {Icon ? <Icon /> : null}
+          <S.UsingAppText>{label}</S.UsingAppText>
         </S.UsingAppContainer>
 
         <S.ActiveTime $status={user.status}>{formatTime(displayActiveTime)}</S.ActiveTime>

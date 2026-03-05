@@ -2,7 +2,9 @@ import styled, { css } from "styled-components";
 import { font } from "@clash/design-tokens/font";
 import DetailArrow from "../../assets/home/front.svg";
 import { palette } from "@clash/design-tokens/theme";
-import VSCode from "../../assets/home/vscode.svg";
+import VSCode from "@/shared/ui/assets/ide-vscode.svg";
+import InteliJ from "@/shared/ui/assets/ide-intellij-idea.svg";
+import WebStorm from "@/shared/ui/assets/ide-webstorm.svg";
 import Profile from "../../assets/home/profile.svg";
 import Plus from "../../assets/home/plus.svg";
 
@@ -169,7 +171,20 @@ export const ActiveBox = styled.div`
   align-items: center;
 `;
 
-export const UsingApp = styled(VSCode)``;
+export const InteliJIcon = styled(InteliJ)`
+  width: 1.25rem;
+  height: 1.25rem;
+`;
+
+export const WebStormIcon = styled(WebStorm)`
+  width: 1.25rem;
+  height: 1.25rem;
+`;
+
+export const VSCodeIcon = styled(VSCode)`
+  width: 1.25rem;
+  height: 1.25rem;
+`;
 
 export const UsingAppText = styled.p`
   ${font.caption.regular};
