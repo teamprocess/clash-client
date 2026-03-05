@@ -2,7 +2,7 @@ import { Button, DeleteRivalsConfirmDialog, Dialog } from "@/shared/ui";
 import * as S from "./RivalsManagement.style";
 import { SearchInput } from "@/shared/ui";
 import { useRival } from "@/shared/lib";
-import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
+import React, { useCallback, useLayoutEffect, useRef, useState } from "react";
 import { RivalLinkingStatusButton } from "@/shared/ui/rival-management";
 
 interface AddRivalsDialogProps {
@@ -33,9 +33,7 @@ export const RivalsManagementDialog = ({ isOpen, onClose, rival }: AddRivalsDial
     const activeTabElement =
       activeTab === "rivals-management" ? addRivalTabRef.current : rivalListTabRef.current;
 
-    if (!tabsElement || !activeTabElement) {
-      return;
-    }
+    if (!tabsElement || !activeTabElement) return;
 
     const tabsRect = tabsElement.getBoundingClientRect();
     const activeRect = activeTabElement.getBoundingClientRect();
@@ -47,22 +45,10 @@ export const RivalsManagementDialog = ({ isOpen, onClose, rival }: AddRivalsDial
   }, [activeTab]);
 
   useLayoutEffect(() => {
-    if (!isOpen) {
-      return;
-    }
+    if (!isOpen) return;
 
     const frameId = requestAnimationFrame(updateActiveRail);
     return () => cancelAnimationFrame(frameId);
-  }, [isOpen, updateActiveRail]);
-
-  useEffect(() => {
-    if (!isOpen) {
-      return;
-    }
-
-    const handleResize = () => updateActiveRail();
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
   }, [isOpen, updateActiveRail]);
 
   return (
@@ -89,6 +75,7 @@ export const RivalsManagementDialog = ({ isOpen, onClose, rival }: AddRivalsDial
             <S.TabActiveRail $left={activeRail.left} $width={activeRail.width} />
           </S.TabRail>
         </S.TabHeader>
+
         {activeTab === "rivals-management" ? (
           <>
             <S.TopSection>
@@ -142,7 +129,6 @@ export const RivalsManagementDialog = ({ isOpen, onClose, rival }: AddRivalsDial
           </>
         ) : (
           <S.ApplyContainer>
-            {/* 현재 라이벌 목록 */}
             <S.DetermineContent>
               <S.DetermineTitle>현재 라이벌</S.DetermineTitle>
 
@@ -212,9 +198,7 @@ export const RivalsManagementDialog = ({ isOpen, onClose, rival }: AddRivalsDial
                           >
                             취소
                           </Button>
-                        ) : (
-                          <></>
-                        )}
+                        ) : null}
                       </S.ProfileContent>
                     </S.UserChoiceBox>
                   ))}
