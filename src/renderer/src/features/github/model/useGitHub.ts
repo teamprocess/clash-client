@@ -13,8 +13,7 @@ const PENDING_GITHUB_STATE_KEY = "clash:github:pending-state";
 const GITHUB_CLIENT_ID = import.meta.env.VITE_GITHUB_CLIENT_ID || "";
 const GITHUB_OAUTH_REDIRECT_URI = (import.meta.env.VITE_GITHUB_OAUTH_REDIRECT_URI || "").trim();
 const GITHUB_OAUTH_SCOPE = (
-  import.meta.env.VITE_GITHUB_OAUTH_SCOPE ||
-  "read:home-ranking-user home-ranking-user:email repo read:org"
+  import.meta.env.VITE_GITHUB_OAUTH_SCOPE || "read:user user:email repo read:org"
 )
   .split(",")
   .join(" ");
