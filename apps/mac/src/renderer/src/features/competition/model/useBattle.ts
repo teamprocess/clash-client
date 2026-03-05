@@ -54,8 +54,8 @@ export const useBattle = () => {
   const rivalPercent = 100 - myPercent;
 
   const judgeUpperHand = (result: string) => {
-    if (result === MATCHVALUE.LOSING) return "우세";
-    if (result === MATCHVALUE.WINNING) return "열세";
+    if (result === MATCHVALUE.LOSING) return "열세";
+    if (result === MATCHVALUE.WINNING) return "우세";
     if (result === MATCHVALUE.LOST) return "패배";
     if (result === MATCHVALUE.WON) return "승리";
     if (result === MATCHVALUE.DRAW) return "무승부";
