@@ -65,20 +65,6 @@ export const RivalsManagementDialog = ({ isOpen, onClose, rival }: AddRivalsDial
     return () => window.removeEventListener("resize", handleResize);
   }, [isOpen, updateActiveRail]);
 
-  // rivalData를 rivalSignAll에 동일한 id 타입으로 정의
-  const myRivalIdSet = React.useMemo(() => {
-    const list = rival.rivalsData?.myRivals ?? [];
-
-    return new Set(list.map(u => u.rivalId ?? u.id).filter((_): _ is number => true));
-  }, [rival.rivalsData?.myRivals]);
-
-  // 교집합인 라이벌 정보는 삭제하도록 필터
-  const filteredSignRivals = React.useMemo(() => {
-    const list = rival.rivalSignAll?.rivals ?? [];
-
-    return list.filter(u => !myRivalIdSet.has(u.rivalId));
-  }, [rival.rivalSignAll?.rivals, myRivalIdSet]);
-
   return (
     <Dialog width={43} height={40} isOpen={isOpen} onClose={handleClose}>
       <S.DialogLayout>
@@ -193,20 +179,20 @@ export const RivalsManagementDialog = ({ isOpen, onClose, rival }: AddRivalsDial
 
               <S.SearchInputBox>
                 <SearchInput
-                  placeholder={"이름 또는 아이디 검색"}
+                  placeholder={"이름 또는 깃허브 아이디 검색"}
                   inputSize={"md"}
                   variant={"light"}
                   fullWidth={true}
-                  value={rival.searchText}
+                  value={rival.applySearchText}
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                    rival.setSearchText(e.target.value)
+                    rival.setApplySearchText(e.target.value)
                   }
                 />
               </S.SearchInputBox>
 
               <S.DetermineList>
                 <S.UserChoiceContainer>
-                  {filteredSignRivals.map(user => (
+                  {rival.filteredSignRivals.map(user => (
                     <S.UserChoiceBox key={user.rivalId} $isRival={true}>
                       <S.ProfileContent $height="3rem">
                         <S.ProfileBox>
