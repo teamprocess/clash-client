@@ -35,7 +35,7 @@ export const BottomRow = styled.div`
   ${flexRow};
   justify-content: space-between;
   align-items: center;
-  margin-top: auto;
+  position: relative;
 `;
 
 export const ProfileContent = styled.div<{ $height?: string }>`
@@ -78,6 +78,7 @@ export const ProfileMention = styled.p`
 export const UserChoiceContainer = styled.div`
   ${flexCol};
   width: 100%;
+  height: 23rem;
   overflow-y: auto;
   scrollbar-width: none;
 `;
@@ -114,6 +115,8 @@ export const ButtonBox = styled.div`
   ${flexRow};
   align-items: center;
   justify-content: flex-end;
+  position: absolute;
+  top: -1rem;
   gap: 0.75rem;
 `;
 

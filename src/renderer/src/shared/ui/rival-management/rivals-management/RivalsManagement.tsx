@@ -80,7 +80,7 @@ export const RivalsManagementDialog = ({ isOpen, onClose, rival }: AddRivalsDial
   }, [rival.rivalSignAll?.rivals, myRivalIdSet]);
 
   return (
-    <Dialog width={43} height={34} isOpen={isOpen} onClose={handleClose}>
+    <Dialog width={43} height={37} isOpen={isOpen} onClose={handleClose}>
       <S.DialogLayout>
         <S.TabHeader>
           <S.Tabs ref={tabsRef}>
