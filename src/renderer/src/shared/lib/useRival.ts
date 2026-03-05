@@ -9,6 +9,7 @@ import {
 import { queryClient, getErrorMessage } from "@/shared/lib";
 import { useRivalSignAllQuery } from "@/entities/home";
 import { RivalSignAllResponse } from "@/entities/home/model/useRival.types";
+import { useMutation } from "@tanstack/react-query";
 
 const USER_STATUS = {
   ONLINE: "ONLINE",
@@ -28,6 +29,10 @@ export const useRival = () => {
   const { data: myRivalsRes } = useMyRivalsQuery();
   const { data: rivalSignAllRes } = useRivalSignAllQuery();
   const { data: rivalListRes } = useRivalListQuery();
+
+  const MY_RIVALS_KEY = ["myRivals"];
+  const RIVAL_LIST_KEY = ["rivalList"];
+  const RIVAL_SIGN_ALL_KEY = ["rivalSignAll"];
 
   const [error, setError] = useState<string | null>(null);
 
@@ -108,6 +113,12 @@ export const useRival = () => {
 
       await rivalsApi.postRivalApply(payload);
 
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: RIVAL_SIGN_ALL_KEY }),
+        queryClient.invalidateQueries({ queryKey: MY_RIVALS_KEY }),
+        queryClient.invalidateQueries({ queryKey: RIVAL_LIST_KEY }),
+      ]);
+
       handleClose();
     } catch (error: unknown) {
       console.error("라이벌 신청 실패:", error);
@@ -137,12 +148,49 @@ export const useRival = () => {
     }
   };
 
+  const cancelRivalSignMutation = useMutation({
+    mutationFn: (rivalId: number) => rivalsApi.postRivalCancel({ id: rivalId }),
+
+    onMutate: async (rivalId: number) => {
+      setError(null);
+
+      await queryClient.cancelQueries({ queryKey: RIVAL_SIGN_ALL_KEY });
+
+      const previous = queryClient.getQueryData<RivalSignAllResponse | null>(RIVAL_SIGN_ALL_KEY);
+
+      queryClient.setQueryData<RivalSignAllResponse | null>(RIVAL_SIGN_ALL_KEY, old => {
+        if (!old) return old;
+
+        return {
+          ...old,
+          rivals: (old.rivals ?? []).filter(u => u.rivalId !== rivalId),
+        };
+      });
+
+      return { previous };
+    },
+
+    onError: (error, _rivalId: number, context) => {
+      console.error("라이벌 신청 취소 실패:", error);
+      setError(getErrorMessage(error, "라이벌 신청 취소 중 오류가 발생했습니다."));
+
+      if (context?.previous !== undefined) {
+        queryClient.setQueryData(RIVAL_SIGN_ALL_KEY, context.previous);
+      }
+    },
+
+    onSettled: async () => {
+      await queryClient.invalidateQueries({ queryKey: RIVAL_SIGN_ALL_KEY });
+      await queryClient.invalidateQueries({ queryKey: ["myRivals"] });
+    },
+  });
+
   const handleRivalSignCancel = async (rivalId: number) => {
     if (!rivalId) return false;
 
     try {
       setError(null);
-      await rivalsApi.postRivalCancel({ id: rivalId });
+      await cancelRivalSignMutation.mutateAsync(rivalId);
       return true;
     } catch (error: unknown) {
       console.error("라이벌 신청 취소 실패:", error);
