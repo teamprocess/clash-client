@@ -7,3 +7,10 @@ export const useRivalListQuery = () => {
     queryFn: rivalsApi.getRivalList,
   });
 };
+
+export const useRivalSignAllQuery = () => {
+  return useSuspenseQuery({
+    queryKey: ["rivalSignAll"],
+    queryFn: rivalsApi.getRivalSignAll,
+  });
+};

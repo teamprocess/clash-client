@@ -1,4 +1,4 @@
-import { MyDataPoint } from "@/entities/competition/model/my-competition/myCompetition.types";
+import { MyDataPoint } from "@/entities/competition";
 
 export const toLineChartData = (dataPoint: MyDataPoint[]) => ({
   dataPoint: {

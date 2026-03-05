@@ -9,7 +9,7 @@ import { useActiveQuery, useTransitionQuery } from "@/entities/home";
 import { useGetMyProfile } from "@/entities/user";
 
 const isNotFound = (error: unknown) => axios.isAxiosError(error) && error.response?.status === 404;
-const PROFILE_SYNC_UNTIL_KEY = "clash:user:profile-sync-until";
+const PROFILE_SYNC_UNTIL_KEY = "clash:home-ranking-user:profile-sync-until";
 
 const isProfileSyncing = () => {
   if (typeof window === "undefined") {

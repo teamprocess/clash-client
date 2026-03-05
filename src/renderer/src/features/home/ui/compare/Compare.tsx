@@ -1,6 +1,6 @@
 import * as S from "./Compare.style";
 import { Link } from "react-router-dom";
-import { Github } from "@/features/home/ui/compare/github/CompareGithub";
+import { Github } from "./github/CompareGithub";
 import { useCompare } from "@/features/home/model/useCompare";
 
 export const Compare = () => {

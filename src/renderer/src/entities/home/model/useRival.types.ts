@@ -10,7 +10,17 @@ export type RivalUsersResponse = {
   users: UserType[];
 };
 
-type IdType = {
+export type RivalSignAllResponse = {
+  rivals: {
+    rivalId: number;
+    githubId: string;
+    name: string;
+    profileImage: string;
+    rivalLinkingStatus: "ACCEPTED" | "REJECTED" | "PENDING" | "CANCELED";
+  }[];
+};
+
+export type IdType = {
   id: number;
 };
 
