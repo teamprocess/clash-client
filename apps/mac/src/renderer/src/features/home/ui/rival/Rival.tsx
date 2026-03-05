@@ -16,7 +16,7 @@ export const Rival = () => {
         </S.TitleLeft>
 
         <S.RightSIde>
-          <S.ArrowBox onClick={() => rival.handleOpen}>
+          <S.ArrowBox onClick={rival.handleOpen}>
             라이벌 관리
             <S.DetailArrowIcon />
           </S.ArrowBox>

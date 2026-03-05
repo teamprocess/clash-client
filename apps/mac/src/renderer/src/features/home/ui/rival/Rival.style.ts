@@ -43,7 +43,7 @@ export const Title = styled.div`
   ${font.title2.bold}
 `;
 
-export const ArrowBox = styled.div`
+export const ArrowBox = styled.button`
   ${font.label.medium}
   color: ${({ theme }) => theme.label.alternative};
   display: flex;
