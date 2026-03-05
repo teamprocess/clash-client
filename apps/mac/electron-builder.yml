@@ -33,7 +33,7 @@ mac:
     NSDownloadsFolderUsageDescription: Application requests access to the user's Downloads folder.
   notarize: true
 dmg:
-  artifactName: ${name}-${version}.${ext}
+  artifactName: clash-client-${version}.${ext}
   title: ${productName} ${version}
   icon: resources/clash-icon.icns
   contents:

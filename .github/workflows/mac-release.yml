@@ -84,7 +84,8 @@ jobs:
 
       - name: Build and notarize
         run: |
-          pnpm --filter @clash/mac run release:mac -- --config.extraMetadata.version="${RELEASE_VERSION}"
+          pnpm --filter @clash/mac run build
+          pnpm --filter @clash/mac exec electron-builder --mac --publish never --config.extraMetadata.version="${RELEASE_VERSION}"
 
       - name: Upload artifacts to S3
         run: |
