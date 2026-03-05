@@ -1,5 +1,4 @@
 import {
-  IdType,
   RivalApplyRequest,
   RivalSignAllResponse,
   RivalUsersResponse,
@@ -26,8 +25,8 @@ export const rivalsApi = {
   },
 
   // 라이벌 신청 취소
-  postRivalCancel: async (data: IdType) => {
-    const result = await api.post<ApiResponse<void>>(`/compete/rivals/cancel`, { data });
+  postRivalCancel: async (data: ModifyRivalRequest) => {
+    const result = await api.post<ApiResponse<void>>(`/compete/rivals/cancel`, { ...data });
     return result.data;
   },
 

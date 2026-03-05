@@ -41,9 +41,17 @@ export const BottomRow = styled.div`
 export const ProfileContent = styled.div<{ $height?: string }>`
   ${flexRow};
   align-items: center;
-  justify-content: flex-start;
+  width: 100%;
+  justify-content: space-between;
   gap: 0.75rem;
   height: ${({ $height }) => $height ?? "auto"};
+`;
+
+export const ProfileBox = styled.div`
+  ${flexRow};
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
 `;
 
 export const ProfileTagBox = styled.div`

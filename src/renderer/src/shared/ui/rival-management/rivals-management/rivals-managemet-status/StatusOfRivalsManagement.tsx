@@ -35,7 +35,6 @@ const STATUS_UI: Record<
   CANCELED: {
     title: "취소됨",
     variant: "secondary",
-    disabled: true,
   },
 };
 
