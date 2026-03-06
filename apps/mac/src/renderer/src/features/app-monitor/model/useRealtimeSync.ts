@@ -1,78 +1,55 @@
-import { useEffect } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import { io, type Socket } from "socket.io-client";
-import { groupQueryKeys } from "@/entities/group";
-import { noticeQueryKeys } from "@/entities/notice";
 import { realtimeApi } from "@/shared/api";
 import { socketConfig } from "@/shared/config/socket";
-import { queryClient } from "@/shared/lib";
+import { invalidateByDomain } from "./invalidateRealtimeQueries";
+import { usePresenceStatus } from "./usePresenceStatus";
+import type { PresenceStatus } from "./realtimeSync.types";
 
 const RECONNECT_DELAY_MS = 3000;
 
-const invalidateGroupQueries = async () => {
-  await Promise.all([
-    queryClient.invalidateQueries({ queryKey: groupQueryKeys.allGroups }),
-    queryClient.invalidateQueries({ queryKey: groupQueryKeys.myGroups }),
-    queryClient.invalidateQueries({ queryKey: groupQueryKeys.groupActivity }),
-    queryClient.invalidateQueries({ queryKey: groupQueryKeys.groupDetail }),
-  ]);
-};
-
-const invalidateCompeteQueries = async () => {
-  await Promise.all([
-    queryClient.invalidateQueries({ queryKey: ["myRivals"] }),
-    queryClient.invalidateQueries({ queryKey: ["compareRivals"] }),
-    queryClient.invalidateQueries({ queryKey: ["battleInfo"] }),
-    queryClient.invalidateQueries({ queryKey: ["battleDetail"] }),
-    queryClient.invalidateQueries({ queryKey: ["battleAnalyze"] }),
-    queryClient.invalidateQueries({ queryKey: ["battleList"] }),
-    queryClient.invalidateQueries({ queryKey: ["active"] }),
-    queryClient.invalidateQueries({ queryKey: ["compare"] }),
-    queryClient.invalidateQueries({ queryKey: ["transition"] }),
-    queryClient.invalidateQueries({ queryKey: ["myCompare"] }),
-    queryClient.invalidateQueries({ queryKey: ["myGrowthRate"] }),
-    queryClient.invalidateQueries({ queryKey: ["rivalList"] }),
-  ]);
-};
-
-const invalidateUserQueries = async () => {
-  await Promise.all([
-    queryClient.invalidateQueries({ queryKey: ["user"] }),
-    queryClient.invalidateQueries({ queryKey: noticeQueryKeys.all }),
-  ]);
-};
-
-const invalidateByDomain = async (domain?: string) => {
-  if (domain === "GROUP") {
-    await invalidateGroupQueries();
-    return;
-  }
-
-  if (domain === "COMPETE") {
-    await invalidateCompeteQueries();
-    return;
-  }
-
-  if (domain === "USER") {
-    await invalidateUserQueries();
-  }
-};
-
 export const useRealtimeSync = () => {
+  const presenceStatus = usePresenceStatus();
+  const socketRef = useRef<Socket | null>(null);
+  const reconnectTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const isMountedRef = useRef(true);
+  const currentPresenceRef = useRef<PresenceStatus>(presenceStatus);
+  const sentPresenceRef = useRef<PresenceStatus | null>(null);
+
+  const clearReconnectTimer = useCallback(() => {
+    if (!reconnectTimerRef.current) {
+      return;
+    }
+
+    clearTimeout(reconnectTimerRef.current);
+    reconnectTimerRef.current = null;
+  }, []);
+
+  const flushPresence = useCallback(() => {
+    const socket = socketRef.current;
+    if (!socket?.connected) {
+      return;
+    }
+
+    const nextPresence = currentPresenceRef.current;
+    if (sentPresenceRef.current === nextPresence) {
+      return;
+    }
+
+    socket.emit(nextPresence === "ONLINE" ? "presence:online" : "presence:away");
+    sentPresenceRef.current = nextPresence;
+  }, []);
+
   useEffect(() => {
-    let isActive = true;
-    let socket: Socket | null = null;
-    let reconnectTimer: ReturnType<typeof setTimeout> | null = null;
+    currentPresenceRef.current = presenceStatus;
+    flushPresence();
+  }, [flushPresence, presenceStatus]);
 
-    const clearReconnectTimer = () => {
-      if (!reconnectTimer) {
-        return;
-      }
-
-      clearTimeout(reconnectTimer);
-      reconnectTimer = null;
-    };
+  useEffect(() => {
+    isMountedRef.current = true;
 
     const disconnect = (notifyAway: boolean) => {
+      const socket = socketRef.current;
       if (!socket) {
         return;
       }
@@ -83,16 +60,17 @@ export const useRealtimeSync = () => {
 
       socket.removeAllListeners();
       socket.disconnect();
-      socket = null;
+      socketRef.current = null;
+      sentPresenceRef.current = null;
     };
 
     const scheduleReconnect = () => {
-      if (!isActive || reconnectTimer) {
+      if (!isMountedRef.current || reconnectTimerRef.current) {
         return;
       }
 
-      reconnectTimer = setTimeout(() => {
-        reconnectTimer = null;
+      reconnectTimerRef.current = setTimeout(() => {
+        reconnectTimerRef.current = null;
         void connect();
       }, RECONNECT_DELAY_MS);
     };
@@ -104,7 +82,7 @@ export const useRealtimeSync = () => {
         const { success, data } = await realtimeApi.createSocketToken();
         const token = data?.token;
 
-        if (!isActive) {
+        if (!isMountedRef.current) {
           return;
         }
 
@@ -113,7 +91,7 @@ export const useRealtimeSync = () => {
           return;
         }
 
-        socket = io(socketConfig.origin, {
+        const socket = io(socketConfig.origin, {
           path: socketConfig.path,
           transports: ["websocket", "polling"],
           withCredentials: true,
@@ -121,8 +99,11 @@ export const useRealtimeSync = () => {
           reconnection: false,
         });
 
+        socketRef.current = socket;
+
         socket.on("connect", () => {
-          socket?.emit("presence:online");
+          sentPresenceRef.current = null;
+          flushPresence();
         });
 
         socket.on("change", (payload: { domain?: string }) => {
@@ -130,7 +111,9 @@ export const useRealtimeSync = () => {
         });
 
         socket.on("disconnect", reason => {
-          if (!isActive || reason === "io client disconnect") {
+          sentPresenceRef.current = null;
+
+          if (!isMountedRef.current || reason === "io client disconnect") {
             return;
           }
 
@@ -138,11 +121,12 @@ export const useRealtimeSync = () => {
         });
 
         socket.on("connect_error", error => {
+          sentPresenceRef.current = null;
           console.error("실시간 소켓 연결에 실패했습니다.", error);
           scheduleReconnect();
         });
       } catch (error) {
-        if (!isActive) {
+        if (!isMountedRef.current) {
           return;
         }
 
@@ -154,9 +138,9 @@ export const useRealtimeSync = () => {
     void connect();
 
     return () => {
-      isActive = false;
+      isMountedRef.current = false;
       clearReconnectTimer();
       disconnect(true);
     };
-  }, []);
+  }, [clearReconnectTimer, flushPresence]);
 };
