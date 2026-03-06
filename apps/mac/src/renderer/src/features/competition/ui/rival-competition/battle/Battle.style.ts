@@ -257,7 +257,6 @@ export const PercentText = styled.p<{ $isRival: boolean }>`
   ${palette.neutral[99]}
   position: absolute;
   opacity: 0.6;
-  z-index: 1000;
   padding-left: ${({ $isRival }) => ($isRival ? "0.5rem" : "0")};
   padding-right: ${({ $isRival }) => ($isRival ? "0" : "0.5rem")};
 `;
