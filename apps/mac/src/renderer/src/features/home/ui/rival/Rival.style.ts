@@ -103,6 +103,7 @@ export const ProfileContent = styled.div`
   align-items: center;
   justify-content: flex-start;
   gap: 0.75rem;
+  width: 100%;
 `;
 
 export const ProfileIcon = styled(Profile)`
@@ -124,6 +125,17 @@ export const ProfileName = styled.p`
 export const ProfileMention = styled.p`
   ${font.label.regular}
   color: ${({ theme }) => theme.label.alternative};
+  cursor: pointer;
+  display: block;
+  min-width: 0;
+  overflow: hidden;
+
+  > span {
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
 `;
 
 export const ProfileBox = styled.div`
@@ -136,6 +148,16 @@ type StatusProps = {
   $status: "ONLINE" | "AWAY" | "OFFLINE";
 };
 
+const statusWidth = ($status: StatusProps["$status"]) => {
+  switch ($status) {
+    case "ONLINE":
+      return "4rem";
+    case "AWAY":
+    case "OFFLINE":
+      return "4.5rem";
+  }
+};
+
 export const Status = styled.div<StatusProps>`
   ${font.caption.bold};
   ${flexRow};
@@ -144,6 +166,8 @@ export const Status = styled.div<StatusProps>`
   padding: 0.125rem 0.5rem;
   border-radius: 0.5rem;
   color: ${palette.neutral[5]};
+
+  width: ${({ $status }) => statusWidth($status)};
 
   background-color: ${({ $status, theme }) => {
     switch ($status) {
