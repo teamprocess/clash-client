@@ -8,6 +8,7 @@ const api = {
   getActiveApp: () => ipcRenderer.invoke("app-monitor:get-active"),
   getSessions: () => ipcRenderer.invoke("app-monitor:get-sessions"),
   getFrontmostMonitoredApp: () => ipcRenderer.invoke("app-monitor:get-frontmost-monitored-app"),
+  getCursorScreenPoint: () => ipcRenderer.invoke("system:get-cursor-screen-point"),
 
   openExternalUrl: (url: string) => ipcRenderer.invoke("open-external-url", url),
   clearAuthSession: () => ipcRenderer.invoke("auth:clear-session"),
