@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import * as S from "@/features/home/ui/rival/Rival.style";
 import { formatTime } from "@/shared/lib";
 import { MyRivalItem } from "@/shared/lib/useRival";
+import { Tooltip } from "@/shared/ui";
 
 export const MyRivalUsers = ({ user, getStatus }: MyRivalItem) => {
   const [displayActiveTime, setDisplayActiveTime] = useState<number>(Number(user.activeTime) || 0);
@@ -16,6 +17,21 @@ export const MyRivalUsers = ({ user, getStatus }: MyRivalItem) => {
     return () => clearInterval(timerId);
   }, [user.status]);
 
+  const renderRivalId = (username: string) => {
+    return (
+      <Tooltip
+        content={username}
+        position={"top"}
+        maxWidth={"10rem"}
+        wrapperStyle={{ maxWidth: "60%", minWidth: 0 }}
+      >
+        <S.ProfileMention>
+          <span>@{username}</span>
+        </S.ProfileMention>
+      </Tooltip>
+    );
+  };
+
   return (
     <S.ProfileContainer>
       <S.ProfileBox>
@@ -23,7 +39,7 @@ export const MyRivalUsers = ({ user, getStatus }: MyRivalItem) => {
           <S.ProfileIcon />
           <S.NameBox>
             <S.ProfileName>{user.name}</S.ProfileName>
-            <S.ProfileMention>@{user.username}</S.ProfileMention>
+            {renderRivalId(user.username)}
           </S.NameBox>
         </S.ProfileContent>
         <S.Status $status={user.status}>{getStatus(user.status)}</S.Status>

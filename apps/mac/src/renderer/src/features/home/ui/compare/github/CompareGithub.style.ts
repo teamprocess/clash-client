@@ -137,6 +137,7 @@ export const CalculateInfoBox = styled.div`
 
 export const ExplainText = styled.p`
   ${font.label.regular}
+  width: 100%;
   color: ${({ theme }) => theme.label.alternative};
 `;
 
@@ -144,13 +145,12 @@ export const RepositoryName = styled.p`
   ${font.label.bold};
   color: ${({ theme }) => theme.label.alternative};
   display: block;
-  width: 100%;
   min-width: 0;
   overflow: hidden;
+  cursor: pointer;
 
   > span {
     display: block;
-    width: 100%;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -242,8 +242,8 @@ export const GitCommitIcon = styled(GitCommits)``;
 
 export const FireIcon = styled(Fire)`
   color: ${({ theme }) => theme.label.alternative};
-  width: 1.25rem;
-  height: 1.25rem;
+  width: 2.15rem;
+  height: 2.15rem;
 `;
 
 export const CodeIcon = styled(Code)``;
