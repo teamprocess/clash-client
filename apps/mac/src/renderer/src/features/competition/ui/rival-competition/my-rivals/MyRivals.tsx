@@ -101,7 +101,7 @@ export const MyRivals = ({ data }: MyRivalsProps) => {
             </S.ArrowBox>
           </S.TitleBox>
 
-          <S.GaroLine />
+          <S.HorizontalLine />
 
           <S.ProfileWrapper>
             {myRivals.myRivalsData?.myRivals && myRivals.myRivalsData.myRivals.length > 0 ? (

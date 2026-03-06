@@ -7,7 +7,7 @@ import WebStorm from "@/shared/ui/assets/ide-webstorm.svg";
 import VSCode from "@/shared/ui/assets/ide-vscode.svg";
 import DetailArrow from "@/features/home/assets/home/front.svg";
 
-export const GaroLine = styled.div`
+export const HorizontalLine = styled.div`
   width: 100%;
   height: 1px;
   background-color: ${({ theme }) => theme.line.neutral};
