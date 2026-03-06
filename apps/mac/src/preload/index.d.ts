@@ -19,12 +19,18 @@ interface MonitoringSession {
   duration: number;
 }
 
+interface CursorScreenPoint {
+  x: number;
+  y: number;
+}
+
 interface AppMonitorAPI {
   startMonitoring: () => Promise<void>;
   stopMonitoring: () => Promise<void>;
   getActiveApp: () => Promise<ActiveApp | null>;
   getSessions: () => Promise<MonitoringSession[]>;
   getFrontmostMonitoredApp: () => Promise<string | null>;
+  getCursorScreenPoint: () => Promise<CursorScreenPoint>;
   openExternalUrl: (url: string) => Promise<void>;
   clearAuthSession: () => Promise<void>;
   onDeepLinkAuth: (callback: (payload: DeepLinkAuthPayload) => void) => () => void;

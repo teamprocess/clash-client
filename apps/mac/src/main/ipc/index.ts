@@ -1,4 +1,4 @@
-import { ipcMain, session, shell } from "electron";
+import { ipcMain, screen, session, shell } from "electron";
 import type { AppMonitor } from "../services";
 
 // AppMonitor 및 외부 URL 열기 관련 IPC를 등록합니다.
@@ -20,6 +20,9 @@ export const registerIpcHandlers = (getAppMonitor: () => AppMonitor | null) => {
   });
   ipcMain.handle("app-monitor:get-frontmost-monitored-app", () => {
     return getAppMonitor()?.getFrontmostMonitoredAppName() ?? null;
+  });
+  ipcMain.handle("system:get-cursor-screen-point", () => {
+    return screen.getCursorScreenPoint();
   });
   ipcMain.handle("open-external-url", async (_, url: string) => {
     await shell.openExternal(url);
