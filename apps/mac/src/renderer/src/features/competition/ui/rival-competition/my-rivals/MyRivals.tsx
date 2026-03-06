@@ -17,27 +17,36 @@ type RivalUser = {
   activeTime?: string | number | null;
 };
 
-type UsingAppType = "INTELLIJ_IDEA" | "WEBSTORM" | "VSCODE" | null | undefined;
+type UsingAppType = keyof typeof S.IdeIcons | null | undefined;
+
+const usingAppMetaMap = {
+  INTELLIJ_IDEA: {
+    Icon: S.IdeIcons.INTELLIJ_IDEA,
+    label: "IntelliJ IDEA",
+  },
+  WEBSTORM: {
+    Icon: S.IdeIcons.WEBSTORM,
+    label: "WebStorm",
+  },
+  VSCODE: {
+    Icon: S.IdeIcons.VSCODE,
+    label: "Visual Studio Code",
+  },
+} as const;
 
 const getUsingAppMeta = (usingApp: UsingAppType) => {
-  switch (usingApp) {
-    case "INTELLIJ_IDEA":
-      return { Icon: S.InteliJIcon, label: "IntelliJ IDEA" };
-    case "WEBSTORM":
-      return { Icon: S.WebStormIcon, label: "WebStorm" };
-    case "VSCODE":
-      return { Icon: S.VSCodeIcon, label: "Visual Studio Code" };
-    default:
-      return { Icon: null, label: "자리비움" };
+  if (!usingApp) {
+    return { Icon: null, label: "자리비움" };
   }
+
+  return usingAppMetaMap[usingApp] ?? { Icon: null, label: "자리비움" };
 };
 
-const RivalRow = ({ user, index }: { user: RivalUser; index: number }) => {
+const RivalRow = ({ user }: { user: RivalUser; index: number }) => {
   const [displayActiveTime, setDisplayActiveTime] = useState<number>(
     () => Number(user.activeTime) || 0
   );
 
-  // ONLINE일 때만 1초씩 증가
   useEffect(() => {
     if (user.status !== "ONLINE") return;
 
@@ -54,7 +63,7 @@ const RivalRow = ({ user, index }: { user: RivalUser; index: number }) => {
   );
 
   return (
-    <S.ProfileContainer key={user.username ?? index}>
+    <S.ProfileContainer>
       <S.ProfileContent>
         <S.ProfileIcon />
         <S.NameBox>

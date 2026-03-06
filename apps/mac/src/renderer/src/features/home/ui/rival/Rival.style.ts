@@ -18,6 +18,12 @@ const flexCol = css`
   flex-direction: column;
 `;
 
+const ideIconStyle = css`
+  width: 1.25rem;
+  height: 1.25rem;
+  flex-shrink: 0;
+`;
+
 export const RivalContainer = styled.div`
   ${flexCol};
   padding: 1.5rem;
@@ -195,20 +201,17 @@ export const ActiveBox = styled.div`
   align-items: center;
 `;
 
-export const InteliJIcon = styled(InteliJ)`
-  width: 1.25rem;
-  height: 1.25rem;
-`;
-
-export const WebStormIcon = styled(WebStorm)`
-  width: 1.25rem;
-  height: 1.25rem;
-`;
-
-export const VSCodeIcon = styled(VSCode)`
-  width: 1.25rem;
-  height: 1.25rem;
-`;
+export const IdeIcons = {
+  INTELLIJ_IDEA: styled(InteliJ)`
+    ${ideIconStyle}
+  `,
+  WEBSTORM: styled(WebStorm)`
+    ${ideIconStyle}
+  `,
+  VSCODE: styled(VSCode)`
+    ${ideIconStyle}
+  `,
+} as const;
 
 export const UsingAppText = styled.p`
   ${font.caption.regular};

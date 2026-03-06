@@ -1,22 +1,31 @@
 import { useEffect, useMemo, useState } from "react";
 import * as S from "@/features/home/ui/rival/Rival.style";
-import { formatTime } from "@/shared/lib";
-import { MyRivalItem } from "@/shared/lib/useRival";
+import { formatTime, MyRivalItem } from "@/shared/lib";
 import { Tooltip } from "@/shared/ui";
 
-type UsingAppType = "INTELLIJ_IDEA" | "WEBSTORM" | "VSCODE" | null | undefined;
+type UsingAppType = keyof typeof S.IdeIcons | null | undefined;
+
+const usingAppMetaMap = {
+  INTELLIJ_IDEA: {
+    Icon: S.IdeIcons.INTELLIJ_IDEA,
+    label: "IntelliJ IDEA",
+  },
+  WEBSTORM: {
+    Icon: S.IdeIcons.WEBSTORM,
+    label: "WebStorm",
+  },
+  VSCODE: {
+    Icon: S.IdeIcons.VSCODE,
+    label: "Visual Studio Code",
+  },
+} as const;
 
 const getUsingAppMeta = (usingApp: UsingAppType) => {
-  switch (usingApp) {
-    case "INTELLIJ_IDEA":
-      return { Icon: S.InteliJIcon, label: "IntelliJ IDEA" };
-    case "WEBSTORM":
-      return { Icon: S.WebStormIcon, label: "WebStorm" };
-    case "VSCODE":
-      return { Icon: S.VSCodeIcon, label: "Visual Studio Code" };
-    default:
-      return { Icon: null, label: "자리비움" };
+  if (!usingApp) {
+    return { Icon: null, label: "자리비움" };
   }
+
+  return usingAppMetaMap[usingApp] ?? { Icon: null, label: "자리비움" };
 };
 
 export const MyRivalUsers = ({ user, getStatus }: MyRivalItem) => {
@@ -36,8 +45,8 @@ export const MyRivalUsers = ({ user, getStatus }: MyRivalItem) => {
     return (
       <Tooltip
         content={username}
-        position={"top"}
-        maxWidth={"10rem"}
+        position="top"
+        maxWidth="10rem"
         wrapperStyle={{ maxWidth: "60%", minWidth: 0 }}
       >
         <S.ProfileMention>
