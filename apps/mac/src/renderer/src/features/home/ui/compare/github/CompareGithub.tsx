@@ -13,7 +13,7 @@ const renderRepositoryName = (
       content={repositoryText}
       position="top"
       maxWidth="10rem"
-      wrapperStyle={{ maxWidth: "39%", minWidth: 0 }}
+      wrapperStyle={{ maxWidth: "100%", minWidth: 0 }}
     >
       <S.RepositoryName>
         <span>{repositoryText}</span>

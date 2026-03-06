@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import * as S from "@/features/home/ui/rival/Rival.style";
 import { formatTime } from "@/shared/lib";
 import { MyRivalItem } from "@/shared/lib/useRival";
+import { Tooltip } from "@/shared/ui";
 
 type UsingAppType = "INTELLIJ_IDEA" | "WEBSTORM" | "VSCODE" | null | undefined;
 
@@ -31,6 +32,21 @@ export const MyRivalUsers = ({ user, getStatus }: MyRivalItem) => {
     return () => clearInterval(timerId);
   }, [user.status]);
 
+  const renderRivalId = (username: string) => {
+    return (
+      <Tooltip
+        content={username}
+        position={"top"}
+        maxWidth={"10rem"}
+        wrapperStyle={{ maxWidth: "60%", minWidth: 0 }}
+      >
+        <S.ProfileMention>
+          <span>@{username}</span>
+        </S.ProfileMention>
+      </Tooltip>
+    );
+  };
+
   const { Icon, label } = useMemo(
     () => getUsingAppMeta(user.usingApp as UsingAppType),
     [user.usingApp]
@@ -43,7 +59,7 @@ export const MyRivalUsers = ({ user, getStatus }: MyRivalItem) => {
           <S.ProfileIcon />
           <S.NameBox>
             <S.ProfileName>{user.name}</S.ProfileName>
-            <S.ProfileMention>@{user.username}</S.ProfileMention>
+            {renderRivalId(user.username)}
           </S.NameBox>
         </S.ProfileContent>
         <S.Status $status={user.status}>{getStatus(user.status)}</S.Status>
