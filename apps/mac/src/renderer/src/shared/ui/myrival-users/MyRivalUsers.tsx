@@ -15,7 +15,7 @@ const getUsingAppMeta = (usingApp: UsingAppType) => {
     case "VSCODE":
       return { Icon: S.VSCodeIcon, label: "Visual Studio Code" };
     default:
-      return { Icon: null, label: "Clash" };
+      return { Icon: null, label: "자리비움" };
   }
 };
 
