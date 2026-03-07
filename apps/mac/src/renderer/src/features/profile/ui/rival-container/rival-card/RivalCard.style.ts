@@ -82,12 +82,6 @@ export const AppRow = styled.div`
   min-width: 0;
 `;
 
-export const AppIcon = styled.img`
-  width: 0.875rem;
-  height: 0.875rem;
-  object-fit: contain;
-`;
-
 export const AppName = styled.p`
   ${font.caption.regular}
   color: ${({ theme }) => theme.label.neutral};
