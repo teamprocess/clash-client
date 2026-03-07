@@ -1,9 +1,10 @@
 import * as S from "./MyRivals.style";
 import { UserStatus, getStatus, useMyRivals } from "@/features/competition/model/useMyRivals";
-import { formatTime, useRival } from "@/shared/lib";
+import { formatTime, resolveUsingApp, useRival } from "@/shared/lib";
 import { MyRivalsResponse } from "@/entities/competition";
 import { useEffect, useMemo, useState } from "react";
 import { RivalsManagementDialog } from "@/shared/ui";
+import { IdeIcons } from "@/shared/ui/assets/ide-img";
 
 interface MyRivalsProps {
   data: MyRivalsResponse;
@@ -17,29 +18,23 @@ type RivalUser = {
   activeTime?: string | number | null;
 };
 
-type UsingAppType = keyof typeof S.IdeIcons | null | undefined;
-
-const usingAppMetaMap = {
-  INTELLIJ_IDEA: {
-    Icon: S.IdeIcons.INTELLIJ_IDEA,
-    label: "IntelliJ IDEA",
-  },
-  WEBSTORM: {
-    Icon: S.IdeIcons.WEBSTORM,
-    label: "WebStorm",
-  },
-  VSCODE: {
-    Icon: S.IdeIcons.VSCODE,
-    label: "Visual Studio Code",
-  },
-} as const;
-
-const getUsingAppMeta = (usingApp: UsingAppType) => {
-  if (!usingApp) {
-    return { Icon: null, label: "자리비움" };
+const getUsingAppMeta = (usingApp?: string | null, status?: string) => {
+  if (status !== "ONLINE") {
+    return { Icon: null, label: "" };
   }
 
-  return usingAppMetaMap[usingApp] ?? { Icon: null, label: "자리비움" };
+  const resolvedApp = resolveUsingApp(usingApp);
+
+  if (!resolvedApp) {
+    return { Icon: null, label: "" };
+  }
+
+  const Icon = IdeIcons[resolvedApp.id as keyof typeof IdeIcons] ?? null;
+
+  return {
+    Icon,
+    label: resolvedApp.name,
+  };
 };
 
 const RivalRow = ({ user }: { user: RivalUser; index: number }) => {
@@ -58,9 +53,11 @@ const RivalRow = ({ user }: { user: RivalUser; index: number }) => {
   }, [user.status]);
 
   const { Icon, label } = useMemo(
-    () => getUsingAppMeta(user.usingApp as UsingAppType),
-    [user.usingApp]
+    () => getUsingAppMeta(user.usingApp, user.status),
+    [user.usingApp, user.status]
   );
+
+  const isOnline = user.status === "ONLINE";
 
   return (
     <S.ProfileContainer>
@@ -77,15 +74,16 @@ const RivalRow = ({ user }: { user: RivalUser; index: number }) => {
       </S.ProfileContent>
 
       <S.PlayTime>
-        {getStatus(user.status as UserStatus) === "온라인" && (
+        {isOnline && (Icon || label) && (
           <>
             <S.UsingBox>
               {Icon ? <Icon /> : null}
-              <S.UsingAppText>{label}</S.UsingAppText>
+              {label && <S.UsingAppText>{label}</S.UsingAppText>}
             </S.UsingBox>
             <S.Point>·</S.Point>
           </>
         )}
+
         <S.ActiveTime $status={user.status as UserStatus}>
           {formatTime(displayActiveTime)}
         </S.ActiveTime>
