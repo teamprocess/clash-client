@@ -81,7 +81,7 @@ export const CookieIcon = styled(Cookie)``;
 export const GoodsBox = styled.div`
   display: flex;
   align-items: center;
-  gap: 0.25rem;
+  gap: 0.5rem;
 
   & > svg {
     width: 1.75rem;

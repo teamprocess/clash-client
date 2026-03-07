@@ -1,18 +1,25 @@
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { formatNoticeDate, useTopbarNotice } from "@/features/notice/model/useTopbarNotice";
 import { Popover } from "@/shared/ui";
 import * as S from "./TopbarNotice.style";
 
 export const TopbarNotice = () => {
   const anchorRef = useRef<HTMLDivElement>(null);
+  const tabsRef = useRef<HTMLDivElement>(null);
+  const unreadTabRef = useRef<HTMLButtonElement>(null);
+  const allTabRef = useRef<HTMLButtonElement>(null);
+  const [activeRail, setActiveRail] = useState({ left: 0, width: 0 });
   const {
     isOpen,
     isLoading,
     hasNotice,
     unreadCount,
+    activeTab,
     searchKeyword,
     filteredNotices,
+    emptyMessage,
     processingNoticeId,
+    setActiveTab,
     setSearchKeyword,
     toggle,
     close,
@@ -20,6 +27,23 @@ export const TopbarNotice = () => {
     confirmNotice,
     denyNotice,
   } = useTopbarNotice();
+
+  useEffect(() => {
+    const activeTabElement = activeTab === "UNREAD" ? unreadTabRef.current : allTabRef.current;
+    const tabsElement = tabsRef.current;
+
+    if (!activeTabElement || !tabsElement) {
+      return;
+    }
+
+    const tabsRect = tabsElement.getBoundingClientRect();
+    const activeRect = activeTabElement.getBoundingClientRect();
+
+    setActiveRail({
+      left: activeRect.left - tabsRect.left,
+      width: activeRect.width,
+    });
+  }, [activeTab, isOpen]);
 
   return (
     <>
@@ -38,25 +62,49 @@ export const TopbarNotice = () => {
       >
         <S.NoticePanel>
           <S.NoticeHeader>
-            <S.NoticeTitle>알림</S.NoticeTitle>
+            <S.TabHeader>
+              <S.Tabs ref={tabsRef}>
+                <S.Tab
+                  ref={unreadTabRef}
+                  type="button"
+                  $isActive={activeTab === "UNREAD"}
+                  onClick={() => setActiveTab("UNREAD")}
+                >
+                  미확인
+                </S.Tab>
+                <S.Tab
+                  ref={allTabRef}
+                  type="button"
+                  $isActive={activeTab === "ALL"}
+                  onClick={() => setActiveTab("ALL")}
+                >
+                  전체
+                </S.Tab>
+              </S.Tabs>
+              <S.TabRail>
+                <S.TabActiveRail $left={activeRail.left} $width={activeRail.width} />
+              </S.TabRail>
+            </S.TabHeader>
             <S.CloseButton type="button" onClick={close}>
               <S.CloseIcon />
             </S.CloseButton>
           </S.NoticeHeader>
           {isLoading ? (
             <S.NoneNotice>알림을 불러오는 중입니다.</S.NoneNotice>
-          ) : hasNotice ? (
+          ) : (
             <>
-              <S.SearchBox>
-                <S.SearchUsers
-                  value={searchKeyword}
-                  onChange={event => setSearchKeyword(event.target.value)}
-                  placeholder="보낸 사람, 알림 내용으로 검색"
-                />
-                <S.SearchIconBox>
-                  <S.SearchIcon />
-                </S.SearchIconBox>
-              </S.SearchBox>
+              {hasNotice && (
+                <S.SearchBox>
+                  <S.SearchUsers
+                    value={searchKeyword}
+                    onChange={event => setSearchKeyword(event.target.value)}
+                    placeholder="보낸 사람, 알림 내용으로 검색"
+                  />
+                  <S.SearchIconBox>
+                    <S.SearchIcon />
+                  </S.SearchIconBox>
+                </S.SearchBox>
+              )}
               {filteredNotices.length > 0 ? (
                 <S.NoticeContainer>
                   {filteredNotices.map(notice => (
@@ -84,7 +132,7 @@ export const TopbarNotice = () => {
                       </S.NoticeTextWrapper>
                       <S.ChoiceBox>
                         <S.ChoiceActions>
-                          {notice.requiresAction && !notice.isRead ? (
+                          {notice.requiresAction ? (
                             <>
                               <S.ChoiceButton
                                 type="button"
@@ -103,7 +151,7 @@ export const TopbarNotice = () => {
                                 <S.DenyIcon />
                               </S.ChoiceButton>
                             </>
-                          ) : (
+                          ) : !notice.isRead ? (
                             <S.ChoiceButton
                               type="button"
                               onClick={() => void readNotice(notice)}
@@ -112,7 +160,7 @@ export const TopbarNotice = () => {
                             >
                               <S.TrashIcon />
                             </S.ChoiceButton>
-                          )}
+                          ) : null}
                         </S.ChoiceActions>
                         {notice.createdAt && (
                           <S.NoticeMeta>{formatNoticeDate(notice.createdAt)}</S.NoticeMeta>
@@ -122,14 +170,9 @@ export const TopbarNotice = () => {
                   ))}
                 </S.NoticeContainer>
               ) : (
-                <S.NoneNotice>검색 결과가 없습니다.</S.NoneNotice>
+                <S.NoneNotice>{emptyMessage}</S.NoneNotice>
               )}
             </>
-          ) : (
-            <S.NoneNotice>
-              <S.CryIcon />
-              현재 도착한 알림이 없습니다.
-            </S.NoneNotice>
           )}
         </S.NoticePanel>
       </Popover>

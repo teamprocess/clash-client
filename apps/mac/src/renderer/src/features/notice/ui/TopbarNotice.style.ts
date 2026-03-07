@@ -21,7 +21,6 @@ export const NoticeButton = styled.button`
   padding: 0;
   border: none;
   background: none;
-  margin-left: 0.75rem;
   cursor: pointer;
 `;
 
@@ -40,7 +39,7 @@ export const NoticePanel = styled.div`
   display: flex;
   flex-direction: column;
   width: 28rem;
-  padding: 1.5rem 1rem 1.5rem 1.5rem;
+  padding: 1.5rem 0.5rem 1.5rem 1.5rem;
   border-radius: 2rem;
   min-height: 16rem;
   max-height: 32rem;
@@ -65,10 +64,11 @@ export const NoticePanel = styled.div`
 export const NoticeHeader = styled.div`
   display: flex;
   flex-direction: row;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
   width: 100%;
   flex-shrink: 0;
+  gap: 1rem;
 `;
 
 export const NoticeTitle = styled.p`
@@ -94,6 +94,51 @@ export const SearchBox = styled.div`
   margin-top: 1rem;
   gap: 0.75rem;
   flex-shrink: 0;
+`;
+
+export const TabHeader = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  flex: 1;
+  flex-shrink: 0;
+`;
+
+export const Tabs = styled.div`
+  display: grid;
+  grid-template-columns: repeat(2, max-content);
+  align-items: center;
+  gap: 1rem;
+`;
+
+export const Tab = styled.button<{ $isActive: boolean }>`
+  ${font.title2.medium}
+  color: ${({ $isActive, theme }) => ($isActive ? theme.label.normal : theme.label.assistive)};
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+`;
+
+export const TabRail = styled.div`
+  position: relative;
+  height: 0.25rem;
+  width: 100%;
+  background-color: ${({ theme }) => theme.line.neutral};
+  border-radius: 1rem;
+  overflow: hidden;
+`;
+
+export const TabActiveRail = styled.div<{ $left: number; $width: number }>`
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: ${({ $left }) => `${$left}px`};
+  width: ${({ $width }) => `${$width}px`};
+  background-color: ${({ theme }) => theme.primary.normal};
+  transition:
+    left 0.2s ease,
+    width 0.2s ease;
 `;
 
 export const SearchUsers = styled.input`
