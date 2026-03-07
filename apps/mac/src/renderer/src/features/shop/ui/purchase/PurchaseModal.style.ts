@@ -2,14 +2,9 @@ import styled from "styled-components";
 import { font } from "@clash/design-tokens/font";
 import Close from "@/features/shop/assets/no.svg";
 import Cookie from "@/features/shop/assets/cookie.svg";
-import Token from "@/features/shop/assets/token.svg";
 import Money from "@/features/shop/assets/money.png";
 
 export const CookieIcon = styled(Cookie)`
-  margin-left: -0.25rem;
-`;
-
-export const TokenIcon = styled(Token)`
   margin-left: -0.25rem;
 `;
 
