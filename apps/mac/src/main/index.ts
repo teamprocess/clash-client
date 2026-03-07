@@ -14,6 +14,9 @@ let appMonitor: AppMonitor | null = null;
 let isCheckingForUpdates = false;
 let isManualUpdateCheck = false;
 let isInstallPromptOpen = false;
+let downloadedUpdateVersion: string | null = null;
+
+const AUTO_UPDATE_CHECK_INTERVAL_MS = 30 * 60 * 1000;
 
 const markSkipShutdownCleanup = () => {
   (globalThis as { __CLASH_SKIP_SHUTDOWN_CLEANUP__?: boolean }).__CLASH_SKIP_SHUTDOWN_CLEANUP__ =
@@ -43,27 +46,38 @@ const showUpdateMessage = async (message: string, detail?: string) => {
 const confirmInstallUpdate = async (version: string | undefined) => {
   const options = {
     type: "info" as const,
-    buttons: ["지금 설치", "나중에"],
-    defaultId: 0,
-    cancelId: 1,
+    buttons: ["나중에", "재시작"],
+    defaultId: 1,
+    cancelId: 0,
     title: "업데이트 설치",
     message: "업데이트 다운로드가 완료되었습니다.",
     detail: version
-      ? `${version} 버전을 설치하려면 앱을 재시작해야 합니다. 지금 설치할까요?`
-      : "업데이트를 설치하려면 앱을 재시작해야 합니다. 지금 설치할까요?",
+      ? `${version} 버전을 설치하려면 앱을 재시작해야 합니다. 지금 재시작할까요?`
+      : "업데이트를 설치하려면 앱을 재시작해야 합니다. 지금 재시작할까요?",
   };
   const targetWindow = BrowserWindow.getFocusedWindow() ?? mainWindow;
   const result = targetWindow
     ? await dialog.showMessageBox(targetWindow, options)
     : await dialog.showMessageBox(options);
 
-  return result.response === 0;
+  return result.response === 1;
 };
 
 const checkForUpdates = async (source: "auto" | "manual") => {
   if (!isUpdateSupported()) {
     if (source === "manual") {
       await showUpdateMessage("업데이트 확인은 배포된 macOS 앱에서만 지원됩니다.");
+    }
+    return;
+  }
+
+  if (downloadedUpdateVersion) {
+    if (source === "manual" && !isInstallPromptOpen) {
+      const shouldInstallNow = await confirmInstallUpdate(downloadedUpdateVersion);
+      if (shouldInstallNow) {
+        markSkipShutdownCleanup();
+        autoUpdater.quitAndInstall();
+      }
     }
     return;
   }
@@ -146,6 +160,7 @@ const registerAutoUpdater = () => {
 
   autoUpdater.on("update-downloaded", info => {
     isCheckingForUpdates = false;
+    downloadedUpdateVersion = info.version ?? null;
     if (isInstallPromptOpen) {
       return;
     }
@@ -159,6 +174,7 @@ const registerAutoUpdater = () => {
           return;
         }
 
+        downloadedUpdateVersion = null;
         markSkipShutdownCleanup();
         autoUpdater.quitAndInstall();
       } finally {
@@ -180,6 +196,9 @@ const registerAutoUpdater = () => {
   });
 
   void checkForUpdates("auto");
+  setInterval(() => {
+    void checkForUpdates("auto");
+  }, AUTO_UPDATE_CHECK_INTERVAL_MS);
 };
 
 configureCertificateHandling();
