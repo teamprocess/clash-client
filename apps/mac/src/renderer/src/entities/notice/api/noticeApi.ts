@@ -7,6 +7,11 @@ export const noticeApi = {
     return result.data;
   },
 
+  getMyAllNotices: async () => {
+    const result = await api.get<ApiResponse<MyUserNoticesResponse>>("/users/me/notices/all");
+    return result.data;
+  },
+
   readNotice: async (noticeId: number) => {
     const result = await api.patch<ApiResponse<void>>(`/users/me/notices/${noticeId}/read`);
     return result.data;
