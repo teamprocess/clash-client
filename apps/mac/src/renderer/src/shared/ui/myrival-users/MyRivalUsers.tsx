@@ -1,8 +1,27 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import * as S from "@/features/home/ui/rival/Rival.style";
-import { formatTime } from "@/shared/lib";
-import { MyRivalItem } from "@/shared/lib/useRival";
+import { formatTime, MyRivalItem, resolveUsingApp } from "@/shared/lib";
+import { IdeIcons } from "@/shared/ui/assets/ide-img";
 import { Tooltip } from "@/shared/ui";
+
+const getUsingAppMeta = (usingApp?: string | null, status?: string) => {
+  if (status !== "ONLINE") {
+    return { Icon: null, label: "" };
+  }
+
+  const resolvedApp = resolveUsingApp(usingApp);
+
+  if (!resolvedApp) {
+    return { Icon: null, label: "" };
+  }
+
+  const Icon = IdeIcons[resolvedApp.id as keyof typeof IdeIcons] ?? null;
+
+  return {
+    Icon,
+    label: resolvedApp.name,
+  };
+};
 
 export const MyRivalUsers = ({ user, getStatus }: MyRivalItem) => {
   const [displayActiveTime, setDisplayActiveTime] = useState<number>(Number(user.activeTime) || 0);
@@ -21,9 +40,9 @@ export const MyRivalUsers = ({ user, getStatus }: MyRivalItem) => {
     return (
       <Tooltip
         content={username}
-        position={"top"}
-        maxWidth={"10rem"}
-        wrapperStyle={{ maxWidth: "60%", minWidth: 0 }}
+        position="top"
+        maxWidth="10rem"
+        wrapperStyle={{ flex: 1, minWidth: 0 }}
       >
         <S.ProfileMention>
           <span>@{username}</span>
@@ -31,6 +50,11 @@ export const MyRivalUsers = ({ user, getStatus }: MyRivalItem) => {
       </Tooltip>
     );
   };
+
+  const { Icon, label } = useMemo(
+    () => getUsingAppMeta(user.usingApp, user.status),
+    [user.usingApp, user.status]
+  );
 
   return (
     <S.ProfileContainer>
@@ -47,8 +71,8 @@ export const MyRivalUsers = ({ user, getStatus }: MyRivalItem) => {
 
       <S.ActiveBox>
         <S.UsingAppContainer>
-          <S.UsingApp />
-          <S.UsingAppText>{user.usingApp}</S.UsingAppText>
+          {Icon ? <Icon /> : null}
+          {label && <S.UsingAppText>{label}</S.UsingAppText>}
         </S.UsingAppContainer>
 
         <S.ActiveTime $status={user.status}>{formatTime(displayActiveTime)}</S.ActiveTime>

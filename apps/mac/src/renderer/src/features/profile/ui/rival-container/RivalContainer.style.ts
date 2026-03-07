@@ -1,6 +1,5 @@
 import styled, { css } from "styled-components";
 import ProfileIcon from "../../assets/rival-profile.png";
-import Vscode from "../../assets/vscode.svg";
 
 const flexCol = css`
   display: flex;
@@ -18,11 +17,6 @@ export const Container = styled.div`
 export const profileSrcMap = {
   default: ProfileIcon,
 } as const;
-
-export const VscodeIcon = styled(Vscode)`
-  width: 0.875rem;
-  height: 0.875rem;
-`;
 
 export const AddRivalButton = styled.button`
   width: 100%;

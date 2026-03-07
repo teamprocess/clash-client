@@ -2,7 +2,6 @@ import styled, { css } from "styled-components";
 import { font } from "@clash/design-tokens/font";
 import DetailArrow from "../../assets/home/front.svg";
 import { palette } from "@clash/design-tokens/theme";
-import VSCode from "../../assets/home/vscode.svg";
 import Profile from "../../assets/home/profile.svg";
 import Plus from "../../assets/home/plus.svg";
 
@@ -192,8 +191,6 @@ export const ActiveBox = styled.div`
   ${flexCol};
   align-items: center;
 `;
-
-export const UsingApp = styled(VSCode)``;
 
 export const UsingAppText = styled.p`
   ${font.caption.regular};
