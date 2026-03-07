@@ -9,3 +9,4 @@ export { useRival } from "./useRival";
 export { buildPaddedStreak } from "./buildPaddedStreaks";
 export { getGrowthInfo } from "./getGrowthInfo";
 export type { MyRivalItem } from "./useRival";
+export { resolveUsingApp } from "./resolveUsingApp";
