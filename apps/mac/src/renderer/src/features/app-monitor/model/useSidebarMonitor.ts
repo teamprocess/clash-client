@@ -8,9 +8,10 @@ export const useSidebarMonitor = () => {
   // Electron 환경 체크
   const isElectron = !!(typeof window !== "undefined" && window.api);
 
-  const { activeApp } = useAppMonitor();
+  const { activeApp, hasInitialized: hasInitializedAppMonitor } = useAppMonitor();
   const { data: todayResponse } = useRecordTodayQuery();
   const [frontmostMonitoredApp, setFrontmostMonitoredApp] = useState<string | null>(null);
+  const [hasResolvedFrontmostMonitoredApp, setHasResolvedFrontmostMonitoredApp] = useState(false);
   const [displayTime, setDisplayTime] = useState("00:00:00");
 
   const isTaskRecording = useMemo(
@@ -54,8 +55,15 @@ export const useSidebarMonitor = () => {
   }, [todayResponse]);
 
   const isFrontmostMonitoredApp = frontmostMonitoredApp !== null;
+  const isActivitySyncReady =
+    !isElectron || (hasInitializedAppMonitor && hasResolvedFrontmostMonitoredApp);
 
-  useActivityRecordSync(isTaskRecording ? null : activeApp, isElectron, isFrontmostMonitoredApp);
+  useActivityRecordSync(
+    isTaskRecording ? null : activeApp,
+    isElectron,
+    isFrontmostMonitoredApp,
+    isActivitySyncReady
+  );
 
   useEffect(() => {
     if (!isElectron) {
@@ -69,11 +77,9 @@ export const useSidebarMonitor = () => {
         const appName = await window.api.getFrontmostMonitoredApp();
         if (!cancelled) {
           setFrontmostMonitoredApp(appName);
+          setHasResolvedFrontmostMonitoredApp(true);
         }
       } catch (error) {
-        if (!cancelled) {
-          setFrontmostMonitoredApp(null);
-        }
         console.error("전면 개발 앱 조회 실패:", error);
       }
     };

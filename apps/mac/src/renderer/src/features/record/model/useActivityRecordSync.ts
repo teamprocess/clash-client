@@ -35,7 +35,8 @@ const parseServerSession = (
 export const useActivityRecordSync = (
   activeApp: ActiveApp | null,
   isElectron: boolean,
-  isFrontmostMonitoredApp: boolean
+  isFrontmostMonitoredApp: boolean,
+  isReady: boolean
 ) => {
   const pendingTargetsRef = useRef<Array<string | null>>([]);
   const monitoredAppsRef = useRef<MonitoredApp[] | null>(null);
@@ -261,17 +262,17 @@ export const useActivityRecordSync = (
   }, [loadCurrentSession, loadMonitoredApps, syncServerSession]);
 
   useEffect(() => {
-    if (!isElectron) {
+    if (!isElectron || !isReady) {
       return;
     }
 
     const currentObservedAppName = activeApp?.appName ?? null;
     enqueueTarget(currentObservedAppName);
     void flushSync();
-  }, [activeApp?.appName, enqueueTarget, flushSync, isElectron]);
+  }, [activeApp?.appName, enqueueTarget, flushSync, isElectron, isReady]);
 
   useEffect(() => {
-    if (!isElectron) {
+    if (!isElectron || !isReady) {
       return;
     }
 
@@ -281,5 +282,5 @@ export const useActivityRecordSync = (
     }, SYNC_POLL_MS);
 
     return () => clearInterval(timer);
-  }, [activeApp?.appName, enqueueTarget, flushSync, isElectron]);
+  }, [activeApp?.appName, enqueueTarget, flushSync, isElectron, isReady]);
 };
