@@ -11,8 +11,8 @@ import Rider from "./ide-rider.svg";
 import Xcode from "./ide-xcode.svg";
 
 const ideIconStyle = css`
-  width: 1.25rem;
-  height: 1.25rem;
+  width: 1rem;
+  height: 1rem;
   flex-shrink: 0;
 `;
 
