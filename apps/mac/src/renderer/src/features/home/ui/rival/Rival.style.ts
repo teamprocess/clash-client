@@ -2,11 +2,18 @@ import styled, { css } from "styled-components";
 import { font } from "@clash/design-tokens/font";
 import DetailArrow from "../../assets/home/front.svg";
 import { palette } from "@clash/design-tokens/theme";
-import VSCode from "@/shared/ui/assets/ide-vscode.svg";
-import InteliJ from "@/shared/ui/assets/ide-intellij-idea.svg";
-import WebStorm from "@/shared/ui/assets/ide-webstorm.svg";
 import Profile from "../../assets/home/profile.svg";
 import Plus from "../../assets/home/plus.svg";
+import VSCode from "@/shared/ui/assets/ide-img/ide-vscode.svg";
+import InteliJ from "@/shared/ui/assets/ide-img/ide-intellij-idea.svg";
+import WebStorm from "@/shared/ui/assets/ide-img/ide-webstorm.svg";
+import PyCharm from "@/shared/ui/assets/ide-img/ide-pycharm.svg";
+import GOLand from "@/shared/ui/assets/ide-img/ide-goland.svg";
+import PhpStorm from "@/shared/ui/assets/ide-img/ide-phpstorm.svg";
+import RubyMine from "@/shared/ui/assets/ide-img/ide-rubymine.svg";
+import Clion from "@/shared/ui/assets/ide-img/ide-clion.svg";
+import Rider from "@/shared/ui/assets/ide-img/ide-rider.svg";
+import Xcode from "@/shared/ui/assets/ide-img/ide-xcode.svg";
 
 const flexRow = css`
   display: flex;
@@ -23,6 +30,39 @@ const ideIconStyle = css`
   height: 1.25rem;
   flex-shrink: 0;
 `;
+
+export const IdeIcons = {
+  INTELLIJ_IDEA: styled(InteliJ)`
+    ${ideIconStyle}
+  `,
+  WEBSTORM: styled(WebStorm)`
+    ${ideIconStyle}
+  `,
+  VSCODE: styled(VSCode)`
+    ${ideIconStyle}
+  `,
+  PYCHARM: styled(PyCharm)`
+    ${ideIconStyle}
+  `,
+  GOLAND: styled(GOLand)`
+    ${ideIconStyle}
+  `,
+  PHPSTORM: styled(PhpStorm)`
+    ${ideIconStyle}
+  `,
+  RUBYMINE: styled(RubyMine)`
+    ${ideIconStyle}
+  `,
+  CLION: styled(Clion)`
+    ${ideIconStyle}
+  `,
+  RIDER: styled(Rider)`
+    ${ideIconStyle}
+  `,
+  XCODE: styled(Xcode)`
+    ${ideIconStyle}
+  `,
+} as const;
 
 export const RivalContainer = styled.div`
   ${flexCol};
@@ -200,18 +240,6 @@ export const ActiveBox = styled.div`
   ${flexCol};
   align-items: center;
 `;
-
-export const IdeIcons = {
-  INTELLIJ_IDEA: styled(InteliJ)`
-    ${ideIconStyle}
-  `,
-  WEBSTORM: styled(WebStorm)`
-    ${ideIconStyle}
-  `,
-  VSCODE: styled(VSCode)`
-    ${ideIconStyle}
-  `,
-} as const;
 
 export const UsingAppText = styled.p`
   ${font.caption.regular};
