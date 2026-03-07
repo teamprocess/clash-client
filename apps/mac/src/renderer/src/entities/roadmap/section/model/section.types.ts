@@ -14,13 +14,6 @@ export interface sectionServer {
   category?: string | number;
   categoryId?: string | number;
   categoryImageUrl?: string | null;
-  icon?: string | null;
-  iconUrl?: string | null;
-  iconURL?: string | null;
-  icon_url?: string | null;
-  image?: string | null;
-  imageUrl?: string | null;
-  image_url?: string | null;
   completed: boolean;
   locked: boolean;
 }
