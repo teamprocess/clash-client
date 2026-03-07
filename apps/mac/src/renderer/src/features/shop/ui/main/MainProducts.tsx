@@ -1,4 +1,3 @@
-import DummyImage from "../../assets/dummy-banner.png";
 import { Recommend } from "@/features/shop";
 import * as S from "./MainProducts.style";
 import { Popularity } from "@/features/shop/ui/popularity/Popularity";
@@ -12,7 +11,7 @@ interface MainProductsProps {
 export const MainProducts = ({ recommendedProducts, popularProducts }: MainProductsProps) => {
   return (
     <S.MainContainer>
-      <S.BannerImage $imgUrl={DummyImage} />
+      <S.BannerImage aria-hidden />
       <Recommend products={recommendedProducts} />
       <Popularity products={popularProducts} />
     </S.MainContainer>

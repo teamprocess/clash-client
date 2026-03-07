@@ -5,11 +5,10 @@ interface ProductCardProps {
   title: string;
   price: number;
   discount: number;
-  type: string;
   onClick?: () => void;
 }
 
-export const ProductCard = ({ title, price, discount, type, onClick }: ProductCardProps) => {
+export const ProductCard = ({ title, price, discount, onClick }: ProductCardProps) => {
   const discounted = calculateDiscountedPrice(price, discount);
 
   return (
@@ -17,7 +16,7 @@ export const ProductCard = ({ title, price, discount, type, onClick }: ProductCa
       <S.ProductInfoBox>
         <S.ProductTitle>{title}</S.ProductTitle>
         <S.PriceBox>
-          {type === "TOKEN" ? <S.TokenIcon /> : <S.CookieIcon />}
+          <S.CookieIcon />
           <S.PriceText>{discounted}</S.PriceText>
           {discount !== 0 && <S.DiscountText>{`(-${discount}%)`}</S.DiscountText>}
         </S.PriceBox>

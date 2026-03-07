@@ -9,11 +9,11 @@ export const MainContainer = styled.div`
   background-color: ${({ theme }) => theme.background.normal};
 `;
 
-export const BannerImage = styled.div<{ $imgUrl: string }>`
+export const BannerImage = styled.div`
   width: 100%;
   aspect-ratio: 74.5 / 15;
-  background-image: url(${({ $imgUrl }) => $imgUrl});
-  background-size: cover;
-  background-position: center;
   border-radius: 0.75rem 0.75rem 0 0;
+  background:
+    radial-gradient(circle at top left, rgba(255, 255, 255, 0.22), transparent 32%),
+    linear-gradient(120deg, #1f6b5c 0%, #2d8a72 45%, #c0e36f 100%);
 `;

@@ -27,7 +27,6 @@ export const Popularity = ({ products }: PopularityProps) => {
             title={product.title}
             price={product.price}
             discount={product.discount}
-            type={product.type}
             onClick={() => handleCardClick(product)}
           />
         ))}
