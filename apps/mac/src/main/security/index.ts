@@ -36,26 +36,34 @@ export const configureCertificateHandling = () => {
 // 응답 헤더에 CSP 주입
 export const registerCspHeaders = () => {
   const connectSourceSet = new Set(["'self'", "https://www.google.com"]);
+  const imageSourceSet = new Set(["'self'", "data:", "https://www.gstatic.com"]);
   const apiOrigin = parseOrigin(process.env.VITE_API_URL);
   const socketOrigin =
     parseOrigin(process.env.VITE_SOCKET_IO_URL) ?? parseOrigin(FALLBACK_SOCKET_ENDPOINT);
+  const cdnOrigin = parseOrigin("https://cdn.clash.kr");
 
   if (apiOrigin) {
     connectSourceSet.add(apiOrigin);
+    imageSourceSet.add(apiOrigin);
   }
 
   if (socketOrigin) {
     connectSourceSet.add(socketOrigin);
   }
 
+  if (cdnOrigin) {
+    imageSourceSet.add(cdnOrigin);
+  }
+
   const connectSources = Array.from(connectSourceSet).join(" ");
+  const imageSources = Array.from(imageSourceSet).join(" ");
 
   session.defaultSession.webRequest.onHeadersReceived((details, callback) => {
     callback({
       responseHeaders: {
         ...details.responseHeaders,
         "Content-Security-Policy": [
-          `default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.google.com https://www.gstatic.com; style-src 'self' 'unsafe-inline' https://www.gstatic.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https://www.gstatic.com; frame-src https://www.google.com; connect-src ${connectSources}`,
+          `default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.google.com https://www.gstatic.com; style-src 'self' 'unsafe-inline' https://www.gstatic.com; font-src 'self' https://fonts.gstatic.com; img-src ${imageSources}; frame-src https://www.google.com; connect-src ${connectSources}`,
         ],
       },
     });
