@@ -36,7 +36,12 @@ export const SectionIconWrapper = styled.button`
   }
 `;
 
-export const SectionIcon = styled.img``;
+export const SectionIcon = styled.img`
+  width: 4rem;
+  height: 4rem;
+  object-fit: contain;
+  flex-shrink: 0;
+`;
 
 export const SectionComplete = styled(CompleteIcon)`
   position: absolute;

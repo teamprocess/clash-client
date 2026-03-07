@@ -6,6 +6,34 @@ export const sectionQueryKeys = {
   major: (major: MajorEnum) => ["sections", "major", major] as const,
 };
 
+const resolveSectionIconUrl = (icon?: string | null) => {
+  const trimmedIcon = icon?.trim();
+
+  if (!trimmedIcon) {
+    return null;
+  }
+
+  if (
+    trimmedIcon.startsWith("http://") ||
+    trimmedIcon.startsWith("https://") ||
+    trimmedIcon.startsWith("data:")
+  ) {
+    return trimmedIcon;
+  }
+
+  const baseUrl = import.meta.env.VITE_API_URL;
+
+  if (!baseUrl) {
+    return trimmedIcon;
+  }
+
+  try {
+    return new URL(trimmedIcon, baseUrl.endsWith("/") ? baseUrl : `${baseUrl}/`).toString();
+  } catch {
+    return trimmedIcon;
+  }
+};
+
 export const useMajorSectionQuery = (major: MajorEnum) => {
   return useQuery({
     queryKey: sectionQueryKeys.major(major),
@@ -23,6 +51,16 @@ export const useMajorSectionQuery = (major: MajorEnum) => {
           id: String(s.id),
           title: s.title,
           category: String(s.category ?? s.categoryId ?? ""),
+          icon: resolveSectionIconUrl(
+            s.categoryImageUrl ??
+              s.iconUrl ??
+              s.iconURL ??
+              s.icon_url ??
+              s.icon ??
+              s.imageUrl ??
+              s.image_url ??
+              s.image
+          ),
           completed: s.completed,
           locked: s.locked,
         })),
