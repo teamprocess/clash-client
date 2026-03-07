@@ -1,6 +1,5 @@
 import * as S from "./RivalContainer.style";
 import { RivalCard } from "@/features/profile";
-import { VscodeIcon } from "./RivalContainer.style";
 import { useRival } from "@/shared/lib";
 import { PlusIcon } from "@/features/home/ui/rival/Rival.style";
 import { RivalsManagementDialog } from "@/shared/ui";
@@ -12,15 +11,14 @@ export const RivalContainer = () => {
 
   return (
     <S.Container>
-      {rivals.map(rival => (
+      {rivals.map(rivalUser => (
         <RivalCard
-          key={rival.id}
-          name={rival.name}
-          status={rival.status}
-          time={rival.activeTime}
-          appName={rival.usingApp}
+          key={rivalUser.id}
+          name={rivalUser.name}
+          status={rivalUser.status}
+          time={String(rivalUser.activeTime ?? 0)}
+          usingApp={rivalUser.usingApp}
           profileSrc={S.profileSrcMap["default"]}
-          appIconSrc={VscodeIcon["vscode"]}
         />
       ))}
 
