@@ -256,6 +256,8 @@ export const NoneNotice = styled.div`
   min-height: 0;
   gap: 0.75rem;
   color: ${({ theme }) => theme.label.assistive};
+  white-space: pre-line;
+  text-align: center;
 `;
 
 export const CryIcon = styled(Cry)`

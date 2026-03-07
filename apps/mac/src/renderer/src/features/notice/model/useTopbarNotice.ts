@@ -215,7 +215,7 @@ export const useTopbarNotice = () => {
 
   const emptyMessage = useMemo(() => {
     if (searchKeyword.trim()) {
-      return "검색 결과가 없습니다.";
+      return "검색 결과가 없습니다.\n최근 2주 이내의 알림만 확인 할 수 있습니다.";
     }
 
     if (activeTab === "UNREAD") {
