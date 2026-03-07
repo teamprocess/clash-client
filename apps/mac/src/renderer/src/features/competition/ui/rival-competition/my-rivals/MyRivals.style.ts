@@ -2,9 +2,9 @@ import styled, { css } from "styled-components";
 import { font } from "@clash/design-tokens/font";
 import { palette } from "@clash/design-tokens/theme";
 import Profile from "@/features/home/assets/home/profile.svg";
-import InteliJ from "@/shared/ui/assets/ide-intellij-idea.svg";
-import WebStorm from "@/shared/ui/assets/ide-webstorm.svg";
-import VSCode from "@/shared/ui/assets/ide-vscode.svg";
+import InteliJ from "@/shared/ui/assets/ide-img/ide-intellij-idea.svg";
+import WebStorm from "@/shared/ui/assets/ide-img/ide-webstorm.svg";
+import VSCode from "@/shared/ui/assets/ide-img/ide-vscode.svg";
 import DetailArrow from "@/features/home/assets/home/front.svg";
 
 const ideIconStyle = css`
