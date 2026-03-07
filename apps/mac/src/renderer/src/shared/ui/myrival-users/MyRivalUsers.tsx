@@ -92,13 +92,13 @@ const getUsingAppMeta = (usingApp?: string | null, status?: string) => {
   }
 
   if (!usingApp) {
-    return { Icon: null, label: "자리비움" };
+    return { Icon: null, label: "" };
   }
 
   const resolvedApp = resolveMonitoredApp(usingApp);
 
   if (!resolvedApp) {
-    return { Icon: null, label: "자리비움" };
+    return { Icon: null, label: "" };
   }
 
   const Icon = S.IdeIcons[resolvedApp.id as keyof typeof S.IdeIcons] ?? null;
