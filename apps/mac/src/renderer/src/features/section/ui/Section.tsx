@@ -43,7 +43,7 @@ export const Section = () => {
   };
 
   const handleClick = (item: section) => {
-    setSelectedSectionId(+item.id);
+    setSelectedSectionId(item.id);
     setIsSelectedSectionLocked(item.locked);
     setIsTutorialModalOpen(true);
   };
