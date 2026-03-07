@@ -16,19 +16,7 @@ export const useMajorSectionQuery = (major: MajorEnum) => {
         throw new Error(response.message ?? "로드맵 목록을 불러오지 못했습니다.");
       }
 
-      const serverData = response.data;
-
-      return {
-        sections: serverData.sections.map(s => ({
-          id: String(s.id),
-          title: s.title,
-          category: String(s.category ?? s.categoryId ?? ""),
-          icon: s.categoryImageUrl?.trim() || null,
-          completed: s.completed,
-          locked: s.locked,
-        })),
-        categories: (serverData.categories ?? []).map(c => String(c)),
-      };
+      return response.data;
     },
     enabled: major != null && major !== MajorEnum.NONE,
   });

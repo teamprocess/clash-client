@@ -33,17 +33,15 @@ export const ChapterPage = () => {
 
     const { categories, sections } = sectionData;
     const byCategory = categories.flatMap(category =>
-      sections.filter(section => section.category === category)
+      sections.filter(section => section.categoryId === category)
     );
-    const remaining = sections.filter(section => !categories.includes(section.category));
+    const remaining = sections.filter(section => !categories.includes(section.categoryId));
 
     return [...byCategory, ...remaining];
   }, [sectionData]);
 
   const { prevSection, nextSection } = useMemo(() => {
-    const currentIndex = orderedSections.findIndex(
-      section => Number(section.id) === numericSectionId
-    );
+    const currentIndex = orderedSections.findIndex(section => section.id === numericSectionId);
     if (currentIndex === -1) {
       return { prevSection: null, nextSection: null };
     }
