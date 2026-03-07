@@ -1,9 +1,10 @@
 import * as S from "./MyRivals.style";
 import { UserStatus, getStatus, useMyRivals } from "@/features/competition/model/useMyRivals";
-import { formatTime, useRival } from "@/shared/lib";
+import { formatTime, resolveUsingApp, useRival } from "@/shared/lib";
 import { MyRivalsResponse } from "@/entities/competition";
-import { useEffect, useState } from "react";
-import { RivalsManagementDialog, Button } from "@/shared/ui";
+import { useEffect, useMemo, useState } from "react";
+import { RivalsManagementDialog } from "@/shared/ui";
+import { IdeIcons } from "@/shared/ui/assets/ide-img";
 
 interface MyRivalsProps {
   data: MyRivalsResponse;
@@ -17,12 +18,30 @@ type RivalUser = {
   activeTime?: string | number | null;
 };
 
-const RivalRow = ({ user, index }: { user: RivalUser; index: number }) => {
+const getUsingAppMeta = (usingApp?: string | null, status?: string) => {
+  if (status !== "ONLINE") {
+    return { Icon: null, label: "" };
+  }
+
+  const resolvedApp = resolveUsingApp(usingApp);
+
+  if (!resolvedApp) {
+    return { Icon: null, label: "" };
+  }
+
+  const Icon = IdeIcons[resolvedApp.id as keyof typeof IdeIcons] ?? null;
+
+  return {
+    Icon,
+    label: resolvedApp.name,
+  };
+};
+
+const RivalRow = ({ user }: { user: RivalUser; index: number }) => {
   const [displayActiveTime, setDisplayActiveTime] = useState<number>(
     () => Number(user.activeTime) || 0
   );
 
-  // ONLINE일 때만 1초씩 증가
   useEffect(() => {
     if (user.status !== "ONLINE") return;
 
@@ -33,8 +52,15 @@ const RivalRow = ({ user, index }: { user: RivalUser; index: number }) => {
     return () => window.clearInterval(timerId);
   }, [user.status]);
 
+  const { Icon, label } = useMemo(
+    () => getUsingAppMeta(user.usingApp, user.status),
+    [user.usingApp, user.status]
+  );
+
+  const isOnline = user.status === "ONLINE";
+
   return (
-    <S.ProfileContainer key={user.username ?? index}>
+    <S.ProfileContainer>
       <S.ProfileContent>
         <S.ProfileIcon />
         <S.NameBox>
@@ -48,12 +74,16 @@ const RivalRow = ({ user, index }: { user: RivalUser; index: number }) => {
       </S.ProfileContent>
 
       <S.PlayTime>
-        {getStatus(user.status as UserStatus) === "온라인" && (
+        {isOnline && (Icon || label) && (
           <>
-            <S.UsingAppText>{user.usingApp}</S.UsingAppText>
+            <S.UsingBox>
+              {Icon ? <Icon /> : null}
+              {label && <S.UsingAppText>{label}</S.UsingAppText>}
+            </S.UsingBox>
             <S.Point>·</S.Point>
           </>
         )}
+
         <S.ActiveTime $status={user.status as UserStatus}>
           {formatTime(displayActiveTime)}
         </S.ActiveTime>
@@ -72,12 +102,13 @@ export const MyRivals = ({ data }: MyRivalsProps) => {
         <S.RivalList>
           <S.TitleBox>
             <S.Title>내 라이벌</S.Title>
-            <Button size={"sm"} variant={"secondary"} onClick={rival.handleOpen}>
+            <S.ArrowBox onClick={rival.handleOpen}>
               라이벌 관리
-            </Button>
+              <S.DetailArrowIcon />
+            </S.ArrowBox>
           </S.TitleBox>
 
-          <S.GaroLine />
+          <S.HorizontalLine />
 
           <S.ProfileWrapper>
             {myRivals.myRivalsData?.myRivals && myRivals.myRivalsData.myRivals.length > 0 ? (

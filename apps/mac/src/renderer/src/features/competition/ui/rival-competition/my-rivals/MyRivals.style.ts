@@ -2,8 +2,9 @@ import styled from "styled-components";
 import { font } from "@clash/design-tokens/font";
 import { palette } from "@clash/design-tokens/theme";
 import Profile from "@/features/home/assets/home/profile.svg";
+import DetailArrow from "@/features/home/assets/home/front.svg";
 
-export const GaroLine = styled.div`
+export const HorizontalLine = styled.div`
   width: 100%;
   height: 1px;
   background-color: ${({ theme }) => theme.line.neutral};
@@ -168,4 +169,26 @@ export const ActiveTime = styled.p<StatusProps>`
         return theme.line.normal;
     }
   }};
+`;
+
+export const UsingBox = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.25rem;
+`;
+
+export const DetailArrowIcon = styled(DetailArrow)`
+  width: 0.5rem;
+  height: 1rem;
+`;
+
+export const ArrowBox = styled.button`
+  ${font.label.medium}
+  color: ${({ theme }) => theme.label.alternative};
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.25rem;
+  cursor: pointer;
 `;

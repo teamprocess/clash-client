@@ -1,15 +1,15 @@
 import * as S from "./RivalCard.style";
 import type { UserStatus } from "@/features/competition/model/useMyRivals";
-import { formatTime } from "@/shared/lib";
-import { useEffect, useState } from "react";
+import { formatTime, resolveUsingApp } from "@/shared/lib";
+import { useEffect, useMemo, useState } from "react";
+import { IdeIcons } from "@/shared/ui/assets/ide-img";
 
 interface RivalCardProps {
   profileSrc: string;
-  appIconSrc: string;
   name: string;
   status: UserStatus;
   time: string;
-  appName: string;
+  usingApp?: string | null;
 }
 
 const statusLabelMap: Record<UserStatus, string> = {
@@ -18,7 +18,26 @@ const statusLabelMap: Record<UserStatus, string> = {
   AWAY: "자리비움",
 };
 
-export function RivalCard({ profileSrc, appIconSrc, name, status, time, appName }: RivalCardProps) {
+const getUsingAppMeta = (usingApp?: string | null, status?: UserStatus) => {
+  if (status !== "ONLINE") {
+    return { Icon: null, label: "" };
+  }
+
+  const resolvedApp = resolveUsingApp(usingApp);
+
+  if (!resolvedApp) {
+    return { Icon: null, label: "" };
+  }
+
+  const Icon = IdeIcons[resolvedApp.id as keyof typeof IdeIcons] ?? null;
+
+  return {
+    Icon,
+    label: resolvedApp.name,
+  };
+};
+
+export function RivalCard({ profileSrc, name, status, time, usingApp }: RivalCardProps) {
   const [displayActiveTime, setDisplayActiveTime] = useState<number>(Number(time) || 0);
 
   useEffect(() => {
@@ -31,6 +50,8 @@ export function RivalCard({ profileSrc, appIconSrc, name, status, time, appName 
     return () => clearInterval(timerId);
   }, [status]);
 
+  const { Icon, label } = useMemo(() => getUsingAppMeta(usingApp, status), [usingApp, status]);
+
   return (
     <S.RivalBox>
       <S.Left>
@@ -42,10 +63,13 @@ export function RivalCard({ profileSrc, appIconSrc, name, status, time, appName 
       </S.Left>
 
       <S.Right>
-        <S.AppRow>
-          <S.AppIcon src={appIconSrc} alt={`${appName} 아이콘`} />
-          <S.AppName>{appName}</S.AppName>
-        </S.AppRow>
+        {(Icon || label) && (
+          <S.AppRow>
+            {Icon ? <Icon /> : null}
+            {label && <S.AppName>{label}</S.AppName>}
+          </S.AppRow>
+        )}
+
         <S.Time>{formatTime(displayActiveTime)}</S.Time>
       </S.Right>
     </S.RivalBox>
