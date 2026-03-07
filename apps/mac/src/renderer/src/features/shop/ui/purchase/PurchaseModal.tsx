@@ -14,10 +14,7 @@ interface PurchaseModalProps {
 export const PurchaseModal = ({ isOpen, product, onClose, onPurchase }: PurchaseModalProps) => {
   const { data: user } = useGetMyProfile();
 
-  const totalToken = user?.totalToken ?? 0;
-  const totalCookie = user?.totalCookie ?? 0;
-
-  const currentBalance = product?.type === "TOKEN" ? totalToken : totalCookie;
+  const currentBalance = user?.totalCookie ?? 0;
 
   const {
     step,
@@ -37,8 +34,7 @@ export const PurchaseModal = ({ isOpen, product, onClose, onPurchase }: Purchase
 
   if (!isOpen || !product) return null;
 
-  const MoneyIcon =
-    product.type === "TOKEN" ? <S.TokenIcon aria-hidden /> : <S.CookieIcon aria-hidden />;
+  const MoneyIcon = <S.CookieIcon aria-hidden />;
 
   return (
     <S.Overlay>

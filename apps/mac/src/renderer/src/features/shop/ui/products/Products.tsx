@@ -129,7 +129,6 @@ export const Products = ({
               title={product.title}
               price={product.price}
               discount={product.discount}
-              type={product.type}
               onClick={() => handleCardClick(Number(product.id))}
             />
           ))}
@@ -145,7 +144,7 @@ export const Products = ({
                   {`유형 : ${getCategoryLabel(selectedProduct.category)}`}
                 </S.ProductCategoryText>
                 <S.PriceBoxDetail>
-                  {selectedProduct.type === "TOKEN" ? <S.TokenIcon /> : <S.CookieIcon />}
+                  <S.CookieIcon />
                   <S.PriceTextDetail>
                     {calculateDiscountedPrice(selectedProduct.price, selectedProduct.discount)}
                   </S.PriceTextDetail>
@@ -161,8 +160,7 @@ export const Products = ({
             </S.InfoContainer>
 
             <S.PurchaseBtn $isBought={selectedProduct.isBought} onClick={handleOpenPurchase}>
-              {!selectedProduct.isBought &&
-                (selectedProduct.type === "TOKEN" ? <S.TokenIcon /> : <S.CookieIcon />)}
+              {!selectedProduct.isBought && <S.CookieIcon />}
               {selectedProduct.isBought
                 ? "이미 구매한 상품입니다."
                 : `${calculateDiscountedPrice(selectedProduct.price, selectedProduct.discount)}에 구매하기`}

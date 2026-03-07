@@ -33,7 +33,6 @@ export const Recommend = ({ products }: RecommendProps) => {
               title={product.title}
               price={product.price}
               discount={product.discount}
-              type={product.type}
               onClick={() => handleCardClick(product)}
             />
           ))}

@@ -5,7 +5,6 @@ import ClashLogo from "@/widgets/topbar/assets/clash-logo.svg";
 import Menu from "@/widgets/topbar/assets/menu.svg";
 import Profile from "@/widgets/topbar/assets/profile.svg";
 import EXP from "@/widgets/topbar/assets/exp.svg";
-import Token from "@/widgets/topbar/assets/token.svg";
 import Cookie from "@/widgets/topbar/assets/cookie.svg";
 
 export const TopbarContainer = styled.header`
@@ -77,7 +76,6 @@ export const Username = styled.span`
 `;
 
 export const EXPIcon = styled(EXP)``;
-export const TokenIcon = styled(Token)``;
 export const CookieIcon = styled(Cookie)``;
 
 export const GoodsBox = styled.div`

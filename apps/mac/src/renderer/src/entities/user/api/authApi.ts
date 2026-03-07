@@ -68,7 +68,6 @@ export interface getMyProfileResponse {
   profileImage: string;
   totalExp: number;
   totalCookie: number;
-  totalToken: number;
   major: string;
   userStatus: string;
   githubLinked: boolean;
