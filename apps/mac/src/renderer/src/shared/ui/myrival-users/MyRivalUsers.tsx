@@ -128,7 +128,7 @@ export const MyRivalUsers = ({ user, getStatus }: MyRivalItem) => {
         content={username}
         position="top"
         maxWidth="10rem"
-        wrapperStyle={{ maxWidth: "60%", minWidth: 0 }}
+        wrapperStyle={{ flex: 1, minWidth: 0 }}
       >
         <S.ProfileMention>
           <span>@{username}</span>
