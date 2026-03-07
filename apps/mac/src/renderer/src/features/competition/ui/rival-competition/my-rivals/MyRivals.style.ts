@@ -1,17 +1,8 @@
-import styled, { css } from "styled-components";
+import styled from "styled-components";
 import { font } from "@clash/design-tokens/font";
 import { palette } from "@clash/design-tokens/theme";
 import Profile from "@/features/home/assets/home/profile.svg";
-import InteliJ from "@/shared/ui/assets/ide-img/ide-intellij-idea.svg";
-import WebStorm from "@/shared/ui/assets/ide-img/ide-webstorm.svg";
-import VSCode from "@/shared/ui/assets/ide-img/ide-vscode.svg";
 import DetailArrow from "@/features/home/assets/home/front.svg";
-
-const ideIconStyle = css`
-  width: 1.25rem;
-  height: 1.25rem;
-  flex-shrink: 0;
-`;
 
 export const HorizontalLine = styled.div`
   width: 100%;
@@ -186,18 +177,6 @@ export const UsingBox = styled.div`
   align-items: center;
   gap: 0.25rem;
 `;
-
-export const IdeIcons = {
-  INTELLIJ_IDEA: styled(InteliJ)`
-    ${ideIconStyle}
-  `,
-  WEBSTORM: styled(WebStorm)`
-    ${ideIconStyle}
-  `,
-  VSCODE: styled(VSCode)`
-    ${ideIconStyle}
-  `,
-} as const;
 
 export const DetailArrowIcon = styled(DetailArrow)`
   width: 0.5rem;
