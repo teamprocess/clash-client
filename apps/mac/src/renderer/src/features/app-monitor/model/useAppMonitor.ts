@@ -5,6 +5,7 @@ export const useAppMonitor = () => {
   const [activeApp, setActiveApp] = useState<ActiveApp | null>(null);
   const [sessions, setSessions] = useState<MonitoringSession[]>([]);
   const [isMonitoring, setIsMonitoring] = useState(false);
+  const [hasInitialized, setHasInitialized] = useState(false);
 
   const startMonitoring = useCallback(async () => {
     try {
@@ -39,28 +40,50 @@ export const useAppMonitor = () => {
       return;
     }
 
+    let cancelled = false;
+
     const unsubscribeAppChanged = window.api.onAppChanged(app => {
-      setActiveApp(app);
+      if (!cancelled) {
+        setActiveApp(app);
+      }
     });
 
     const unsubscribeSessionUpdated = window.api.onSessionUpdated(session => {
-      setSessions(prev => [...prev, session]);
+      if (!cancelled) {
+        setSessions(prev => [...prev, session]);
+      }
     });
 
     // 비동기 시작 함수
     const initMonitoring = async () => {
       try {
         await window.api.startMonitoring();
+        if (cancelled) {
+          return;
+        }
+
         setIsMonitoring(true);
 
         // 초기 상태 로드
         const currentApp = await window.api.getActiveApp();
+        if (cancelled) {
+          return;
+        }
+
         setActiveApp(currentApp);
 
         const currentSessions = await window.api.getSessions();
+        if (cancelled) {
+          return;
+        }
+
         setSessions(currentSessions);
       } catch (error) {
         console.error("모니터링을 시작하는데 실패했습니다:", error);
+      } finally {
+        if (!cancelled) {
+          setHasInitialized(true);
+        }
       }
     };
 
@@ -68,15 +91,9 @@ export const useAppMonitor = () => {
 
     // Cleanup
     return () => {
+      cancelled = true;
       unsubscribeAppChanged();
       unsubscribeSessionUpdated();
-
-      // 비동기 정리
-      window.api.stopMonitoring().catch(error => {
-        console.error("모니터링을 중지하는데 실패했습니다:", error);
-      });
-      setIsMonitoring(false);
-      setActiveApp(null);
     };
   }, []);
 
@@ -84,6 +101,7 @@ export const useAppMonitor = () => {
     activeApp,
     sessions,
     isMonitoring,
+    hasInitialized,
     startMonitoring,
     stopMonitoring,
   };
