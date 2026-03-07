@@ -1,5 +1,5 @@
 export type ProductCategory = "INSIGNIA" | "NAMEPLATE" | "BANNER";
-export type ProductCurrency = "TOKEN" | "COOKIE";
+export type ProductCurrency = "COOKIE";
 
 export interface Product {
   id: number;
@@ -31,7 +31,7 @@ export const popularityProductsMock: ProductListResponse = {
         title: "전설의 용사 휘장",
         category: "INSIGNIA",
         image: "...",
-        type: "TOKEN",
+        type: "COOKIE",
         price: 50000,
         discount: 10,
         popularity: 9999,
@@ -57,7 +57,7 @@ export const popularityProductsMock: ProductListResponse = {
         title: "우주 정복 배너",
         category: "BANNER",
         image: "...",
-        type: "TOKEN",
+        type: "COOKIE",
         price: 25000,
         discount: 20,
         popularity: 7200,
@@ -83,7 +83,7 @@ export const popularityProductsMock: ProductListResponse = {
         title: "네온 라이트 이름표",
         category: "NAMEPLATE",
         image: "...",
-        type: "TOKEN",
+        type: "COOKIE",
         price: 12000,
         discount: 0,
         popularity: 5400,
@@ -122,7 +122,7 @@ export const popularityProductsMock: ProductListResponse = {
         title: "귀여운 고양이 배너",
         category: "BANNER",
         image: "...",
-        type: "TOKEN",
+        type: "COOKIE",
         price: 9000,
         discount: 10,
         popularity: 2800,
@@ -148,7 +148,7 @@ export const popularityProductsMock: ProductListResponse = {
         title: "영광의 승리 휘장",
         category: "INSIGNIA",
         image: "...",
-        type: "TOKEN",
+        type: "COOKIE",
         price: 30000,
         discount: 0,
         popularity: 900,

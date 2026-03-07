@@ -13,17 +13,11 @@ export enum ProductCategory {
   BANNER = "BANNER",
 }
 
-export enum ProductType {
-  COOKIE = "COOKIE",
-  TOKEN = "TOKEN",
-}
-
 export interface Product {
   id: number;
   title: string;
   category: ProductCategory;
   image: string;
-  type: ProductType;
   price: number;
   discount: number;
   description: string;

@@ -26,10 +26,6 @@ export const Topbar = ({ onToggleSidebar }: TopbarProps) => {
           <span>{formatPrice(user?.totalExp || 0)}</span>
         </S.GoodsBox>
         <S.GoodsBox>
-          <S.TokenIcon />
-          <span>{formatPrice(user?.totalToken || 0)}</span>
-        </S.GoodsBox>
-        <S.GoodsBox>
           <S.CookieIcon />
           <span>{formatPrice(user?.totalCookie || 0)}</span>
         </S.GoodsBox>
