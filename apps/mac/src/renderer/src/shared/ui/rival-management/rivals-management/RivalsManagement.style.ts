@@ -28,7 +28,7 @@ export const TopSection = styled.div`
 `;
 
 export const SearchInputBox = styled.div`
-  margin: 1rem 0;
+  margin-top: 1rem;
 `;
 
 export const BottomRow = styled.div`
@@ -235,4 +235,28 @@ export const DetermineContent = styled.div`
 
 export const DetermineList = styled.div`
   ${flexCol};
+`;
+
+export const EmptyStateBox = styled.div`
+  ${flexCol};
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 10rem;
+  padding: 2rem 1rem;
+  border: 1px dashed ${({ theme }) => theme.line.alternative};
+  border-radius: 0.75rem;
+  background-color: ${({ theme }) => theme.fill.normal};
+  text-align: center;
+  gap: 0.5rem;
+`;
+
+export const EmptyTitle = styled.p`
+  ${font.headline2.medium};
+  color: ${({ theme }) => theme.label.normal};
+`;
+
+export const EmptyDescription = styled.p`
+  ${font.caption.medium};
+  color: ${({ theme }) => theme.label.alternative};
 `;
