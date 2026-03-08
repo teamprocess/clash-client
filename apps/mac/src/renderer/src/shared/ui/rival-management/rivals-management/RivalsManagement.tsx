@@ -1,5 +1,5 @@
-import { Button, DeleteRivalsConfirmDialog, Dialog } from "@/shared/ui";
 import * as S from "./RivalsManagement.style";
+import { Button, DeleteRivalsConfirmDialog, Dialog } from "@/shared/ui";
 import { SearchInput } from "@/shared/ui";
 import { useRival } from "@/shared/lib";
 import React, { useCallback, useLayoutEffect, useRef, useState } from "react";
@@ -19,7 +19,11 @@ export const RivalsManagementDialog = ({ isOpen, onClose, rival }: AddRivalsDial
   };
 
   const users = rival.filteredUsers ?? [];
+  const currentRivals = rival.rivalsData?.myRivals ?? [];
+  const signRivals = rival.filteredSignRivals ?? [];
 
+  const hasCurrentRivals = currentRivals.length > 0;
+  const hasSignRivals = signRivals.length > 0;
   const [activeTab, setActiveTab] = useState<"rivals-management" | "rivalList">(
     "rivals-management"
   );
@@ -133,30 +137,39 @@ export const RivalsManagementDialog = ({ isOpen, onClose, rival }: AddRivalsDial
               <S.DetermineTitle>현재 라이벌</S.DetermineTitle>
 
               <S.UserChoiceContainer>
-                {rival.rivalsData?.myRivals.map(user => (
-                  <S.UserChoiceBox key={user.rivalId ?? user.id} $isRival={true}>
-                    <S.ProfileContent $height="3rem">
-                      <S.ProfileBox>
-                        <S.ProfileIcon />
-                        <S.ProfileTagBox>
-                          <S.ProfileName>{user.name}</S.ProfileName>
-                          <S.ProfileMention>@{user.username}</S.ProfileMention>
-                        </S.ProfileTagBox>
-                      </S.ProfileBox>
-                    </S.ProfileContent>
+                {hasCurrentRivals ? (
+                  currentRivals.map(user => (
+                    <S.UserChoiceBox key={user.rivalId ?? user.id} $isRival={true}>
+                      <S.ProfileContent $height="3rem">
+                        <S.ProfileBox>
+                          <S.ProfileIcon />
+                          <S.ProfileTagBox>
+                            <S.ProfileName>{user.name}</S.ProfileName>
+                            <S.ProfileMention>@{user.username}</S.ProfileMention>
+                          </S.ProfileTagBox>
+                        </S.ProfileBox>
+                      </S.ProfileContent>
 
-                    <Button
-                      size="sm"
-                      variant="primary"
-                      onClick={e => {
-                        e.stopPropagation();
-                        rival.openDeleteConfirm(user.rivalId ?? user.id, user.name);
-                      }}
-                    >
-                      끊기
-                    </Button>
-                  </S.UserChoiceBox>
-                ))}
+                      <Button
+                        size="sm"
+                        variant="primary"
+                        onClick={e => {
+                          e.stopPropagation();
+                          rival.openDeleteConfirm(user.rivalId ?? user.id, user.name);
+                        }}
+                      >
+                        끊기
+                      </Button>
+                    </S.UserChoiceBox>
+                  ))
+                ) : (
+                  <S.EmptyStateBox>
+                    <S.EmptyTitle>현재 등록된 라이벌이 없습니다.</S.EmptyTitle>
+                    <S.EmptyDescription>
+                      라이벌을 추가하면 여기서 확인할 수 있어요.
+                    </S.EmptyDescription>
+                  </S.EmptyStateBox>
+                )}
               </S.UserChoiceContainer>
             </S.DetermineContent>
 
@@ -178,30 +191,39 @@ export const RivalsManagementDialog = ({ isOpen, onClose, rival }: AddRivalsDial
 
               <S.DetermineList>
                 <S.UserChoiceContainer>
-                  {rival.filteredSignRivals.map(user => (
-                    <S.UserChoiceBox key={user.rivalId} $isRival={true}>
-                      <S.ProfileContent $height="3rem">
-                        <S.ProfileBox>
-                          <S.ProfileIcon />
-                          <S.ProfileTagBox>
-                            <S.ProfileName>{user.name}</S.ProfileName>
-                            <S.ProfileMention>@{user.githubId}</S.ProfileMention>
-                          </S.ProfileTagBox>
-                          <RivalLinkingStatusButton status={user.rivalLinkingStatus} />
-                        </S.ProfileBox>
+                  {hasSignRivals ? (
+                    signRivals.map(user => (
+                      <S.UserChoiceBox key={user.rivalId} $isRival={true}>
+                        <S.ProfileContent $height="3rem">
+                          <S.ProfileBox>
+                            <S.ProfileIcon />
+                            <S.ProfileTagBox>
+                              <S.ProfileName>{user.name}</S.ProfileName>
+                              <S.ProfileMention>@{user.githubId}</S.ProfileMention>
+                            </S.ProfileTagBox>
+                            <RivalLinkingStatusButton status={user.rivalLinkingStatus} />
+                          </S.ProfileBox>
 
-                        {user.rivalLinkingStatus === "PENDING" ? (
-                          <Button
-                            size="sm"
-                            variant={"primary"}
-                            onClick={() => rival.handleRivalSignCancel(user.rivalId)}
-                          >
-                            취소
-                          </Button>
-                        ) : null}
-                      </S.ProfileContent>
-                    </S.UserChoiceBox>
-                  ))}
+                          {user.rivalLinkingStatus === "PENDING" ? (
+                            <Button
+                              size="sm"
+                              variant={"primary"}
+                              onClick={() => rival.handleRivalSignCancel(user.rivalId)}
+                            >
+                              취소
+                            </Button>
+                          ) : null}
+                        </S.ProfileContent>
+                      </S.UserChoiceBox>
+                    ))
+                  ) : (
+                    <S.EmptyStateBox>
+                      <S.EmptyTitle>라이벌 신청 내역이 없습니다.</S.EmptyTitle>
+                      <S.EmptyDescription>
+                        보낸 신청 또는 받은 신청이 생기면 여기서 확인할 수 있어요.
+                      </S.EmptyDescription>
+                    </S.EmptyStateBox>
+                  )}
                 </S.UserChoiceContainer>
               </S.DetermineList>
             </S.DetermineContent>
