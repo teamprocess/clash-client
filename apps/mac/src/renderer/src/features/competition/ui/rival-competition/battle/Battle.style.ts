@@ -354,23 +354,36 @@ export const DefaultBattleText = styled.p`
 export const UserChoiceContainer = styled.div`
   ${flexCol};
   width: 100%;
-  height: 20rem;
+  height: 16.25rem;
   overflow-y: auto;
   scrollbar-width: none;
 `;
 
-export const UserChoiceBox = styled.div<{ $isSelected: boolean }>`
+export const UserChoiceBox = styled.div<{ $isSelected?: boolean; $isRival?: boolean }>`
   ${flexRow};
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  padding: 0.5rem;
+  padding: 0.5rem 0.75rem;
   border-bottom: 1px solid ${({ theme }) => theme.line.alternative};
   cursor: pointer;
-  background-color: transparent;
-  &:hover {
-    background-color: ${({ theme }) => theme.fill.alternative};
-  }
+  transition: 0.1s ease-in-out;
+
+  ${({ $isRival, theme }) =>
+    !$isRival &&
+    css`
+      &:hover {
+        border-radius: 0.75rem;
+        padding: 0.5rem 1.25rem;
+        background-color: ${theme.fill.alternative};
+      }
+    `}
+
+  ${({ $isRival }) =>
+    $isRival &&
+    css`
+      cursor: default;
+    `}
 `;
 
 export const CheckedIcon = styled(Checked)``;
@@ -435,7 +448,6 @@ export const CompareDiff = styled.span`
 export const ModalContent = styled.div`
   ${flexCol};
   height: 100%;
-  padding-top: 1.5rem;
   align-items: flex-end;
   justify-content: space-between;
 `;
@@ -446,7 +458,7 @@ export const DateChoiceRow = styled.div`
   justify-content: space-between;
 `;
 
-export const DateChoiceBox = styled.div<{ $active: boolean }>`
+export const DateChoiceBox = styled.button<{ $active: boolean }>`
   padding: 0.5rem 1rem;
   width: 30%;
   border-radius: 0.5rem;
@@ -458,8 +470,11 @@ export const DateChoiceBox = styled.div<{ $active: boolean }>`
   ${flexRow};
   align-items: center;
   justify-content: center;
+  transition: 0.1s ease-in-out;
+
   &:hover {
-    background-color: ${palette.red[40]};
+    scale: 1.1;
+    background-color: ${({ theme }) => theme.primary.normal};
   }
 `;
 
@@ -469,4 +484,48 @@ export const DataBox = styled.div`
   width: 100%;
   gap: 0.25rem;
   ${font.label.bold}
+`;
+
+export const TabHeader = styled.div`
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  gap: 0.75rem;
+`;
+
+export const Tabs = styled.div`
+  display: grid;
+  grid-template-columns: repeat(2, max-content);
+  align-items: center;
+  gap: 1rem;
+`;
+
+export const Tab = styled.button<{ $isActive: boolean }>`
+  ${font.title2.medium}
+  color: ${({ $isActive, theme }) => ($isActive ? theme.label.normal : theme.label.assistive)};
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+`;
+
+export const TabRail = styled.div`
+  position: relative;
+  height: 0.25rem;
+  width: 100%;
+  background-color: ${({ theme }) => theme.line.neutral};
+  border-radius: 1rem;
+  overflow: hidden;
+`;
+
+export const TabActiveRail = styled.div<{ $left: number; $width: number }>`
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: ${({ $left }) => `${$left}px`};
+  width: ${({ $width }) => `${$width}px`};
+  background-color: ${({ theme }) => theme.primary.normal};
+  transition:
+    left 0.2s ease,
+    width 0.2s ease;
 `;
