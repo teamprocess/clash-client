@@ -16,8 +16,9 @@ export const RivalContainer = () => {
           key={rivalUser.id}
           name={rivalUser.name}
           status={rivalUser.status}
-          time={String(rivalUser.activeTime ?? 0)}
+          activeTime={rivalUser.activeTime}
           usingApp={rivalUser.usingApp}
+          isStudying={rivalUser.isStudying}
           profileSrc={S.profileSrcMap["default"]}
         />
       ))}
