@@ -70,10 +70,9 @@ export const ProfileContainer = styled.div`
   height: 100%;
   border-radius: 0.5rem;
   background-color: ${({ theme }) => theme.background.alternative};
-  padding: 1rem 0.75rem;
+  padding: 1rem;
   ${flexCol};
   justify-content: flex-start;
-  gap: 1rem;
 `;
 
 export const AddRivalButton = styled.button`
@@ -178,27 +177,36 @@ export const Status = styled.div<StatusProps>`
   }};
 `;
 
+export const ActiveBox = styled.div`
+  ${flexCol};
+  flex: 1;
+  width: 100%;
+  min-height: 0;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(0.25rem, 1vw, 0.5rem);
+  text-align: center;
+`;
+
 export const UsingAppContainer = styled.div`
   ${flexRow};
   align-items: center;
   justify-content: center;
-  gap: 0.25rem;
+  gap: clamp(0.25rem, 0.8vw, 0.5rem);
   width: 100%;
-  flex: 1;
-`;
-
-export const ActiveBox = styled.div`
-  ${flexCol};
-  align-items: center;
+  flex-wrap: wrap;
 `;
 
 export const UsingAppText = styled.p`
   ${font.caption.regular};
   color: ${({ theme }) => theme.label.neutral};
+  text-align: center;
+  word-break: keep-all;
 `;
 
 export const ActiveTime = styled.p<StatusProps>`
   ${font.title1.bold};
+  text-align: center;
   color: ${({ theme, $status }) => {
     switch ($status) {
       case "ONLINE":
