@@ -257,8 +257,8 @@ export const GitCommitIcon = styled(GitCommits)``;
 
 export const FireIcon = styled(Fire)`
   color: ${({ theme }) => theme.label.alternative};
-  width: 2.1rem;
-  height: 2.1rem;
+  width: 1.25rem;
+  height: 1.25rem;
 `;
 
 export const CodeIcon = styled(Code)``;
