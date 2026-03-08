@@ -1,9 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
 import { authApi } from "../api/authApi";
+import type { getMyProfileResponse } from "../api/authApi";
 
-const PROFILE_SYNC_UNTIL_KEY = "clash:home-ranking-user:profile-sync-until";
+export const PROFILE_SYNC_UNTIL_KEY = "clash:home-ranking-user:profile-sync-until";
 const PROFILE_SYNC_WINDOW_MS = 3 * 60 * 1000;
-const PROFILE_SYNC_INTERVAL_MS = 3000;
+export const PROFILE_SYNC_INTERVAL_MS = 3000;
 
 const getProfileSyncUntil = (): number | null => {
   if (typeof window === "undefined") {
@@ -51,10 +52,8 @@ export const useGetMyProfile = () => {
         return false;
       }
 
-      const response = query.state.data as
-        | Awaited<ReturnType<typeof authApi.getMyProfile>>
-        | undefined;
-      if (response?.data?.githubLinked) {
+      const profile = query.state.data as getMyProfileResponse | null;
+      if (profile?.githubLinked) {
         clearProfileSyncWindow();
         return false;
       }
