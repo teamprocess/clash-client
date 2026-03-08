@@ -213,7 +213,7 @@ export const ApplyContainer = styled.div`
   flex: 1;
   min-height: 0;
   padding: 1rem;
-  gap: 2rem;
+  gap: 1rem;
 
   overflow-y: auto;
   scrollbar-width: none;
@@ -243,7 +243,7 @@ export const EmptyStateBox = styled.div`
   justify-content: center;
   width: 100%;
   min-height: 10rem;
-  padding: 2rem 1rem;
+  margin-top: 1rem;
   border: 1px dashed ${({ theme }) => theme.line.alternative};
   border-radius: 0.75rem;
   background-color: ${({ theme }) => theme.fill.normal};
