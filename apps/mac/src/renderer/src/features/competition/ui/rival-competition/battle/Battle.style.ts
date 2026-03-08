@@ -427,9 +427,10 @@ export const CompareDiff = styled.span`
   white-space: nowrap;
 `;
 
-export const ModalContent = styled.div`
+export const ModalContainer = styled.div`
   ${flexCol};
   height: 100%;
+  padding: 0.625rem;
   align-items: flex-end;
   justify-content: space-between;
 `;

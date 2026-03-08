@@ -227,7 +227,7 @@ export const Battle = () => {
       {/* 배틀 생성 모달 */}
       {battle.isModalOpen && (
         <Dialog width={43} height={30} isOpen={battle.isModalOpen} onClose={battle.closeModal}>
-          <S.ModalContent>
+          <S.ModalContainer>
             <S.TabHeader>
               <S.Tabs ref={tabsRef}>
                 <S.Tab
@@ -309,7 +309,7 @@ export const Battle = () => {
             ) : (
               <></>
             )}
-          </S.ModalContent>
+          </S.ModalContainer>
         </Dialog>
       )}
     </>
