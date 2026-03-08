@@ -2,16 +2,18 @@ import styled from "styled-components";
 import { font } from "@clash/design-tokens/font";
 import DetailArrow from "../../assets/home/front.svg";
 
-const MAX_BAR_HEIGHT = 8;
+const MAX_BAR_HEIGHT = "clamp(5rem, 20vw, 8rem)";
 
 export const TransitionContainer = styled.div`
-  padding: 1.5rem;
+  padding: clamp(1rem, 2vw, 1.5rem);
   width: 100%;
   height: 100%;
+  min-height: 0;
   border-radius: 1rem;
   background-color: ${({ theme }) => theme.background.normal};
   display: flex;
   flex-direction: column;
+  box-sizing: border-box;
 `;
 
 export const TitleBox = styled.div`
@@ -20,6 +22,8 @@ export const TitleBox = styled.div`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
 `;
 
 export const Title = styled.div`
@@ -42,7 +46,7 @@ export const DetailArrowIcon = styled(DetailArrow)`
 
 export const SubTitle = styled.div`
   ${font.headline2.bold}
-  padding: 0 0.75rem;
+  padding: 0 clamp(0.5rem, 1.5vw, 0.75rem);
 `;
 
 export const ContentContainer = styled.div`
@@ -51,31 +55,45 @@ export const ContentContainer = styled.div`
   justify-content: center;
   width: 100%;
   flex: 1;
+  min-height: 0;
+  padding-top: clamp(0.75rem, 2vw, 1rem);
 `;
 
 export const ContentBox = styled.div`
   display: flex;
   flex-direction: row;
-  align-items: flex-start;
+  align-items: stretch;
   justify-content: center;
+  width: 100%;
+  flex: 1;
+  min-height: 0;
+  gap: clamp(0.75rem, 2vw, 1rem);
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+  }
 `;
 
 export const Content = styled.div`
-  width: 100%;
-  height: 100%;
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
   display: flex;
   flex-direction: column;
-  gap: 20%;
+  justify-content: space-between;
+  gap: clamp(0.75rem, 2vw, 1.25rem);
 `;
 
 export const InfoBox = styled.div`
-  padding: 0.75rem;
+  padding: clamp(0.75rem, 2vw, 1rem);
   width: 100%;
-  height: 100%;
+  flex: 1;
+  min-height: 0;
   display: flex;
   flex-direction: column;
-  justify-content: end;
-  gap: 0.75rem;
+  justify-content: flex-end;
+  gap: clamp(0.5rem, 1.5vw, 0.75rem);
+  box-sizing: border-box;
 `;
 
 export const DateBox = styled.div`
@@ -97,11 +115,15 @@ export const Line = styled.div`
   background-color: ${({ theme }) => theme.line.normal};
 `;
 
-// 활동시간, commit 수 간의 세로선
 export const VerticalLine = styled.div`
-  height: 116%;
   width: 2px;
+  align-self: stretch;
   background-color: ${({ theme }) => theme.line.neutral};
+
+  @media (max-width: 768px) {
+    width: 100%;
+    height: 1px;
+  }
 `;
 
 export const GraphBox = styled.div`
@@ -109,13 +131,15 @@ export const GraphBox = styled.div`
   flex-direction: row;
   align-items: flex-end;
   width: 100%;
-  height: 100%;
+  flex: 1;
+  min-height: 0;
 `;
 
 export const Bars = styled.div`
   position: relative;
   width: 100%;
-  height: ${MAX_BAR_HEIGHT}rem;
+  height: ${MAX_BAR_HEIGHT};
+  min-height: 5rem;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -133,13 +157,14 @@ export const Value = styled.p<BarProps>`
   left: 50%;
   transform: translateX(-50%);
   bottom: ${({ value, max }) =>
-    max <= 0 ? "0rem" : `calc(${(value / max) * MAX_BAR_HEIGHT}rem + 0.4rem)`};
+    max <= 0 ? "0rem" : `calc(${value / max} * ${MAX_BAR_HEIGHT} + 0.4rem)`};
   transition: bottom 0.4s ease;
   white-space: nowrap;
+  font-size: clamp(0.75rem, 1.8vw, 1rem);
 `;
 
 export const Bar = styled.div<BarProps>`
-  width: 2.5rem;
+  width: clamp(1.5rem, 6vw, 2.5rem);
   height: 100%;
   border-radius: 0.25rem;
   background-color: ${({ theme }) => theme.primary.normal};
