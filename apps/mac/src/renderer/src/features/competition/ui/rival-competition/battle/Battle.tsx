@@ -1,14 +1,46 @@
 import * as S from "./Battle.style";
-import { Dialog, Select } from "@/shared/ui";
+import { Button, Dialog, Select } from "@/shared/ui";
 import { AnalyzeCategory, MATCHVALUE } from "@/entities/competition";
 import { useBattle } from "@/features/competition/model/useBattle";
 import { formatTime } from "@/shared/lib";
+import { useCallback, useLayoutEffect, useRef, useState } from "react";
 
 export const Battle = () => {
   const battle = useBattle();
 
   const battles = battle.battleData?.battles ?? [];
   const hasBattles = battles.length > 0;
+
+  const [activeTab, setActiveTab] = useState<"battle-create" | "battle-request-list">(
+    "battle-create"
+  );
+  const tabsRef = useRef<HTMLDivElement>(null);
+  const createTabRef = useRef<HTMLButtonElement>(null);
+  const requestListTabRef = useRef<HTMLButtonElement>(null);
+  const [activeRail, setActiveRail] = useState({ left: 0, width: 0 });
+
+  const updateActiveRail = useCallback(() => {
+    const tabsElement = tabsRef.current;
+    const activeTabElement =
+      activeTab === "battle-create" ? createTabRef.current : requestListTabRef.current;
+
+    if (!tabsElement || !activeTabElement) return;
+
+    const tabsRect = tabsElement.getBoundingClientRect();
+    const activeRect = activeTabElement.getBoundingClientRect();
+
+    setActiveRail({
+      left: activeRect.left - tabsRect.left,
+      width: activeRect.width,
+    });
+  }, [activeTab]);
+
+  useLayoutEffect(() => {
+    if (!battle.isModalOpen) return;
+
+    const frameId = requestAnimationFrame(updateActiveRail);
+    return () => cancelAnimationFrame(frameId);
+  }, [battle.isModalOpen, updateActiveRail]);
 
   return (
     <>
@@ -20,7 +52,14 @@ export const Battle = () => {
                 <S.Title>배틀</S.Title>
                 <S.SubText>배틀을 생성해 라이벌과 더 치열하게 경쟁할 수 있습니다.</S.SubText>
               </S.BattleTextBox>
-              <S.MakeBattle onClick={battle.openModal}>배틀 생성하기</S.MakeBattle>
+              <S.MakeBattle
+                onClick={() => {
+                  setActiveTab("battle-create");
+                  battle.openModal();
+                }}
+              >
+                배틀 생성하기
+              </S.MakeBattle>
             </S.TitleBox>
 
             <S.GaroLine />
@@ -187,64 +226,90 @@ export const Battle = () => {
 
       {/* 배틀 생성 모달 */}
       {battle.isModalOpen && (
-        <Dialog
-          title={"배틀 생성하기"}
-          width={21.625}
-          height={34}
-          isOpen={battle.isModalOpen}
-          onClose={battle.closeModal}
-        >
-          <S.ModalContent>
-            <S.UserChoiceContainer>
-              {battle.battleList?.rivals.map(user => {
-                const isSelected = battle.rivalSelectedId === user.id;
-
-                return (
-                  <S.UserChoiceBox
-                    key={user.id}
-                    $isSelected={isSelected}
-                    onClick={() => battle.handleUserSelect(user.id)}
-                  >
-                    <S.ProfileContent $height="3rem">
-                      <S.ProfileIcon />
-                      <S.ProfileTagBox>
-                        <S.ProfileName>{user.name}</S.ProfileName>
-                      </S.ProfileTagBox>
-                    </S.ProfileContent>
-
-                    {isSelected ? <S.CheckedIcon /> : <S.UncheckedBox />}
-                  </S.UserChoiceBox>
-                );
-              })}
-            </S.UserChoiceContainer>
-
-            <S.DateChoiceRow>
-              {battle.periodOptions.map(day => (
-                <S.DateChoiceBox
-                  key={day}
-                  onClick={() => {
-                    battle.setSelectedDay(day);
-                    battle.setDuration(day);
-                  }}
-                  $active={battle.selectedDay === day}
+        <Dialog width={43} height={30} isOpen={battle.isModalOpen} onClose={battle.closeModal}>
+          <S.ModalContainer>
+            <S.TabHeader>
+              <S.Tabs ref={tabsRef}>
+                <S.Tab
+                  ref={createTabRef}
+                  $isActive={activeTab === "battle-create"}
+                  onClick={() => setActiveTab("battle-create")}
                 >
-                  {day}일
-                </S.DateChoiceBox>
-              ))}
-            </S.DateChoiceRow>
-
-            <S.BottomBox>
-              <S.ButtonBox>
-                <S.CloseButton onClick={battle.closeModal}>취소</S.CloseButton>
-                <S.OkayButton
-                  disabled={!battle.rivalSelectedId || !battle.duration}
-                  onClick={battle.createBattle}
+                  배틀 신청하기
+                </S.Tab>
+                <S.Tab
+                  ref={requestListTabRef}
+                  $isActive={activeTab === "battle-request-list"}
+                  onClick={() => setActiveTab("battle-request-list")}
                 >
-                  배틀 신청
-                </S.OkayButton>
-              </S.ButtonBox>
-            </S.BottomBox>
-          </S.ModalContent>
+                  신청 목록
+                </S.Tab>
+              </S.Tabs>
+
+              <S.TabRail>
+                <S.TabActiveRail $left={activeRail.left} $width={activeRail.width} />
+              </S.TabRail>
+            </S.TabHeader>
+
+            {activeTab === "battle-create" ? (
+              <>
+                <S.UserChoiceContainer>
+                  {battle.battleList?.rivals.map(user => {
+                    const isSelected = battle.rivalSelectedId === user.id;
+
+                    return (
+                      <S.UserChoiceBox
+                        key={user.id}
+                        $isSelected={isSelected}
+                        onClick={() => battle.handleUserSelect(user.id)}
+                      >
+                        <S.ProfileContent $height="3rem">
+                          <S.ProfileIcon />
+                          <S.ProfileTagBox>
+                            <S.ProfileName>{user.name}</S.ProfileName>
+                          </S.ProfileTagBox>
+                        </S.ProfileContent>
+
+                        {isSelected ? <S.CheckedIcon /> : <S.UncheckedBox />}
+                      </S.UserChoiceBox>
+                    );
+                  })}
+                </S.UserChoiceContainer>
+
+                <S.DateChoiceRow>
+                  {battle.periodOptions.map(day => (
+                    <S.DateChoiceBox
+                      key={day}
+                      onClick={() => {
+                        battle.setSelectedDay(day);
+                        battle.setDuration(day);
+                      }}
+                      $active={battle.selectedDay === day}
+                    >
+                      {day}일
+                    </S.DateChoiceBox>
+                  ))}
+                </S.DateChoiceRow>
+
+                <S.BottomBox>
+                  <S.ButtonBox>
+                    <Button size={"sm"} onClick={battle.closeModal}>
+                      취소
+                    </Button>
+                    <Button
+                      size={"sm"}
+                      disabled={!battle.rivalSelectedId || !battle.duration}
+                      onClick={battle.createBattle}
+                    >
+                      신청
+                    </Button>
+                  </S.ButtonBox>
+                </S.BottomBox>
+              </>
+            ) : (
+              <></>
+            )}
+          </S.ModalContainer>
         </Dialog>
       )}
     </>
