@@ -6,9 +6,10 @@ export interface MyRivalsRequest {
   name: string;
   username: string;
   profileImage: string;
-  activeTime: string;
-  usingApp: string;
+  activeTime: number;
+  usingApp: string | null;
   status: UserStatus;
+  isStudying: boolean;
 }
 
 export type MyRivalsResponse = {

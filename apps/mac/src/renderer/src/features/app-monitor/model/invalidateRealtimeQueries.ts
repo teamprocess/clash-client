@@ -55,11 +55,11 @@ export const invalidateByDomain = async (domain?: string) => {
   }
 
   if (domain === "USER") {
-    await invalidateUserQueries();
+    await Promise.all([invalidateUserQueries(), invalidateCompeteQueries()]);
     return;
   }
 
   if (domain === "RECORD") {
-    await invalidateRecordQueries();
+    await Promise.all([invalidateRecordQueries(), invalidateCompeteQueries()]);
   }
 };
