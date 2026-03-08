@@ -2,6 +2,8 @@ import { useQuery } from "@tanstack/react-query";
 import { groupApi } from "../groupApi";
 import type { GroupCategoryFilter } from "@/entities/group/model/groupCategory";
 
+const GROUP_ACTIVITY_SYNC_INTERVAL_MS = 5000;
+
 export const groupQueryKeys = {
   allGroups: ["groups"] as const,
   myGroups: ["myGroups"] as const,
@@ -32,6 +34,9 @@ export const useGroupActivityQuery = (groupId: number | null) => {
     queryKey: [...groupQueryKeys.groupActivity, groupId],
     queryFn: () => groupApi.getGroupActivity(groupId ?? 0),
     enabled: groupId !== null,
+    staleTime: 0,
+    refetchInterval: groupId !== null ? GROUP_ACTIVITY_SYNC_INTERVAL_MS : false,
+    refetchIntervalInBackground: true,
   });
 };
 

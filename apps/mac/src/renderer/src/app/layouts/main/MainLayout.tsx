@@ -1,6 +1,6 @@
 import { useRef, useEffect, useState } from "react";
 import { Outlet, useLocation } from "react-router-dom";
-import { useRealtimeSync } from "@/features/app-monitor";
+import { useDailyRefresh, useRealtimeSync } from "@/features/app-monitor";
 import { GitHubGuard } from "@/features/github";
 import { Topbar } from "@/widgets/topbar";
 import { Sidebar } from "@/widgets/sidebar";
@@ -16,6 +16,7 @@ export const MainLayout = ({ variant = "default" }: MainLayoutProps) => {
   const mainContentRef = useRef<HTMLElement>(null);
   const { pathname } = useLocation();
   useRealtimeSync();
+  useDailyRefresh();
 
   useEffect(() => {
     mainContentRef.current?.scrollTo(0, 0);
