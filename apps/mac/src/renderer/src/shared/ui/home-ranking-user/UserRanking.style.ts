@@ -6,7 +6,7 @@ import { palette } from "@clash/design-tokens/theme";
 export const UserContainer = styled.div<{ $sticky?: boolean }>`
   padding: 1rem;
   width: 100%;
-  height: 4rem;
+  height: 3.5rem;
   border-bottom: 1px solid ${({ theme }) => theme.line.alternative};
   display: flex;
   flex-direction: row;
