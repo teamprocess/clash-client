@@ -45,6 +45,7 @@ export const Content = styled.div`
   background-color: ${({ theme }) => theme.background.alternative};
   border-radius: 0.75rem;
   gap: 0.625rem;
+  min-height: 0;
 `;
 
 export const SubtitleBox = styled.div`
@@ -81,14 +82,19 @@ export const InfoContainer = styled.div`
   padding: 0.75rem;
   gap: 0.625rem;
   height: 100%;
+  flex: 1;
+  min-height: 0;
 `;
 
 export const InfoContent = styled.div<{ $mb?: string }>`
   ${flexCol};
   padding: 0.75rem;
+  justify-content: center;
   gap: 0.625rem;
   border-bottom: 1px solid ${({ theme }) => theme.line.neutral};
   margin-bottom: ${({ $mb }) => $mb ?? 0};
+  flex: 1;
+  min-height: 0;
 `;
 
 export const InfoTitle = styled.p`
@@ -135,9 +141,10 @@ export const CalculateInfoBox = styled.div`
   padding: 0.625rem;
 `;
 
-export const ExplainText = styled.p`
-  ${font.label.regular}
-  width: 100%;
+export const ExplainText = styled.p<{ $fitContent?: boolean }>`
+  ${font.label.regular};
+  width: ${({ $fitContent }) => ($fitContent ? "auto" : "100%")};
+  flex-shrink: ${({ $fitContent }) => ($fitContent ? 0 : 1)};
   color: ${({ theme }) => theme.label.alternative};
 `;
 
@@ -145,12 +152,14 @@ export const RepositoryName = styled.p`
   ${font.label.bold};
   color: ${({ theme }) => theme.label.alternative};
   display: block;
+  flex: 1;
   min-width: 0;
   overflow: hidden;
   cursor: pointer;
 
   > span {
     display: block;
+    width: 100%;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -178,6 +187,9 @@ export const GridFooter = styled.div`
   ${flexRow};
   width: 100%;
   height: 100%;
+
+  flex: 1;
+  min-height: 0;
 `;
 
 export const FooterItem = styled.div`
@@ -186,12 +198,15 @@ export const FooterItem = styled.div`
   height: 100%;
   padding: 0.75rem;
   gap: 0.625rem;
+  min-height: 0;
 `;
 
 export const FooterCenter = styled.div`
   ${flexRow};
   align-items: center;
   height: 100%;
+  flex: 1;
+  min-height: 0;
 `;
 
 export const GroupTitle = styled.p`
@@ -242,8 +257,8 @@ export const GitCommitIcon = styled(GitCommits)``;
 
 export const FireIcon = styled(Fire)`
   color: ${({ theme }) => theme.label.alternative};
-  width: 2.15rem;
-  height: 2.15rem;
+  width: 2.1rem;
+  height: 2.1rem;
 `;
 
 export const CodeIcon = styled(Code)``;
