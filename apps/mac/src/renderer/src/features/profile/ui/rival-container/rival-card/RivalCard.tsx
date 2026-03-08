@@ -1,15 +1,16 @@
 import * as S from "./RivalCard.style";
 import type { UserStatus } from "@/features/competition/model/useMyRivals";
-import { formatTime, resolveUsingApp } from "@/shared/lib";
-import { useEffect, useMemo, useState } from "react";
+import { formatTime, resolveUsingApp, useRealtimeRivalActiveTime } from "@/shared/lib";
+import { useMemo } from "react";
 import { IdeIcons } from "@/shared/ui/assets/ide-img";
 
 interface RivalCardProps {
   profileSrc: string;
   name: string;
   status: UserStatus;
-  time: string;
-  usingApp?: string | null;
+  activeTime: number;
+  usingApp: string | null;
+  isStudying: boolean;
 }
 
 const statusLabelMap: Record<UserStatus, string> = {
@@ -37,18 +38,18 @@ const getUsingAppMeta = (usingApp?: string | null, status?: UserStatus) => {
   };
 };
 
-export function RivalCard({ profileSrc, name, status, time, usingApp }: RivalCardProps) {
-  const [displayActiveTime, setDisplayActiveTime] = useState<number>(Number(time) || 0);
-
-  useEffect(() => {
-    if (status !== "ONLINE") return;
-
-    const timerId = setInterval(() => {
-      setDisplayActiveTime(prev => prev + 1);
-    }, 1000);
-
-    return () => clearInterval(timerId);
-  }, [status]);
+export function RivalCard({
+  profileSrc,
+  name,
+  status,
+  activeTime,
+  usingApp,
+  isStudying,
+}: RivalCardProps) {
+  const displayActiveTime = useRealtimeRivalActiveTime({
+    activeTime,
+    isStudying,
+  });
 
   const { Icon, label } = useMemo(() => getUsingAppMeta(usingApp, status), [usingApp, status]);
 

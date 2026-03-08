@@ -1,22 +1,14 @@
 import * as S from "./MyRivals.style";
-import { UserStatus, getStatus, useMyRivals } from "@/features/competition/model/useMyRivals";
-import { formatTime, resolveUsingApp, useRival } from "@/shared/lib";
-import { MyRivalsResponse } from "@/entities/competition";
-import { useEffect, useMemo, useState } from "react";
+import { getStatus, useMyRivals } from "@/features/competition/model/useMyRivals";
+import { formatTime, resolveUsingApp, useRealtimeRivalActiveTime, useRival } from "@/shared/lib";
+import { MyRivalsRequest, MyRivalsResponse } from "@/entities/competition";
+import { useMemo } from "react";
 import { RivalsManagementDialog } from "@/shared/ui";
 import { IdeIcons } from "@/shared/ui/assets/ide-img";
 
 interface MyRivalsProps {
   data: MyRivalsResponse;
 }
-
-type RivalUser = {
-  name: string;
-  username?: string | null;
-  status: string;
-  usingApp?: string | null;
-  activeTime?: string | number | null;
-};
 
 const getUsingAppMeta = (usingApp?: string | null, status?: string) => {
   if (status !== "ONLINE") {
@@ -37,20 +29,11 @@ const getUsingAppMeta = (usingApp?: string | null, status?: string) => {
   };
 };
 
-const RivalRow = ({ user }: { user: RivalUser; index: number }) => {
-  const [displayActiveTime, setDisplayActiveTime] = useState<number>(
-    () => Number(user.activeTime) || 0
-  );
-
-  useEffect(() => {
-    if (user.status !== "ONLINE") return;
-
-    const timerId = window.setInterval(() => {
-      setDisplayActiveTime(prev => prev + 1);
-    }, 1000);
-
-    return () => window.clearInterval(timerId);
-  }, [user.status]);
+const RivalRow = ({ user }: { user: MyRivalsRequest }) => {
+  const displayActiveTime = useRealtimeRivalActiveTime({
+    activeTime: user.activeTime,
+    isStudying: user.isStudying,
+  });
 
   const { Icon, label } = useMemo(
     () => getUsingAppMeta(user.usingApp, user.status),
@@ -68,9 +51,7 @@ const RivalRow = ({ user }: { user: RivalUser; index: number }) => {
           <S.ProfileMention>@{user.username}</S.ProfileMention>
         </S.NameBox>
 
-        <S.Status $status={user.status as UserStatus}>
-          {getStatus(user.status as UserStatus)}
-        </S.Status>
+        <S.Status $status={user.status}>{getStatus(user.status)}</S.Status>
       </S.ProfileContent>
 
       <S.PlayTime>
@@ -84,9 +65,7 @@ const RivalRow = ({ user }: { user: RivalUser; index: number }) => {
           </>
         )}
 
-        <S.ActiveTime $status={user.status as UserStatus}>
-          {formatTime(displayActiveTime)}
-        </S.ActiveTime>
+        <S.ActiveTime $status={user.status}>{formatTime(displayActiveTime)}</S.ActiveTime>
       </S.PlayTime>
     </S.ProfileContainer>
   );
@@ -113,11 +92,7 @@ export const MyRivals = ({ data }: MyRivalsProps) => {
           <S.ProfileWrapper>
             {myRivals.myRivalsData?.myRivals && myRivals.myRivalsData.myRivals.length > 0 ? (
               myRivals.myRivalsData.myRivals.map((user, index) => (
-                <RivalRow
-                  key={user.username ?? index}
-                  user={user as unknown as RivalUser}
-                  index={index}
-                />
+                <RivalRow key={user.username ?? index} user={user} />
               ))
             ) : (
               <S.DetailWrapper>

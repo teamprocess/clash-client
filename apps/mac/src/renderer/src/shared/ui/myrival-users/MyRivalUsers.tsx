@@ -1,6 +1,6 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo } from "react";
 import * as S from "@/features/home/ui/rival/Rival.style";
-import { formatTime, MyRivalItem, resolveUsingApp } from "@/shared/lib";
+import { formatTime, MyRivalItem, resolveUsingApp, useRealtimeRivalActiveTime } from "@/shared/lib";
 import { IdeIcons } from "@/shared/ui/assets/ide-img";
 import { Tooltip } from "@/shared/ui";
 
@@ -24,17 +24,10 @@ const getUsingAppMeta = (usingApp?: string | null, status?: string) => {
 };
 
 export const MyRivalUsers = ({ user, getStatus }: MyRivalItem) => {
-  const [displayActiveTime, setDisplayActiveTime] = useState<number>(Number(user.activeTime) || 0);
-
-  useEffect(() => {
-    if (user.status !== "ONLINE") return;
-
-    const timerId = setInterval(() => {
-      setDisplayActiveTime(prev => prev + 1);
-    }, 1000);
-
-    return () => clearInterval(timerId);
-  }, [user.status]);
+  const displayActiveTime = useRealtimeRivalActiveTime({
+    activeTime: user.activeTime,
+    isStudying: user.isStudying,
+  });
 
   const renderRivalId = (username: string) => {
     return (
