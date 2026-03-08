@@ -213,7 +213,7 @@ export const ApplyContainer = styled.div`
   flex: 1;
   min-height: 0;
   padding: 1rem;
-  gap: 2rem;
+  gap: 1rem;
 
   overflow-y: auto;
   scrollbar-width: none;
@@ -235,4 +235,28 @@ export const DetermineContent = styled.div`
 
 export const DetermineList = styled.div`
   ${flexCol};
+`;
+
+export const EmptyStateBox = styled.div`
+  ${flexCol};
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 10rem;
+  margin-top: 1rem;
+  border: 1px dashed ${({ theme }) => theme.line.alternative};
+  border-radius: 0.75rem;
+  background-color: ${({ theme }) => theme.fill.normal};
+  text-align: center;
+  gap: 0.5rem;
+`;
+
+export const EmptyTitle = styled.p`
+  ${font.headline2.medium};
+  color: ${({ theme }) => theme.label.normal};
+`;
+
+export const EmptyDescription = styled.p`
+  ${font.caption.medium};
+  color: ${({ theme }) => theme.label.alternative};
 `;
