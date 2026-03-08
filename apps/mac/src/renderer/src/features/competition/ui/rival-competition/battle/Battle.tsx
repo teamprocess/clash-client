@@ -1,5 +1,5 @@
 import * as S from "./Battle.style";
-import { Dialog, Select } from "@/shared/ui";
+import { Button, Dialog, Select } from "@/shared/ui";
 import { AnalyzeCategory, MATCHVALUE } from "@/entities/competition";
 import { useBattle } from "@/features/competition/model/useBattle";
 import { formatTime } from "@/shared/lib";
@@ -293,13 +293,16 @@ export const Battle = () => {
 
                 <S.BottomBox>
                   <S.ButtonBox>
-                    <S.CloseButton onClick={battle.closeModal}>취소</S.CloseButton>
-                    <S.OkayButton
+                    <Button size={"sm"} onClick={battle.closeModal}>
+                      취소
+                    </Button>
+                    <Button
+                      size={"sm"}
                       disabled={!battle.rivalSelectedId || !battle.duration}
                       onClick={battle.createBattle}
                     >
-                      배틀 신청
-                    </S.OkayButton>
+                      신청
+                    </Button>
                   </S.ButtonBox>
                 </S.BottomBox>
               </>
