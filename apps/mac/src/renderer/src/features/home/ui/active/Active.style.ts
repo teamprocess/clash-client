@@ -95,8 +95,14 @@ export const GrassWrapper = styled.div`
 
 export const ChartWrapper = styled.div`
   width: 100%;
-  height: 7rem;
+  min-height: 0;
+  max-height: 82%;
   position: relative;
+
+  canvas {
+    width: 100% !important;
+    height: 100% !important;
+  }
 `;
 
 export const PortalTooltip = styled.div<{ $top: number; $left: number }>`

@@ -37,26 +37,28 @@ export const Ranking = () => {
 
       <S.Line />
 
-      <S.UserWrapper ref={wrapperRef}>
-        {domain.userList.rankings.length === 0 ? (
-          <S.DetailWrapper>
-            <S.DefaultBattleBox>
-              <S.DefaultBattleText>아직 랭킹에 대한 데이터가 없어요.</S.DefaultBattleText>
-            </S.DefaultBattleBox>
-          </S.DetailWrapper>
-        ) : (
-          domain.userList.rankings.map((user: RankingItem, index: number) => (
-            <UserRanking
-              key={user.linkedId}
-              user={user}
-              rank={index + 1}
-              unit={unit}
-              formatValue={formatActiveRankingPoint}
-              isRival={user.userId !== domain.currentUser?.userId && user.isRival}
-              ref={user.userId === domain.currentUser?.userId ? currentUserRef : null}
-            />
-          ))
-        )}
+      <S.UserWrapper>
+        <S.UserContainer ref={wrapperRef}>
+          {domain.userList.rankings.length === 0 ? (
+            <S.DetailWrapper>
+              <S.DefaultBattleBox>
+                <S.DefaultBattleText>아직 랭킹에 대한 데이터가 없어요.</S.DefaultBattleText>
+              </S.DefaultBattleBox>
+            </S.DetailWrapper>
+          ) : (
+            domain.userList.rankings.map((user: RankingItem, index: number) => (
+              <UserRanking
+                key={user.linkedId}
+                user={user}
+                rank={index + 1}
+                unit={unit}
+                formatValue={formatActiveRankingPoint}
+                isRival={user.userId !== domain.currentUser?.userId && user.isRival}
+                ref={user.userId === domain.currentUser?.userId ? currentUserRef : null}
+              />
+            ))
+          )}
+        </S.UserContainer>
       </S.UserWrapper>
 
       {view.stickyState !== "none" && domain.currentUser && domain.currentUserRank !== null && (

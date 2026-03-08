@@ -1,5 +1,6 @@
 import { Line } from "react-chartjs-2";
 import "chart.js/auto";
+import type { TooltipItem } from "chart.js";
 
 interface ActiveLineChartProps {
   data: {
@@ -21,7 +22,7 @@ export const ActiveLineChart = ({ data }: ActiveLineChartProps) => {
             data: values,
             borderColor: "#747678",
             backgroundColor: "#DCDDDE",
-            borderWidth: 2,
+            borderWidth: 2.5,
             pointRadius: 8,
             pointHoverRadius: 9,
             pointBackgroundColor: "#DCDDDE",
@@ -44,10 +45,10 @@ export const ActiveLineChart = ({ data }: ActiveLineChartProps) => {
             displayColors: false,
             callbacks: {
               title: () => "",
-              label: tooltipItem => {
+              label: (tooltipItem: TooltipItem<"line">) => {
                 const value = tooltipItem.raw;
                 if (value === null || value === undefined) return "";
-                return value.toString();
+                return String(value);
               },
             },
           },

@@ -12,8 +12,8 @@ const renderRepositoryName = (
     <Tooltip
       content={repositoryText}
       position="top"
-      maxWidth="10rem"
-      wrapperStyle={{ maxWidth: "100%", minWidth: 0 }}
+      maxWidth="100rem"
+      wrapperStyle={{ flex: 1, maxWidth: "100%", minWidth: 0 }}
     >
       <S.RepositoryName>
         <span>{repositoryText}</span>
@@ -47,7 +47,7 @@ export const Github = ({ today, yesterday }: CompareResponse) => {
               <S.CalculateContainer>
                 <S.CalculateInfoBox>
                   <S.FireIcon />
-                  <S.ExplainText>최다 커밋 레포지토리</S.ExplainText>
+                  <S.ExplainText $fitContent>최다 커밋 레포지토리</S.ExplainText>
                   {renderRepositoryName(
                     yesterday?.commit.representationRepo,
                     "현재 최다 커밋 레포지토리가 없습니다."
@@ -88,7 +88,7 @@ export const Github = ({ today, yesterday }: CompareResponse) => {
               <S.CalculateContainer>
                 <S.CalculateInfoBox>
                   <S.FireIcon />
-                  <S.ExplainText>최다 PR 레포지토리</S.ExplainText>
+                  <S.ExplainText $fitContent>최다 PR 레포지토리</S.ExplainText>
                   {renderRepositoryName(
                     yesterday?.pullRequest.representationRepo,
                     "현재 최다 PR 레포지토리가 없습니다."
@@ -159,7 +159,7 @@ export const Github = ({ today, yesterday }: CompareResponse) => {
               <S.CalculateContainer>
                 <S.CalculateInfoBox>
                   <S.FireIcon />
-                  <S.ExplainText>최다 커밋 레포지토리</S.ExplainText>
+                  <S.ExplainText $fitContent>최다 커밋 레포지토리</S.ExplainText>
                   {renderRepositoryName(
                     today?.commit.representationRepo,
                     "현재 최다 커밋 레포지토리가 없습니다."
@@ -207,7 +207,7 @@ export const Github = ({ today, yesterday }: CompareResponse) => {
               <S.CalculateContainer>
                 <S.CalculateInfoBox>
                   <S.FireIcon />
-                  <S.ExplainText>최다 PR 레포지토리</S.ExplainText>
+                  <S.ExplainText $fitContent>최다 PR 레포지토리</S.ExplainText>
                   {renderRepositoryName(
                     today?.pullRequest.representationRepo,
                     "현재 최다 PR 레포지토리가 없습니다."
