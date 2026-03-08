@@ -12,4 +12,9 @@ export type {
   getMyProfileResponse,
 } from "./api/authApi";
 export type { LinkGitHubOAuthRequest, LinkGitHubOAuthResponse } from "./api/githubApi";
-export { startUserProfileSyncWindow, useGetMyProfile } from "./model/useGetMyProfile";
+export {
+  PROFILE_SYNC_INTERVAL_MS,
+  PROFILE_SYNC_UNTIL_KEY,
+  startUserProfileSyncWindow,
+  useGetMyProfile,
+} from "./model/useGetMyProfile";

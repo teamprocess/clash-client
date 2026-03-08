@@ -6,10 +6,9 @@ import { Dialog } from "@/shared/ui";
 import { Skeleton } from "@/shared/ui/skeleton/Skeleton";
 import * as S from "./Home.style";
 import { useActiveQuery, useTransitionQuery } from "@/entities/home";
-import { useGetMyProfile } from "@/entities/user";
+import { PROFILE_SYNC_INTERVAL_MS, PROFILE_SYNC_UNTIL_KEY, useGetMyProfile } from "@/entities/user";
 
 const isNotFound = (error: unknown) => axios.isAxiosError(error) && error.response?.status === 404;
-const PROFILE_SYNC_UNTIL_KEY = "clash:home-ranking-user:profile-sync-until";
 
 const isProfileSyncing = () => {
   if (typeof window === "undefined") {
@@ -60,6 +59,20 @@ export const Home = () => {
   const shouldPollGithubData = !isChecking && !isGithubNotLinked && isGithubNotReady;
 
   useEffect(() => {
+    if (!shouldSyncProfile) {
+      return;
+    }
+
+    const interval = setInterval(() => {
+      void queryClient.invalidateQueries({ queryKey: ["user"] });
+    }, PROFILE_SYNC_INTERVAL_MS);
+
+    return () => {
+      clearInterval(interval);
+    };
+  }, [queryClient, shouldSyncProfile]);
+
+  useEffect(() => {
     if (!shouldPollGithubData) {
       return;
     }
@@ -69,7 +82,7 @@ export const Home = () => {
         queryClient.invalidateQueries({ queryKey: ["transition"] }),
         queryClient.invalidateQueries({ queryKey: ["active", "GITHUB"] }),
       ]);
-    }, 3000);
+    }, PROFILE_SYNC_INTERVAL_MS);
 
     return () => {
       clearInterval(interval);
