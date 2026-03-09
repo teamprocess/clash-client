@@ -1,27 +1,17 @@
-import * as S from "./CompetitionPage.style";
-import { useCompetition } from "@/pages/competition/model/useCompetition";
-import { WithMyCompetition, RivalCompetition } from "@/features/competition";
-import { RivalsManagementDialog } from "@/shared/ui/rival-management/rivals-management/RivalsManagement";
-import { useRival } from "@/shared/lib/useRival";
+import * as S from "./RivalCompetitionPage.style";
+import { RivalCompetition } from "@/features/competition";
+import { useRivalCompetition } from "@/features/competition/model/useRivalCompetition";
+import { useRival } from "@/shared/lib";
 import { useState } from "react";
-import { Button, Dialog } from "@/shared/ui";
+import { Button, Dialog, RivalsManagementDialog } from "@/shared/ui";
 
-export const CompetitionPage = () => {
-  const { myRivalsData, competitionTab, setCompetitionTab } = useCompetition();
+export const RivalCompetitionPage = () => {
+  const { myRivalsData } = useRivalCompetition();
   const rival = useRival();
 
   const isEmptyRivals = (myRivalsData?.data?.myRivals.length ?? 0) === 0;
 
-  const [isPreDialogOpen, setIsPreDialogOpen] = useState(false);
-
-  const handleClickRivalTab = () => {
-    if (isEmptyRivals) {
-      setCompetitionTab("ME");
-      setIsPreDialogOpen(true);
-      return;
-    }
-    setCompetitionTab("RIVAL");
-  };
+  const [isPreDialogOpen, setIsPreDialogOpen] = useState(isEmptyRivals);
 
   const handleConfirmPreDialog = () => {
     setIsPreDialogOpen(false);
@@ -34,19 +24,7 @@ export const CompetitionPage = () => {
 
   return (
     <S.Wrapper>
-      <S.CompetitionTopBar>
-        <S.WitchCompete $isActive={competitionTab === "ME"} onClick={() => setCompetitionTab("ME")}>
-          나와의 경쟁
-        </S.WitchCompete>
-
-        <S.WitchCompete $isActive={competitionTab === "RIVAL"} onClick={handleClickRivalTab}>
-          라이벌과의 경쟁
-        </S.WitchCompete>
-      </S.CompetitionTopBar>
-
-      {competitionTab === "ME" ? (
-        <WithMyCompetition />
-      ) : isEmptyRivals ? (
+      {isEmptyRivals ? (
         <S.EmptyText>등록된 라이벌이 없습니다.</S.EmptyText>
       ) : myRivalsData?.data ? (
         <RivalCompetition data={myRivalsData.data} />
