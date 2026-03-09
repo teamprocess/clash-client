@@ -11,7 +11,7 @@ interface ActiveLineChartProps {
 
 export const ActiveLineChart = ({ data }: ActiveLineChartProps) => {
   const labels = data.labels.map(v => `${v}월`);
-  const values = data.values.map(v => v);
+  const values = data.values;
 
   return (
     <Line
