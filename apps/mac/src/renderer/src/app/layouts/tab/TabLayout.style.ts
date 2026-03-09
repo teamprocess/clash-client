@@ -34,3 +34,7 @@ export const TabItem = styled.button<{ $isActive: boolean }>`
   color: ${({ $isActive, theme }) => ($isActive ? theme.label.normal : theme.label.assistive)};
   cursor: pointer;
 `;
+
+export const Content = styled.div`
+  flex: 1;
+`;
