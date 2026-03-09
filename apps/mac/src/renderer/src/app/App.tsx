@@ -56,13 +56,13 @@ function App() {
                   element={
                     <TabLayout
                       tabs={[
-                        { name: "나와의 경쟁", url: "/competition/my" },
+                        { name: "나와의 경쟁", url: "/competition" },
                         { name: "라이벌과의 경쟁", url: "/competition/rival" },
                       ]}
                     />
                   }
                 >
-                  <Route path="/competition/my" element={<MyCompetitionPage />} />
+                  <Route path="/competition" element={<MyCompetitionPage />} />
                   <Route path="/competition/rival" element={<RivalCompetitionPage />} />
                 </Route>
                 {/* Shop */}
