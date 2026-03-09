@@ -26,7 +26,9 @@ export const TabLayout = ({ tabs }: TabLayoutProps) => {
           </S.TabItem>
         ))}
       </S.TabContainer>
-      <Outlet />
+      <S.Content>
+        <Outlet />
+      </S.Content>
     </S.Wrapper>
   );
 };

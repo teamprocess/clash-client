@@ -11,7 +11,7 @@ export const RivalCompetitionPage = () => {
 
   const isEmptyRivals = (myRivalsData?.data?.myRivals.length ?? 0) === 0;
 
-  const [isPreDialogOpen, setIsPreDialogOpen] = useState(isEmptyRivals);
+  const [isPreDialogOpen, setIsPreDialogOpen] = useState(myRivalsData?.data && isEmptyRivals);
 
   const handleConfirmPreDialog = () => {
     setIsPreDialogOpen(false);
