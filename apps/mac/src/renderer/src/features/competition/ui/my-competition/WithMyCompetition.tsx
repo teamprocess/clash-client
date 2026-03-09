@@ -4,7 +4,6 @@ import { useMyCompetition } from "@/features/competition/model/useMyCompetition"
 import { toLineChartData } from "@/shared/ui/my-compete-chart/formatMyCompeteChartData";
 import { CompareStandard, GrowthRateStandard } from "@/entities/competition";
 import { formatTime } from "@/shared/lib";
-import { useMemo } from "react";
 
 export const WithMyCompetition = () => {
   const {
@@ -22,25 +21,6 @@ export const WithMyCompetition = () => {
 
   const chartData = toLineChartData(dataPoints);
 
-  const fullChartData = useMemo(() => {
-    const now = new Date();
-    const currentMonth = now.getMonth() + 1;
-
-    const fullMonths = Array.from({ length: 12 }, (_, i) => {
-      const month = currentMonth - 11 + i;
-      const normalized = month <= 0 ? month + 12 : month;
-      return `${normalized}월`;
-    });
-
-    const labels = chartData.dataPoint.labels;
-    const values = fullMonths.map(label => {
-      const index = labels.indexOf(label);
-      return index !== -1 ? Math.round(Number(chartData.dataPoint.values[index])) : 0;
-    });
-
-    return { labels: fullMonths, values };
-  }, [chartData]);
-
   return (
     <S.ContentArea>
       <S.GraphWrapper>
@@ -54,7 +34,7 @@ export const WithMyCompetition = () => {
         </S.TitleBox>
 
         <S.ChartWrapper>
-          <MyCompetitionLineChart dataPoint={fullChartData} />
+          <MyCompetitionLineChart dataPoint={chartData.dataPoint} />
         </S.ChartWrapper>
       </S.GraphWrapper>
 
