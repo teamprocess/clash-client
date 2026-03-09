@@ -141,8 +141,24 @@ export const GrowthRateBox = styled.div<{ $direction?: GrowthDirection; $gap?: s
 
 export const ChartWrapper = styled.div`
   width: 100%;
-  flex: 1;
   position: relative;
+  min-height: 85%;
+  height: 100%;
+  flex: 1;
+
+  canvas {
+    width: 100% !important;
+    height: 100% !important;
+  }
+
+  @media (max-height: 64rem) {
+    flex: none;
+    height: clamp(10rem, 24vh, 14rem);
+  }
+
+  @media (max-height: 48rem) {
+    height: clamp(9rem, 22vh, 12rem);
+  }
 `;
 
 export const GithubCompareBox = styled.div`
