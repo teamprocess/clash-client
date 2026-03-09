@@ -96,12 +96,17 @@ export const GrassWrapper = styled.div`
 export const ChartWrapper = styled.div`
   width: 100%;
   min-height: 0;
-  max-height: 82%;
+  max-height: 84.5%;
+  flex: 1;
   position: relative;
 
   canvas {
     width: 100% !important;
     height: 100% !important;
+  }
+
+  @media (max-width: 48rem) {
+    max-height: 82%;
   }
 `;
 
