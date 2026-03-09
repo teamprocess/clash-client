@@ -134,7 +134,11 @@ export const BattleProfileBox = styled.button`
   border-bottom: 1px solid ${({ theme }) => theme.line.alternative};
   cursor: pointer;
   background-color: transparent;
+  transition: 0.1s ease-in-out;
+
   &:hover {
+    padding: 0.8rem 1rem;
+    border-radius: 0.5rem;
     background-color: ${({ theme }) => theme.background.alternative};
   }
 `;
