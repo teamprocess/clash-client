@@ -70,6 +70,10 @@ export const Grid = styled.div`
   grid-template-rows: repeat(7, 1fr);
   grid-auto-columns: 0.75rem;
   gap: 0.25rem;
+
+  @media (max-height: 56.25rem) {
+    gap: 0.15rem;
+  }
 `;
 
 const GRASS_COLORS = ["", "#3DCD5F40", "#3DCD5F80", "#3DCD5FBF", "#3DCD5FFF"] as const;
@@ -81,6 +85,11 @@ export const Grass = styled.div<{ $level: 0 | 1 | 2 | 3 | 4; $hidden?: boolean }
   visibility: ${({ $hidden }) => ($hidden ? "hidden" : "visible")};
   background-color: ${({ $level, theme }) =>
     $level === 0 ? theme.fill.neutral : GRASS_COLORS[$level]};
+
+  @media (max-height: 56.25rem) {
+    width: 0.67rem;
+    height: 0.67rem;
+  }
 `;
 
 export const GrassWrapper = styled.div`
@@ -95,13 +104,19 @@ export const GrassWrapper = styled.div`
 
 export const ChartWrapper = styled.div`
   width: 100%;
+  min-width: 0;
   min-height: 0;
-  max-height: 82%;
+  max-height: 8rem;
   position: relative;
+  flex: 1;
+  height: 100%;
 
-  canvas {
-    width: 100% !important;
-    height: 100% !important;
+  @media (max-height: 56.25rem) {
+    height: clamp(0rem, 24vh, 6.5rem);
+  }
+
+  @media (max-height: 48rem) {
+    height: clamp(9rem, 22vh, 12rem);
   }
 `;
 
