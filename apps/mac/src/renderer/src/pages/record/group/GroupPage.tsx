@@ -1,14 +1,14 @@
-import * as S from "./RecordPage.style";
+import * as S from "./GroupPage.style";
 import { Record } from "@/features/record";
 import { RecordHeader } from "@/features/record/ui/record-header/RecordHeader";
 
-export const RecordPage = () => {
+export const GroupPage = () => {
   return (
     <>
-      <RecordHeader active="PERSONAL" />
-      <S.RecordPageContainer>
+      <RecordHeader active={"GROUP"} />
+      <S.GroupPageContainer>
         <Record />
-      </S.RecordPageContainer>
+      </S.GroupPageContainer>
     </>
   );
 };
