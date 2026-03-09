@@ -5,13 +5,8 @@ import { GitHubGuard } from "@/features/github";
 import { Topbar } from "@/widgets/topbar";
 import { Sidebar } from "@/widgets/sidebar";
 import * as S from "./MainLayout.style";
-import type { LayoutVariant } from "./MainLayout.types";
 
-interface MainLayoutProps {
-  variant?: LayoutVariant;
-}
-
-export const MainLayout = ({ variant = "default" }: MainLayoutProps) => {
+export const MainLayout = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const mainContentRef = useRef<HTMLElement>(null);
   const { pathname } = useLocation();
@@ -31,7 +26,7 @@ export const MainLayout = ({ variant = "default" }: MainLayoutProps) => {
       <Topbar onToggleSidebar={toggleSidebar} />
       <S.ContentWrapper>
         <Sidebar isOpen={isSidebarOpen} />
-        <S.MainContent ref={mainContentRef} $variant={variant}>
+        <S.MainContent ref={mainContentRef}>
           <Outlet />
         </S.MainContent>
       </S.ContentWrapper>

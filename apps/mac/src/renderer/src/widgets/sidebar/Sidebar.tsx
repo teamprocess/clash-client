@@ -8,7 +8,7 @@ interface SidebarProps {
 
 const menuItems = [
   { icon: <S.HomeIcon />, label: "홈", to: "/" },
-  { icon: <S.CompetitionIcon />, label: "경쟁", to: "/competition" },
+  { icon: <S.CompetitionIcon />, label: "경쟁", to: "/competition/my" },
   { icon: <S.RecordIcon />, label: "기록", to: "/record" },
   { icon: <S.ShopIcon />, label: "상점", to: "/shop" },
   { icon: <S.RoadMapIcon />, label: "로드맵", to: "/roadmap" },
