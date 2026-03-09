@@ -7,7 +7,7 @@ out
 *.log*
 apps/mac/build
 .idea
-apps/mac/.env
+.env
 CLAUDE.md
 AGENTS.md
 apps/mac/certs
