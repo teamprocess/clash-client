@@ -10,7 +10,11 @@ export const Timer = () => {
 
   const Timer = (
     <>
-      <S.Date>{currentDate}</S.Date>
+      <S.DateBox>
+        <S.ArrowIcon rotate="LEFT" />
+        <S.Date>{currentDate}</S.Date>
+        <S.ArrowIcon rotate="RIGHT" />
+      </S.DateBox>
       <S.TimeBox>
         {activeTaskId !== null && (
           <S.PlayButton

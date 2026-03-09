@@ -1,13 +1,14 @@
 import styled from "styled-components";
 import { font } from "@clash/design-tokens/font";
 import Pause from "../../assets/pause.svg";
+import Arrow from "../../assets/arrow.svg";
 
 export const TimerContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-between;
-  padding: 2.5rem 1rem 2rem 1rem;
+  justify-content: center;
+  padding: 1rem;
   width: 100%;
   height: 100%;
 `;
@@ -15,6 +16,17 @@ export const TimerContainer = styled.div`
 export const TimerBox = styled.div`
   display: flex;
   flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+`;
+
+export const ArrowIcon = styled(Arrow)<{ rotate: "LEFT" | "RIGHT" }>`
+  rotate: ${({ rotate }) => (rotate === "LEFT" ? "180deg" : "0deg")};
+  cursor: pointer;
+`;
+
+export const DateBox = styled.div`
+  display: flex;
   align-items: center;
   gap: 1rem;
 `;
@@ -37,8 +49,8 @@ export const Time = styled.span`
 
 export const PauseIcon = styled(Pause)`
   cursor: pointer;
-  width: 2.25rem;
-  height: 2.25rem;
+  width: 2rem;
+  height: 2rem;
 `;
 
 export const PlayButton = styled.button`
