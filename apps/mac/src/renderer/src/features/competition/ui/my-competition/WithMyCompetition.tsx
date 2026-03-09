@@ -16,7 +16,7 @@ export const WithMyCompetition = () => {
     setGrowthRateDropdown,
     growthRateDropDownValue,
     competitionDropDownValue,
-    oneDecimal,
+    roundOneDecimal,
   } = useMyCompetition();
 
   const chartData = toLineChartData(dataPoints);
@@ -64,7 +64,7 @@ export const WithMyCompetition = () => {
                     <S.EXPIcon />
                     <S.ExplainText>총 획득 EXP</S.ExplainText>
                   </S.ImpressiveBox>
-                  <S.DataText>{oneDecimal(compareData?.earnedExp)} EXP</S.DataText>
+                  <S.DataText>{roundOneDecimal(compareData?.earnedExp)} EXP</S.DataText>
                 </S.DataBoxing>
               </S.GridBox>
 
@@ -74,7 +74,7 @@ export const WithMyCompetition = () => {
                     <S.RecordIcon />
                     <S.ExplainText>학습시간</S.ExplainText>
                   </S.ImpressiveBox>
-                  <S.DataText>{formatTime(oneDecimal(compareData?.studyTime))}</S.DataText>
+                  <S.DataText>{formatTime(roundOneDecimal(compareData?.studyTime))}</S.DataText>
                 </S.DataBoxing>
               </S.GridBox>
             </S.GridContainer>
@@ -88,11 +88,11 @@ export const WithMyCompetition = () => {
                 <S.GrowthRateBox $direction="row" $gap="2rem">
                   <S.DataText>
                     <S.SubText>Commit</S.SubText>
-                    {oneDecimal(compareData?.commitCount)}개
+                    {roundOneDecimal(compareData?.commitCount)}개
                   </S.DataText>
                   <S.DataText>
                     <S.SubText>Contributions</S.SubText>
-                    {oneDecimal(compareData?.gitHubAttribution)}개
+                    {roundOneDecimal(compareData?.gitHubAttribution)}개
                   </S.DataText>
                 </S.GrowthRateBox>
               </S.DataBoxing>
@@ -113,10 +113,10 @@ export const WithMyCompetition = () => {
                     <S.ExplainText>총 획득 EXP</S.ExplainText>
                   </S.ImpressiveBox>
                   <S.GrowthRateBox>
-                    <S.DataText>{oneDecimal(todayData?.earnedExp)} EXP</S.DataText>
+                    <S.DataText>{roundOneDecimal(todayData?.earnedExp)} EXP</S.DataText>
                     <GrowthRate
-                      yesterday={oneDecimal(compareData?.earnedExp)}
-                      today={oneDecimal(todayData?.earnedExp)}
+                      yesterday={roundOneDecimal(compareData?.earnedExp)}
+                      today={roundOneDecimal(todayData?.earnedExp)}
                     />
                   </S.GrowthRateBox>
                 </S.DataBoxing>
@@ -129,11 +129,11 @@ export const WithMyCompetition = () => {
                     <S.ExplainText>학습시간</S.ExplainText>
                   </S.ImpressiveBox>
                   <S.GrowthRateBox>
-                    <S.DataText>{formatTime(oneDecimal(todayData?.studyTime))}</S.DataText>
+                    <S.DataText>{formatTime(roundOneDecimal(todayData?.studyTime))}</S.DataText>
                     <GrowthRate
                       studyState={true}
-                      yesterday={oneDecimal(compareData?.studyTime)}
-                      today={oneDecimal(todayData?.studyTime)}
+                      yesterday={roundOneDecimal(compareData?.studyTime)}
+                      today={roundOneDecimal(todayData?.studyTime)}
                     />
                   </S.GrowthRateBox>
                 </S.DataBoxing>
@@ -151,10 +151,10 @@ export const WithMyCompetition = () => {
                   <S.GithubCompareBox>
                     <S.SubText>Commit</S.SubText>
                     <S.StatCompareRow>
-                      <S.DataText>{oneDecimal(todayData?.commitCount)}개</S.DataText>
+                      <S.DataText>{roundOneDecimal(todayData?.commitCount)}개</S.DataText>
                       <GrowthRate
-                        yesterday={oneDecimal(compareData?.commitCount)}
-                        today={oneDecimal(todayData?.commitCount)}
+                        yesterday={roundOneDecimal(compareData?.commitCount)}
+                        today={roundOneDecimal(todayData?.commitCount)}
                       />
                     </S.StatCompareRow>
                   </S.GithubCompareBox>
@@ -162,10 +162,10 @@ export const WithMyCompetition = () => {
                   <S.GithubCompareBox>
                     <S.SubText>Contributions</S.SubText>
                     <S.StatCompareRow>
-                      <S.DataText>{oneDecimal(todayData?.gitHubAttribution)}개</S.DataText>
+                      <S.DataText>{roundOneDecimal(todayData?.gitHubAttribution)}개</S.DataText>
                       <GrowthRate
-                        yesterday={oneDecimal(compareData?.gitHubAttribution)}
-                        today={oneDecimal(todayData?.gitHubAttribution)}
+                        yesterday={roundOneDecimal(compareData?.gitHubAttribution)}
+                        today={roundOneDecimal(todayData?.gitHubAttribution)}
                       />
                     </S.StatCompareRow>
                   </S.GithubCompareBox>
