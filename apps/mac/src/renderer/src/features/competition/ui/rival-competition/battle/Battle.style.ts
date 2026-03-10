@@ -539,7 +539,7 @@ export const EmptyStateBox = styled.div`
   justify-content: center;
   width: 100%;
   height: 100%;
-  margin-top: 1rem;
+  margin-top: 2rem;
   border: 1px dashed ${({ theme }) => theme.line.alternative};
   border-radius: 0.75rem;
   background-color: ${({ theme }) => theme.fill.normal};
@@ -555,4 +555,11 @@ export const EmptyTitle = styled.p`
 export const EmptyDescription = styled.p`
   ${font.caption.medium};
   color: ${({ theme }) => theme.label.alternative};
+`;
+
+export const ErrorText = styled.p`
+  padding-top: 1.425rem;
+  ${font.label.medium};
+  color: ${palette.red[60]};
+  width: 100%;
 `;

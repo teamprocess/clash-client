@@ -96,6 +96,7 @@ export const useBattle = () => {
   const [rivalSelectedId, setRivalSelectedId] = useState<number | null>(null);
 
   const handleUserSelect = (id: number) => {
+    setError(null);
     setRivalSelectedId(prev => (prev === id ? null : id));
   };
 
@@ -119,13 +120,15 @@ export const useBattle = () => {
   };
 
   const remainDays = getRemainDays(battleDetailData?.expireDate);
-
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const openModal = () => setIsModalOpen(true);
+  const openModal = () => {
+    setError(null);
+    setIsModalOpen(true);
+  };
 
-  const [duration, setDuration] = useState<PeriodDay>(3);
+  const [duration, setDuration] = useState<PeriodDay | null>(null);
   const periodOptions: PeriodDay[] = [3, 5, 7];
-  const [selectedDay, setSelectedDay] = useState<number | null>(null);
+  const [selectedDay, setSelectedDay] = useState<PeriodDay | null>(null);
 
   const submittingRef = useRef(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -135,31 +138,53 @@ export const useBattle = () => {
 
     setIsModalOpen(false);
     setRivalSelectedId(null);
-    setDuration(3);
+    setDuration(null);
     setSelectedDay(null);
-
     setIsSubmitting(false);
+    setError(null);
   };
 
+  const handlePeriodSelect = (day: PeriodDay) => {
+    setError(null);
+    setSelectedDay(day);
+    setDuration(day);
+  };
+
+  const canCreateBattle = rivalSelectedId !== null && duration !== null && !isSubmitting;
+
   const createBattle = async () => {
-    if (!rivalSelectedId) return;
+    if (!rivalSelectedId || duration === null) {
+      setError("라이벌과 기간을 모두 선택해주세요.");
+      return;
+    }
 
     if (submittingRef.current) return;
 
     submittingRef.current = true;
     setIsSubmitting(true);
+    setError(null);
 
     try {
       await battleApi.postCreateBattle({
         id: rivalSelectedId,
         duration,
       });
+
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: ["battleInfo"] }),
+        queryClient.invalidateQueries({ queryKey: ["battleList"] }),
+        queryClient.invalidateQueries({ queryKey: ["battleApplyList"] }),
+      ]);
+
+      submittingRef.current = false;
+      setIsSubmitting(false);
+      closeModal();
     } catch (error: unknown) {
-      const errorMessage = getErrorMessage(error, "배틀 신청 중 오류가 발생했습니다.");
-      console.error("배틀 신청 실패", errorMessage, error);
+      console.error("배틀 신청 실패:", error);
+      setError(getErrorMessage(error, "배틀 신청 중 오류가 발생했습니다."));
     } finally {
       submittingRef.current = false;
-      closeModal();
+      setIsSubmitting(false);
     }
   };
 
@@ -199,10 +224,12 @@ export const useBattle = () => {
     closeModal,
     duration,
     setDuration,
+    selectedDay,
     periodOptions,
     createBattle,
-    selectedDay,
     setSelectedDay,
+    handlePeriodSelect,
+    canCreateBattle,
 
     selectBattleTarget,
     isBattleSelected,
