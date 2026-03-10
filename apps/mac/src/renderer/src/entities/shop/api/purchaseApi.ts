@@ -1,16 +1,5 @@
-import { api } from "@/shared/api/axios";
-import type { ApiResponse } from "@/shared/api/types";
+import { shopApi, type PurchaseRequest, type PurchaseResponse } from "@/entities/shop/api/shopApi";
 
-/** 요청 */
-export interface PurchaseRequest {
-  productId: number;
-}
+export type { PurchaseRequest, PurchaseResponse };
 
-export interface PurchaseResponse {
-  purchaseId: number;
-}
-
-export const purchaseProduct = async (request: PurchaseRequest) => {
-  const res = await api.post<ApiResponse<PurchaseResponse>>("/shop/purchases", request);
-  return res.data;
-};
+export const purchaseProduct = shopApi.purchaseProduct;
