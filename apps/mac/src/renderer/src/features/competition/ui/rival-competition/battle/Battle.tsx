@@ -231,7 +231,7 @@ export const Battle = () => {
       {battle.isModalOpen && (
         <Dialog
           width={43}
-          height={activeTab === "battle-request-list" ? 23.825 : 30}
+          height={activeTab === "battle-request-list" ? 23 : 30}
           isOpen={battle.isModalOpen}
           onClose={battle.closeModal}
         >
@@ -288,10 +288,7 @@ export const Battle = () => {
                   {battle.periodOptions.map(day => (
                     <S.DateChoiceBox
                       key={day}
-                      onClick={() => {
-                        battle.setSelectedDay(day);
-                        battle.setDuration(day);
-                      }}
+                      onClick={() => battle.handlePeriodSelect(day)}
                       $active={battle.selectedDay === day}
                     >
                       {day}일
@@ -299,21 +296,24 @@ export const Battle = () => {
                   ))}
                 </S.DateChoiceRow>
 
-                <S.BottomBox>
-                  <S.ButtonBox>
-                    <Button size="sm" onClick={battle.closeModal}>
-                      취소
-                    </Button>
-                    <Button
-                      size="sm"
-                      variant="primary"
-                      disabled={!battle.rivalSelectedId || !battle.duration}
-                      onClick={battle.createBattle}
-                    >
-                      신청
-                    </Button>
-                  </S.ButtonBox>
-                </S.BottomBox>
+                <S.TitleBox>
+                  {battle.error ? <S.ErrorText>{battle.error}</S.ErrorText> : <div />}
+                  <S.BottomBox>
+                    <S.ButtonBox>
+                      <Button size="sm" onClick={battle.closeModal}>
+                        취소
+                      </Button>
+                      <Button
+                        size="sm"
+                        variant="primary"
+                        disabled={!battle.canCreateBattle}
+                        onClick={battle.createBattle}
+                      >
+                        신청
+                      </Button>
+                    </S.ButtonBox>
+                  </S.BottomBox>
+                </S.TitleBox>
               </>
             ) : (
               <S.BattleApplyListContainer $hasApply={hasBattleApplyList}>
