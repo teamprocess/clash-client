@@ -100,6 +100,7 @@ export const ProductImg = styled.div<{ $imgUrl: string }>`
   background-image: url(${({ $imgUrl }) => $imgUrl});
   background-repeat: no-repeat;
   background-color: ${({ theme }) => theme.fill.neutral};
+  background-position: center;
 `;
 
 export const MajorInfoWrapper = styled.div`
