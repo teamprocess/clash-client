@@ -78,7 +78,7 @@ export const ProfileMention = styled.p`
 export const UserChoiceContainer = styled.div<{ $uiStatus?: "create" }>`
   ${flexCol};
   width: 100%;
-  height: ${({ $uiStatus }) => ($uiStatus === "create" ? "26rem" : "100%")};
+  height: ${({ $uiStatus }) => ($uiStatus === "create" ? "25rem" : "100%")};
 
   ${({ $uiStatus }) =>
     $uiStatus === "create"
@@ -124,26 +124,8 @@ export const ButtonBox = styled.div`
   align-items: center;
   justify-content: flex-end;
   position: absolute;
-  top: -1rem;
+  top: -1.75rem;
   gap: 0.75rem;
-`;
-
-export const CloseButton = styled.button`
-  width: 4.25rem;
-  border-radius: 0.625rem;
-  color: ${palette.neutral[97]};
-  padding: 0.4rem 0.5rem;
-  background: ${({ theme }) => theme.line.normal};
-  cursor: pointer;
-`;
-
-export const OkayButton = styled.button`
-  width: 4.25rem;
-  border-radius: 0.625rem;
-  color: ${palette.neutral[97]};
-  padding: 0.4rem 0.5rem;
-  background: ${({ theme }) => theme.primary.normal};
-  cursor: pointer;
 `;
 
 export const CheckedIcon = styled(Checked)``;
@@ -159,7 +141,7 @@ export const UncheckedBox = styled.div`
 `;
 
 export const ErrorText = styled.span`
-  ${font.caption.medium};
+  ${font.label.medium};
   color: ${palette.red[60]};
   width: 100%;
 `;
