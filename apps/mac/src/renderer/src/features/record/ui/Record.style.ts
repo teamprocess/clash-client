@@ -3,7 +3,7 @@ import More from "../assets/more.svg";
 
 export const RecordContainer = styled.div`
   display: flex;
-  flex: 2;
+  flex: 3;
   flex-direction: column;
   height: 100%;
   width: 100%;
