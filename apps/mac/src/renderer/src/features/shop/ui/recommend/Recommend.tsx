@@ -28,6 +28,7 @@ export const Recommend = ({ products }: RecommendProps) => {
             <ProductCard
               key={product.id}
               id={product.id}
+              image={product.image}
               title={product.title}
               price={product.price}
               discount={product.discount}
