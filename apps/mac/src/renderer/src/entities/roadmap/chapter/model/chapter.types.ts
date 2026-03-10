@@ -43,15 +43,30 @@ export interface GetChapterDetailsResponse {
   chapterId: number;
   title: string;
   description: string;
-  currentMissionId: number;
-  currentQuestionId: number;
-  currentQuestionIndex: number;
+  orderIndex: number;
+  studyMaterialUrl: string | null;
+  questions: ChapterQuestion[];
   totalQuestions: number;
-  missions: Mission[] | [];
+  currentQuestionIndex: number;
+  correctCount: number;
+  isCleared: boolean;
+}
+
+export interface ChapterQuestion {
+  questionId: number;
+  content: string;
+  explanation: string;
+  orderIndex: number;
+  difficulty: number;
+  choices: ChapterChoice[];
+}
+
+export interface ChapterChoice {
+  choiceId: number;
+  content: string;
 }
 
 export interface SubmitAnswerRequest {
-  missionId: number;
   questionId: number;
   submittedChoiceId: number;
 }
@@ -62,25 +77,18 @@ export interface SubmitAnswerResponse {
   currentProgress: number;
   totalQuestion: number;
   correctChoiceId: number | null;
-  isMissionCleared: boolean;
-  nextMissionId: number | null;
-  nextMissionOrderIndex: number | null;
   isChapterCleared: boolean;
   nextChapterId: number | null;
   nextChapterOrderIndex: number | null;
 }
 
-export interface SubmitResultResponse {
-  missionId: number;
+export interface GetChapterResultResponse {
   isCleared: boolean;
   correctCount: number;
   totalCount: number;
-  nextMissionId: number | null;
-  nextMissionOrderIndex: number | null;
-  nextChapterId: number | null;
-  nextChapterOrderIndex: number | null;
+  scorePercentage: number;
 }
 
-export interface ResetMissionRequest {
-  missionId: number;
+export interface ResetChapterRequest {
+  chapterId: number;
 }

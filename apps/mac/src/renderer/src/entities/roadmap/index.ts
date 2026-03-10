@@ -11,15 +11,18 @@ export type {
 export { chapterApi, rankingApi, useChapterRankingQuery } from "./chapter";
 export type {
   Chapter,
+  ChapterChoice,
+  ChapterQuestion,
+  GetChapterResultResponse,
   GetChapterDetailsRequest,
   GetChapterDetailsResponse,
   GetSectionDetailsRequest,
   GetSectionDetailsResponse,
   Mission,
+  ResetChapterRequest,
   Stage,
   SubmitAnswerRequest,
   SubmitAnswerResponse,
-  SubmitResultResponse,
   GetChapterRankingsResponse,
   RankingUser,
 } from "./chapter";
