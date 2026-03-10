@@ -516,3 +516,10 @@ export const TabActiveRail = styled.div<{ $left: number; $width: number }>`
     left 0.2s ease,
     width 0.2s ease;
 `;
+
+export const ProfileSubText = styled.div`
+  color: #8a8f98;
+  font-size: 0.75rem;
+  font-weight: 400;
+  line-height: 1.2;
+`;

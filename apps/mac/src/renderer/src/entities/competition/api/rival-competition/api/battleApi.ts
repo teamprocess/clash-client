@@ -2,6 +2,7 @@ import { api, ApiResponse } from "@/shared/api";
 import {
   AnalyzeBattleRequest,
   AnalyzeBattleResponse,
+  BattleApplyListResponse,
   BattleDetailResponse,
   BattleListResponse,
   BattleResponse,
@@ -64,7 +65,9 @@ export const battleApi = {
   },
 
   getBattleApplyList: async () => {
-    const result = await api.get(`/compete/rivals/battles/apply`);
+    const result = await api.get<ApiResponse<BattleApplyListResponse>>(
+      `/compete/rivals/battles/apply`
+    );
     return result.data;
   },
 };
