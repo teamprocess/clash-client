@@ -31,3 +31,10 @@ export const useBattleListQuery = () => {
     queryFn: battleApi.getBattleList,
   });
 };
+
+export const useBattleApplyListQuery = () => {
+  return useQuery({
+    queryKey: ["battleApplyList"],
+    queryFn: battleApi.getBattleApplyList,
+  });
+};

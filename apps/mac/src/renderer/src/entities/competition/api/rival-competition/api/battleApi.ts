@@ -62,4 +62,9 @@ export const battleApi = {
     });
     return result.data;
   },
+
+  getBattleApplyList: async () => {
+    const result = await api.get(`/compete/rivals/battles/apply`);
+    return result.data;
+  },
 };
