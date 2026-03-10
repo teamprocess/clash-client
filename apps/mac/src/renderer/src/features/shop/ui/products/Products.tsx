@@ -134,6 +134,8 @@ export const Products = ({
               title={product.title}
               price={product.price}
               discount={product.discount}
+              isBought={product.isBought}
+              showOwnedBadge
               onClick={() => handleCardClick(Number(product.id))}
             />
           ))}
