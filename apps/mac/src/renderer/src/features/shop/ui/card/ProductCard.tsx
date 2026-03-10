@@ -7,15 +7,29 @@ interface ProductCardProps {
   title: string;
   price: number;
   discount: number;
+  isBought?: boolean;
+  showOwnedBadge?: boolean;
   onClick?: () => void;
 }
 
-export const ProductCard = ({ id, image, title, price, discount, onClick }: ProductCardProps) => {
+export const ProductCard = ({
+  id,
+  image,
+  title,
+  price,
+  discount,
+  isBought,
+  showOwnedBadge,
+  onClick,
+}: ProductCardProps) => {
   const discounted = calculateDiscountedPrice(price, discount);
 
   return (
     <S.CardContainer data-product-id={id} onClick={onClick}>
-      <S.ProductImage $imgUrl={image} />
+      <S.ProductImageWrapper>
+        <S.ProductImage $imgUrl={image} />
+        {showOwnedBadge && isBought && <S.OwnedBadge>소유함</S.OwnedBadge>}
+      </S.ProductImageWrapper>
       <S.ProductInfoBox>
         <S.ProductTitle>{title}</S.ProductTitle>
         <S.PriceBox>

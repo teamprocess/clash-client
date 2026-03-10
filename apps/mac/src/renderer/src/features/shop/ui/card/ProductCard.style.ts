@@ -22,15 +22,32 @@ export const CardContainer = styled.div`
   }
 `;
 
-export const ProductImage = styled.div<{ $imgUrl: string }>`
+export const ProductImageWrapper = styled.div`
+  position: relative;
   width: 100%;
   flex: 1;
   min-height: 0;
+`;
+
+export const ProductImage = styled.div<{ $imgUrl: string }>`
+  width: 100%;
+  height: 100%;
   background-color: ${({ theme }) => theme.fill.alternative};
   background-image: url(${({ $imgUrl }) => $imgUrl});
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
+`;
+
+export const OwnedBadge = styled.span`
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  padding: 0.22rem 0.6rem;
+  border-radius: 0.75rem;
+  background: ${({ theme }) => theme.primary.normal};
+  color: ${palette.neutral[95]};
+  ${font.caption.medium};
 `;
 
 export const ProductInfoBox = styled.div`
