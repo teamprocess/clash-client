@@ -14,6 +14,7 @@ import {
   MATCHVALUE,
 } from "@/entities/competition";
 import { getErrorMessage } from "@/shared/lib";
+import { useBattleApplyListQuery } from "@/entities/competition/api/rival-competition/api/query/useBattle.query";
 
 const analyzeCategoryOptions: { key: AnalyzeCategory; label: string }[] = [
   { key: "EXP", label: "EXP" },
@@ -42,6 +43,7 @@ export const useBattle = () => {
   const { data: battleDetailRes } = useBattleDetailQuery(battleTargetId ?? 0);
   const { data: analyzeRes } = useAnalyzeBattleQuery(battleDetailRes?.data?.id ?? 0, category);
   const { data: battleListRes } = useBattleListQuery();
+  const { data: battleApplyList } = useBattleApplyListQuery();
 
   const battleData: BattleResponse | null = battleInfoRes?.data ?? null;
   const battleDetailData: BattleDetailResponse | null = battleDetailRes?.data ?? null;
@@ -199,5 +201,6 @@ export const useBattle = () => {
     battleData,
     battleDetailData,
     battleList,
+    battleApplyList,
   };
 };

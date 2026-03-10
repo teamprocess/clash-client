@@ -308,7 +308,30 @@ export const Battle = () => {
                 </S.BottomBox>
               </>
             ) : (
-              <></>
+              <S.UserChoiceContainer>
+                {(battle.battleApplyList?.data?.battles ?? []).length > 0 ? (
+                  (battle.battleApplyList?.data?.battles ?? []).map(applyItem => (
+                    <S.UserChoiceBox key={applyItem.id} $isSelected={false}>
+                      <S.ProfileContent $height="3rem">
+                        <S.ProfileIcon />
+                        <S.ProfileTagBox>
+                          <S.ProfileName>{applyItem.enemy.name}</S.ProfileName>
+                          <S.ProfileSubText>
+                            {applyItem.startDate} ~ {applyItem.endDate}
+                          </S.ProfileSubText>
+                          <S.ProfileSubText>
+                            {applyItem.isMine ? "내가 보낸 신청" : "상대가 보낸 신청"}
+                          </S.ProfileSubText>
+                        </S.ProfileTagBox>
+                      </S.ProfileContent>
+                    </S.UserChoiceBox>
+                  ))
+                ) : (
+                  <S.DefaultBattleBox>
+                    <S.DefaultBattleText>현재 신청된 배틀 목록이 없습니다.</S.DefaultBattleText>
+                  </S.DefaultBattleBox>
+                )}
+              </S.UserChoiceContainer>
             )}
           </S.ModalContainer>
         </Dialog>
