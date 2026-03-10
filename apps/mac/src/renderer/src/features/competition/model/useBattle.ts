@@ -63,7 +63,7 @@ export const useBattle = () => {
     if (result === MATCHVALUE.LOST) return "패배";
     if (result === MATCHVALUE.WON) return "승리";
     if (result === MATCHVALUE.DRAW) return "무승부";
-    return "동률";
+    return "수락 대기중";
   };
 
   const myAnalyzePoint = useMemo(() => {
