@@ -5,10 +5,11 @@ import { z } from "zod";
 import {
   GROUP_CATEGORIES,
   groupApi,
+  groupQueryKeys,
   type GroupCategory,
   useGroupDetailQuery,
 } from "@/entities/group";
-import { getErrorMessage } from "@/shared/lib";
+import { getErrorMessage, queryClient } from "@/shared/lib";
 
 const groupEditSchema = z.object({
   name: z.string().min(1, "그룹 이름을 입력하세요."),
@@ -23,7 +24,7 @@ const groupEditSchema = z.object({
 
 export type GroupEditFormData = z.infer<typeof groupEditSchema>;
 
-export const useGroup = () => {
+export const useGroup = (currentGroupId: number | null) => {
   const menuRef = useRef<HTMLDivElement>(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -34,7 +35,6 @@ export const useGroup = () => {
   const [isFormModalOpen, setIsFormModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [joinPassword, setJoinPassword] = useState<string>("");
-  const [currentGroupId, setCurrentGroupId] = useState<number | null>(null);
   const [isJoining, setIsJoining] = useState(false);
   const [editingGroupId, setEditingGroupId] = useState<number | null>(null);
   const { data: groupDetailResponse, error: groupDetailError } =
@@ -180,7 +180,12 @@ export const useGroup = () => {
 
       if (result.success) {
         setIsDeleteModalOpen(false);
-        setCurrentGroupId(null);
+        await Promise.all([
+          queryClient.invalidateQueries({ queryKey: groupQueryKeys.myGroups }),
+          queryClient.invalidateQueries({ queryKey: groupQueryKeys.allGroups }),
+          queryClient.invalidateQueries({ queryKey: groupQueryKeys.groupActivity }),
+          queryClient.invalidateQueries({ queryKey: groupQueryKeys.groupDetail }),
+        ]);
       } else {
         console.error(`그룹 ${deleteAction === "delete" ? "삭제" : "탈퇴"} 실패:`, result.message);
       }
@@ -218,6 +223,10 @@ export const useGroup = () => {
       if (result.success) {
         setIsFormModalOpen(false);
         createForm.reset();
+        await Promise.all([
+          queryClient.invalidateQueries({ queryKey: groupQueryKeys.myGroups }),
+          queryClient.invalidateQueries({ queryKey: groupQueryKeys.allGroups }),
+        ]);
       } else {
         console.error("그룹 생성 실패:", result.message);
       }
@@ -235,6 +244,11 @@ export const useGroup = () => {
       if (result.success) {
         setIsFormModalOpen(false);
         setJoinPassword("");
+        await Promise.all([
+          queryClient.invalidateQueries({ queryKey: groupQueryKeys.myGroups }),
+          queryClient.invalidateQueries({ queryKey: groupQueryKeys.allGroups }),
+          queryClient.invalidateQueries({ queryKey: groupQueryKeys.groupActivity }),
+        ]);
         return true;
       } else {
         console.error("그룹 참여 실패:", result.message);
@@ -270,6 +284,12 @@ export const useGroup = () => {
       if (result.success) {
         setIsEditModalOpen(false);
         editForm.reset();
+        await Promise.all([
+          queryClient.invalidateQueries({ queryKey: groupQueryKeys.myGroups }),
+          queryClient.invalidateQueries({ queryKey: groupQueryKeys.allGroups }),
+          queryClient.invalidateQueries({ queryKey: groupQueryKeys.groupActivity }),
+          queryClient.invalidateQueries({ queryKey: groupQueryKeys.groupDetail }),
+        ]);
       } else {
         console.error("그룹 수정 실패:", result.message);
       }
@@ -329,7 +349,6 @@ export const useGroup = () => {
     formModal,
     editModal,
     deleteModal,
-    setCurrentGroupId,
   };
 };
 

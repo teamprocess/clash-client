@@ -3,10 +3,24 @@ import { formatTime } from "@/shared/lib";
 import { useRecordStore } from "../../model/recordStore";
 import { useLiveRecordStudyTime } from "../../model/useLiveRecordStudyTime";
 
-export const Timer = () => {
+interface TimerProps {
+  stopButtonPosition?: "LEFT" | "RIGHT";
+}
+
+export const Timer = ({ stopButtonPosition = "LEFT" }: TimerProps) => {
   const { activeTaskId, stop } = useRecordStore();
   const { totalStudyTime } = useLiveRecordStudyTime();
   const currentDate = new Date().toISOString().split("T")[0];
+  const stopButton =
+    activeTaskId !== null ? (
+      <S.PlayButton
+        onClick={() => {
+          void stop();
+        }}
+      >
+        <S.PauseIcon />
+      </S.PlayButton>
+    ) : null;
 
   const Timer = (
     <>
@@ -16,16 +30,9 @@ export const Timer = () => {
         <S.ArrowIcon rotate="RIGHT" />
       </S.DateBox>
       <S.TimeBox>
-        {activeTaskId !== null && (
-          <S.PlayButton
-            onClick={() => {
-              void stop();
-            }}
-          >
-            <S.PauseIcon />
-          </S.PlayButton>
-        )}
+        {stopButtonPosition === "LEFT" && stopButton}
         <S.Time>{formatTime(totalStudyTime)}</S.Time>
+        {stopButtonPosition === "RIGHT" && stopButton}
       </S.TimeBox>
     </>
   );
