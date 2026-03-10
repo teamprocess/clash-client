@@ -36,5 +36,6 @@ export const TabItem = styled.button<{ $isActive: boolean }>`
 `;
 
 export const Content = styled.div`
+  overflow: auto;
   flex: 1;
 `;

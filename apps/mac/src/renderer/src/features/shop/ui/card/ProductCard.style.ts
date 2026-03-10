@@ -16,6 +16,10 @@ export const CardContainer = styled.div`
   border-radius: 0.25rem;
   overflow: hidden;
   cursor: pointer;
+
+  &.active {
+    border: 2px solid #5199d6;
+  }
 `;
 
 export const ProductInfoBox = styled.div`
