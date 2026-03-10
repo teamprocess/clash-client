@@ -293,11 +293,12 @@ export const Battle = () => {
 
                 <S.BottomBox>
                   <S.ButtonBox>
-                    <Button size={"sm"} onClick={battle.closeModal}>
+                    <Button size="sm" onClick={battle.closeModal}>
                       취소
                     </Button>
                     <Button
-                      size={"sm"}
+                      size="sm"
+                      variant="primary"
                       disabled={!battle.rivalSelectedId || !battle.duration}
                       onClick={battle.createBattle}
                     >

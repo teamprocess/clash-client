@@ -34,10 +34,10 @@ export const DeleteRivalsConfirmDialog = ({
         {rival.error && <S.ErrorText>{rival.error}</S.ErrorText>}
 
         <S.ButtonBox>
-          <Button size={"sm"} variant="secondary" fullWidth onClick={onClose}>
+          <Button size="sm" variant="secondary" fullWidth onClick={onClose}>
             취소
           </Button>
-          <Button size={"sm"} variant="primary" fullWidth onClick={handleConfirm}>
+          <Button size="sm" variant="primary" fullWidth onClick={handleConfirm}>
             삭제
           </Button>
         </S.ButtonBox>
