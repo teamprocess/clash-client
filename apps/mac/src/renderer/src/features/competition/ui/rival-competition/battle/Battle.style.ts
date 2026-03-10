@@ -355,6 +355,14 @@ export const DefaultBattleText = styled.p`
   color: ${({ theme }) => theme.label.assistive};
 `;
 
+export const BattleApplyListContainer = styled.div<{ $hasApply: boolean }>`
+  ${flexCol};
+  width: 100%;
+  height: 100%;
+  align-items: ${({ $hasApply }) => ($hasApply ? "stretch" : "center")};
+  justify-content: ${({ $hasApply }) => ($hasApply ? "flex-start" : "center")};
+`;
+
 export const UserChoiceContainer = styled.div`
   ${flexCol};
   width: 100%;
@@ -522,4 +530,28 @@ export const ProfileSubText = styled.div`
   font-size: 0.75rem;
   font-weight: 400;
   line-height: 1.2;
+`;
+
+export const EmptyStateBox = styled.div`
+  ${flexCol};
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  margin-top: 1rem;
+  border: 1px dashed ${({ theme }) => theme.line.alternative};
+  border-radius: 0.75rem;
+  background-color: ${({ theme }) => theme.fill.normal};
+  text-align: center;
+  gap: 0.5rem;
+`;
+
+export const EmptyTitle = styled.p`
+  ${font.headline2.medium};
+  color: ${({ theme }) => theme.label.normal};
+`;
+
+export const EmptyDescription = styled.p`
+  ${font.caption.medium};
+  color: ${({ theme }) => theme.label.alternative};
 `;

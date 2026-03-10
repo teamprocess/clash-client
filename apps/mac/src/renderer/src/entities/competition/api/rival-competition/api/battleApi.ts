@@ -64,6 +64,13 @@ export const battleApi = {
     return result.data;
   },
 
+  postCancelBattle: async (data: ModifyBattleRequest) => {
+    const result = await api.post<ApiResponse<void>>(`/compete/rivals/battles/cancel`, {
+      ...data,
+    });
+    return result.data;
+  },
+
   getBattleApplyList: async () => {
     const result = await api.get<ApiResponse<BattleApplyListResponse>>(
       `/compete/rivals/battles/apply`
