@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import type { LayoutVariant } from "./MainLayout.types";
 
 export const LayoutContainer = styled.div`
   display: flex;
@@ -13,10 +12,10 @@ export const ContentWrapper = styled.div`
   flex: 1;
 `;
 
-export const MainContent = styled.main<{ $variant: LayoutVariant }>`
+export const MainContent = styled.main`
   flex: 1;
-  padding: ${({ $variant }) => ($variant === "default" ? "2.5rem" : "2.5rem 2.5rem 0 2.5rem")};
-  overflow: ${({ $variant }) => ($variant === "fixed" ? "hidden" : "auto")};
+  padding: 2.5rem 2.5rem 2.5rem 2.5rem;
+  overflow: auto;
   scrollbar-gutter: stable;
   background-color: ${({ theme }) => theme.background.alternative};
 
