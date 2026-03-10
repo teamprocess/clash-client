@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { font } from "@clash/design-tokens/font";
 import { palette } from "@clash/design-tokens/theme";
 import Profile from "@/features/home/assets/home/profile.svg";
-import DetailArrow from "@/features/home/assets/home/front.svg";
+import DetailArrow from "@/shared/ui/assets/front.svg";
 
 export const HorizontalLine = styled.div`
   width: 100%;
