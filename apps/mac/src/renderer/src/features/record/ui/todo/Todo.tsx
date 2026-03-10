@@ -3,9 +3,9 @@ import { Popover } from "@/shared/ui";
 import * as S from "./Todo.style";
 
 const todoItems = [
-  { id: 1, name: "학습 계획 정리하기", isActive: false },
-  { id: 2, name: "기록 V2 화면 검토하기", isActive: true },
-  { id: 3, name: "오늘 회고 작성하기", isActive: false },
+  { id: 1, name: "학습 계획 정리하기", isActive: false, parentTaskName: "운영체제" },
+  { id: 2, name: "기록 V2 화면 검토하기", isActive: true, parentTaskName: null },
+  { id: 3, name: "오늘 회고 작성하기", isActive: false, parentTaskName: "알고리즘" },
 ];
 
 export const Todo = () => {
@@ -39,6 +39,9 @@ export const Todo = () => {
                 <S.TodoText>{todoItem.name}</S.TodoText>
               </S.TodoLeftBox>
               <S.TodoRightBox>
+                {todoItem.parentTaskName ? (
+                  <S.ParentTaskName>{todoItem.parentTaskName}</S.ParentTaskName>
+                ) : null}
                 <S.MoreIconWrapper ref={isMenuOpen ? menuRef : null}>
                   <S.IconButton
                     type="button"
