@@ -33,6 +33,9 @@ export const GroupPage = () => {
           currentGroupId={currentGroup?.id ?? null}
           onSelectGroup={setSelectedGroupId}
           onOpenFormModal={groupControls.handleOpenFormModal}
+          onEditGroup={groupControls.handleEditGroupRequest}
+          onDeleteGroup={groupId => groupControls.handleDeleteGroupRequest("delete", groupId)}
+          onQuitGroup={groupId => groupControls.handleDeleteGroupRequest("quit", groupId)}
         />
       </S.Content>
       <GroupFormModal {...groupControls.formModal} />
