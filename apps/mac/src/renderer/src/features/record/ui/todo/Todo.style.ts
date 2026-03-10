@@ -75,6 +75,12 @@ export const TodoText = styled.span`
   white-space: nowrap;
 `;
 
+export const ParentTaskName = styled.span`
+  ${font.body.regular};
+  color: ${({ theme }) => theme.label.assistive};
+  white-space: nowrap;
+`;
+
 export const MoreIcon = styled(More)`
   flex-shrink: 0;
   cursor: pointer;
