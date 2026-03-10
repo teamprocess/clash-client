@@ -231,7 +231,7 @@ export const Battle = () => {
       {battle.isModalOpen && (
         <Dialog
           width={43}
-          height={activeTab === "battle-request-list" ? 23 : 30}
+          height={activeTab === "battle-request-list" ? 25.5 : 30}
           isOpen={battle.isModalOpen}
           onClose={battle.closeModal}
         >
@@ -258,6 +258,8 @@ export const Battle = () => {
                 <S.TabActiveRail $left={activeRail.left} $width={activeRail.width} />
               </S.TabRail>
             </S.TabHeader>
+
+            {battle.error && <S.ErrorText>{battle.error}</S.ErrorText>}
 
             {activeTab === "battle-create" ? (
               <>
@@ -296,24 +298,21 @@ export const Battle = () => {
                   ))}
                 </S.DateChoiceRow>
 
-                <S.TitleBox>
-                  {battle.error ? <S.ErrorText>{battle.error}</S.ErrorText> : <div />}
-                  <S.BottomBox>
-                    <S.ButtonBox>
-                      <Button size="sm" onClick={battle.closeModal}>
-                        취소
-                      </Button>
-                      <Button
-                        size="sm"
-                        variant="primary"
-                        disabled={!battle.canCreateBattle}
-                        onClick={battle.createBattle}
-                      >
-                        신청
-                      </Button>
-                    </S.ButtonBox>
-                  </S.BottomBox>
-                </S.TitleBox>
+                <S.BottomBox>
+                  <S.ButtonBox>
+                    <Button size="sm" onClick={battle.closeModal}>
+                      취소
+                    </Button>
+                    <Button
+                      size="sm"
+                      variant="primary"
+                      disabled={!battle.canCreateBattle}
+                      onClick={battle.createBattle}
+                    >
+                      신청
+                    </Button>
+                  </S.ButtonBox>
+                </S.BottomBox>
               </>
             ) : (
               <S.BattleApplyListContainer $hasApply={hasBattleApplyList}>
