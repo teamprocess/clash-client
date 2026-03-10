@@ -18,7 +18,8 @@ export const CardContainer = styled.div`
   cursor: pointer;
 
   &.active {
-    border: 2px solid #5199d6;
+    border-color: ${({ theme }) => theme.primary.normal};
+    box-shadow: inset 0 0 0 1px ${({ theme }) => theme.primary.normal};
   }
 `;
 
