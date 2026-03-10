@@ -32,6 +32,8 @@ export const Recommend = ({ products }: RecommendProps) => {
               title={product.title}
               price={product.price}
               discount={product.discount}
+              isBought={product.isBought}
+              showOwnedBadge
               onClick={() => handleCardClick(product)}
             />
           ))}
