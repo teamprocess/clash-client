@@ -1,4 +1,4 @@
-import { Button, Popover, Tooltip } from "@/shared/ui";
+import { Popover, Select, Tooltip } from "@/shared/ui";
 import * as S from "./Todo.style";
 import { useTodoList } from "../../model/useTodoList";
 
@@ -13,6 +13,8 @@ export const Todo = () => {
     todoNameErrorMessage,
     isTodoNameInvalid,
     shouldShowTodoNameTooltip,
+    selectedParentTaskId,
+    parentTaskOptions,
     openMenuTodoId,
     menuRef,
     handleCloseMenu,
@@ -23,9 +25,11 @@ export const Todo = () => {
     handleSaveClick,
     handleTodoNameChange,
     handleTodoNameKeyDown,
+    handleParentTaskChange,
     handlePlayPauseClick,
     handleCompleteClick,
     handleDeleteClick,
+    getParentTaskName,
   } = useTodoList();
 
   const renderTodoNameInput = () => (
@@ -38,7 +42,7 @@ export const Todo = () => {
     >
       <S.TodoTextInput
         ref={todoNameInputRef}
-        placeholder="할 일을 입력하세요."
+        placeholder="할 일 제목"
         value={todoName}
         maxLength={todoNameInputMaxLength}
         aria-invalid={isTodoNameInvalid}
@@ -62,14 +66,31 @@ export const Todo = () => {
                 <S.TodoItem key={todoItem.id}>
                   <S.TodoInputBox>{renderTodoNameInput()}</S.TodoInputBox>
                   <S.TodoRightBox>
-                    <S.ButtonBox>
-                      <Button variant="secondary" size="sm" onClick={handleCancelEdit}>
-                        취소
-                      </Button>
-                      <Button variant="primary" size="sm" onClick={handleSaveClick}>
-                        저장
-                      </Button>
-                    </S.ButtonBox>
+                    <S.ParentTaskSelectBox>
+                      <Select
+                        value={
+                          selectedParentTaskId === null ? "NONE" : String(selectedParentTaskId)
+                        }
+                        options={parentTaskOptions}
+                        onChange={handleParentTaskChange}
+                      />
+                    </S.ParentTaskSelectBox>
+                    <S.ActionButtonsBox>
+                      <S.ActionIconButton
+                        type="button"
+                        aria-label="할 일 추가 취소"
+                        onClick={handleCancelEdit}
+                      >
+                        <S.CancelIcon />
+                      </S.ActionIconButton>
+                      <S.ActionIconButton
+                        type="button"
+                        aria-label="할 일 저장"
+                        onClick={handleSaveClick}
+                      >
+                        <S.SaveIcon />
+                      </S.ActionIconButton>
+                    </S.ActionButtonsBox>
                   </S.TodoRightBox>
                 </S.TodoItem>
               );
@@ -88,8 +109,8 @@ export const Todo = () => {
                   <S.TodoText $completed={todoItem.isCompleted}>{todoItem.name}</S.TodoText>
                 </S.TodoLeftBox>
                 <S.TodoRightBox>
-                  {todoItem.parentTaskName ? (
-                    <S.ParentTaskName>{todoItem.parentTaskName}</S.ParentTaskName>
+                  {getParentTaskName(todoItem.parentTaskId) ? (
+                    <S.ParentTaskName>{getParentTaskName(todoItem.parentTaskId)}</S.ParentTaskName>
                   ) : null}
                   <S.MoreIconWrapper ref={isMenuOpen ? menuRef : null}>
                     <S.IconButton
@@ -126,14 +147,29 @@ export const Todo = () => {
             <S.TodoItem>
               <S.TodoInputBox>{renderTodoNameInput()}</S.TodoInputBox>
               <S.TodoRightBox>
-                <S.ButtonBox>
-                  <Button variant="secondary" size="sm" onClick={handleCancelEdit}>
-                    취소
-                  </Button>
-                  <Button variant="primary" size="sm" onClick={handleSaveClick}>
-                    저장
-                  </Button>
-                </S.ButtonBox>
+                <S.ParentTaskSelectBox>
+                  <Select
+                    value={selectedParentTaskId === null ? "NONE" : String(selectedParentTaskId)}
+                    options={parentTaskOptions}
+                    onChange={handleParentTaskChange}
+                  />
+                </S.ParentTaskSelectBox>
+                <S.ActionButtonsBox>
+                  <S.ActionIconButton
+                    type="button"
+                    aria-label="할 일 추가 취소"
+                    onClick={handleCancelEdit}
+                  >
+                    <S.CancelIcon />
+                  </S.ActionIconButton>
+                  <S.ActionIconButton
+                    type="button"
+                    aria-label="할 일 저장"
+                    onClick={handleSaveClick}
+                  >
+                    <S.SaveIcon />
+                  </S.ActionIconButton>
+                </S.ActionButtonsBox>
               </S.TodoRightBox>
             </S.TodoItem>
           )}
