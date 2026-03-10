@@ -42,6 +42,9 @@ export const Battle = () => {
     return () => cancelAnimationFrame(frameId);
   }, [battle.isModalOpen, updateActiveRail]);
 
+  const battleApplyItems = battle.battleApplyList?.data?.battles ?? [];
+  const hasBattleApplyList = battleApplyItems.length > 0;
+
   return (
     <>
       <S.ContentBox>
@@ -70,11 +73,16 @@ export const Battle = () => {
                 <S.BattleListContainer>
                   {battles.map(battleItem => {
                     const judge = battle.judgeUpperHand(battleItem.result);
+                    const isPending = battleItem.result === MATCHVALUE.PENDING;
 
                     return (
                       <S.BattleProfileBox
                         key={battleItem.id}
-                        onClick={() => battle.selectBattleTarget(battleItem.id)}
+                        $disabled={isPending}
+                        onClick={() => {
+                          if (isPending) return;
+                          battle.selectBattleTarget(battleItem.id);
+                        }}
                       >
                         <S.ProfileContent>
                           <S.NameBox>
@@ -90,7 +98,7 @@ export const Battle = () => {
                         </S.ProfileContent>
 
                         <S.DetailBox>
-                          <S.DetailButton>
+                          <S.DetailButton $disabled={isPending}>
                             {battleItem.result === MATCHVALUE.WON ||
                             battleItem.result === MATCHVALUE.LOST
                               ? "결과 보기"
@@ -226,7 +234,12 @@ export const Battle = () => {
 
       {/* 배틀 생성 모달 */}
       {battle.isModalOpen && (
-        <Dialog width={43} height={30} isOpen={battle.isModalOpen} onClose={battle.closeModal}>
+        <Dialog
+          width={43}
+          height={activeTab === "battle-request-list" ? 25.5 : 30}
+          isOpen={battle.isModalOpen}
+          onClose={battle.closeModal}
+        >
           <S.ModalContainer>
             <S.TabHeader>
               <S.Tabs ref={tabsRef}>
@@ -250,6 +263,8 @@ export const Battle = () => {
                 <S.TabActiveRail $left={activeRail.left} $width={activeRail.width} />
               </S.TabRail>
             </S.TabHeader>
+
+            {battle.error && <S.ErrorText>{battle.error}</S.ErrorText>}
 
             {activeTab === "battle-create" ? (
               <>
@@ -280,10 +295,7 @@ export const Battle = () => {
                   {battle.periodOptions.map(day => (
                     <S.DateChoiceBox
                       key={day}
-                      onClick={() => {
-                        battle.setSelectedDay(day);
-                        battle.setDuration(day);
-                      }}
+                      onClick={() => battle.handlePeriodSelect(day)}
                       $active={battle.selectedDay === day}
                     >
                       {day}일
@@ -299,7 +311,7 @@ export const Battle = () => {
                     <Button
                       size="sm"
                       variant="primary"
-                      disabled={!battle.rivalSelectedId || !battle.duration}
+                      disabled={!battle.canCreateBattle}
                       onClick={battle.createBattle}
                     >
                       신청
@@ -308,7 +320,44 @@ export const Battle = () => {
                 </S.BottomBox>
               </>
             ) : (
-              <></>
+              <S.BattleApplyListContainer $hasApply={hasBattleApplyList}>
+                <S.UserChoiceContainer>
+                  {hasBattleApplyList ? (
+                    battleApplyItems.map(applyItem => (
+                      <S.UserChoiceBox key={applyItem.id} $isSelected={false} $isRival>
+                        <S.ProfileContent $height="3rem">
+                          <S.ProfileIcon />
+                          <S.ProfileTagBox>
+                            <S.ProfileName>{applyItem.enemy.name}</S.ProfileName>
+                            <S.ProfileSubText>
+                              {applyItem.startDate} ~ {applyItem.endDate}
+                            </S.ProfileSubText>
+                            <S.ProfileSubText>
+                              {applyItem.isMine ? "내가 보낸 신청" : "상대가 보낸 신청"}
+                            </S.ProfileSubText>
+                          </S.ProfileTagBox>
+                        </S.ProfileContent>
+
+                        <Button
+                          size="sm"
+                          variant="primary"
+                          disabled={!applyItem.isMine}
+                          onClick={() => battle.handleBattleApplyCancel(applyItem.id)}
+                        >
+                          취소
+                        </Button>
+                      </S.UserChoiceBox>
+                    ))
+                  ) : (
+                    <S.EmptyStateBox>
+                      <S.EmptyTitle>라이벌 신청 내역이 없습니다.</S.EmptyTitle>
+                      <S.EmptyDescription>
+                        보낸 신청 또는 받은 신청이 생기면 여기서 확인할 수 있어요.
+                      </S.EmptyDescription>
+                    </S.EmptyStateBox>
+                  )}
+                </S.UserChoiceContainer>
+              </S.BattleApplyListContainer>
             )}
           </S.ModalContainer>
         </Dialog>
