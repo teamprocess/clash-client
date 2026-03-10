@@ -1,13 +1,32 @@
 import { api } from "@/shared/api/axios";
 import type { ApiResponse } from "@/shared/api/types";
 
-export interface Task {
+export interface SubjectTask {
   id: number;
   name: string;
+  icon: string;
+  completed: boolean;
   studyTime: number;
 }
 
-export type RecordType = "TASK" | "ACTIVITY";
+export interface Subject {
+  id: number;
+  name: string;
+  icon: string;
+  studyTime: number;
+  tasks: SubjectTask[];
+}
+
+export interface Task {
+  id: number;
+  subjectId: number | null;
+  name: string;
+  icon: string;
+  completed: boolean;
+  studyTime: number;
+}
+
+export type RecordSessionType = "TASK" | "DEVELOP";
 export type IsoDateTimeString = string;
 export type MonitoredApp =
   | "VSCODE"
@@ -24,63 +43,50 @@ export type MonitoredApp =
 
 export interface TaskRecordSession {
   id: number;
-  recordType: "TASK";
+  sessionType: "TASK";
   startedAt: IsoDateTimeString;
   endedAt: IsoDateTimeString | null;
+  subject: {
+    id: number;
+    name: string;
+  } | null;
   task: {
     id: number;
     name: string;
-  };
-  activity: null;
+  } | null;
+  develop: null;
 }
 
-export interface ActivityRecordSession {
+export interface DevelopRecordSession {
   id: number;
-  recordType: "ACTIVITY";
+  sessionType: "DEVELOP";
   startedAt: IsoDateTimeString;
   endedAt: IsoDateTimeString | null;
+  subject: null;
   task: null;
-  activity: {
+  develop: {
     appId: MonitoredApp;
   };
 }
 
-export type RecordSession = TaskRecordSession | ActivityRecordSession;
+export type RecordSession = TaskRecordSession | DevelopRecordSession;
 
-export interface RecordTodayResponse {
+export interface RecordDailyResponse {
   date: string;
-  pomodoroEnabled: boolean;
   totalStudyTime: number;
   studyStoppedAt: IsoDateTimeString | null;
   sessions: RecordSession[];
 }
 
-export interface RecordSettingResponse {
-  pomodoroEnabled: boolean;
-  studyMinute: number;
-  breakMinute: number;
+export interface RecordStartRequest {
+  sessionType: RecordSessionType;
+  subjectId: number | null;
+  taskId: number | null;
+  appId: MonitoredApp | null;
 }
-
-export interface RecordSettingUpdateRequest {
-  pomodoroEnabled: boolean;
-  studyMinute: number;
-  breakMinute: number;
-}
-
-export type RecordStartRequest =
-  | {
-      recordType: "TASK";
-      taskId: number;
-      appId: null;
-    }
-  | {
-      recordType: "ACTIVITY";
-      taskId: null;
-      appId: MonitoredApp;
-    };
 
 export interface RecordStartResponse {
-  startedTime: IsoDateTimeString;
+  startedAt: IsoDateTimeString;
   session: RecordSession;
 }
 
@@ -89,13 +95,13 @@ export interface RecordStopResponse {
   session: RecordSession;
 }
 
-export interface RecordSwitchActivityAppRequest {
+export interface RecordSwitchDevelopAppRequest {
   appId: MonitoredApp;
 }
 
-export interface RecordSwitchActivityAppResponse {
+export interface RecordSwitchDevelopAppResponse {
   switchedAt: IsoDateTimeString;
-  session: RecordSession;
+  session: DevelopRecordSession;
 }
 
 export type RecordCurrentResponse = RecordSession | null;
@@ -104,102 +110,146 @@ export interface RecordMonitoredAppsResponse {
   apps: MonitoredApp[];
 }
 
-export interface RecordTasksResponse {
-  tasks: Task[];
+export interface RecordSubjectsResponse {
+  subjects: Subject[];
 }
 
-export interface RecordTaskCreateRequest {
+export interface RecordSubjectCreateRequest {
   name: string;
 }
 
-export interface RecordTaskUpdateRequest {
+export interface RecordSubjectUpdateRequest {
   name: string;
 }
 
-export interface RecordTaskUpdateResponse {
+export interface RecordSubjectUpdateResponse {
   id: number;
   name: string;
   studyTime: number;
 }
 
+export interface RecordTasksResponse {
+  tasks: Task[];
+}
+
+export interface RecordTaskCreateRequest {
+  subjectId: number | null;
+  name: string;
+}
+
+export interface RecordTaskUpdateRequest {
+  subjectId: number | null;
+  name: string;
+}
+
+export interface RecordTaskUpdateResponse {
+  id: number;
+  subjectId: number | null;
+  name: string;
+  completed: boolean;
+  studyTime: number;
+}
+
+export interface RecordTaskCompletionUpdateRequest {
+  completed: boolean;
+}
+
+export interface RecordTaskCompletionUpdateResponse {
+  id: number;
+  subjectId: number | null;
+  name: string;
+  completed: boolean;
+}
+
 export const recordApi = {
-  // 현재 일반 기록 현황
-  getToday: async () => {
-    const result = await api.get<ApiResponse<RecordTodayResponse>>("/record/today");
+  getToday: async (date?: string) => {
+    const result = await api.get<ApiResponse<RecordDailyResponse>>("/v2/record/daily", {
+      params: date ? { date } : undefined,
+    });
     return result.data;
   },
 
-  // 일반 기록 설정 조회
-  getSetting: async () => {
-    const result = await api.get<ApiResponse<RecordSettingResponse>>("/record/setting");
-    return result.data;
-  },
-
-  // 일반 기록 설정 변경
-  updateSetting: async (data: RecordSettingUpdateRequest) => {
-    const result = await api.patch<ApiResponse<RecordSettingResponse>>("/record/setting", data);
-    return result.data;
-  },
-
-  // 일반 기록 시작
   startRecord: async (data: RecordStartRequest) => {
-    const result = await api.post<ApiResponse<RecordStartResponse>>("/record/start", data);
+    const result = await api.post<ApiResponse<RecordStartResponse>>("/v2/record/start", data);
     return result.data;
   },
 
-  // 일반 기록 중지
   stopRecord: async () => {
-    const result = await api.post<ApiResponse<RecordStopResponse>>("/record/stop");
+    const result = await api.post<ApiResponse<RecordStopResponse>>("/v2/record/stop");
     return result.data;
   },
 
-  // 활동 앱 전환
-  switchActivityApp: async (data: RecordSwitchActivityAppRequest) => {
-    const result = await api.patch<ApiResponse<RecordSwitchActivityAppResponse>>(
-      "/record/activities/switch-app",
+  switchDevelopApp: async (data: RecordSwitchDevelopAppRequest) => {
+    const result = await api.patch<ApiResponse<RecordSwitchDevelopAppResponse>>(
+      "/v2/record/activities/switch-app",
       data
     );
     return result.data;
   },
 
-  // 현재 기록 세션 조회
   getCurrentRecord: async () => {
-    const result = await api.get<ApiResponse<RecordCurrentResponse>>("/record/current");
+    const result = await api.get<ApiResponse<RecordCurrentResponse>>("/v2/record/current");
     return result.data;
   },
 
-  // 활동 기록 가능 앱 목록 조회
   getMonitoredApps: async () => {
     const result = await api.get<ApiResponse<RecordMonitoredAppsResponse>>(
-      "/record/activities/monitored-apps"
+      "/v2/record/activities/monitored-apps"
     );
     return result.data;
   },
 
-  // 과목 목록 불러오기
-  getTasks: async () => {
-    const result = await api.get<ApiResponse<RecordTasksResponse>>("/record/tasks");
+  getSubjects: async () => {
+    const result = await api.get<ApiResponse<RecordSubjectsResponse>>("/v2/record/subjects");
     return result.data;
   },
 
-  // 과목 생성
-  createTask: async (data: RecordTaskCreateRequest) => {
-    const result = await api.post<ApiResponse<void>>("/record/tasks", data);
+  createSubject: async (data: RecordSubjectCreateRequest) => {
+    const result = await api.post<ApiResponse<void>>("/v2/record/subjects", data);
     return result.data;
   },
 
-  // 과목 수정
-  updateTask: async (taskId: number, data: RecordTaskUpdateRequest) => {
-    const result = await api.patch<ApiResponse<RecordTaskUpdateResponse>>(
-      `/record/tasks/${taskId}`,
+  updateSubject: async (subjectId: number, data: RecordSubjectUpdateRequest) => {
+    const result = await api.patch<ApiResponse<RecordSubjectUpdateResponse>>(
+      `/v2/record/subjects/${subjectId}`,
       data
     );
     return result.data;
   },
 
-  // 과목 삭제
+  deleteSubject: async (subjectId: number) => {
+    const result = await api.delete<ApiResponse<void>>(`/v2/record/subjects/${subjectId}`);
+    return result.data;
+  },
+
+  getTasks: async () => {
+    const result = await api.get<ApiResponse<RecordTasksResponse>>("/v2/record/tasks");
+    return result.data;
+  },
+
+  createTask: async (data: RecordTaskCreateRequest) => {
+    const result = await api.post<ApiResponse<void>>("/v2/record/tasks", data);
+    return result.data;
+  },
+
+  updateTask: async (taskId: number, data: RecordTaskUpdateRequest) => {
+    const result = await api.patch<ApiResponse<RecordTaskUpdateResponse>>(
+      `/v2/record/tasks/${taskId}`,
+      data
+    );
+    return result.data;
+  },
+
   deleteTask: async (taskId: number) => {
-    const result = await api.delete<ApiResponse<void>>(`/record/tasks/${taskId}`);
+    const result = await api.delete<ApiResponse<void>>(`/v2/record/tasks/${taskId}`);
+    return result.data;
+  },
+
+  updateTaskCompletion: async (taskId: number, data: RecordTaskCompletionUpdateRequest) => {
+    const result = await api.patch<ApiResponse<RecordTaskCompletionUpdateResponse>>(
+      `/v2/record/tasks/${taskId}/completion`,
+      data
+    );
     return result.data;
   },
 };

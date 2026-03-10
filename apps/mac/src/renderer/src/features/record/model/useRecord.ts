@@ -1,12 +1,23 @@
 import { useEffect } from "react";
 import { useRecordStore } from "./recordStore";
-import type { TaskRecordSession } from "@/entities/record";
-import { useRecordTasksQuery, useRecordTodayQuery } from "@/entities/record";
+import {
+  useRecordSubjectsQuery,
+  useRecordTasksQuery,
+  useRecordTodayQuery,
+} from "@/entities/record";
 
 export const useRecord = () => {
-  const { startTime, setCurrentStudyTime, setTasks, setActiveSession } = useRecordStore();
+  const { startTime, setCurrentStudyTime, setSubjects, setTasks, setActiveSession } =
+    useRecordStore();
+  const { data: subjectsResponse } = useRecordSubjectsQuery();
   const { data: tasksResponse } = useRecordTasksQuery();
   const { data: todayResponse } = useRecordTodayQuery();
+
+  useEffect(() => {
+    if (subjectsResponse?.success && subjectsResponse.data) {
+      setSubjects(subjectsResponse.data.subjects);
+    }
+  }, [setSubjects, subjectsResponse]);
 
   useEffect(() => {
     if (tasksResponse?.success && tasksResponse.data) {
@@ -19,25 +30,34 @@ export const useRecord = () => {
       return;
     }
 
-    // 앱 재진입 시에도 현재 진행 중인 TASK 세션 복원
-    const activeTaskSession = todayResponse.data.sessions.find(
-      (session): session is TaskRecordSession =>
-        session.endedAt === null && session.recordType === "TASK"
-    );
+    const activeSession =
+      todayResponse.data.sessions.find(session => session.endedAt === null) ?? null;
 
-    // 활성 공부 세션이 없으면 공부 중 아님 상태 명확하게 고정
-    if (!activeTaskSession) {
-      setActiveSession(null, null);
+    if (!activeSession) {
+      setActiveSession({
+        activeSessionType: null,
+        activeSubjectId: null,
+        activeTaskId: null,
+        startTime: null,
+        baseStudyTime: todayResponse.data.totalStudyTime,
+      });
       setCurrentStudyTime(0);
       return;
     }
 
-    const serverStartTime = new Date(activeTaskSession.startedAt).getTime();
+    const serverStartTime = new Date(activeSession.startedAt).getTime();
     const now = Date.now();
-    const elapsedSeconds = Math.floor((now - serverStartTime) / 1000);
+    const elapsedSeconds = Math.max(0, Math.floor((now - serverStartTime) / 1000));
+    const baseStudyTime = Math.max(todayResponse.data.totalStudyTime - elapsedSeconds, 0);
 
-    setActiveSession(activeTaskSession.task.id, now - elapsedSeconds * 1000);
-    setCurrentStudyTime(0);
+    setActiveSession({
+      activeSessionType: activeSession.sessionType,
+      activeSubjectId: activeSession.subject?.id ?? null,
+      activeTaskId: activeSession.task?.id ?? null,
+      startTime: now - elapsedSeconds * 1000,
+      baseStudyTime,
+    });
+    setCurrentStudyTime(elapsedSeconds);
   }, [setActiveSession, setCurrentStudyTime, todayResponse]);
 
   useEffect(() => {

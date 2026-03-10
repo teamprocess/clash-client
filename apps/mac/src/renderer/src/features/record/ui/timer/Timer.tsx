@@ -8,11 +8,11 @@ interface TimerProps {
 }
 
 export const Timer = ({ stopButtonPosition = "LEFT" }: TimerProps) => {
-  const { activeTaskId, stop } = useRecordStore();
+  const { activeSessionType, stop } = useRecordStore();
   const { totalStudyTime } = useLiveRecordStudyTime();
   const currentDate = new Date().toISOString().split("T")[0];
   const stopButton =
-    activeTaskId !== null ? (
+    activeSessionType !== null ? (
       <S.PlayButton
         onClick={() => {
           void stop();
@@ -22,7 +22,7 @@ export const Timer = ({ stopButtonPosition = "LEFT" }: TimerProps) => {
       </S.PlayButton>
     ) : null;
 
-  const Timer = (
+  const timerContent = (
     <>
       <S.DateBox>
         <S.ArrowIcon rotate="LEFT" />
@@ -39,7 +39,7 @@ export const Timer = ({ stopButtonPosition = "LEFT" }: TimerProps) => {
 
   return (
     <S.TimerContainer>
-      <S.TimerBox>{Timer}</S.TimerBox>
+      <S.TimerBox>{timerContent}</S.TimerBox>
     </S.TimerContainer>
   );
 };

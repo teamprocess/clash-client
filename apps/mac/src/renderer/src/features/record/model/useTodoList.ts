@@ -1,40 +1,8 @@
 import { useEffect, useRef, useState, type ChangeEvent, type KeyboardEvent } from "react";
 import { useRecordStore } from "./recordStore";
 
-export type TodoItem = {
-  id: number;
-  name: string;
-  isActive: boolean;
-  isCompleted: boolean;
-  parentTaskId: number | null;
-};
-
 type EditMode = "NONE" | "ADD" | "EDIT";
-const NO_PARENT_TASK = "NONE";
-
-const initialTodoItems: TodoItem[] = [
-  {
-    id: 1,
-    name: "학습 계획 정리하기",
-    isActive: false,
-    isCompleted: false,
-    parentTaskId: null,
-  },
-  {
-    id: 2,
-    name: "기록 V2 화면 검토하기",
-    isActive: true,
-    isCompleted: false,
-    parentTaskId: null,
-  },
-  {
-    id: 3,
-    name: "오늘 회고 작성하기",
-    isActive: false,
-    isCompleted: true,
-    parentTaskId: null,
-  },
-];
+const NO_PARENT_SUBJECT = "NONE";
 
 const MAX_TODO_NAME_LENGTH = 13;
 const TODO_NAME_INPUT_MAX_LENGTH = 14;
@@ -54,8 +22,18 @@ const getTodoNameErrorMessage = (name: string) => {
 };
 
 export const useTodoList = () => {
-  const tasks = useRecordStore(state => state.tasks);
-  const [todos, setTodos] = useState(initialTodoItems);
+  const {
+    subjects,
+    tasks,
+    activeSessionType,
+    activeTaskId,
+    startTask,
+    stop,
+    addTask,
+    updateTask,
+    deleteTask,
+    updateTaskCompletion,
+  } = useRecordStore();
   const [editMode, setEditMode] = useState<EditMode>("NONE");
   const [editingTodoId, setEditingTodoId] = useState<number | null>(null);
   const [todoName, setTodoName] = useState("");
@@ -72,8 +50,8 @@ export const useTodoList = () => {
   const shouldShowTodoNameTooltip =
     Boolean(todoNameErrorMessage) && (isTodoNameTooltipOpen || isTodoNameTooLong);
   const parentTaskOptions = [
-    { key: NO_PARENT_TASK, label: "과목 없음" },
-    ...tasks.map(task => ({ key: String(task.id), label: task.name })),
+    { key: NO_PARENT_SUBJECT, label: "과목 없음" },
+    ...subjects.map(subject => ({ key: String(subject.id), label: subject.name })),
   ];
 
   useEffect(() => {
@@ -93,7 +71,7 @@ export const useTodoList = () => {
   };
 
   const handleMoreClick = (todoId: number) => {
-    setOpenMenuTodoId(prev => (prev === todoId ? null : todoId));
+    setOpenMenuTodoId(previousId => (previousId === todoId ? null : todoId));
   };
 
   const handleAddClick = () => {
@@ -106,7 +84,7 @@ export const useTodoList = () => {
   };
 
   const handleEditClick = (todoId: number) => {
-    const todo = todos.find(item => item.id === todoId);
+    const todo = tasks.find(item => item.id === todoId);
 
     if (!todo) {
       return;
@@ -115,7 +93,7 @@ export const useTodoList = () => {
     setEditMode("EDIT");
     setEditingTodoId(todoId);
     setTodoName(todo.name);
-    setSelectedParentTaskId(todo.parentTaskId);
+    setSelectedParentTaskId(todo.subjectId);
     handleCloseMenu();
     closeTodoNameTooltip();
   };
@@ -128,7 +106,7 @@ export const useTodoList = () => {
     closeTodoNameTooltip();
   };
 
-  const handleSaveTodo = () => {
+  const handleSaveTodo = async () => {
     if (isTodoNameInvalid) {
       return false;
     }
@@ -136,37 +114,26 @@ export const useTodoList = () => {
     const trimmedTodoName = todoName.trim();
 
     if (editMode === "ADD") {
-      setTodos(prev => [
-        ...prev,
-        {
-          id: Math.max(0, ...prev.map(todo => todo.id)) + 1,
-          name: trimmedTodoName,
-          isActive: false,
-          isCompleted: false,
-          parentTaskId: selectedParentTaskId,
-        },
-      ]);
-      handleCancelEdit();
-      return true;
+      const saved = await addTask(trimmedTodoName, selectedParentTaskId);
+      if (saved) {
+        handleCancelEdit();
+      }
+      return saved;
     }
 
     if (editMode === "EDIT" && editingTodoId !== null) {
-      setTodos(prev =>
-        prev.map(todo =>
-          todo.id === editingTodoId
-            ? { ...todo, name: trimmedTodoName, parentTaskId: selectedParentTaskId }
-            : todo
-        )
-      );
-      handleCancelEdit();
-      return true;
+      const saved = await updateTask(editingTodoId, trimmedTodoName, selectedParentTaskId);
+      if (saved) {
+        handleCancelEdit();
+      }
+      return saved;
     }
 
     return false;
   };
 
-  const handleSaveClick = () => {
-    const isSaved = handleSaveTodo();
+  const handleSaveClick = async () => {
+    const isSaved = await handleSaveTodo();
     setIsTodoNameTooltipOpen(!isSaved);
   };
 
@@ -184,30 +151,42 @@ export const useTodoList = () => {
     if (event.key !== "Enter") return;
 
     event.preventDefault();
-    handleSaveClick();
+    void handleSaveClick();
   };
 
   const handleParentTaskChange = (value: string) => {
-    setSelectedParentTaskId(value === NO_PARENT_TASK ? null : Number(value));
+    setSelectedParentTaskId(value === NO_PARENT_SUBJECT ? null : Number(value));
   };
 
-  const handlePlayPauseClick = (todoId: number) => {
-    setTodos(prev =>
-      prev.map(todo => (todo.id === todoId ? { ...todo, isActive: !todo.isActive } : todo))
-    );
+  const handlePlayPauseClick = async (todoId: number) => {
+    if (activeSessionType === "TASK" && activeTaskId === todoId) {
+      await stop();
+      return;
+    }
+
+    if (activeSessionType === "DEVELOP") {
+      const stopped = await stop();
+      if (!stopped) {
+        return;
+      }
+    }
+
+    await startTask(todoId);
   };
 
-  const handleCompleteClick = (todoId: number) => {
-    setTodos(prev =>
-      prev.map(todo =>
-        todo.id === todoId ? { ...todo, isCompleted: true, isActive: false } : todo
-      )
-    );
-    handleCloseMenu();
+  const handleCompleteClick = async (todoId: number) => {
+    const completed = await updateTaskCompletion(todoId, true);
+    if (completed) {
+      handleCloseMenu();
+    }
   };
 
-  const handleDeleteClick = (todoId: number) => {
-    setTodos(prev => prev.filter(todo => todo.id !== todoId));
+  const handleDeleteClick = async (todoId: number) => {
+    const deleted = await deleteTask(todoId);
+
+    if (!deleted) {
+      return;
+    }
 
     if (editingTodoId === todoId) {
       handleCancelEdit();
@@ -222,11 +201,17 @@ export const useTodoList = () => {
       return null;
     }
 
-    return tasks.find(task => task.id === parentTaskId)?.name ?? null;
+    return subjects.find(subject => subject.id === parentTaskId)?.name ?? null;
   };
 
   return {
-    todos,
+    todos: tasks.map(task => ({
+      id: task.id,
+      name: task.name,
+      isActive: activeSessionType === "TASK" && activeTaskId === task.id,
+      isCompleted: task.completed,
+      parentTaskId: task.subjectId,
+    })),
     editMode,
     editingTodoId,
     todoName,
