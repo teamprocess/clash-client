@@ -45,8 +45,6 @@ export const Battle = () => {
   const battleApplyItems = battle.battleApplyList?.data?.battles ?? [];
   const hasBattleApplyList = battleApplyItems.length > 0;
 
-  // 브랜치명
-
   return (
     <>
       <S.ContentBox>
