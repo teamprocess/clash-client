@@ -1,6 +1,6 @@
 import styled, { css } from "styled-components";
 import { font } from "@clash/design-tokens/font";
-import DetailArrow from "../../assets/home/front.svg";
+import DetailArrow from "../../../../shared/ui/assets/front.svg";
 import { palette } from "@clash/design-tokens/theme";
 import Profile from "../../assets/home/profile.svg";
 import Plus from "../../assets/home/plus.svg";

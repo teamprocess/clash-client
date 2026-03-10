@@ -55,14 +55,15 @@ export const Battle = () => {
                 <S.Title>배틀</S.Title>
                 <S.SubText>배틀을 생성해 라이벌과 더 치열하게 경쟁할 수 있습니다.</S.SubText>
               </S.BattleTextBox>
-              <S.MakeBattle
+              <S.ArrowBox
                 onClick={() => {
-                  setActiveTab("battle-create");
+                  setActiveTab("battle-request-list");
                   battle.openModal();
                 }}
               >
-                배틀 생성하기
-              </S.MakeBattle>
+                배틀 신청 목록
+                <S.DetailArrowIcon />
+              </S.ArrowBox>
             </S.TitleBox>
 
             <S.GaroLine />
