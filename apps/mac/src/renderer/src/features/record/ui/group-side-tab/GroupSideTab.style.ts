@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { font } from "@clash/design-tokens";
 import Plus from "../../assets/plus.svg";
+import More from "../../assets/more.svg";
 
 export const GroupSideTabContainer = styled.div`
   display: flex;
@@ -42,16 +43,24 @@ export const GroupList = styled.div`
   }
 `;
 
-export const GroupListItem = styled.button<{ $isSelected: boolean }>`
+export const GroupListItem = styled.div<{ $isSelected: boolean }>`
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
   width: 100%;
-  padding: 1rem 0.75rem;
+  padding: 1.25rem 0.75rem;
+  border-bottom: 2px solid ${({ theme }) => theme.fill.alternative};
+`;
+
+export const GroupSelectButton = styled.button`
+  display: flex;
+  flex: 1;
+  min-width: 0;
+  align-items: center;
   background: none;
   border: none;
-  border-bottom: 1px solid ${({ theme }) => theme.line.normal};
+  padding: 0;
   cursor: pointer;
 `;
 
@@ -63,16 +72,16 @@ export const GroupListLeft = styled.div`
 `;
 
 export const SelectionDot = styled.div<{ $isSelected: boolean }>`
-  width: 1.125rem;
-  height: 1.125rem;
+  width: 1.5rem;
+  height: 1.5rem;
   flex-shrink: 0;
   border-radius: 50%;
-  border: 4px solid
+  border: 0.4rem solid
     ${({ theme, $isSelected }) => ($isSelected ? theme.primary.normal : theme.line.normal)};
 `;
 
 export const GroupListName = styled.span`
-  ${font.headline2.medium}
+  ${font.headline1.medium}
   color: ${({ theme }) => theme.label.alternative};
   overflow: hidden;
   text-overflow: ellipsis;
@@ -80,9 +89,63 @@ export const GroupListName = styled.span`
 `;
 
 export const GroupCategory = styled.span`
-  ${font.label.medium}
+  ${font.body.medium}
   color: ${({ theme }) => theme.label.assistive};
   white-space: nowrap;
+`;
+
+export const GroupListRight = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-shrink: 0;
+`;
+
+export const MoreIconWrapper = styled.div`
+  position: relative;
+  display: flex;
+  align-items: center;
+`;
+
+export const IconButton = styled.button`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+`;
+
+export const MoreIcon = styled(More)`
+  cursor: pointer;
+`;
+
+export const MenuList = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: max-content;
+`;
+
+export const MenuItem = styled.button`
+  display: block;
+  width: auto;
+  padding: 0.75rem 1.5rem;
+  text-align: left;
+  white-space: nowrap;
+  background: none;
+  border: none;
+  ${font.body.regular};
+  color: ${({ theme }) => theme.label.normal};
+  cursor: pointer;
+
+  &:hover {
+    background-color: ${({ theme }) => theme.fill.alternative};
+  }
+
+  &:not(:last-child) {
+    border-bottom: 1px solid ${({ theme }) => theme.line.normal};
+  }
 `;
 
 export const PlusIconWrapper = styled.button`
