@@ -7,6 +7,7 @@ import { PurchaseModal } from "@/features/shop/ui/purchase/PurchaseModal";
 import { usePurchaseProduct } from "@/entities/shop/model/usePurchaseProduct";
 import { useProductDetailStore } from "@/entities/shop/model/productDetailStore";
 import { ProductDetailPanel } from "@/features/shop/ui/detail-panel/ProductDetailPanel";
+import { ShopLoading } from "@/features/shop/ui/loading/ShopLoading";
 
 interface ProductsProps {
   products: Product[];
@@ -107,7 +108,7 @@ export const Products = ({
           onKeywordChange={onKeywordChange}
         />
         <S.ContentWrapper $isPanelOpen={false}>
-          <div>로딩 중...</div>
+          <ShopLoading variant="products" />
         </S.ContentWrapper>
       </S.MainContainer>
     );
