@@ -7,13 +7,19 @@ import { useEffect, useMemo, useState } from "react";
 import { useProductDetailStore } from "@/entities/shop/model/productDetailStore";
 import { usePurchaseProduct } from "@/entities/shop/model/usePurchaseProduct";
 import { ProductDetailPanel } from "@/features/shop/ui/detail-panel/ProductDetailPanel";
+import { ShopLoading } from "@/features/shop/ui/loading/ShopLoading";
 
 interface MainProductsProps {
   recommendedProducts: Product[];
   popularProducts: Product[];
+  isLoading?: boolean;
 }
 
-export const MainProducts = ({ recommendedProducts, popularProducts }: MainProductsProps) => {
+export const MainProducts = ({
+  recommendedProducts,
+  popularProducts,
+  isLoading,
+}: MainProductsProps) => {
   const products: Product[] = recommendedProducts.concat(popularProducts);
 
   const selectedId = useProductDetailStore(s => s.selectedProductId);
@@ -54,6 +60,14 @@ export const MainProducts = ({ recommendedProducts, popularProducts }: MainProdu
 
     productDiv.scrollIntoView({ behavior: "smooth" });
   }, [selectedId]);
+
+  if (isLoading) {
+    return (
+      <S.MainContainer>
+        <ShopLoading variant="main" />
+      </S.MainContainer>
+    );
+  }
 
   return (
     <S.MainContainer>
