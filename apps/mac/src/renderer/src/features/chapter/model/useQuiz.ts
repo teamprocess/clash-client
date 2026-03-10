@@ -1,6 +1,9 @@
 import { useRef, useState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 import type { Mission } from "@/features/chapter/model/chapter.types";
 import { chapterApi } from "@/entities/roadmap/chapter/api/chapterApi";
+import type { GetChapterDetailsResponse } from "@/entities/roadmap/chapter/model/chapter.types";
+import { chapterQueryKeys } from "@/entities/roadmap/chapter/api/query/chapterQueryKeys";
 import { getErrorMessage } from "@/shared/lib";
 
 type QuizState = {
@@ -11,16 +14,23 @@ type QuizState = {
   lastResult: boolean | null;
   explanation: string;
   isSubmitting: boolean;
+  isPassed: boolean | null;
 };
 
-const initialState: QuizState = {
-  currentIndex: 0,
-  answers: {},
-  correctCount: 0,
-  view: "quiz",
-  lastResult: null,
-  explanation: "",
-  isSubmitting: false,
+const createInitialState = (mission: Mission): QuizState => {
+  const maxIndex = Math.max(mission.questions.length - 1, 0);
+  const resolvedIndex = Math.min(Math.max(mission.currentQuestionIndex, 0), maxIndex);
+
+  return {
+    currentIndex: resolvedIndex,
+    answers: {},
+    correctCount: mission.correctCount,
+    view: "quiz",
+    lastResult: null,
+    explanation: "",
+    isSubmitting: false,
+    isPassed: mission.completed ? true : null,
+  };
 };
 
 type UseQuizParams = {
@@ -30,13 +40,14 @@ type UseQuizParams = {
 };
 
 export const useQuiz = ({ mission, onMissionComplete, onClose }: UseQuizParams) => {
-  const [state, setState] = useState<QuizState>(initialState);
+  const queryClient = useQueryClient();
+  const [state, setState] = useState<QuizState>(() => createInitialState(mission));
   const [error, setError] = useState<string | null>(null);
 
   const isClosingRef = useRef(false);
-  const isRequestingMissionResultRef = useRef(false);
-  const missionResultDoneRef = useRef(false);
-  const isResettingMissionRef = useRef(false);
+  const isRequestingChapterResultRef = useRef(false);
+  const chapterResultDoneRef = useRef(false);
+  const isResettingChapterRef = useRef(false);
 
   const questions = mission.questions;
   const currentQuestion = questions[state.currentIndex];
@@ -45,48 +56,73 @@ export const useQuiz = ({ mission, onMissionComplete, onClose }: UseQuizParams) 
   const isLocallyPassed = (correctCount: number) =>
     questions.length > 0 && correctCount === questions.length;
 
-  const requestMissionResult = async (fallbackCorrectCount?: number) => {
-    if (missionResultDoneRef.current) return;
-    if (isRequestingMissionResultRef.current) return;
-    isRequestingMissionResultRef.current = true;
+  const syncChapterCache = (
+    updater: (old: GetChapterDetailsResponse) => GetChapterDetailsResponse
+  ) => {
+    queryClient.setQueryData<GetChapterDetailsResponse>(
+      chapterQueryKeys.chapterDetails(mission.id),
+      old => (old ? updater(old) : old)
+    );
+  };
+
+  const requestChapterResult = async (fallbackCorrectCount?: number) => {
+    if (chapterResultDoneRef.current) return;
+    if (isRequestingChapterResultRef.current) return;
+    isRequestingChapterResultRef.current = true;
 
     try {
-      const response = await chapterApi.submitMissionResult(mission.id);
+      const response = await chapterApi.getChapterResult(mission.id);
       const passedByServer = response.success && response.data?.isCleared === true;
       const passedByLocal =
         fallbackCorrectCount != null ? isLocallyPassed(fallbackCorrectCount) : undefined;
 
       setError(null);
 
+      if (response.success && response.data) {
+        syncChapterCache(old => ({
+          ...old,
+          isCleared: response.data!.isCleared,
+          correctCount: response.data!.correctCount,
+          currentQuestionIndex: response.data!.isCleared
+            ? Math.max(old.totalQuestions - 1, 0)
+            : old.currentQuestionIndex,
+        }));
+
+        setState(prev => ({
+          ...prev,
+          correctCount: response.data!.correctCount,
+          isPassed: response.data!.isCleared,
+        }));
+      }
+
       if (passedByServer) {
-        missionResultDoneRef.current = true;
+        chapterResultDoneRef.current = true;
         onMissionComplete?.(mission.id);
         return;
       }
 
       if (!response.success) {
-        setError(response.message || "미션 결과 저장에 실패했습니다.");
-        console.error("미션 결과 저장/조회에 실패했습니다.", response);
-      } else if (passedByLocal === true) {
-        console.error(
-          "서버는 미션 미통과로 응답했지만( isCleared=false ), 로컬 기준으로는 통과입니다.",
-          { missionId: mission.id, fallbackCorrectCount, response }
-        );
+        setError(response.message || "챕터 결과 조회에 실패했습니다.");
+        console.error("챕터 결과 조회에 실패했습니다.", response);
       }
 
       if (passedByLocal === true) {
         onMissionComplete?.(mission.id);
+        setState(prev => ({ ...prev, isPassed: true }));
+      } else if (response.success && response.data) {
+        setState(prev => ({ ...prev, isPassed: response.data?.isCleared ?? false }));
       }
 
-      missionResultDoneRef.current = true;
+      chapterResultDoneRef.current = true;
     } catch (error: unknown) {
-      console.error("미션 결과 저장/조회 요청에 실패했습니다.", error);
-      setError(getErrorMessage(error, "미션 결과 저장에 실패했습니다."));
+      console.error("챕터 결과 조회 요청에 실패했습니다.", error);
+      setError(getErrorMessage(error, "챕터 결과 조회에 실패했습니다."));
       if (fallbackCorrectCount != null && isLocallyPassed(fallbackCorrectCount)) {
         onMissionComplete?.(mission.id);
+        setState(prev => ({ ...prev, isPassed: true }));
       }
     } finally {
-      isRequestingMissionResultRef.current = false;
+      isRequestingChapterResultRef.current = false;
     }
   };
 
@@ -101,13 +137,12 @@ export const useQuiz = ({ mission, onMissionComplete, onClose }: UseQuizParams) 
   };
 
   const handleConfirm = async () => {
-    if (selectedChoiceId == null || state.isSubmitting) return;
+    if (!currentQuestion || selectedChoiceId == null || state.isSubmitting) return;
 
     setState(prev => ({ ...prev, isSubmitting: true }));
 
     try {
       const response = await chapterApi.submitAnswer({
-        missionId: mission.id,
         questionId: currentQuestion.id,
         submittedChoiceId: selectedChoiceId,
       });
@@ -123,18 +158,28 @@ export const useQuiz = ({ mission, onMissionComplete, onClose }: UseQuizParams) 
       const result = response.data;
       const isLastQuestion = state.currentIndex === questions.length - 1;
       const nextCorrectCount = result.isCorrect ? state.correctCount + 1 : state.correctCount;
-      const nextPassed = isLocallyPassed(nextCorrectCount);
+      const nextIndex = Math.min(result.currentProgress, Math.max(questions.length - 1, 0));
+
+      syncChapterCache(old => ({
+        ...old,
+        currentQuestionIndex: nextIndex,
+        correctCount: nextCorrectCount,
+        isCleared: result.isChapterCleared,
+      }));
 
       setState(prev => ({
         ...prev,
-        correctCount: result.isCorrect ? prev.correctCount + 1 : prev.correctCount,
+        correctCount: nextCorrectCount,
         lastResult: result.isCorrect,
         explanation: result.explanation ?? "",
         view: "result",
         isSubmitting: false,
+        isPassed: isLastQuestion ? result.isChapterCleared : prev.isPassed,
       }));
 
-      if (isLastQuestion && nextPassed) await requestMissionResult(nextCorrectCount);
+      if (isLastQuestion) {
+        await requestChapterResult(nextCorrectCount);
+      }
     } catch (error: unknown) {
       console.error("정답 제출 요청에 실패했습니다.", error);
       setError(getErrorMessage(error, "정답 제출에 실패했습니다."));
@@ -157,27 +202,36 @@ export const useQuiz = ({ mission, onMissionComplete, onClose }: UseQuizParams) 
   };
 
   const resetState = () => {
-    missionResultDoneRef.current = false;
-    setState(initialState);
+    chapterResultDoneRef.current = false;
+    setState(
+      createInitialState({ ...mission, completed: false, currentQuestionIndex: 0, correctCount: 0 })
+    );
     setError(null);
   };
 
   const handleRestart = async () => {
-    if (isResettingMissionRef.current) return;
-    isResettingMissionRef.current = true;
+    if (isResettingChapterRef.current) return;
+    isResettingChapterRef.current = true;
 
     try {
-      const response = await chapterApi.resetMission({ missionId: mission.id });
+      const response = await chapterApi.resetChapter({ chapterId: mission.id });
       if (!response.success) {
-        setError(response.message || "미션 초기화에 실패했습니다.");
+        setError(response.message || "챕터 초기화에 실패했습니다.");
         return;
       }
 
+      syncChapterCache(old => ({
+        ...old,
+        currentQuestionIndex: 0,
+        correctCount: 0,
+        isCleared: false,
+      }));
+
       resetState();
     } catch (error: unknown) {
-      setError(getErrorMessage(error, "미션 초기화에 실패했습니다."));
+      setError(getErrorMessage(error, "챕터 초기화에 실패했습니다."));
     } finally {
-      isResettingMissionRef.current = false;
+      isResettingChapterRef.current = false;
     }
   };
 
@@ -186,8 +240,12 @@ export const useQuiz = ({ mission, onMissionComplete, onClose }: UseQuizParams) 
     isClosingRef.current = true;
 
     try {
-      if (state.view === "final" && isLocallyPassed(state.correctCount)) {
-        await requestMissionResult(state.correctCount);
+      if (
+        state.view === "final" &&
+        state.isPassed !== true &&
+        isLocallyPassed(state.correctCount)
+      ) {
+        await requestChapterResult(state.correctCount);
       }
     } finally {
       resetState();

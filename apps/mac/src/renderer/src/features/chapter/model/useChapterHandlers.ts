@@ -4,8 +4,6 @@ import type { Node, NodeStatus } from "@/features/chapter/roadmapData";
 import { useQueryClient } from "@tanstack/react-query";
 import type { GetChapterDetailsResponse } from "@/entities/roadmap/chapter/model/chapter.types";
 import { chapterQueryKeys } from "@/entities/roadmap/chapter/api/query/chapterQueryKeys";
-import { chapterApi } from "@/entities/roadmap/chapter/api/chapterApi";
-import { getErrorMessage } from "@/shared/lib";
 
 type UseChapterHandlersParams = {
   stages: Stage[];
@@ -40,28 +38,16 @@ export const useChapterHandlers = ({
     setCurrentMission(null);
   };
 
-  const handleMissionClick = async (missionId: number) => {
+  const handleMissionClick = (missionId: number) => {
     if (isOpeningMissionRef.current) return;
 
     const mission = currentStageMissions.find(m => m.id === missionId);
     if (!mission || mission.completed) return;
 
     isOpeningMissionRef.current = true;
-    try {
-      const response = await chapterApi.resetMission({
-        missionId: mission.id,
-      });
-      if (!response.success) {
-        console.error("미션 초기화에 실패했습니다.", response.message);
-      }
-    } catch (error: unknown) {
-      const errorMessage = getErrorMessage(error, "미션 초기화 요청에 실패했습니다.");
-      console.error("미션 초기화 요청에 실패했습니다.", errorMessage, error);
-    } finally {
-      isOpeningMissionRef.current = false;
-      setCurrentMission(mission);
-      setModalOpen(true);
-    }
+    setCurrentMission(mission);
+    setModalOpen(true);
+    isOpeningMissionRef.current = false;
   };
 
   const handleMissionComplete = (missionId: number) => {
@@ -74,7 +60,9 @@ export const useChapterHandlers = ({
         if (!old) return old;
         return {
           ...old,
-          missions: old.missions.map(m => (m.id === missionId ? { ...m, completed: true } : m)),
+          isCleared: true,
+          correctCount: old.totalQuestions,
+          currentQuestionIndex: old.totalQuestions > 0 ? old.totalQuestions - 1 : 0,
         };
       }
     );
@@ -85,19 +73,16 @@ export const useChapterHandlers = ({
       const updated = prevStages.map((stage, index) => {
         if (stage.id !== currentStageId) return stage;
 
-        const nextProgress = Math.min(stage.currentProgress + 1, stage.totalMissions);
-        const isStageCompleted = nextProgress === stage.totalMissions;
+        const isStageCompleted = true;
 
         if (isStageCompleted) {
           nextStageId = prevStages[index + 1]?.id ?? null;
         }
 
-        const nextStatus: StageStatus = isStageCompleted ? "completed" : stage.status;
-
         return {
           ...stage,
-          currentProgress: nextProgress,
-          status: nextStatus,
+          currentProgress: stage.totalMissions,
+          status: "completed" as StageStatus,
         };
       });
 
@@ -123,7 +108,7 @@ export const useChapterHandlers = ({
     });
   };
 
-  const handleSelectStage = async (stageId: number) => {
+  const handleSelectStage = (stageId: number) => {
     const stage = stages.find(s => s.id === stageId);
     const node = roadmapNodes.find(n => n.id === stageId);
     if (!stage || !node || node.status === "locked") return;
