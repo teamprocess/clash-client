@@ -42,6 +42,9 @@ export const Battle = () => {
     return () => cancelAnimationFrame(frameId);
   }, [battle.isModalOpen, updateActiveRail]);
 
+  const battleApplyItems = battle.battleApplyList?.data?.battles ?? [];
+  const hasBattleApplyList = battleApplyItems.length > 0;
+
   return (
     <>
       <S.ContentBox>
@@ -226,7 +229,12 @@ export const Battle = () => {
 
       {/* 배틀 생성 모달 */}
       {battle.isModalOpen && (
-        <Dialog width={43} height={30} isOpen={battle.isModalOpen} onClose={battle.closeModal}>
+        <Dialog
+          width={43}
+          height={activeTab === "battle-request-list" ? 23.825 : 30}
+          isOpen={battle.isModalOpen}
+          onClose={battle.closeModal}
+        >
           <S.ModalContainer>
             <S.TabHeader>
               <S.Tabs ref={tabsRef}>
@@ -308,30 +316,44 @@ export const Battle = () => {
                 </S.BottomBox>
               </>
             ) : (
-              <S.UserChoiceContainer>
-                {(battle.battleApplyList?.data?.battles ?? []).length > 0 ? (
-                  (battle.battleApplyList?.data?.battles ?? []).map(applyItem => (
-                    <S.UserChoiceBox key={applyItem.id} $isSelected={false}>
-                      <S.ProfileContent $height="3rem">
-                        <S.ProfileIcon />
-                        <S.ProfileTagBox>
-                          <S.ProfileName>{applyItem.enemy.name}</S.ProfileName>
-                          <S.ProfileSubText>
-                            {applyItem.startDate} ~ {applyItem.endDate}
-                          </S.ProfileSubText>
-                          <S.ProfileSubText>
-                            {applyItem.isMine ? "내가 보낸 신청" : "상대가 보낸 신청"}
-                          </S.ProfileSubText>
-                        </S.ProfileTagBox>
-                      </S.ProfileContent>
-                    </S.UserChoiceBox>
-                  ))
-                ) : (
-                  <S.DefaultBattleBox>
-                    <S.DefaultBattleText>현재 신청된 배틀 목록이 없습니다.</S.DefaultBattleText>
-                  </S.DefaultBattleBox>
-                )}
-              </S.UserChoiceContainer>
+              <S.BattleApplyListContainer $hasApply={hasBattleApplyList}>
+                <S.UserChoiceContainer>
+                  {hasBattleApplyList ? (
+                    battleApplyItems.map(applyItem => (
+                      <S.UserChoiceBox key={applyItem.id} $isSelected={false} $isRival>
+                        <S.ProfileContent $height="3rem">
+                          <S.ProfileIcon />
+                          <S.ProfileTagBox>
+                            <S.ProfileName>{applyItem.enemy.name}</S.ProfileName>
+                            <S.ProfileSubText>
+                              {applyItem.startDate} ~ {applyItem.endDate}
+                            </S.ProfileSubText>
+                            <S.ProfileSubText>
+                              {applyItem.isMine ? "내가 보낸 신청" : "상대가 보낸 신청"}
+                            </S.ProfileSubText>
+                          </S.ProfileTagBox>
+                        </S.ProfileContent>
+
+                        <Button
+                          size="sm"
+                          variant="primary"
+                          disabled={!applyItem.isMine}
+                          onClick={() => battle.handleBattleApplyCancel(applyItem.id)}
+                        >
+                          취소
+                        </Button>
+                      </S.UserChoiceBox>
+                    ))
+                  ) : (
+                    <S.EmptyStateBox>
+                      <S.EmptyTitle>라이벌 신청 내역이 없습니다.</S.EmptyTitle>
+                      <S.EmptyDescription>
+                        보낸 신청 또는 받은 신청이 생기면 여기서 확인할 수 있어요.
+                      </S.EmptyDescription>
+                    </S.EmptyStateBox>
+                  )}
+                </S.UserChoiceContainer>
+              </S.BattleApplyListContainer>
             )}
           </S.ModalContainer>
         </Dialog>

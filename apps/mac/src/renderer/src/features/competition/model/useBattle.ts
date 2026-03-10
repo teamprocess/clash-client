@@ -13,8 +13,9 @@ import {
   PeriodDay,
   MATCHVALUE,
 } from "@/entities/competition";
-import { getErrorMessage } from "@/shared/lib";
+import { getErrorMessage, queryClient } from "@/shared/lib";
 import { useBattleApplyListQuery } from "@/entities/competition/api/rival-competition/api/query/useBattle.query";
+import { useMutation } from "@tanstack/react-query";
 
 const analyzeCategoryOptions: { key: AnalyzeCategory; label: string }[] = [
   { key: "EXP", label: "EXP" },
@@ -26,6 +27,7 @@ export const useBattle = () => {
   const [battleTargetId, setBattleTargetId] = useState<number | null>(null);
   const [isBattleSelected, setIsBattleSelected] = useState(false);
   const [category, setCategory] = useState<AnalyzeCategory>("EXP");
+  const [error, setError] = useState<string | null>(null);
 
   const selectBattleTarget = (id: number) => {
     setBattleTargetId(prevId => {
@@ -161,6 +163,35 @@ export const useBattle = () => {
     }
   };
 
+  const cancelBattleApplyMutation = useMutation({
+    mutationFn: battleApi.postCancelBattle,
+    onSuccess: async () => {
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: ["battleApplyList"] }),
+        queryClient.invalidateQueries({ queryKey: ["battleList"] }),
+        queryClient.invalidateQueries({ queryKey: ["battle"] }),
+      ]);
+    },
+  });
+
+  const handleBattleApplyCancel = async (id: number) => {
+    if (!id) return false;
+
+    try {
+      setError(null);
+
+      await cancelBattleApplyMutation.mutateAsync({
+        id,
+      });
+
+      return true;
+    } catch (error: unknown) {
+      console.error("배틀 신청 취소 실패:", error);
+      setError(getErrorMessage(error, "배틀 신청 취소 중 오류가 발생했습니다."));
+      return false;
+    }
+  };
+
   return {
     isModalOpen,
     openModal,
@@ -201,6 +232,10 @@ export const useBattle = () => {
     battleData,
     battleDetailData,
     battleList,
+
     battleApplyList,
+    handleBattleApplyCancel,
+
+    error,
   };
 };
