@@ -1,14 +1,15 @@
 import styled from "styled-components";
 import { font } from "@clash/design-tokens/font";
-import Arrow from "../../assets/arrow.svg";
 import Fire from "../../assets/fire.svg";
-import Plus from "../../assets/plus.svg";
 import More from "../../assets/more.svg";
 import Cry from "../../assets/cry.svg";
 
 export const GroupContainer = styled.div`
   display: flex;
-  flex: 1;
+  flex: 2;
+  background-color: ${({ theme }) => theme.background.normal};
+  border-radius: 1rem;
+  height: 100%;
 `;
 
 export const GroupWrapper = styled.div`
@@ -16,45 +17,117 @@ export const GroupWrapper = styled.div`
   flex-direction: column;
   justify-content: flex-start;
   padding: 2rem;
-  gap: 1rem;
+  gap: 0;
   position: relative;
   width: 100%;
-  border-radius: 1rem;
-  background-color: ${({ theme }) => theme.background.alternative};
+  height: 100%;
 `;
 
-export const GroupHeader = styled.div`
+export const GroupContent = styled.div`
   display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+  height: 100%;
+  min-height: 0;
+  width: 100%;
+`;
+
+export const GroupBodySection = styled.div`
+  display: flex;
+  flex: 1;
+  min-height: 0;
+  flex-direction: column;
+  gap: 1.5rem;
+`;
+
+export const HeaderTimer = styled.div`
+  display: flex;
+  width: 100%;
+  align-items: center;
   justify-content: space-between;
+  gap: 1.5rem;
+  padding: 1.5rem 2rem 1.5rem 1.5rem;
 `;
 
-export const MemberCountBox = styled.p`
+export const HeaderTimerSection = styled.div`
   display: flex;
+  flex: 1;
+  min-width: 0;
+
+  & > div {
+    padding: 0;
+    height: auto;
+    align-items: flex-start;
+    justify-content: flex-start;
+  }
+
+  & > div > div {
+    align-items: flex-start;
+  }
+`;
+
+export const MyStudySummary = styled.div<{ $isActive: boolean }>`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.875rem;
+  margin-top: 1rem;
+  color: ${({ $isActive, theme }) => ($isActive ? theme.primary.normal : theme.line.normal)};
+`;
+
+export const MyStudyFireIcon = styled(Fire)`
+  width: 4rem;
+  height: 4rem;
+`;
+
+export const MyStudyTime = styled.span<{ $isActive: boolean }>`
+  ${font.headline1.medium}
+  color: ${({ $isActive, theme }) => ($isActive ? theme.primary.normal : theme.label.assistive)};
+`;
+
+export const GroupInfoRow = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.875rem;
+  width: 100%;
+`;
+
+export const MemberCapacityText = styled.p`
+  display: flex;
+  margin: 0;
   align-items: center;
   ${font.title2.medium}
   color: ${({ theme }) => theme.label.alternative};
 `;
 
-export const ActiveMemberCount = styled.span`
+export const CurrentMemberCount = styled.span`
   color: ${({ theme }) => theme.primary.normal};
 `;
 
-export const ArrowIcon = styled(Arrow)`
-  cursor: pointer;
-`;
-export const ReverseArrowIcon = styled(ArrowIcon)`
-  transform: rotate(180deg);
+export const GroupTitle = styled.span`
+  ${font.headline1.medium}
+  color: ${({ theme }) => theme.label.alternative};
 `;
 
-export const GroupNameBox = styled.div`
+export const GroupStats = styled.div`
   display: flex;
-  align-items: center;
-  gap: 0.75rem;
+  align-items: flex-end;
+  justify-content: space-between;
+  width: 100%;
+  gap: 2rem;
 `;
 
-export const GroupName = styled.span`
-  ${font.headline2.medium}
-  color: ${({ theme }) => theme.label.neutral};
+export const ActiveStudyingText = styled.p`
+  display: flex;
+  margin: 0;
+  align-items: center;
+  ${font.headline1.medium}
+`;
+
+export const ActiveStudyingCount = styled.span`
+  color: ${({ theme }) => theme.primary.normal};
 `;
 
 export const EmptyGroupState = styled.div`
@@ -88,12 +161,32 @@ export const EmptyGroupDescription = styled.p`
   color: ${({ theme }) => theme.label.assistive};
 `;
 
-export const MemberContent = styled.div`
+export const MemberActivitySection = styled.div`
+  display: flex;
+  flex: 1;
+  min-height: 0;
+  flex-direction: column;
+  gap: 0;
+  margin-top: 1rem;
+`;
+
+export const MemberActivityTitle = styled.h3`
+  margin: 0;
+  ${font.title2.medium}
+  color: ${({ theme }) => theme.label.alternative};
+`;
+
+export const MemberGrid = styled.div`
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
-  grid-gap: 2rem 1rem;
-  padding: 2rem 0 0 0;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  column-gap: 1rem;
+  row-gap: 1.25rem;
+  justify-items: center;
+  align-content: start;
+  padding: 0;
   overflow: auto;
+  min-height: 0;
+  flex: 1;
 
   &::-webkit-scrollbar {
     height: 0.5rem;
@@ -128,7 +221,7 @@ export const MemberBox = styled.div<{ $isActive: boolean }>`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 1.25rem;
+  gap: 0.875rem;
   color: ${({ $isActive, theme }) => ($isActive ? theme.primary.normal : theme.line.normal)};
 
   ${MemberStudyTime} {
@@ -140,29 +233,14 @@ export const MemberBox = styled.div<{ $isActive: boolean }>`
   }
 `;
 
-export const FireIon = styled(Fire)``;
+export const FireIcon = styled(Fire)``;
 
-export const MemberTextBox = styled.div`
+export const MemberInfoBox = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.25rem;
+  gap: 0.375rem;
 `;
-
-export const PlusIconWrapper = styled.button`
-  position: absolute;
-  bottom: 1.5rem;
-  right: 1.5rem;
-  background: none;
-  border: none;
-  padding: 0;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
-
-export const PlusIcon = styled(Plus)``;
 
 export const MoreIcon = styled(More)`
   cursor: pointer;

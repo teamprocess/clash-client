@@ -39,12 +39,17 @@ export const Date = styled.span`
 export const TimeBox = styled.div`
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 0.625rem;
 `;
 
 export const Time = styled.span`
+  display: inline-block;
+  min-width: 8ch;
+  text-align: center;
   color: ${({ theme }) => theme.label.alternative};
   ${font.display1.medium};
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum";
 `;
 
 export const PauseIcon = styled(Pause)`

@@ -1,77 +1,33 @@
 import * as S from "./Group.style";
-import { useEffect, useMemo, useState } from "react";
-import { type Group as GroupEntity, useMyGroupsQuery } from "@/entities/group";
+import { useEffect } from "react";
+import { type Group as GroupEntity } from "@/entities/group";
 import { useGetMyProfile } from "@/entities/user";
-import { useGroup } from "../../model/useGroup";
 import { formatTime } from "@/shared/lib";
-import { Popover } from "@/shared/ui";
-import { GroupDeleteModal } from "./modal/GroupDeleteModal";
-import { GroupEditModal } from "./modal/GroupEditModal";
-import { GroupFormModal } from "./modal/GroupFormModal";
 import { useGroupMembersActivity } from "../../model/useGroupMembersActivity";
+import { useLiveRecordStudyTime } from "../../model/useLiveRecordStudyTime";
+import { Timer } from "@/features/record/ui/timer/Timer";
 
-export const Group = () => {
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const { data: myGroupsResponse } = useMyGroupsQuery(1, 20);
+interface GroupProps {
+  currentGroup: GroupEntity | null;
+}
+
+export const Group = ({ currentGroup }: GroupProps) => {
   const { data: myProfile } = useGetMyProfile();
-  const groupList = myGroupsResponse?.data?.groups;
-  const groups = useMemo<GroupEntity[]>(() => groupList ?? [], [groupList]);
   const myUserId = myProfile?.id ?? null;
+  const { totalStudyTime, isStudying } = useLiveRecordStudyTime();
 
-  const {
-    menuRef,
-    isMenuOpen,
-    handleMoreClick,
-    handleCloseMenu,
-    handleOpenFormModal,
-    handleEditGroupRequest,
-    handleDeleteGroupRequest,
-    formModal,
-    editModal,
-    deleteModal,
-    setCurrentGroupId,
-  } = useGroup();
-
-  const safeCurrentIndex = useMemo(() => {
-    if (groups.length === 0) {
-      return 0;
-    }
-
-    return Math.min(currentIndex, groups.length - 1);
-  }, [currentIndex, groups.length]);
-  const currentGroup = useMemo(() => groups[safeCurrentIndex], [groups, safeCurrentIndex]);
   const { groupMembers, incrementStudyingMembers } = useGroupMembersActivity(
     currentGroup?.id ?? null,
     myUserId
   );
 
   useEffect(() => {
-    setCurrentGroupId(currentGroup ? currentGroup.id : null);
-  }, [currentGroup, setCurrentGroupId]);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
+    const interval = window.setInterval(() => {
       incrementStudyingMembers();
     }, 1000);
 
-    return () => clearInterval(interval);
+    return () => window.clearInterval(interval);
   }, [incrementStudyingMembers]);
-
-  const handlePrevGroup = () => {
-    if (groups.length <= 1) {
-      return;
-    }
-    setCurrentIndex(prev => (prev - 1 + groups.length) % groups.length);
-  };
-
-  const handleNextGroup = () => {
-    if (groups.length <= 1) {
-      return;
-    }
-    setCurrentIndex(prev => (prev + 1) % groups.length);
-  };
-
-  const isOwner = !!currentGroup && myUserId === currentGroup.owner.id;
 
   return (
     <>
@@ -88,68 +44,50 @@ export const Group = () => {
               </S.EmptyGroupTextBox>
             </S.EmptyGroupState>
           ) : (
-            <>
-              <S.GroupHeader>
-                <S.MemberCountBox>
-                  <S.ActiveMemberCount>{currentGroup.currentMemberCount}</S.ActiveMemberCount>
-                  &nbsp;/ {currentGroup.maxMembers}
-                </S.MemberCountBox>
-                <S.GroupNameBox>
-                  {groups.length > 1 && (
-                    <S.IconButton type="button" onClick={handlePrevGroup}>
-                      <S.ReverseArrowIcon />
-                    </S.IconButton>
-                  )}
-                  <S.GroupName>{currentGroup.name}</S.GroupName>
-                  {groups.length > 1 && (
-                    <S.IconButton type="button" onClick={handleNextGroup}>
-                      <S.ArrowIcon />
-                    </S.IconButton>
-                  )}
-                  <S.MoreIconWrapper ref={isMenuOpen ? menuRef : null}>
-                    <S.IconButton onClick={() => handleMoreClick()}>
-                      <S.MoreIcon />
-                    </S.IconButton>
-                    <Popover isOpen={isMenuOpen} onClose={handleCloseMenu} anchorRef={menuRef}>
-                      <S.MenuList>
-                        {isOwner ? (
-                          <>
-                            <S.MenuItem onClick={handleEditGroupRequest}>그룹 수정</S.MenuItem>
-                            <S.MenuItem onClick={() => handleDeleteGroupRequest("delete")}>
-                              그룹 삭제
-                            </S.MenuItem>
-                          </>
-                        ) : (
-                          <S.MenuItem onClick={() => handleDeleteGroupRequest("quit")}>
-                            그룹 탈퇴
-                          </S.MenuItem>
-                        )}
-                      </S.MenuList>
-                    </Popover>
-                  </S.MoreIconWrapper>
-                </S.GroupNameBox>
-              </S.GroupHeader>
-              <S.MemberContent>
-                {groupMembers.map(member => (
-                  <S.MemberBox key={member.id} $isActive={member.isStudying}>
-                    <S.FireIon />
-                    <S.MemberTextBox>
-                      <S.MemberName>{member.name}</S.MemberName>
-                      <S.MemberStudyTime>{formatTime(member.studyTime)}</S.MemberStudyTime>
-                    </S.MemberTextBox>
-                  </S.MemberBox>
-                ))}
-              </S.MemberContent>
-            </>
+            <S.GroupContent>
+              <S.HeaderTimer>
+                <S.HeaderTimerSection>
+                  <Timer stopButtonPosition="RIGHT" />
+                </S.HeaderTimerSection>
+                <S.MyStudySummary $isActive={isStudying}>
+                  <S.MyStudyFireIcon />
+                  <S.MyStudyTime $isActive={isStudying}>{formatTime(totalStudyTime)}</S.MyStudyTime>
+                </S.MyStudySummary>
+              </S.HeaderTimer>
+              <S.GroupBodySection>
+                <S.GroupInfoRow>
+                  <S.GroupTitle>{currentGroup.name}</S.GroupTitle>
+                  <S.GroupStats>
+                    <S.ActiveStudyingText>
+                      <S.ActiveStudyingCount>
+                        {currentGroup.currentMemberCount}명
+                      </S.ActiveStudyingCount>
+                      &nbsp;활동 중
+                    </S.ActiveStudyingText>
+                    <S.MemberCapacityText>
+                      <S.CurrentMemberCount>{currentGroup.currentMemberCount}</S.CurrentMemberCount>
+                      &nbsp;/ {currentGroup.maxMembers}
+                    </S.MemberCapacityText>
+                  </S.GroupStats>
+                </S.GroupInfoRow>
+                <S.MemberActivitySection>
+                  <S.MemberGrid>
+                    {groupMembers.map(member => (
+                      <S.MemberBox key={member.id} $isActive={member.isStudying}>
+                        <S.FireIcon />
+                        <S.MemberInfoBox>
+                          <S.MemberName>{member.name}</S.MemberName>
+                          <S.MemberStudyTime>{formatTime(member.studyTime)}</S.MemberStudyTime>
+                        </S.MemberInfoBox>
+                      </S.MemberBox>
+                    ))}
+                  </S.MemberGrid>
+                </S.MemberActivitySection>
+              </S.GroupBodySection>
+            </S.GroupContent>
           )}
-          <S.PlusIconWrapper onClick={handleOpenFormModal}>
-            <S.PlusIcon />
-          </S.PlusIconWrapper>
         </S.GroupWrapper>
       </S.GroupContainer>
-      <GroupFormModal {...formModal} />
-      <GroupEditModal {...editModal} />
-      <GroupDeleteModal {...deleteModal} />
     </>
   );
 };
