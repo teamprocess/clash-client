@@ -2,17 +2,18 @@ import * as S from "./ProductCard.style";
 import { calculateDiscountedPrice } from "@/features/shop/lib/calculateDiscountedPrice";
 
 interface ProductCardProps {
+  id: number;
   title: string;
   price: number;
   discount: number;
   onClick?: () => void;
 }
 
-export const ProductCard = ({ title, price, discount, onClick }: ProductCardProps) => {
+export const ProductCard = ({ id, title, price, discount, onClick }: ProductCardProps) => {
   const discounted = calculateDiscountedPrice(price, discount);
 
   return (
-    <S.CardContainer onClick={onClick}>
+    <S.CardContainer data-product-id={id} onClick={onClick}>
       <S.ProductInfoBox>
         <S.ProductTitle>{title}</S.ProductTitle>
         <S.PriceBox>

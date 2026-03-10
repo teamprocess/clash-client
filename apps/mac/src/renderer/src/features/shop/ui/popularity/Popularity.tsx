@@ -1,7 +1,6 @@
 import * as S from "./Popularity.style";
 import { ProductCard } from "@/features/shop/ui/card/ProductCard";
 import { Product } from "@/entities/product";
-import { useNavigate } from "react-router-dom";
 import { useProductDetailStore } from "@/entities/shop/model/productDetailStore";
 
 interface PopularityProps {
@@ -9,12 +8,10 @@ interface PopularityProps {
 }
 
 export const Popularity = ({ products }: PopularityProps) => {
-  const navigate = useNavigate();
-  const open = useProductDetailStore(s => s.open);
+  const toggle = useProductDetailStore(s => s.toggle);
 
   const handleCardClick = (product: Product) => {
-    open(product.id, product);
-    navigate("/shop/products");
+    toggle(product.id);
   };
 
   return (
@@ -24,6 +21,7 @@ export const Popularity = ({ products }: PopularityProps) => {
         {products.map(product => (
           <ProductCard
             key={product.id}
+            id={product.id}
             title={product.title}
             price={product.price}
             discount={product.discount}
