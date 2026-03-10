@@ -126,21 +126,26 @@ export const UpperHandJudge = styled.div<{ $type: string }>`
   border-radius: 0.5rem;
 `;
 
-export const BattleProfileBox = styled.button`
+export const BattleProfileBox = styled.button<{ $disabled?: boolean }>`
   ${flexRow};
   align-items: center;
   justify-content: space-between;
   padding: 0.8rem 0.5rem;
   border-bottom: 1px solid ${({ theme }) => theme.line.alternative};
-  cursor: pointer;
+  cursor: ${({ $disabled }) => ($disabled ? "default" : "pointer")};
   background-color: transparent;
   transition: 0.1s ease-in-out;
+  opacity: ${({ $disabled }) => ($disabled ? 0.6 : 1)};
 
-  &:hover {
-    padding: 0.8rem 1rem;
-    border-radius: 0.5rem;
-    background-color: ${({ theme }) => theme.background.alternative};
-  }
+  ${({ $disabled, theme }) =>
+    !$disabled &&
+    css`
+      &:hover {
+        padding: 0.8rem 1rem;
+        border-radius: 0.5rem;
+        background-color: ${theme.background.alternative};
+      }
+    `}
 `;
 
 export const BattleName = styled.p`
@@ -167,9 +172,9 @@ export const DetailBox = styled.div`
   align-items: center;
 `;
 
-export const DetailButton = styled.div`
+export const DetailButton = styled.div<{ $disabled?: boolean }>`
   ${font.label.medium};
-  color: ${({ theme }) => theme.label.alternative};
+  color: ${({ theme, $disabled }) => ($disabled ? theme.label.assistive : theme.label.alternative)};
 `;
 
 export const BackArrowIcon = styled(BackArrow)`
