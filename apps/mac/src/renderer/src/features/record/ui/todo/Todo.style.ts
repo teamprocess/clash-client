@@ -3,6 +3,8 @@ import { font } from "@clash/design-tokens";
 import More from "../../assets/more.svg";
 import Play from "../../assets/play.svg";
 import Pause from "../../assets/pause.svg";
+import Close from "@/features/profile/assets/close.svg";
+import Check from "@/features/section/assets/check.svg";
 
 export const TodoContainer = styled.div`
   display: flex;
@@ -111,6 +113,10 @@ export const ParentTaskName = styled.span`
   white-space: nowrap;
 `;
 
+export const ParentTaskSelectBox = styled.div`
+  flex-shrink: 0;
+`;
+
 export const TodoTextInput = styled.input`
   width: 100%;
   padding: 0.5rem 0.5rem 0.5rem 1rem;
@@ -162,10 +168,32 @@ export const MenuItem = styled.button`
   }
 `;
 
-export const ButtonBox = styled.div`
+export const ActionButtonsBox = styled.div`
   display: flex;
   justify-content: flex-end;
   gap: 0.5rem;
+`;
+
+export const ActionIconButton = styled.button`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+`;
+
+export const CancelIcon = styled(Close)`
+  width: 1.35rem;
+  height: 1.35rem;
+`;
+
+export const SaveIcon = styled(Check)`
+  width: 1.5rem;
+  height: 1.5rem;
 `;
 
 export const AddTodoButton = styled.button`
