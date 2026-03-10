@@ -126,10 +126,10 @@ export const RivalsManagementDialog = ({ isOpen, onClose, rival }: AddRivalsDial
             <S.BottomRow>
               {rival.error && <S.ErrorText>{rival.error}</S.ErrorText>}
               <S.ButtonBox>
-                <Button size={"sm"} variant={"secondary"} onClick={rival.handleSelectClose}>
+                <Button size="sm" variant="secondary" onClick={rival.handleSelectClose}>
                   초기화
                 </Button>
-                <Button size={"sm"} variant={"primary"} onClick={rival.handleRivalCreate}>
+                <Button size="sm" variant="primary" onClick={rival.handleRivalCreate}>
                   확인
                 </Button>
               </S.ButtonBox>
@@ -211,7 +211,7 @@ export const RivalsManagementDialog = ({ isOpen, onClose, rival }: AddRivalsDial
                           {user.rivalLinkingStatus === "PENDING" ? (
                             <Button
                               size="sm"
-                              variant={"primary"}
+                              variant="primary"
                               onClick={() => rival.handleRivalSignCancel(user.rivalId)}
                             >
                               취소
