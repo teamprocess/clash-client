@@ -260,6 +260,7 @@ export const PercentText = styled.p<{ $isRival: boolean }>`
   ${font.title2.bold}
   ${palette.neutral[99]}
   position: absolute;
+  z-index: 2;
   opacity: 0.6;
   padding-left: ${({ $isRival }) => ($isRival ? "0.5rem" : "0")};
   padding-right: ${({ $isRival }) => ($isRival ? "0" : "0.5rem")};
