@@ -126,8 +126,12 @@ export const RivalsManagementDialog = ({ isOpen, onClose, rival }: AddRivalsDial
             <S.BottomRow>
               {rival.error && <S.ErrorText>{rival.error}</S.ErrorText>}
               <S.ButtonBox>
-                <S.CloseButton onClick={rival.handleSelectClose}>초기화</S.CloseButton>
-                <S.OkayButton onClick={rival.handleRivalCreate}>확인</S.OkayButton>
+                <Button size={"sm"} variant={"secondary"} onClick={rival.handleSelectClose}>
+                  초기화
+                </Button>
+                <Button size={"sm"} variant={"primary"} onClick={rival.handleRivalCreate}>
+                  확인
+                </Button>
               </S.ButtonBox>
             </S.BottomRow>
           </>
