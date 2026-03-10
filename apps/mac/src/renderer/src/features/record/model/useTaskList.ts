@@ -4,7 +4,7 @@ import { recordApi, recordQueryKeys, useRecordTodayQuery } from "@/entities/reco
 import type { TaskRecordSession } from "@/entities/record";
 import { getErrorMessage, queryClient } from "@/shared/lib";
 
-type EditMode = "none" | "add" | "edit";
+type EditMode = "NONE" | "ADD" | "EDIT";
 const MAX_TASK_NAME_LENGTH = 13;
 const TASK_NAME_INPUT_MAX_LENGTH = 14;
 
@@ -27,7 +27,7 @@ export const useTaskList = () => {
     useRecordStore();
   const { data: todayResponse } = useRecordTodayQuery();
 
-  const [editMode, setEditMode] = useState<EditMode>("none");
+  const [editMode, setEditMode] = useState<EditMode>("NONE");
   const [editingTaskId, setEditingTaskId] = useState<number | null>(null);
   const [taskName, setTaskName] = useState("");
   const [openMenuTaskId, setOpenMenuTaskId] = useState<number | null>(null);
@@ -45,7 +45,7 @@ export const useTaskList = () => {
   const taskNameInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    if (editMode === "none") return;
+    if (editMode === "NONE") return;
     taskNameInputRef.current?.focus();
   }, [editMode, editingTaskId]);
 
@@ -124,7 +124,7 @@ export const useTaskList = () => {
   };
 
   const handleAddClick = () => {
-    setEditMode("add");
+    setEditMode("ADD");
     setTaskName("");
     closeTaskNameTooltip();
   };
@@ -132,7 +132,7 @@ export const useTaskList = () => {
   const handleEditClick = (taskId: number) => {
     const task = tasks.find(t => t.id === taskId);
     if (task) {
-      setEditMode("edit");
+      setEditMode("EDIT");
       setEditingTaskId(taskId);
       setTaskName(task.name);
       setOpenMenuTaskId(null);
@@ -149,7 +149,7 @@ export const useTaskList = () => {
   };
 
   const handleCancelEdit = () => {
-    setEditMode("none");
+    setEditMode("NONE");
     setEditingTaskId(null);
     setTaskName("");
     closeTaskNameTooltip();
@@ -159,11 +159,11 @@ export const useTaskList = () => {
     if (isTaskNameInvalid) return false;
     const trimmedTaskName = taskName.trim();
 
-    if (editMode === "add") {
+    if (editMode === "ADD") {
       await addTask(trimmedTaskName);
       handleCancelEdit();
       return true;
-    } else if (editMode === "edit" && editingTaskId !== null) {
+    } else if (editMode === "EDIT" && editingTaskId !== null) {
       await updateTask(editingTaskId, trimmedTaskName);
       handleCancelEdit();
       return true;

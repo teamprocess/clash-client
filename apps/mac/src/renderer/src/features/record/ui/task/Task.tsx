@@ -66,7 +66,7 @@ export const Task = () => {
             const isActive = isTaskActive(task.id);
             const studyTime = getTaskStudyTime(task.id);
             const isMenuOpen = openMenuTaskId === task.id;
-            const isEditing = editMode === "edit" && editingTaskId === task.id;
+            const isEditing = editMode === "EDIT" && editingTaskId === task.id;
 
             if (isEditing) {
               return (
@@ -113,7 +113,7 @@ export const Task = () => {
               </S.TaskItem>
             );
           })}
-          {editMode === "add" && (
+          {editMode === "ADD" && (
             <S.TaskItem>
               <S.TaskInputBox>{renderTaskNameInput()}</S.TaskInputBox>
               <S.TaskRightBox>
