@@ -11,7 +11,7 @@ import { getErrorMessage, queryClient } from "@/shared/lib";
 type ServerSessionState =
   | { type: "NONE"; appId: null }
   | { type: "TASK"; appId: null }
-  | { type: "ACTIVITY"; appId: MonitoredApp | null };
+  | { type: "DEVELOP"; appId: MonitoredApp | null };
 
 const SYNC_POLL_MS = 15000;
 
@@ -22,13 +22,13 @@ const parseServerSession = (
     return { type: "NONE", appId: null } satisfies ServerSessionState;
   }
 
-  if (data.recordType === "TASK") {
+  if (data.sessionType === "TASK") {
     return { type: "TASK", appId: null } satisfies ServerSessionState;
   }
 
   return {
-    type: "ACTIVITY",
-    appId: data.activity?.appId ?? null,
+    type: "DEVELOP",
+    appId: data.develop?.appId ?? null,
   } satisfies ServerSessionState;
 };
 
@@ -106,11 +106,11 @@ export const useActivityRecordSync = (
     return matchMonitoredApp(rawAppName, monitoredApps);
   }, []);
 
-  const stopActivitySession = useCallback(async () => {
+  const stopDevelopSession = useCallback(async () => {
     try {
       const stopResponse = await recordApi.stopRecord();
       if (!stopResponse.success) {
-        console.error("개발 활동 기록 중지 API 실패 응답:", stopResponse.message);
+        console.error("개발 기록 중지 API 실패 응답:", stopResponse.message);
         await refreshServerSession();
         return;
       }
@@ -118,68 +118,69 @@ export const useActivityRecordSync = (
       serverSessionRef.current = { type: "NONE", appId: null };
       await invalidateToday();
     } catch (error) {
-      const errorMessage = getErrorMessage(error, "개발 활동 기록 중지에 실패했습니다.");
-      console.error("개발 활동 기록 중지 실패:", errorMessage, error);
+      const errorMessage = getErrorMessage(error, "개발 기록 중지에 실패했습니다.");
+      console.error("개발 기록 중지 실패:", errorMessage, error);
       await refreshServerSession();
     }
   }, [invalidateToday, refreshServerSession]);
 
-  const switchActivitySession = useCallback(
+  const switchDevelopSession = useCallback(
     async (targetAppId: MonitoredApp) => {
       try {
-        const switchResponse = await recordApi.switchActivityApp({ appId: targetAppId });
+        const switchResponse = await recordApi.switchDevelopApp({ appId: targetAppId });
         const switchedSession = switchResponse.data?.session;
         if (
           !switchResponse.success ||
           !switchedSession ||
-          switchedSession.recordType !== "ACTIVITY"
+          switchedSession.sessionType !== "DEVELOP"
         ) {
           if (!switchResponse.success) {
-            console.error("개발 활동 기록 전환 API 실패 응답:", switchResponse.message);
+            console.error("개발 기록 전환 API 실패 응답:", switchResponse.message);
           }
           await refreshServerSession();
           return;
         }
 
         serverSessionRef.current = {
-          type: "ACTIVITY",
-          appId: switchedSession.activity.appId,
+          type: "DEVELOP",
+          appId: switchedSession.develop.appId,
         };
         await invalidateToday();
       } catch (error) {
-        const errorMessage = getErrorMessage(error, "개발 활동 기록 전환에 실패했습니다.");
-        console.error("개발 활동 기록 전환 실패:", errorMessage, error);
+        const errorMessage = getErrorMessage(error, "개발 기록 전환에 실패했습니다.");
+        console.error("개발 기록 전환 실패:", errorMessage, error);
         await refreshServerSession();
       }
     },
     [invalidateToday, refreshServerSession]
   );
 
-  const startActivitySession = useCallback(
+  const startDevelopSession = useCallback(
     async (targetAppId: MonitoredApp) => {
       try {
         const startResponse = await recordApi.startRecord({
-          recordType: "ACTIVITY",
+          sessionType: "DEVELOP",
+          subjectId: null,
           taskId: null,
           appId: targetAppId,
         });
         const startedSession = startResponse.data?.session;
-        if (!startResponse.success || !startedSession || startedSession.recordType !== "ACTIVITY") {
+        if (!startResponse.success || !startedSession || startedSession.sessionType !== "DEVELOP") {
           if (!startResponse.success) {
-            console.error("개발 활동 기록 시작 API 실패 응답:", startResponse.message);
+            console.error("개발 기록 시작 API 실패 응답:", startResponse.message);
           }
           await refreshServerSession();
           return;
         }
 
         serverSessionRef.current = {
-          type: "ACTIVITY",
-          appId: startedSession.activity.appId,
+          type: "DEVELOP",
+          appId: startedSession.develop.appId,
         };
         await invalidateToday();
       } catch (error) {
-        const errorMessage = getErrorMessage(error, "개발 활동 기록 시작에 실패했습니다.");
-        console.error("개발 활동 기록 시작 실패:", errorMessage, error);
+        const errorMessage = getErrorMessage(error, "개발 기록 시작에 실패했습니다.");
+        console.error("개발 기록 시작 실패:", errorMessage, error);
         await refreshServerSession();
       }
     },
@@ -189,52 +190,50 @@ export const useActivityRecordSync = (
   const syncServerSession = useCallback(
     async (rawTargetAppName: string | null) => {
       const targetAppId = normalizeTargetAppId(rawTargetAppName);
-      // 서버 최신 세션을 확인 후 공부 중에는 개발 자동 추적이 동작하지 않게 고정
       const serverSession = await refreshServerSession();
+
       if (serverSession.type === "TASK") {
-        // TASK가 끝난 직후에는 실제 IDE 전면 복귀가 있을 때만 ACTIVITY를 다시 시작
         requiresFrontmostToRestartRef.current = true;
         return;
       }
 
-      if (serverSession.type === "ACTIVITY") {
+      if (serverSession.type === "DEVELOP") {
         requiresFrontmostToRestartRef.current = false;
       } else if (requiresFrontmostToRestartRef.current && !isFrontmostMonitoredApp) {
         return;
       }
 
       if (targetAppId === null) {
-        if (serverSession.type !== "ACTIVITY") {
+        if (serverSession.type !== "DEVELOP") {
           return;
         }
 
-        await stopActivitySession();
+        await stopDevelopSession();
         return;
       }
 
-      if (serverSession.type === "ACTIVITY") {
+      if (serverSession.type === "DEVELOP") {
         if (serverSession.appId === targetAppId) {
           return;
         }
-        await switchActivitySession(targetAppId);
+        await switchDevelopSession(targetAppId);
         return;
       }
 
-      // 새 ACTIVITY 세션 시작은 "지금 전면 IDE인 경우"에만 허용
       if (!isFrontmostMonitoredApp) {
         return;
       }
 
-      await startActivitySession(targetAppId);
+      await startDevelopSession(targetAppId);
       requiresFrontmostToRestartRef.current = false;
     },
     [
       isFrontmostMonitoredApp,
       normalizeTargetAppId,
       refreshServerSession,
-      startActivitySession,
-      stopActivitySession,
-      switchActivitySession,
+      startDevelopSession,
+      stopDevelopSession,
+      switchDevelopSession,
     ]
   );
 

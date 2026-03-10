@@ -19,7 +19,7 @@ export const useSidebarMonitor = () => {
       !!(
         todayResponse?.success &&
         todayResponse.data?.sessions.some(
-          session => session.endedAt === null && session.recordType === "TASK"
+          session => session.endedAt === null && session.sessionType === "TASK"
         )
       ),
     [todayResponse]
@@ -41,15 +41,15 @@ export const useSidebarMonitor = () => {
         : latest
     );
 
-    if (latestActiveSession.recordType === "TASK") {
+    if (latestActiveSession.sessionType === "TASK") {
       return {
-        appName: latestActiveSession.task.name,
+        appName: latestActiveSession.task?.name ?? latestActiveSession.subject?.name ?? "일반 기록",
         startTime: new Date(latestActiveSession.startedAt),
       };
     }
 
     return {
-      appName: getMonitoredAppLabel(latestActiveSession.activity.appId),
+      appName: getMonitoredAppLabel(latestActiveSession.develop.appId),
       startTime: new Date(latestActiveSession.startedAt),
     };
   }, [todayResponse]);
