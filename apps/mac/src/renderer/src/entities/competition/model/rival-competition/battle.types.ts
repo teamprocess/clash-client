@@ -63,3 +63,17 @@ export interface PostBattleRequest {
   id: number | null;
   duration: number;
 }
+
+export type BattleApplyListResponse = {
+  battles: {
+    id: number;
+    enemy: {
+      id: number;
+      name: string;
+      profileImage: string;
+    };
+    startDate: string;
+    endDate: string;
+    isMine: boolean;
+  }[];
+};

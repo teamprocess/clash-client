@@ -13,7 +13,9 @@ import {
   PeriodDay,
   MATCHVALUE,
 } from "@/entities/competition";
-import { getErrorMessage } from "@/shared/lib";
+import { getErrorMessage, queryClient } from "@/shared/lib";
+import { useBattleApplyListQuery } from "@/entities/competition/api/rival-competition/api/query/useBattle.query";
+import { useMutation } from "@tanstack/react-query";
 
 const analyzeCategoryOptions: { key: AnalyzeCategory; label: string }[] = [
   { key: "EXP", label: "EXP" },
@@ -25,6 +27,7 @@ export const useBattle = () => {
   const [battleTargetId, setBattleTargetId] = useState<number | null>(null);
   const [isBattleSelected, setIsBattleSelected] = useState(false);
   const [category, setCategory] = useState<AnalyzeCategory>("EXP");
+  const [error, setError] = useState<string | null>(null);
 
   const selectBattleTarget = (id: number) => {
     setBattleTargetId(prevId => {
@@ -42,6 +45,7 @@ export const useBattle = () => {
   const { data: battleDetailRes } = useBattleDetailQuery(battleTargetId ?? 0);
   const { data: analyzeRes } = useAnalyzeBattleQuery(battleDetailRes?.data?.id ?? 0, category);
   const { data: battleListRes } = useBattleListQuery();
+  const { data: battleApplyList } = useBattleApplyListQuery();
 
   const battleData: BattleResponse | null = battleInfoRes?.data ?? null;
   const battleDetailData: BattleDetailResponse | null = battleDetailRes?.data ?? null;
@@ -59,7 +63,7 @@ export const useBattle = () => {
     if (result === MATCHVALUE.LOST) return "패배";
     if (result === MATCHVALUE.WON) return "승리";
     if (result === MATCHVALUE.DRAW) return "무승부";
-    return "동률";
+    return "수락 대기중";
   };
 
   const myAnalyzePoint = useMemo(() => {
@@ -92,6 +96,7 @@ export const useBattle = () => {
   const [rivalSelectedId, setRivalSelectedId] = useState<number | null>(null);
 
   const handleUserSelect = (id: number) => {
+    setError(null);
     setRivalSelectedId(prev => (prev === id ? null : id));
   };
 
@@ -115,13 +120,15 @@ export const useBattle = () => {
   };
 
   const remainDays = getRemainDays(battleDetailData?.expireDate);
-
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const openModal = () => setIsModalOpen(true);
+  const openModal = () => {
+    setError(null);
+    setIsModalOpen(true);
+  };
 
-  const [duration, setDuration] = useState<PeriodDay>(3);
+  const [duration, setDuration] = useState<PeriodDay | null>(null);
   const periodOptions: PeriodDay[] = [3, 5, 7];
-  const [selectedDay, setSelectedDay] = useState<number | null>(null);
+  const [selectedDay, setSelectedDay] = useState<PeriodDay | null>(null);
 
   const submittingRef = useRef(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -131,31 +138,82 @@ export const useBattle = () => {
 
     setIsModalOpen(false);
     setRivalSelectedId(null);
-    setDuration(3);
+    setDuration(null);
     setSelectedDay(null);
-
     setIsSubmitting(false);
+    setError(null);
   };
 
+  const handlePeriodSelect = (day: PeriodDay) => {
+    setError(null);
+    setSelectedDay(day);
+    setDuration(day);
+  };
+
+  const canCreateBattle = rivalSelectedId !== null && duration !== null && !isSubmitting;
+
   const createBattle = async () => {
-    if (!rivalSelectedId) return;
+    if (!rivalSelectedId || duration === null) {
+      setError("라이벌과 기간을 모두 선택해주세요.");
+      return;
+    }
 
     if (submittingRef.current) return;
 
     submittingRef.current = true;
     setIsSubmitting(true);
+    setError(null);
 
     try {
       await battleApi.postCreateBattle({
         id: rivalSelectedId,
         duration,
       });
+
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: ["battleInfo"] }),
+        queryClient.invalidateQueries({ queryKey: ["battleList"] }),
+        queryClient.invalidateQueries({ queryKey: ["battleApplyList"] }),
+      ]);
+
+      submittingRef.current = false;
+      setIsSubmitting(false);
+      closeModal();
     } catch (error: unknown) {
-      const errorMessage = getErrorMessage(error, "배틀 신청 중 오류가 발생했습니다.");
-      console.error("배틀 신청 실패", errorMessage, error);
+      console.error("배틀 신청 실패:", error);
+      setError(getErrorMessage(error, "배틀 신청 중 오류가 발생했습니다."));
     } finally {
       submittingRef.current = false;
-      closeModal();
+      setIsSubmitting(false);
+    }
+  };
+
+  const cancelBattleApplyMutation = useMutation({
+    mutationFn: battleApi.postCancelBattle,
+    onSuccess: async () => {
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: ["battleApplyList"] }),
+        queryClient.invalidateQueries({ queryKey: ["battleList"] }),
+        queryClient.invalidateQueries({ queryKey: ["battle"] }),
+      ]);
+    },
+  });
+
+  const handleBattleApplyCancel = async (id: number) => {
+    if (!id) return false;
+
+    try {
+      setError(null);
+
+      await cancelBattleApplyMutation.mutateAsync({
+        id,
+      });
+
+      return true;
+    } catch (error: unknown) {
+      console.error("배틀 신청 취소 실패:", error);
+      setError(getErrorMessage(error, "배틀 신청 취소 중 오류가 발생했습니다."));
+      return false;
     }
   };
 
@@ -166,10 +224,12 @@ export const useBattle = () => {
     closeModal,
     duration,
     setDuration,
+    selectedDay,
     periodOptions,
     createBattle,
-    selectedDay,
     setSelectedDay,
+    handlePeriodSelect,
+    canCreateBattle,
 
     selectBattleTarget,
     isBattleSelected,
@@ -199,5 +259,10 @@ export const useBattle = () => {
     battleData,
     battleDetailData,
     battleList,
+
+    battleApplyList,
+    handleBattleApplyCancel,
+
+    error,
   };
 };
