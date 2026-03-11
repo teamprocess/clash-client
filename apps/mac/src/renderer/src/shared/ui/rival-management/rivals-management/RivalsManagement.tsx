@@ -124,8 +124,14 @@ export const RivalsManagementDialog = ({ isOpen, onClose, rival }: AddRivalsDial
             </S.TopSection>
 
             <S.BottomRow>
-              {rival.error && <S.ErrorText>{rival.error}</S.ErrorText>}
               <S.ButtonBox>
+                {rival.error && (
+                  <S.ErrorText>
+                    {rival.error === "라이벌이 너무 많습니다."
+                      ? `라이벌은 최대 4명까지 설정할 수 있습니다.\n신청 목록을 확인해주세요!`
+                      : rival.error}
+                  </S.ErrorText>
+                )}
                 <Button size="sm" variant="secondary" onClick={rival.handleSelectClose}>
                   초기화
                 </Button>
@@ -179,7 +185,13 @@ export const RivalsManagementDialog = ({ isOpen, onClose, rival }: AddRivalsDial
 
             <S.DetermineContent>
               <S.DetermineTitle>라이벌 신청 목록</S.DetermineTitle>
-
+              {rival.error && (
+                <S.ErrorText>
+                  {rival.error === "라이벌이 너무 많습니다."
+                    ? `라이벌 신청을 보낸 내역이 있다면 취소를 한 후, 다른 사용자를 추가해보세요!`
+                    : rival.error}
+                </S.ErrorText>
+              )}
               <S.SearchInputBox>
                 <SearchInput
                   placeholder={"이름 또는 깃허브 아이디 검색"}
@@ -241,8 +253,6 @@ export const RivalsManagementDialog = ({ isOpen, onClose, rival }: AddRivalsDial
                 userName={rival.pendingDelete.name}
               />
             )}
-
-            {rival.error && <S.ErrorText>{rival.error}</S.ErrorText>}
           </S.ApplyContainer>
         )}
       </S.DialogLayout>
