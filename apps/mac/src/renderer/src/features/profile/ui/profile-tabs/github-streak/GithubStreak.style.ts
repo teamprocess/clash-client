@@ -1,9 +1,9 @@
 import styled from "styled-components";
 import { font } from "@clash/design-tokens/font";
 
-const CELL = 1.25;
-const GAP = 0.375;
-const RADIUS = 0.25;
+const CELL = 0.9;
+const GAP = 0.25;
+const RADIUS = 0.2;
 
 export const ActiveContainer = styled.div`
   width: 100%;

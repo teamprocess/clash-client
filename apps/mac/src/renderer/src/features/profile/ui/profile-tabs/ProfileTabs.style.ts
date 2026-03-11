@@ -15,7 +15,7 @@ export const Banner = styled.div`
 
 export const Background = styled.div`
   width: 100%;
-  height: 26.25rem;
+  height: 23.4rem;
   border-radius: 1rem;
   background: ${({ theme }) => theme.background.alternative};
   display: flex;
