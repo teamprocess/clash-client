@@ -1,5 +1,4 @@
 import * as S from "./GroupPage.style";
-import { RecordHeader } from "@/features/record/ui/record-header/RecordHeader";
 import { Group } from "@/features/record/ui/group/Group";
 import { GroupSideTab } from "@/features/record/ui/group-side-tab/GroupSideTab";
 import { useMemo, useState } from "react";
@@ -25,7 +24,6 @@ export const GroupPage = () => {
 
   return (
     <S.GroupPageContainer>
-      <RecordHeader active={"GROUP"} />
       <S.Content>
         <Group currentGroup={currentGroup} />
         <GroupSideTab

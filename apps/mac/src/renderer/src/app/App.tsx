@@ -8,9 +8,7 @@ import { GlobalStyle } from "./styles/GlobalStyle";
 import { useNetworkStatus, useTheme } from "@/shared/lib";
 import { MainLayout } from "@/app/layouts/main";
 import { HomePage } from "@/pages/home";
-import { CompetitionPage } from "@/pages/competition";
 import { GroupPage, RecordPage } from "@/pages/record";
-import { RecordPage } from "@/pages/record";
 import { ChapterPage, RoadmapMajorChoicePage } from "@/pages/roadmap";
 import { ProductsPage, ShopPage } from "@/pages/shop";
 import { AuthLayout } from "@/app/layouts/auth";
@@ -48,8 +46,19 @@ function App() {
               <Route element={<MainLayout />}>
                 <Route path="/" element={<HomePage />} />
                 <Route path="/home/transition" element={<ComparePage />} />
-                <Route path="/record" element={<RecordPage />} />
-                <Route path="/record/group" element={<GroupPage />} />
+                <Route
+                  element={
+                    <TabLayout
+                      tabs={[
+                        { name: "개인 기록", url: "/record" },
+                        { name: "그룹 스터디", url: "/record/group" },
+                      ]}
+                    />
+                  }
+                >
+                  <Route path="/record" element={<RecordPage />} />
+                  <Route path="/record/group" element={<GroupPage />} />
+                </Route>
                 <Route path="/roadmap" element={<RoadmapPage />} />
                 <Route path="/roadmap/major-choice" element={<RoadmapMajorChoicePage />} />
                 <Route path="/roadmap/:sectionId" element={<ChapterPage />} />
