@@ -11,13 +11,24 @@ export const TopProfile = ({
   isEditing,
   onCancel,
   onSave,
-  onEditProfile,
+  // onEditProfile,
 }: TopProfileProps) => {
   const { signOut, isLoading } = useSignOut();
   const { data: user } = useGetMyProfile();
 
   return (
     <S.Banner $accent={bannerAccentColor} $bgImage={bannerBgImageUrl}>
+      <S.ProfileCard>
+        <S.ProfileImgWrap $accent={badgeAccentColor} $bgImage={badgeBgImageUrl}>
+          <S.ProfileImg />
+        </S.ProfileImgWrap>
+
+        <S.UserInfo>
+          <S.Name>{user?.name}</S.Name>
+          <S.BadgeDot />
+        </S.UserInfo>
+      </S.ProfileCard>
+
       <S.Button>
         {isEditing ? (
           <>
@@ -30,26 +41,15 @@ export const TopProfile = ({
           </>
         ) : (
           <>
-            <S.ButtonEdit type="button" onClick={onEditProfile}>
-              수정
-            </S.ButtonEdit>
+            {/*<S.ButtonEdit type="button" onClick={onEditProfile}>*/}
+            {/*  수정*/}
+            {/*</S.ButtonEdit>*/}
             <S.ButtonLogout type="button" onClick={signOut} disabled={isLoading}>
               {isLoading ? "로그아웃 중.." : "로그아웃"}
             </S.ButtonLogout>
           </>
         )}
       </S.Button>
-
-      <S.ProfileCard>
-        <S.ProfileImgWrap $accent={badgeAccentColor} $bgImage={badgeBgImageUrl}>
-          <S.ProfileImg />
-        </S.ProfileImgWrap>
-
-        <S.UserInfo>
-          <S.Name>{user?.name}</S.Name>
-          <S.BadgeDot />
-        </S.UserInfo>
-      </S.ProfileCard>
     </S.Banner>
   );
 };
