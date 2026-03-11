@@ -13,6 +13,8 @@ export { ModalActions } from "./dialog-actions";
 export type { ModalActionsProps } from "./dialog-actions";
 export { RivalsManagementDialog, DeleteRivalsConfirmDialog } from "./rival-management";
 export { SearchInput } from "./search-input";
+export { SlideSelector } from "./slide-selector";
+export type { SlideSelectorProps } from "./slide-selector";
 export { MyRivalUsers } from "./myrival-users/MyRivalUsers";
 export { UserRanking } from "./home-ranking-user/UserRanking";
 export { GrowthRate } from "./growth-rate/GrowthRate";
