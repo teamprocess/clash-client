@@ -30,6 +30,10 @@ export const useGroupMembersActivity = (groupId: number | null, myUserId: number
       })
       .sort((left, right) => right.studyTime - left.studyTime);
   }, [activityResponse, myUserId, myTotalStudyTime, isMyStudying, elapsedSeconds]);
+  const activeStudyingCount = useMemo(
+    () => groupMembers.filter(member => member.isStudying).length,
+    [groupMembers]
+  );
 
   // 조회한 그룹 멤버 중 공부 중인 멤버의 공부 시간을 1초 늘리는 Callback 함수
   const incrementStudyingMembers = useCallback(() => {
@@ -38,6 +42,7 @@ export const useGroupMembersActivity = (groupId: number | null, myUserId: number
 
   return {
     groupMembers,
+    activeStudyingCount,
     incrementStudyingMembers,
   };
 };
