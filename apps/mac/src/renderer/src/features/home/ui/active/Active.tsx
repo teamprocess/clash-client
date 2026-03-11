@@ -40,8 +40,6 @@ export const Active = ({ activeData }: ActiveProps) => {
           <S.Title>내 활동 분석</S.Title>
         </S.TitleBox>
 
-        <S.Line />
-
         <S.StreakContainer>
           <S.StreakBox>
             <S.StreakTitle>스트릭</S.StreakTitle>

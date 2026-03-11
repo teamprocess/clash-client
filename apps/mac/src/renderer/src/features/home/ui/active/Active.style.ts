@@ -26,6 +26,7 @@ export const TitleBox = styled.div`
   ${flexRow};
   justify-content: space-between;
   align-items: center;
+  margin-bottom: 0.725rem;
 `;
 
 export const Title = styled.div`
