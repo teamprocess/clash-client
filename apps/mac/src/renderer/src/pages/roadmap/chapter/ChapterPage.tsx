@@ -133,8 +133,13 @@ export const ChapterPage = () => {
       {view.missionModalOpen && (
         <MissionContainer
           currentStage={domain.currentStage}
-          currentStageMissions={domain.currentStageMissions}
-          onMissionClick={handlers.handleMissionClick}
+          description={
+            domain.currentStageDetailsError
+              ? "챕터 설명을 불러오지 못했습니다. 잠시 후 다시 확인해주세요."
+              : domain.currentStageDescription
+          }
+          isLoading={domain.currentStageDetailsLoading}
+          onClose={handlers.handleCloseMissionPanel}
         />
       )}
 

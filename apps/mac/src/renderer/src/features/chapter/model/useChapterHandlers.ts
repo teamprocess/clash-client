@@ -38,6 +38,10 @@ export const useChapterHandlers = ({
     setCurrentMission(null);
   };
 
+  const handleCloseMissionPanel = () => {
+    setMissionModalOpen(false);
+  };
+
   const handleMissionClick = (missionId: number) => {
     if (isOpeningMissionRef.current) return;
 
@@ -121,6 +125,7 @@ export const useChapterHandlers = ({
     handleMissionClick,
     handleMissionComplete,
     handleSelectStage,
+    handleCloseMissionPanel,
     handleCloseQuizModal,
   };
 };

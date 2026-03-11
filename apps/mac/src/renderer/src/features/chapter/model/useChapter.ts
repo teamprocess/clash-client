@@ -9,7 +9,6 @@ export const useChapter = (sectionId: number) => {
   const domain = useChapterDomain(sectionId);
   const view = useChapterView({ loading: domain.loading, sectionId });
 
-  // 모달 열릴 때만 상세 조회
   const chapterDetailsQuery = useChapterDetailsQuery(domain.currentStageId, {
     enabled: view.missionModalOpen,
   });
@@ -71,8 +70,12 @@ export const useChapter = (sectionId: number) => {
     domain: {
       roadmapNodes: domain.roadmapNodes,
       currentStage,
+      currentStageDescription: chapterDetailsQuery.data?.description ?? null,
       currentStageMissions,
       currentStageMissionsLoading: chapterDetailsQuery.isLoading,
+      currentStageDetailsLoading: chapterDetailsQuery.isLoading,
+      currentStageDetailsError:
+        chapterDetailsQuery.error instanceof Error ? chapterDetailsQuery.error.message : null,
       sectionTitle: domain.sectionTitle,
       loading: domain.loading,
       error: domain.error,
@@ -86,6 +89,7 @@ export const useChapter = (sectionId: number) => {
       handleMissionClick: handlers.handleMissionClick,
       handleMissionComplete: handlers.handleMissionComplete,
       handleSelectStage: handlers.handleSelectStage,
+      handleCloseMissionPanel: handlers.handleCloseMissionPanel,
       handleCloseQuizModal: handlers.handleCloseQuizModal,
     },
   };
