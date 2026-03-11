@@ -40,8 +40,10 @@ export const GroupFormFields = ({
   const maxMembersInputId = `${idPrefix}-max-members-input`;
   const descriptionInputId = `${idPrefix}-description-input`;
   const activeCategory = selectedType ?? GROUP_CATEGORIES[0];
-  const activeCategoryIndex = Math.max(0, GROUP_CATEGORIES.indexOf(activeCategory));
-  const categoryCount = GROUP_CATEGORIES.length;
+  const categoryOptions = GROUP_CATEGORIES.map(category => ({
+    key: category,
+    label: GROUP_CATEGORY_LABELS[category],
+  }));
 
   return (
     <S.FieldsContainer>
@@ -84,15 +86,18 @@ export const GroupFormFields = ({
         <S.InputBox>
           <S.Label htmlFor={typeInputId}>{typeLabel}</S.Label>
           <S.SlideButtonBox id={typeInputId}>
-            <S.SlideActiveIndicator $activeIndex={activeCategoryIndex} $count={categoryCount} />
-            {GROUP_CATEGORIES.map(category => (
+            <S.SlideActiveIndicator
+              $activeIndex={Math.max(0, GROUP_CATEGORIES.indexOf(activeCategory))}
+              $count={GROUP_CATEGORIES.length}
+            />
+            {categoryOptions.map(option => (
               <S.SlideButton
-                key={category}
+                key={option.key}
                 type="button"
-                $isActive={selectedType === category}
-                onClick={() => onTypeSelect(category)}
+                $isActive={activeCategory === option.key}
+                onClick={() => onTypeSelect(option.key)}
               >
-                {GROUP_CATEGORY_LABELS[category]}
+                {option.label}
               </S.SlideButton>
             ))}
           </S.SlideButtonBox>

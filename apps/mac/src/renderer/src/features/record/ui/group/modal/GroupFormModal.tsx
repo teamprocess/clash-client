@@ -1,13 +1,5 @@
-import {
-  type ChangeEvent,
-  type FormEvent,
-  useCallback,
-  useEffect,
-  useLayoutEffect,
-  useRef,
-  useState,
-} from "react";
-import { Dialog, ModalActions } from "@/shared/ui";
+import { type ChangeEvent, type FormEvent, useCallback, useState } from "react";
+import { Dialog, ModalActions, SlideSelector } from "@/shared/ui";
 import { GROUP_CATEGORY_LABELS } from "@/entities/group";
 import type { GroupFormModalProps } from "../../../model/useGroup";
 import { useGroupList } from "../../../model/useGroupList";
@@ -31,10 +23,6 @@ export const GroupFormModal = ({
   setJoinPassword,
 }: GroupFormModalProps) => {
   const [activeTab, setActiveTab] = useState<"join" | "create">("join");
-  const tabsRef = useRef<HTMLDivElement>(null);
-  const joinTabRef = useRef<HTMLButtonElement>(null);
-  const createTabRef = useRef<HTMLButtonElement>(null);
-  const [activeRail, setActiveRail] = useState({ left: 0, width: 0 });
   const {
     groups,
     pagination,
@@ -55,42 +43,6 @@ export const GroupFormModal = ({
   } | null>(null);
   const [joinPasswordError, setJoinPasswordError] = useState("");
   const [joiningGroupId, setJoiningGroupId] = useState<number | null>(null);
-
-  const updateActiveRail = useCallback(() => {
-    const tabsElement = tabsRef.current;
-    const activeTabElement = activeTab === "join" ? joinTabRef.current : createTabRef.current;
-
-    if (!tabsElement || !activeTabElement) {
-      return;
-    }
-
-    const tabsRect = tabsElement.getBoundingClientRect();
-    const activeRect = activeTabElement.getBoundingClientRect();
-
-    setActiveRail({
-      left: activeRect.left - tabsRect.left,
-      width: activeRect.width,
-    });
-  }, [activeTab]);
-
-  useLayoutEffect(() => {
-    if (!isOpen) {
-      return;
-    }
-
-    const frameId = requestAnimationFrame(updateActiveRail);
-    return () => cancelAnimationFrame(frameId);
-  }, [isOpen, updateActiveRail]);
-
-  useEffect(() => {
-    if (!isOpen) {
-      return;
-    }
-
-    const handleResize = () => updateActiveRail();
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, [isOpen, updateActiveRail]);
 
   const resetJoinPasswordDialog = useCallback(() => {
     setPasswordTargetGroup(null);
@@ -162,27 +114,14 @@ export const GroupFormModal = ({
     <>
       <Dialog width={64} height={40} isOpen={isOpen} onClose={handleCloseGroupFormModal} gap={3}>
         <S.ModalContent>
-          <S.TabHeader>
-            <S.Tabs ref={tabsRef}>
-              <S.Tab
-                ref={joinTabRef}
-                $isActive={activeTab === "join"}
-                onClick={() => handleTabChange("join")}
-              >
-                그룹 참여
-              </S.Tab>
-              <S.Tab
-                ref={createTabRef}
-                $isActive={activeTab === "create"}
-                onClick={() => handleTabChange("create")}
-              >
-                그룹 생성
-              </S.Tab>
-            </S.Tabs>
-            <S.TabRail>
-              <S.TabActiveRail $left={activeRail.left} $width={activeRail.width} />
-            </S.TabRail>
-          </S.TabHeader>
+          <SlideSelector
+            value={activeTab}
+            options={[
+              { key: "join", label: "그룹 참여" },
+              { key: "create", label: "그룹 생성" },
+            ]}
+            onChange={handleTabChange}
+          />
 
           {activeTab === "join" ? (
             <S.JoinContainer>
