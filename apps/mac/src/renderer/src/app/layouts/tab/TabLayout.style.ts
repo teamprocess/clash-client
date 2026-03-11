@@ -4,6 +4,7 @@ import { font } from "@clash/design-tokens";
 export const Wrapper = styled.div`
   width: 100%;
   height: 100%;
+  min-height: 0;
   display: flex;
   flex-direction: column;
   gap: 1rem;
@@ -36,6 +37,7 @@ export const TabItem = styled.button<{ $isActive: boolean }>`
 `;
 
 export const Content = styled.div`
-  overflow: auto;
+  min-height: 0;
   flex: 1;
+  overflow: auto;
 `;
