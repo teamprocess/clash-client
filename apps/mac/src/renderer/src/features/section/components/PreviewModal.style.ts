@@ -338,15 +338,17 @@ export const TargetBoxIntro = styled.div`
 export const TargetBoxList = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: flex-start;
   gap: 0.75rem;
+  width: 100%;
+  overflow-y: auto;
 `;
 
 export const TargetItem = styled.div`
   display: flex;
   align-items: flex-start;
   gap: 0.75rem;
+  word-break: break-all;
 `;
 
 export const TargetStarWrapper = styled.div`
