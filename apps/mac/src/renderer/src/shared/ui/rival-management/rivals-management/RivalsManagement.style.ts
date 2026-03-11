@@ -144,6 +144,7 @@ export const ErrorText = styled.span`
   ${font.label.medium};
   color: ${palette.red[60]};
   width: 100%;
+  white-space: pre-line;
 `;
 
 export const TabHeader = styled.div`
@@ -208,6 +209,7 @@ export const ApplyContainer = styled.div`
 export const DetermineTitle = styled.p`
   ${font.title2.medium};
   color: ${palette.neutral[97]};
+  width: 100%;
 `;
 
 export const DetermineContent = styled.div`
