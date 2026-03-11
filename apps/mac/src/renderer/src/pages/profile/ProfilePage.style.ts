@@ -7,12 +7,12 @@ export const Background = styled.div`
   border-radius: 1rem;
   padding: 2rem;
   box-sizing: border-box;
-  -webkit-app-region: no-drag;
 `;
 
 export const BodyRow = styled.div`
   display: flex;
   gap: 2rem;
+  height: 100%;
   align-items: flex-start;
   width: 100%;
   justify-content: flex-start;

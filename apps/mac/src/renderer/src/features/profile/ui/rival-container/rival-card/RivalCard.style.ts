@@ -3,9 +3,9 @@ import type { UserStatus } from "@/features/competition/model/useMyRivals";
 import { font } from "@clash/design-tokens/font";
 import { palette } from "@clash/design-tokens/theme";
 
-export const RivalBox = styled.section`
+export const RivalBox = styled.div`
   width: 100%;
-  height: 100%;
+  min-height: 5.25rem;
   border-radius: 0.75rem;
   background: ${({ theme }) => theme.background.alternative};
   padding: 0.875rem 1rem;
@@ -51,6 +51,8 @@ export const UserName = styled.p`
   ${font.caption.bold}
   color: ${({ theme }) => theme.label.assistive};
   white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 
 export const StatusBadge = styled.span<{ $status: UserStatus }>`
@@ -96,6 +98,9 @@ export const AppRow = styled.div`
 export const AppName = styled.p`
   ${font.caption.regular}
   color: ${({ theme }) => theme.label.neutral};
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 
 export const Time = styled.p`
