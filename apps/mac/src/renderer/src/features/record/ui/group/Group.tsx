@@ -16,7 +16,7 @@ export const Group = ({ currentGroup }: GroupProps) => {
   const myUserId = myProfile?.id ?? null;
   const { totalStudyTime, isStudying } = useLiveRecordStudyTime();
 
-  const { groupMembers, incrementStudyingMembers } = useGroupMembersActivity(
+  const { groupMembers, activeStudyingCount, incrementStudyingMembers } = useGroupMembersActivity(
     currentGroup?.id ?? null,
     myUserId
   );
@@ -59,9 +59,7 @@ export const Group = ({ currentGroup }: GroupProps) => {
                   <S.GroupTitle>{currentGroup.name}</S.GroupTitle>
                   <S.GroupStats>
                     <S.ActiveStudyingText>
-                      <S.ActiveStudyingCount>
-                        {currentGroup.currentMemberCount}명
-                      </S.ActiveStudyingCount>
+                      <S.ActiveStudyingCount>{activeStudyingCount}명</S.ActiveStudyingCount>
                       &nbsp;활동 중
                     </S.ActiveStudyingText>
                     <S.MemberCapacityText>
