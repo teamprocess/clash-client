@@ -11,7 +11,7 @@ export const TopProfile = ({
   isEditing,
   onCancel,
   onSave,
-  onEditProfile,
+  // onEditProfile,
 }: TopProfileProps) => {
   const { signOut, isLoading } = useSignOut();
   const { data: user } = useGetMyProfile();
@@ -41,9 +41,9 @@ export const TopProfile = ({
           </>
         ) : (
           <>
-            <S.ButtonEdit type="button" onClick={onEditProfile}>
-              수정
-            </S.ButtonEdit>
+            {/*<S.ButtonEdit type="button" onClick={onEditProfile}>*/}
+            {/*  수정*/}
+            {/*</S.ButtonEdit>*/}
             <S.ButtonLogout type="button" onClick={signOut} disabled={isLoading}>
               {isLoading ? "로그아웃 중.." : "로그아웃"}
             </S.ButtonLogout>
