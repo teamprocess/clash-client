@@ -4,13 +4,14 @@ import { ItemPanel, ItemPreviewPayload } from "./item-panel/ItemPanel";
 import { TimePanel } from "@/features/profile";
 import { GithubActivityPanel } from "@/features/profile/ui/profile-tabs/github-activity-panel/GithubAcivityPanel";
 
-interface ProfileTabsProps {
+export interface ProfileTabsProps {
   onPreviewChange?: (payload: ItemPreviewPayload) => void;
 }
 
 export type TabKey = "github" | "item" | "time";
 
-export const ProfileTabs = ({ onPreviewChange }: ProfileTabsProps) => {
+// origin props: { onPreviewChange }: ProfileTabsProps
+export const ProfileTabs = () => {
   const [active, setActive] = useState<TabKey>("github");
   const [activeRail, setActiveRail] = useState({ left: 0, width: 0 });
 
@@ -79,7 +80,7 @@ export const ProfileTabs = ({ onPreviewChange }: ProfileTabsProps) => {
 
       <S.Background>
         {active === "github" && <GithubActivityPanel />}
-        {active === "item" && <ItemPanel onPreviewChange={onPreviewChange} />}
+        {active === "item" && <ItemPanel />}
         {active === "time" && <TimePanel />}
       </S.Background>
     </S.Banner>
