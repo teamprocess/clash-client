@@ -10,7 +10,11 @@ export const TabLayout = ({ tabs }: TabLayoutProps) => {
   const navigate = useNavigate();
   const location = useLocation();
   const pathname = location.pathname;
-  const currentTab = tabs.find(t => t.url == pathname);
+  const currentTab = tabs.find(t => t.url === pathname);
+  const activeIndex = Math.max(
+    0,
+    tabs.findIndex(tab => tab.url === currentTab?.url)
+  );
 
   if (currentTab == null) {
     console.error("tabs에 등록되어 있지 않은 페이지입니다.");
@@ -20,9 +24,15 @@ export const TabLayout = ({ tabs }: TabLayoutProps) => {
   return (
     <S.Wrapper>
       <S.TabContainer>
-        {tabs.map((t, idx) => (
-          <S.TabItem key={idx} $isActive={t.url == currentTab.url} onClick={() => navigate(t.url)}>
-            {t.name}
+        <S.TabActiveIndicator $activeIndex={activeIndex} $count={tabs.length} />
+        {tabs.map((tab, idx) => (
+          <S.TabItem
+            key={idx}
+            type="button"
+            $isActive={tab.url === currentTab.url}
+            onClick={() => navigate(tab.url)}
+          >
+            {tab.name}
           </S.TabItem>
         ))}
       </S.TabContainer>
