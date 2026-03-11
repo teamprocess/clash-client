@@ -9,16 +9,20 @@ import { Timer } from "@/features/record/ui/timer/Timer";
 
 interface GroupProps {
   currentGroup: GroupEntity | null;
+  selectedDate: string;
+  onPreviousDate: () => void;
+  onNextDate: () => void;
 }
 
-export const Group = ({ currentGroup }: GroupProps) => {
+export const Group = ({ currentGroup, selectedDate, onPreviousDate, onNextDate }: GroupProps) => {
   const { data: myProfile } = useGetMyProfile();
   const myUserId = myProfile?.id ?? null;
-  const { totalStudyTime, isStudying } = useLiveRecordStudyTime();
+  const { totalStudyTime, isStudying } = useLiveRecordStudyTime(selectedDate);
 
   const { groupMembers, activeStudyingCount, incrementStudyingMembers } = useGroupMembersActivity(
     currentGroup?.id ?? null,
-    myUserId
+    myUserId,
+    selectedDate
   );
 
   useEffect(() => {
@@ -47,7 +51,13 @@ export const Group = ({ currentGroup }: GroupProps) => {
             <S.GroupContent>
               <S.HeaderTimer>
                 <S.HeaderTimerSection>
-                  <Timer stopButtonPosition="RIGHT" />
+                  <Timer
+                    date={selectedDate}
+                    onPreviousDate={onPreviousDate}
+                    onNextDate={onNextDate}
+                    canGoNextDate
+                    stopButtonPosition="RIGHT"
+                  />
                 </S.HeaderTimerSection>
                 <S.MyStudySummary $isActive={isStudying}>
                   <S.MyStudyFireIcon />

@@ -64,11 +64,11 @@ export const groupApi = {
   },
 
   // 그룹 활동 조회
-  getGroupActivity: async (groupId: number, page?: number, pageSize?: number) => {
+  getGroupActivity: async (groupId: number, page?: number, pageSize?: number, date?: string) => {
     const result = await api.get<ApiResponse<GetGroupActivityResponse>>(
       `/groups/${groupId}/activity`,
       {
-        params: { page, pageSize },
+        params: { page, pageSize, date },
       }
     );
     return result.data;

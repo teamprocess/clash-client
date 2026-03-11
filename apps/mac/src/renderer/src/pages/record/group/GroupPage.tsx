@@ -7,9 +7,11 @@ import { useGroup } from "@/features/record/model/useGroup";
 import { GroupDeleteModal } from "@/features/record/ui/group/modal/GroupDeleteModal";
 import { GroupEditModal } from "@/features/record/ui/group/modal/GroupEditModal";
 import { GroupFormModal } from "@/features/record/ui/group/modal/GroupFormModal";
+import { getTodayRecordDate, shiftRecordDate } from "@/features/record/model/recordDate";
 
 export const GroupPage = () => {
   const [selectedGroupId, setSelectedGroupId] = useState<number | null>(null);
+  const [selectedDate, setSelectedDate] = useState(() => getTodayRecordDate());
   const { data: myGroupsResponse } = useMyGroupsQuery(1, 20);
   const groups = useMemo<GroupEntity[]>(
     () => myGroupsResponse?.data?.groups ?? [],
@@ -25,7 +27,16 @@ export const GroupPage = () => {
   return (
     <S.GroupPageContainer>
       <S.Content>
-        <Group currentGroup={currentGroup} />
+        <Group
+          currentGroup={currentGroup}
+          selectedDate={selectedDate}
+          onPreviousDate={() => {
+            setSelectedDate(currentDate => shiftRecordDate(currentDate, -1));
+          }}
+          onNextDate={() => {
+            setSelectedDate(currentDate => shiftRecordDate(currentDate, 1));
+          }}
+        />
         <GroupSideTab
           groups={groups}
           currentGroupId={currentGroup?.id ?? null}
