@@ -10,6 +10,7 @@ import { MainLayout } from "@/app/layouts/main";
 import { HomePage } from "@/pages/home";
 import { CompetitionPage } from "@/pages/competition";
 import { GroupPage, RecordPage } from "@/pages/record";
+import { RecordPage } from "@/pages/record";
 import { ChapterPage, RoadmapMajorChoicePage } from "@/pages/roadmap";
 import { ProductsPage, ShopPage } from "@/pages/shop";
 import { AuthLayout } from "@/app/layouts/auth";
@@ -19,6 +20,8 @@ import { RoadmapPage } from "@/pages/roadmap/section/RoadmapPage";
 import { ComparePage } from "@/pages/home/compare/ComparePage";
 import { ProfilePage } from "@/pages/profile";
 import { OfflinePage } from "@/pages/offline";
+import { TabLayout } from "@/app/layouts/tab";
+import { MyCompetitionPage, RivalCompetitionPage } from "@/pages/competition";
 
 const RECAPTCHA_SITE_KEY = import.meta.env.VITE_RECAPTCHA_SITE_KEY || "";
 
@@ -45,19 +48,40 @@ function App() {
               <Route element={<MainLayout />}>
                 <Route path="/" element={<HomePage />} />
                 <Route path="/home/transition" element={<ComparePage />} />
-                <Route path="/competition" element={<CompetitionPage />} />
                 <Route path="/record" element={<RecordPage />} />
                 <Route path="/record/group" element={<GroupPage />} />
                 <Route path="/roadmap" element={<RoadmapPage />} />
                 <Route path="/roadmap/major-choice" element={<RoadmapMajorChoicePage />} />
                 <Route path="/roadmap/:sectionId" element={<ChapterPage />} />
                 <Route path="/profile" element={<ProfilePage />} />
-              </Route>
-              <Route element={<MainLayout variant="scrollable" />}>
-                <Route path="/shop" element={<ShopPage />} />
-              </Route>
-              <Route element={<MainLayout variant="fixed" />}>
-                <Route path="/shop/products" element={<ProductsPage />} />
+                {/* Competition */}
+                <Route
+                  element={
+                    <TabLayout
+                      tabs={[
+                        { name: "나와의 경쟁", url: "/competition" },
+                        { name: "라이벌과의 경쟁", url: "/competition/rival" },
+                      ]}
+                    />
+                  }
+                >
+                  <Route path="/competition" element={<MyCompetitionPage />} />
+                  <Route path="/competition/rival" element={<RivalCompetitionPage />} />
+                </Route>
+                {/* Shop */}
+                <Route
+                  element={
+                    <TabLayout
+                      tabs={[
+                        { name: "메인", url: "/shop" },
+                        { name: "전체 상품 목록", url: "/shop/products" },
+                      ]}
+                    />
+                  }
+                >
+                  <Route path="/shop" element={<ShopPage />} />
+                  <Route path="/shop/products" element={<ProductsPage />} />
+                </Route>
               </Route>
               <Route element={<AuthLayout />}>
                 <Route path="/sign-in" element={<SignInPage />} />

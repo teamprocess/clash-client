@@ -1,27 +1,12 @@
-import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { productApi, Product } from "@/entities/product";
+import {
+  usePopularProductsQuery,
+  useRecommendedProductsQuery,
+} from "@/entities/shop/api/query/useShop.query";
 
 export const useShop = () => {
-  const [recommendedProducts, setRecommendedProducts] = useState<Product[]>([]);
-  const [popularProducts, setPopularProducts] = useState<Product[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      setIsLoading(true);
-      const [recommendedData, popularData] = await Promise.all([
-        productApi.getRecommendedProducts(),
-        productApi.getPopularProducts(),
-      ]);
-
-      setRecommendedProducts(recommendedData.data?.products ?? []);
-      setPopularProducts(popularData.data?.products ?? []);
-      setIsLoading(false);
-    };
-
-    fetchData();
-  }, []);
+  const recommendedProductsQuery = useRecommendedProductsQuery();
+  const popularProductsQuery = usePopularProductsQuery();
 
   const navigate = useNavigate();
   const navigateToProducts = () => {
@@ -29,9 +14,9 @@ export const useShop = () => {
   };
 
   return {
-    recommendedProducts,
-    popularProducts,
-    isLoading,
+    recommendedProducts: recommendedProductsQuery.data?.data?.products ?? [],
+    popularProducts: popularProductsQuery.data?.data?.products ?? [],
+    isLoading: recommendedProductsQuery.isLoading || popularProductsQuery.isLoading,
     navigateToProducts,
   };
 };

@@ -6,6 +6,7 @@ import Date from "@/features/home/assets/home/date.svg";
 import BackArrow from "@/features/home/assets/home/back.svg";
 import Fire from "@/features/home/assets/home/fire.svg";
 import Checked from "@/features/home/assets/home/check-box.svg";
+import DetailArrow from "@/shared/ui/assets/front.svg";
 
 const flexRow = css`
   display: flex;
@@ -126,17 +127,26 @@ export const UpperHandJudge = styled.div<{ $type: string }>`
   border-radius: 0.5rem;
 `;
 
-export const BattleProfileBox = styled.button`
+export const BattleProfileBox = styled.button<{ $disabled?: boolean }>`
   ${flexRow};
   align-items: center;
   justify-content: space-between;
   padding: 0.8rem 0.5rem;
   border-bottom: 1px solid ${({ theme }) => theme.line.alternative};
-  cursor: pointer;
+  cursor: ${({ $disabled }) => ($disabled ? "default" : "pointer")};
   background-color: transparent;
-  &:hover {
-    background-color: ${({ theme }) => theme.background.alternative};
-  }
+  transition: 0.1s ease-in-out;
+  opacity: ${({ $disabled }) => ($disabled ? 0.6 : 1)};
+
+  ${({ $disabled, theme }) =>
+    !$disabled &&
+    css`
+      &:hover {
+        padding: 0.8rem 1rem;
+        border-radius: 0.5rem;
+        background-color: ${theme.background.alternative};
+      }
+    `}
 `;
 
 export const BattleName = styled.p`
@@ -163,9 +173,9 @@ export const DetailBox = styled.div`
   align-items: center;
 `;
 
-export const DetailButton = styled.div`
+export const DetailButton = styled.div<{ $disabled?: boolean }>`
   ${font.label.medium};
-  color: ${({ theme }) => theme.label.alternative};
+  color: ${({ theme, $disabled }) => ($disabled ? theme.label.assistive : theme.label.alternative)};
 `;
 
 export const BackArrowIcon = styled(BackArrow)`
@@ -256,6 +266,7 @@ export const PercentText = styled.p<{ $isRival: boolean }>`
   ${font.title2.bold}
   ${palette.neutral[99]}
   position: absolute;
+  z-index: 2;
   opacity: 0.6;
   padding-left: ${({ $isRival }) => ($isRival ? "0.5rem" : "0")};
   padding-right: ${({ $isRival }) => ($isRival ? "0" : "0.5rem")};
@@ -349,6 +360,14 @@ export const FireIcon = styled(Fire)`
 export const DefaultBattleText = styled.p`
   ${font.label.medium};
   color: ${({ theme }) => theme.label.assistive};
+`;
+
+export const BattleApplyListContainer = styled.div<{ $hasApply: boolean }>`
+  ${flexCol};
+  width: 100%;
+  height: 100%;
+  align-items: ${({ $hasApply }) => ($hasApply ? "stretch" : "center")};
+  justify-content: ${({ $hasApply }) => ($hasApply ? "flex-start" : "center")};
 `;
 
 export const UserChoiceContainer = styled.div`
@@ -511,4 +530,57 @@ export const TabActiveRail = styled.div<{ $left: number; $width: number }>`
   transition:
     left 0.2s ease,
     width 0.2s ease;
+`;
+
+export const ProfileSubText = styled.div`
+  color: #8a8f98;
+  font-size: 0.75rem;
+  font-weight: 400;
+  line-height: 1.2;
+`;
+
+export const EmptyStateBox = styled.div`
+  ${flexCol};
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  margin-top: 2rem;
+  border: 1px dashed ${({ theme }) => theme.line.alternative};
+  border-radius: 0.75rem;
+  background-color: ${({ theme }) => theme.fill.normal};
+  text-align: center;
+  gap: 0.5rem;
+`;
+
+export const EmptyTitle = styled.p`
+  ${font.headline2.medium};
+  color: ${({ theme }) => theme.label.normal};
+`;
+
+export const EmptyDescription = styled.p`
+  ${font.caption.medium};
+  color: ${({ theme }) => theme.label.alternative};
+`;
+
+export const ErrorText = styled.p`
+  padding-top: 1.425rem;
+  ${font.label.medium};
+  color: ${palette.red[60]};
+  width: 100%;
+`;
+
+export const DetailArrowIcon = styled(DetailArrow)`
+  width: 0.5rem;
+  height: 1rem;
+`;
+
+export const ArrowBox = styled.button`
+  ${font.label.medium}
+  color: ${({ theme }) => theme.label.alternative};
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.25rem;
+  cursor: pointer;
 `;
