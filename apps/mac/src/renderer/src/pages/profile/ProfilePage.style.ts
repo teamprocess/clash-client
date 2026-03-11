@@ -1,7 +1,6 @@
 import styled from "styled-components";
 
 export const Background = styled.div`
-  height: 100%;
   width: 100%;
   background: ${({ theme }) => theme.background.normal};
   border-radius: 1rem;

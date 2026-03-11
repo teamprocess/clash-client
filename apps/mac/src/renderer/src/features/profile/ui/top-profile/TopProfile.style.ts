@@ -5,7 +5,7 @@ import MypageProfileSrc from "../../assets/mypage-profile.png";
 
 export const Banner = styled.div<{ $accent?: string; $bgImage?: string }>`
   width: 100%;
-  height: 25%;
+  height: clamp(12.725rem, 10vw, 16rem);
   border-radius: 1rem;
   background: ${({ theme }) => theme.background.alternative};
 
