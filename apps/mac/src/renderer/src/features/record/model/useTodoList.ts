@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState, type ChangeEvent, type KeyboardEvent } from "react";
 import { useRecordStore } from "./recordStore";
+import { isTodayRecordDate } from "./recordDate";
 
 type EditMode = "NONE" | "ADD" | "EDIT";
 const NO_PARENT_SUBJECT = "NONE";
@@ -21,7 +22,7 @@ const getTodoNameErrorMessage = (name: string) => {
   return null;
 };
 
-export const useTodoList = () => {
+export const useTodoList = (selectedDate: string) => {
   const {
     subjects,
     tasks,
@@ -34,6 +35,7 @@ export const useTodoList = () => {
     deleteTask,
     updateTaskCompletion,
   } = useRecordStore();
+  const isTodaySelected = isTodayRecordDate(selectedDate);
   const [editMode, setEditMode] = useState<EditMode>("NONE");
   const [editingTodoId, setEditingTodoId] = useState<number | null>(null);
   const [todoName, setTodoName] = useState("");
@@ -159,6 +161,10 @@ export const useTodoList = () => {
   };
 
   const handlePlayPauseClick = async (todoId: number) => {
+    if (!isTodaySelected) {
+      return;
+    }
+
     if (activeSessionType === "TASK" && activeTaskId === todoId) {
       await stop();
       return;

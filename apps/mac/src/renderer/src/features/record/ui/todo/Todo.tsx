@@ -2,7 +2,11 @@ import { Popover, Select, Tooltip } from "@/shared/ui";
 import * as S from "./Todo.style";
 import { useTodoList } from "../../model/useTodoList";
 
-export const Todo = () => {
+interface TodoProps {
+  selectedDate: string;
+}
+
+export const Todo = ({ selectedDate }: TodoProps) => {
   const {
     todos,
     editMode,
@@ -30,7 +34,7 @@ export const Todo = () => {
     handleCompleteClick,
     handleDeleteClick,
     getParentTaskName,
-  } = useTodoList();
+  } = useTodoList(selectedDate);
 
   const renderTodoNameInput = () => (
     <Tooltip

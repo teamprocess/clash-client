@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, type ChangeEvent, type KeyboardEvent } from "react";
 import { useRecordStore } from "./recordStore";
 import { useRecordTodayQuery } from "@/entities/record";
+import { isTodayRecordDate } from "./recordDate";
 
 type EditMode = "NONE" | "ADD" | "EDIT";
 const MAX_TASK_NAME_LENGTH = 13;
@@ -20,7 +21,7 @@ const getTaskNameErrorMessage = (name: string) => {
   return null;
 };
 
-export const useTaskList = () => {
+export const useTaskList = (selectedDate: string) => {
   const {
     subjects,
     activeSessionType,
@@ -32,7 +33,8 @@ export const useTaskList = () => {
     updateSubject,
     deleteSubject,
   } = useRecordStore();
-  const { data: todayResponse } = useRecordTodayQuery();
+  const isTodaySelected = isTodayRecordDate(selectedDate);
+  const { data: todayResponse } = useRecordTodayQuery(isTodaySelected ? undefined : selectedDate);
 
   const [editMode, setEditMode] = useState<EditMode>("NONE");
   const [editingSubjectId, setEditingSubjectId] = useState<number | null>(null);
@@ -69,6 +71,10 @@ export const useTaskList = () => {
   );
 
   const handlePlayPauseClick = async (subjectId: number) => {
+    if (!isTodaySelected) {
+      return;
+    }
+
     if (isDevelopRecording && activeSubjectId !== subjectId) {
       setDevelopSwitchTargetSubjectId(subjectId);
       return;

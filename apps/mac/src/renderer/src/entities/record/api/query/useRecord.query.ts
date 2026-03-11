@@ -13,17 +13,17 @@ const hasActiveRecordSession = (response?: Awaited<ReturnType<typeof recordApi.g
   return !!response?.success && !!response.data?.sessions.some(session => session.endedAt === null);
 };
 
-export const useRecordSubjectsQuery = () => {
+export const useRecordSubjectsQuery = (date?: string) => {
   return useQuery({
-    queryKey: recordQueryKeys.subjects,
-    queryFn: () => recordApi.getSubjects(),
+    queryKey: [...recordQueryKeys.subjects, date ?? "today"],
+    queryFn: () => recordApi.getSubjects(date),
   });
 };
 
-export const useRecordTasksQuery = () => {
+export const useRecordTasksQuery = (date?: string) => {
   return useQuery({
-    queryKey: recordQueryKeys.tasks,
-    queryFn: () => recordApi.getTasks(),
+    queryKey: [...recordQueryKeys.tasks, date ?? "today"],
+    queryFn: () => recordApi.getTasks(date),
   });
 };
 

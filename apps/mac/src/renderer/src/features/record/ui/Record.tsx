@@ -3,16 +3,33 @@ import { Task } from "./task/Task";
 import { Timer } from "./timer/Timer";
 import { useRecord } from "../model/useRecord";
 
-export const Record = () => {
-  useRecord();
+interface RecordProps {
+  selectedDate: string;
+  onPreviousDate: () => void;
+  onNextDate: () => void;
+  canGoNextDate: boolean;
+}
+
+export const Record = ({
+  selectedDate,
+  onPreviousDate,
+  onNextDate,
+  canGoNextDate,
+}: RecordProps) => {
+  useRecord(selectedDate);
 
   return (
     <S.RecordContainer>
       <S.TopContainer>
-        <Timer />
+        <Timer
+          date={selectedDate}
+          onPreviousDate={onPreviousDate}
+          onNextDate={onNextDate}
+          canGoNextDate={canGoNextDate}
+        />
       </S.TopContainer>
       <S.BottomContainer>
-        <Task />
+        <Task selectedDate={selectedDate} />
       </S.BottomContainer>
     </S.RecordContainer>
   );
