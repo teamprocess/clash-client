@@ -139,7 +139,11 @@ export const ChapterPage = () => {
               : domain.currentStageDescription
           }
           isLoading={domain.currentStageDetailsLoading}
+          isSolveDisabled={
+            domain.currentStageMissionsLoading || domain.currentStageMissions.length === 0
+          }
           onClose={handlers.handleCloseMissionPanel}
+          onSolve={handlers.handleStartCurrentStageMission}
         />
       )}
 

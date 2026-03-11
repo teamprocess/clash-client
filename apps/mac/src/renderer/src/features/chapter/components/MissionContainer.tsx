@@ -1,5 +1,4 @@
 import * as S from "./MissionContainer.style";
-import { Button } from "@/shared/ui/button/Button";
 import { useEffect, useRef, useState } from "react";
 
 const CLOSE_ANIMATION_MS = 220;
@@ -14,14 +13,18 @@ interface MissionContainerProps {
   currentStage: CurrentStageMeta;
   description: string | null;
   isLoading: boolean;
+  isSolveDisabled: boolean;
   onClose: () => void;
+  onSolve: () => void;
 }
 
 export const MissionContainer = ({
   currentStage,
   description,
   isLoading,
+  isSolveDisabled,
   onClose,
+  onSolve,
 }: MissionContainerProps) => {
   const [isClosing, setIsClosing] = useState(false);
   const closeTimeoutRef = useRef<number | null>(null);
@@ -90,12 +93,18 @@ export const MissionContainer = ({
         </S.PanelBody>
 
         <S.PanelFooter>
-          <Button variant="primary" size="md" fullWidth>
+          <S.ActionButton variant="primary" size="lg" fullWidth>
             학습하러 가기
-          </Button>
-          <Button variant="secondary" size="md" fullWidth>
+          </S.ActionButton>
+          <S.ActionButton
+            variant="secondary"
+            size="lg"
+            fullWidth
+            onClick={onSolve}
+            disabled={isSolveDisabled}
+          >
             문제 풀러 가기
-          </Button>
+          </S.ActionButton>
         </S.PanelFooter>
       </S.Panel>
     </S.MissionContainer>

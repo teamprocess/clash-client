@@ -33,6 +33,12 @@ export const useChapterHandlers = ({
   const queryClient = useQueryClient();
   const isOpeningMissionRef = useRef(false);
 
+  const openMission = (mission: Mission) => {
+    setMissionModalOpen(false);
+    setCurrentMission(mission);
+    setModalOpen(true);
+  };
+
   const handleCloseQuizModal = () => {
     setModalOpen(false);
     setCurrentMission(null);
@@ -46,11 +52,19 @@ export const useChapterHandlers = ({
     if (isOpeningMissionRef.current) return;
 
     const mission = currentStageMissions.find(m => m.id === missionId);
-    if (!mission || mission.completed) return;
+    if (!mission) return;
 
     isOpeningMissionRef.current = true;
-    setCurrentMission(mission);
-    setModalOpen(true);
+    openMission(mission);
+    isOpeningMissionRef.current = false;
+  };
+
+  const handleStartCurrentStageMission = () => {
+    const mission = currentStageMissions[0];
+    if (!mission || isOpeningMissionRef.current) return;
+
+    isOpeningMissionRef.current = true;
+    openMission(mission);
     isOpeningMissionRef.current = false;
   };
 
@@ -125,6 +139,7 @@ export const useChapterHandlers = ({
     handleMissionClick,
     handleMissionComplete,
     handleSelectStage,
+    handleStartCurrentStageMission,
     handleCloseMissionPanel,
     handleCloseQuizModal,
   };

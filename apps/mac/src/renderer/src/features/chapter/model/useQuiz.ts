@@ -25,7 +25,7 @@ const createInitialState = (mission: Mission): QuizState => {
     currentIndex: resolvedIndex,
     answers: {},
     correctCount: mission.correctCount,
-    view: "quiz",
+    view: mission.completed ? "final" : "quiz",
     lastResult: null,
     explanation: "",
     isSubmitting: false,

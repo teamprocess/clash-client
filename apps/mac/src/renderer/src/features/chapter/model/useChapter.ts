@@ -89,6 +89,7 @@ export const useChapter = (sectionId: number) => {
       handleMissionClick: handlers.handleMissionClick,
       handleMissionComplete: handlers.handleMissionComplete,
       handleSelectStage: handlers.handleSelectStage,
+      handleStartCurrentStageMission: handlers.handleStartCurrentStageMission,
       handleCloseMissionPanel: handlers.handleCloseMissionPanel,
       handleCloseQuizModal: handlers.handleCloseQuizModal,
     },

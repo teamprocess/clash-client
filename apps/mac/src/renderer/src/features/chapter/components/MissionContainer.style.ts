@@ -1,6 +1,7 @@
 import styled, { keyframes } from "styled-components";
 import { font } from "@clash/design-tokens/font";
 import Close from "@/features/profile/assets/close.svg";
+import { Button } from "@/shared/ui/button/Button";
 
 const fadeIn = keyframes`
   from {
@@ -200,4 +201,11 @@ export const PanelFooter = styled.div`
   display: flex;
   flex-direction: column;
   gap: 1rem;
+`;
+
+export const ActionButton = styled(Button)`
+  ${font.headline2.medium}
+  min-height: 3.25rem;
+  padding: 0.75rem 1.125rem;
+  border-radius: 0.875rem;
 `;
