@@ -1,13 +1,23 @@
 import { useCallback, useMemo, useState } from "react";
 import { type GroupMember, useGroupActivityQuery } from "@/entities/group";
 import { useLiveRecordStudyTime } from "./useLiveRecordStudyTime";
+import { isTodayRecordDate } from "./recordDate";
 
-export const useGroupMembersActivity = (groupId: number | null, myUserId: number | null) => {
-  const { data: activityResponse, dataUpdatedAt } = useGroupActivityQuery(groupId);
-  const { totalStudyTime: myTotalStudyTime, isStudying: isMyStudying } = useLiveRecordStudyTime();
+export const useGroupMembersActivity = (
+  groupId: number | null,
+  myUserId: number | null,
+  selectedDate: string
+) => {
+  const isTodaySelected = isTodayRecordDate(selectedDate);
+  const queryDate = isTodaySelected ? undefined : selectedDate;
+  const { data: activityResponse, dataUpdatedAt } = useGroupActivityQuery(groupId, queryDate);
+  const { totalStudyTime: myTotalStudyTime, isStudying: isMyStudying } =
+    useLiveRecordStudyTime(selectedDate);
   const [now, setNow] = useState(() => Date.now());
   const elapsedSeconds =
-    dataUpdatedAt > 0 ? Math.max(0, Math.floor((now - dataUpdatedAt) / 1000)) : 0;
+    isTodaySelected && dataUpdatedAt > 0
+      ? Math.max(0, Math.floor((now - dataUpdatedAt) / 1000))
+      : 0;
 
   const groupMembers = useMemo(() => {
     const members: GroupMember[] = activityResponse?.data?.members ?? [];
@@ -37,8 +47,12 @@ export const useGroupMembersActivity = (groupId: number | null, myUserId: number
 
   // 조회한 그룹 멤버 중 공부 중인 멤버의 공부 시간을 1초 늘리는 Callback 함수
   const incrementStudyingMembers = useCallback(() => {
+    if (!isTodaySelected) {
+      return;
+    }
+
     setNow(Date.now());
-  }, []);
+  }, [isTodaySelected]);
 
   return {
     groupMembers,

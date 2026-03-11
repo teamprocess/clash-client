@@ -29,13 +29,14 @@ export const useMyGroupsQuery = (page: number = 1, pageSize: number = 20) => {
   });
 };
 
-export const useGroupActivityQuery = (groupId: number | null) => {
+export const useGroupActivityQuery = (groupId: number | null, date?: string) => {
   return useQuery({
-    queryKey: [...groupQueryKeys.groupActivity, groupId],
-    queryFn: () => groupApi.getGroupActivity(groupId ?? 0),
+    queryKey: [...groupQueryKeys.groupActivity, groupId, date ?? "today"],
+    queryFn: () => groupApi.getGroupActivity(groupId ?? 0, undefined, undefined, date),
     enabled: groupId !== null,
     staleTime: 0,
-    refetchInterval: groupId !== null ? GROUP_ACTIVITY_SYNC_INTERVAL_MS : false,
+    refetchInterval:
+      groupId !== null && date === undefined ? GROUP_ACTIVITY_SYNC_INTERVAL_MS : false,
     refetchIntervalInBackground: true,
   });
 };
