@@ -1,14 +1,15 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import {
   GROUP_CATEGORIES,
   groupApi,
+  groupQueryKeys,
   type GroupCategory,
   useGroupDetailQuery,
 } from "@/entities/group";
-import { getErrorMessage } from "@/shared/lib";
+import { getErrorMessage, queryClient } from "@/shared/lib";
 
 const groupEditSchema = z.object({
   name: z.string().min(1, "그룹 이름을 입력하세요."),
@@ -23,9 +24,7 @@ const groupEditSchema = z.object({
 
 export type GroupEditFormData = z.infer<typeof groupEditSchema>;
 
-export const useGroup = () => {
-  const menuRef = useRef<HTMLDivElement>(null);
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+export const useGroup = (currentGroupId: number | null) => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [deleteAction, setDeleteAction] = useState<"delete" | "quit">("quit");
   const [editPasswordRequired, setEditPasswordRequired] = useState(false);
@@ -34,11 +33,12 @@ export const useGroup = () => {
   const [isFormModalOpen, setIsFormModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [joinPassword, setJoinPassword] = useState<string>("");
-  const [currentGroupId, setCurrentGroupId] = useState<number | null>(null);
   const [isJoining, setIsJoining] = useState(false);
-  const [editingGroupId, setEditingGroupId] = useState<number | null>(null);
+  const [groupDetailTargetId, setGroupDetailTargetId] = useState<number | null>(null);
+  const [editTargetGroupId, setEditTargetGroupId] = useState<number | null>(null);
+  const [deleteTargetGroupId, setDeleteTargetGroupId] = useState<number | null>(null);
   const { data: groupDetailResponse, error: groupDetailError } =
-    useGroupDetailQuery(editingGroupId);
+    useGroupDetailQuery(groupDetailTargetId);
 
   // 그룹 생성 폼
   const createForm = useForm<GroupEditFormData>({
@@ -74,14 +74,6 @@ export const useGroup = () => {
     name: "type",
   }) as GroupCategory | undefined;
 
-  const handleMoreClick = () => {
-    setIsMenuOpen(!isMenuOpen);
-  };
-
-  const handleCloseMenu = () => {
-    setIsMenuOpen(false);
-  };
-
   const handleOpenFormModal = () => {
     setIsFormModalOpen(true);
     createForm.reset({
@@ -98,19 +90,19 @@ export const useGroup = () => {
     createForm.reset();
   };
 
-  const handleEditGroupRequest = () => {
-    if (!currentGroupId) {
+  const handleEditGroupRequest = (groupId: number | null = currentGroupId) => {
+    if (!groupId) {
       console.error("수정할 그룹 ID가 없습니다.");
       return;
     }
 
-    setIsMenuOpen(false);
-    setEditingGroupId(currentGroupId);
+    setEditTargetGroupId(groupId);
+    setGroupDetailTargetId(groupId);
   };
 
   // 그룹 수정 진입 시 최신 상세 데이터로 폼 채우기
   useEffect(() => {
-    if (!editingGroupId || !groupDetailResponse) {
+    if (!groupDetailTargetId || !groupDetailResponse) {
       return;
     }
 
@@ -131,11 +123,11 @@ export const useGroup = () => {
       console.error("그룹 상세 조회 실패:", groupDetailResponse.message);
     }
 
-    setEditingGroupId(null);
-  }, [editForm, editingGroupId, groupDetailResponse]);
+    setGroupDetailTargetId(null);
+  }, [editForm, groupDetailTargetId, groupDetailResponse]);
 
   useEffect(() => {
-    if (!editingGroupId || !groupDetailError) {
+    if (!groupDetailTargetId || !groupDetailError) {
       return;
     }
 
@@ -145,29 +137,39 @@ export const useGroup = () => {
     );
     console.error("그룹 상세 조회 실패:", errorMessage, groupDetailError);
 
-    setEditingGroupId(null);
-  }, [editingGroupId, groupDetailError]);
+    setGroupDetailTargetId(null);
+  }, [groupDetailTargetId, groupDetailError]);
 
   const handleCloseEditModal = () => {
     setIsEditModalOpen(false);
     setEditPasswordRequired(false);
     setIsEditPasswordChangeEnabled(false);
     setHasEditPassword(false);
+    setEditTargetGroupId(null);
     editForm.reset();
   };
 
-  const handleDeleteGroupRequest = (action: "delete" | "quit") => {
-    setIsMenuOpen(false);
+  const handleDeleteGroupRequest = (
+    action: "delete" | "quit",
+    groupId: number | null = currentGroupId
+  ) => {
+    if (!groupId) {
+      console.error("처리할 그룹 ID가 없습니다.");
+      return;
+    }
+
+    setDeleteTargetGroupId(groupId);
     setDeleteAction(action);
     setIsDeleteModalOpen(true);
   };
 
   const handleCancelDelete = () => {
     setIsDeleteModalOpen(false);
+    setDeleteTargetGroupId(null);
   };
 
   const handleConfirmDelete = async () => {
-    if (!currentGroupId) {
+    if (!deleteTargetGroupId) {
       console.error("처리할 그룹 ID가 없습니다.");
       return;
     }
@@ -175,12 +177,18 @@ export const useGroup = () => {
     try {
       const isDelete = deleteAction === "delete";
       const result = isDelete
-        ? await groupApi.deleteGroup(currentGroupId)
-        : await groupApi.quitGroup(currentGroupId);
+        ? await groupApi.deleteGroup(deleteTargetGroupId)
+        : await groupApi.quitGroup(deleteTargetGroupId);
 
       if (result.success) {
         setIsDeleteModalOpen(false);
-        setCurrentGroupId(null);
+        setDeleteTargetGroupId(null);
+        await Promise.all([
+          queryClient.invalidateQueries({ queryKey: groupQueryKeys.myGroups }),
+          queryClient.invalidateQueries({ queryKey: groupQueryKeys.allGroups }),
+          queryClient.invalidateQueries({ queryKey: groupQueryKeys.groupActivity }),
+          queryClient.invalidateQueries({ queryKey: groupQueryKeys.groupDetail }),
+        ]);
       } else {
         console.error(`그룹 ${deleteAction === "delete" ? "삭제" : "탈퇴"} 실패:`, result.message);
       }
@@ -218,6 +226,10 @@ export const useGroup = () => {
       if (result.success) {
         setIsFormModalOpen(false);
         createForm.reset();
+        await Promise.all([
+          queryClient.invalidateQueries({ queryKey: groupQueryKeys.myGroups }),
+          queryClient.invalidateQueries({ queryKey: groupQueryKeys.allGroups }),
+        ]);
       } else {
         console.error("그룹 생성 실패:", result.message);
       }
@@ -235,6 +247,11 @@ export const useGroup = () => {
       if (result.success) {
         setIsFormModalOpen(false);
         setJoinPassword("");
+        await Promise.all([
+          queryClient.invalidateQueries({ queryKey: groupQueryKeys.myGroups }),
+          queryClient.invalidateQueries({ queryKey: groupQueryKeys.allGroups }),
+          queryClient.invalidateQueries({ queryKey: groupQueryKeys.groupActivity }),
+        ]);
         return true;
       } else {
         console.error("그룹 참여 실패:", result.message);
@@ -250,7 +267,7 @@ export const useGroup = () => {
   };
 
   const handleEditSubmit = async (data: GroupEditFormData) => {
-    if (!currentGroupId) {
+    if (!editTargetGroupId) {
       console.error("수정할 그룹 ID가 없습니다.");
       return;
     }
@@ -258,7 +275,7 @@ export const useGroup = () => {
     try {
       const nextPassword = isEditPasswordChangeEnabled ? (data.password ?? "") : "";
       const passwordRequired = editPasswordRequired || nextPassword.length > 0;
-      const result = await groupApi.updateGroup(currentGroupId, {
+      const result = await groupApi.updateGroup(editTargetGroupId, {
         name: data.name,
         description: data.description,
         maxMembers: data.maxMembers,
@@ -270,6 +287,12 @@ export const useGroup = () => {
       if (result.success) {
         setIsEditModalOpen(false);
         editForm.reset();
+        await Promise.all([
+          queryClient.invalidateQueries({ queryKey: groupQueryKeys.myGroups }),
+          queryClient.invalidateQueries({ queryKey: groupQueryKeys.allGroups }),
+          queryClient.invalidateQueries({ queryKey: groupQueryKeys.groupActivity }),
+          queryClient.invalidateQueries({ queryKey: groupQueryKeys.groupDetail }),
+        ]);
       } else {
         console.error("그룹 수정 실패:", result.message);
       }
@@ -316,10 +339,6 @@ export const useGroup = () => {
   };
 
   return {
-    menuRef,
-    isMenuOpen,
-    handleMoreClick,
-    handleCloseMenu,
     // 그룹 생성/참여 모달
     handleOpenFormModal,
     // 그룹 수정 모달
@@ -329,7 +348,6 @@ export const useGroup = () => {
     formModal,
     editModal,
     deleteModal,
-    setCurrentGroupId,
   };
 };
 

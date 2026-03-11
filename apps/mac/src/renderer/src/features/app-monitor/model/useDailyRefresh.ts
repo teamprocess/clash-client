@@ -23,6 +23,8 @@ const getMillisecondsUntilNextKstRefresh = (nowMs = Date.now()) => {
 const refreshKstDailyQueries = async () => {
   await Promise.all([
     queryClient.invalidateQueries({ queryKey: recordQueryKeys.today }),
+    queryClient.invalidateQueries({ queryKey: recordQueryKeys.subjects }),
+    queryClient.invalidateQueries({ queryKey: recordQueryKeys.tasks }),
     queryClient.invalidateQueries({ queryKey: groupQueryKeys.allGroups }),
     queryClient.invalidateQueries({ queryKey: groupQueryKeys.myGroups }),
     queryClient.invalidateQueries({ queryKey: groupQueryKeys.groupActivity }),
