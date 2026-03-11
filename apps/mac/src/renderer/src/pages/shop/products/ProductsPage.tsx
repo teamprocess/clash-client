@@ -1,35 +1,20 @@
-import * as S from "./ProductsPage.style";
 import { Products } from "@/features/shop/ui/products/Products";
-import { useNavigate } from "react-router-dom";
 import { useProducts } from "@/features/shop/model/useProducts";
 
 export const ProductsPage = () => {
   const { products, isLoading, keyword, setKeyword, sort, setSort, category, setCategory } =
     useProducts();
 
-  const navigate = useNavigate();
-  const handleGoShopMain = () => {
-    navigate("/shop");
-  };
-
   return (
-    <S.ShopContainer>
-      <S.MenuBox>
-        <S.MenuButton $isActive={false} onClick={() => handleGoShopMain()}>
-          메인
-        </S.MenuButton>
-        <S.MenuButton $isActive={true}>전체 상품 목록</S.MenuButton>
-      </S.MenuBox>
-      <Products
-        products={products?.products ?? []}
-        isLoading={isLoading}
-        keyword={keyword}
-        onKeywordChange={setKeyword}
-        sort={sort}
-        onSortChange={setSort}
-        category={category}
-        onCategoryChange={setCategory}
-      />
-    </S.ShopContainer>
+    <Products
+      products={products?.products ?? []}
+      isLoading={isLoading}
+      keyword={keyword}
+      onKeywordChange={setKeyword}
+      sort={sort}
+      onSortChange={setSort}
+      category={category}
+      onCategoryChange={setCategory}
+    />
   );
 };

@@ -12,7 +12,7 @@ export const MainContainer = styled.div`
   flex-direction: column;
   align-items: center;
   width: 100%;
-  height: 50rem;
+  height: 100%;
   border-radius: 0.75rem;
   background-color: ${({ theme }) => theme.background.normal};
   overflow: hidden;
@@ -39,9 +39,6 @@ export const CardContainer = styled.div<LayoutProps>`
   width: ${({ $isPanelOpen }) => ($isPanelOpen ? "60%" : "100%")};
   height: 100%;
   overflow-y: auto;
-  transition:
-    width 0.3s ease,
-    grid-template-columns 0.3s ease;
   &::after {
     content: "";
     display: block;
@@ -103,6 +100,7 @@ export const ProductImg = styled.div<{ $imgUrl: string }>`
   background-image: url(${({ $imgUrl }) => $imgUrl});
   background-repeat: no-repeat;
   background-color: ${({ theme }) => theme.fill.neutral};
+  background-position: center;
 `;
 
 export const MajorInfoWrapper = styled.div`

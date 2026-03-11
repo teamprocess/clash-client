@@ -2,6 +2,7 @@ import { api, ApiResponse } from "@/shared/api";
 import {
   AnalyzeBattleRequest,
   AnalyzeBattleResponse,
+  BattleApplyListResponse,
   BattleDetailResponse,
   BattleListResponse,
   BattleResponse,
@@ -60,6 +61,20 @@ export const battleApi = {
     const result = await api.post<ApiResponse<void>>(`/compete/rivals/battles/reject`, {
       ...data,
     });
+    return result.data;
+  },
+
+  postCancelBattle: async (data: ModifyBattleRequest) => {
+    const result = await api.post<ApiResponse<void>>(`/compete/rivals/battles/cancel`, {
+      ...data,
+    });
+    return result.data;
+  },
+
+  getBattleApplyList: async () => {
+    const result = await api.get<ApiResponse<BattleApplyListResponse>>(
+      `/compete/rivals/battles/apply`
+    );
     return result.data;
   },
 };

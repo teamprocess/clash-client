@@ -22,18 +22,16 @@ const growthRateDropDownValue: { key: GrowthRateStandard; label: string }[] = [
 
 export const useMyCompetition = () => {
   const [competitionDropdown, setCompetitionDropdown] = useState<CompareStandard>("YESTERDAY");
-
   const [growthRateDropdown, setGrowthRateDropdown] = useState<GrowthRateStandard>("DAY");
 
   const { data: todayResponse } = useMyCompareQuery("TODAY");
   const { data: compareResponse, isLoading: isCompareLoading } =
     useMyCompareQuery(competitionDropdown);
-
   const { data: growthRateResponse } = useMyGrowthRateQuery(growthRateDropdown);
 
-  const oneDecimal = (value?: number | null) => (value == null ? 0 : Math.trunc(value * 10) / 10);
-
   const dataPoints = growthRateResponse?.data?.dataPoint ?? [];
+
+  const roundOneDecimal = (value?: number | null) => (value == null ? 0 : Math.round(value));
 
   return {
     dataPoints,
@@ -46,6 +44,6 @@ export const useMyCompetition = () => {
     setGrowthRateDropdown,
     growthRateDropDownValue,
     competitionDropDownValue,
-    oneDecimal,
+    roundOneDecimal,
   };
 };
