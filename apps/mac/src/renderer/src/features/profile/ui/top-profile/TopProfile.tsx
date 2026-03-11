@@ -18,6 +18,17 @@ export const TopProfile = ({
 
   return (
     <S.Banner $accent={bannerAccentColor} $bgImage={bannerBgImageUrl}>
+      <S.ProfileCard>
+        <S.ProfileImgWrap $accent={badgeAccentColor} $bgImage={badgeBgImageUrl}>
+          <S.ProfileImg />
+        </S.ProfileImgWrap>
+
+        <S.UserInfo>
+          <S.Name>{user?.name}</S.Name>
+          <S.BadgeDot />
+        </S.UserInfo>
+      </S.ProfileCard>
+
       <S.Button>
         {isEditing ? (
           <>
@@ -39,17 +50,6 @@ export const TopProfile = ({
           </>
         )}
       </S.Button>
-
-      <S.ProfileCard>
-        <S.ProfileImgWrap $accent={badgeAccentColor} $bgImage={badgeBgImageUrl}>
-          <S.ProfileImg />
-        </S.ProfileImgWrap>
-
-        <S.UserInfo>
-          <S.Name>{user?.name}</S.Name>
-          <S.BadgeDot />
-        </S.UserInfo>
-      </S.ProfileCard>
     </S.Banner>
   );
 };

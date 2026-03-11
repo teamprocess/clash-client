@@ -8,8 +8,8 @@ const flexCol = css`
 
 export const Container = styled.div`
   width: 100%;
-  display: flex;
-  flex-direction: column;
+  height: 100%;
+  ${flexCol};
   gap: 1.25rem;
   margin-top: 7.25rem;
 `;

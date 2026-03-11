@@ -5,7 +5,7 @@ import { palette } from "@clash/design-tokens/theme";
 
 export const RivalBox = styled.section`
   width: 100%;
-  height: 5.625rem;
+  height: 100%;
   border-radius: 0.75rem;
   background: ${({ theme }) => theme.background.alternative};
   padding: 0.875rem 1rem;
@@ -34,12 +34,23 @@ export const NameStatus = styled.div`
   min-width: 0;
 `;
 
+export const NameBox = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
 export const Name = styled.p`
   ${font.body.bold}
   color: ${({ theme }) => theme.label.neutral};
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+`;
+
+export const UserName = styled.p`
+  ${font.caption.bold}
+  color: ${({ theme }) => theme.label.assistive};
+  white-space: nowrap;
 `;
 
 export const StatusBadge = styled.span<{ $status: UserStatus }>`
