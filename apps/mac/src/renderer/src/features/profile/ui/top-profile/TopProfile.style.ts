@@ -5,7 +5,7 @@ import MypageProfileSrc from "../../assets/mypage-profile.png";
 
 export const Banner = styled.div<{ $accent?: string; $bgImage?: string }>`
   width: 100%;
-  height: 25%;
+  height: 20.5%;
   border-radius: 1rem;
   background: ${({ theme }) => theme.background.alternative};
 
@@ -25,6 +25,10 @@ export const Banner = styled.div<{ $accent?: string; $bgImage?: string }>`
   justify-content: flex-end;
   align-items: flex-end;
   position: relative;
+
+  @media (min-height: 56.25rem) {
+    height: 30%;
+  }
 `;
 
 export const Button = styled.div`
@@ -57,9 +61,13 @@ export const ButtonLogout = styled.button`
 export const ProfileCard = styled.div`
   position: absolute;
   left: 4rem;
-  top: 6rem;
+  top: 30%;
   width: 11rem;
   height: 11rem;
+
+  @media (min-height: 56.25rem) {
+    top: 60%;
+  }
 `;
 
 export const ProfileImgWrap = styled.div<{ $accent?: string; $bgImage?: string }>`

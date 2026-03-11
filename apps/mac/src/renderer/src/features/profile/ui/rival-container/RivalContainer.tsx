@@ -20,6 +20,7 @@ export const RivalContainer = () => {
           usingApp={rivalUser.usingApp}
           isStudying={rivalUser.isStudying}
           profileSrc={S.profileSrcMap["default"]}
+          username={rivalUser.username}
         />
       ))}
 
