@@ -9,21 +9,23 @@ export const ProfilePage = () => {
     useProfile();
 
   return (
-    <S.Background>
-      <TopProfile
-        bannerAccentColor={appliedBg?.accentColor}
-        bannerBgImageUrl={appliedBg?.bgImageUrl}
-        badgeAccentColor={appliedBadge?.accentColor}
-        badgeBgImageUrl={appliedBadge?.bgImageUrl}
-        isEditing={isEditing}
-        onCancel={handleCancel}
-        onSave={handleSave}
-      />
+    <S.Wrapper>
+      <S.Background>
+        <TopProfile
+          bannerAccentColor={appliedBg?.accentColor}
+          bannerBgImageUrl={appliedBg?.bgImageUrl}
+          badgeAccentColor={appliedBadge?.accentColor}
+          badgeBgImageUrl={appliedBadge?.bgImageUrl}
+          isEditing={isEditing}
+          onCancel={handleCancel}
+          onSave={handleSave}
+        />
 
-      <S.BodyRow>
-        <RivalContainer />
-        <ProfileTabs onPreviewChange={handlePreviewChange} />
-      </S.BodyRow>
-    </S.Background>
+        <S.BodyRow>
+          <RivalContainer />
+          <ProfileTabs onPreviewChange={handlePreviewChange} />
+        </S.BodyRow>
+      </S.Background>
+    </S.Wrapper>
   );
 };
