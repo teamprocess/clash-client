@@ -8,7 +8,7 @@ export type GithubInfoProps = {
   issues: number;
   pullRequests: number;
   reviews: number;
-  topRepoName: string;
+  topCommitRepo: string;
   dailyAddedLines: number;
   dailyDeletedLines: number;
   hasDetail?: boolean;
@@ -21,7 +21,7 @@ export const GithubInfo = ({
   issues,
   pullRequests,
   reviews,
-  topRepoName,
+  topCommitRepo,
   dailyAddedLines,
   dailyDeletedLines,
   hasDetail = true,
@@ -94,7 +94,7 @@ export const GithubInfo = ({
             <S.FireIcon />
             <S.MetaText>
               <S.MetaLabel>최다 커밋 레포지토리</S.MetaLabel>
-              <S.MetaValue>{topRepoName}</S.MetaValue>
+              <S.MetaValue>{topCommitRepo}</S.MetaValue>
             </S.MetaText>
           </S.MetaRow>
 

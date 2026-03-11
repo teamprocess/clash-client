@@ -32,7 +32,7 @@ export const GithubActivityPanel = () => {
       pullRequests: detail?.prCount ?? 0,
       reviews: detail?.reviewsCount ?? 0,
 
-      topRepoName: "-",
+      topCommitRepo: detail?.topCommitRepo ?? "-",
       dailyAddedLines: detail?.additionLines ?? 0,
       dailyDeletedLines: detail?.deletionLines ?? 0,
     };
