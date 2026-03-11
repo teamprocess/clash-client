@@ -1,11 +1,11 @@
 import * as S from "./TimePanel.style";
-import { useProfileTabs } from "@/features/profile/model/useProfileTabs";
-import type { DayCell } from "@/features/profile/model/useProfileTabs";
+// import { useProfileTabs } from "@/features/profile/model/useProfileTabs";
+// import type { DayCell } from "@/features/profile/model/useProfileTabs";
 // import React from "react";
 
 export const TimePanel = () => {
-  const { timePanel } = useProfileTabs();
-  const { WEEKDAYS, title, days, handlePrev, handleNext } = timePanel;
+  // const { timePanel } = useProfileTabs();
+  // const { WEEKDAYS, title, days, handlePrev, handleNext } = timePanel;
 
   return (
     <>
