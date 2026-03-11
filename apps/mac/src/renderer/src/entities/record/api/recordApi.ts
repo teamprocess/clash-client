@@ -199,8 +199,10 @@ export const recordApi = {
     return result.data;
   },
 
-  getSubjects: async () => {
-    const result = await api.get<ApiResponse<RecordSubjectsResponse>>("/v2/record/subjects");
+  getSubjects: async (date?: string) => {
+    const result = await api.get<ApiResponse<RecordSubjectsResponse>>("/v2/record/subjects", {
+      params: date ? { date } : undefined,
+    });
     return result.data;
   },
 
@@ -222,8 +224,10 @@ export const recordApi = {
     return result.data;
   },
 
-  getTasks: async () => {
-    const result = await api.get<ApiResponse<RecordTasksResponse>>("/v2/record/tasks");
+  getTasks: async (date?: string) => {
+    const result = await api.get<ApiResponse<RecordTasksResponse>>("/v2/record/tasks", {
+      params: date ? { date } : undefined,
+    });
     return result.data;
   },
 

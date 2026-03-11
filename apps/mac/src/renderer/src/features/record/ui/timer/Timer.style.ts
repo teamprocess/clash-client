@@ -20,9 +20,23 @@ export const TimerBox = styled.div`
   gap: 1rem;
 `;
 
-export const ArrowIcon = styled(Arrow)<{ rotate: "LEFT" | "RIGHT" }>`
-  rotate: ${({ rotate }) => (rotate === "LEFT" ? "180deg" : "0deg")};
+export const ArrowButton = styled.button`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: none;
+  background: none;
   cursor: pointer;
+
+  &:disabled {
+    cursor: default;
+  }
+`;
+
+export const ArrowIcon = styled(Arrow)<{ rotate: "LEFT" | "RIGHT"; $disabled?: boolean }>`
+  rotate: ${({ rotate }) => (rotate === "LEFT" ? "180deg" : "0deg")};
+  opacity: ${({ $disabled }) => ($disabled ? 0.32 : 1)};
 `;
 
 export const DateBox = styled.div`

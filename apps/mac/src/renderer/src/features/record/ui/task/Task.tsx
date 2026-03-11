@@ -3,7 +3,11 @@ import { formatTime } from "@/shared/lib";
 import { useTaskList } from "../../model/useTaskList";
 import { Button, ConfirmDialog, Popover, Tooltip } from "@/shared/ui";
 
-export const Task = () => {
+interface TaskProps {
+  selectedDate: string;
+}
+
+export const Task = ({ selectedDate }: TaskProps) => {
   const {
     subjects,
     editMode,
@@ -36,7 +40,7 @@ export const Task = () => {
     handleCancelEdit,
     handleCancelDelete,
     handleConfirmDelete,
-  } = useTaskList();
+  } = useTaskList(selectedDate);
 
   const renderTaskNameInput = () => (
     <Tooltip

@@ -6,27 +6,36 @@ import {
   useRecordTodayQuery,
 } from "@/entities/record";
 
-export const useRecord = () => {
+export const useRecord = (selectedDate: string) => {
   const { startTime, setCurrentStudyTime, setSubjects, setTasks, setActiveSession } =
     useRecordStore();
-  const { data: subjectsResponse } = useRecordSubjectsQuery();
-  const { data: tasksResponse } = useRecordTasksQuery();
-  const { data: todayResponse } = useRecordTodayQuery();
+  const { data: subjectsResponse } = useRecordSubjectsQuery(selectedDate);
+  const { data: tasksResponse } = useRecordTasksQuery(selectedDate);
+  const { data: todayResponse } = useRecordTodayQuery(selectedDate);
 
   useEffect(() => {
-    if (subjectsResponse?.success && subjectsResponse.data) {
-      setSubjects(subjectsResponse.data.subjects);
+    if (!subjectsResponse?.success || !subjectsResponse.data) {
+      return;
     }
-  }, [setSubjects, subjectsResponse]);
 
-  useEffect(() => {
-    if (tasksResponse?.success && tasksResponse.data) {
-      setTasks(tasksResponse.data.tasks);
+    if (!tasksResponse?.success || !tasksResponse.data) {
+      return;
     }
-  }, [setTasks, tasksResponse]);
+
+    setSubjects(subjectsResponse.data.subjects);
+    setTasks(tasksResponse.data.tasks);
+  }, [setSubjects, setTasks, subjectsResponse, tasksResponse]);
 
   useEffect(() => {
     if (!todayResponse?.success || !todayResponse.data) {
+      setActiveSession({
+        activeSessionType: null,
+        activeSubjectId: null,
+        activeTaskId: null,
+        startTime: null,
+        baseStudyTime: 0,
+      });
+      setCurrentStudyTime(0);
       return;
     }
 
