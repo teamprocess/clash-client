@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export const RecordPageContainer = styled.div`
+export const GroupPageContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;

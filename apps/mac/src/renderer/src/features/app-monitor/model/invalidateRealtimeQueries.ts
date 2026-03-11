@@ -39,6 +39,7 @@ const invalidateUserQueries = async () => {
 const invalidateRecordQueries = async () => {
   await Promise.all([
     queryClient.invalidateQueries({ queryKey: recordQueryKeys.today }),
+    queryClient.invalidateQueries({ queryKey: recordQueryKeys.subjects }),
     queryClient.invalidateQueries({ queryKey: recordQueryKeys.tasks }),
   ]);
 };

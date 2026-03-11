@@ -3,13 +3,17 @@ import { formatTime } from "@/shared/lib";
 import { useTaskList } from "../../model/useTaskList";
 import { Button, ConfirmDialog, Popover, Tooltip } from "@/shared/ui";
 
-export const Task = () => {
+interface TaskProps {
+  selectedDate: string;
+}
+
+export const Task = ({ selectedDate }: TaskProps) => {
   const {
-    tasks,
+    subjects,
     editMode,
-    editingTaskId,
-    taskName,
-    taskNameInputRef,
+    editingSubjectId,
+    subjectName,
+    subjectNameInputRef,
     taskNameInputMaxLength,
     taskNameErrorMessage,
     isTaskNameInvalid,
@@ -36,7 +40,7 @@ export const Task = () => {
     handleCancelEdit,
     handleCancelDelete,
     handleConfirmDelete,
-  } = useTaskList();
+  } = useTaskList(selectedDate);
 
   const renderTaskNameInput = () => (
     <Tooltip
@@ -47,9 +51,9 @@ export const Task = () => {
       wrapperStyle={{ width: "100%", maxWidth: "100%" }}
     >
       <S.TaskTextInput
-        ref={taskNameInputRef}
+        ref={subjectNameInputRef}
         placeholder="과목명을 입력하세요."
-        value={taskName}
+        value={subjectName}
         maxLength={taskNameInputMaxLength}
         aria-invalid={isTaskNameInvalid}
         onChange={handleTaskNameChange}
@@ -62,15 +66,15 @@ export const Task = () => {
     <>
       <S.TaskContainer>
         <S.TaskBox>
-          {tasks.map(task => {
-            const isActive = isTaskActive(task.id);
-            const studyTime = getTaskStudyTime(task.id);
-            const isMenuOpen = openMenuTaskId === task.id;
-            const isEditing = editMode === "edit" && editingTaskId === task.id;
+          {subjects.map(subject => {
+            const isActive = isTaskActive(subject.id);
+            const studyTime = getTaskStudyTime(subject.id);
+            const isMenuOpen = openMenuTaskId === subject.id;
+            const isEditing = editMode === "EDIT" && editingSubjectId === subject.id;
 
             if (isEditing) {
               return (
-                <S.TaskItem key={task.id}>
+                <S.TaskItem key={subject.id}>
                   <S.TaskInputBox>{renderTaskNameInput()}</S.TaskInputBox>
                   <S.TaskRightBox>
                     <S.ButtonBox>
@@ -87,23 +91,25 @@ export const Task = () => {
             }
 
             return (
-              <S.TaskItem key={task.id}>
+              <S.TaskItem key={subject.id}>
                 <S.TaskLeftBox>
-                  <S.IconButton onClick={() => handlePlayPauseClick(task.id)}>
+                  <S.IconButton onClick={() => handlePlayPauseClick(subject.id)}>
                     {isActive ? <S.PauseIcon /> : <S.PlayIcon />}
                   </S.IconButton>
-                  <S.TaskText>{task.name}</S.TaskText>
+                  <S.TaskText>{subject.name}</S.TaskText>
                 </S.TaskLeftBox>
                 <S.TaskRightBox>
                   <S.TaskText>{formatTime(studyTime)}</S.TaskText>
                   <S.MoreIconWrapper ref={isMenuOpen ? menuRef : null}>
-                    <S.IconButton onClick={() => handleMoreClick(task.id)}>
+                    <S.IconButton onClick={() => handleMoreClick(subject.id)}>
                       <S.MoreIcon />
                     </S.IconButton>
                     <Popover isOpen={isMenuOpen} onClose={handleCloseMenu} anchorRef={menuRef}>
                       <S.MenuList>
-                        <S.MenuItem onClick={() => handleEditClick(task.id)}>과목 수정</S.MenuItem>
-                        <S.MenuItem onClick={() => handleDeleteRequest(task.id)}>
+                        <S.MenuItem onClick={() => handleEditClick(subject.id)}>
+                          과목 수정
+                        </S.MenuItem>
+                        <S.MenuItem onClick={() => handleDeleteRequest(subject.id)}>
                           과목 삭제
                         </S.MenuItem>
                       </S.MenuList>
@@ -113,7 +119,7 @@ export const Task = () => {
               </S.TaskItem>
             );
           })}
-          {editMode === "add" && (
+          {editMode === "ADD" && (
             <S.TaskItem>
               <S.TaskInputBox>{renderTaskNameInput()}</S.TaskInputBox>
               <S.TaskRightBox>

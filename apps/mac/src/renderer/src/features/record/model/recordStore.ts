@@ -1,109 +1,261 @@
 import { create } from "zustand";
-import { recordApi, recordQueryKeys, type Task } from "@/entities/record";
+import {
+  recordApi,
+  recordQueryKeys,
+  type RecordSessionType,
+  type Subject,
+  type SubjectTask,
+  type Task,
+} from "@/entities/record";
 import { getErrorMessage, queryClient } from "@/shared/lib";
 
-interface RecordStore {
-  tasks: Task[];
+interface ActiveSessionState {
+  activeSessionType: RecordSessionType | null;
+  activeSubjectId: number | null;
   activeTaskId: number | null;
-  currentStudyTime: number;
   startTime: number | null;
-  start: (taskId: number) => Promise<void>;
-  stop: () => Promise<boolean>;
-  addTask: (name: string) => Promise<void>;
-  updateTask: (taskId: number, name: string) => Promise<void>;
-  deleteTask: (taskId: number) => Promise<void>;
-  setCurrentStudyTime: (time: number) => void;
-  setTasks: (tasks: Task[]) => void;
-  setActiveSession: (activeTaskId: number | null, startTime: number | null) => void;
+  baseStudyTime: number;
 }
+
+interface RecordStore extends ActiveSessionState {
+  subjects: Subject[];
+  tasks: Task[];
+  currentStudyTime: number;
+  startSubject: (subjectId: number) => Promise<void>;
+  startTask: (taskId: number) => Promise<void>;
+  stop: () => Promise<boolean>;
+  addSubject: (name: string) => Promise<boolean>;
+  updateSubject: (subjectId: number, name: string) => Promise<boolean>;
+  deleteSubject: (subjectId: number) => Promise<boolean>;
+  addTask: (name: string, subjectId: number | null) => Promise<boolean>;
+  updateTask: (taskId: number, name: string, subjectId: number | null) => Promise<boolean>;
+  deleteTask: (taskId: number) => Promise<boolean>;
+  updateTaskCompletion: (taskId: number, completed: boolean) => Promise<boolean>;
+  setCurrentStudyTime: (time: number) => void;
+  setSubjects: (subjects: Subject[]) => void;
+  setTasks: (tasks: Task[]) => void;
+  setActiveSession: (session: ActiveSessionState) => void;
+}
+
+const invalidateRecordQueries = async () => {
+  await Promise.all([
+    queryClient.invalidateQueries({ queryKey: recordQueryKeys.subjects }),
+    queryClient.invalidateQueries({ queryKey: recordQueryKeys.tasks }),
+    queryClient.invalidateQueries({ queryKey: recordQueryKeys.today }),
+  ]);
+};
+
+const updateNestedSubjectTasks = (
+  tasks: SubjectTask[],
+  taskId: number,
+  updater: (task: SubjectTask) => SubjectTask
+) => tasks.map(task => (task.id === taskId ? updater(task) : task));
+
+const applyElapsedStudyTime = (
+  subjects: Subject[],
+  tasks: Task[],
+  activeSubjectId: number | null,
+  activeTaskId: number | null,
+  elapsedSeconds: number
+) => {
+  const nextTasks =
+    activeTaskId === null
+      ? tasks
+      : tasks.map(task =>
+          task.id === activeTaskId ? { ...task, studyTime: task.studyTime + elapsedSeconds } : task
+        );
+
+  const nextSubjects =
+    activeSubjectId === null
+      ? subjects
+      : subjects.map(subject => {
+          const nextStudyTime =
+            subject.id === activeSubjectId ? subject.studyTime + elapsedSeconds : subject.studyTime;
+
+          if (activeTaskId === null) {
+            return subject.id === activeSubjectId
+              ? { ...subject, studyTime: nextStudyTime }
+              : subject;
+          }
+
+          return {
+            ...subject,
+            studyTime: nextStudyTime,
+            tasks:
+              subject.id === activeSubjectId
+                ? updateNestedSubjectTasks(subject.tasks, activeTaskId, task => ({
+                    ...task,
+                    studyTime: task.studyTime + elapsedSeconds,
+                  }))
+                : subject.tasks,
+          };
+        });
+
+  return { subjects: nextSubjects, tasks: nextTasks };
+};
+
+const updateSubjectList = (
+  subjects: Subject[],
+  subjectId: number,
+  updater: (subject: Subject) => Subject
+) => subjects.map(subject => (subject.id === subjectId ? updater(subject) : subject));
 
 let stopInFlight: Promise<boolean> | null = null;
 
 export const useRecordStore = create<RecordStore>((set, get) => ({
+  subjects: [],
   tasks: [],
+  activeSessionType: null,
+  activeSubjectId: null,
   activeTaskId: null,
   currentStudyTime: 0,
   startTime: null,
+  baseStudyTime: 0,
 
-  // 공부 시작
-  start: async (taskId: number) => {
-    const { activeTaskId } = get();
+  startSubject: async subjectId => {
+    const { activeSessionType, activeSubjectId, activeTaskId } = get();
 
     try {
-      // 다른 과목 공부 중이면 해당 과목 중단
-      if (activeTaskId !== null && activeTaskId !== taskId) {
-        await get().stop();
-      }
-
-      if (activeTaskId === taskId) {
+      if (activeSessionType === "TASK" && activeSubjectId === subjectId && activeTaskId === null) {
         return;
       }
 
-      const response = await recordApi.startRecord({ recordType: "TASK", taskId, appId: null });
-      if (response.success) {
-        set({ activeTaskId: taskId, startTime: Date.now(), currentStudyTime: 0 });
-        await queryClient.invalidateQueries({ queryKey: recordQueryKeys.today });
+      if (activeSessionType !== null) {
+        const stopped = await get().stop();
+        if (!stopped) {
+          return;
+        }
       }
+
+      const response = await recordApi.startRecord({
+        sessionType: "TASK",
+        subjectId,
+        taskId: null,
+        appId: null,
+      });
+
+      if (!response.success) {
+        return;
+      }
+
+      set(state => ({
+        activeSessionType: "TASK",
+        activeSubjectId: subjectId,
+        activeTaskId: null,
+        startTime: Date.now(),
+        currentStudyTime: 0,
+        baseStudyTime: state.baseStudyTime,
+      }));
+      await queryClient.invalidateQueries({ queryKey: recordQueryKeys.today });
     } catch (error: unknown) {
-      const errorMessage = getErrorMessage(error, "기록 시작에 실패했습니다.");
-      console.error("기록 시작 실패:", errorMessage, error);
+      const errorMessage = getErrorMessage(error, "과목 기록 시작에 실패했습니다.");
+      console.error("과목 기록 시작 실패:", errorMessage, error);
     }
   },
 
-  // 공부 중지
+  startTask: async taskId => {
+    const { tasks, activeSessionType, activeTaskId } = get();
+    const task = tasks.find(item => item.id === taskId);
+
+    if (!task) {
+      return;
+    }
+
+    try {
+      if (activeSessionType === "TASK" && activeTaskId === taskId) {
+        return;
+      }
+
+      if (activeSessionType !== null) {
+        const stopped = await get().stop();
+        if (!stopped) {
+          return;
+        }
+      }
+
+      const response = await recordApi.startRecord({
+        sessionType: "TASK",
+        subjectId: task.subjectId,
+        taskId,
+        appId: null,
+      });
+
+      if (!response.success) {
+        return;
+      }
+
+      set(state => ({
+        activeSessionType: "TASK",
+        activeSubjectId: task.subjectId,
+        activeTaskId: taskId,
+        startTime: Date.now(),
+        currentStudyTime: 0,
+        baseStudyTime: state.baseStudyTime,
+      }));
+      await queryClient.invalidateQueries({ queryKey: recordQueryKeys.today });
+    } catch (error: unknown) {
+      const errorMessage = getErrorMessage(error, "할 일 기록 시작에 실패했습니다.");
+      console.error("할 일 기록 시작 실패:", errorMessage, error);
+    }
+  },
+
   stop: async () => {
-    // 이미 중지 요청이 진행 중이면 같은 요청을 기다림
     if (stopInFlight) {
       return stopInFlight;
     }
 
     const runStop = async (): Promise<boolean> => {
-      const { activeTaskId, startTime, currentStudyTime } = get();
+      const {
+        subjects,
+        tasks,
+        activeSessionType,
+        activeSubjectId,
+        activeTaskId,
+        startTime,
+        currentStudyTime,
+        baseStudyTime,
+      } = get();
 
-      if (activeTaskId === null) {
+      if (activeSessionType === null) {
         return true;
       }
 
-      // 중지 버튼 누르는 순간 시간을 고정해두고 바로 UI를 멈춤
       const elapsedAtStop =
         startTime !== null
           ? Math.max(0, Math.floor((Date.now() - startTime) / 1000))
           : Math.max(0, currentStudyTime);
 
-      set(state => ({
-        tasks: state.tasks.map(task =>
-          task.id === activeTaskId ? { ...task, studyTime: task.studyTime + elapsedAtStop } : task
-        ),
+      const nextStudyState =
+        elapsedAtStop > 0
+          ? applyElapsedStudyTime(subjects, tasks, activeSubjectId, activeTaskId, elapsedAtStop)
+          : { subjects, tasks };
+
+      set({
+        subjects: nextStudyState.subjects,
+        tasks: nextStudyState.tasks,
+        activeSessionType: null,
+        activeSubjectId: null,
         activeTaskId: null,
         startTime: null,
         currentStudyTime: 0,
-      }));
+        baseStudyTime: baseStudyTime + elapsedAtStop,
+      });
 
       try {
         const response = await recordApi.stopRecord();
 
         if (!response.success) {
           console.error("기록 중지 실패:", "기록 중지 응답이 실패로 반환되었습니다.", response);
-          await Promise.all([
-            queryClient.invalidateQueries({ queryKey: recordQueryKeys.tasks }),
-            queryClient.invalidateQueries({ queryKey: recordQueryKeys.today }),
-          ]);
+          await invalidateRecordQueries();
           return false;
         }
 
-        // 중지 직후에는 today의 active session 캐시도 함께 정리해야 타이머가 즉시 멈춤
-        await Promise.all([
-          queryClient.invalidateQueries({ queryKey: recordQueryKeys.tasks }),
-          queryClient.invalidateQueries({ queryKey: recordQueryKeys.today }),
-        ]);
+        await invalidateRecordQueries();
         return true;
       } catch (error: unknown) {
         const errorMessage = getErrorMessage(error, "기록 중지에 실패했습니다.");
         console.error("기록 중지 실패:", errorMessage, error);
-        await Promise.all([
-          queryClient.invalidateQueries({ queryKey: recordQueryKeys.tasks }),
-          queryClient.invalidateQueries({ queryKey: recordQueryKeys.today }),
-        ]);
+        await invalidateRecordQueries();
         return false;
       }
     };
@@ -114,65 +266,248 @@ export const useRecordStore = create<RecordStore>((set, get) => ({
     return stopped;
   },
 
-  // 과목 추가
-  addTask: async (name: string) => {
+  addSubject: async name => {
     try {
-      const response = await recordApi.createTask({ name });
-      if (response.success) {
-        await queryClient.invalidateQueries({ queryKey: recordQueryKeys.tasks });
+      const response = await recordApi.createSubject({ name });
+      if (!response.success) {
+        return false;
       }
+
+      await queryClient.invalidateQueries({ queryKey: recordQueryKeys.subjects });
+      return true;
     } catch (error: unknown) {
       const errorMessage = getErrorMessage(error, "과목 추가에 실패했습니다.");
       console.error("과목 추가 실패:", errorMessage, error);
+      return false;
     }
   },
 
-  // 과목 수정
-  updateTask: async (taskId: number, name: string) => {
+  updateSubject: async (subjectId, name) => {
     try {
-      const response = await recordApi.updateTask(taskId, { name });
-      if (response.success) {
-        set(state => ({
-          tasks: state.tasks.map(task => (task.id === taskId ? { ...task, name } : task)),
-        }));
+      const response = await recordApi.updateSubject(subjectId, { name });
+      if (!response.success) {
+        return false;
       }
+
+      set(state => ({
+        subjects: state.subjects.map(subject =>
+          subject.id === subjectId ? { ...subject, name } : subject
+        ),
+      }));
+      return true;
     } catch (error: unknown) {
       const errorMessage = getErrorMessage(error, "과목 수정에 실패했습니다.");
       console.error("과목 수정 실패:", errorMessage, error);
+      return false;
     }
   },
 
-  // 과목 삭제
-  deleteTask: async (taskId: number) => {
-    const { activeTaskId, startTime, currentStudyTime } = get();
+  deleteSubject: async subjectId => {
+    const { activeSubjectId } = get();
 
     try {
-      // 삭제 대상이 실행 중 과목이거나, stop 요청이 진행 중이면 stop 완료를 먼저 보장
-      if (activeTaskId === taskId || startTime !== null || currentStudyTime > 0 || stopInFlight) {
-        const stopSuccess = await get().stop();
-        if (!stopSuccess) {
+      if (activeSubjectId === subjectId || stopInFlight) {
+        const stopped = await get().stop();
+        if (!stopped) {
           console.error("과목 삭제 실패:", "기록 중지에 실패해 삭제를 진행하지 않았습니다.");
-          return;
+          return false;
+        }
+      }
+
+      const response = await recordApi.deleteSubject(subjectId);
+      if (!response.success) {
+        await invalidateRecordQueries();
+        return false;
+      }
+
+      set(state => ({
+        subjects: state.subjects.filter(subject => subject.id !== subjectId),
+        tasks: state.tasks.filter(task => task.subjectId !== subjectId),
+      }));
+      await invalidateRecordQueries();
+      return true;
+    } catch (error: unknown) {
+      const errorMessage = getErrorMessage(error, "과목 삭제에 실패했습니다.");
+      console.error("과목 삭제 실패:", errorMessage, error);
+      return false;
+    }
+  },
+
+  addTask: async (name, subjectId) => {
+    try {
+      const response = await recordApi.createTask({ name, subjectId });
+      if (!response.success) {
+        return false;
+      }
+
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: recordQueryKeys.subjects }),
+        queryClient.invalidateQueries({ queryKey: recordQueryKeys.tasks }),
+      ]);
+      return true;
+    } catch (error: unknown) {
+      const errorMessage = getErrorMessage(error, "할 일 추가에 실패했습니다.");
+      console.error("할 일 추가 실패:", errorMessage, error);
+      return false;
+    }
+  },
+
+  updateTask: async (taskId, name, subjectId) => {
+    const task = get().tasks.find(item => item.id === taskId);
+
+    if (!task) {
+      return false;
+    }
+
+    try {
+      const response = await recordApi.updateTask(taskId, { name, subjectId });
+      if (!response.success) {
+        return false;
+      }
+
+      set(state => ({
+        tasks: state.tasks.map(item => (item.id === taskId ? { ...item, name, subjectId } : item)),
+        activeSubjectId:
+          state.activeSessionType === "TASK" && state.activeTaskId === taskId
+            ? subjectId
+            : state.activeSubjectId,
+        subjects: state.subjects.map(subject => {
+          if (subject.id === subjectId && task.subjectId === subjectId) {
+            return {
+              ...subject,
+              tasks: updateNestedSubjectTasks(subject.tasks, taskId, nestedTask => ({
+                ...nestedTask,
+                name,
+              })),
+            };
+          }
+
+          const withoutTask = subject.tasks.filter(nestedTask => nestedTask.id !== taskId);
+
+          if (subject.id === subjectId) {
+            return {
+              ...subject,
+              tasks: [
+                ...withoutTask,
+                {
+                  id: taskId,
+                  name,
+                  icon: task.icon,
+                  completed: task.completed,
+                  studyTime: task.studyTime,
+                },
+              ],
+            };
+          }
+
+          return withoutTask.length === subject.tasks.length
+            ? subject
+            : { ...subject, tasks: withoutTask };
+        }),
+      }));
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: recordQueryKeys.subjects }),
+        queryClient.invalidateQueries({ queryKey: recordQueryKeys.tasks }),
+      ]);
+      return true;
+    } catch (error: unknown) {
+      const errorMessage = getErrorMessage(error, "할 일 수정에 실패했습니다.");
+      console.error("할 일 수정 실패:", errorMessage, error);
+      return false;
+    }
+  },
+
+  deleteTask: async taskId => {
+    const task = get().tasks.find(item => item.id === taskId);
+
+    if (!task) {
+      return false;
+    }
+
+    try {
+      if (get().activeTaskId === taskId || stopInFlight) {
+        const stopped = await get().stop();
+        if (!stopped) {
+          console.error("할 일 삭제 실패:", "기록 중지에 실패해 삭제를 진행하지 않았습니다.");
+          return false;
         }
       }
 
       const response = await recordApi.deleteTask(taskId);
       if (!response.success) {
-        console.error("과목 삭제 실패:", "과목 삭제 응답이 실패로 반환되었습니다.", response);
-        await queryClient.invalidateQueries({ queryKey: recordQueryKeys.tasks });
-        return;
+        await invalidateRecordQueries();
+        return false;
       }
 
-      set(state => ({ tasks: state.tasks.filter(task => task.id !== taskId) }));
-      await queryClient.invalidateQueries({ queryKey: recordQueryKeys.tasks });
+      set(state => ({
+        tasks: state.tasks.filter(item => item.id !== taskId),
+        subjects: state.subjects.map(subject => ({
+          ...subject,
+          tasks: subject.tasks.filter(nestedTask => nestedTask.id !== taskId),
+        })),
+      }));
+      await invalidateRecordQueries();
+      return true;
     } catch (error: unknown) {
-      const errorMessage = getErrorMessage(error, "과목 삭제에 실패했습니다.");
-      console.error("과목 삭제 실패:", errorMessage, error);
+      const errorMessage = getErrorMessage(error, "할 일 삭제에 실패했습니다.");
+      console.error("할 일 삭제 실패:", errorMessage, error);
+      return false;
     }
   },
 
-  setCurrentStudyTime: (time: number) => set({ currentStudyTime: time }),
-  setTasks: (tasks: Task[]) => set({ tasks }),
-  setActiveSession: (activeTaskId: number | null, startTime: number | null) =>
-    set({ activeTaskId, startTime }),
+  updateTaskCompletion: async (taskId, completed) => {
+    const task = get().tasks.find(item => item.id === taskId);
+
+    if (!task) {
+      return false;
+    }
+
+    try {
+      if (completed && get().activeTaskId === taskId) {
+        const stopped = await get().stop();
+        if (!stopped) {
+          console.error(
+            "할 일 완료 처리 실패:",
+            "기록 중지에 실패해 완료 처리를 진행하지 않았습니다."
+          );
+          return false;
+        }
+      }
+
+      const response = await recordApi.updateTaskCompletion(taskId, { completed });
+      if (!response.success) {
+        return false;
+      }
+
+      set(state => ({
+        tasks: state.tasks.map(item =>
+          item.id === taskId ? { ...item, completed: response.data?.completed ?? completed } : item
+        ),
+        subjects:
+          task.subjectId === null
+            ? state.subjects
+            : updateSubjectList(state.subjects, task.subjectId, subject => ({
+                ...subject,
+                tasks: updateNestedSubjectTasks(subject.tasks, taskId, nestedTask => ({
+                  ...nestedTask,
+                  completed: response.data?.completed ?? completed,
+                })),
+              })),
+      }));
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: recordQueryKeys.subjects }),
+        queryClient.invalidateQueries({ queryKey: recordQueryKeys.tasks }),
+      ]);
+      return true;
+    } catch (error: unknown) {
+      const errorMessage = getErrorMessage(error, "할 일 완료 상태 변경에 실패했습니다.");
+      console.error("할 일 완료 상태 변경 실패:", errorMessage, error);
+      return false;
+    }
+  },
+
+  setCurrentStudyTime: time => set({ currentStudyTime: time }),
+  setSubjects: subjects => set({ subjects }),
+  setTasks: tasks => set({ tasks }),
+  setActiveSession: session => set(session),
 }));

@@ -1,10 +1,9 @@
 import { useEffect, useRef, useState, type ChangeEvent, type KeyboardEvent } from "react";
 import { useRecordStore } from "./recordStore";
-import { recordApi, recordQueryKeys, useRecordTodayQuery } from "@/entities/record";
-import type { TaskRecordSession } from "@/entities/record";
-import { getErrorMessage, queryClient } from "@/shared/lib";
+import { useRecordTodayQuery } from "@/entities/record";
+import { isTodayRecordDate } from "./recordDate";
 
-type EditMode = "none" | "add" | "edit";
+type EditMode = "NONE" | "ADD" | "EDIT";
 const MAX_TASK_NAME_LENGTH = 13;
 const TASK_NAME_INPUT_MAX_LENGTH = 14;
 
@@ -22,151 +21,157 @@ const getTaskNameErrorMessage = (name: string) => {
   return null;
 };
 
-export const useTaskList = () => {
-  const { tasks, activeTaskId, currentStudyTime, start, stop, addTask, updateTask, deleteTask } =
-    useRecordStore();
-  const { data: todayResponse } = useRecordTodayQuery();
+export const useTaskList = (selectedDate: string) => {
+  const {
+    subjects,
+    activeSessionType,
+    activeSubjectId,
+    currentStudyTime,
+    startSubject,
+    stop,
+    addSubject,
+    updateSubject,
+    deleteSubject,
+  } = useRecordStore();
+  const isTodaySelected = isTodayRecordDate(selectedDate);
+  const { data: todayResponse } = useRecordTodayQuery(isTodaySelected ? undefined : selectedDate);
 
-  const [editMode, setEditMode] = useState<EditMode>("none");
-  const [editingTaskId, setEditingTaskId] = useState<number | null>(null);
-  const [taskName, setTaskName] = useState("");
-  const [openMenuTaskId, setOpenMenuTaskId] = useState<number | null>(null);
+  const [editMode, setEditMode] = useState<EditMode>("NONE");
+  const [editingSubjectId, setEditingSubjectId] = useState<number | null>(null);
+  const [subjectName, setSubjectName] = useState("");
+  const [openMenuSubjectId, setOpenMenuSubjectId] = useState<number | null>(null);
   const [deleteTargetId, setDeleteTargetId] = useState<number | null>(null);
-  const [activitySwitchTargetTaskId, setActivitySwitchTargetTaskId] = useState<number | null>(null);
-  const [isSwitchingFromActivity, setIsSwitchingFromActivity] = useState(false);
-  const [isTaskNameTooltipOpen, setIsTaskNameTooltipOpen] = useState(false);
-  const taskNameErrorMessage = getTaskNameErrorMessage(taskName);
-  const isTaskNameInvalid = taskNameErrorMessage !== null;
-  const isTaskNameTooLong = taskName.trim().length > MAX_TASK_NAME_LENGTH;
-  const shouldShowTaskNameTooltip =
-    Boolean(taskNameErrorMessage) && (isTaskNameTooltipOpen || isTaskNameTooLong);
+  const [developSwitchTargetSubjectId, setDevelopSwitchTargetSubjectId] = useState<number | null>(
+    null
+  );
+  const [isSwitchingFromDevelop, setIsSwitchingFromDevelop] = useState(false);
+  const [isSubjectNameTooltipOpen, setIsSubjectNameTooltipOpen] = useState(false);
+  const subjectNameErrorMessage = getTaskNameErrorMessage(subjectName);
+  const isSubjectNameInvalid = subjectNameErrorMessage !== null;
+  const isSubjectNameTooLong = subjectName.trim().length > MAX_TASK_NAME_LENGTH;
+  const shouldShowSubjectNameTooltip =
+    Boolean(subjectNameErrorMessage) && (isSubjectNameTooltipOpen || isSubjectNameTooLong);
 
   const menuRef = useRef<HTMLDivElement>(null);
-  const taskNameInputRef = useRef<HTMLInputElement>(null);
+  const subjectNameInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    if (editMode === "none") return;
-    taskNameInputRef.current?.focus();
-  }, [editMode, editingTaskId]);
+    if (editMode === "NONE") return;
+    subjectNameInputRef.current?.focus();
+  }, [editMode, editingSubjectId]);
 
-  const isActivityRecording = Boolean(
+  const isDevelopRecording = Boolean(
     todayResponse?.success &&
     todayResponse.data?.sessions.some(
-      session => session.endedAt === null && session.recordType === "ACTIVITY"
+      session => session.endedAt === null && session.sessionType === "DEVELOP"
     )
   );
-  const activeTaskSessionId =
-    todayResponse?.success && todayResponse.data
-      ? ((
-          todayResponse.data.sessions.find(
-            (session): session is TaskRecordSession =>
-              session.endedAt === null && session.recordType === "TASK"
-          ) ?? null
-        )?.task.id ?? null)
-      : null;
-  const isDeletingActiveTask = Boolean(
-    deleteTargetId !== null &&
-    (activeTaskId === deleteTargetId || activeTaskSessionId === deleteTargetId)
+  const isDeletingActiveSubject = Boolean(
+    deleteTargetId !== null && activeSessionType === "TASK" && activeSubjectId === deleteTargetId
   );
 
-  const handlePlayPauseClick = async (taskId: number) => {
-    if (isActivityRecording && activeTaskId !== taskId) {
-      setActivitySwitchTargetTaskId(taskId);
+  const handlePlayPauseClick = async (subjectId: number) => {
+    if (!isTodaySelected) {
       return;
     }
 
-    if (activeTaskId === taskId) {
-      await stop();
-    } else {
-      await start(taskId);
+    if (isDevelopRecording && activeSubjectId !== subjectId) {
+      setDevelopSwitchTargetSubjectId(subjectId);
+      return;
     }
+
+    if (activeSessionType === "TASK" && activeSubjectId === subjectId) {
+      await stop();
+      return;
+    }
+
+    await startSubject(subjectId);
   };
 
   const handleCloseActivitySwitchDialog = () => {
-    if (isSwitchingFromActivity) {
+    if (isSwitchingFromDevelop) {
       return;
     }
-    setActivitySwitchTargetTaskId(null);
+    setDevelopSwitchTargetSubjectId(null);
   };
 
   const handleConfirmActivitySwitch = async () => {
-    if (activitySwitchTargetTaskId === null) {
+    if (developSwitchTargetSubjectId === null) {
       return;
     }
 
-    setIsSwitchingFromActivity(true);
+    setIsSwitchingFromDevelop(true);
+
     try {
-      const stopResponse = await recordApi.stopRecord();
-      if (!stopResponse.success) {
-        console.error(
-          "개발 기록 종료 실패:",
-          stopResponse.message ?? "개발 세션 종료 응답이 실패로 반환되었습니다."
-        );
+      const stopped = await stop();
+      if (!stopped) {
         return;
       }
 
-      await queryClient.invalidateQueries({ queryKey: recordQueryKeys.today });
-      await start(activitySwitchTargetTaskId);
-      setActivitySwitchTargetTaskId(null);
-    } catch (error: unknown) {
-      const errorMessage = getErrorMessage(
-        error,
-        "개발 기록 종료 후 과목 공부 시작에 실패했습니다."
-      );
-      console.error("개발 기록 종료 후 과목 공부 시작 실패:", errorMessage, error);
+      await startSubject(developSwitchTargetSubjectId);
+      setDevelopSwitchTargetSubjectId(null);
     } finally {
-      setIsSwitchingFromActivity(false);
+      setIsSwitchingFromDevelop(false);
     }
   };
 
-  const closeTaskNameTooltip = () => {
-    setIsTaskNameTooltipOpen(false);
+  const closeSubjectNameTooltip = () => {
+    setIsSubjectNameTooltipOpen(false);
   };
 
   const handleAddClick = () => {
-    setEditMode("add");
-    setTaskName("");
-    closeTaskNameTooltip();
+    setEditMode("ADD");
+    setSubjectName("");
+    closeSubjectNameTooltip();
   };
 
-  const handleEditClick = (taskId: number) => {
-    const task = tasks.find(t => t.id === taskId);
-    if (task) {
-      setEditMode("edit");
-      setEditingTaskId(taskId);
-      setTaskName(task.name);
-      setOpenMenuTaskId(null);
-      closeTaskNameTooltip();
+  const handleEditClick = (subjectId: number) => {
+    const subject = subjects.find(item => item.id === subjectId);
+    if (subject) {
+      setEditMode("EDIT");
+      setEditingSubjectId(subjectId);
+      setSubjectName(subject.name);
+      setOpenMenuSubjectId(null);
+      closeSubjectNameTooltip();
     }
   };
 
-  const handleMoreClick = (taskId: number) => {
-    setOpenMenuTaskId(prev => (prev === taskId ? null : taskId));
+  const handleMoreClick = (subjectId: number) => {
+    setOpenMenuSubjectId(previousId => (previousId === subjectId ? null : subjectId));
   };
 
   const handleCloseMenu = () => {
-    setOpenMenuTaskId(null);
+    setOpenMenuSubjectId(null);
   };
 
   const handleCancelEdit = () => {
-    setEditMode("none");
-    setEditingTaskId(null);
-    setTaskName("");
-    closeTaskNameTooltip();
+    setEditMode("NONE");
+    setEditingSubjectId(null);
+    setSubjectName("");
+    closeSubjectNameTooltip();
   };
 
   const handleSaveTask = async () => {
-    if (isTaskNameInvalid) return false;
-    const trimmedTaskName = taskName.trim();
+    if (isSubjectNameInvalid) {
+      return false;
+    }
 
-    if (editMode === "add") {
-      await addTask(trimmedTaskName);
-      handleCancelEdit();
-      return true;
-    } else if (editMode === "edit" && editingTaskId !== null) {
-      await updateTask(editingTaskId, trimmedTaskName);
-      handleCancelEdit();
-      return true;
+    const trimmedSubjectName = subjectName.trim();
+
+    if (editMode === "ADD") {
+      const saved = await addSubject(trimmedSubjectName);
+      if (saved) {
+        handleCancelEdit();
+      }
+      return saved;
+    }
+
+    if (editMode === "EDIT" && editingSubjectId !== null) {
+      const saved = await updateSubject(editingSubjectId, trimmedSubjectName);
+      if (saved) {
+        handleCancelEdit();
+      }
+      return saved;
     }
 
     return false;
@@ -174,15 +179,15 @@ export const useTaskList = () => {
 
   const handleSaveClick = async () => {
     const isSaved = await handleSaveTask();
-    setIsTaskNameTooltipOpen(!isSaved);
+    setIsSubjectNameTooltipOpen(!isSaved);
   };
 
   const handleTaskNameChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const nextTaskName = event.target.value;
-    setTaskName(nextTaskName);
+    const nextSubjectName = event.target.value;
+    setSubjectName(nextSubjectName);
 
-    if (nextTaskName.trim().length <= MAX_TASK_NAME_LENGTH) {
-      closeTaskNameTooltip();
+    if (nextSubjectName.trim().length <= MAX_TASK_NAME_LENGTH) {
+      closeSubjectNameTooltip();
     }
   };
 
@@ -193,9 +198,9 @@ export const useTaskList = () => {
     void handleSaveClick();
   };
 
-  const handleDeleteRequest = (taskId: number) => {
-    setDeleteTargetId(taskId);
-    setOpenMenuTaskId(null);
+  const handleDeleteRequest = (subjectId: number) => {
+    setDeleteTargetId(subjectId);
+    setOpenMenuSubjectId(null);
   };
 
   const handleCancelDelete = () => {
@@ -204,37 +209,40 @@ export const useTaskList = () => {
 
   const handleConfirmDelete = async () => {
     if (deleteTargetId !== null) {
-      await deleteTask(deleteTargetId);
-      setDeleteTargetId(null);
+      const deleted = await deleteSubject(deleteTargetId);
+      if (deleted) {
+        setDeleteTargetId(null);
+      }
     }
   };
 
-  const isTaskActive = (taskId: number) => activeTaskId === taskId;
+  const isSubjectActive = (subjectId: number) =>
+    activeSessionType === "TASK" && activeSubjectId === subjectId;
 
-  const getTaskStudyTime = (taskId: number) => {
-    const task = tasks.find(item => item.id === taskId);
-    if (!task) return 0;
-    return activeTaskId === taskId ? task.studyTime + currentStudyTime : task.studyTime;
+  const getSubjectStudyTime = (subjectId: number) => {
+    const subject = subjects.find(item => item.id === subjectId);
+    if (!subject) return 0;
+    return isSubjectActive(subjectId) ? subject.studyTime + currentStudyTime : subject.studyTime;
   };
 
   return {
-    tasks,
+    subjects,
     editMode,
-    editingTaskId,
-    taskName,
-    taskNameInputRef,
+    editingSubjectId,
+    subjectName,
+    subjectNameInputRef,
     taskNameInputMaxLength: TASK_NAME_INPUT_MAX_LENGTH,
-    taskNameErrorMessage,
-    isTaskNameInvalid,
-    shouldShowTaskNameTooltip,
-    openMenuTaskId,
+    taskNameErrorMessage: subjectNameErrorMessage,
+    isTaskNameInvalid: isSubjectNameInvalid,
+    shouldShowTaskNameTooltip: shouldShowSubjectNameTooltip,
+    openMenuTaskId: openMenuSubjectId,
     deleteTargetId,
-    isDeletingActiveTask,
-    activitySwitchTargetTaskId,
-    isSwitchingFromActivity,
+    isDeletingActiveTask: isDeletingActiveSubject,
+    activitySwitchTargetTaskId: developSwitchTargetSubjectId,
+    isSwitchingFromActivity: isSwitchingFromDevelop,
     menuRef,
-    isTaskActive,
-    getTaskStudyTime,
+    isTaskActive: isSubjectActive,
+    getTaskStudyTime: getSubjectStudyTime,
     handleTaskNameChange,
     handleTaskNameKeyDown,
     handleSaveClick,
