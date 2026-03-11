@@ -141,100 +141,104 @@ export const ItemPanel = ({ onPreviewChange, onStartEdit }: ItemPanelProps) => {
 
   return (
     <>
-      <S.Wrapper>
-        <S.Header>
-          <S.Title>아이템</S.Title>
+      {/*<S.Wrapper>*/}
+      {/*  <S.Header>*/}
+      {/*    <S.Title>아이템</S.Title>*/}
 
-          <S.FilterRow>
-            {(["all", "badge", "background", "nameplate"] as const).map(key => (
-              <S.FilterChip
-                key={key}
-                $active={filter === key}
-                onClick={() => handleFilterClick(key)}
-                type="button"
-              >
-                {chipLabel[key]}
-              </S.FilterChip>
-            ))}
-          </S.FilterRow>
-        </S.Header>
+      {/*    <S.FilterRow>*/}
+      {/*      {(["all", "badge", "background", "nameplate"] as const).map(key => (*/}
+      {/*        <S.FilterChip*/}
+      {/*          key={key}*/}
+      {/*          $active={filter === key}*/}
+      {/*          onClick={() => handleFilterClick(key)}*/}
+      {/*          type="button"*/}
+      {/*        >*/}
+      {/*          {chipLabel[key]}*/}
+      {/*        </S.FilterChip>*/}
+      {/*      ))}*/}
+      {/*    </S.FilterRow>*/}
+      {/*  </S.Header>*/}
 
-        <S.GridScrollArea>
-          <S.Grid>
-            {items.map(item => {
-              const isActive = selectedId === item.id;
+      {/*  <S.GridScrollArea>*/}
+      {/*    <S.Grid>*/}
+      {/*      {items.map(item => {*/}
+      {/*        const isActive = selectedId === item.id;*/}
 
-              const styleVars: CSSVars = {};
-              if (item.accentColor) styleVars["--item-accent"] = item.accentColor;
-              if (item.bgImageUrl) styleVars["--item-bg-image"] = `url(${item.bgImageUrl})`;
+      {/*        const styleVars: CSSVars = {};*/}
+      {/*        if (item.accentColor) styleVars["--item-accent"] = item.accentColor;*/}
+      {/*        if (item.bgImageUrl) styleVars["--item-bg-image"] = `url(${item.bgImageUrl})`;*/}
 
-              return (
-                <S.CardButton
-                  key={item.id}
-                  type="button"
-                  $active={isActive}
-                  onClick={() => handleCardClick(item)}
-                >
-                  <S.CardInner>
-                    {item.category === "background" && (
-                      <>
-                        <S.ThumbBackground style={styleVars} />
-                        <S.CardFooter>
-                          <S.ItemTitle>{item.title}</S.ItemTitle>
-                          <S.BadgePill>{pillLabel[item.category]}</S.BadgePill>
-                        </S.CardFooter>
-                      </>
-                    )}
+      {/*        return (*/}
+      {/*          <S.CardButton*/}
+      {/*            key={item.id}*/}
+      {/*            type="button"*/}
+      {/*            $active={isActive}*/}
+      {/*            onClick={() => handleCardClick(item)}*/}
+      {/*          >*/}
+      {/*            <S.CardInner>*/}
+      {/*              {item.category === "background" && (*/}
+      {/*                <>*/}
+      {/*                  <S.ThumbBackground style={styleVars} />*/}
+      {/*                  <S.CardFooter>*/}
+      {/*                    <S.ItemTitle>{item.title}</S.ItemTitle>*/}
+      {/*                    <S.BadgePill>{pillLabel[item.category]}</S.BadgePill>*/}
+      {/*                  </S.CardFooter>*/}
+      {/*                </>*/}
+      {/*              )}*/}
 
-                    {item.category === "badge" && (
-                      <S.ThumbBadgeCard>
-                        <S.BadgeLeftRing style={styleVars}>
-                          <S.BadgeAvatar alt="profile" />
-                        </S.BadgeLeftRing>
+      {/*              {item.category === "badge" && (*/}
+      {/*                <S.ThumbBadgeCard>*/}
+      {/*                  <S.BadgeLeftRing style={styleVars}>*/}
+      {/*                    <S.BadgeAvatar alt="profile" />*/}
+      {/*                  </S.BadgeLeftRing>*/}
 
-                        <S.BadgeRight>
-                          <S.BadgePillInline>{pillLabel[item.category]}</S.BadgePillInline>
-                          <S.BadgeTitle>{item.title}</S.BadgeTitle>
-                        </S.BadgeRight>
-                      </S.ThumbBadgeCard>
-                    )}
+      {/*                  <S.BadgeRight>*/}
+      {/*                    <S.BadgePillInline>{pillLabel[item.category]}</S.BadgePillInline>*/}
+      {/*                    <S.BadgeTitle>{item.title}</S.BadgeTitle>*/}
+      {/*                  </S.BadgeRight>*/}
+      {/*                </S.ThumbBadgeCard>*/}
+      {/*              )}*/}
 
-                    {item.category === "nameplate" && (
-                      <>
-                        <S.ThumbName>
-                          <S.NameSmallRow>
-                            <S.NameSmallAvatar alt="" />
-                            <S.NameSmallBar />
-                          </S.NameSmallRow>
+      {/*              {item.category === "nameplate" && (*/}
+      {/*                <>*/}
+      {/*                  <S.ThumbName>*/}
+      {/*                    <S.NameSmallRow>*/}
+      {/*                      <S.NameSmallAvatar alt="" />*/}
+      {/*                      <S.NameSmallBar />*/}
+      {/*                    </S.NameSmallRow>*/}
 
-                          <S.NameMainRow>
-                            <S.NameMainAvatar alt="" style={styleVars} />
-                            <S.NameMainBar style={styleVars} />
-                          </S.NameMainRow>
+      {/*                    <S.NameMainRow>*/}
+      {/*                      <S.NameMainAvatar alt="" style={styleVars} />*/}
+      {/*                      <S.NameMainBar style={styleVars} />*/}
+      {/*                    </S.NameMainRow>*/}
 
-                          <S.NameSmallRow>
-                            <S.NameSmallAvatar alt="" />
-                            <S.NameSmallBar />
-                          </S.NameSmallRow>
-                        </S.ThumbName>
+      {/*                    <S.NameSmallRow>*/}
+      {/*                      <S.NameSmallAvatar alt="" />*/}
+      {/*                      <S.NameSmallBar />*/}
+      {/*                    </S.NameSmallRow>*/}
+      {/*                  </S.ThumbName>*/}
 
-                        <S.CardFooter>
-                          <S.ItemTitle>{item.title}</S.ItemTitle>
-                          <S.BadgePill>{pillLabel[item.category]}</S.BadgePill>
-                        </S.CardFooter>
-                      </>
-                    )}
-                  </S.CardInner>
-                </S.CardButton>
-              );
-            })}
-          </S.Grid>
-        </S.GridScrollArea>
-      </S.Wrapper>
+      {/*                  <S.CardFooter>*/}
+      {/*                    <S.ItemTitle>{item.title}</S.ItemTitle>*/}
+      {/*                    <S.BadgePill>{pillLabel[item.category]}</S.BadgePill>*/}
+      {/*                  </S.CardFooter>*/}
+      {/*                </>*/}
+      {/*              )}*/}
+      {/*            </S.CardInner>*/}
+      {/*          </S.CardButton>*/}
+      {/*        );*/}
+      {/*      })}*/}
+      {/*    </S.Grid>*/}
+      {/*  </S.GridScrollArea>*/}
+      {/*</S.Wrapper>*/}
 
-      <NameplateModal open={isNameplateModalOpen} onClose={closeNameplateModal}>
-        <NameplateModalContent onClose={closeNameplateModal} />
-      </NameplateModal>
+      {/*<NameplateModal open={isNameplateModalOpen} onClose={closeNameplateModal}>*/}
+      {/*  <NameplateModalContent onClose={closeNameplateModal} />*/}
+      {/*</NameplateModal>*/}
+      <S.EmptyStateBox>
+        <S.EmptyTitle>아이템 기능은 현재 개발중인 탭입니다.</S.EmptyTitle>
+        <S.EmptyDescription>정식 출시 이후에 사용할 수 있어요!</S.EmptyDescription>
+      </S.EmptyStateBox>
     </>
   );
 };
