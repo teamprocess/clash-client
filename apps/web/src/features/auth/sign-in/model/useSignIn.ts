@@ -4,9 +4,8 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
 import { useLocation, useNavigate } from "react-router-dom";
-import axios from "axios";
 import { authApi } from "@/entities/user";
-import { getAuthParams } from "@/shared/lib/authParams";
+import { getAuthParams, getErrorMessage } from "@/shared/lib";
 
 const signInSchema = z.object({
   id: z.string().min(4, "아이디를 입력하세요."),
@@ -87,16 +86,9 @@ export const useSignIn = () => {
     } catch (error: unknown) {
       console.error("로그인 실패:", error);
 
-      let errorMessage = "로그인 중 오류가 발생했습니다.";
-
-      if (axios.isAxiosError(error)) {
-        errorMessage =
-          error.response?.data?.error?.message || error.response?.data?.message || errorMessage;
-      }
-
       setError("root", {
         type: "manual",
-        message: errorMessage,
+        message: getErrorMessage(error, "로그인 중 오류가 발생했습니다."),
       });
     }
   };
