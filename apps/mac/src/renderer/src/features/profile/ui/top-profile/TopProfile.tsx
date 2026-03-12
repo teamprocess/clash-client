@@ -1,7 +1,7 @@
 import * as S from "./TopProfile.style";
 import { TopProfileProps } from "@/features/profile/model/useTopProfile";
 import { useGetMyProfile } from "@/entities/user";
-import { RankTier } from "@/shared/ui";
+import { Button, RankTier } from "@/shared/ui";
 
 export const TopProfile = ({
   bannerAccentColor,
@@ -11,7 +11,7 @@ export const TopProfile = ({
   isEditing,
   onCancel,
   onSave,
-  // onEditProfile,
+  onEditProfile,
 }: TopProfileProps) => {
   const { data: user } = useGetMyProfile();
 
@@ -34,18 +34,14 @@ export const TopProfile = ({
       <S.Button>
         {isEditing ? (
           <>
-            <S.ButtonEdit type="button" onClick={onCancel}>
-              취소
-            </S.ButtonEdit>
-            <S.ButtonLogout type="button" onClick={onSave}>
-              저장
-            </S.ButtonLogout>
+            <S.ButtonEdit onClick={onCancel}>취소</S.ButtonEdit>
+            <S.ButtonLogout onClick={onSave}>저장</S.ButtonLogout>
           </>
         ) : (
           <>
-            {/*<S.ButtonEdit type="button" onClick={onEditProfile}>*/}
-            {/*  수정*/}
-            {/*</S.ButtonEdit>*/}
+            <Button size="sm" onClick={onEditProfile}>
+              수정
+            </Button>
           </>
         )}
       </S.Button>
