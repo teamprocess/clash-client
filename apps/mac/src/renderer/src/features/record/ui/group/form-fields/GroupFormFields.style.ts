@@ -2,12 +2,12 @@ import styled, { css } from "styled-components";
 import { font } from "@clash/design-tokens/font";
 import { palette } from "@clash/design-tokens/theme";
 
-export const FieldsContainer = styled.div`
+export const FieldsContainer = styled.div<{ $variant: "default" | "createPanel" }>`
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  gap: 2rem;
-  height: 100%;
+  justify-content: flex-start;
+  gap: ${({ $variant }) => ($variant === "createPanel" ? "1.75rem" : "2rem")};
+  height: auto;
 `;
 
 export const InputWrapper = styled.div`
@@ -53,6 +53,10 @@ export const Input = styled.input`
     -webkit-appearance: none;
     margin: 0;
   }
+`;
+
+export const NumberInput = styled(Input)`
+  padding-right: 3rem;
 `;
 
 export const PasswordInputWrapper = styled.div<{ $hasAction?: boolean }>`
@@ -124,7 +128,7 @@ export const SlideButton = styled.button<{ $isActive?: boolean }>`
   background-color: transparent;
   border: none;
   color: ${({ theme, $isActive }) => ($isActive ? theme.label.normal : theme.label.assistive)};
-  ${font.headline2.medium};
+  ${font.body.medium};
   min-width: 0;
   padding: 0.25rem 0.75rem;
   border-radius: 0.5rem;
@@ -141,10 +145,16 @@ export const TextArea = styled.textarea`
   outline: none;
   border-radius: 0.5rem;
   resize: none;
+  min-height: 11rem;
 
   &::placeholder {
     color: ${({ theme }) => theme.label.assistive};
   }
+`;
+
+export const NumberInputWrapper = styled.div`
+  position: relative;
+  width: 100%;
 `;
 
 export const ErrorText = styled.p`

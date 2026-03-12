@@ -15,6 +15,12 @@ export const GroupSideTabContainer = styled.div`
   position: relative;
 `;
 
+export const FormPanelWrapper = styled.div`
+  flex: 1;
+  min-height: 0;
+  padding-right: 0.25rem;
+`;
+
 export const Title = styled.h3`
   ${font.title2.medium};
   color: ${({ theme }) => theme.label.normal};
@@ -150,8 +156,8 @@ export const MenuItem = styled.button`
 
 export const PlusIconWrapper = styled.button`
   position: absolute;
-  bottom: 1.5rem;
   right: 1.5rem;
+  top: 1.5rem;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -159,6 +165,10 @@ export const PlusIconWrapper = styled.button`
   border: none;
   background: none;
   cursor: pointer;
+  z-index: 2;
 `;
 
-export const PlusIcon = styled(Plus)``;
+export const PlusIcon = styled(Plus)<{ $isOpen?: boolean }>`
+  transform: ${({ $isOpen }) => ($isOpen ? "rotate(45deg)" : "none")};
+  transition: transform 0.2s ease;
+`;
