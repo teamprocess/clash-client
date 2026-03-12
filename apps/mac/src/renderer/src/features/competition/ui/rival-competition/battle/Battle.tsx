@@ -1,9 +1,9 @@
 import * as S from "./Battle.style";
-import { Button, Dialog, Select } from "@/shared/ui";
+import { Button, Dialog, Select, SlideSelector } from "@/shared/ui";
 import { AnalyzeCategory, MATCHVALUE } from "@/entities/competition";
 import { useBattle } from "@/features/competition/model/useBattle";
 import { formatTime } from "@/shared/lib";
-import { useCallback, useLayoutEffect, useRef, useState } from "react";
+import { useState } from "react";
 
 export const Battle = () => {
   const battle = useBattle();
@@ -14,33 +14,6 @@ export const Battle = () => {
   const [activeTab, setActiveTab] = useState<"battle-create" | "battle-request-list">(
     "battle-create"
   );
-  const tabsRef = useRef<HTMLDivElement>(null);
-  const createTabRef = useRef<HTMLButtonElement>(null);
-  const requestListTabRef = useRef<HTMLButtonElement>(null);
-  const [activeRail, setActiveRail] = useState({ left: 0, width: 0 });
-
-  const updateActiveRail = useCallback(() => {
-    const tabsElement = tabsRef.current;
-    const activeTabElement =
-      activeTab === "battle-create" ? createTabRef.current : requestListTabRef.current;
-
-    if (!tabsElement || !activeTabElement) return;
-
-    const tabsRect = tabsElement.getBoundingClientRect();
-    const activeRect = activeTabElement.getBoundingClientRect();
-
-    setActiveRail({
-      left: activeRect.left - tabsRect.left,
-      width: activeRect.width,
-    });
-  }, [activeTab]);
-
-  useLayoutEffect(() => {
-    if (!battle.isModalOpen) return;
-
-    const frameId = requestAnimationFrame(updateActiveRail);
-    return () => cancelAnimationFrame(frameId);
-  }, [battle.isModalOpen, updateActiveRail]);
 
   const battleApplyItems = battle.battleApplyList?.data?.battles ?? [];
   const hasBattleApplyList = battleApplyItems.length > 0;
@@ -242,28 +215,14 @@ export const Battle = () => {
           onClose={battle.closeModal}
         >
           <S.ModalContainer>
-            <S.TabHeader>
-              <S.Tabs ref={tabsRef}>
-                <S.Tab
-                  ref={createTabRef}
-                  $isActive={activeTab === "battle-create"}
-                  onClick={() => setActiveTab("battle-create")}
-                >
-                  배틀 신청하기
-                </S.Tab>
-                <S.Tab
-                  ref={requestListTabRef}
-                  $isActive={activeTab === "battle-request-list"}
-                  onClick={() => setActiveTab("battle-request-list")}
-                >
-                  신청 목록
-                </S.Tab>
-              </S.Tabs>
-
-              <S.TabRail>
-                <S.TabActiveRail $left={activeRail.left} $width={activeRail.width} />
-              </S.TabRail>
-            </S.TabHeader>
+            <SlideSelector
+              value={activeTab}
+              options={[
+                { key: "battle-create", label: "배틀 신청하기" },
+                { key: "battle-request-list", label: "신청 목록" },
+              ]}
+              onChange={setActiveTab}
+            />
 
             {battle.error && <S.ErrorText>{battle.error}</S.ErrorText>}
 

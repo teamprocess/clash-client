@@ -6,7 +6,6 @@ import { type Group as GroupEntity, useMyGroupsQuery } from "@/entities/group";
 import { useGroup } from "@/features/record/model/useGroup";
 import { GroupDeleteModal } from "@/features/record/ui/group/modal/GroupDeleteModal";
 import { GroupEditModal } from "@/features/record/ui/group/modal/GroupEditModal";
-import { GroupFormModal } from "@/features/record/ui/group/modal/GroupFormModal";
 import { getTodayRecordDate, shiftRecordDate } from "@/features/record/model/recordDate";
 
 export const GroupPage = () => {
@@ -41,13 +40,13 @@ export const GroupPage = () => {
           groups={groups}
           currentGroupId={currentGroup?.id ?? null}
           onSelectGroup={setSelectedGroupId}
-          onOpenFormModal={groupControls.handleOpenFormModal}
+          onOpenFormPanel={groupControls.handleOpenFormPanel}
+          formPanel={groupControls.formPanel}
           onEditGroup={groupControls.handleEditGroupRequest}
           onDeleteGroup={groupId => groupControls.handleDeleteGroupRequest("delete", groupId)}
           onQuitGroup={groupId => groupControls.handleDeleteGroupRequest("quit", groupId)}
         />
       </S.Content>
-      <GroupFormModal {...groupControls.formModal} />
       <GroupEditModal {...groupControls.editModal} />
       <GroupDeleteModal {...groupControls.deleteModal} />
     </S.GroupPageContainer>
