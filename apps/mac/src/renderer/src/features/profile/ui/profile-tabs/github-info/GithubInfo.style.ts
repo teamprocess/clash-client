@@ -106,7 +106,7 @@ export const DateText = styled.p`
 export const Total = styled.span`
   display: flex;
   align-items: baseline;
-  gap: 0.5rem;
+  gap: 0.25rem;
 `;
 
 export const Number = styled.p`
@@ -129,8 +129,6 @@ export const GithubBox = styled.div`
   align-items: center;
   justify-content: flex-start;
   gap: 3rem;
-  box-sizing: border-box;
-  overflow: hidden;
   min-width: 0;
 `;
 
@@ -139,7 +137,7 @@ export const Github = styled.div`
   grid-template-columns: repeat(2, max-content);
   column-gap: 1.25rem;
   row-gap: 0.625rem;
-  flex: 0 1 auto;
+  flex: 1;
   min-width: 0;
 `;
 
@@ -147,7 +145,7 @@ export const Stat = styled.div`
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  width: fit-content;
+  width: 100%;
   min-width: 0;
 `;
 
@@ -174,8 +172,8 @@ export const Info = styled.div`
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-  flex: 0 1 15.5rem;
-  width: 15.5rem;
+  flex: 1;
+  width: 100%;
   min-width: 0;
 `;
 
@@ -190,6 +188,7 @@ export const MetaText = styled.div`
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  flex: 1;
   min-width: 0;
 `;
 
@@ -197,16 +196,21 @@ export const MetaLabel = styled.p`
   ${font.body.medium}
   color: ${({ theme }) => theme.label.alternative};
   white-space: nowrap;
+  flex: 0 0 auto;
 `;
 
 export const MetaValue = styled.p`
   ${font.body.bold}
   color: ${({ theme }) => theme.label.alternative};
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
   white-space: nowrap;
 `;
 
 export const HDivider = styled.div`
-  width: 17.5rem;
+  width: 100%;
   height: 0.1rem;
   background: ${({ theme }) => theme.line.neutral};
 `;
@@ -215,7 +219,8 @@ export const Lines = styled.div`
   display: flex;
   align-items: baseline;
   gap: 0.25rem;
-  width: 1.25rem;
+  min-width: 0;
+  width: auto;
 `;
 
 export const Plus = styled.span`
@@ -245,7 +250,6 @@ export const EmptyBox = styled.div`
   padding: 1.25rem;
   background: ${({ theme }) => theme.label.disable};
   box-sizing: border-box;
-
   display: flex;
   flex-direction: column;
   justify-content: center;
