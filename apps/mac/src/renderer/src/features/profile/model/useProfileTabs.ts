@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useActiveQuery } from "@/entities/home";
 import type { StreakItem } from "@/entities/home";
+import { buildPaddedStreak } from "@/shared/lib";
 
 export type Level = 0 | 1 | 2 | 3 | 4;
 
@@ -35,6 +36,18 @@ export const useGithubStreak = ({
     return daysForView.find(d => d.id === selectedId) ?? null;
   }, [daysForView, selectedId]);
 
+  const paddedDaysForView = useMemo(() => {
+    if (!daysForView.length) return [];
+
+    return buildPaddedStreak(
+      daysForView.map(day => ({
+        date: String(day.id),
+        detailedInfo: day.count,
+        colorRatio: day.ratio ?? 0,
+      }))
+    );
+  }, [daysForView]);
+
   useEffect(() => {
     const onPointerDown = (e: PointerEvent) => {
       if (selectedId === null) return;
@@ -56,7 +69,14 @@ export const useGithubStreak = ({
     setSelectedId(prev => (prev === id ? null : id));
   };
 
-  return { daysForView, getLevel, selectedId, selectedDay, handleGrassClick };
+  return {
+    daysForView,
+    paddedDaysForView,
+    getLevel,
+    selectedId,
+    selectedDay,
+    handleGrassClick,
+  };
 };
 
 const toCommitDays = (streaks?: StreakItem[]): CommitDay[] => {
@@ -88,6 +108,7 @@ export const useProfileGithubStreak = (props: GithubStreakProps = {}) => {
   };
 };
 
+// 베타테스트 때, 배포버전에서 사용안하는 함수 요소들
 export type DayCell = {
   key: string;
   day: number;

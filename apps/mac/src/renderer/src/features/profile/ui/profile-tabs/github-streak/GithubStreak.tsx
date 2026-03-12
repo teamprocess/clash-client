@@ -1,7 +1,6 @@
-import { useEffect, useMemo, useRef } from "react";
+import { useEffect, useRef } from "react";
 import * as S from "./GithubStreak.style";
 import { useProfileGithubStreak } from "@/features/profile/model/useProfileTabs";
-import { buildPaddedStreak } from "@/shared/lib";
 
 interface GithubStreakProps {
   onSelectDate?: (date: string, count: number) => void;
@@ -10,20 +9,8 @@ interface GithubStreakProps {
 export const GithubStreak = ({ onSelectDate, ...streakProps }: GithubStreakProps) => {
   const grassRef = useRef<HTMLDivElement>(null);
 
-  const { daysForView, getLevel, selectedId, selectedDay, handleGrassClick } =
+  const { paddedDaysForView, getLevel, selectedId, selectedDay, handleGrassClick } =
     useProfileGithubStreak(streakProps);
-
-  const paddedDaysForView = useMemo(() => {
-    if (!daysForView?.length) return [];
-
-    return buildPaddedStreak(
-      daysForView.map(day => ({
-        date: String(day.id),
-        detailedInfo: day.count,
-        colorRatio: day.ratio ?? 0,
-      }))
-    );
-  }, [daysForView]);
 
   useEffect(() => {
     const el = grassRef.current;
