@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import { font } from "@clash/design-tokens/font";
 
 const CELL = 0.9;
@@ -23,6 +23,10 @@ export const GrassBox = styled.div`
   overflow-x: auto;
   scrollbar-width: none;
   padding: 0.25rem 0;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `;
 
 export const Grid = styled.div`
@@ -40,18 +44,32 @@ export const Grass = styled.div<{
   $level: 0 | 1 | 2 | 3 | 4;
   $dimmed?: boolean;
   $selected?: boolean;
+  $hidden?: boolean;
 }>`
   width: ${CELL}rem;
   height: ${CELL}rem;
   border-radius: ${RADIUS}rem;
 
-  opacity: ${({ $dimmed }) => ($dimmed ? 0.25 : 1)};
+  opacity: ${({ $dimmed, $hidden }) => {
+    if ($hidden) return 0;
+    return $dimmed ? 0.25 : 1;
+  }};
 
-  background-color: ${({ $level, theme }) => {
+  pointer-events: ${({ $hidden }) => ($hidden ? "none" : "auto")};
+
+  background-color: ${({ $level, $hidden, theme }) => {
+    if ($hidden) return "transparent";
     if ($level === 0) return theme.fill.neutral;
     return GRASS_COLORS[$level];
   }};
 
-  outline: ${({ $selected }) => ($selected ? "2px solid rgba(61, 205, 95, 0.9)" : "none")};
+  outline: ${({ $selected, $hidden }) =>
+    !$hidden && $selected ? "2px solid rgba(61, 205, 95, 0.9)" : "none"};
   outline-offset: 2px;
+
+  ${({ $hidden }) =>
+    $hidden &&
+    css`
+      visibility: hidden;
+    `}
 `;
