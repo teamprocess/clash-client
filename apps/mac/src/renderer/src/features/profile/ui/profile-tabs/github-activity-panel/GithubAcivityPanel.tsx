@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 import { GithubInfo } from "@/features/profile/ui/profile-tabs/github-info/GithubInfo";
 import { GithubStreak } from "@/features/profile/ui/profile-tabs/github-streak/GithubStreak";
 import { useProfileGithubDetailQuery } from "@/entities/profile/api/query/useProfileGithubDetail.query";
+import * as S from "./GithubActivityPanel.style";
 
 const formatKoreanDate = (ymd: string) => {
   const [y, m, d] = ymd.split("-");
@@ -52,7 +53,12 @@ export const GithubActivityPanel = () => {
       />
 
       {!selectedDate || !infoProps ? (
-        <div>날짜를 선택해주세요.</div>
+        <S.EmptyStateBox>
+          <S.EmptyTitle>잔디를 선택하면 상세 정보를 확인할 수 있어요!</S.EmptyTitle>
+          <S.EmptyDescription>
+            원하는 날짜의 잔디를 클릭해서 활동 내역과 자세한 정보를 확인해보세요.
+          </S.EmptyDescription>
+        </S.EmptyStateBox>
       ) : (
         <GithubInfo {...infoProps} />
       )}
