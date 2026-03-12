@@ -1,57 +1,69 @@
 import styled from "styled-components";
 import { font } from "@clash/design-tokens/font";
-import Cry from "../../../assets/cry.svg";
+import Lock from "../../../assets/lock.svg";
 
-export const ModalContent = styled.div`
+export const PanelContent = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 2rem;
-  padding: 1rem 1rem 0 1rem;
+  gap: 1.5rem;
   height: 100%;
   width: 100%;
+  min-height: 0;
 `;
 
 export const FormContainer = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  padding: 1rem;
+  gap: 1.5rem;
   height: 100%;
   width: 100%;
+  min-height: 0;
+  overflow: hidden;
+`;
+
+export const FormFieldsArea = styled.div`
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding-right: 0.25rem;
+
+  &::-webkit-scrollbar {
+    width: 0.45rem;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: ${({ theme }) => theme.line.normal};
+    border-radius: 999px;
+  }
 `;
 
 export const Groups = styled.div`
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  grid-auto-rows: minmax(10rem, auto);
-  align-content: center;
-  gap: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
   width: 100%;
-  height: 100%;
 `;
 
 export const GroupContainer = styled.div<{ $isMember?: boolean }>`
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  min-height: 8rem;
   border-radius: 1rem;
   padding: 1rem;
-  background-color: ${({ theme }) => theme.label.disable};
+  background-color: ${({ theme }) => theme.background.alternative};
   opacity: ${({ $isMember }) => ($isMember ? 0.5 : 1)};
-`;
-
-export const GroupPlaceholder = styled.div`
-  min-height: 8rem;
-  border-radius: 1rem;
-  visibility: hidden;
-  pointer-events: none;
 `;
 
 export const GroupHeader = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 0.75rem;
+`;
+
+export const GroupHeaderRow = styled.div`
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
 `;
 
 export const GroupHeaderTextBox = styled.div`
@@ -61,13 +73,15 @@ export const GroupHeaderTextBox = styled.div`
 `;
 
 export const GroupBadge = styled.span`
-  ${font.body.medium};
-  padding: 0.1rem 1rem;
+  ${font.label.medium};
+  padding: 0.25rem 0.75rem;
   border-radius: 1rem;
-  min-width: fit-content;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-width: 3.5rem;
   background-color: ${({ theme }) => theme.label.alternative};
   color: ${({ theme }) => theme.label.disable};
-  cursor: pointer;
 `;
 
 export const GroupName = styled.h3`
@@ -76,22 +90,35 @@ export const GroupName = styled.h3`
   margin: 0;
 `;
 
+export const GroupDescriptionRow = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+`;
+
+export const LockIcon = styled(Lock)`
+  width: 1rem;
+  height: 1rem;
+  flex-shrink: 0;
+`;
+
 export const GroupDescription = styled.p`
   ${font.body.regular};
   color: ${({ theme }) => theme.label.alternative};
-  margin: 0.5rem 0 0 0;
+  margin: 0;
 `;
 
 export const GroupFooter = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 1rem;
+  padding: 1rem 0 0 0;
 `;
 
 export const GroupMembers = styled.span`
   ${font.headline2.medium};
   color: ${({ theme }) => theme.label.alternative};
+  flex-shrink: 0;
 
   span {
     color: ${({ theme }) => theme.primary.normal};
@@ -99,9 +126,10 @@ export const GroupMembers = styled.span`
 `;
 
 export const GroupJoinButton = styled.button<{ $isMember?: boolean }>`
-  ${font.body.medium};
-  padding: 0.25rem 0.75rem;
-  border-radius: 0.5rem;
+  ${font.label.medium};
+  min-width: 4rem;
+  padding: 0.375rem 0.25rem;
+  border-radius: 0.75rem;
   background-color: ${({ theme, $isMember }) =>
     $isMember ? theme.line.normal : theme.primary.normal};
   color: ${({ theme }) => theme.label.normal};
@@ -111,19 +139,20 @@ export const GroupJoinButton = styled.button<{ $isMember?: boolean }>`
 
 export const CategoryFilters = styled.div`
   display: flex;
-  gap: 0.5rem;
+  gap: 0.375rem;
   align-items: center;
-  justify-content: flex-end;
-  margin-bottom: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
 `;
 
 export const CategoryButton = styled.button<{ $isActive?: boolean }>`
-  ${font.body.medium};
-  padding: 0.2rem 0.75rem;
+  ${font.label.medium};
+  padding: 0.25rem 0.875rem;
+  min-width: 3.25rem;
   border-radius: 1rem;
   background-color: ${({ theme, $isActive }) =>
     $isActive ? theme.primary.normal : theme.fill.alternative};
-  color: ${({ theme }) => theme.label.alternative};
+  color: ${({ theme, $isActive }) => ($isActive ? theme.label.normal : theme.label.alternative)};
   border: none;
   cursor: pointer;
 
@@ -137,13 +166,23 @@ export const JoinContainer = styled.div`
   flex-direction: column;
   justify-content: space-between;
   height: 100%;
-  gap: 1rem;
-  padding: 0 1rem 1rem 1rem;
+  gap: 1.25rem;
+  min-height: 0;
 `;
 
 export const GroupsWrapper = styled.div`
   flex: 1;
+  min-height: 0;
   overflow-y: auto;
+
+  &::-webkit-scrollbar {
+    width: 0.45rem;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: ${({ theme }) => theme.line.normal};
+    border-radius: 999px;
+  }
 `;
 
 export const EmptyState = styled.div`
@@ -155,11 +194,6 @@ export const EmptyState = styled.div`
   gap: 1rem;
   width: 100%;
   height: 100%;
-`;
-
-export const EmptyIcon = styled(Cry)`
-  width: 3.25rem;
-  height: 3.25rem;
 `;
 
 export const EmptyTextBox = styled.div`
@@ -185,7 +219,13 @@ export const Pagination = styled.div`
   gap: 0.5rem;
   align-items: center;
   justify-content: center;
-  padding: 0;
+  padding: 0.25rem 0 0;
+`;
+
+export const CreateActionRow = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  flex-shrink: 0;
 `;
 
 export const PageButton = styled.button<{ $isActive?: boolean }>`

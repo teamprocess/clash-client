@@ -1,10 +1,7 @@
 import * as S from "./Group.style";
-import { useEffect } from "react";
 import { type Group as GroupEntity } from "@/entities/group";
-import { useGetMyProfile } from "@/entities/user";
 import { formatTime } from "@/shared/lib";
-import { useGroupMembersActivity } from "../../model/useGroupMembersActivity";
-import { useLiveRecordStudyTime } from "../../model/useLiveRecordStudyTime";
+import { useGroupRealtimeActivity } from "../../model/useGroupRealtimeActivity";
 import { Timer } from "@/features/record/ui/timer/Timer";
 
 interface GroupProps {
@@ -15,23 +12,8 @@ interface GroupProps {
 }
 
 export const Group = ({ currentGroup, selectedDate, onPreviousDate, onNextDate }: GroupProps) => {
-  const { data: myProfile } = useGetMyProfile();
-  const myUserId = myProfile?.id ?? null;
-  const { totalStudyTime, isStudying } = useLiveRecordStudyTime(selectedDate);
-
-  const { groupMembers, activeStudyingCount, incrementStudyingMembers } = useGroupMembersActivity(
-    currentGroup?.id ?? null,
-    myUserId,
-    selectedDate
-  );
-
-  useEffect(() => {
-    const interval = window.setInterval(() => {
-      incrementStudyingMembers();
-    }, 1000);
-
-    return () => window.clearInterval(interval);
-  }, [incrementStudyingMembers]);
+  const { totalStudyTime, isStudying, groupMembers, activeStudyingCount } =
+    useGroupRealtimeActivity(currentGroup?.id ?? null, selectedDate);
 
   return (
     <>
