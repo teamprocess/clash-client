@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import * as S from "./GithubStreak.style";
 import { useProfileGithubStreak } from "@/features/profile/model/useProfileTabs";
 
@@ -7,8 +7,17 @@ interface GithubStreakProps {
 }
 
 export const GithubStreak = ({ onSelectDate, ...streakProps }: GithubStreakProps) => {
+  const grassRef = useRef<HTMLDivElement>(null);
+
   const { daysForView, getLevel, selectedId, selectedDay, handleGrassClick } =
     useProfileGithubStreak(streakProps);
+
+  useEffect(() => {
+    const el = grassRef.current;
+    if (!el) return;
+
+    el.scrollLeft = el.scrollWidth;
+  }, [daysForView]);
 
   useEffect(() => {
     const date = typeof selectedDay?.id === "string" ? selectedDay.id : "";
@@ -21,7 +30,7 @@ export const GithubStreak = ({ onSelectDate, ...streakProps }: GithubStreakProps
     <S.ActiveContainer>
       <S.Title>스트릭</S.Title>
 
-      <S.GrassBox>
+      <S.GrassBox ref={grassRef}>
         <S.Grid>
           {daysForView.map(day => (
             <S.Grass
