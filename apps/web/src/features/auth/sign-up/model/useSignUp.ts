@@ -5,6 +5,7 @@ import { z } from "zod";
 import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
 import { authApi } from "@/entities/user";
 import { useLocation, useNavigate } from "react-router-dom";
+import { getApiError, getErrorMessage } from "@/shared/lib";
 
 // SignUp Schema
 const signUpSchema = z.object({
@@ -144,6 +145,21 @@ export const useSignUp = () => {
       }
     } catch (error: unknown) {
       console.error("회원가입에 실패했습니다.", error);
+
+      const { code, status, message } = getApiError(error, "회원가입에 실패했습니다.");
+
+      if (code === "EMAIL_ALREADY_EXIST" || status === 409) {
+        signUpForm.setError("email", {
+          type: "manual",
+          message: "이미 등록된 이메일입니다.",
+        });
+        return;
+      }
+
+      signUpForm.setError("root", {
+        type: "manual",
+        message,
+      });
     }
   };
 
@@ -176,6 +192,11 @@ export const useSignUp = () => {
       }
     } catch (error: unknown) {
       console.error("이메일 인증에 실패했습니다.", error);
+
+      emailVerifyForm.setError("root", {
+        type: "manual",
+        message: getErrorMessage(error, "이메일 인증에 실패했습니다."),
+      });
     }
   };
 
