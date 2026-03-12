@@ -146,12 +146,12 @@ export const useSignUp = () => {
     } catch (error: unknown) {
       console.error("회원가입에 실패했습니다.", error);
 
-      const { code, message } = getApiError(error, "회원가입에 실패했습니다.");
+      const { code, status, message } = getApiError(error, "회원가입에 실패했습니다.");
 
-      if (code === "EMAIL_ALREADY_EXIST") {
+      if (code === "EMAIL_ALREADY_EXIST" || status === 409) {
         signUpForm.setError("email", {
           type: "manual",
-          message,
+          message: "이미 등록된 이메일입니다.",
         });
         return;
       }
