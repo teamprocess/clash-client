@@ -3,16 +3,23 @@ import { useAppMonitor } from "./useAppMonitor";
 import { useActivityRecordSync } from "@/features/record/model/useActivityRecordSync";
 import { formatDuration } from "@/entities/app-monitor";
 import { getMonitoredAppLabel, useRecordTodayQuery } from "@/entities/record";
+import { useRecordStore } from "@/features/record/model/recordStore";
+import { useRecordTicker } from "@/features/record/model/useRecordTicker";
+import { formatTime } from "@/shared/lib";
 
 export const useSidebarMonitor = () => {
   // Electron 환경 체크
   const isElectron = !!(typeof window !== "undefined" && window.api);
 
+  useRecordTicker();
+
   const { activeApp, hasInitialized: hasInitializedAppMonitor } = useAppMonitor();
   const { data: todayResponse } = useRecordTodayQuery();
+  const activeSessionType = useRecordStore(state => state.activeSessionType);
+  const currentStudyTime = useRecordStore(state => state.currentStudyTime);
   const [frontmostMonitoredApp, setFrontmostMonitoredApp] = useState<string | null>(null);
   const [hasResolvedFrontmostMonitoredApp, setHasResolvedFrontmostMonitoredApp] = useState(false);
-  const [displayTime, setDisplayTime] = useState("00:00:00");
+  const [fallbackDisplayTime, setFallbackDisplayTime] = useState("00:00:00");
 
   const isTaskRecording = useMemo(
     () =>
@@ -43,12 +50,14 @@ export const useSidebarMonitor = () => {
 
     if (latestActiveSession.sessionType === "TASK") {
       return {
+        sessionType: latestActiveSession.sessionType,
         appName: latestActiveSession.task?.name ?? latestActiveSession.subject?.name ?? "일반 기록",
         startTime: new Date(latestActiveSession.startedAt),
       };
     }
 
     return {
+      sessionType: latestActiveSession.sessionType,
       appName: getMonitoredAppLabel(latestActiveSession.develop.appId),
       startTime: new Date(latestActiveSession.startedAt),
     };
@@ -97,13 +106,13 @@ export const useSidebarMonitor = () => {
 
   // 실시간 시간 업데이트
   useEffect(() => {
-    if (!activeRecordSession) {
+    if (!activeRecordSession || activeRecordSession.sessionType === activeSessionType) {
       return;
     }
 
     const updateDisplayTime = () => {
       const duration = Date.now() - activeRecordSession.startTime.getTime();
-      setDisplayTime(formatDuration(duration));
+      setFallbackDisplayTime(formatDuration(duration));
     };
 
     // 초기값 설정
@@ -117,13 +126,13 @@ export const useSidebarMonitor = () => {
       clearTimeout(timer);
       clearInterval(interval);
     };
-  }, [activeRecordSession]);
+  }, [activeRecordSession, activeSessionType]);
 
   // activeRecordSession이 없으면 displayTime 초기화
   useEffect(() => {
     if (!activeRecordSession) {
       const timer = setTimeout(() => {
-        setDisplayTime("00:00:00");
+        setFallbackDisplayTime("00:00:00");
       }, 0);
 
       return () => clearTimeout(timer);
@@ -131,6 +140,18 @@ export const useSidebarMonitor = () => {
 
     return undefined;
   }, [activeRecordSession]);
+
+  const displayTime = useMemo(() => {
+    if (!activeRecordSession) {
+      return "00:00:00";
+    }
+
+    if (activeRecordSession.sessionType === activeSessionType) {
+      return formatTime(currentStudyTime);
+    }
+
+    return fallbackDisplayTime;
+  }, [activeRecordSession, activeSessionType, currentStudyTime, fallbackDisplayTime]);
 
   return {
     isElectron,
