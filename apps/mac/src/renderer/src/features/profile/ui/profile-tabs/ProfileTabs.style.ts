@@ -24,7 +24,6 @@ export const Background = styled.div`
   align-items: stretch;
   padding: 1.5rem;
   box-sizing: border-box;
-  overflow: hidden;
   gap: 0.5rem;
 `;
 
