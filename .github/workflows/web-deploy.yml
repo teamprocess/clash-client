@@ -51,7 +51,7 @@ jobs:
             --cache-from type=gha \
             --cache-to type=gha,mode=max \
             --push \
-            apps/web
+            .
 
       - name: Deploy Web on EC2
         uses: appleboy/ssh-action@master
