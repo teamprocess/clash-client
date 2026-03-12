@@ -97,6 +97,7 @@ export const EmailVerify = ({
           {errors.verificationCode && (
             <CommonS.ErrorText>{errors.verificationCode.message}</CommonS.ErrorText>
           )}
+          {errors.root && <CommonS.ErrorText>{errors.root.message}</CommonS.ErrorText>}
         </div>
       </CommonS.InputBox>
       <CommonS.ButtonWrapper>

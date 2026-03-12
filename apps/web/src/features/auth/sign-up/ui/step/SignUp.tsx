@@ -56,6 +56,7 @@ export const SignUp = ({
           <S.Input placeholder="비밀번호를 입력하세요." {...register("password")} type="password" />
           {errors.password && <S.ErrorText>{errors.password.message}</S.ErrorText>}
         </div>
+        {errors.root && <S.ErrorText>{errors.root.message}</S.ErrorText>}
       </S.InputBox>
       <S.ButtonWrapper>
         <S.SubmitButton type="submit" disabled={isSubmitting || isCheckingUsername}>
