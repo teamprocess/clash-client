@@ -3,9 +3,6 @@ import { GithubInfo } from "@/features/profile/ui/profile-tabs/github-info/Githu
 import { GithubStreak } from "@/features/profile/ui/profile-tabs/github-streak/GithubStreak";
 import { useProfileGithubDetailQuery } from "@/entities/profile/api/query/useProfileGithubDetail.query";
 
-const pad2 = (n: number) => String(n).padStart(2, "0");
-const toYmd = (d: Date) => `${d.getFullYear()}-${pad2(d.getMonth() + 1)}-${pad2(d.getDate())}`;
-
 const formatKoreanDate = (ymd: string) => {
   const [y, m, d] = ymd.split("-");
   if (!y || !m || !d) return ymd;
@@ -13,14 +10,15 @@ const formatKoreanDate = (ymd: string) => {
 };
 
 export const GithubActivityPanel = () => {
-  const [selectedDate, setSelectedDate] = useState<string>(() => toYmd(new Date()));
+  const [selectedDate, setSelectedDate] = useState<string | null>(null);
   const [fallbackCount, setFallbackCount] = useState<number>(0);
 
   const detailQuery = useProfileGithubDetailQuery(selectedDate);
-
   const detail = detailQuery.data?.data;
 
   const infoProps = useMemo(() => {
+    if (!selectedDate) return null;
+
     const dateText = formatKoreanDate(selectedDate);
 
     return {
@@ -43,16 +41,21 @@ export const GithubActivityPanel = () => {
       <GithubStreak
         onSelectDate={(date, count) => {
           if (!date) {
-            setSelectedDate(toYmd(new Date()));
+            setSelectedDate(null);
             setFallbackCount(0);
             return;
           }
+
           setSelectedDate(date);
           setFallbackCount(count);
         }}
       />
 
-      <GithubInfo {...infoProps} />
+      {!selectedDate || !infoProps ? (
+        <div>날짜를 선택해주세요.</div>
+      ) : (
+        <GithubInfo {...infoProps} />
+      )}
     </>
   );
 };
