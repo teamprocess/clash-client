@@ -47,21 +47,23 @@ export const Battle = () => {
                 <S.BattleListContainer>
                   {battles.map(battleItem => {
                     const judge = battle.judgeUpperHand(battleItem.result);
-                    const isPending = battleItem.result === MATCHVALUE.PENDING;
+
+                    const cannotOpen =
+                      battleItem.result === MATCHVALUE.PENDING ||
+                      battleItem.result === MATCHVALUE.CANCELED;
 
                     return (
                       <S.BattleProfileBox
                         key={battleItem.id}
-                        $disabled={isPending}
+                        $disabled={cannotOpen}
                         onClick={() => {
-                          if (isPending) return;
+                          if (cannotOpen) return;
                           battle.selectBattleTarget(battleItem.id);
                         }}
                       >
                         <S.ProfileContent>
                           <S.NameBox>
                             <S.UpperHandJudge $type={judge}>{judge}</S.UpperHandJudge>
-
                             <S.BattleName>vs {battleItem.enemy.name}</S.BattleName>
 
                             <S.DateBox>
@@ -72,7 +74,7 @@ export const Battle = () => {
                         </S.ProfileContent>
 
                         <S.DetailBox>
-                          <S.DetailButton $disabled={isPending}>
+                          <S.DetailButton $disabled={cannotOpen}>
                             {battleItem.result === MATCHVALUE.WON ||
                             battleItem.result === MATCHVALUE.LOST
                               ? "결과 보기"

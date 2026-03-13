@@ -101,17 +101,12 @@ export const BattleTextBox = styled.div`
   align-items: center;
 `;
 
-export const MakeBattle = styled.button`
-  ${font.body.medium}
-  color: ${({ theme }) => theme.label.normal};
-  background-color: ${({ theme }) => theme.primary.normal};
-  padding: 0.25rem 1.5rem;
-  border-radius: 0.5rem;
-  cursor: pointer;
-`;
-
 export const BattleListContainer = styled.div`
   ${flexCol};
+  min-height: 11rem;
+  max-height: 14.65rem;
+  overflow-y: auto;
+  scrollbar-width: none;
 `;
 
 export const UpperHandJudge = styled.div<{ $type: string }>`
