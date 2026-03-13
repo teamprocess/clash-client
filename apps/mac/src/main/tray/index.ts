@@ -1,4 +1,5 @@
 import { app, BrowserWindow } from "electron";
+import { isUpdateInstallInProgress } from "../updateInstallState";
 
 interface RegisterTrayParams {
   getMainWindow: () => BrowserWindow | null;
@@ -22,7 +23,7 @@ export const registerTray = ({ getMainWindow }: RegisterTrayParams) => {
         return;
       }
 
-      if (isQuitting) {
+      if (isQuitting || isUpdateInstallInProgress()) {
         return;
       }
 
