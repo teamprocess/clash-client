@@ -4,7 +4,6 @@
   "version": "0.0.0",
   "packageManager": "pnpm@10.29.3",
   "scripts": {
-    "prepare": "husky",
     "dev": "turbo run dev --parallel",
     "dev:mac": "pnpm --filter @clash/mac dev",
     "dev:web": "pnpm --filter @clash/web dev",
@@ -17,11 +16,7 @@
     "test": "turbo run test"
   },
   "devDependencies": {
-    "@commitlint/cli": "^20.3.0",
-    "@commitlint/config-conventional": "^20.3.0",
     "eslint": "^9.39.1",
-    "husky": "^9.1.7",
-    "lint-staged": "^16.2.7",
     "prettier": "^3.7.4",
     "turbo": "^2.5.8"
   },
