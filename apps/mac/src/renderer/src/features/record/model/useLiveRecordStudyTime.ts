@@ -1,11 +1,9 @@
 import { useMemo } from "react";
 import { useRecordTodayQuery } from "@/entities/record";
 import { useRecordStore } from "./recordStore";
-import { isTodayRecordDate } from "./recordDate";
 
 export const useLiveRecordStudyTime = (selectedDate?: string) => {
-  const date = selectedDate && !isTodayRecordDate(selectedDate) ? selectedDate : undefined;
-  const { data: todayResponse } = useRecordTodayQuery(date);
+  const { data: todayResponse } = useRecordTodayQuery(selectedDate);
   const activeSessionType = useRecordStore(state => state.activeSessionType);
   const baseStudyTime = useRecordStore(state => state.baseStudyTime);
   const currentStudyTime = useRecordStore(state => state.currentStudyTime);
@@ -19,7 +17,7 @@ export const useLiveRecordStudyTime = (selectedDate?: string) => {
   }, [todayResponse]);
 
   const totalStudyTime = useMemo(() => {
-    if (date === undefined && activeSessionType !== null) {
+    if (selectedDate === undefined && activeSessionType !== null) {
       return baseStudyTime + currentStudyTime;
     }
 
@@ -28,10 +26,10 @@ export const useLiveRecordStudyTime = (selectedDate?: string) => {
     }
 
     return baseStudyTime + currentStudyTime;
-  }, [activeSessionType, baseStudyTime, currentStudyTime, date, todayResponse]);
+  }, [activeSessionType, baseStudyTime, currentStudyTime, selectedDate, todayResponse]);
 
   return {
     totalStudyTime,
-    isStudying: hasServerActiveSession || (date === undefined && activeSessionType !== null),
+    isStudying: hasServerActiveSession || (selectedDate === undefined && activeSessionType !== null),
   };
 };

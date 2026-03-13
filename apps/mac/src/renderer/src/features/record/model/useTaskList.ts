@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState, type ChangeEvent, type KeyboardEvent } from "react";
 import { useRecordStore } from "./recordStore";
 import { useRecordTodayQuery } from "@/entities/record";
-import { isTodayRecordDate } from "./recordDate";
 
 type EditMode = "NONE" | "ADD" | "EDIT";
 const MAX_TASK_NAME_LENGTH = 13;
@@ -21,7 +20,7 @@ const getTaskNameErrorMessage = (name: string) => {
   return null;
 };
 
-export const useTaskList = (selectedDate: string) => {
+export const useTaskList = (selectedDate?: string) => {
   const {
     subjects,
     activeSessionType,
@@ -33,8 +32,8 @@ export const useTaskList = (selectedDate: string) => {
     updateSubject,
     deleteSubject,
   } = useRecordStore();
-  const isTodaySelected = isTodayRecordDate(selectedDate);
-  const { data: todayResponse } = useRecordTodayQuery(isTodaySelected ? undefined : selectedDate);
+  const isTodaySelected = selectedDate === undefined;
+  const { data: todayResponse } = useRecordTodayQuery(selectedDate);
 
   const [editMode, setEditMode] = useState<EditMode>("NONE");
   const [editingSubjectId, setEditingSubjectId] = useState<number | null>(null);
