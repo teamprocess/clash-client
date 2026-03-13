@@ -1,5 +1,6 @@
 import { app, session } from "electron";
 import type { AppMonitor } from "../services";
+import { isUpdateInstallInProgress } from "../updateInstallState";
 
 const VITE_API_URL = process.env.VITE_API_URL;
 const SHUTDOWN_CLEANUP_TIMEOUT_MS = 2500;
@@ -117,9 +118,7 @@ export const registerQuitHandlers = ({ getAppMonitor }: RegisterQuitHandlersPara
   app.on("before-quit", event => {
     getAppMonitor()?.stop();
 
-    if (
-      (globalThis as { __CLASH_SKIP_SHUTDOWN_CLEANUP__?: boolean }).__CLASH_SKIP_SHUTDOWN_CLEANUP__
-    ) {
+    if (isUpdateInstallInProgress()) {
       return;
     }
 

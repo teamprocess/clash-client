@@ -8,6 +8,7 @@ import { consumePendingDeepLink, registerDeepLinkEvents } from "./deeplink";
 import { bootstrapMainProcess } from "./bootstrap";
 import { registerApplicationMenu } from "./menu";
 import { registerTray } from "./tray";
+import { markUpdateInstallInProgress } from "./updateInstallState";
 
 let mainWindow: BrowserWindow | null = null;
 let appMonitor: AppMonitor | null = null;
@@ -17,11 +18,6 @@ let isInstallPromptOpen = false;
 let downloadedUpdateVersion: string | null = null;
 
 const AUTO_UPDATE_CHECK_INTERVAL_MS = 30 * 60 * 1000;
-
-const markSkipShutdownCleanup = () => {
-  (globalThis as { __CLASH_SKIP_SHUTDOWN_CLEANUP__?: boolean }).__CLASH_SKIP_SHUTDOWN_CLEANUP__ =
-    true;
-};
 
 const isUpdateSupported = () => app.isPackaged && process.platform === "darwin";
 
@@ -75,7 +71,8 @@ const checkForUpdates = async (source: "auto" | "manual") => {
     if (source === "manual" && !isInstallPromptOpen) {
       const shouldInstallNow = await confirmInstallUpdate(downloadedUpdateVersion);
       if (shouldInstallNow) {
-        markSkipShutdownCleanup();
+        downloadedUpdateVersion = null;
+        markUpdateInstallInProgress();
         autoUpdater.quitAndInstall();
       }
     }
@@ -175,7 +172,7 @@ const registerAutoUpdater = () => {
         }
 
         downloadedUpdateVersion = null;
-        markSkipShutdownCleanup();
+        markUpdateInstallInProgress();
         autoUpdater.quitAndInstall();
       } finally {
         isInstallPromptOpen = false;
