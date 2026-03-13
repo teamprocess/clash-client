@@ -6,7 +6,7 @@ import {
   useRecordTodayQuery,
 } from "@/entities/record";
 
-export const useRecord = (selectedDate: string) => {
+export const useRecord = (selectedDate?: string) => {
   const { setCurrentStudyTime, setSubjects, setTasks, setActiveSession } = useRecordStore();
   const { data: subjectsResponse } = useRecordSubjectsQuery(selectedDate);
   const { data: tasksResponse } = useRecordTasksQuery(selectedDate);

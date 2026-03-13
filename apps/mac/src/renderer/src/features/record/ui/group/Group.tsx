@@ -6,12 +6,21 @@ import { Timer } from "@/features/record/ui/timer/Timer";
 
 interface GroupProps {
   currentGroup: GroupEntity | null;
-  selectedDate: string;
+  selectedDate?: string;
+  displayDate: string;
   onPreviousDate: () => void;
   onNextDate: () => void;
+  canGoNextDate: boolean;
 }
 
-export const Group = ({ currentGroup, selectedDate, onPreviousDate, onNextDate }: GroupProps) => {
+export const Group = ({
+  currentGroup,
+  selectedDate,
+  displayDate,
+  onPreviousDate,
+  onNextDate,
+  canGoNextDate,
+}: GroupProps) => {
   const { totalStudyTime, isStudying, groupMembers, activeStudyingCount } =
     useGroupRealtimeActivity(currentGroup?.id ?? null, selectedDate);
 
@@ -34,10 +43,11 @@ export const Group = ({ currentGroup, selectedDate, onPreviousDate, onNextDate }
               <S.HeaderTimer>
                 <S.HeaderTimerSection>
                   <Timer
-                    date={selectedDate}
+                    date={displayDate}
+                    selectedDate={selectedDate}
                     onPreviousDate={onPreviousDate}
                     onNextDate={onNextDate}
-                    canGoNextDate
+                    canGoNextDate={canGoNextDate}
                     stopButtonPosition="RIGHT"
                   />
                 </S.HeaderTimerSection>
