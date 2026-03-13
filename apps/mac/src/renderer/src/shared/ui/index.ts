@@ -20,3 +20,5 @@ export { UserRanking } from "./home-ranking-user/UserRanking";
 export { GrowthRate } from "./growth-rate/GrowthRate";
 export { RivalCompetitionLineChart } from "./rival-compete-chart/RivalCompeteLineChart";
 export { MyCompetitionLineChart } from "./my-compete-chart/MyCompetitionLineChart";
+export { RankTier } from "./rank-tier-ui/RankTier";
+export type { RankTierState } from "./rank-tier-ui/RankTier";

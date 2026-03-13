@@ -2,6 +2,7 @@ import * as S from "./TopProfile.style";
 import { TopProfileProps } from "@/features/profile/model/useTopProfile";
 import { useSignOut } from "@/features/auth";
 import { useGetMyProfile } from "@/entities/user";
+import { Button, RankTier } from "@/shared/ui";
 
 export const TopProfile = ({
   bannerAccentColor,
@@ -20,12 +21,15 @@ export const TopProfile = ({
     <S.Banner $accent={bannerAccentColor} $bgImage={bannerBgImageUrl}>
       <S.ProfileCard>
         <S.ProfileImgWrap $accent={badgeAccentColor} $bgImage={badgeBgImageUrl}>
-          <S.ProfileImg />
+          <S.ImgBox>
+            <S.ProfileImg />
+            <S.BadgeDot />
+          </S.ImgBox>
         </S.ProfileImgWrap>
 
         <S.UserInfo>
           <S.Name>{user?.name}</S.Name>
-          <S.BadgeDot />
+          <RankTier tier={String(user?.expTier)} />
         </S.UserInfo>
       </S.ProfileCard>
 
@@ -44,9 +48,15 @@ export const TopProfile = ({
             {/*<S.ButtonEdit type="button" onClick={onEditProfile}>*/}
             {/*  수정*/}
             {/*</S.ButtonEdit>*/}
-            <S.ButtonLogout type="button" onClick={signOut} disabled={isLoading}>
+            <Button
+              size="sm"
+              variant="primary"
+              type="button"
+              onClick={signOut}
+              disabled={isLoading}
+            >
               {isLoading ? "로그아웃 중.." : "로그아웃"}
-            </S.ButtonLogout>
+            </Button>
           </>
         )}
       </S.Button>

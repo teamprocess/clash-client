@@ -62,8 +62,8 @@ export const ProfileCard = styled.div`
   position: absolute;
   left: 4rem;
   top: 30%;
-  width: 11rem;
-  height: 11rem;
+  width: 100%;
+  height: 100%;
 
   @media (min-height: 56.25rem) {
     top: 60%;
@@ -74,7 +74,6 @@ export const ProfileImgWrap = styled.div<{ $accent?: string; $bgImage?: string }
   width: 7.5rem;
   height: 7.5rem;
   border-radius: 50%;
-  overflow: hidden;
   box-sizing: border-box;
   border: ${({ $accent }) => ($accent ? `0.5rem solid ${$accent}` : "none")};
 
@@ -101,7 +100,7 @@ export const UserInfo = styled.div`
   width: 100%;
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 0.5rem;
   margin-top: 0.875rem;
 `;
 
@@ -112,8 +111,18 @@ export const Name = styled.div`
 `;
 
 export const BadgeDot = styled.div<{ $accent?: string }>`
+  position: absolute;
+  right: 0.5rem;
+  bottom: 0;
   width: 2rem;
   height: 2rem;
   border-radius: 100%;
   background: ${({ $accent, theme }) => $accent ?? theme.label.normal};
+  transform: translate(15%, 15%);
+`;
+
+export const ImgBox = styled.div`
+  position: relative;
+  width: 100%;
+  height: 100%;
 `;
