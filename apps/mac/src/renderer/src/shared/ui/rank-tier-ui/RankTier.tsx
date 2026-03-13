@@ -7,7 +7,7 @@ export type RankTierState =
   | "GOLD"
   | "DIAMOND"
   | "MASTER"
-  | "CHALLENGER";
+  | "AURA";
 
 interface RankTierProps {
   tier: string;
@@ -20,7 +20,7 @@ const RANK_TIER_LABEL: Record<RankTierState, string> = {
   GOLD: "골드",
   DIAMOND: "다이아몬드",
   MASTER: "마스터",
-  CHALLENGER: "챌린저",
+  AURA: "아우라",
 };
 
 const normalizeTier = (tier: string): RankTierState => {
