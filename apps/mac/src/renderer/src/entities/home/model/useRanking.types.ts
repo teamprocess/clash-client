@@ -8,6 +8,8 @@ export type RankingItem = {
   isRival: boolean;
   linkedId: string;
   point: number;
+  rankTier: string;
+  expTier: string;
 };
 
 export type RankingsResponse = {
