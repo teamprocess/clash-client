@@ -63,6 +63,7 @@ export interface getMyProfileResponse {
   updatedAt: string;
   username: string;
   name: string;
+  expTier: string;
   email: string;
   role: string;
   profileImage: string;
