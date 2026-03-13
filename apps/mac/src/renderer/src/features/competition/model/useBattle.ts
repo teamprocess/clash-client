@@ -57,13 +57,21 @@ export const useBattle = () => {
   const myPercent = raw == null || raw === 0 ? 50 : raw;
   const rivalPercent = 100 - myPercent;
 
-  const judgeUpperHand = (result: string) => {
-    if (result === MATCHVALUE.LOSING) return "열세";
-    if (result === MATCHVALUE.WINNING) return "우세";
-    if (result === MATCHVALUE.LOST) return "패배";
-    if (result === MATCHVALUE.WON) return "승리";
-    if (result === MATCHVALUE.DRAW) return "무승부";
-    return "수락 대기중";
+  // 배틀 신청 목록 상태 정리
+  type MatchValue = (typeof MATCHVALUE)[keyof typeof MATCHVALUE];
+
+  const judgeUpperHandMap = {
+    [MATCHVALUE.LOSING]: "열세",
+    [MATCHVALUE.WINNING]: "우세",
+    [MATCHVALUE.LOST]: "패배",
+    [MATCHVALUE.WON]: "승리",
+    [MATCHVALUE.DRAW]: "무승부",
+    [MATCHVALUE.CANCELED]: "취소된 배틀",
+    [MATCHVALUE.PENDING]: "수락 대기중",
+  } as const;
+
+  const judgeUpperHand = (result: MatchValue): string => {
+    return judgeUpperHandMap[result] ?? "";
   };
 
   const myAnalyzePoint = useMemo(() => {

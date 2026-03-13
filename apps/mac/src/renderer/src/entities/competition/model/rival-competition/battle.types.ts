@@ -5,6 +5,7 @@ export const MATCHVALUE = {
   LOSING: "LOSING",
   DRAW: "DRAW",
   PENDING: "PENDING",
+  CANCELED: "CANCELED",
 } as const;
 
 export type MatchValueType = (typeof MATCHVALUE)[keyof typeof MATCHVALUE];
