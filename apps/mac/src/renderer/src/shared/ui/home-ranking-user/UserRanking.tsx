@@ -23,13 +23,11 @@ export const UserRanking = forwardRef<HTMLDivElement, UserRankingProps>(
             <S.ProfileIcon />
             <S.NameBox>
               <S.ProfileName>{user.name}</S.ProfileName>
-              <S.ProfileMention>(@{user.linkedId})</S.ProfileMention>
+              <S.ProfileMention>@{user.linkedId}</S.ProfileMention>
             </S.NameBox>
 
             <S.ProfileMention>
-              <RankTier
-                tier={user.rankTier === "NONE" ? String(user.expTier) : String(user.rankTier)}
-              />
+              <RankTier tier={user.tier} />
             </S.ProfileMention>
 
             {isRival && <S.RivalMention>RIVAL</S.RivalMention>}
