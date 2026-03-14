@@ -1,8 +1,7 @@
 import * as S from "./TopProfile.style";
 import { TopProfileProps } from "@/features/profile/model/useTopProfile";
-import { useSignOut } from "@/features/auth";
 import { useGetMyProfile } from "@/entities/user";
-import { Button, RankTier } from "@/shared/ui";
+import { RankTier } from "@/shared/ui";
 
 export const TopProfile = ({
   bannerAccentColor,
@@ -14,7 +13,6 @@ export const TopProfile = ({
   onSave,
   // onEditProfile,
 }: TopProfileProps) => {
-  const { signOut, isLoading } = useSignOut();
   const { data: user } = useGetMyProfile();
 
   return (
@@ -48,15 +46,6 @@ export const TopProfile = ({
             {/*<S.ButtonEdit type="button" onClick={onEditProfile}>*/}
             {/*  수정*/}
             {/*</S.ButtonEdit>*/}
-            <Button
-              size="sm"
-              variant="primary"
-              type="button"
-              onClick={signOut}
-              disabled={isLoading}
-            >
-              {isLoading ? "로그아웃 중.." : "로그아웃"}
-            </Button>
           </>
         )}
       </S.Button>
