@@ -47,28 +47,17 @@ export const ProfileTabs = () => {
         <S.Tabs ref={tabsRef}>
           <S.Tab
             ref={githubTabRef}
-            type="button"
             $isActive={active === "github"}
             onClick={() => setActive("github")}
           >
             Github
           </S.Tab>
 
-          <S.Tab
-            ref={itemTabRef}
-            type="button"
-            $isActive={active === "item"}
-            onClick={() => setActive("item")}
-          >
+          <S.Tab ref={itemTabRef} $isActive={active === "item"} onClick={() => setActive("item")}>
             아이템
           </S.Tab>
 
-          <S.Tab
-            ref={timeTabRef}
-            type="button"
-            $isActive={active === "time"}
-            onClick={() => setActive("time")}
-          >
+          <S.Tab ref={timeTabRef} $isActive={active === "time"} onClick={() => setActive("time")}>
             시간
           </S.Tab>
         </S.Tabs>
