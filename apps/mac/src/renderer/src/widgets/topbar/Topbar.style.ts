@@ -115,8 +115,8 @@ export const MenuList = styled.div`
 export const MenuItem = styled.button<{ $isLogout: boolean }>`
   display: block;
   width: 100%;
-  padding: 0.75rem 1.5rem;
-  text-align: left;
+  padding: 0.625rem;
+  text-align: center;
   background: none;
   border: none;
   ${font.body.regular};
