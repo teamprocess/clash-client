@@ -40,7 +40,7 @@ export const Topbar = ({ onToggleSidebar }: TopbarProps) => {
   return (
     <S.TopbarContainer>
       <S.LeftMenu>
-        <S.MenuButton type="button" onClick={onToggleSidebar}>
+        <S.MenuButton onClick={onToggleSidebar}>
           <S.MenuIcon />
         </S.MenuButton>
         <S.LogoWrapper to="/">
@@ -64,7 +64,6 @@ export const Topbar = ({ onToggleSidebar }: TopbarProps) => {
         <S.ProfileMenuWrapper>
           <S.ProfileButton
             ref={profileMenuRef}
-            type="button"
             onClick={handleToggleProfileMenu}
             aria-haspopup="menu"
             aria-expanded={isProfileMenuOpen}
@@ -84,10 +83,10 @@ export const Topbar = ({ onToggleSidebar }: TopbarProps) => {
             offset={10}
           >
             <S.MenuList>
-              <S.MenuItem type="button" $isLogout={false} onClick={handleMoveProfile}>
+              <S.MenuItem $isLogout={false} onClick={handleMoveProfile}>
                 내 프로필
               </S.MenuItem>
-              <S.MenuItem type="button" $isLogout onClick={handleLogout}>
+              <S.MenuItem $isLogout onClick={handleLogout}>
                 로그아웃
               </S.MenuItem>
             </S.MenuList>
