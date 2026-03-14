@@ -60,7 +60,7 @@ export const ButtonLogout = styled.button`
 
 export const ProfileCard = styled.div`
   position: absolute;
-  left: 4rem;
+  left: 5rem;
   top: 30%;
   width: 100%;
   height: 100%;
