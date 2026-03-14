@@ -10,6 +10,7 @@ export interface MyRivalsRequest {
   usingApp: string | null;
   status: UserStatus;
   isStudying: boolean;
+  tier: string;
 }
 
 export type MyRivalsResponse = {
