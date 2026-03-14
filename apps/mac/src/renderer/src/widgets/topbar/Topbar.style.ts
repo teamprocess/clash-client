@@ -64,10 +64,6 @@ export const ProfileButton = styled.button`
   border-radius: 0.75rem;
   background: transparent;
   cursor: pointer;
-
-  &:hover {
-    background-color: ${({ theme }) => theme.fill.alternative};
-  }
 `;
 
 export const ProfileIcon = styled(Profile)`
