@@ -44,7 +44,7 @@ export const ProfileName = styled.p`
   color: ${({ theme }) => theme.label.normal};
 `;
 
-export const ProfileMention = styled.p`
+export const ProfileMention = styled.div`
   ${font.caption.medium}
   color: ${({ theme }) => theme.label.alternative};
 `;

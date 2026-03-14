@@ -27,7 +27,7 @@ export const TopProfile = ({
 
         <S.UserInfo>
           <S.Name>{user?.name}</S.Name>
-          <RankTier tier={String(user?.expTier)} />
+          <RankTier tier={String(user?.tier)} />
         </S.UserInfo>
       </S.ProfileCard>
 
