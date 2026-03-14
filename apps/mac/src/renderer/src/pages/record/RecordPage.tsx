@@ -1,26 +1,39 @@
 import * as S from "./RecordPage.style";
 import { Record } from "@/features/record";
 import { Todo } from "@/features/record/ui/todo/Todo";
+import { shiftRecordDate } from "@/features/record/model/recordDate";
+import { useTodayRecordDate } from "@/features/record/model/useTodayRecordDate";
 import { useState } from "react";
-import { getTodayRecordDate, shiftRecordDate } from "@/features/record/model/recordDate";
 
 export const RecordPage = () => {
-  const [selectedDate, setSelectedDate] = useState(() => getTodayRecordDate());
+  const todayRecordDate = useTodayRecordDate();
+  const [selectedDate, setSelectedDate] = useState<string | undefined>(undefined);
+  const normalizedSelectedDate = selectedDate === todayRecordDate ? undefined : selectedDate;
+  const displayDate = normalizedSelectedDate ?? todayRecordDate;
 
   return (
     <S.RecordPageContainer>
       <S.Content>
         <Record
-          selectedDate={selectedDate}
+          selectedDate={normalizedSelectedDate}
+          displayDate={displayDate}
           onPreviousDate={() => {
-            setSelectedDate(currentDate => shiftRecordDate(currentDate, -1));
+            setSelectedDate(currentDate => {
+              const normalizedCurrentDate =
+                currentDate === todayRecordDate ? undefined : currentDate;
+              return shiftRecordDate(normalizedCurrentDate ?? todayRecordDate, -1);
+            });
           }}
           onNextDate={() => {
-            setSelectedDate(currentDate => shiftRecordDate(currentDate, 1));
+            setSelectedDate(currentDate => {
+              const normalizedCurrentDate =
+                currentDate === todayRecordDate ? undefined : currentDate;
+              return shiftRecordDate(normalizedCurrentDate ?? todayRecordDate, 1);
+            });
           }}
           canGoNextDate
         />
-        <Todo selectedDate={selectedDate} />
+        <Todo selectedDate={normalizedSelectedDate} />
       </S.Content>
     </S.RecordPageContainer>
   );

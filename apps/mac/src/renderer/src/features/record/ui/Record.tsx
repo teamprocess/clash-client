@@ -4,7 +4,8 @@ import { Timer } from "./timer/Timer";
 import { useRecord } from "../model/useRecord";
 
 interface RecordProps {
-  selectedDate: string;
+  selectedDate?: string;
+  displayDate: string;
   onPreviousDate: () => void;
   onNextDate: () => void;
   canGoNextDate: boolean;
@@ -12,6 +13,7 @@ interface RecordProps {
 
 export const Record = ({
   selectedDate,
+  displayDate,
   onPreviousDate,
   onNextDate,
   canGoNextDate,
@@ -22,7 +24,8 @@ export const Record = ({
     <S.RecordContainer>
       <S.TopContainer>
         <Timer
-          date={selectedDate}
+          date={displayDate}
+          selectedDate={selectedDate}
           onPreviousDate={onPreviousDate}
           onNextDate={onNextDate}
           canGoNextDate={canGoNextDate}

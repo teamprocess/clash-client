@@ -3,7 +3,7 @@ import * as S from "./Todo.style";
 import { useTodoList } from "../../model/useTodoList";
 
 interface TodoProps {
-  selectedDate: string;
+  selectedDate?: string;
 }
 
 export const Todo = ({ selectedDate }: TodoProps) => {
