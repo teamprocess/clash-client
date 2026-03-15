@@ -12,14 +12,14 @@ import {
 import { getErrorMessage, queryClient } from "@/shared/lib";
 
 const groupEditSchema = z.object({
-  name: z.string().min(1, "그룹 이름을 입력하세요."),
+  name: z.string().min(1, "그룹명을 입력하세요"),
   password: z.string().optional(),
   type: z.enum(GROUP_CATEGORIES),
   maxMembers: z
     .number({ message: "숫자를 입력하세요." })
     .min(1, "최대 인원은 1명 이상이어야 합니다.")
     .max(100, "최대 인원은 100명 이하이어야 합니다."),
-  description: z.string().min(1, "그룹 설명을 입력하세요."),
+  description: z.string().min(1, "그룹 설명을 입력하세요"),
 });
 
 export type GroupEditFormData = z.infer<typeof groupEditSchema>;
@@ -30,7 +30,7 @@ export const useGroup = (currentGroupId: number | null) => {
   const [editPasswordRequired, setEditPasswordRequired] = useState(false);
   const [isEditPasswordChangeEnabled, setIsEditPasswordChangeEnabled] = useState(false);
   const [hasEditPassword, setHasEditPassword] = useState(false);
-  const [isFormModalOpen, setIsFormModalOpen] = useState(false);
+  const [isFormPanelOpen, setIsFormPanelOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [joinPassword, setJoinPassword] = useState<string>("");
   const [isJoining, setIsJoining] = useState(false);
@@ -74,8 +74,8 @@ export const useGroup = (currentGroupId: number | null) => {
     name: "type",
   }) as GroupCategory | undefined;
 
-  const handleOpenFormModal = () => {
-    setIsFormModalOpen(true);
+  const handleOpenFormPanel = () => {
+    setIsFormPanelOpen(true);
     createForm.reset({
       name: "",
       password: "",
@@ -85,8 +85,8 @@ export const useGroup = (currentGroupId: number | null) => {
     });
   };
 
-  const handleCloseFormModal = () => {
-    setIsFormModalOpen(false);
+  const handleCloseFormPanel = () => {
+    setIsFormPanelOpen(false);
     createForm.reset();
   };
 
@@ -224,7 +224,7 @@ export const useGroup = (currentGroupId: number | null) => {
       });
 
       if (result.success) {
-        setIsFormModalOpen(false);
+        setIsFormPanelOpen(false);
         createForm.reset();
         await Promise.all([
           queryClient.invalidateQueries({ queryKey: groupQueryKeys.myGroups }),
@@ -245,7 +245,7 @@ export const useGroup = (currentGroupId: number | null) => {
       const result = await groupApi.joinGroup(groupId, password ? { password } : undefined);
 
       if (result.success) {
-        setIsFormModalOpen(false);
+        setIsFormPanelOpen(false);
         setJoinPassword("");
         await Promise.all([
           queryClient.invalidateQueries({ queryKey: groupQueryKeys.myGroups }),
@@ -302,9 +302,9 @@ export const useGroup = (currentGroupId: number | null) => {
     }
   };
 
-  const formModal = {
-    isOpen: isFormModalOpen,
-    onClose: handleCloseFormModal,
+  const formPanel = {
+    isOpen: isFormPanelOpen,
+    onClose: handleCloseFormPanel,
     onCreateSubmit: createForm.handleSubmit(handleCreateSubmit),
     onJoinSubmit: handleJoinSubmit,
     createRegister: createForm.register,
@@ -339,19 +339,19 @@ export const useGroup = (currentGroupId: number | null) => {
   };
 
   return {
-    // 그룹 생성/참여 모달
-    handleOpenFormModal,
+    // 그룹 생성/참여 패널
+    handleOpenFormPanel,
     // 그룹 수정 모달
     handleEditGroupRequest,
     // 그룹 삭제 모달
     handleDeleteGroupRequest,
-    formModal,
+    formPanel,
     editModal,
     deleteModal,
   };
 };
 
 export type UseGroupReturn = ReturnType<typeof useGroup>;
-export type GroupFormModalProps = UseGroupReturn["formModal"];
+export type GroupFormPanelProps = UseGroupReturn["formPanel"];
 export type GroupEditModalProps = UseGroupReturn["editModal"];
 export type GroupDeleteModalProps = UseGroupReturn["deleteModal"];

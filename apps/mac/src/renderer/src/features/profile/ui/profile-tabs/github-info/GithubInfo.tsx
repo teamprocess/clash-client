@@ -1,5 +1,6 @@
 import { useMemo } from "react";
 import * as S from "./GithubInfo.style";
+import { Tooltip } from "@/shared/ui";
 
 export type GithubInfoProps = {
   dateText: string;
@@ -8,7 +9,7 @@ export type GithubInfoProps = {
   issues: number;
   pullRequests: number;
   reviews: number;
-  topRepoName: string;
+  topCommitRepo: string;
   dailyAddedLines: number;
   dailyDeletedLines: number;
   hasDetail?: boolean;
@@ -21,7 +22,7 @@ export const GithubInfo = ({
   issues,
   pullRequests,
   reviews,
-  topRepoName,
+  topCommitRepo,
   dailyAddedLines,
   dailyDeletedLines,
   hasDetail = true,
@@ -36,6 +37,8 @@ export const GithubInfo = ({
       ] as const,
     [commits, issues, pullRequests, reviews]
   );
+
+  const repoText = topCommitRepo?.trim() || "레포지토리 정보가 없습니다.";
 
   if (!hasDetail) {
     return (
@@ -94,7 +97,15 @@ export const GithubInfo = ({
             <S.FireIcon />
             <S.MetaText>
               <S.MetaLabel>최다 커밋 레포지토리</S.MetaLabel>
-              <S.MetaValue>{topRepoName}</S.MetaValue>
+
+              <Tooltip
+                content={repoText}
+                position="top"
+                maxWidth="20rem"
+                wrapperStyle={{ flex: 1, minWidth: 0 }}
+              >
+                <S.MetaValue>{repoText}</S.MetaValue>
+              </Tooltip>
             </S.MetaText>
           </S.MetaRow>
 
@@ -106,9 +117,9 @@ export const GithubInfo = ({
               <S.MetaLabel>하루 동안</S.MetaLabel>
               <S.Lines>
                 <S.Plus>+{dailyAddedLines}</S.Plus>
-                <S.Slash> / </S.Slash>
+                <S.Slash>/</S.Slash>
                 <S.Minus>-{dailyDeletedLines}</S.Minus>
-                <S.LinesUnit> lines</S.LinesUnit>
+                <S.LinesUnit>lines</S.LinesUnit>
               </S.Lines>
             </S.MetaText>
           </S.MetaRow>

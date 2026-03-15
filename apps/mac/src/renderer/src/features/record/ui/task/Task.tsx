@@ -4,7 +4,7 @@ import { useTaskList } from "../../model/useTaskList";
 import { Button, ConfirmDialog, Popover, Tooltip } from "@/shared/ui";
 
 interface TaskProps {
-  selectedDate: string;
+  selectedDate?: string;
 }
 
 export const Task = ({ selectedDate }: TaskProps) => {

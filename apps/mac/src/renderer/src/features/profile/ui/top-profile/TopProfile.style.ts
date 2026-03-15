@@ -5,7 +5,7 @@ import MypageProfileSrc from "../../assets/mypage-profile.png";
 
 export const Banner = styled.div<{ $accent?: string; $bgImage?: string }>`
   width: 100%;
-  height: 25%;
+  height: 20.5%;
   border-radius: 1rem;
   background: ${({ theme }) => theme.background.alternative};
 
@@ -25,6 +25,10 @@ export const Banner = styled.div<{ $accent?: string; $bgImage?: string }>`
   justify-content: flex-end;
   align-items: flex-end;
   position: relative;
+
+  @media (min-height: 56.25rem) {
+    height: 30%;
+  }
 `;
 
 export const Button = styled.div`
@@ -56,17 +60,18 @@ export const ButtonLogout = styled.button`
 
 export const ProfileCard = styled.div`
   position: absolute;
-  left: 4rem;
-  top: 6rem;
-  width: 11rem;
-  height: 11rem;
+  left: 10rem;
+  top: 30%;
+
+  @media (min-height: 56.25rem) {
+    top: 60%;
+  }
 `;
 
 export const ProfileImgWrap = styled.div<{ $accent?: string; $bgImage?: string }>`
   width: 7.5rem;
   height: 7.5rem;
   border-radius: 50%;
-  overflow: hidden;
   box-sizing: border-box;
   border: ${({ $accent }) => ($accent ? `0.5rem solid ${$accent}` : "none")};
 
@@ -93,7 +98,7 @@ export const UserInfo = styled.div`
   width: 100%;
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 0.5rem;
   margin-top: 0.875rem;
 `;
 
@@ -106,6 +111,22 @@ export const Name = styled.div`
 export const BadgeDot = styled.div<{ $accent?: string }>`
   width: 2rem;
   height: 2rem;
+  margin-bottom: 0.625rem;
   border-radius: 100%;
   background: ${({ $accent, theme }) => $accent ?? theme.label.normal};
+  transform: translate(15%, 15%);
+`;
+
+export const ImgBox = styled.div`
+  position: relative;
+  width: 100%;
+  height: 100%;
+`;
+
+export const TierBox = styled.div`
+  position: absolute;
+  right: 0.5rem;
+  bottom: 0;
+  width: 2rem;
+  transform: translate(15%, 15%);
 `;

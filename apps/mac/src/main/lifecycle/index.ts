@@ -1,5 +1,6 @@
 import { app, session } from "electron";
 import type { AppMonitor } from "../services";
+import { isUpdateInstallInProgress } from "../updateInstallState";
 
 const VITE_API_URL = process.env.VITE_API_URL;
 const SHUTDOWN_CLEANUP_TIMEOUT_MS = 2500;
@@ -17,12 +18,12 @@ const buildCookieHeader = (
 
 const buildRecordStopUrl = () => {
   const normalizedApiUrl = VITE_API_URL?.endsWith("/") ? VITE_API_URL : `${VITE_API_URL}/`;
-  return new URL("record/stop", normalizedApiUrl).toString();
+  return new URL("v2/record/stop", normalizedApiUrl).toString();
 };
 
 const buildRecordCurrentUrl = () => {
   const normalizedApiUrl = VITE_API_URL?.endsWith("/") ? VITE_API_URL : `${VITE_API_URL}/`;
-  return new URL("record/current", normalizedApiUrl).toString();
+  return new URL("v2/record/current", normalizedApiUrl).toString();
 };
 
 // API 응답에서 종료해야 할 활성 세션이 있는지 확인
@@ -117,9 +118,7 @@ export const registerQuitHandlers = ({ getAppMonitor }: RegisterQuitHandlersPara
   app.on("before-quit", event => {
     getAppMonitor()?.stop();
 
-    if (
-      (globalThis as { __CLASH_SKIP_SHUTDOWN_CLEANUP__?: boolean }).__CLASH_SKIP_SHUTDOWN_CLEANUP__
-    ) {
+    if (isUpdateInstallInProgress()) {
       return;
     }
 

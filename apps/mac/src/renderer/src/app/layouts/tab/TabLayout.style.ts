@@ -11,6 +11,7 @@ export const Wrapper = styled.div`
 `;
 
 export const TabContainer = styled.div`
+  position: relative;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -21,17 +22,34 @@ export const TabContainer = styled.div`
   border-radius: 0.75rem;
 `;
 
+export const TabActiveIndicator = styled.span<{ $activeIndex: number; $count: number }>`
+  position: absolute;
+  top: 0.25rem;
+  bottom: 0.25rem;
+  left: 0.25rem;
+  width: ${({ $count }) =>
+    `calc((100% - 0.5rem - ${(Math.max($count - 1, 0) * 0.25).toFixed(2)}rem) / ${$count})`};
+  border-radius: 0.5rem;
+  background-color: ${({ theme }) => theme.fill.alternative};
+  transform: translateX(
+    ${({ $activeIndex }) => `calc(${$activeIndex * 100}% + ${($activeIndex * 0.25).toFixed(2)}rem)`}
+  );
+  transition: transform 0.2s ease;
+`;
+
 export const TabItem = styled.button<{ $isActive: boolean }>`
+  position: relative;
+  z-index: 1;
   display: flex;
   align-items: center;
   justify-content: center;
   width: 100%;
   height: 100%;
   padding: 0.5rem;
+  border: none;
   border-radius: 0.5rem;
   ${font.headline1.bold}
-  background-color: ${({ $isActive, theme }) =>
-    $isActive ? theme.fill.alternative : "transparent"};
+  background-color: transparent;
   color: ${({ $isActive, theme }) => ($isActive ? theme.label.normal : theme.label.assistive)};
   cursor: pointer;
 `;

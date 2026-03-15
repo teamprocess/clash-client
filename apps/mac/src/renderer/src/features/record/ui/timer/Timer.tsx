@@ -2,10 +2,10 @@ import * as S from "./Timer.style";
 import { formatTime } from "@/shared/lib";
 import { useRecordStore } from "../../model/recordStore";
 import { useLiveRecordStudyTime } from "../../model/useLiveRecordStudyTime";
-import { getTodayRecordDate } from "../../model/recordDate";
 
 interface TimerProps {
-  date?: string;
+  date: string;
+  selectedDate?: string;
   onPreviousDate?: () => void;
   onNextDate?: () => void;
   canGoNextDate?: boolean;
@@ -14,14 +14,14 @@ interface TimerProps {
 
 export const Timer = ({
   date,
+  selectedDate,
   onPreviousDate,
   onNextDate,
   canGoNextDate = false,
   stopButtonPosition = "LEFT",
 }: TimerProps) => {
   const { activeSessionType, stop } = useRecordStore();
-  const { totalStudyTime } = useLiveRecordStudyTime(date);
-  const currentDate = date ?? getTodayRecordDate();
+  const { totalStudyTime } = useLiveRecordStudyTime(selectedDate);
   const isPreviousDateEnabled = typeof onPreviousDate === "function";
   const isNextDateEnabled = typeof onNextDate === "function" && canGoNextDate;
   const stopButton =
@@ -46,7 +46,7 @@ export const Timer = ({
         >
           <S.ArrowIcon rotate="LEFT" $disabled={!isPreviousDateEnabled} />
         </S.ArrowButton>
-        <S.Date>{currentDate}</S.Date>
+        <S.Date>{date}</S.Date>
         <S.ArrowButton
           type="button"
           aria-label="다음 날짜 조회"

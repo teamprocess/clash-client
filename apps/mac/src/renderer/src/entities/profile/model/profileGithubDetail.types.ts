@@ -12,6 +12,7 @@ export type ProfileGithubDetailData = {
   reviewsCount: number;
   additionLines: number;
   deletionLines: number;
+  topCommitRepo: string;
 };
 
 export type ProfileGithubDetailResponse = ProfileGithubDetailData;

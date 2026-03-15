@@ -1,0 +1,12 @@
+.DS_Store
+.git
+.github
+.idea
+.turbo
+node_modules
+**/node_modules
+**/dist
+**/.turbo
+**/*.tsbuildinfo
+apps/mac/node_modules
+apps/mac/dist

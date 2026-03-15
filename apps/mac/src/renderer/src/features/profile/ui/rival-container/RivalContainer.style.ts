@@ -7,10 +7,11 @@ const flexCol = css`
 `;
 
 export const Container = styled.div`
-  width: 100%;
   display: flex;
+  width: 100%;
   flex-direction: column;
-  gap: 1.25rem;
+  gap: 0.75rem;
+  min-height: 5.325rem;
   margin-top: 7.25rem;
 `;
 
@@ -20,7 +21,6 @@ export const profileSrcMap = {
 
 export const AddRivalButton = styled.button`
   width: 100%;
-  height: 100%;
   border-radius: 0.75rem;
   background-color: ${({ theme }) => theme.background.alternative};
   padding: 1rem 0.75rem;
@@ -29,6 +29,7 @@ export const AddRivalButton = styled.button`
   gap: 1rem;
   border: 0;
   cursor: pointer;
+  flex: 1;
 
   &:focus-visible {
     outline: 2px solid ${({ theme }) => theme.primary.normal};

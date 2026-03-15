@@ -5,25 +5,28 @@ import { ProfileTabs } from "@/features/profile/ui/profile-tabs/ProfileTabs";
 import { useProfile } from "@/features/profile/model/useProfile";
 
 export const ProfilePage = () => {
-  const { appliedBg, appliedBadge, isEditing, handleCancel, handleSave, handlePreviewChange } =
-    useProfile();
+  // handlePreviewChange
+  const { appliedBg, appliedBadge, isEditing, handleCancel, handleSave } = useProfile();
 
   return (
-    <S.Background>
-      <TopProfile
-        bannerAccentColor={appliedBg?.accentColor}
-        bannerBgImageUrl={appliedBg?.bgImageUrl}
-        badgeAccentColor={appliedBadge?.accentColor}
-        badgeBgImageUrl={appliedBadge?.bgImageUrl}
-        isEditing={isEditing}
-        onCancel={handleCancel}
-        onSave={handleSave}
-      />
+    <S.Wrapper>
+      <S.Background>
+        <TopProfile
+          bannerAccentColor={appliedBg?.accentColor}
+          bannerBgImageUrl={appliedBg?.bgImageUrl}
+          badgeAccentColor={appliedBadge?.accentColor}
+          badgeBgImageUrl={appliedBadge?.bgImageUrl}
+          isEditing={isEditing}
+          onCancel={handleCancel}
+          onSave={handleSave}
+        />
 
-      <S.BodyRow>
-        <RivalContainer />
-        <ProfileTabs onPreviewChange={handlePreviewChange} />
-      </S.BodyRow>
-    </S.Background>
+        <S.BodyRow>
+          <RivalContainer />
+          {/*<ProfileTabs onPreviewChange={handlePreviewChange} />*/}
+          <ProfileTabs />
+        </S.BodyRow>
+      </S.Background>
+    </S.Wrapper>
   );
 };

@@ -3,9 +3,9 @@ import type { UserStatus } from "@/features/competition/model/useMyRivals";
 import { font } from "@clash/design-tokens/font";
 import { palette } from "@clash/design-tokens/theme";
 
-export const RivalBox = styled.section`
+export const RivalBox = styled.div`
   width: 100%;
-  height: 5.625rem;
+  min-height: 5.25rem;
   border-radius: 0.75rem;
   background: ${({ theme }) => theme.background.alternative};
   padding: 0.875rem 1rem;
@@ -17,7 +17,7 @@ export const RivalBox = styled.section`
 export const Left = styled.div`
   display: flex;
   align-items: center;
-  gap: 0.875rem;
+  gap: 0.425rem;
   min-width: 0;
 `;
 
@@ -34,9 +34,22 @@ export const NameStatus = styled.div`
   min-width: 0;
 `;
 
+export const NameBox = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
 export const Name = styled.p`
   ${font.body.bold}
   color: ${({ theme }) => theme.label.neutral};
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+`;
+
+export const UserName = styled.p`
+  ${font.caption.bold}
+  color: ${({ theme }) => theme.label.assistive};
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -85,6 +98,9 @@ export const AppRow = styled.div`
 export const AppName = styled.p`
   ${font.caption.regular}
   color: ${({ theme }) => theme.label.neutral};
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 
 export const Time = styled.p`

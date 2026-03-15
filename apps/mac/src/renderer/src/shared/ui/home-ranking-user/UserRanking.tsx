@@ -1,6 +1,7 @@
 import * as S from "./UserRanking.style";
 import { forwardRef } from "react";
 import { RankingItem } from "@/entities/home/model/useRanking.types";
+import { RankTier } from "@/shared/ui";
 
 interface UserRankingProps {
   user: RankingItem;
@@ -19,10 +20,13 @@ export const UserRanking = forwardRef<HTMLDivElement, UserRankingProps>(
           <S.Rank $rank={rank}>{rank}</S.Rank>
 
           <S.ProfileContent>
+            <S.ProfileMention>
+              <RankTier tier={user.tier} />
+            </S.ProfileMention>
             <S.ProfileIcon />
             <S.NameBox>
               <S.ProfileName>{user.name}</S.ProfileName>
-              <S.ProfileMention>(@{user.linkedId})</S.ProfileMention>
+              <S.ProfileMention>@{user.linkedId}</S.ProfileMention>
             </S.NameBox>
 
             {isRival && <S.RivalMention>RIVAL</S.RivalMention>}
