@@ -29,7 +29,7 @@ export const TopProfile = ({
 
         <S.UserInfo>
           <S.Name>{user?.name}</S.Name>
-          <S.BadgeDot />
+          {badgeBgImageUrl ? <S.BadgeDot /> : <></>}
         </S.UserInfo>
       </S.ProfileCard>
 
