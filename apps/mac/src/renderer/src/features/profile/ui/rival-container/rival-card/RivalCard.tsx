@@ -61,13 +61,13 @@ export function RivalCard({
   return (
     <S.RivalBox>
       <S.Left>
+        <RankTier tier={tier} />
         <S.ProfileImg src={profileSrc} alt="라이벌 프로필" />
         <S.NameStatus>
           <S.NameBox>
             <S.Name>{name}</S.Name>
             <S.UserName>{username}</S.UserName>
           </S.NameBox>
-          <RankTier tier={tier} />
           <S.StatusBadge $status={status}>{statusLabelMap[status]}</S.StatusBadge>
         </S.NameStatus>
       </S.Left>

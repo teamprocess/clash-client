@@ -17,7 +17,7 @@ export const RivalBox = styled.div`
 export const Left = styled.div`
   display: flex;
   align-items: center;
-  gap: 0.875rem;
+  gap: 0.425rem;
   min-width: 0;
 `;
 

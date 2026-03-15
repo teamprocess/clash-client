@@ -20,15 +20,14 @@ export const UserRanking = forwardRef<HTMLDivElement, UserRankingProps>(
           <S.Rank $rank={rank}>{rank}</S.Rank>
 
           <S.ProfileContent>
+            <S.ProfileMention>
+              <RankTier tier={user.tier} />
+            </S.ProfileMention>
             <S.ProfileIcon />
             <S.NameBox>
               <S.ProfileName>{user.name}</S.ProfileName>
               <S.ProfileMention>@{user.linkedId}</S.ProfileMention>
             </S.NameBox>
-
-            <S.ProfileMention>
-              <RankTier tier={user.tier} />
-            </S.ProfileMention>
 
             {isRival && <S.RivalMention>RIVAL</S.RivalMention>}
           </S.ProfileContent>
