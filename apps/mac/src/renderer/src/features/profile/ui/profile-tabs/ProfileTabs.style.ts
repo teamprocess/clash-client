@@ -47,6 +47,7 @@ export const Tab = styled.button<{ $isActive: boolean }>`
   border: none;
   cursor: pointer;
   padding: 0;
+  z-index: 2;
 `;
 
 export const TabRail = styled.div`
