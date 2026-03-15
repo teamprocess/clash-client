@@ -125,18 +125,26 @@ export const PreviewModal = ({
                 <S.RoadmapStepsContainer ref={stepsContainerRef}>
                   {hasSteps ? (
                     <S.RoadmapSteps>
-                      {previewData.steps.map((step, index) => (
-                        <S.StepWrapper
-                          key={step.id}
-                          ref={el => {
-                            stepRefs.current[index] = el;
-                          }}
-                          onClick={() => handleStepClick(step.id)}
-                        >
-                          <S.StepCircle $active={step.id === currentStep}>{step.id}</S.StepCircle>
-                          {step.id === currentStep && <S.StepTooltip>{step.tooltip}</S.StepTooltip>}
-                        </S.StepWrapper>
-                      ))}
+                      {previewData.steps.map((step, index) => {
+                        const isFirstStep = index === 0;
+                        const isLastStep = index === previewData.steps.length - 1;
+                        const tooltipAlign = isFirstStep ? "left" : isLastStep ? "right" : "center";
+
+                        return (
+                          <S.StepWrapper
+                            key={step.id}
+                            ref={el => {
+                              stepRefs.current[index] = el;
+                            }}
+                            onClick={() => handleStepClick(step.id)}
+                          >
+                            <S.StepCircle $active={step.id === currentStep}>{step.id}</S.StepCircle>
+                            {step.id === currentStep && (
+                              <S.StepTooltip $align={tooltipAlign}>{step.tooltip}</S.StepTooltip>
+                            )}
+                          </S.StepWrapper>
+                        );
+                      })}
                       <S.StepCircle>
                         <S.StepFlag />
                       </S.StepCircle>
