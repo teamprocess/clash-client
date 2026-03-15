@@ -60,10 +60,8 @@ export const ButtonLogout = styled.button`
 
 export const ProfileCard = styled.div`
   position: absolute;
-  left: 5rem;
+  left: 10rem;
   top: 30%;
-  width: 100%;
-  height: 100%;
 
   @media (min-height: 56.25rem) {
     top: 60%;
