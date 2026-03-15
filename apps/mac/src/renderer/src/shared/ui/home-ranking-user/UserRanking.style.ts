@@ -45,6 +45,8 @@ export const ProfileName = styled.p`
 `;
 
 export const ProfileMention = styled.div`
+  display: flex;
+  height: 100%;
   ${font.caption.medium}
   color: ${({ theme }) => theme.label.alternative};
 `;
