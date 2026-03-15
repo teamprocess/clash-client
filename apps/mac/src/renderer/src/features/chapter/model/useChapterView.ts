@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState, type SetStateAction } from "react";
 import type { Mission } from "@/features/chapter/model/chapter.types";
 
 type UseChapterViewParams = {
@@ -9,9 +9,66 @@ type UseChapterViewParams = {
 export const useChapterView = ({ loading, sectionId }: UseChapterViewParams) => {
   const chapterRef = useRef<HTMLDivElement>(null);
 
-  const [currentMission, setCurrentMission] = useState<Mission | null>(null);
-  const [modalOpen, setModalOpen] = useState(false);
-  const [missionModalOpen, setMissionModalOpen] = useState(false);
+  const [viewState, setViewState] = useState({
+    sectionId,
+    currentMission: null as Mission | null,
+    missionModalOpen: false,
+  });
+
+  const resolvedViewState =
+    viewState.sectionId === sectionId
+      ? viewState
+      : {
+          sectionId,
+          currentMission: null,
+          missionModalOpen: false,
+        };
+
+  const setSectionScopedState = useCallback(
+    <T extends "currentMission" | "missionModalOpen">(
+      key: T,
+      value: SetStateAction<(typeof resolvedViewState)[T]>
+    ) => {
+      setViewState(prev => {
+        const base =
+          prev.sectionId === sectionId
+            ? prev
+            : {
+                sectionId,
+                currentMission: null,
+                missionModalOpen: false,
+              };
+
+        const nextValue =
+          typeof value === "function"
+            ? (
+                value as (prevState: (typeof resolvedViewState)[T]) => (typeof resolvedViewState)[T]
+              )(base[key])
+            : value;
+
+        return {
+          ...base,
+          sectionId,
+          [key]: nextValue,
+        };
+      });
+    },
+    [sectionId]
+  );
+
+  const setCurrentMission = useCallback(
+    (value: SetStateAction<Mission | null>) => {
+      setSectionScopedState("currentMission", value);
+    },
+    [setSectionScopedState]
+  );
+
+  const setMissionModalOpen = useCallback(
+    (value: SetStateAction<boolean>) => {
+      setSectionScopedState("missionModalOpen", value);
+    },
+    [setSectionScopedState]
+  );
 
   const handleScroll = () => {
     if (!chapterRef.current) return;
@@ -46,11 +103,9 @@ export const useChapterView = ({ loading, sectionId }: UseChapterViewParams) => 
 
   return {
     chapterRef,
-    currentMission,
+    currentMission: resolvedViewState.currentMission,
     setCurrentMission,
-    modalOpen,
-    setModalOpen,
-    missionModalOpen,
+    missionModalOpen: resolvedViewState.missionModalOpen,
     setMissionModalOpen,
   };
 };

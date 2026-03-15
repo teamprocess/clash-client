@@ -68,6 +68,17 @@ export const RoadmapWrapper = styled.div`
   right: 5rem;
 `;
 
+export const EmptyRoadmapMessage = styled.div`
+  position: absolute;
+  top: 50%;
+  right: 5rem;
+  transform: translateY(-50%);
+  width: 48rem;
+  text-align: center;
+  ${font.headline1.medium}
+  color: ${({ theme }) => theme.label.assistive};
+`;
+
 export const CurrentSectionBox = styled.div`
   display: flex;
   align-items: center;

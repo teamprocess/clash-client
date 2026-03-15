@@ -1,4 +1,4 @@
-import * as S from "../components/QuizModal.style";
+import * as S from "./AnswerOptionButton.style";
 
 interface AnswerOptionButtonProps {
   id: number;

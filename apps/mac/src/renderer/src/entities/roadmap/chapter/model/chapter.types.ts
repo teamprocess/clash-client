@@ -1,19 +1,21 @@
-export interface Chapter {
-  id: number;
+export interface SectionChapter {
+  id?: number | null;
+  chapterId?: number | null;
   title: string;
   orderIndex: number;
-  completedMissions: number;
-  totalMissions: number;
+  completedMissions: number | null;
+  totalMissions: number | null;
+  description?: string | null;
+  studyMaterialUrl?: string | null;
 }
 
 export interface GetSectionDetailsResponse {
   sectionId: number;
   sectionTitle: string;
   totalChapters: number;
-  currentChapterId: number;
-  currentOrderIndex: number;
-  currentMissionIndex: number;
-  chapters: Chapter[];
+  currentChapterId: number | null;
+  currentOrderIndex: number | null;
+  chapters: SectionChapter[];
 }
 
 export interface Mission {

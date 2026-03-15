@@ -10,7 +10,6 @@ export type {
 } from "./section";
 export { chapterApi, rankingApi, useChapterRankingQuery } from "./chapter";
 export type {
-  Chapter,
   ChapterChoice,
   ChapterQuestion,
   GetChapterResultResponse,
@@ -20,6 +19,7 @@ export type {
   GetSectionDetailsResponse,
   Mission,
   ResetChapterRequest,
+  SectionChapter,
   Stage,
   SubmitAnswerRequest,
   SubmitAnswerResponse,
