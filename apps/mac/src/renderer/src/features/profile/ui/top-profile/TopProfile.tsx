@@ -21,13 +21,15 @@ export const TopProfile = ({
         <S.ProfileImgWrap $accent={badgeAccentColor} $bgImage={badgeBgImageUrl}>
           <S.ImgBox>
             <S.ProfileImg />
-            <S.BadgeDot />
+            <S.TierBox>
+              <RankTier tier={String(user?.tier)} />
+            </S.TierBox>
           </S.ImgBox>
         </S.ProfileImgWrap>
 
         <S.UserInfo>
           <S.Name>{user?.name}</S.Name>
-          <RankTier tier={String(user?.tier)} />
+          <S.BadgeDot />
         </S.UserInfo>
       </S.ProfileCard>
 

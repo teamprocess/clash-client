@@ -45,13 +45,12 @@ const RivalRow = ({ user }: { user: MyRivalsRequest }) => {
   return (
     <S.ProfileContainer>
       <S.ProfileContent>
+        <RankTier tier={user.tier} />
         <S.ProfileIcon />
         <S.NameBox>
           <S.ProfileName>{user.name}</S.ProfileName>
           <S.ProfileMention>@{user.username}</S.ProfileMention>
         </S.NameBox>
-
-        <RankTier tier={user.tier} />
         <S.Status $status={user.status}>{getStatus(user.status)}</S.Status>
       </S.ProfileContent>
 

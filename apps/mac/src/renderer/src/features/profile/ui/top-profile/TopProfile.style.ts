@@ -111,11 +111,9 @@ export const Name = styled.div`
 `;
 
 export const BadgeDot = styled.div<{ $accent?: string }>`
-  position: absolute;
-  right: 0.5rem;
-  bottom: 0;
   width: 2rem;
   height: 2rem;
+  margin-bottom: 0.625rem;
   border-radius: 100%;
   background: ${({ $accent, theme }) => $accent ?? theme.label.normal};
   transform: translate(15%, 15%);
@@ -125,4 +123,12 @@ export const ImgBox = styled.div`
   position: relative;
   width: 100%;
   height: 100%;
+`;
+
+export const TierBox = styled.div`
+  position: absolute;
+  right: 0.5rem;
+  bottom: 0;
+  width: 2rem;
+  transform: translate(15%, 15%);
 `;
