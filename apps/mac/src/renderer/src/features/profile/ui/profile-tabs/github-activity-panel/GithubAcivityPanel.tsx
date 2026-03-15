@@ -2,9 +2,7 @@ import { useMemo, useState } from "react";
 import { GithubInfo } from "@/features/profile/ui/profile-tabs/github-info/GithubInfo";
 import { GithubStreak } from "@/features/profile/ui/profile-tabs/github-streak/GithubStreak";
 import { useProfileGithubDetailQuery } from "@/entities/profile/api/query/useProfileGithubDetail.query";
-
-const pad2 = (n: number) => String(n).padStart(2, "0");
-const toYmd = (d: Date) => `${d.getFullYear()}-${pad2(d.getMonth() + 1)}-${pad2(d.getDate())}`;
+import * as S from "./GithubActivityPanel.style";
 
 const formatKoreanDate = (ymd: string) => {
   const [y, m, d] = ymd.split("-");
@@ -13,14 +11,15 @@ const formatKoreanDate = (ymd: string) => {
 };
 
 export const GithubActivityPanel = () => {
-  const [selectedDate, setSelectedDate] = useState<string>(() => toYmd(new Date()));
+  const [selectedDate, setSelectedDate] = useState<string | null>(null);
   const [fallbackCount, setFallbackCount] = useState<number>(0);
 
   const detailQuery = useProfileGithubDetailQuery(selectedDate);
-
   const detail = detailQuery.data?.data;
 
   const infoProps = useMemo(() => {
+    if (!selectedDate) return null;
+
     const dateText = formatKoreanDate(selectedDate);
 
     return {
@@ -32,7 +31,7 @@ export const GithubActivityPanel = () => {
       pullRequests: detail?.prCount ?? 0,
       reviews: detail?.reviewsCount ?? 0,
 
-      topRepoName: "-",
+      topCommitRepo: detail?.topCommitRepo ?? "-",
       dailyAddedLines: detail?.additionLines ?? 0,
       dailyDeletedLines: detail?.deletionLines ?? 0,
     };
@@ -43,16 +42,26 @@ export const GithubActivityPanel = () => {
       <GithubStreak
         onSelectDate={(date, count) => {
           if (!date) {
-            setSelectedDate(toYmd(new Date()));
+            setSelectedDate(null);
             setFallbackCount(0);
             return;
           }
+
           setSelectedDate(date);
           setFallbackCount(count);
         }}
       />
 
-      <GithubInfo {...infoProps} />
+      {!selectedDate || !infoProps ? (
+        <S.EmptyStateBox>
+          <S.EmptyTitle>잔디를 선택하면 상세 정보를 확인할 수 있어요!</S.EmptyTitle>
+          <S.EmptyDescription>
+            원하는 날짜의 잔디를 클릭해서 활동 내역과 자세한 정보를 확인해보세요.
+          </S.EmptyDescription>
+        </S.EmptyStateBox>
+      ) : (
+        <GithubInfo {...infoProps} />
+      )}
     </>
   );
 };

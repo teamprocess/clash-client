@@ -1,8 +1,8 @@
 import * as S from "./RivalsManagement.style";
-import { Button, DeleteRivalsConfirmDialog, Dialog } from "@/shared/ui";
+import { Button, DeleteRivalsConfirmDialog, Dialog, SlideSelector } from "@/shared/ui";
 import { SearchInput } from "@/shared/ui";
 import { useRival } from "@/shared/lib";
-import React, { useCallback, useLayoutEffect, useRef, useState } from "react";
+import React, { useState } from "react";
 import { RivalLinkingStatusButton } from "@/shared/ui/rival-management";
 
 interface AddRivalsDialogProps {
@@ -27,58 +27,18 @@ export const RivalsManagementDialog = ({ isOpen, onClose, rival }: AddRivalsDial
   const [activeTab, setActiveTab] = useState<"rivals-management" | "rivalList">(
     "rivals-management"
   );
-  const tabsRef = useRef<HTMLDivElement>(null);
-  const addRivalTabRef = useRef<HTMLButtonElement>(null);
-  const rivalListTabRef = useRef<HTMLButtonElement>(null);
-  const [activeRail, setActiveRail] = useState({ left: 0, width: 0 });
-
-  const updateActiveRail = useCallback(() => {
-    const tabsElement = tabsRef.current;
-    const activeTabElement =
-      activeTab === "rivals-management" ? addRivalTabRef.current : rivalListTabRef.current;
-
-    if (!tabsElement || !activeTabElement) return;
-
-    const tabsRect = tabsElement.getBoundingClientRect();
-    const activeRect = activeTabElement.getBoundingClientRect();
-
-    setActiveRail({
-      left: activeRect.left - tabsRect.left,
-      width: activeRect.width,
-    });
-  }, [activeTab]);
-
-  useLayoutEffect(() => {
-    if (!isOpen) return;
-
-    const frameId = requestAnimationFrame(updateActiveRail);
-    return () => cancelAnimationFrame(frameId);
-  }, [isOpen, updateActiveRail]);
 
   return (
     <Dialog width={43} height={40} isOpen={isOpen} onClose={handleClose}>
       <S.DialogLayout>
-        <S.TabHeader>
-          <S.Tabs ref={tabsRef}>
-            <S.Tab
-              ref={addRivalTabRef}
-              $isActive={activeTab === "rivals-management"}
-              onClick={() => setActiveTab("rivals-management")}
-            >
-              라이벌 추가
-            </S.Tab>
-            <S.Tab
-              ref={rivalListTabRef}
-              $isActive={activeTab === "rivalList"}
-              onClick={() => setActiveTab("rivalList")}
-            >
-              신청 목록
-            </S.Tab>
-          </S.Tabs>
-          <S.TabRail>
-            <S.TabActiveRail $left={activeRail.left} $width={activeRail.width} />
-          </S.TabRail>
-        </S.TabHeader>
+        <SlideSelector
+          value={activeTab}
+          options={[
+            { key: "rivals-management", label: "라이벌 추가" },
+            { key: "rivalList", label: "신청 목록" },
+          ]}
+          onChange={setActiveTab}
+        />
 
         {activeTab === "rivals-management" ? (
           <>

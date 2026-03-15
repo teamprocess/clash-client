@@ -1,6 +1,6 @@
 import { Dialog, ModalActions } from "@/shared/ui";
 import type { GroupEditModalProps } from "../../../model/useGroup";
-import { GroupFormFields } from "./GroupFormFields";
+import { GroupFormFields } from "../form-fields/GroupFormFields";
 import * as S from "./GroupEditModal.style";
 
 export const GroupEditModal = ({

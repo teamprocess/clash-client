@@ -6,9 +6,8 @@ import {
   useRecordTodayQuery,
 } from "@/entities/record";
 
-export const useRecord = (selectedDate: string) => {
-  const { startTime, setCurrentStudyTime, setSubjects, setTasks, setActiveSession } =
-    useRecordStore();
+export const useRecord = (selectedDate?: string) => {
+  const { setCurrentStudyTime, setSubjects, setTasks, setActiveSession } = useRecordStore();
   const { data: subjectsResponse } = useRecordSubjectsQuery(selectedDate);
   const { data: tasksResponse } = useRecordTasksQuery(selectedDate);
   const { data: todayResponse } = useRecordTodayQuery(selectedDate);
@@ -68,14 +67,4 @@ export const useRecord = (selectedDate: string) => {
     });
     setCurrentStudyTime(elapsedSeconds);
   }, [setActiveSession, setCurrentStudyTime, todayResponse]);
-
-  useEffect(() => {
-    if (!startTime) return;
-
-    const timer = setInterval(() => {
-      setCurrentStudyTime(Math.floor((Date.now() - startTime) / 1000));
-    }, 1000);
-
-    return () => clearInterval(timer);
-  }, [startTime, setCurrentStudyTime]);
 };

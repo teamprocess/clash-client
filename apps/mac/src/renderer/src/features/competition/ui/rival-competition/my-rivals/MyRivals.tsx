@@ -3,7 +3,7 @@ import { getStatus, useMyRivals } from "@/features/competition/model/useMyRivals
 import { formatTime, resolveUsingApp, useRealtimeRivalActiveTime, useRival } from "@/shared/lib";
 import { MyRivalsRequest, MyRivalsResponse } from "@/entities/competition";
 import { useMemo } from "react";
-import { RivalsManagementDialog } from "@/shared/ui";
+import { RankTier, RivalsManagementDialog } from "@/shared/ui";
 import { IdeIcons } from "@/shared/ui/assets/ide-img";
 
 interface MyRivalsProps {
@@ -45,12 +45,12 @@ const RivalRow = ({ user }: { user: MyRivalsRequest }) => {
   return (
     <S.ProfileContainer>
       <S.ProfileContent>
+        <RankTier tier={user.tier} />
         <S.ProfileIcon />
         <S.NameBox>
           <S.ProfileName>{user.name}</S.ProfileName>
           <S.ProfileMention>@{user.username}</S.ProfileMention>
         </S.NameBox>
-
         <S.Status $status={user.status}>{getStatus(user.status)}</S.Status>
       </S.ProfileContent>
 

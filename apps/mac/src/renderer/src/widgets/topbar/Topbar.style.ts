@@ -51,17 +51,29 @@ export const RightMenu = styled.div`
   gap: 1.25rem;
 `;
 
-export const ProfileIcon = styled(Profile)``;
+export const ProfileMenuWrapper = styled.div`
+  position: relative;
+`;
 
-export const ProfileBox = styled(Link)`
+export const ProfileButton = styled.button`
   display: flex;
   align-items: center;
   gap: 0.75rem;
+  padding: 0.375rem 0.5rem;
+  border: none;
+  border-radius: 0.75rem;
+  background: transparent;
+  cursor: pointer;
+`;
+
+export const ProfileIcon = styled(Profile)`
+  flex-shrink: 0;
 `;
 
 export const NameBox = styled.div`
   display: flex;
   flex-direction: column;
+  align-items: flex-start;
   gap: 0.1rem;
 `;
 
@@ -76,6 +88,7 @@ export const Username = styled.span`
 `;
 
 export const EXPIcon = styled(EXP)``;
+
 export const CookieIcon = styled(Cookie)``;
 
 export const GoodsBox = styled.div`
@@ -91,5 +104,30 @@ export const GoodsBox = styled.div`
   & > span {
     ${font.headline2.medium}
     color: ${({ theme }) => theme.label.normal};
+  }
+`;
+
+export const MenuList = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+export const MenuItem = styled.button<{ $isLogout: boolean }>`
+  display: block;
+  width: 100%;
+  padding: 0.625rem;
+  text-align: center;
+  background: none;
+  border: none;
+  ${font.body.regular};
+  color: ${({ theme, $isLogout }) => ($isLogout ? theme.primary.normal : theme.label.normal)};
+  cursor: pointer;
+
+  &:hover {
+    background-color: ${({ theme }) => theme.fill.alternative};
+  }
+
+  &:not(:last-child) {
+    border-bottom: 1px solid ${({ theme }) => theme.line.normal};
   }
 `;

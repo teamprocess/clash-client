@@ -3,7 +3,6 @@ export { GithubInfo } from "./ui/profile-tabs/github-info/GithubInfo";
 export { GithubStreak } from "./ui/profile-tabs/github-streak/GithubStreak";
 export { ItemPanel } from "./ui/profile-tabs/item-panel/ItemPanel";
 export { NameplateModal } from "./ui/profile-tabs/item-panel/nameplate-modal/NameplateModal";
-export { MenuTabs } from "./ui/profile-tabs/menu-tabs/MenuTabs";
 export { TimePanel } from "./ui/profile-tabs/time-panel/TimePanel";
 export { RivalContainer } from "./ui/rival-container/RivalContainer";
 export { RivalCard } from "./ui/rival-container/rival-card/RivalCard";

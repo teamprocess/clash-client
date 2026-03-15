@@ -1,16 +1,14 @@
 import { useCallback, useMemo, useState } from "react";
 import { type GroupMember, useGroupActivityQuery } from "@/entities/group";
 import { useLiveRecordStudyTime } from "./useLiveRecordStudyTime";
-import { isTodayRecordDate } from "./recordDate";
 
 export const useGroupMembersActivity = (
   groupId: number | null,
   myUserId: number | null,
-  selectedDate: string
+  selectedDate?: string
 ) => {
-  const isTodaySelected = isTodayRecordDate(selectedDate);
-  const queryDate = isTodaySelected ? undefined : selectedDate;
-  const { data: activityResponse, dataUpdatedAt } = useGroupActivityQuery(groupId, queryDate);
+  const isTodaySelected = selectedDate === undefined;
+  const { data: activityResponse, dataUpdatedAt } = useGroupActivityQuery(groupId, selectedDate);
   const { totalStudyTime: myTotalStudyTime, isStudying: isMyStudying } =
     useLiveRecordStudyTime(selectedDate);
   const [now, setNow] = useState(() => Date.now());
