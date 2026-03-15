@@ -14,7 +14,7 @@ export const chapterApi = {
   // 로드맵 상세 조회
   getSectionDetails: async (data: GetSectionDetailsRequest) => {
     const result = await api.get<ApiResponse<GetSectionDetailsResponse>>(
-      `/sections/${data.sectionId}/details`
+      `/v2/sections/${data.sectionId}/details`
     );
     return result.data;
   },

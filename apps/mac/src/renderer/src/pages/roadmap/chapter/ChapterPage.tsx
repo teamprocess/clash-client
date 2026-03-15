@@ -3,7 +3,6 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { ChapterRanking } from "@/features/chapter-ranking";
 import { SectionProgress } from "@/features/section-progress";
 import { Roadmap } from "@/features/chapter/components/Roadmap";
-import { QuizModal } from "@/features/chapter/components/QuizModal";
 import { useChapter } from "@/features/chapter/model/useChapter";
 import { MajorEnum } from "@/entities/roadmap/section/model/section.types";
 import { useEffect, useMemo } from "react";
@@ -95,9 +94,13 @@ export const ChapterPage = () => {
           <S.Square key={idx} />
         ))}
 
-        <S.RoadmapWrapper>
-          <Roadmap nodes={domain.roadmapNodes} onSelectStage={handlers.handleSelectStage} />
-        </S.RoadmapWrapper>
+        {domain.roadmapNodes.length > 0 ? (
+          <S.RoadmapWrapper>
+            <Roadmap nodes={domain.roadmapNodes} onSelectStage={handlers.handleSelectStage} />
+          </S.RoadmapWrapper>
+        ) : (
+          <S.EmptyRoadmapMessage>아직 등록된 챕터가 없습니다.</S.EmptyRoadmapMessage>
+        )}
       </S.ChapterScrollable>
 
       <ChapterRanking page="chapter" />
@@ -132,7 +135,9 @@ export const ChapterPage = () => {
 
       {view.missionModalOpen && (
         <MissionContainer
+          isOpen={view.missionModalOpen}
           currentStage={domain.currentStage}
+          currentMission={view.currentMission}
           description={
             domain.currentStageDetailsError
               ? "챕터 설명을 불러오지 못했습니다. 잠시 후 다시 확인해주세요."
@@ -142,16 +147,10 @@ export const ChapterPage = () => {
           isSolveDisabled={
             domain.currentStageMissionsLoading || domain.currentStageMissions.length === 0
           }
+          studyMaterialUrl={domain.currentStageStudyMaterialUrl}
           onClose={handlers.handleCloseMissionPanel}
+          onBackToOverview={handlers.handleCloseQuizModal}
           onSolve={handlers.handleStartCurrentStageMission}
-        />
-      )}
-
-      {view.currentMission && (
-        <QuizModal
-          isOpen={view.modalOpen}
-          onClose={handlers.handleCloseQuizModal}
-          currentMission={view.currentMission}
           onMissionComplete={handlers.handleMissionComplete}
         />
       )}

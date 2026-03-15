@@ -166,6 +166,17 @@ export const RoadmapStepsContainer = styled.div`
   }
 `;
 
+export const EmptyRoadmapState = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 5rem;
+  text-align: center;
+  ${font.body.medium}
+  color: ${({ theme }) => theme.label.assistive};
+`;
+
 export const StepCircle = styled.div<{ $active?: boolean }>`
   width: 2.25rem;
   height: 2.25rem;
@@ -273,6 +284,12 @@ export const RoadmapDescription = styled.span`
   width: 32rem;
 `;
 
+export const EmptyRoadmapDescription = styled.span`
+  ${font.headline2.medium}
+  color: ${({ theme }) => theme.label.assistive};
+  text-align: center;
+`;
+
 export const RoadmapStepBox = styled.div`
   display: flex;
   justify-content: center;
@@ -298,6 +315,11 @@ export const StepLabel = styled.div`
 export const TotalStepLabel = styled.span`
   ${font.title2.medium}
   color: ${({ theme }) => theme.label.alternative};
+`;
+
+export const EmptyStepLabel = styled.span`
+  ${font.title2.medium}
+  color: ${({ theme }) => theme.label.assistive};
 `;
 
 export const TargetBoxTop = styled.div`

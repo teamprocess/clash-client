@@ -1,6 +1,5 @@
 export { chapterApi } from "./api/chapterApi";
 export type {
-  Chapter,
   ChapterChoice,
   ChapterQuestion,
   GetChapterResultResponse,
@@ -10,6 +9,7 @@ export type {
   GetSectionDetailsResponse,
   Mission,
   ResetChapterRequest,
+  SectionChapter,
   Stage,
   SubmitAnswerRequest,
   SubmitAnswerResponse,

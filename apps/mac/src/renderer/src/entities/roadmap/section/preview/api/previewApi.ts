@@ -5,7 +5,7 @@ export const previewApi = {
   // 로드맵 미리보기 조회
   getSectionPreview: async (sectionId: number) => {
     const result = await api.get<ApiResponse<GetSectionPreviewResponse>>(
-      `/sections/${sectionId}/preview`
+      `/v2/sections/${sectionId}/preview`
     );
     return result.data;
   },

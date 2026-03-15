@@ -60,9 +60,13 @@ export const useChapter = (sectionId: number) => {
   }, [chapterDetailsQuery.data, domain.currentStage]);
 
   const handlers = useChapterHandlers({
-    ...domain,
-    ...view,
+    stages: domain.stages,
+    setStageOverrides: domain.setStageOverrides,
+    currentStageId: domain.currentStageId,
+    setCurrentStageId: domain.setCurrentStageId,
     currentStageMissions,
+    setCurrentMission: view.setCurrentMission,
+    setMissionModalOpen: view.setMissionModalOpen,
   });
 
   return {
@@ -71,6 +75,7 @@ export const useChapter = (sectionId: number) => {
       roadmapNodes: domain.roadmapNodes,
       currentStage,
       currentStageDescription: chapterDetailsQuery.data?.description ?? null,
+      currentStageStudyMaterialUrl: chapterDetailsQuery.data?.studyMaterialUrl ?? null,
       currentStageMissions,
       currentStageMissionsLoading: chapterDetailsQuery.isLoading,
       currentStageDetailsLoading: chapterDetailsQuery.isLoading,
@@ -82,7 +87,6 @@ export const useChapter = (sectionId: number) => {
     },
     view: {
       currentMission: view.currentMission,
-      modalOpen: view.modalOpen,
       missionModalOpen: view.missionModalOpen,
     },
     handlers: {

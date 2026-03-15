@@ -18,3 +18,5 @@ export { UserRanking } from "./home-ranking-user/UserRanking";
 export { GrowthRate } from "./growth-rate/GrowthRate";
 export { RivalCompetitionLineChart } from "./rival-compete-chart/RivalCompeteLineChart";
 export { MyCompetitionLineChart } from "./my-compete-chart/MyCompetitionLineChart";
+export { SidePanel } from "./side-panel";
+export type { SidePanelProps } from "./side-panel";
