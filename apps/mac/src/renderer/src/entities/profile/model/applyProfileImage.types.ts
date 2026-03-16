@@ -4,16 +4,12 @@ export interface PostProfileImagePresignedUrlRequest {
 }
 
 export interface PostProfileImagePresignedUrlResponse {
-  success: boolean;
-  message: string;
-  data: {
-    uploadUrl: string;
-    objectKey: string;
-    fileUrl: string;
-    httpMethod: "PUT";
-    contentType: string;
-    expiresInSeconds: number;
-  };
+  uploadUrl: string;
+  objectKey: string;
+  fileUrl: string;
+  httpMethod: "PUT";
+  contentType: string;
+  expiresInSeconds: number;
 }
 
 export interface ApplyProfileImageRequest {
@@ -21,9 +17,5 @@ export interface ApplyProfileImageRequest {
 }
 
 export interface ApplyProfileImageResponse {
-  success: boolean;
-  message: string;
-  data: {
-    profileImageUrl: string;
-  };
+  profileImageUrl: string;
 }

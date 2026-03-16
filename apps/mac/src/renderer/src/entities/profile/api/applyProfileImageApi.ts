@@ -36,6 +36,15 @@ export const uploadProfileImageToS3 = async ({
   file: File;
   contentType: string;
 }) => {
+  if (typeof window !== "undefined" && typeof window.api?.uploadFileToPresignedUrl === "function") {
+    await window.api.uploadFileToPresignedUrl(
+      uploadUrl,
+      new Uint8Array(await file.arrayBuffer()),
+      contentType
+    );
+    return;
+  }
+
   const response = await fetch(uploadUrl, {
     method: "PUT",
     headers: {
