@@ -2,6 +2,7 @@ import * as S from "./MissionContainer.style";
 import { useEffect, useRef, useState } from "react";
 import { SidePanel } from "@/shared/ui";
 import { getErrorMessage } from "@/shared/lib";
+import { MarkdownCodeContent } from "@/shared/ui/markdown-code-content/MarkdownCodeContent";
 import type { Mission } from "@/features/chapter/model/chapter.types";
 import { useQuiz } from "../model/useQuiz";
 import { AnswerOptionButton } from "../ui/AnswerOptionButton";
@@ -111,9 +112,10 @@ const QuizPanelContent = ({
             </S.ResultHeader>
 
             <S.ExplanationBox>
-              <S.ExplanationText>
-                {state.explanation || "해설이 제공되지 않았습니다."}
-              </S.ExplanationText>
+              <MarkdownCodeContent
+                content={state.explanation || "해설이 제공되지 않았습니다."}
+                variant="body"
+              />
             </S.ExplanationBox>
           </S.ResultCard>
         </S.QuizViewport>
@@ -202,7 +204,13 @@ const QuizPanelContent = ({
       <S.QuizViewport>
         <S.QuizContent>
           <S.QuizCard>
-            <S.QuestionText><span>Q.</span> {currentQuestion.content}</S.QuestionText>
+            <S.QuestionText>
+              <MarkdownCodeContent
+                content={currentQuestion.content}
+                variant="question"
+                prefix={<S.QuestionPrefix>Q.</S.QuestionPrefix>}
+              />
+            </S.QuestionText>
           </S.QuizCard>
 
           <S.OptionList>

@@ -62,16 +62,18 @@ export const TotalQuestions = styled.span`
 export const QuestionWrapper = styled.div`
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
   width: 100%;
+  max-height: 13.5rem;
+  overflow-y: auto;
+  padding-right: 0.25rem;
 `;
 
-export const QuestionTitle = styled.span`
-  ${font.headline1.medium}
-  color: ${({ theme }) => theme.label.normal};
-  text-overflow: ellipsis;
-  text-align: center;
-  width: 20rem;
+export const QuestionTitle = styled.div`
+  display: flex;
+  width: 100%;
+  max-width: 20rem;
+  min-width: 0;
 `;
 
 export const QuestionPrefix = styled.span`
@@ -86,6 +88,7 @@ export const ModalBody = styled.div`
   align-items: center;
   align-self: center;
   width: 20rem;
+  min-height: 0;
   gap: 3rem;
 `;
 
@@ -146,13 +149,15 @@ export const CorrectIcon = styled(Correct)``;
 export const IncorrectIcon = styled(InCorrect)``;
 
 export const CommentaryBox = styled.div`
-  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
   width: 100%;
   background-color: ${({ theme }) => theme.background.normal};
-  ${font.headline2.regular}
-  color: ${({ theme }) => theme.label.normal};
   padding: 1.5rem 2rem;
   border-radius: 0.75rem;
+  max-height: 12rem;
+  overflow: auto;
 `;
 
 export const LastResultWrapper = styled.div`
