@@ -31,6 +31,11 @@ interface AppMonitorAPI {
   getSessions: () => Promise<MonitoringSession[]>;
   getFrontmostMonitoredApp: () => Promise<string | null>;
   getCursorScreenPoint: () => Promise<CursorScreenPoint>;
+  uploadFileToPresignedUrl: (
+    uploadUrl: string,
+    fileBytes: Uint8Array,
+    contentType: string
+  ) => Promise<void>;
   openExternalUrl: (url: string) => Promise<void>;
   clearAuthSession: () => Promise<void>;
   onDeepLinkAuth: (callback: (payload: DeepLinkAuthPayload) => void) => () => void;

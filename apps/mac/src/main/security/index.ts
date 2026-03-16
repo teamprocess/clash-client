@@ -2,6 +2,11 @@ import { app, session } from "electron";
 import { is } from "@electron-toolkit/utils";
 
 const FALLBACK_SOCKET_ENDPOINT = "wss://api.clash.kr/socket.io";
+const DEFAULT_PROFILE_IMAGE_SOURCES = [
+  "https://cdn.clash.kr",
+  "https://*.amazonaws.com",
+  "https://*.cloudfront.net",
+];
 
 const parseOrigin = (rawUrl: string | undefined) => {
   if (!rawUrl) {
@@ -40,7 +45,6 @@ export const registerCspHeaders = () => {
   const apiOrigin = parseOrigin(process.env.VITE_API_URL);
   const socketOrigin =
     parseOrigin(process.env.VITE_SOCKET_IO_URL) ?? parseOrigin(FALLBACK_SOCKET_ENDPOINT);
-  const cdnOrigin = parseOrigin("https://cdn.clash.kr");
 
   if (apiOrigin) {
     connectSourceSet.add(apiOrigin);
@@ -51,8 +55,9 @@ export const registerCspHeaders = () => {
     connectSourceSet.add(socketOrigin);
   }
 
-  if (cdnOrigin) {
-    imageSourceSet.add(cdnOrigin);
+  for (const source of DEFAULT_PROFILE_IMAGE_SOURCES) {
+    imageSourceSet.add(source);
+    connectSourceSet.add(source);
   }
 
   const connectSources = Array.from(connectSourceSet).join(" ");

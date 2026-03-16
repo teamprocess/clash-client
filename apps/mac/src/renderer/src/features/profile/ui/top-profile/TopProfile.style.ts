@@ -1,7 +1,8 @@
 import styled from "styled-components";
-import { palette } from "@clash/design-tokens/theme";
 import { font } from "@clash/design-tokens/font";
 import MypageProfileSrc from "../../assets/mypage-profile.png";
+import AddProfileImg from "../../assets/add-profile-img-icon.svg";
+import ChangeProfileImg from "../../assets/change-profile-img-icon.svg";
 
 export const Banner = styled.div<{ $accent?: string; $bgImage?: string }>`
   width: 100%;
@@ -33,29 +34,9 @@ export const Banner = styled.div<{ $accent?: string; $bgImage?: string }>`
 
 export const Button = styled.div`
   display: flex;
-  gap: 0.875rem;
-`;
-
-export const ButtonEdit = styled.button`
-  width: 4rem;
-  height: 2rem;
-  background: ${({ theme }) => theme.line.normal};
-  border-radius: 0.75rem;
-  color: ${palette.neutral[97]};
-  ${font.label.medium};
-  border: none;
-  cursor: pointer;
-`;
-
-export const ButtonLogout = styled.button`
-  width: 5rem;
-  height: 2rem;
-  background: ${({ theme }) => theme.primary.normal};
-  border-radius: 0.75rem;
-  color: ${palette.neutral[97]};
-  ${font.label.medium};
-  border: none;
-  cursor: pointer;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.5rem;
 `;
 
 export const ProfileCard = styled.div`
@@ -86,12 +67,53 @@ export const ProfileImgWrap = styled.div<{ $accent?: string; $bgImage?: string }
 `;
 
 export const ProfileImg = styled.img.attrs(() => ({
-  src: MypageProfileSrc,
   alt: "프로필",
 }))`
   width: 100%;
   height: 100%;
   object-fit: cover;
+  display: block;
+`;
+
+export const ProfileImageButton = styled.button<{ $hasImage: boolean }>`
+  position: relative;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  border-radius: 50%;
+  overflow: hidden;
+
+  &:hover {
+    opacity: 1;
+    visibility: visible;
+  }
+`;
+
+export const AddProfileImageIconWrap = styled.div`
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.32);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+`;
+
+export const ChangeProfileImageIconWrap = styled.div`
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.32);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
 `;
 
 export const UserInfo = styled.div`
@@ -123,10 +145,20 @@ export const ImgBox = styled.div`
   height: 100%;
 `;
 
-export const TierBox = styled.div`
-  position: absolute;
-  right: 0.5rem;
-  bottom: 0;
-  width: 2rem;
-  transform: translate(15%, 15%);
+export const HiddenFileInput = styled.input`
+  display: none;
+`;
+
+export const FallbackProfileImage = MypageProfileSrc;
+
+export const AddProfileImageIcon = styled(AddProfileImg)`
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+`;
+
+export const ChangeProfileImageIcon = styled(ChangeProfileImg)`
+  width: 100%;
+  height: 100%;
+  z-index: 2;
 `;
