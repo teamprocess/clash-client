@@ -45,7 +45,9 @@ const RivalRow = ({ user }: { user: MyRivalsRequest }) => {
   return (
     <S.ProfileContainer>
       <S.ProfileContent>
-        <RankTier tier={user.tier} />
+        <S.RankTierWrap>
+          <RankTier tier={user.tier} />
+        </S.RankTierWrap>
         <S.ProfileIcon />
         <S.NameBox>
           <S.ProfileName>{user.name}</S.ProfileName>
