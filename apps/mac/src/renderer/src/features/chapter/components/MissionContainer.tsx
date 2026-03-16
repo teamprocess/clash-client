@@ -310,8 +310,6 @@ export const MissionContainer = ({
       : 0;
   const hasStudyMaterial = Boolean(studyMaterialUrl?.trim());
   const isOverviewLoading = isLoading && !currentMission;
-  const materialMessage =
-    studyMaterialError ?? (!hasStudyMaterial ? "현재 챕터에는 연결된 학습 자료가 없습니다." : null);
 
   return (
     <SidePanel
@@ -386,20 +384,22 @@ export const MissionContainer = ({
                 </>
               ) : (
                 <>
-                  {materialMessage && (
-                    <S.InlineMessage $tone={studyMaterialError ? "error" : "neutral"}>
-                      {materialMessage}
+                  {studyMaterialError && (
+                    <S.InlineMessage $tone="error">
+                      {studyMaterialError}
                     </S.InlineMessage>
                   )}
-                  <S.PrimaryActionButton
-                    variant="primary"
-                    size="lg"
-                    fullWidth
-                    onClick={() => void handleOpenStudyMaterial()}
-                    disabled={isLoading || !hasStudyMaterial}
-                  >
-                    학습하러 가기
-                  </S.PrimaryActionButton>
+                  {hasStudyMaterial && (
+                    <S.PrimaryActionButton
+                      variant="primary"
+                      size="lg"
+                      fullWidth
+                      onClick={() => void handleOpenStudyMaterial()}
+                      disabled={isLoading}
+                    >
+                      학습하러 가기
+                    </S.PrimaryActionButton>
+                  )}
                   <S.SecondaryActionButton
                     variant="secondary"
                     size="lg"
