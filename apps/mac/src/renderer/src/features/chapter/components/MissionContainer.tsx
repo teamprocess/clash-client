@@ -348,16 +348,6 @@ export const MissionContainer = ({
                   <>
                     <S.LoadingBlock $width="6rem" $height="2rem" $radius="0.5rem" />
                     <S.LoadingBlock $width="100%" $height="0.5rem" $radius="999px" />
-                    <S.MetaRow>
-                      <S.MetaItem>
-                        <S.MetaLabel>완료한 문제</S.MetaLabel>
-                        <S.LoadingBlock $width="4.5rem" $height="1rem" $radius="0.45rem" />
-                      </S.MetaItem>
-                      <S.MetaItem>
-                        <S.MetaLabel>전체 문제</S.MetaLabel>
-                        <S.LoadingBlock $width="4.5rem" $height="1rem" $radius="0.45rem" />
-                      </S.MetaItem>
-                    </S.MetaRow>
                   </>
                 ) : (
                   <>
@@ -369,17 +359,6 @@ export const MissionContainer = ({
                     <S.ProgressTrack aria-hidden>
                       <S.ProgressFill $value={progressPercent} />
                     </S.ProgressTrack>
-
-                    <S.MetaRow>
-                      <S.MetaItem>
-                        <S.MetaLabel>완료한 문제</S.MetaLabel>
-                        <S.MetaValue>{currentStage.currentProgress}문제</S.MetaValue>
-                      </S.MetaItem>
-                      <S.MetaItem>
-                        <S.MetaLabel>전체 문제</S.MetaLabel>
-                        <S.MetaValue>{currentStage.totalMissions || 0}문제</S.MetaValue>
-                      </S.MetaItem>
-                    </S.MetaRow>
                   </>
                 )}
               </S.SectionCard>
