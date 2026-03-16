@@ -4,7 +4,8 @@ import Silver from "./clash-silver.svg";
 import Gold from "./clash-gold.svg";
 import Diamond from "./clash-diamond.svg";
 import Master from "./clash-master.svg";
-import AURA from "./clash-AURA.svg";
+import Aura from "./clash-aura.svg";
+import Unranked from "./clash-unranked.svg";
 
 const tierIcon = css`
   width: 2em;
@@ -13,6 +14,9 @@ const tierIcon = css`
 `;
 
 export const TierIcons = {
+  UNRANKED: styled(Unranked)`
+    ${tierIcon}
+  `,
   BRONZE: styled(Bronze)`
     ${tierIcon}
   `,
@@ -28,7 +32,7 @@ export const TierIcons = {
   MASTER: styled(Master)`
     ${tierIcon}
   `,
-  AURA: styled(AURA)`
+  AURA: styled(Aura)`
     ${tierIcon}
   `,
 };
