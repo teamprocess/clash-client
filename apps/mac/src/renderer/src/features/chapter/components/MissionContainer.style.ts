@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, { css, keyframes } from "styled-components";
 import { font } from "@clash/design-tokens/font";
 import { palette } from "@clash/design-tokens/theme";
 import Close from "@/features/profile/assets/close.svg";
@@ -12,6 +12,27 @@ const panelBackground = "#27282b";
 const neutralSurface = "rgba(255, 255, 255, 0.035)";
 const neutralSurfaceStrong = "rgba(255, 255, 255, 0.055)";
 const subtleBorder = "rgba(255, 255, 255, 0.08)";
+
+const skeletonWave = keyframes`
+  0% {
+    background-position: 200% 0;
+  }
+
+  100% {
+    background-position: -200% 0;
+  }
+`;
+
+const skeletonBase = css`
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.05) 0%,
+    rgba(255, 255, 255, 0.11) 50%,
+    rgba(255, 255, 255, 0.05) 100%
+  );
+  background-size: 200% 100%;
+  animation: ${skeletonWave} 1.6s ease-in-out infinite;
+`;
 
 export const PanelContent = styled.div`
   display: flex;
@@ -175,6 +196,23 @@ export const InlineMessage = styled.p<{ $tone?: "error" | "neutral" }>`
   color: ${({ theme, $tone = "neutral" }) =>
     $tone === "error" ? palette.red[60] : theme.label.assistive};
   line-height: 1.45;
+`;
+
+export const LoadingBlock = styled.div<{
+  $width: string;
+  $height: string;
+  $radius?: string;
+}>`
+  width: ${({ $width }) => $width};
+  height: ${({ $height }) => $height};
+  border-radius: ${({ $radius = "0.75rem" }) => $radius};
+  ${skeletonBase}
+`;
+
+export const LoadingDescriptionStack = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
 `;
 
 export const FooterActions = styled.div`

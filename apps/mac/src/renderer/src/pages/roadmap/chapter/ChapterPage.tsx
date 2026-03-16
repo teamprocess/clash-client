@@ -73,7 +73,79 @@ export const ChapterPage = () => {
   if (domain.loading) {
     return (
       <S.ChapterContainer>
-        <div>로딩 중...</div>
+        <S.ChapterScrollable>
+          <S.ChapterCanvas>
+            <S.RoadmapStageArea>
+              <S.LoadingRoadmapWrapper>
+                <S.LoadingRoadmapPath $top="9rem" $left="9rem" $width="12rem" $rotate="-22deg" />
+                <S.LoadingRoadmapPath $top="16rem" $left="18rem" $width="10rem" $rotate="18deg" />
+                <S.LoadingRoadmapPath $top="24rem" $left="10rem" $width="14rem" $rotate="-12deg" />
+                <S.LoadingRoadmapPath $top="30rem" $left="22rem" $width="11rem" $rotate="22deg" />
+                <S.LoadingRoadmapPath $top="40rem" $left="12rem" $width="12rem" $rotate="-10deg" />
+                <S.LoadingRoadmapPath $top="48rem" $left="24rem" $width="10rem" $rotate="28deg" />
+
+                <S.LoadingRoadmapNode $top="6rem" $left="6rem" />
+                <S.LoadingRoadmapNode $top="12rem" $left="18rem" />
+                <S.LoadingRoadmapNode $top="20rem" $left="26rem" />
+                <S.LoadingRoadmapNode $top="27rem" $left="12rem" />
+                <S.LoadingRoadmapNode $top="34rem" $left="24rem" />
+                <S.LoadingRoadmapNode $top="44rem" $left="14rem" />
+                <S.LoadingRoadmapNode $top="52rem" $left="30rem" />
+              </S.LoadingRoadmapWrapper>
+            </S.RoadmapStageArea>
+          </S.ChapterCanvas>
+        </S.ChapterScrollable>
+
+        <S.LoadingRankingContainer>
+          <S.LoadingSkeleton $width="7rem" $height="1.6rem" />
+          <S.LoadingRankingTop3>
+            <S.LoadingRankingPodium>
+              <S.LoadingSkeleton $width="3.6rem" $height="3.6rem" $radius="999px" />
+              <S.LoadingSkeleton $width="2.8rem" $height="0.8rem" />
+              <S.LoadingSkeleton $width="2.2rem" $height="0.7rem" />
+            </S.LoadingRankingPodium>
+            <S.LoadingRankingPodium>
+              <S.LoadingSkeleton $width="4.2rem" $height="4.2rem" $radius="999px" />
+              <S.LoadingSkeleton $width="3rem" $height="0.9rem" />
+              <S.LoadingSkeleton $width="2.4rem" $height="0.7rem" />
+            </S.LoadingRankingPodium>
+            <S.LoadingRankingPodium>
+              <S.LoadingSkeleton $width="3.6rem" $height="3.6rem" $radius="999px" />
+              <S.LoadingSkeleton $width="2.8rem" $height="0.8rem" />
+              <S.LoadingSkeleton $width="2.2rem" $height="0.7rem" />
+            </S.LoadingRankingPodium>
+          </S.LoadingRankingTop3>
+          <S.LoadingRankingList>
+            {Array.from({ length: 5 }).map((_, idx) => (
+              <S.LoadingRankingItem key={idx}>
+                <S.LoadingSkeleton $width="7rem" $height="1rem" />
+                <S.LoadingSkeleton $width="2.5rem" $height="0.9rem" />
+              </S.LoadingRankingItem>
+            ))}
+          </S.LoadingRankingList>
+        </S.LoadingRankingContainer>
+
+        <S.LoadingPreviousBox>
+          <S.LoadingSkeleton $width="2rem" $height="2rem" $radius="999px" />
+          <S.LoadingSkeleton $width="7rem" $height="1.7rem" />
+        </S.LoadingPreviousBox>
+
+        <S.LoadingCurrentSectionBox>
+          <S.LoadingSkeleton $width="2rem" $height="2rem" $radius="999px" />
+          <S.LoadingSkeleton $width="12rem" $height="2rem" />
+          <S.LoadingSkeleton $width="2rem" $height="2rem" $radius="999px" />
+        </S.LoadingCurrentSectionBox>
+
+        <S.LoadingSectionProgress>
+          <S.LoadingProgressInfo>
+            <S.LoadingSkeleton $width="2rem" $height="2rem" $radius="0.35rem" />
+            <S.LoadingSkeleton $width="6rem" $height="1.5rem" />
+          </S.LoadingProgressInfo>
+          <S.LoadingProgressBar>
+            <S.LoadingSkeleton $width="100%" $height="0.5rem" $radius="999px" />
+            <S.LoadingSkeleton $width="3rem" $height="1.5rem" />
+          </S.LoadingProgressBar>
+        </S.LoadingSectionProgress>
       </S.ChapterContainer>
     );
   }
