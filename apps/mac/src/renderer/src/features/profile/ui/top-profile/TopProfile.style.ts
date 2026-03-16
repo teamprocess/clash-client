@@ -50,6 +50,7 @@ export const ProfileCard = styled.div`
 `;
 
 export const ProfileImgWrap = styled.div<{ $accent?: string; $bgImage?: string }>`
+  position: relative;
   width: 7.5rem;
   height: 7.5rem;
   border-radius: 50%;
@@ -64,6 +65,16 @@ export const ProfileImgWrap = styled.div<{ $accent?: string; $bgImage?: string }
         background-position: center;
       `
       : ""}
+`;
+
+export const RankTierWrap = styled.div`
+  position: absolute;
+  right: 1rem;
+  width: 3rem;
+  height: 3rem;
+  bottom: 0;
+  transform: translate(35%, 35%);
+  z-index: 3;
 `;
 
 export const ProfileImg = styled.img.attrs(() => ({
@@ -86,7 +97,7 @@ export const ProfileImageButton = styled.button<{ $hasImage: boolean }>`
   border-radius: 50%;
   overflow: hidden;
 
-  &:hover {
+  &:hover .profile-image-overlay {
     opacity: 1;
     visibility: visible;
   }

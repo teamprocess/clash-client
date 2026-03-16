@@ -8,8 +8,8 @@ import Aura from "./clash-aura.svg";
 import Unranked from "./clash-unranked.svg";
 
 const tierIcon = css`
-  width: 2em;
-  height: 2em;
+  width: 100%;
+  height: 100%;
   flex-shrink: 0;
 `;
 
