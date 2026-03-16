@@ -301,6 +301,7 @@ export const MissionContainer = ({
       ? Math.min((currentStage.currentProgress / currentStage.totalMissions) * 100, 100)
       : 0;
   const hasStudyMaterial = Boolean(studyMaterialUrl?.trim());
+  const isOverviewLoading = isLoading && !currentMission;
   const materialMessage =
     studyMaterialError ?? (!hasStudyMaterial ? "현재 챕터에는 연결된 학습 자료가 없습니다." : null);
 
@@ -335,57 +336,94 @@ export const MissionContainer = ({
             <S.OverviewBody>
               <S.SectionCard>
                 <S.SectionTitle>진행 상태</S.SectionTitle>
-                <S.ProgressSummary>
-                  <S.ProgressCurrent>{currentStage.currentProgress}</S.ProgressCurrent>
-                  <S.ProgressTotal>/ {currentStage.totalMissions || 0}</S.ProgressTotal>
-                </S.ProgressSummary>
+                {isOverviewLoading ? (
+                  <>
+                    <S.LoadingBlock $width="6rem" $height="2rem" $radius="0.5rem" />
+                    <S.LoadingBlock $width="100%" $height="0.5rem" $radius="999px" />
+                    <S.MetaRow>
+                      <S.MetaItem>
+                        <S.MetaLabel>완료한 문제</S.MetaLabel>
+                        <S.LoadingBlock $width="4.5rem" $height="1rem" $radius="0.45rem" />
+                      </S.MetaItem>
+                      <S.MetaItem>
+                        <S.MetaLabel>전체 문제</S.MetaLabel>
+                        <S.LoadingBlock $width="4.5rem" $height="1rem" $radius="0.45rem" />
+                      </S.MetaItem>
+                    </S.MetaRow>
+                  </>
+                ) : (
+                  <>
+                    <S.ProgressSummary>
+                      <S.ProgressCurrent>{currentStage.currentProgress}</S.ProgressCurrent>
+                      <S.ProgressTotal>/ {currentStage.totalMissions || 0}</S.ProgressTotal>
+                    </S.ProgressSummary>
 
-                <S.ProgressTrack aria-hidden>
-                  <S.ProgressFill $value={progressPercent} />
-                </S.ProgressTrack>
+                    <S.ProgressTrack aria-hidden>
+                      <S.ProgressFill $value={progressPercent} />
+                    </S.ProgressTrack>
 
-                <S.MetaRow>
-                  <S.MetaItem>
-                    <S.MetaLabel>완료한 문제</S.MetaLabel>
-                    <S.MetaValue>{currentStage.currentProgress}문제</S.MetaValue>
-                  </S.MetaItem>
-                  <S.MetaItem>
-                    <S.MetaLabel>전체 문제</S.MetaLabel>
-                    <S.MetaValue>{currentStage.totalMissions || 0}문제</S.MetaValue>
-                  </S.MetaItem>
-                </S.MetaRow>
+                    <S.MetaRow>
+                      <S.MetaItem>
+                        <S.MetaLabel>완료한 문제</S.MetaLabel>
+                        <S.MetaValue>{currentStage.currentProgress}문제</S.MetaValue>
+                      </S.MetaItem>
+                      <S.MetaItem>
+                        <S.MetaLabel>전체 문제</S.MetaLabel>
+                        <S.MetaValue>{currentStage.totalMissions || 0}문제</S.MetaValue>
+                      </S.MetaItem>
+                    </S.MetaRow>
+                  </>
+                )}
               </S.SectionCard>
 
               <S.SectionCard>
                 <S.SectionTitle>챕터 설명</S.SectionTitle>
-                <S.DescriptionText>{descriptionText}</S.DescriptionText>
+                {isOverviewLoading ? (
+                  <S.LoadingDescriptionStack>
+                    <S.LoadingBlock $width="100%" $height="0.95rem" $radius="0.45rem" />
+                    <S.LoadingBlock $width="92%" $height="0.95rem" $radius="0.45rem" />
+                    <S.LoadingBlock $width="78%" $height="0.95rem" $radius="0.45rem" />
+                  </S.LoadingDescriptionStack>
+                ) : (
+                  <S.DescriptionText>{descriptionText}</S.DescriptionText>
+                )}
               </S.SectionCard>
             </S.OverviewBody>
 
             <S.FooterActions>
-              {materialMessage && (
-                <S.InlineMessage $tone={studyMaterialError ? "error" : "neutral"}>
-                  {materialMessage}
-                </S.InlineMessage>
+              {isOverviewLoading ? (
+                <>
+                  <S.LoadingBlock $width="48%" $height="0.8rem" $radius="0.45rem" />
+                  <S.LoadingBlock $width="100%" $height="3.25rem" $radius="0.8rem" />
+                  <S.LoadingBlock $width="100%" $height="3.25rem" $radius="0.8rem" />
+                </>
+              ) : (
+                <>
+                  {materialMessage && (
+                    <S.InlineMessage $tone={studyMaterialError ? "error" : "neutral"}>
+                      {materialMessage}
+                    </S.InlineMessage>
+                  )}
+                  <S.PrimaryActionButton
+                    variant="primary"
+                    size="lg"
+                    fullWidth
+                    onClick={() => void handleOpenStudyMaterial()}
+                    disabled={isLoading || !hasStudyMaterial}
+                  >
+                    학습하러 가기
+                  </S.PrimaryActionButton>
+                  <S.SecondaryActionButton
+                    variant="secondary"
+                    size="lg"
+                    fullWidth
+                    onClick={onSolve}
+                    disabled={isSolveDisabled}
+                  >
+                    문제 풀러 가기
+                  </S.SecondaryActionButton>
+                </>
               )}
-              <S.PrimaryActionButton
-                variant="primary"
-                size="lg"
-                fullWidth
-                onClick={() => void handleOpenStudyMaterial()}
-                disabled={isLoading || !hasStudyMaterial}
-              >
-                학습하러 가기
-              </S.PrimaryActionButton>
-              <S.SecondaryActionButton
-                variant="secondary"
-                size="lg"
-                fullWidth
-                onClick={onSolve}
-                disabled={isSolveDisabled}
-              >
-                문제 풀러 가기
-              </S.SecondaryActionButton>
             </S.FooterActions>
           </>
         )}
