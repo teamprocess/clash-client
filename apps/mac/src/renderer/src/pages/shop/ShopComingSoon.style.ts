@@ -14,26 +14,13 @@ export const Panel = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1rem;
+  gap: 0.75rem;
   width: min(100%, 34rem);
   padding: 2.75rem 2rem;
   border: 1px solid ${({ theme }) => theme.line.normal};
   border-radius: 1rem;
   background: ${({ theme }) => theme.background.normal};
   text-align: center;
-`;
-
-export const Badge = styled.span`
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0.4rem 0.75rem;
-  border-radius: 999px;
-  background: ${({ theme }) => theme.fill.alternative};
-  color: ${({ theme }) => theme.label.assistive};
-  ${font.caption.medium}
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
 `;
 
 export const Title = styled.h1`
