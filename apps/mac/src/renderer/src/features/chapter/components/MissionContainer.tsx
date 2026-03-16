@@ -84,20 +84,19 @@ const QuizPanelContent = ({
   if (state.view === "result") {
     return (
       <S.QuizBody>
+        <S.QuizProgress>
+          <S.QuizProgressTrack aria-hidden>
+            <S.ProgressFill $value={quizProgressPercent} />
+          </S.QuizProgressTrack>
+          <S.QuizStep>
+            {state.currentIndex + 1} / {questions.length}
+          </S.QuizStep>
+        </S.QuizProgress>
+
         <S.BackButton type="button" onClick={onBackToOverview}>
           <S.BackArrow>‹</S.BackArrow>
           챕터 정보
         </S.BackButton>
-        <S.QuizProgress>
-          <S.SectionTitle>{stageTitle}</S.SectionTitle>
-          <S.QuizStep>
-            {state.currentIndex + 1}/{questions.length}
-          </S.QuizStep>
-        </S.QuizProgress>
-
-        <S.ProgressTrack aria-hidden>
-          <S.ProgressFill $value={quizProgressPercent} />
-        </S.ProgressTrack>
 
         <S.ResultCard>
           <S.ResultHeader>
@@ -114,9 +113,11 @@ const QuizPanelContent = ({
             </S.ExplanationText>
           </S.ExplanationBox>
 
-          <S.PrimaryActionButton variant="primary" size="lg" fullWidth onClick={handleNextOrClose}>
-            {state.currentIndex === questions.length - 1 ? "결과 보기" : "다음 문제로"}
-          </S.PrimaryActionButton>
+          <S.ResultFooterActions>
+            <S.PrimaryActionButton variant="primary" size="lg" fullWidth onClick={handleNextOrClose}>
+              {state.currentIndex === questions.length - 1 ? "결과 보기" : "다음 문제로"}
+            </S.PrimaryActionButton>
+          </S.ResultFooterActions>
         </S.ResultCard>
       </S.QuizBody>
     );
@@ -125,66 +126,77 @@ const QuizPanelContent = ({
   if (state.view === "final") {
     const isPassed =
       state.isPassed ?? (questions.length > 0 && state.correctCount === questions.length);
+    const finalProgressPercent = questions.length > 0 ? 100 : 0;
 
     return (
       <S.QuizBody>
+        <S.QuizProgress>
+          <S.QuizProgressTrack aria-hidden>
+            <S.ProgressFill $value={finalProgressPercent} />
+          </S.QuizProgressTrack>
+          <S.QuizStep>
+            {questions.length} / {questions.length}
+          </S.QuizStep>
+        </S.QuizProgress>
+
         <S.BackButton type="button" onClick={handleClose}>
           <S.BackArrow>‹</S.BackArrow>
           챕터 정보
         </S.BackButton>
-        <S.SummaryCard>
-          {isPassed ? <S.ClearIcon /> : <S.FailIcon />}
-          <S.SummaryTitle>{isPassed ? "문제 풀이 완료" : "다시 도전해보세요"}</S.SummaryTitle>
-          <S.SummaryScore>
-            {state.correctCount}
-            <S.SummaryScoreTotal>/ {questions.length}</S.SummaryScoreTotal>
-          </S.SummaryScore>
-          <S.SummaryDescription>
-            {isPassed
-              ? `${stageTitle}의 문제 풀이를 모두 마쳤습니다.`
-              : `${stageTitle} 문제를 다시 풀어볼 수 있습니다.`}
-          </S.SummaryDescription>
-          {error && <S.InlineMessage $tone="error">{error}</S.InlineMessage>}
-        </S.SummaryCard>
+        <S.FinalContent>
+          <S.SummaryCard>
+            {isPassed ? <S.ClearIcon /> : <S.FailIcon />}
+            <S.SummaryTitle>{isPassed ? "문제 풀이 완료" : "다시 도전해보세요"}</S.SummaryTitle>
+            <S.SummaryScore>
+              {state.correctCount}
+              <S.SummaryScoreTotal>/ {questions.length}</S.SummaryScoreTotal>
+            </S.SummaryScore>
+            <S.SummaryDescription>
+              {isPassed
+                ? `${stageTitle}의 문제 풀이를 모두 마쳤습니다.`
+                : `${stageTitle} 문제를 다시 풀어볼 수 있습니다.`}
+            </S.SummaryDescription>
+            {error && <S.InlineMessage $tone="error">{error}</S.InlineMessage>}
+          </S.SummaryCard>
 
-        <S.ButtonRow>
-          {!isPassed && (
-            <S.SecondaryActionButton
-              variant="secondary"
-              size="lg"
-              fullWidth
-              onClick={handleRestart}
-            >
-              다시하기
-            </S.SecondaryActionButton>
-          )}
-          <S.PrimaryActionButton variant="primary" size="lg" fullWidth onClick={handleClose}>
-            챕터 보기
-          </S.PrimaryActionButton>
-        </S.ButtonRow>
+          <S.ButtonRow>
+            {!isPassed && (
+              <S.SecondaryActionButton
+                variant="secondary"
+                size="lg"
+                fullWidth
+                onClick={handleRestart}
+              >
+                다시하기
+              </S.SecondaryActionButton>
+            )}
+            <S.PrimaryActionButton variant="primary" size="lg" fullWidth onClick={handleClose}>
+              챕터 보기
+            </S.PrimaryActionButton>
+          </S.ButtonRow>
+        </S.FinalContent>
       </S.QuizBody>
     );
   }
 
   return (
     <S.QuizBody>
+      <S.QuizProgress>
+        <S.QuizProgressTrack aria-hidden>
+          <S.ProgressFill $value={quizProgressPercent} />
+        </S.QuizProgressTrack>
+        <S.QuizStep>
+          {state.currentIndex + 1} / {questions.length}
+        </S.QuizStep>
+      </S.QuizProgress>
+
       <S.BackButton type="button" onClick={onBackToOverview}>
         <S.BackArrow>‹</S.BackArrow>
         챕터 정보
       </S.BackButton>
-      <S.QuizProgress>
-        <S.SectionTitle>{stageTitle}</S.SectionTitle>
-        <S.QuizStep>
-          {state.currentIndex + 1}/{questions.length}
-        </S.QuizStep>
-      </S.QuizProgress>
-
-      <S.ProgressTrack aria-hidden>
-        <S.ProgressFill $value={quizProgressPercent} />
-      </S.ProgressTrack>
 
       <S.QuizCard>
-        <S.QuestionText>{currentQuestion.content}</S.QuestionText>
+        <S.QuestionText><span>Q.</span> {currentQuestion.content}</S.QuestionText>
       </S.QuizCard>
 
       <S.OptionList>
@@ -302,12 +314,7 @@ export const MissionContainer = ({
     >
       <S.PanelContent>
         <S.PanelHeader>
-          <S.HeaderMain>
-            <S.HeaderTitle>{currentStage.title}</S.HeaderTitle>
-            <S.HeaderMeta>
-              {currentMission ? "문제 풀이" : `${currentStage.totalMissions}문제로 구성된 챕터`}
-            </S.HeaderMeta>
-          </S.HeaderMain>
+          <S.HeaderMain>{!currentMission && <S.HeaderTitle>{currentStage.title}</S.HeaderTitle>}</S.HeaderMain>
 
           <S.HeaderActions>
             <S.IconButton type="button" onClick={handleRequestClose} aria-label="챕터 패널 닫기">
@@ -361,24 +368,24 @@ export const MissionContainer = ({
                   {materialMessage}
                 </S.InlineMessage>
               )}
-              <S.SecondaryActionButton
-                variant="secondary"
+              <S.PrimaryActionButton
+                variant="primary"
                 size="lg"
                 fullWidth
                 onClick={() => void handleOpenStudyMaterial()}
                 disabled={isLoading || !hasStudyMaterial}
               >
                 학습하러 가기
-              </S.SecondaryActionButton>
-              <S.PrimaryActionButton
-                variant="primary"
+              </S.PrimaryActionButton>
+              <S.SecondaryActionButton
+                variant="secondary"
                 size="lg"
                 fullWidth
                 onClick={onSolve}
                 disabled={isSolveDisabled}
               >
                 문제 풀러 가기
-              </S.PrimaryActionButton>
+              </S.SecondaryActionButton>
             </S.FooterActions>
           </>
         )}
