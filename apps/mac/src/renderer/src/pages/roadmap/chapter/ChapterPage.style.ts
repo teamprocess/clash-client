@@ -10,20 +10,19 @@ export const ChapterContainer = styled.div`
 `;
 
 export const ChapterScrollable = styled.div`
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(64px, 1fr));
-  grid-template-rows: repeat(auto-fill, 64px);
-  gap: 0.05rem;
-  align-items: center;
   width: 100%;
   height: 100%;
-  background-color: ${({ theme }) => theme.line.alternative};
+  min-height: 42rem;
+  background-color: ${({ theme }) => theme.background.normal};
+  border: 1px solid ${({ theme }) => theme.line.alternative};
   border-radius: 1rem;
-  overflow-x: hidden;
-  overflow-y: auto;
+  overflow: auto;
   position: relative;
+  isolation: isolate;
+  overscroll-behavior: contain;
 
   &::-webkit-scrollbar {
+    width: 8px;
     height: 8px;
   }
 
@@ -37,11 +36,28 @@ export const ChapterScrollable = styled.div`
   }
 `;
 
-export const Square = styled.div`
-  width: 100%;
-  height: 100%;
-  aspect-ratio: 1 / 1;
+export const ChapterCanvas = styled.div`
+  position: relative;
+  width: max-content;
+  min-width: 100%;
+  min-height: 100%;
+  padding: 5rem 4rem 7rem 20rem;
   background-color: ${({ theme }) => theme.background.normal};
+  background-image:
+    linear-gradient(to right, ${({ theme }) => theme.line.alternative} 1px, transparent 1px),
+    linear-gradient(to bottom, ${({ theme }) => theme.line.alternative} 1px, transparent 1px);
+  background-size: 4rem 4rem;
+  background-position: -1px -1px;
+`;
+
+export const RoadmapStageArea = styled.div`
+  position: relative;
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-start;
+  width: max-content;
+  min-width: 100%;
+  min-height: 100%;
 `;
 
 export const PreviousBox = styled.div`
@@ -61,19 +77,18 @@ export const PreviousLabel = styled.span`
 `;
 
 export const RoadmapWrapper = styled.div`
-  width: 48rem;
-  height: 68rem;
-  position: absolute;
-  top: -2rem;
-  right: 5rem;
+  width: max-content;
+  height: max-content;
 `;
 
 export const EmptyRoadmapMessage = styled.div`
-  position: absolute;
-  top: 50%;
-  right: 5rem;
-  transform: translateY(-50%);
-  width: 48rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: calc(100vw - 31rem);
+  min-width: 48rem;
+  min-height: 48rem;
+  margin-left: auto;
   text-align: center;
   ${font.headline1.medium}
   color: ${({ theme }) => theme.label.assistive};

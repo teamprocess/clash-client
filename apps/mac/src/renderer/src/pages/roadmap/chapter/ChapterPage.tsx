@@ -90,17 +90,17 @@ export const ChapterPage = () => {
   return (
     <S.ChapterContainer>
       <S.ChapterScrollable ref={chapterRef}>
-        {Array.from({ length: 340 }).map((_, idx) => (
-          <S.Square key={idx} />
-        ))}
-
-        {domain.roadmapNodes.length > 0 ? (
-          <S.RoadmapWrapper>
-            <Roadmap nodes={domain.roadmapNodes} onSelectStage={handlers.handleSelectStage} />
-          </S.RoadmapWrapper>
-        ) : (
-          <S.EmptyRoadmapMessage>아직 등록된 챕터가 없습니다.</S.EmptyRoadmapMessage>
-        )}
+        <S.ChapterCanvas>
+          <S.RoadmapStageArea>
+            {domain.roadmapNodes.length > 0 ? (
+              <S.RoadmapWrapper>
+                <Roadmap nodes={domain.roadmapNodes} onSelectStage={handlers.handleSelectStage} />
+              </S.RoadmapWrapper>
+            ) : (
+              <S.EmptyRoadmapMessage>아직 등록된 챕터가 없습니다.</S.EmptyRoadmapMessage>
+            )}
+          </S.RoadmapStageArea>
+        </S.ChapterCanvas>
       </S.ChapterScrollable>
 
       <ChapterRanking page="chapter" />

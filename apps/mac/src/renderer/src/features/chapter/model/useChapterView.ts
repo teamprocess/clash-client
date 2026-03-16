@@ -70,36 +70,21 @@ export const useChapterView = ({ loading, sectionId }: UseChapterViewParams) => 
     [setSectionScopedState]
   );
 
-  const handleScroll = () => {
-    if (!chapterRef.current) return;
-    const container = chapterRef.current;
-    const child = container.childNodes.item(0) as HTMLDivElement;
-
-    const scrolledSize = container.scrollTop + container.offsetHeight;
-    const canScroll = scrolledSize <= container.scrollHeight - child.offsetWidth;
-
-    if (!canScroll) {
-      container.scrollTo(
-        container.scrollWidth,
-        container.scrollHeight - container.offsetHeight - child.offsetWidth
-      );
-    }
-  };
-
   useEffect(() => {
     if (!chapterRef.current || loading) return;
-    chapterRef.current.scrollTo(chapterRef.current.scrollWidth, chapterRef.current.scrollHeight);
-  }, [loading, sectionId]);
 
-  useEffect(() => {
-    if (!chapterRef.current) return;
-    const chapter = chapterRef.current;
+    const frame = window.requestAnimationFrame(() => {
+      if (!chapterRef.current) return;
+      chapterRef.current.scrollTo({
+        left: chapterRef.current.scrollWidth,
+        top: chapterRef.current.scrollHeight,
+      });
+    });
 
-    chapter.addEventListener("scroll", handleScroll);
     return () => {
-      chapter.removeEventListener("scroll", handleScroll);
+      window.cancelAnimationFrame(frame);
     };
-  });
+  }, [loading, sectionId]);
 
   return {
     chapterRef,
