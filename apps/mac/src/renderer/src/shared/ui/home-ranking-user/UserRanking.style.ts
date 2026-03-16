@@ -91,3 +91,8 @@ export const Rank = styled.div<{ $rank: number }>`
 export const Point = styled.div`
   ${font.headline2.medium}
 `;
+
+export const RankTierWrap = styled.div`
+  width: 2rem;
+  height: 2rem;
+`;

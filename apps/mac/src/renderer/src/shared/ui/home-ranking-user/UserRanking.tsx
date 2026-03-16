@@ -21,7 +21,9 @@ export const UserRanking = forwardRef<HTMLDivElement, UserRankingProps>(
 
           <S.ProfileContent>
             <S.ProfileMention>
-              <RankTier tier={user.tier} />
+              <S.RankTierWrap>
+                <RankTier tier={user.tier} />
+              </S.RankTierWrap>
             </S.ProfileMention>
             <S.ProfileIcon />
             <S.NameBox>
