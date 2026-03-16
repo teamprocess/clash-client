@@ -1,30 +1,37 @@
 import styled from "styled-components";
 import { font } from "@clash/design-tokens/font";
+import { palette } from "@clash/design-tokens/theme";
+
+const optionSurface = "rgba(255, 255, 255, 0.05)";
+const optionSurfaceSelected = "rgba(239,88,89,0.12)";
+const optionBorder = "rgba(255, 255, 255, 0.08)";
 
 export const AnswerOption = styled.button<{ $selected: boolean }>`
   display: flex;
   align-items: center;
-  justify-content: flex-start;
-  width: 100%;
-  min-height: 3.5rem;
-  padding: 0.9rem 1rem;
-  border-radius: 0.85rem;
-  border: 1px solid
-    ${({ $selected, theme }) => ($selected ? theme.primary.normal : theme.line.alternative)};
-  background-color: ${({ $selected, theme }) =>
-    $selected ? theme.fill.normal : theme.background.alternative};
+  justify-content: center;
+  width: min(100%, 29rem);
+  min-height: 4.2rem;
+  padding: 0.95rem 1.25rem;
+  border-radius: 0.9rem;
+  border: 2px solid ${({ $selected, theme }) => ($selected ? theme.primary.normal : optionBorder)};
+  background-color: ${({ $selected }) => ($selected ? optionSurfaceSelected : optionSurface)};
   ${font.body.medium}
-  color: ${({ theme }) => theme.label.normal};
-  text-align: left;
-  line-height: 1.5;
+  color: ${palette.neutral[99]};
+  text-align: center;
+  line-height: 1.45;
   cursor: pointer;
   transition:
     border-color 0.18s ease,
-    background-color 0.18s ease,
+    box-shadow 0.18s ease,
     transform 0.18s ease;
 
   &:hover {
     border-color: ${({ theme }) => theme.primary.normal};
     transform: translateY(-1px);
+  }
+
+  &:disabled {
+    color: ${palette.neutral[70]};
   }
 `;
