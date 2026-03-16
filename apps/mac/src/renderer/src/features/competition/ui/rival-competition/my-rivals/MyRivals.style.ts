@@ -192,3 +192,8 @@ export const ArrowBox = styled.button`
   gap: 0.25rem;
   cursor: pointer;
 `;
+
+export const RankTierWrap = styled.div`
+  width: 2rem;
+  height: 2rem;
+`;
