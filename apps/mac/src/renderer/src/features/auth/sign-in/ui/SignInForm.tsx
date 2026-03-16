@@ -3,7 +3,7 @@ import { useSignIn } from "@/features/auth/sign-in/model/useSignIn";
 import { Button } from "@/shared/ui";
 
 export const SignInForm = () => {
-  const { startWebLogin, isStarting, error } = useSignIn();
+  const { startWebLogin, startWebSignUp, isStarting, error } = useSignIn();
 
   return (
     <S.FormContainer>
@@ -24,7 +24,9 @@ export const SignInForm = () => {
         </Button>
         {error && <S.ErrorText>{error}</S.ErrorText>}
         <S.HelpTextBox>
-          <S.HelpText to="/sign-up">회원가입</S.HelpText>
+          <S.HelpText type="button" onClick={startWebSignUp} disabled={isStarting}>
+            회원가입
+          </S.HelpText>
         </S.HelpTextBox>
       </S.ButtonWrapper>
     </S.FormContainer>
