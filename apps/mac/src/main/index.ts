@@ -136,6 +136,8 @@ const registerAutoUpdater = () => {
     return;
   }
 
+  autoUpdater.allowPrerelease = true;
+
   autoUpdater.on("update-available", info => {
     console.log(`업데이트 있음: ${info.version}`);
     if (isManualUpdateCheck) {
