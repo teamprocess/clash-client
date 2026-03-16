@@ -34,7 +34,11 @@ export const RoadmapNode = ({ node, onClick }: RoadmapNodeProps) => {
   const starCenterOffset = (starOffsetInViewBox * STAR_WIDTH) / STAR_VIEWBOX_WIDTH;
 
   return (
-    <S.NodeGroup onClick={onClick}>
+    <S.NodeGroup
+      onClick={onClick}
+      data-roadmap-node-id={node.id}
+      data-roadmap-node-status={node.status}
+    >
       <S.NodeCircle cx={node.x} cy={node.y} r={NODE_RADIUS} $status={node.status} />
 
       {node.status === "completed" && (
