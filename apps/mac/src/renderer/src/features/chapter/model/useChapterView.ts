@@ -9,6 +9,8 @@ type UseChapterViewParams = {
 export const useChapterView = ({ loading, sectionId }: UseChapterViewParams) => {
   const chapterRef = useRef<HTMLDivElement>(null);
 
+  const clamp = (value: number, min: number, max: number) => Math.min(Math.max(value, min), max);
+
   const [viewState, setViewState] = useState({
     sectionId,
     currentMission: null as Mission | null,
@@ -73,16 +75,52 @@ export const useChapterView = ({ loading, sectionId }: UseChapterViewParams) => 
   useEffect(() => {
     if (!chapterRef.current || loading) return;
 
+    let secondFrame = 0;
     const frame = window.requestAnimationFrame(() => {
-      if (!chapterRef.current) return;
-      chapterRef.current.scrollTo({
-        left: chapterRef.current.scrollWidth,
-        top: chapterRef.current.scrollHeight,
+      secondFrame = window.requestAnimationFrame(() => {
+        if (!chapterRef.current) return;
+
+        const container = chapterRef.current;
+        const currentNode = container.querySelector<SVGGElement>(
+          '[data-roadmap-node-status="current"]'
+        );
+
+        if (!currentNode) {
+          container.scrollTo({
+            left: container.scrollWidth,
+            top: container.scrollHeight,
+          });
+          return;
+        }
+
+        const containerRect = container.getBoundingClientRect();
+        const nodeRect = currentNode.getBoundingClientRect();
+        const nodeCenterX =
+          nodeRect.left - containerRect.left + container.scrollLeft + nodeRect.width / 2;
+        const nodeCenterY =
+          nodeRect.top - containerRect.top + container.scrollTop + nodeRect.height / 2;
+
+        const targetLeft = clamp(
+          nodeCenterX - container.clientWidth * 0.62,
+          0,
+          Math.max(container.scrollWidth - container.clientWidth, 0)
+        );
+        const targetTop = clamp(
+          nodeCenterY - container.clientHeight * 0.72,
+          0,
+          Math.max(container.scrollHeight - container.clientHeight, 0)
+        );
+
+        container.scrollTo({
+          left: targetLeft,
+          top: targetTop,
+        });
       });
     });
 
     return () => {
       window.cancelAnimationFrame(frame);
+      window.cancelAnimationFrame(secondFrame);
     };
   }, [loading, sectionId]);
 
