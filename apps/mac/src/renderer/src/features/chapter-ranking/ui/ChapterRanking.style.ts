@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, { css, keyframes } from "styled-components";
 import { font } from "@clash/design-tokens/font";
 import FirstFrameIcon from "../assets/first-frame.svg";
 import SecondFrameIcon from "../assets/second-frame.svg";
@@ -7,6 +7,27 @@ import { palette } from "@clash/design-tokens/theme";
 
 export type RankingPageEnum = "section" | "chapter";
 export type RankingPositionEnum = "top" | "bottom";
+
+const skeletonWave = keyframes`
+  0% {
+    background-position: 200% 0;
+  }
+
+  100% {
+    background-position: -200% 0;
+  }
+`;
+
+const skeletonBase = css`
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.05) 0%,
+    rgba(255, 255, 255, 0.12) 50%,
+    rgba(255, 255, 255, 0.05) 100%
+  );
+  background-size: 200% 100%;
+  animation: ${skeletonWave} 1.6s ease-in-out infinite;
+`;
 
 export const RankingContainer = styled.div<{ $page: RankingPageEnum }>`
   display: flex;
@@ -242,4 +263,45 @@ export const MyRankingItem = styled.div<{ $position: RankingPositionEnum; $page:
   background: ${({ theme }) => theme.fill.neutral};
   border-radius: 0.5rem;
   box-shadow: 0 0 8px rgba(0, 0, 0, 0.15);
+`;
+
+export const RankingLoadingTop3Box = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  gap: 0.75rem;
+`;
+
+export const RankingLoadingPodium = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.45rem;
+`;
+
+export const RankingLoadingList = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 0.35rem;
+  padding: 0 0.85rem;
+`;
+
+export const RankingLoadingItem = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  min-height: 3rem;
+`;
+
+export const RankingLoadingBlock = styled.div<{
+  $width: string;
+  $height: string;
+  $radius?: string;
+}>`
+  width: ${({ $width }) => $width};
+  height: ${({ $height }) => $height};
+  border-radius: ${({ $radius = "0.5rem" }) => $radius};
+  ${skeletonBase}
 `;

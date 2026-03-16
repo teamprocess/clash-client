@@ -1,8 +1,10 @@
 import styled from "styled-components";
 
 export const RoadmapSvg = styled.svg`
+  display: block;
   width: 100%;
   height: 100%;
+  overflow: visible;
 `;
 
 export const PathLine = styled.path`

@@ -13,6 +13,8 @@ export interface ConfirmDialogProps {
   cancelLabel?: string;
   confirmVariant?: ButtonVariant;
   isConfirming?: boolean;
+  width?: number;
+  height?: number;
   onClose: () => void;
   onConfirm: () => void;
 }
@@ -26,11 +28,13 @@ export const ConfirmDialog = ({
   cancelLabel = "취소",
   confirmVariant = "primary",
   isConfirming = false,
+  width = 23,
+  height = 13,
   onClose,
   onConfirm,
 }: ConfirmDialogProps) => {
   return (
-    <Dialog width={23} height={13} isOpen={isOpen} onClose={onClose} title={title} gap={3}>
+    <Dialog width={width} height={height} isOpen={isOpen} onClose={onClose} title={title} gap={3}>
       <S.Content>
         <S.MessageBox>
           <S.Description>{description}</S.Description>

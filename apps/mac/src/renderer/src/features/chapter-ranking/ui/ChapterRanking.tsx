@@ -24,7 +24,34 @@ export const ChapterRanking = ({ page }: ChapterRankingProps) => {
     return (
       <S.RankingContainer $page={page}>
         <S.RankingLabel>챕터 랭킹</S.RankingLabel>
-        <div>로딩 중...</div>
+        <S.RankingBox>
+          <S.RankingLoadingTop3Box>
+            <S.RankingLoadingPodium>
+              <S.RankingLoadingBlock $width="3.4rem" $height="3.4rem" $radius="999px" />
+              <S.RankingLoadingBlock $width="2.8rem" $height="0.8rem" />
+              <S.RankingLoadingBlock $width="2.1rem" $height="0.7rem" />
+            </S.RankingLoadingPodium>
+            <S.RankingLoadingPodium>
+              <S.RankingLoadingBlock $width="4rem" $height="4rem" $radius="999px" />
+              <S.RankingLoadingBlock $width="3.1rem" $height="0.9rem" />
+              <S.RankingLoadingBlock $width="2.3rem" $height="0.7rem" />
+            </S.RankingLoadingPodium>
+            <S.RankingLoadingPodium>
+              <S.RankingLoadingBlock $width="3.4rem" $height="3.4rem" $radius="999px" />
+              <S.RankingLoadingBlock $width="2.8rem" $height="0.8rem" />
+              <S.RankingLoadingBlock $width="2.1rem" $height="0.7rem" />
+            </S.RankingLoadingPodium>
+          </S.RankingLoadingTop3Box>
+
+          <S.RankingLoadingList>
+            {Array.from({ length: 6 }).map((_, idx) => (
+              <S.RankingLoadingItem key={idx}>
+                <S.RankingLoadingBlock $width="7.4rem" $height="1rem" />
+                <S.RankingLoadingBlock $width="2.8rem" $height="0.9rem" />
+              </S.RankingLoadingItem>
+            ))}
+          </S.RankingLoadingList>
+        </S.RankingBox>
       </S.RankingContainer>
     );
   }
