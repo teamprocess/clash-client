@@ -2,6 +2,8 @@ import styled from "styled-components";
 import { palette } from "@clash/design-tokens/theme";
 import { font } from "@clash/design-tokens/font";
 import MypageProfileSrc from "../../assets/mypage-profile.png";
+import AddProfileImg from "../../assets/add-profile-img-icon.svg";
+import ChangeProfileImg from "../../assets/change-profile-img-icon.svg";
 
 export const Banner = styled.div<{ $accent?: string; $bgImage?: string }>`
   width: 100%;
@@ -41,6 +43,7 @@ export const Button = styled.div`
 export const ActionButtons = styled.div`
   display: flex;
   gap: 0.875rem;
+  z-index: 2;
 `;
 
 export const ButtonEdit = styled.button`
@@ -81,7 +84,6 @@ export const ProfileImgWrap = styled.div<{ $accent?: string; $bgImage?: string }
   width: 7.5rem;
   height: 7.5rem;
   border-radius: 50%;
-  overflow: hidden;
   box-sizing: border-box;
   border: ${({ $accent }) => ($accent ? `0.5rem solid ${$accent}` : "none")};
 
@@ -101,6 +103,48 @@ export const ProfileImg = styled.img.attrs(() => ({
   width: 100%;
   height: 100%;
   object-fit: cover;
+  display: block;
+`;
+
+export const ProfileImageButton = styled.button<{ $hasImage: boolean }>`
+  position: relative;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  border-radius: 50%;
+  overflow: hidden;
+
+  &:hover {
+    opacity: 1;
+    visibility: visible;
+  }
+`;
+
+export const AddProfileImageIconWrap = styled.div`
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.32);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+`;
+
+export const ChangeProfileImageIconWrap = styled.div`
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.32);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
 `;
 
 export const UserInfo = styled.div`
@@ -157,3 +201,15 @@ export const ActionGuide = styled.p<{ $tone?: "default" | "error" | "success" }>
 `;
 
 export const FallbackProfileImage = MypageProfileSrc;
+
+export const AddProfileImageIcon = styled(AddProfileImg)`
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+`;
+
+export const ChangeProfileImageIcon = styled(ChangeProfileImg)`
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+`;
