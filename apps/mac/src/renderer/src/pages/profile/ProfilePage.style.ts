@@ -9,7 +9,7 @@ export const Wrapper = styled.div`
 
 export const Background = styled.div`
   width: 100%;
-  height: 95%;
+  height: 100%;
   background: ${({ theme }) => theme.background.normal};
   border-radius: 1rem;
   padding: 2rem;
