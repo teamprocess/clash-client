@@ -59,6 +59,12 @@ jobs:
       - name: Show release version
         run: echo "RELEASE_VERSION=${RELEASE_VERSION}"
 
+      - name: Resolve update channel
+        run: |
+          CHANNEL="$(node -e 'const semver = require("semver"); const prerelease = semver.prerelease(process.env.RELEASE_VERSION); process.stdout.write(String(prerelease?.[0] ?? "latest"));')"
+          echo "UPDATE_CHANNEL=${CHANNEL}" >> "$GITHUB_ENV"
+          echo "UPDATE_CHANNEL_FILE=${CHANNEL}-mac.yml" >> "$GITHUB_ENV"
+
       - name: Validate required release env
         run: |
           test -n "$S3_BUCKET" || (echo "S3_BUCKET is required" && exit 1)
@@ -98,12 +104,12 @@ jobs:
           BLOCKMAP_FILE="${ZIP_FILE}.blockmap"
           DMG_FILE="clash-client-${RELEASE_VERSION}.dmg"
 
-          test -f "apps/mac/dist/latest-mac.yml" || (echo "apps/mac/dist/latest-mac.yml not found" && exit 1)
+          test -f "apps/mac/dist/${UPDATE_CHANNEL_FILE}" || (echo "apps/mac/dist/${UPDATE_CHANNEL_FILE} not found" && exit 1)
           test -f "apps/mac/dist/${ZIP_FILE}" || (echo "apps/mac/dist/${ZIP_FILE} not found" && exit 1)
           test -f "apps/mac/dist/${BLOCKMAP_FILE}" || (echo "apps/mac/dist/${BLOCKMAP_FILE} not found" && exit 1)
           test -f "apps/mac/dist/${DMG_FILE}" || (echo "apps/mac/dist/${DMG_FILE} not found" && exit 1)
 
-          aws s3 cp "apps/mac/dist/latest-mac.yml" "s3://${S3_BUCKET}/${UPDATES_PREFIX}/latest-mac.yml" \
+          aws s3 cp "apps/mac/dist/${UPDATE_CHANNEL_FILE}" "s3://${S3_BUCKET}/${UPDATES_PREFIX}/${UPDATE_CHANNEL_FILE}" \
             --cache-control "public,max-age=60,must-revalidate"
           aws s3 cp "apps/mac/dist/${ZIP_FILE}" "s3://${S3_BUCKET}/${UPDATES_PREFIX}/${ZIP_FILE}" \
             --cache-control "public,max-age=31536000,immutable"
@@ -122,4 +128,4 @@ jobs:
           DOWNLOADS_PREFIX="${S3_DOWNLOADS_PREFIX:-downloads/mac}"
           aws cloudfront create-invalidation \
             --distribution-id "$CLOUDFRONT_DISTRIBUTION_ID" \
-            --paths "/${UPDATES_PREFIX}/latest-mac.yml" "/${DOWNLOADS_PREFIX}/latest"
+            --paths "/${UPDATES_PREFIX}/${UPDATE_CHANNEL_FILE}" "/${DOWNLOADS_PREFIX}/latest"
