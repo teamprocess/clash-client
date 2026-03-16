@@ -3,7 +3,7 @@ import { font } from "@clash/design-tokens/font";
 import { palette } from "@clash/design-tokens/theme";
 
 const optionSurface = "rgba(255, 255, 255, 0.05)";
-const optionSurfaceSelected = "rgba(239,88,89,0.12)";
+const optionSurfaceSelected = "rgba(255,202,202,0.12)";
 const optionBorder = "rgba(255, 255, 255, 0.08)";
 
 export const AnswerOption = styled.button<{ $selected: boolean }>`
@@ -21,15 +21,6 @@ export const AnswerOption = styled.button<{ $selected: boolean }>`
   text-align: center;
   line-height: 1.45;
   cursor: pointer;
-  transition:
-    border-color 0.18s ease,
-    box-shadow 0.18s ease,
-    transform 0.18s ease;
-
-  &:hover {
-    border-color: ${({ theme }) => theme.primary.normal};
-    transform: translateY(-1px);
-  }
 
   &:disabled {
     color: ${palette.neutral[70]};
