@@ -82,6 +82,8 @@ export const useChapter = (sectionId: number) => {
       currentStageDetailsError:
         chapterDetailsQuery.error instanceof Error ? chapterDetailsQuery.error.message : null,
       sectionTitle: domain.sectionTitle,
+      completedChapters: domain.completedChapters,
+      totalChapters: domain.totalChapters,
       loading: domain.loading,
       error: domain.error,
     },
