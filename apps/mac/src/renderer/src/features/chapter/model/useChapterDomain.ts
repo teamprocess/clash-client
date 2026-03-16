@@ -127,6 +127,18 @@ const EMPTY_STAGE: Stage = {
 
 type StageOverride = Partial<Pick<Stage, "status" | "currentProgress">>;
 
+const isStageCompleted = (stage: Stage, override?: StageOverride) => {
+  const resolvedStatus = override?.status ?? stage.status;
+
+  if (resolvedStatus === "completed") {
+    return true;
+  }
+
+  const progress = override?.currentProgress ?? stage.currentProgress;
+
+  return stage.totalMissions > 0 && progress >= stage.totalMissions;
+};
+
 export const useChapterDomain = (sectionId: number) => {
   const [stageOverrides, setStageOverrides] = useState<Record<number, StageOverride>>({});
   const [currentStageIdOverride, setCurrentStageId] = useState<number>(0);
@@ -168,6 +180,10 @@ export const useChapterDomain = (sectionId: number) => {
     : fallbackStageId;
 
   const currentStage = stages.find(stage => stage.id === currentStageId) ?? EMPTY_STAGE;
+  const completedChapters = stages.filter(stage =>
+    isStageCompleted(stage, stageOverrides[stage.id])
+  ).length;
+  const totalChapters = sectionDetails?.totalChapters ?? baseStages.length;
 
   return {
     stages,
@@ -177,6 +193,8 @@ export const useChapterDomain = (sectionId: number) => {
     setCurrentStageId,
     currentStage,
     sectionTitle: sectionDetails?.sectionTitle ?? "",
+    completedChapters,
+    totalChapters,
     loading: isLoading,
     error: error instanceof Error ? error.message : null,
   };

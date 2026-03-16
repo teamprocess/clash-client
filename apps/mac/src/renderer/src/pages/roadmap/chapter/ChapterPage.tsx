@@ -104,7 +104,7 @@ export const ChapterPage = () => {
       </S.ChapterScrollable>
 
       <ChapterRanking page="chapter" />
-      <SectionProgress />
+      <SectionProgress completed={domain.completedChapters} total={domain.totalChapters} />
 
       <Link to="/roadmap">
         <S.PreviousBox>
