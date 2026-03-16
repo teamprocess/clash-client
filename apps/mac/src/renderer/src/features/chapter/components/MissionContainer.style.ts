@@ -319,17 +319,15 @@ export const QuizContent = styled.div`
   margin-block: auto;
 `;
 
-export const QuestionText = styled.p`
-  ${font.title1.medium}
-  color: ${({ theme }) => theme.label.strong};
-  line-height: 1.4;
-  word-break: keep-all;
-  text-align: center;
+export const QuestionText = styled.div`
+  width: 100%;
   max-width: 32rem;
-  span {
-      color: ${({ theme }) => theme.primary.normal};
-      margin-right: 0.2rem;
-  }
+  min-width: 0;
+`;
+
+export const QuestionPrefix = styled.span`
+  ${font.title1.medium}
+  color: ${({ theme }) => theme.primary.normal};
 `;
 
 export const OptionList = styled.div`
@@ -379,15 +377,8 @@ export const ExplanationBox = styled.div`
   background-color: ${neutralSurface};
   border: 1px solid ${subtleBorder};
   align-self: center;
-`;
-
-export const ExplanationText = styled.p`
-  ${font.body.regular}
-  color: ${({ theme }) => theme.label.normal};
-  line-height: 1.65;
-  white-space: pre-wrap;
-  word-break: keep-all;
-  text-align: center;
+  max-height: 14rem;
+  overflow: auto;
 `;
 
 export const ResultFooterActions = styled.div`
