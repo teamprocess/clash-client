@@ -8,8 +8,12 @@ export type RankingItem = {
   isRival: boolean;
   linkedId: string;
   point: number;
-  rankTier: string;
-  expTier: string;
+  equippedItems: {
+    insigma: { id: number; name: string; image: string };
+    nameplate: string;
+    banner: string;
+  };
+  tier: string;
 };
 
 export type RankingsResponse = {

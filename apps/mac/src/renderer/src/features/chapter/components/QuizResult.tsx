@@ -46,11 +46,11 @@ export const QuizResult = (props: QuizResultProps) => {
             <S.ResultLabelGroup>
               <S.LastResultTitle>
                 {isPassed
-                  ? `${total}문제 중 ${correctCount}문제를 맞추어 미션을 클리어하셨습니다!`
-                  : `${total}문제 중 ${correctCount}문제를 맞추어 미션을 클리어하지 못했습니다`}
+                  ? `${total}문제 중 ${correctCount}문제를 맞추어 챕터를 클리어하셨습니다!`
+                  : `${total}문제 중 ${correctCount}문제를 맞추었습니다. 다시 도전해보세요.`}
               </S.LastResultTitle>
               <S.LastResultSubTitle>
-                ※ {total}문제 모두 맞추었을 시에 미션 클리어됩니다
+                ※ 결과는 서버의 챕터 진행 상태를 기준으로 반영됩니다
               </S.LastResultSubTitle>
               {errorMessage && <S.ErrorMessage>{errorMessage}</S.ErrorMessage>}
             </S.ResultLabelGroup>

@@ -7,6 +7,7 @@ import { PreviewModal } from "@/features/section/components/PreviewModal";
 import { useMajorSectionQuery } from "@/entities/roadmap/section/api/query/useMajorSection.query";
 import { MajorEnum, section } from "@/entities/roadmap/section/model/section.types";
 import { useGetMyProfile } from "@/entities/user";
+import { ConfirmDialog } from "@/shared/ui";
 import { SectionItemBox } from "../components/SectionItemBox";
 import { majorApi, Major } from "@/entities/major";
 import { useQueryClient } from "@tanstack/react-query";
@@ -16,6 +17,8 @@ export const Section = () => {
   const queryClient = useQueryClient();
 
   const [isTutorialModalOpen, setIsTutorialModalOpen] = useState(false);
+  const [isChangeMajorModalOpen, setIsChangeMajorModalOpen] = useState(false);
+  const [isChangingMajor, setIsChangingMajor] = useState(false);
   const [selectedSectionId, setSelectedSectionId] = useState<number | null>(null);
   const [isSelectedSectionLocked, setIsSelectedSectionLocked] = useState(false);
   const { data: myProfile } = useGetMyProfile();
@@ -31,14 +34,30 @@ export const Section = () => {
   };
   const roadmapTitle = majorLabelMap[major] ? `${majorLabelMap[major]} 로드맵` : "로드맵";
 
-  const handleChangeMajor = async () => {
+  const handleChangeMajor = () => {
+    setIsChangeMajorModalOpen(true);
+  };
+
+  const handleCloseChangeMajorModal = () => {
+    if (isChangingMajor) {
+      return;
+    }
+
+    setIsChangeMajorModalOpen(false);
+  };
+
+  const handleConfirmChangeMajor = async () => {
+    setIsChangingMajor(true);
+
     try {
       await majorApi.postMyMajor({ major: Major.NONE });
-      await queryClient.invalidateQueries({ queryKey: ["user"] });
+      setIsChangeMajorModalOpen(false);
+      void queryClient.invalidateQueries({ queryKey: ["user"] });
+      navigate("/roadmap/major-choice");
     } catch (error) {
       console.error("Failed to reset major", error);
     } finally {
-      navigate("/roadmap/major-choice");
+      setIsChangingMajor(false);
     }
   };
 
@@ -95,6 +114,24 @@ export const Section = () => {
           sectionId={selectedSectionId}
         />
       )}
+      <ConfirmDialog
+        isOpen={isChangeMajorModalOpen}
+        title="전공 변경"
+        description={
+          <>
+            전공을 변경하면 전공 선택 페이지로 이동합니다.
+            <br />
+            지금까지의 로드맵 진행 상황은 저장된 상태로 유지됩니다.
+          </>
+        }
+        confirmMessage="변경을 진행하면 현재 전공을 잃게 됩니다."
+        confirmLabel="전공 변경"
+        isConfirming={isChangingMajor}
+        width={28}
+        height={15}
+        onClose={handleCloseChangeMajorModal}
+        onConfirm={handleConfirmChangeMajor}
+      />
     </S.RoadmapContainer>
   );
 };

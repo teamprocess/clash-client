@@ -11,11 +11,6 @@ interface NodeCircleProps {
   $status: "completed" | "current" | "locked";
 }
 
-interface IconProps {
-  $width?: number;
-  $height?: number;
-}
-
 export const NodeGroup = styled.g`
   cursor: pointer;
   transition: transform 0.2s;
@@ -44,34 +39,25 @@ export const NodeNumber = styled.text`
   fill: ${palette.neutral["97"]};
   user-select: none;
   pointer-events: none;
+  dominant-baseline: middle;
 `;
 
-export const CheckIcon = styled(CheckImg)<IconProps>`
-  width: ${({ $width = 0 }) => `${$width}px`};
-  height: ${({ $height = 0 }) => `${$height}px`};
+export const CheckIcon = styled(CheckImg)`
   pointer-events: none;
 `;
 
-export const LockIcon = styled(LockImg)<IconProps>`
-  width: ${({ $width = 0 }) => `${$width}px`};
-  height: ${({ $height = 0 }) => `${$height}px`};
+export const LockIcon = styled(LockImg)`
   pointer-events: none;
 `;
 
-export const Star1Icon = styled(Star1Img)<IconProps>`
-  width: ${({ $width = 0 }) => `${$width}px`};
-  height: ${({ $height = 0 }) => `${$height}px`};
+export const Star1Icon = styled(Star1Img)`
   pointer-events: none;
 `;
 
-export const Star2Icon = styled(Star2Img)<IconProps>`
-  width: ${({ $width = 0 }) => `${$width}px`};
-  height: ${({ $height = 0 }) => `${$height}px`};
+export const Star2Icon = styled(Star2Img)`
   pointer-events: none;
 `;
 
-export const Star3Icon = styled(Star3Img)<IconProps>`
-  width: ${({ $width = 0 }) => `${$width}px`};
-  height: ${({ $height = 0 }) => `${$height}px`};
+export const Star3Icon = styled(Star3Img)`
   pointer-events: none;
 `;

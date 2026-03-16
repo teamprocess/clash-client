@@ -18,7 +18,7 @@ export const Background = styled.div`
 
 export const BodyRow = styled.div`
   display: flex;
-  gap: 2rem;
+  gap: 1rem;
   align-items: flex-start;
   width: 100%;
   justify-content: flex-start;

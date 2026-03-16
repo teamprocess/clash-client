@@ -9,81 +9,94 @@ export const useChapter = (sectionId: number) => {
   const domain = useChapterDomain(sectionId);
   const view = useChapterView({ loading: domain.loading, sectionId });
 
-  // 모달 열릴 때만 상세 조회
   const chapterDetailsQuery = useChapterDetailsQuery(domain.currentStageId, {
     enabled: view.missionModalOpen,
   });
 
-  // missions 응답이 일정하지 않아서 여기서 한 번 정리
   const currentStageMissions = useMemo(() => {
-    const missions = (chapterDetailsQuery.data?.missions ?? []) as Mission[];
+    const chapter = chapterDetailsQuery.data;
 
-    // 완료 개수만 내려오는 경우 대비
-    const completedCount = Math.max(0, domain.currentStage.currentProgress ?? 0);
+    if (!chapter) return [];
 
-    const getOrderIndex = (mission: Mission) => {
-      const raw = (mission as Mission & { orderIndex?: unknown }).orderIndex;
-      const num = typeof raw === "number" ? raw : typeof raw === "string" ? Number(raw) : NaN;
+    const orderedQuestions = [...chapter.questions].sort((a, b) => a.orderIndex - b.orderIndex);
 
-      return Number.isFinite(num) ? num : null;
+    return [
+      {
+        id: chapter.chapterId,
+        title: "문제 풀기",
+        completed: chapter.isCleared,
+        currentQuestionIndex: chapter.currentQuestionIndex,
+        correctCount: chapter.correctCount,
+        studyMaterialUrl: chapter.studyMaterialUrl,
+        questions: orderedQuestions.map(question => ({
+          id: question.questionId,
+          content: question.content,
+          explanation: question.explanation,
+          orderIndex: question.orderIndex,
+          difficulty: question.difficulty,
+          choices: question.choices.map(choice => ({
+            id: choice.choiceId,
+            content: choice.content,
+          })),
+        })),
+      } satisfies Mission,
+    ];
+  }, [chapterDetailsQuery.data]);
+
+  const currentStage = useMemo(() => {
+    const chapter = chapterDetailsQuery.data;
+
+    if (!chapter) return domain.currentStage;
+
+    const currentProgress = chapter.isCleared
+      ? chapter.totalQuestions
+      : chapter.currentQuestionIndex;
+
+    return {
+      ...domain.currentStage,
+      currentProgress,
+      totalMissions: chapter.totalQuestions,
     };
-
-    const orderedMissions = [...missions].sort((a, b) => {
-      const aOrder = getOrderIndex(a);
-      const bOrder = getOrderIndex(b);
-
-      // orderIndex 있는 것만 우선 정렬
-      if (aOrder == null && bOrder == null) return 0;
-      if (aOrder == null) return 1;
-      if (bOrder == null) return -1;
-      return aOrder - bOrder;
-    });
-
-    return orderedMissions.map((mission, index) => {
-      const maybeMission = mission as Mission & {
-        isCleared?: boolean;
-        isMissionCleared?: boolean;
-        cleared?: boolean;
-      };
-
-      // 완료 플래그가 제각각이라 여기서 통합
-      const completed =
-        Boolean(mission.completed) ||
-        maybeMission.isCleared === true ||
-        maybeMission.isMissionCleared === true ||
-        maybeMission.cleared === true ||
-        index < completedCount;
-
-      return { ...mission, completed };
-    });
-  }, [chapterDetailsQuery.data?.missions, domain.currentStage.currentProgress]);
+  }, [chapterDetailsQuery.data, domain.currentStage]);
 
   const handlers = useChapterHandlers({
-    ...domain,
-    ...view,
+    stages: domain.stages,
+    setStageOverrides: domain.setStageOverrides,
+    currentStageId: domain.currentStageId,
+    setCurrentStageId: domain.setCurrentStageId,
     currentStageMissions,
+    setCurrentMission: view.setCurrentMission,
+    setMissionModalOpen: view.setMissionModalOpen,
   });
 
   return {
     chapterRef: view.chapterRef,
     domain: {
       roadmapNodes: domain.roadmapNodes,
-      currentStage: domain.currentStage,
+      currentStage,
+      currentStageDescription: chapterDetailsQuery.data?.description ?? null,
+      currentStageStudyMaterialUrl: chapterDetailsQuery.data?.studyMaterialUrl ?? null,
       currentStageMissions,
       currentStageMissionsLoading: chapterDetailsQuery.isLoading,
+      currentStageDetailsLoading: chapterDetailsQuery.isLoading,
+      currentStageDetailsError:
+        chapterDetailsQuery.error instanceof Error ? chapterDetailsQuery.error.message : null,
       sectionTitle: domain.sectionTitle,
+      completedChapters: domain.completedChapters,
+      totalChapters: domain.totalChapters,
       loading: domain.loading,
       error: domain.error,
     },
     view: {
       currentMission: view.currentMission,
-      modalOpen: view.modalOpen,
       missionModalOpen: view.missionModalOpen,
     },
     handlers: {
       handleMissionClick: handlers.handleMissionClick,
       handleMissionComplete: handlers.handleMissionComplete,
       handleSelectStage: handlers.handleSelectStage,
+      handleStartCurrentStageMission: handlers.handleStartCurrentStageMission,
+      handleCloseMissionPanel: handlers.handleCloseMissionPanel,
       handleCloseQuizModal: handlers.handleCloseQuizModal,
     },
   };
