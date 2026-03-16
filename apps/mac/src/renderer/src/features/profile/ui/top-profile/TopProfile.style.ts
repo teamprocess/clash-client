@@ -86,23 +86,6 @@ export const ProfileImg = styled.img.attrs(() => ({
   display: block;
 `;
 
-export const ProfileImageButton = styled.button<{ $hasImage: boolean }>`
-  position: relative;
-  width: 100%;
-  height: 100%;
-  padding: 0;
-  border: none;
-  background: transparent;
-  cursor: pointer;
-  border-radius: 50%;
-  overflow: hidden;
-
-  &:hover .profile-image-overlay {
-    opacity: 1;
-    visibility: visible;
-  }
-`;
-
 export const AddProfileImageIconWrap = styled.div`
   position: absolute;
   inset: 0;
@@ -125,6 +108,23 @@ export const ChangeProfileImageIconWrap = styled.div`
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
+`;
+
+export const ProfileImageButton = styled.button<{ $hasImage: boolean }>`
+  position: relative;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  border-radius: 50%;
+  overflow: hidden;
+
+  &:hover ${AddProfileImageIconWrap}, &:hover ${ChangeProfileImageIconWrap} {
+    opacity: 1;
+    visibility: visible;
+  }
 `;
 
 export const UserInfo = styled.div`
