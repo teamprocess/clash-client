@@ -107,3 +107,8 @@ export const Time = styled.p`
   ${font.title2.bold}
   color: ${({ theme }) => theme.label.neutral};
 `;
+
+export const RankTierWrap = styled.div`
+  width: 2rem;
+  height: 2rem;
+`;
