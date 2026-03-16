@@ -1,7 +1,11 @@
 export interface PreviewChapter {
-  id: number;
+  id?: number | null;
+  chapterId?: number | null;
   title: string;
-  description: string;
+  orderIndex: number;
+  completedMissions: number | null;
+  totalMissions: number | null;
+  description?: string | null;
 }
 
 export interface GetSectionPreviewResponse {

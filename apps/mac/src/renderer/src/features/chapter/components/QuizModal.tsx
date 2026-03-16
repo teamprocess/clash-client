@@ -41,7 +41,9 @@ export const QuizModal = ({
       <Dialog width={25} height={34} isOpen={isOpen} onClose={handleClose} gap={6.5}>
         <QuizResult
           isFinal
-          isPassed={questions.length > 0 && state.correctCount === questions.length}
+          isPassed={
+            state.isPassed ?? (questions.length > 0 && state.correctCount === questions.length)
+          }
           correctCount={state.correctCount}
           total={questions.length}
           errorMessage={error}
@@ -63,6 +65,16 @@ export const QuizModal = ({
           explanation={state.explanation}
           onNext={handleNextOrClose}
         />
+      </Dialog>
+    );
+  }
+
+  if (!currentQuestion || questions.length === 0) {
+    return (
+      <Dialog width={25} height={20} isOpen={isOpen} onClose={handleClose} gap={3}>
+        <S.ModalBody>
+          <S.ErrorMessage>문제 정보를 불러오지 못했습니다.</S.ErrorMessage>
+        </S.ModalBody>
       </Dialog>
     );
   }
@@ -112,7 +124,7 @@ export const QuizModal = ({
           {error && <S.ErrorMessage>{error}</S.ErrorMessage>}
           {error && (
             <Button variant="secondary" size="md" onClick={handleRestart} fullWidth>
-              미션 다시 시작하기
+              챕터 다시 시작하기
             </Button>
           )}
         </S.ButtonGroup>

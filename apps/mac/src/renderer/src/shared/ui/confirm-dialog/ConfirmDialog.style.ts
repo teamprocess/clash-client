@@ -7,14 +7,15 @@ export const Content = styled.div`
   flex-direction: column;
   justify-content: space-between;
   gap: 1.5rem;
-  padding: 1rem 0 0 0;
+  box-sizing: border-box;
+  padding: 1rem 0 0.25rem;
   height: 100%;
 `;
 
 export const MessageBox = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 0.25rem;
+  gap: 0.5rem;
 `;
 
 export const Description = styled.p`

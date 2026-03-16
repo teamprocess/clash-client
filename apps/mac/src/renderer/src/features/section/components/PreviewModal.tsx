@@ -85,6 +85,8 @@ export const PreviewModal = ({
     );
   }
 
+  const hasSteps = previewData.steps.length > 0;
+
   return (
     <Dialog width={74} height={48} isOpen={isOpen} onClose={onClose}>
       <S.PreviewModalWrapper>
@@ -121,44 +123,72 @@ export const PreviewModal = ({
 
               <S.RoadmapBottom>
                 <S.RoadmapStepsContainer ref={stepsContainerRef}>
-                  <S.RoadmapSteps>
-                    {previewData.steps.map((step, index) => (
-                      <S.StepWrapper
-                        key={step.id}
-                        ref={el => {
-                          stepRefs.current[index] = el;
-                        }}
-                        onClick={() => handleStepClick(step.id)}
-                      >
-                        <S.StepCircle $active={step.id === currentStep}>{step.id}</S.StepCircle>
-                        {step.id === currentStep && <S.StepTooltip>{step.tooltip}</S.StepTooltip>}
-                      </S.StepWrapper>
-                    ))}
-                    <S.StepCircle>
-                      <S.StepFlag />
-                    </S.StepCircle>
-                  </S.RoadmapSteps>
+                  {hasSteps ? (
+                    <S.RoadmapSteps>
+                      {previewData.steps.map((step, index) => {
+                        const isFirstStep = index === 0;
+                        const isLastStep = index === previewData.steps.length - 1;
+                        const tooltipAlign = isFirstStep ? "left" : isLastStep ? "right" : "center";
+
+                        return (
+                          <S.StepWrapper
+                            key={step.id}
+                            ref={el => {
+                              stepRefs.current[index] = el;
+                            }}
+                            onClick={() => handleStepClick(step.id)}
+                          >
+                            <S.StepCircle $active={step.id === currentStep}>{step.id}</S.StepCircle>
+                            {step.id === currentStep && (
+                              <S.StepTooltip $align={tooltipAlign}>{step.tooltip}</S.StepTooltip>
+                            )}
+                          </S.StepWrapper>
+                        );
+                      })}
+                      <S.StepCircle>
+                        <S.StepFlag />
+                      </S.StepCircle>
+                    </S.RoadmapSteps>
+                  ) : (
+                    <S.EmptyRoadmapState>
+                      아직 등록된 챕터가 없어요. 내용이 추가되면 여기서 스텝을 확인할 수 있습니다.
+                    </S.EmptyRoadmapState>
+                  )}
                 </S.RoadmapStepsContainer>
 
                 <S.RoadmapDescriptionBox>
-                  <S.RoadmapNumberBox>
-                    <S.StepTitle>Step</S.StepTitle>
-                    <S.RoadmapNumber>{String(activeStep?.id).padStart(2, "0")}</S.RoadmapNumber>
-                  </S.RoadmapNumberBox>
-                  <S.RoadmapDescription>{activeStep?.description}</S.RoadmapDescription>
+                  {hasSteps ? (
+                    <>
+                      <S.RoadmapNumberBox>
+                        <S.StepTitle>Step</S.StepTitle>
+                        <S.RoadmapNumber>{String(activeStep?.id).padStart(2, "0")}</S.RoadmapNumber>
+                      </S.RoadmapNumberBox>
+                      <S.RoadmapDescription>{activeStep?.description}</S.RoadmapDescription>
+                    </>
+                  ) : (
+                    <S.EmptyRoadmapDescription>
+                      아직 준비된 스텝이 없습니다.
+                    </S.EmptyRoadmapDescription>
+                  )}
                 </S.RoadmapDescriptionBox>
 
                 <S.RoadmapStepBox>
-                  <S.ArrowButton onClick={handlePrev} $disabled={currentStep === 1}>
-                    <S.ArrowIcon $direction="left" />
-                  </S.ArrowButton>
-                  <S.StepLabel>
-                    <S.CurrentStepLabel>{currentStep}</S.CurrentStepLabel>/
-                    <S.TotalStepLabel>{totalSteps}</S.TotalStepLabel>
-                  </S.StepLabel>
-                  <S.ArrowButton onClick={handleNext} $disabled={currentStep === totalSteps}>
-                    <S.ArrowIcon $direction="right" />
-                  </S.ArrowButton>
+                  {hasSteps ? (
+                    <>
+                      <S.ArrowButton onClick={handlePrev} $disabled={currentStep === 1}>
+                        <S.ArrowIcon $direction="left" />
+                      </S.ArrowButton>
+                      <S.StepLabel>
+                        <S.CurrentStepLabel>{currentStep}</S.CurrentStepLabel>/
+                        <S.TotalStepLabel>{totalSteps}</S.TotalStepLabel>
+                      </S.StepLabel>
+                      <S.ArrowButton onClick={handleNext} $disabled={currentStep === totalSteps}>
+                        <S.ArrowIcon $direction="right" />
+                      </S.ArrowButton>
+                    </>
+                  ) : (
+                    <S.EmptyStepLabel>챕터 준비 중</S.EmptyStepLabel>
+                  )}
                 </S.RoadmapStepBox>
               </S.RoadmapBottom>
             </S.RoadmapBox>
