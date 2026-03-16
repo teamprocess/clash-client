@@ -68,15 +68,17 @@ const QuizPanelContent = ({
           <S.BackArrow>‹</S.BackArrow>
           챕터 정보
         </S.BackButton>
-        <S.ResultCard>
-          <S.ResultHeader>
-            <S.IncorrectIcon />
-            <S.ResultTextGroup>
-              <S.ResultTitle>문제 정보를 불러오지 못했습니다.</S.ResultTitle>
-              <S.ResultCaption>잠시 후 다시 시도해주세요.</S.ResultCaption>
-            </S.ResultTextGroup>
-          </S.ResultHeader>
-        </S.ResultCard>
+        <S.QuizViewport>
+          <S.ResultCard>
+            <S.ResultHeader>
+              <S.IncorrectIcon />
+              <S.ResultTextGroup>
+                <S.ResultTitle>문제 정보를 불러오지 못했습니다.</S.ResultTitle>
+                <S.ResultCaption>잠시 후 다시 시도해주세요.</S.ResultCaption>
+              </S.ResultTextGroup>
+            </S.ResultHeader>
+          </S.ResultCard>
+        </S.QuizViewport>
       </S.QuizBody>
     );
   }
@@ -98,27 +100,29 @@ const QuizPanelContent = ({
           챕터 정보
         </S.BackButton>
 
-        <S.ResultCard>
-          <S.ResultHeader>
-            {state.lastResult ? <S.CorrectIcon /> : <S.IncorrectIcon />}
-            <S.ResultTextGroup>
-              <S.ResultTitle>{state.lastResult ? "정답입니다." : "오답입니다."}</S.ResultTitle>
-              <S.ResultCaption>해설을 확인하고 다음 문제로 넘어가세요.</S.ResultCaption>
-            </S.ResultTextGroup>
-          </S.ResultHeader>
+        <S.QuizViewport>
+          <S.ResultCard>
+            <S.ResultHeader>
+              {state.lastResult ? <S.CorrectIcon /> : <S.IncorrectIcon />}
+              <S.ResultTextGroup>
+                <S.ResultTitle>{state.lastResult ? "정답입니다." : "오답입니다."}</S.ResultTitle>
+                <S.ResultCaption>해설을 확인하고 다음 문제로 넘어가세요.</S.ResultCaption>
+              </S.ResultTextGroup>
+            </S.ResultHeader>
 
-          <S.ExplanationBox>
-            <S.ExplanationText>
-              {state.explanation || "해설이 제공되지 않았습니다."}
-            </S.ExplanationText>
-          </S.ExplanationBox>
+            <S.ExplanationBox>
+              <S.ExplanationText>
+                {state.explanation || "해설이 제공되지 않았습니다."}
+              </S.ExplanationText>
+            </S.ExplanationBox>
+          </S.ResultCard>
+        </S.QuizViewport>
 
-          <S.ResultFooterActions>
-            <S.PrimaryActionButton variant="primary" size="lg" fullWidth onClick={handleNextOrClose}>
-              {state.currentIndex === questions.length - 1 ? "결과 보기" : "다음 문제로"}
-            </S.PrimaryActionButton>
-          </S.ResultFooterActions>
-        </S.ResultCard>
+        <S.ResultFooterActions>
+          <S.PrimaryActionButton variant="primary" size="lg" fullWidth onClick={handleNextOrClose}>
+            {state.currentIndex === questions.length - 1 ? "결과 보기" : "다음 문제로"}
+          </S.PrimaryActionButton>
+        </S.ResultFooterActions>
       </S.QuizBody>
     );
   }
@@ -195,21 +199,25 @@ const QuizPanelContent = ({
         챕터 정보
       </S.BackButton>
 
-      <S.QuizCard>
-        <S.QuestionText><span>Q.</span> {currentQuestion.content}</S.QuestionText>
-      </S.QuizCard>
+      <S.QuizViewport>
+        <S.QuizContent>
+          <S.QuizCard>
+            <S.QuestionText><span>Q.</span> {currentQuestion.content}</S.QuestionText>
+          </S.QuizCard>
 
-      <S.OptionList>
-        {currentQuestion.choices.map(choice => (
-          <AnswerOptionButton
-            key={choice.id}
-            id={choice.id}
-            content={choice.content}
-            selectedId={selectedChoiceId}
-            onSelect={handleSelectChoice}
-          />
-        ))}
-      </S.OptionList>
+          <S.OptionList>
+            {currentQuestion.choices.map(choice => (
+              <AnswerOptionButton
+                key={choice.id}
+                id={choice.id}
+                content={choice.content}
+                selectedId={selectedChoiceId}
+                onSelect={handleSelectChoice}
+              />
+            ))}
+          </S.OptionList>
+        </S.QuizContent>
+      </S.QuizViewport>
 
       <S.FooterActions>
         <S.PrimaryActionButton
