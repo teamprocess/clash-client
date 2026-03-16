@@ -56,7 +56,7 @@ export const HeaderMain = styled.div`
 `;
 
 export const HeaderTitle = styled.h2`
-  ${font.headline1.medium}
+  ${font.title1.medium}
   color: ${({ theme }) => theme.label.strong};
   word-break: keep-all;
   line-height: 1.35;
@@ -163,29 +163,6 @@ export const ProgressFill = styled.div<{ $value: number }>`
   background-color: ${({ theme }) => theme.primary.normal};
   border-radius: inherit;
   transition: width 0.22s ease;
-`;
-
-export const MetaRow = styled.div`
-  display: flex;
-  justify-content: space-between;
-  gap: 0.75rem;
-  padding-top: 0.15rem;
-`;
-
-export const MetaItem = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-`;
-
-export const MetaLabel = styled.span`
-  ${font.caption.regular}
-  color: ${({ theme }) => theme.label.assistive};
-`;
-
-export const MetaValue = styled.span`
-  ${font.body.regular}
-  color: ${({ theme }) => theme.label.normal};
 `;
 
 export const DescriptionText = styled.p`
@@ -345,10 +322,10 @@ export const QuizContent = styled.div`
 export const QuestionText = styled.p`
   ${font.title1.medium}
   color: ${({ theme }) => theme.label.strong};
-  line-height: 1.45;
+  line-height: 1.4;
   word-break: keep-all;
   text-align: center;
-  max-width: 26rem;
+  max-width: 32rem;
   span {
       color: ${({ theme }) => theme.primary.normal};
       margin-right: 0.2rem;

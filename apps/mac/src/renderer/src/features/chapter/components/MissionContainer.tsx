@@ -310,8 +310,6 @@ export const MissionContainer = ({
       : 0;
   const hasStudyMaterial = Boolean(studyMaterialUrl?.trim());
   const isOverviewLoading = isLoading && !currentMission;
-  const materialMessage =
-    studyMaterialError ?? (!hasStudyMaterial ? "현재 챕터에는 연결된 학습 자료가 없습니다." : null);
 
   return (
     <SidePanel
@@ -348,16 +346,6 @@ export const MissionContainer = ({
                   <>
                     <S.LoadingBlock $width="6rem" $height="2rem" $radius="0.5rem" />
                     <S.LoadingBlock $width="100%" $height="0.5rem" $radius="999px" />
-                    <S.MetaRow>
-                      <S.MetaItem>
-                        <S.MetaLabel>완료한 문제</S.MetaLabel>
-                        <S.LoadingBlock $width="4.5rem" $height="1rem" $radius="0.45rem" />
-                      </S.MetaItem>
-                      <S.MetaItem>
-                        <S.MetaLabel>전체 문제</S.MetaLabel>
-                        <S.LoadingBlock $width="4.5rem" $height="1rem" $radius="0.45rem" />
-                      </S.MetaItem>
-                    </S.MetaRow>
                   </>
                 ) : (
                   <>
@@ -369,17 +357,6 @@ export const MissionContainer = ({
                     <S.ProgressTrack aria-hidden>
                       <S.ProgressFill $value={progressPercent} />
                     </S.ProgressTrack>
-
-                    <S.MetaRow>
-                      <S.MetaItem>
-                        <S.MetaLabel>완료한 문제</S.MetaLabel>
-                        <S.MetaValue>{currentStage.currentProgress}문제</S.MetaValue>
-                      </S.MetaItem>
-                      <S.MetaItem>
-                        <S.MetaLabel>전체 문제</S.MetaLabel>
-                        <S.MetaValue>{currentStage.totalMissions || 0}문제</S.MetaValue>
-                      </S.MetaItem>
-                    </S.MetaRow>
                   </>
                 )}
               </S.SectionCard>
@@ -407,20 +384,22 @@ export const MissionContainer = ({
                 </>
               ) : (
                 <>
-                  {materialMessage && (
-                    <S.InlineMessage $tone={studyMaterialError ? "error" : "neutral"}>
-                      {materialMessage}
+                  {studyMaterialError && (
+                    <S.InlineMessage $tone="error">
+                      {studyMaterialError}
                     </S.InlineMessage>
                   )}
-                  <S.PrimaryActionButton
-                    variant="primary"
-                    size="lg"
-                    fullWidth
-                    onClick={() => void handleOpenStudyMaterial()}
-                    disabled={isLoading || !hasStudyMaterial}
-                  >
-                    학습하러 가기
-                  </S.PrimaryActionButton>
+                  {hasStudyMaterial && (
+                    <S.PrimaryActionButton
+                      variant="primary"
+                      size="lg"
+                      fullWidth
+                      onClick={() => void handleOpenStudyMaterial()}
+                      disabled={isLoading}
+                    >
+                      학습하러 가기
+                    </S.PrimaryActionButton>
+                  )}
                   <S.SecondaryActionButton
                     variant="secondary"
                     size="lg"
