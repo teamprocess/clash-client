@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import type { ReactNode } from "react";
+import { createPortal } from "react-dom";
 import * as S from "./SidePanel.style";
 
 export interface SidePanelProps {
@@ -38,7 +39,11 @@ export const SidePanel = ({
     return null;
   }
 
-  return (
+  if (typeof document === "undefined") {
+    return null;
+  }
+
+  return createPortal(
     <S.Overlay $closing={isClosing} $position={position} onClick={onClose} aria-hidden={!isOpen}>
       <S.Panel
         $closing={isClosing}
@@ -49,6 +54,7 @@ export const SidePanel = ({
       >
         {children}
       </S.Panel>
-    </S.Overlay>
+    </S.Overlay>,
+    document.body
   );
 };

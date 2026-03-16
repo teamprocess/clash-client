@@ -49,9 +49,11 @@ export const Overlay = styled.div<{ $closing: boolean; $position: "absolute" | "
   inset: 0;
   display: flex;
   justify-content: flex-end;
+  width: 100vw;
+  height: 100dvh;
   background-color: rgba(0, 0, 0, 0.52);
   backdrop-filter: blur(4px);
-  z-index: 220;
+  z-index: 1200;
   animation: ${({ $closing }) => ($closing ? fadeOut : fadeIn)} 0.22s ease forwards;
 `;
 
@@ -64,5 +66,5 @@ export const Panel = styled.div<{ $closing: boolean; $width: string }>`
   background-color: ${({ theme }) => theme.background.normal};
   border-left: 1px solid ${({ theme }) => theme.line.alternative};
   animation: ${({ $closing }) => ($closing ? slideOut : slideIn)} 0.24s ease forwards;
-  box-shadow: -18px 0 42px rgba(15, 23, 42, 0.16);
+  box-shadow: -4px 0 12px rgba(0, 0, 0, 0.12);
 `;

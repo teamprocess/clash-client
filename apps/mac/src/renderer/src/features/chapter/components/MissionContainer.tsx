@@ -297,8 +297,8 @@ export const MissionContainer = ({
       isOpen={isOpen}
       isClosing={isClosing}
       onClose={handleRequestClose}
-      width="min(100%, 36rem)"
-      position="absolute"
+      width="min(100vw, 46rem)"
+      position="fixed"
     >
       <S.PanelContent>
         <S.PanelHeader>
