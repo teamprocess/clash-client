@@ -108,30 +108,34 @@ export const OverviewBody = styled.div`
   display: flex;
   flex: 1;
   flex-direction: column;
-  gap: 0.875rem;
+  gap: 1.35rem;
   min-height: 0;
 `;
 
 export const SectionCard = styled.section`
   display: flex;
   flex-direction: column;
-  gap: 0.875rem;
-  padding: 1rem 1rem;
-  border-radius: 0.85rem;
-  background-color: ${neutralSurface};
-  border: 1px solid ${subtleBorder};
-  box-shadow: none;
+  gap: 0.9rem;
+  padding: 0;
+  background-color: transparent;
+  border: none;
+
+  & + & {
+    padding-top: 1.3rem;
+    border-top: 1px solid ${subtleBorder};
+  }
 `;
 
 export const SectionTitle = styled.h3`
   ${font.body.medium}
   color: ${({ theme }) => theme.label.strong};
+  letter-spacing: -0.01em;
 `;
 
 export const ProgressSummary = styled.div`
   display: flex;
   align-items: baseline;
-  gap: 0.35rem;
+  gap: 0.45rem;
 `;
 
 export const ProgressCurrent = styled.span`
@@ -150,7 +154,7 @@ export const ProgressTrack = styled.div`
   height: 0.5rem;
   border-radius: 999px;
   overflow: hidden;
-  background-color: rgba(255, 255, 255, 0.14);
+  background-color: rgba(255, 255, 255, 0.1);
 `;
 
 export const ProgressFill = styled.div<{ $value: number }>`
@@ -165,6 +169,7 @@ export const MetaRow = styled.div`
   display: flex;
   justify-content: space-between;
   gap: 0.75rem;
+  padding-top: 0.15rem;
 `;
 
 export const MetaItem = styled.div`
@@ -189,6 +194,7 @@ export const DescriptionText = styled.p`
   line-height: 1.65;
   white-space: pre-wrap;
   word-break: keep-all;
+  max-width: 34rem;
 `;
 
 export const InlineMessage = styled.p<{ $tone?: "error" | "neutral" }>`
@@ -220,6 +226,8 @@ export const FooterActions = styled.div`
   flex-direction: column;
   gap: 0.75rem;
   margin-top: auto;
+  padding-top: 1.5rem;
+  border-top: 1px solid ${subtleBorder};
 `;
 
 export const PrimaryActionButton = styled(Button)`
@@ -247,6 +255,7 @@ export const QuizBody = styled.div`
   flex-direction: column;
   gap: 0.875rem;
   min-height: 0;
+  overflow: hidden;
 `;
 
 export const BackButton = styled.button`
@@ -295,12 +304,42 @@ export const QuizCard = styled.section`
   display: flex;
   flex-direction: column;
   gap: 0.875rem;
-  margin-top: 1.1rem;
   padding: 0;
   border-radius: 0;
   background-color: transparent;
   border: none;
   align-items: center;
+`;
+
+export const QuizViewport = styled.div`
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  padding: 1rem 0 1.25rem;
+
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: ${({ theme }) => theme.line.normal};
+    border-radius: 999px;
+  }
+`;
+
+export const QuizContent = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  margin-block: auto;
 `;
 
 export const QuestionText = styled.p`
@@ -320,16 +359,14 @@ export const OptionList = styled.div`
   display: flex;
   flex-direction: column;
   gap: 0.875rem;
-  margin-top: 0.75rem;
+  width: 100%;
   align-items: center;
 `;
 
 export const ResultCard = styled(QuizCard)`
-  flex: 1;
   width: 100%;
   gap: 1.35rem;
-  margin-top: 1.25rem;
-  min-height: 0;
+  margin-block: auto;
 `;
 
 export const ResultHeader = styled.div`
@@ -380,10 +417,10 @@ export const ResultFooterActions = styled.div`
   display: flex;
   justify-content: center;
   width: 100%;
-  margin-top: auto;
+  padding-top: 1rem;
 
   & > * {
-    width: min(100%, 24rem);
+    width: 100%;
     flex: none;
   }
 `;
