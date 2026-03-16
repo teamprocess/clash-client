@@ -338,6 +338,36 @@ export const OptionList = styled.div`
   align-items: center;
 `;
 
+export const OptionsSection = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
+`;
+
+export const OptionsDivider = styled.div`
+  display: flex;
+  align-items: center;
+  width: min(100%, 32rem);
+  gap: 0.85rem;
+  align-self: center;
+
+  &::before,
+  &::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: ${subtleBorder};
+  }
+`;
+
+export const OptionsDividerLabel = styled.span`
+  ${font.caption.medium}
+  color: ${({ theme }) => theme.label.assistive};
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+`;
+
 export const ResultCard = styled(QuizCard)`
   width: 100%;
   gap: 1.35rem;

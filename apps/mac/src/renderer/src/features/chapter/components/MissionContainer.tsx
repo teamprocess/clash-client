@@ -213,17 +213,23 @@ const QuizPanelContent = ({
             </S.QuestionText>
           </S.QuizCard>
 
-          <S.OptionList>
-            {currentQuestion.choices.map(choice => (
-              <AnswerOptionButton
-                key={choice.id}
-                id={choice.id}
-                content={choice.content}
-                selectedId={selectedChoiceId}
-                onSelect={handleSelectChoice}
-              />
-            ))}
-          </S.OptionList>
+          <S.OptionsSection>
+            <S.OptionsDivider>
+              <S.OptionsDividerLabel>보기 선택</S.OptionsDividerLabel>
+            </S.OptionsDivider>
+
+            <S.OptionList>
+              {currentQuestion.choices.map(choice => (
+                <AnswerOptionButton
+                  key={choice.id}
+                  id={choice.id}
+                  content={choice.content}
+                  selectedId={selectedChoiceId}
+                  onSelect={handleSelectChoice}
+                />
+              ))}
+            </S.OptionList>
+          </S.OptionsSection>
         </S.QuizContent>
       </S.QuizViewport>
 
