@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { font } from "@clash/design-tokens/font";
-import MypageProfileSrc from "../../assets/mypage-profile.png";
+import MypageProfileSrc from "../../assets/rival-profile.png";
 import AddProfileImg from "../../assets/add-profile-img-icon.svg";
 import ChangeProfileImg from "../../assets/change-profile-img-icon.svg";
 
