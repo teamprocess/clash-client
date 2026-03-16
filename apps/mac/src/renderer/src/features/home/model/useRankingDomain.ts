@@ -3,8 +3,8 @@ import { RankingsResponse, CategoryType, PeriodType, useRankingQuery } from "@/e
 import { useGetMyProfile } from "@/entities/user";
 
 export const rankingDropDownValue: { key: CategoryType; label: string }[] = [
-  { key: "GITHUB", label: "Github" },
   { key: "EXP", label: "EXP" },
+  { key: "GITHUB", label: "Github" },
   { key: "ACTIVE_TIME", label: "총 학습 시간" },
 ];
 
@@ -15,7 +15,7 @@ export const rankingPeriodDropDownValue: { key: PeriodType; label: string }[] = 
 ];
 
 export const useRankingDomain = () => {
-  const [RankingDropdown, setRankingDropdown] = useState<CategoryType>("GITHUB");
+  const [RankingDropdown, setRankingDropdown] = useState<CategoryType>("EXP");
   const [RankingPeriodDropdown, setRankingPeriodDropdown] = useState<PeriodType>("DAY");
 
   const { data: rankingResponse } = useRankingQuery(RankingDropdown, RankingPeriodDropdown);
