@@ -1,7 +1,20 @@
 import styled from "styled-components";
-import Profile from "@/features/home/assets/home/profile.svg";
 import { font } from "@clash/design-tokens/font";
 import { palette } from "@clash/design-tokens/theme";
+import DefaultProfile from "@/features/home/assets/home/profile.svg";
+
+export const ProfileIcon = styled.img`
+  width: 2rem;
+  height: 2rem;
+  flex-shrink: 0;
+  border-radius: 50%;
+  object-fit: cover;
+`;
+
+export const DefaultProfileIcon = styled(DefaultProfile)`
+  width: 2rem;
+  height: 2rem;
+`;
 
 export const UserContainer = styled.div<{ $sticky?: boolean }>`
   padding: 1rem;
@@ -25,11 +38,6 @@ export const ProfileContent = styled.div`
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-`;
-
-export const ProfileIcon = styled(Profile)`
-  width: 2rem;
-  height: 2rem;
 `;
 
 export const NameBox = styled.div`
