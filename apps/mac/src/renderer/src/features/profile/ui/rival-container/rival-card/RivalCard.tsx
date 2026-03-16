@@ -61,7 +61,9 @@ export function RivalCard({
   return (
     <S.RivalBox>
       <S.Left>
-        <RankTier tier={tier} />
+        <S.RankTierWrap>
+          <RankTier tier={tier} />
+        </S.RankTierWrap>
         <S.ProfileImg src={profileSrc} alt="라이벌 프로필" />
         <S.NameStatus>
           <S.NameBox>

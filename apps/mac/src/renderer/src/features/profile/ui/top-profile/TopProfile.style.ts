@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { font } from "@clash/design-tokens/font";
-import MypageProfileSrc from "../../assets/mypage-profile.png";
+import MypageProfileSrc from "../../assets/rival-profile.png";
 import AddProfileImg from "../../assets/add-profile-img-icon.svg";
 import ChangeProfileImg from "../../assets/change-profile-img-icon.svg";
 
@@ -50,6 +50,7 @@ export const ProfileCard = styled.div`
 `;
 
 export const ProfileImgWrap = styled.div<{ $accent?: string; $bgImage?: string }>`
+  position: relative;
   width: 7.5rem;
   height: 7.5rem;
   border-radius: 50%;
@@ -66,6 +67,16 @@ export const ProfileImgWrap = styled.div<{ $accent?: string; $bgImage?: string }
       : ""}
 `;
 
+export const RankTierWrap = styled.div`
+  position: absolute;
+  right: 1rem;
+  width: 3rem;
+  height: 3rem;
+  bottom: 0;
+  transform: translate(35%, 35%);
+  z-index: 3;
+`;
+
 export const ProfileImg = styled.img.attrs(() => ({
   alt: "프로필",
 }))`
@@ -73,23 +84,6 @@ export const ProfileImg = styled.img.attrs(() => ({
   height: 100%;
   object-fit: cover;
   display: block;
-`;
-
-export const ProfileImageButton = styled.button<{ $hasImage: boolean }>`
-  position: relative;
-  width: 100%;
-  height: 100%;
-  padding: 0;
-  border: none;
-  background: transparent;
-  cursor: pointer;
-  border-radius: 50%;
-  overflow: hidden;
-
-  &:hover {
-    opacity: 1;
-    visibility: visible;
-  }
 `;
 
 export const AddProfileImageIconWrap = styled.div`
@@ -114,6 +108,23 @@ export const ChangeProfileImageIconWrap = styled.div`
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
+`;
+
+export const ProfileImageButton = styled.button<{ $hasImage: boolean }>`
+  position: relative;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  border-radius: 50%;
+  overflow: hidden;
+
+  &:hover ${AddProfileImageIconWrap}, &:hover ${ChangeProfileImageIconWrap} {
+    opacity: 1;
+    visibility: visible;
+  }
 `;
 
 export const UserInfo = styled.div`
