@@ -116,7 +116,8 @@ export const ThirdFrame = styled(ThirdFrameIcon)`
   z-index: 200;
 `;
 export const Top3ProfileImage = styled.img<{ $isFirst: boolean }>`
-  width: 100%;
+  width: ${({ $isFirst }) => $isFirst ? "95%" : "70%"};
+  object-fit: cover;
   height: ${({ $isFirst }) => ($isFirst ? "3.5rem" : "58%")};
   border-radius: 50%;
   position: absolute;
