@@ -1,5 +1,5 @@
 import { ThemeProvider } from "styled-components";
-import { HashRouter, Route, Routes } from "react-router-dom";
+import { HashRouter, Navigate, Route, Routes } from "react-router-dom";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { GoogleReCaptchaProvider } from "react-google-recaptcha-v3";
@@ -12,7 +12,7 @@ import { GroupPage, RecordPage } from "@/pages/record";
 import { ChapterPage, RoadmapMajorChoicePage } from "@/pages/roadmap";
 import { ProductsPage, ShopPage } from "@/pages/shop";
 import { AuthLayout } from "@/app/layouts/auth";
-import { SignInPage, SignUpPage } from "@/pages/auth";
+import { SignInPage } from "@/pages/auth";
 import { NotFoundPage } from "@/pages/not-found/NotFoundPage";
 import { RoadmapPage } from "@/pages/roadmap/section/RoadmapPage";
 import { ComparePage } from "@/pages/home/compare/ComparePage";
@@ -82,7 +82,7 @@ function App() {
               </Route>
               <Route element={<AuthLayout />}>
                 <Route path="/sign-in" element={<SignInPage />} />
-                <Route path="/sign-up" element={<SignUpPage />} />
+                <Route path="/sign-up" element={<Navigate to="/sign-in" replace />} />
               </Route>
 
               <Route path="*" element={<NotFoundPage />} />
