@@ -3,6 +3,7 @@ import type { UserStatus } from "@/features/competition/model/useMyRivals";
 import { formatTime, resolveUsingApp, useRealtimeRivalActiveTime } from "@/shared/lib";
 import { useMemo } from "react";
 import { IdeIcons } from "@/shared/ui/assets/ide-img";
+import { RankTier } from "@/shared/ui";
 
 interface RivalCardProps {
   profileSrc: string;
@@ -12,6 +13,7 @@ interface RivalCardProps {
   usingApp: string | null;
   isStudying: boolean;
   username: string;
+  tier: string;
 }
 
 const statusLabelMap: Record<UserStatus, string> = {
@@ -47,6 +49,7 @@ export function RivalCard({
   usingApp,
   isStudying,
   username,
+  tier,
 }: RivalCardProps) {
   const displayActiveTime = useRealtimeRivalActiveTime({
     activeTime,
@@ -58,6 +61,7 @@ export function RivalCard({
   return (
     <S.RivalBox>
       <S.Left>
+        <RankTier tier={tier} />
         <S.ProfileImg src={profileSrc} alt="라이벌 프로필" />
         <S.NameStatus>
           <S.NameBox>

@@ -14,6 +14,9 @@ export interface Mission {
   id: number;
   title: string;
   completed: boolean;
+  currentQuestionIndex: number;
+  correctCount: number;
+  studyMaterialUrl: string | null;
   questions: Question[];
 }
 
@@ -21,8 +24,9 @@ export interface Question {
   id: number;
   content: string;
   choices: Choice[];
-  answerId: number;
   explanation: string;
+  orderIndex: number;
+  difficulty: number;
 }
 
 export interface Choice {

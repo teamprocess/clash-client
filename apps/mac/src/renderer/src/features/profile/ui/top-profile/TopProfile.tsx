@@ -78,7 +78,7 @@ export const TopProfile = ({
 
         <S.UserInfo>
           <S.Name>{user?.name}</S.Name>
-          <RankTier tier={String(user?.expTier)} />
+          {badgeBgImageUrl ? <S.BadgeDot /> : <></>}
         </S.UserInfo>
       </S.ProfileCard>
 

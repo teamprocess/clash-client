@@ -96,8 +96,9 @@ export const PreviewModalHeadLabel = styled.span`
 export const PreviewModalBody = styled.div`
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: stretch;
   width: 100%;
+  gap: 1rem;
 `;
 
 export const RoadmapBox = styled.div`
@@ -112,6 +113,8 @@ export const RoadmapBox = styled.div`
   background-color: ${({ theme }) => theme.background.normal};
   border-radius: 1.25rem;
   box-shadow: 0 0 7px 0 ${({ theme }) => theme.line.normal};
+  min-width: 0;
+  overflow: hidden;
 `;
 
 export const TargetBox = styled.div`
@@ -142,6 +145,7 @@ export const RoadmapBottom = styled.div`
   align-items: center;
   gap: 2.5rem;
   width: 100%;
+  min-width: 0;
 `;
 
 export const RoadmapIcon = styled(Roadmap)`
@@ -156,14 +160,26 @@ export const RoadmapTitle = styled.span`
 
 export const RoadmapStepsContainer = styled.div`
   width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
   overflow-x: auto;
-  overflow-y: visible;
-  padding: 4rem 2rem 0 2rem;
-  margin: 0 -2rem;
+  overflow-y: hidden;
+  padding: 4.75rem 1.5rem 0.25rem;
 
   &::-webkit-scrollbar {
     height: 0;
   }
+`;
+
+export const EmptyRoadmapState = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 5rem;
+  text-align: center;
+  ${font.body.medium}
+  color: ${({ theme }) => theme.label.assistive};
 `;
 
 export const StepCircle = styled.div<{ $active?: boolean }>`
@@ -187,14 +203,14 @@ export const RoadmapSteps = styled.div`
   align-items: center;
   gap: 4.5rem;
   width: max-content;
-  padding: 0 2rem;
+  padding: 0 1.5rem;
 
   &::before {
     content: "";
     position: absolute;
     top: 50%;
-    left: 2rem;
-    right: 2rem;
+    left: 1.5rem;
+    right: 1.5rem;
     height: 2px;
     background-color: ${({ theme }) => theme.line.neutral};
     z-index: 0;
@@ -207,25 +223,31 @@ export const StepWrapper = styled.div`
   cursor: pointer;
 `;
 
-export const StepTooltip = styled.div`
+export const StepTooltip = styled.div<{ $align?: "left" | "center" | "right" }>`
   position: absolute;
   bottom: 3rem;
-  left: 50%;
-  transform: translateX(-50%);
+  left: ${({ $align }) => ($align === "right" ? "auto" : $align === "left" ? "0" : "50%")};
+  right: ${({ $align }) => ($align === "right" ? "0" : "auto")};
+  transform: ${({ $align }) => ($align === "center" ? "translateX(-50%)" : "none")};
   background-color: ${({ theme }) => theme.line.normal};
   ${font.headline2.medium}
   color: ${palette.neutral["20"]};
   padding: 0.5rem 1rem;
   border-radius: 0.75rem;
-  white-space: nowrap;
+  white-space: normal;
   width: max-content;
-  max-width: none;
+  max-width: 14rem;
+  text-align: center;
+  word-break: keep-all;
+  z-index: 2;
+
   &::after {
     content: "";
     position: absolute;
     top: 100%;
-    left: 50%;
-    transform: translateX(-50%);
+    left: ${({ $align }) => ($align === "right" ? "auto" : $align === "left" ? "1.5rem" : "50%")};
+    right: ${({ $align }) => ($align === "right" ? "1.5rem" : "auto")};
+    transform: ${({ $align }) => ($align === "center" ? "translateX(-50%)" : "none")};
     border-width: 7px 5px 0 5px;
     border-style: solid;
     border-color: ${({ theme }) => theme.line.normal} transparent transparent transparent;
@@ -236,7 +258,7 @@ export const StepFlag = styled(Flag)``;
 
 export const RoadmapDescriptionBox = styled.div`
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   gap: 1rem;
   padding: 1.25rem;
@@ -244,6 +266,7 @@ export const RoadmapDescriptionBox = styled.div`
   height: 5rem;
   background-color: ${({ theme }) => theme.background.neutral};
   border-radius: 0.75rem;
+  min-width: 0;
 `;
 
 export const RoadmapNumberBox = styled.button`
@@ -255,6 +278,7 @@ export const RoadmapNumberBox = styled.button`
   height: 2.8rem;
   background-color: ${({ theme }) => theme.primary.normal};
   border-radius: 0.5rem;
+  flex-shrink: 0;
 `;
 
 export const StepTitle = styled.span`
@@ -270,7 +294,16 @@ export const RoadmapNumber = styled.span`
 export const RoadmapDescription = styled.span`
   ${font.headline2.medium}
   color: ${({ theme }) => theme.label.alternative};
-  width: 32rem;
+  flex: 1;
+  min-width: 0;
+  white-space: normal;
+  word-break: keep-all;
+`;
+
+export const EmptyRoadmapDescription = styled.span`
+  ${font.headline2.medium}
+  color: ${({ theme }) => theme.label.assistive};
+  text-align: center;
 `;
 
 export const RoadmapStepBox = styled.div`
@@ -298,6 +331,11 @@ export const StepLabel = styled.div`
 export const TotalStepLabel = styled.span`
   ${font.title2.medium}
   color: ${({ theme }) => theme.label.alternative};
+`;
+
+export const EmptyStepLabel = styled.span`
+  ${font.title2.medium}
+  color: ${({ theme }) => theme.label.assistive};
 `;
 
 export const TargetBoxTop = styled.div`
@@ -338,15 +376,17 @@ export const TargetBoxIntro = styled.div`
 export const TargetBoxList = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: flex-start;
   gap: 0.75rem;
+  width: 100%;
+  overflow-y: auto;
 `;
 
 export const TargetItem = styled.div`
   display: flex;
   align-items: flex-start;
   gap: 0.75rem;
+  word-break: break-all;
 `;
 
 export const TargetStarWrapper = styled.div`

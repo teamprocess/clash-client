@@ -5,11 +5,10 @@ export const Banner = styled.div`
   display: flex;
   flex-direction: column;
   gap: 1.125rem;
-  width: 43.25rem;
   margin-left: 0;
   margin-top: 3.125rem;
   align-items: center;
-  flex: 0 0 43.25rem;
+  flex: 0 0 40rem;
   min-width: 0;
 `;
 
@@ -48,6 +47,7 @@ export const Tab = styled.button<{ $isActive: boolean }>`
   border: none;
   cursor: pointer;
   padding: 0;
+  z-index: 2;
 `;
 
 export const TabRail = styled.div`

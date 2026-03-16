@@ -3,7 +3,6 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { ChapterRanking } from "@/features/chapter-ranking";
 import { SectionProgress } from "@/features/section-progress";
 import { Roadmap } from "@/features/chapter/components/Roadmap";
-import { QuizModal } from "@/features/chapter/components/QuizModal";
 import { useChapter } from "@/features/chapter/model/useChapter";
 import { MajorEnum } from "@/entities/roadmap/section/model/section.types";
 import { useEffect, useMemo } from "react";
@@ -74,7 +73,79 @@ export const ChapterPage = () => {
   if (domain.loading) {
     return (
       <S.ChapterContainer>
-        <div>로딩 중...</div>
+        <S.ChapterScrollable>
+          <S.ChapterCanvas>
+            <S.RoadmapStageArea>
+              <S.LoadingRoadmapWrapper>
+                <S.LoadingRoadmapPath $top="9rem" $left="9rem" $width="12rem" $rotate="-22deg" />
+                <S.LoadingRoadmapPath $top="16rem" $left="18rem" $width="10rem" $rotate="18deg" />
+                <S.LoadingRoadmapPath $top="24rem" $left="10rem" $width="14rem" $rotate="-12deg" />
+                <S.LoadingRoadmapPath $top="30rem" $left="22rem" $width="11rem" $rotate="22deg" />
+                <S.LoadingRoadmapPath $top="40rem" $left="12rem" $width="12rem" $rotate="-10deg" />
+                <S.LoadingRoadmapPath $top="48rem" $left="24rem" $width="10rem" $rotate="28deg" />
+
+                <S.LoadingRoadmapNode $top="6rem" $left="6rem" />
+                <S.LoadingRoadmapNode $top="12rem" $left="18rem" />
+                <S.LoadingRoadmapNode $top="20rem" $left="26rem" />
+                <S.LoadingRoadmapNode $top="27rem" $left="12rem" />
+                <S.LoadingRoadmapNode $top="34rem" $left="24rem" />
+                <S.LoadingRoadmapNode $top="44rem" $left="14rem" />
+                <S.LoadingRoadmapNode $top="52rem" $left="30rem" />
+              </S.LoadingRoadmapWrapper>
+            </S.RoadmapStageArea>
+          </S.ChapterCanvas>
+        </S.ChapterScrollable>
+
+        <S.LoadingRankingContainer>
+          <S.LoadingSkeleton $width="7rem" $height="1.6rem" />
+          <S.LoadingRankingTop3>
+            <S.LoadingRankingPodium>
+              <S.LoadingSkeleton $width="3.6rem" $height="3.6rem" $radius="999px" />
+              <S.LoadingSkeleton $width="2.8rem" $height="0.8rem" />
+              <S.LoadingSkeleton $width="2.2rem" $height="0.7rem" />
+            </S.LoadingRankingPodium>
+            <S.LoadingRankingPodium>
+              <S.LoadingSkeleton $width="4.2rem" $height="4.2rem" $radius="999px" />
+              <S.LoadingSkeleton $width="3rem" $height="0.9rem" />
+              <S.LoadingSkeleton $width="2.4rem" $height="0.7rem" />
+            </S.LoadingRankingPodium>
+            <S.LoadingRankingPodium>
+              <S.LoadingSkeleton $width="3.6rem" $height="3.6rem" $radius="999px" />
+              <S.LoadingSkeleton $width="2.8rem" $height="0.8rem" />
+              <S.LoadingSkeleton $width="2.2rem" $height="0.7rem" />
+            </S.LoadingRankingPodium>
+          </S.LoadingRankingTop3>
+          <S.LoadingRankingList>
+            {Array.from({ length: 5 }).map((_, idx) => (
+              <S.LoadingRankingItem key={idx}>
+                <S.LoadingSkeleton $width="7rem" $height="1rem" />
+                <S.LoadingSkeleton $width="2.5rem" $height="0.9rem" />
+              </S.LoadingRankingItem>
+            ))}
+          </S.LoadingRankingList>
+        </S.LoadingRankingContainer>
+
+        <S.LoadingPreviousBox>
+          <S.LoadingSkeleton $width="2rem" $height="2rem" $radius="999px" />
+          <S.LoadingSkeleton $width="7rem" $height="1.7rem" />
+        </S.LoadingPreviousBox>
+
+        <S.LoadingCurrentSectionBox>
+          <S.LoadingSkeleton $width="2rem" $height="2rem" $radius="999px" />
+          <S.LoadingSkeleton $width="12rem" $height="2rem" />
+          <S.LoadingSkeleton $width="2rem" $height="2rem" $radius="999px" />
+        </S.LoadingCurrentSectionBox>
+
+        <S.LoadingSectionProgress>
+          <S.LoadingProgressInfo>
+            <S.LoadingSkeleton $width="2rem" $height="2rem" $radius="0.35rem" />
+            <S.LoadingSkeleton $width="6rem" $height="1.5rem" />
+          </S.LoadingProgressInfo>
+          <S.LoadingProgressBar>
+            <S.LoadingSkeleton $width="100%" $height="0.5rem" $radius="999px" />
+            <S.LoadingSkeleton $width="3rem" $height="1.5rem" />
+          </S.LoadingProgressBar>
+        </S.LoadingSectionProgress>
       </S.ChapterContainer>
     );
   }
@@ -91,17 +162,21 @@ export const ChapterPage = () => {
   return (
     <S.ChapterContainer>
       <S.ChapterScrollable ref={chapterRef}>
-        {Array.from({ length: 340 }).map((_, idx) => (
-          <S.Square key={idx} />
-        ))}
-
-        <S.RoadmapWrapper>
-          <Roadmap nodes={domain.roadmapNodes} onSelectStage={handlers.handleSelectStage} />
-        </S.RoadmapWrapper>
+        <S.ChapterCanvas>
+          <S.RoadmapStageArea>
+            {domain.roadmapNodes.length > 0 ? (
+              <S.RoadmapWrapper>
+                <Roadmap nodes={domain.roadmapNodes} onSelectStage={handlers.handleSelectStage} />
+              </S.RoadmapWrapper>
+            ) : (
+              <S.EmptyRoadmapMessage>아직 등록된 챕터가 없습니다.</S.EmptyRoadmapMessage>
+            )}
+          </S.RoadmapStageArea>
+        </S.ChapterCanvas>
       </S.ChapterScrollable>
 
       <ChapterRanking page="chapter" />
-      <SectionProgress />
+      <SectionProgress completed={domain.completedChapters} total={domain.totalChapters} />
 
       <Link to="/roadmap">
         <S.PreviousBox>
@@ -132,17 +207,22 @@ export const ChapterPage = () => {
 
       {view.missionModalOpen && (
         <MissionContainer
+          isOpen={view.missionModalOpen}
           currentStage={domain.currentStage}
-          currentStageMissions={domain.currentStageMissions}
-          onMissionClick={handlers.handleMissionClick}
-        />
-      )}
-
-      {view.currentMission && (
-        <QuizModal
-          isOpen={view.modalOpen}
-          onClose={handlers.handleCloseQuizModal}
           currentMission={view.currentMission}
+          description={
+            domain.currentStageDetailsError
+              ? "챕터 설명을 불러오지 못했습니다. 잠시 후 다시 확인해주세요."
+              : domain.currentStageDescription
+          }
+          isLoading={domain.currentStageDetailsLoading}
+          isSolveDisabled={
+            domain.currentStageMissionsLoading || domain.currentStageMissions.length === 0
+          }
+          studyMaterialUrl={domain.currentStageStudyMaterialUrl}
+          onClose={handlers.handleCloseMissionPanel}
+          onBackToOverview={handlers.handleCloseQuizModal}
+          onSolve={handlers.handleStartCurrentStageMission}
           onMissionComplete={handlers.handleMissionComplete}
         />
       )}
