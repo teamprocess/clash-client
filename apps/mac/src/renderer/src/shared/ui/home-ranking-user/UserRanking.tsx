@@ -25,7 +25,11 @@ export const UserRanking = forwardRef<HTMLDivElement, UserRankingProps>(
                 <RankTier tier={user.tier} />
               </S.RankTierWrap>
             </S.ProfileMention>
-            <S.ProfileIcon />
+            {user.profileImage ? (
+              <S.ProfileIcon src={user.profileImage} />
+            ) : (
+              <S.DefaultProfileIcon />
+            )}
             <S.NameBox>
               <S.ProfileName>{user.name}</S.ProfileName>
               <S.ProfileMention>@{user.linkedId}</S.ProfileMention>
