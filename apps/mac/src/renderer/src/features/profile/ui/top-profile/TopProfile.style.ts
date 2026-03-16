@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import { palette } from "@clash/design-tokens/theme";
 import { font } from "@clash/design-tokens/font";
 import MypageProfileSrc from "../../assets/mypage-profile.png";
 import AddProfileImg from "../../assets/add-profile-img-icon.svg";
@@ -38,34 +37,6 @@ export const Button = styled.div`
   flex-direction: column;
   align-items: flex-end;
   gap: 0.5rem;
-`;
-
-export const ActionButtons = styled.div`
-  display: flex;
-  gap: 0.875rem;
-  z-index: 2;
-`;
-
-export const ButtonEdit = styled.button`
-  width: 4rem;
-  height: 2rem;
-  background: ${({ theme }) => theme.line.normal};
-  border-radius: 0.75rem;
-  color: ${palette.neutral[97]};
-  ${font.label.medium};
-  border: none;
-  cursor: pointer;
-`;
-
-export const ButtonLogout = styled.button`
-  width: 5rem;
-  height: 2rem;
-  background: ${({ theme }) => theme.primary.normal};
-  border-radius: 0.75rem;
-  color: ${palette.neutral[97]};
-  ${font.label.medium};
-  border: none;
-  cursor: pointer;
 `;
 
 export const ProfileCard = styled.div`
@@ -180,24 +151,6 @@ export const ImgBox = styled.div`
 
 export const HiddenFileInput = styled.input`
   display: none;
-`;
-
-export const ActionGuide = styled.p<{ $tone?: "default" | "error" | "success" }>`
-  max-width: 14rem;
-  margin: 0;
-  text-align: right;
-  ${font.caption.medium};
-  color: ${({ $tone, theme }) => {
-    if ($tone === "error") {
-      return palette.red[60];
-    }
-
-    if ($tone === "success") {
-      return palette.green[50];
-    }
-
-    return theme.label.assistive;
-  }};
 `;
 
 export const FallbackProfileImage = MypageProfileSrc;
