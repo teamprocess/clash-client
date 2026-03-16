@@ -53,7 +53,8 @@ export const MyRivalUsers = ({ user, getStatus }: MyRivalItem) => {
     <S.ProfileContainer>
       <S.ProfileBox>
         <S.ProfileContent>
-          <S.ProfileIcon />
+          {user.profileImage ? <S.ProfileIcon src={user.profileImage} /> : <S.DefaultProfileIcon />}
+
           <S.NameBox>
             <S.ProfileName>{user.name}</S.ProfileName>
             {renderRivalId(user.username)}
