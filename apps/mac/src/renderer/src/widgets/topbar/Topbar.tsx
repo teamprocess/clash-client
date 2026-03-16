@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { SyntheticEvent, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import * as S from "./Topbar.style";
 import { useGetMyProfile } from "@/entities/user";
@@ -37,6 +37,11 @@ export const Topbar = ({ onToggleSidebar }: TopbarProps) => {
     signOut();
   };
 
+  const handleProfileImageError = (event: SyntheticEvent<HTMLImageElement>) => {
+    event.currentTarget.onerror = null;
+    event.currentTarget.src = S.FallbackProfileIcon;
+  };
+
   return (
     <S.TopbarContainer>
       <S.LeftMenu>
@@ -68,7 +73,10 @@ export const Topbar = ({ onToggleSidebar }: TopbarProps) => {
             aria-haspopup="menu"
             aria-expanded={isProfileMenuOpen}
           >
-            <S.ProfileIcon />
+            <S.ProfileIcon
+              src={user?.profileImage || S.FallbackProfileIcon}
+              onError={handleProfileImageError}
+            />
             <S.NameBox>
               <S.Name>{user?.name}</S.Name>
               <S.Username>@{user?.username}</S.Username>

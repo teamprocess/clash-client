@@ -9,6 +9,12 @@ const api = {
   getSessions: () => ipcRenderer.invoke("app-monitor:get-sessions"),
   getFrontmostMonitoredApp: () => ipcRenderer.invoke("app-monitor:get-frontmost-monitored-app"),
   getCursorScreenPoint: () => ipcRenderer.invoke("system:get-cursor-screen-point"),
+  uploadFileToPresignedUrl: (uploadUrl: string, fileBytes: Uint8Array, contentType: string) =>
+    ipcRenderer.invoke("profile-image:upload-to-presigned-url", {
+      uploadUrl,
+      fileBytes,
+      contentType,
+    }),
 
   openExternalUrl: (url: string) => ipcRenderer.invoke("open-external-url", url),
   clearAuthSession: () => ipcRenderer.invoke("auth:clear-session"),

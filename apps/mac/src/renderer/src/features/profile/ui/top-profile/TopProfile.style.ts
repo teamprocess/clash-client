@@ -33,6 +33,13 @@ export const Banner = styled.div<{ $accent?: string; $bgImage?: string }>`
 
 export const Button = styled.div`
   display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.5rem;
+`;
+
+export const ActionButtons = styled.div`
+  display: flex;
   gap: 0.875rem;
 `;
 
@@ -74,6 +81,7 @@ export const ProfileImgWrap = styled.div<{ $accent?: string; $bgImage?: string }
   width: 7.5rem;
   height: 7.5rem;
   border-radius: 50%;
+  overflow: hidden;
   box-sizing: border-box;
   border: ${({ $accent }) => ($accent ? `0.5rem solid ${$accent}` : "none")};
 
@@ -88,7 +96,6 @@ export const ProfileImgWrap = styled.div<{ $accent?: string; $bgImage?: string }
 `;
 
 export const ProfileImg = styled.img.attrs(() => ({
-  src: MypageProfileSrc,
   alt: "프로필",
 }))`
   width: 100%;
@@ -126,3 +133,27 @@ export const ImgBox = styled.div`
   width: 100%;
   height: 100%;
 `;
+
+export const HiddenFileInput = styled.input`
+  display: none;
+`;
+
+export const ActionGuide = styled.p<{ $tone?: "default" | "error" | "success" }>`
+  max-width: 14rem;
+  margin: 0;
+  text-align: right;
+  ${font.caption.medium};
+  color: ${({ $tone, theme }) => {
+    if ($tone === "error") {
+      return palette.red[60];
+    }
+
+    if ($tone === "success") {
+      return palette.green[50];
+    }
+
+    return theme.label.assistive;
+  }};
+`;
+
+export const FallbackProfileImage = MypageProfileSrc;
