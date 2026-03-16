@@ -3,7 +3,6 @@ import * as S from "./TopProfile.style";
 import { TopProfileProps } from "@/features/profile/model/useTopProfile";
 import { useGetMyProfile } from "@/entities/user";
 import { useUploadProfileImageMutation } from "@/entities/profile/api/query/useUserProfileImage.query";
-import { RankTier } from "@/shared/ui";
 
 const ACCEPTED_IMAGE_TYPES = ["image/png", "image/jpeg", "image/webp", "image/gif"];
 

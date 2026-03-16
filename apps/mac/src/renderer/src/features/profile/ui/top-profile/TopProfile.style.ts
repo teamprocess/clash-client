@@ -161,11 +161,4 @@ export const ChangeProfileImageIcon = styled(ChangeProfileImg)`
   width: 100%;
   height: 100%;
   z-index: 2;
-  
-export const TierBox = styled.div`
-  position: absolute;
-  right: 0.5rem;
-  bottom: 0;
-  width: 2rem;
-  transform: translate(15%, 15%);
 `;
