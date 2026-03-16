@@ -3,7 +3,7 @@ import { font } from "@clash/design-tokens/font";
 import { Link } from "react-router-dom";
 import ClashLogo from "@/widgets/topbar/assets/clash-logo.svg";
 import Menu from "@/widgets/topbar/assets/menu.svg";
-import Profile from "@/widgets/topbar/assets/profile.svg";
+import Profile from "@/widgets/topbar/assets/profile.svg?url";
 import EXP from "@/widgets/topbar/assets/exp.svg";
 import Cookie from "@/widgets/topbar/assets/cookie.svg";
 
@@ -66,9 +66,17 @@ export const ProfileButton = styled.button`
   cursor: pointer;
 `;
 
-export const ProfileIcon = styled(Profile)`
+export const ProfileIcon = styled.img.attrs({
+  alt: "프로필 이미지",
+})`
   flex-shrink: 0;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  object-fit: cover;
 `;
+
+export const FallbackProfileIcon = Profile;
 
 export const NameBox = styled.div`
   display: flex;
