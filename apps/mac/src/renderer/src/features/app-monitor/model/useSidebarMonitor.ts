@@ -52,6 +52,7 @@ export const useSidebarMonitor = () => {
       return {
         sessionType: latestActiveSession.sessionType,
         appName: latestActiveSession.task?.name ?? latestActiveSession.subject?.name ?? "일반 기록",
+        appId: null,
         startTime: new Date(latestActiveSession.startedAt),
       };
     }
@@ -59,6 +60,7 @@ export const useSidebarMonitor = () => {
     return {
       sessionType: latestActiveSession.sessionType,
       appName: getMonitoredAppLabel(latestActiveSession.develop.appId),
+      appId: latestActiveSession.develop.appId,
       startTime: new Date(latestActiveSession.startedAt),
     };
   }, [todayResponse]);

@@ -1,7 +1,7 @@
 import type { MonitoredApp } from "../api/recordApi";
 
 const MONITORED_APP_LABELS: Record<MonitoredApp, string> = {
-  VSCODE: "VS Code",
+  VSCODE: "Visual Studio Code",
   WEBSTORM: "WebStorm",
   INTELLIJ_IDEA: "IntelliJ IDEA",
   PYCHARM: "PyCharm",
