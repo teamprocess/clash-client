@@ -10,6 +10,7 @@ import Clion from "./ide-clion.svg";
 import Rider from "./ide-rider.svg";
 import Xcode from "./ide-xcode.svg";
 import AndroidStudio from "./ide-android-studio.svg";
+import Unity from "./unity.svg";
 
 const ideIconStyle = css`
   width: 1rem;
@@ -49,6 +50,9 @@ export const IdeIcons = {
     ${ideIconStyle}
   `,
   ANDROID_STUDIO: styled(AndroidStudio)`
+    ${ideIconStyle}
+  `,
+  UNITY: styled(Unity)`
     ${ideIconStyle}
   `,
 } as const;
