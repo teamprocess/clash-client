@@ -9,7 +9,8 @@ export type MonitoredAppId =
   | "CLION"
   | "RIDER"
   | "ANDROID_STUDIO"
-  | "XCODE";
+  | "XCODE"
+  | "UNITY";
 
 interface MonitoredAppDefinition {
   id: MonitoredAppId;
@@ -23,7 +24,7 @@ export interface MonitoredAppInfo {
 }
 
 const MONITORED_APPS: MonitoredAppDefinition[] = [
-  { id: "VSCODE", name: "VS Code", aliases: ["VS Code", "Code", "Visual Studio Code"] },
+  { id: "VSCODE", name: "Visual Studio Code", aliases: ["VS Code", "Code", "Visual Studio Code"] },
   { id: "WEBSTORM", name: "WebStorm", aliases: ["WebStorm"] },
   {
     id: "INTELLIJ_IDEA",
@@ -42,6 +43,7 @@ const MONITORED_APPS: MonitoredAppDefinition[] = [
   { id: "RIDER", name: "Rider", aliases: ["Rider"] },
   { id: "ANDROID_STUDIO", name: "Android Studio", aliases: ["Android Studio"] },
   { id: "XCODE", name: "Xcode", aliases: ["Xcode"] },
+  { id: "UNITY", name: "Unity", aliases: ["Unity", "Unity Hub"] },
 ];
 
 const normalize = (name: string) => name.toLowerCase().trim().replace(/\s+/g, " ");

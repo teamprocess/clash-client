@@ -30,9 +30,20 @@ export const TimeTracker = styled.div`
 `;
 
 export const SessionNameText = styled.span`
-  display: flex;
   ${font.body.regular}
   color: ${({ theme }) => theme.label.alternative};
+`;
+
+export const SessionNameRow = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+
+  & > svg {
+    width: 1rem;
+    height: 1rem;
+    flex-shrink: 0;
+  }
 `;
 
 export const TimeText = styled.span`
@@ -45,6 +56,7 @@ export const ActiveSessionBox = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  gap: 0.25rem;
 `;
 
 export const ActiveNoneBox = styled.div`
