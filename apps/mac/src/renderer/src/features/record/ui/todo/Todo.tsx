@@ -131,8 +131,10 @@ export const Todo = ({ selectedDate }: TodoProps) => {
                       minWidth="max-content"
                     >
                       <S.MenuList>
-                        <S.MenuItem onClick={() => handleCompleteClick(todoItem.id)}>
-                          완료로 표시
+                        <S.MenuItem
+                          onClick={() => handleCompleteClick(todoItem.id, !todoItem.isCompleted)}
+                        >
+                          {todoItem.isCompleted ? "할 일로 표시" : "완료로 표시"}
                         </S.MenuItem>
                         <S.MenuItem onClick={() => handleEditClick(todoItem.id)}>
                           할 일 수정
