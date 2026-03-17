@@ -28,15 +28,16 @@ export const Battle = () => {
                 <S.Title>배틀</S.Title>
                 <S.SubText>배틀을 생성해 라이벌과 더 치열하게 경쟁할 수 있습니다.</S.SubText>
               </S.BattleTextBox>
-              <S.ArrowBox
+              <Button
+                size="sm"
+                variant="primary"
                 onClick={() => {
-                  setActiveTab("battle-request-list");
+                  setActiveTab("battle-create");
                   battle.openModal();
                 }}
               >
-                배틀 신청 목록
-                <S.DetailArrowIcon />
-              </S.ArrowBox>
+                배틀 신청
+              </Button>
             </S.TitleBox>
 
             <S.GaroLine />
@@ -210,26 +211,23 @@ export const Battle = () => {
 
       {/* 배틀 생성 모달 */}
       {battle.isModalOpen && (
-        <Dialog
-          width={43}
-          height={activeTab === "battle-request-list" ? 25.5 : 30}
-          isOpen={battle.isModalOpen}
-          onClose={battle.closeModal}
-        >
+        <Dialog width={43} height={30} isOpen={battle.isModalOpen} onClose={battle.closeModal}>
           <S.ModalContainer>
-            <SlideSelector
-              value={activeTab}
-              options={[
-                { key: "battle-create", label: "배틀 신청하기" },
-                { key: "battle-request-list", label: "신청 목록" },
-              ]}
-              onChange={setActiveTab}
-            />
+            <S.ModalHeader>
+              <SlideSelector
+                value={activeTab}
+                options={[
+                  { key: "battle-create", label: "배틀 신청하기" },
+                  { key: "battle-request-list", label: "신청 목록" },
+                ]}
+                onChange={setActiveTab}
+              />
 
-            {battle.error && <S.ErrorText>{battle.error}</S.ErrorText>}
+              {battle.error && <S.ErrorText>{battle.error}</S.ErrorText>}
+            </S.ModalHeader>
 
             {activeTab === "battle-create" ? (
-              <>
+              <S.ModalBody>
                 <S.UserChoiceContainer>
                   {battle.battleList?.rivals.map(user => {
                     const isSelected = battle.rivalSelectedId === user.id;
@@ -264,7 +262,6 @@ export const Battle = () => {
                     </S.DateChoiceBox>
                   ))}
                 </S.DateChoiceRow>
-
                 <S.BottomBox>
                   <S.ButtonBox>
                     <Button size="sm" onClick={battle.closeModal}>
@@ -280,45 +277,43 @@ export const Battle = () => {
                     </Button>
                   </S.ButtonBox>
                 </S.BottomBox>
-              </>
+              </S.ModalBody>
             ) : (
               <S.BattleApplyListContainer $hasApply={hasBattleApplyList}>
-                <S.UserChoiceContainer>
-                  {hasBattleApplyList ? (
-                    battleApplyItems.map(applyItem => (
-                      <S.UserChoiceBox key={applyItem.id} $isSelected={false} $isRival>
-                        <S.ProfileContent $height="3rem">
-                          <S.ProfileIcon />
-                          <S.ProfileTagBox>
-                            <S.ProfileName>{applyItem.enemy.name}</S.ProfileName>
-                            <S.ProfileSubText>
-                              {applyItem.startDate} ~ {applyItem.endDate}
-                            </S.ProfileSubText>
-                            <S.ProfileSubText>
-                              {applyItem.isMine ? "내가 보낸 신청" : "상대가 보낸 신청"}
-                            </S.ProfileSubText>
-                          </S.ProfileTagBox>
-                        </S.ProfileContent>
+                {hasBattleApplyList ? (
+                  battleApplyItems.map(applyItem => (
+                    <S.UserChoiceBox key={applyItem.id} $isSelected={false} $isRival>
+                      <S.ProfileContent $height="3rem">
+                        <S.ProfileIcon />
+                        <S.ProfileTagBox>
+                          <S.ProfileName>{applyItem.enemy.name}</S.ProfileName>
+                          <S.ProfileSubText>
+                            {applyItem.startDate} ~ {applyItem.endDate}
+                          </S.ProfileSubText>
+                          <S.ProfileSubText>
+                            {applyItem.isMine ? "내가 보낸 신청" : "상대가 보낸 신청"}
+                          </S.ProfileSubText>
+                        </S.ProfileTagBox>
+                      </S.ProfileContent>
 
-                        <Button
-                          size="sm"
-                          variant="primary"
-                          disabled={!applyItem.isMine}
-                          onClick={() => battle.handleBattleApplyCancel(applyItem.id)}
-                        >
-                          취소
-                        </Button>
-                      </S.UserChoiceBox>
-                    ))
-                  ) : (
-                    <S.EmptyStateBox>
-                      <S.EmptyTitle>라이벌 신청 내역이 없습니다.</S.EmptyTitle>
-                      <S.EmptyDescription>
-                        보낸 신청 또는 받은 신청이 생기면 여기서 확인할 수 있어요.
-                      </S.EmptyDescription>
-                    </S.EmptyStateBox>
-                  )}
-                </S.UserChoiceContainer>
+                      <Button
+                        size="sm"
+                        variant="primary"
+                        disabled={!applyItem.isMine}
+                        onClick={() => battle.handleBattleApplyCancel(applyItem.id)}
+                      >
+                        취소
+                      </Button>
+                    </S.UserChoiceBox>
+                  ))
+                ) : (
+                  <S.EmptyStateBox>
+                    <S.EmptyTitle>라이벌 신청 내역이 없습니다.</S.EmptyTitle>
+                    <S.EmptyDescription>
+                      보낸 신청 또는 받은 신청이 생기면 여기서 확인할 수 있어요.
+                    </S.EmptyDescription>
+                  </S.EmptyStateBox>
+                )}
               </S.BattleApplyListContainer>
             )}
           </S.ModalContainer>
