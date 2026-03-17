@@ -8,6 +8,7 @@ interface RecordProps {
   displayDate: string;
   onPreviousDate: () => void;
   onNextDate: () => void;
+  onResetToToday: () => void;
   canGoNextDate: boolean;
 }
 
@@ -16,6 +17,7 @@ export const Record = ({
   displayDate,
   onPreviousDate,
   onNextDate,
+  onResetToToday,
   canGoNextDate,
 }: RecordProps) => {
   useRecord(selectedDate);
@@ -28,6 +30,7 @@ export const Record = ({
           selectedDate={selectedDate}
           onPreviousDate={onPreviousDate}
           onNextDate={onNextDate}
+          onResetToToday={onResetToToday}
           canGoNextDate={canGoNextDate}
         />
       </S.TopContainer>
