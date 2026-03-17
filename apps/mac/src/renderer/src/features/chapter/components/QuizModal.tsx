@@ -23,6 +23,7 @@ export const QuizModal = ({
   const {
     state,
     error,
+    isPreparing,
     questions,
     currentQuestion,
     selectedChoiceId,
@@ -111,6 +112,7 @@ export const QuizModal = ({
               key={choice.id}
               id={choice.id}
               content={choice.content}
+              disabled={isPreparing}
               selectedId={selectedChoiceId}
               onSelect={handleSelectChoice}
             />
@@ -120,10 +122,10 @@ export const QuizModal = ({
             variant="primary"
             size="lg"
             onClick={handleConfirm}
-            disabled={!selectedChoiceId}
+            disabled={!selectedChoiceId || isPreparing}
             fullWidth
           >
-            선택 완료하기
+            {isPreparing ? "문제 준비 중..." : "선택 완료하기"}
           </Button>
           {error && <S.ErrorMessage>{error}</S.ErrorMessage>}
           {error && (
