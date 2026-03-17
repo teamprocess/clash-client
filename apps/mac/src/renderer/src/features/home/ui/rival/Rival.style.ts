@@ -25,14 +25,6 @@ export const RivalContainer = styled.div`
   min-height: 0;
   border-radius: 1rem;
   background-color: ${({ theme }) => theme.background.normal};
-
-  @media (max-width: 1024px) {
-    padding: 1.25rem;
-  }
-
-  @media (max-width: 48rem) {
-    padding: 1rem;
-  }
 `;
 
 export const TitleBox = styled.div`
@@ -80,21 +72,29 @@ export const DetailArrowIcon = styled(DetailArrow)`
 
 export const RivalBox = styled.div`
   flex: 1;
+  width: 100%;
+  height: 100%;
   min-width: 0;
   min-height: 0;
+
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  grid-auto-rows: minmax(0, 1fr);
+  grid-template-rows: repeat(2, minmax(0, 1fr));
   gap: 1rem;
 
   > * {
+    width: 100%;
+    height: 100%;
     min-width: 0;
     min-height: 0;
   }
 
   @media (max-width: 48rem) {
-    grid-template-columns: minmax(0, 1fr);
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
     grid-auto-rows: minmax(9rem, auto);
+    height: auto;
+    flex: unset;
   }
 `;
 
