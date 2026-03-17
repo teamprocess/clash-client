@@ -48,6 +48,9 @@ export const GroupPage = () => {
               return shiftRecordDate(normalizedCurrentDate ?? todayRecordDate, 1);
             });
           }}
+          onResetToToday={() => {
+            setSelectedDate(undefined);
+          }}
           canGoNextDate
         />
         <GroupSideTab

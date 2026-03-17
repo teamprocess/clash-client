@@ -31,6 +31,9 @@ export const RecordPage = () => {
               return shiftRecordDate(normalizedCurrentDate ?? todayRecordDate, 1);
             });
           }}
+          onResetToToday={() => {
+            setSelectedDate(undefined);
+          }}
           canGoNextDate
         />
         <Todo selectedDate={normalizedSelectedDate} />
