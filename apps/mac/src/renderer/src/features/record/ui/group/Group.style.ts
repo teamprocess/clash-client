@@ -1,7 +1,6 @@
 import styled from "styled-components";
 import { font } from "@clash/design-tokens/font";
 import Fire from "../../assets/fire.svg";
-import More from "../../assets/more.svg";
 import Cry from "../../assets/cry.svg";
 
 export const GroupContainer = styled.div`
@@ -170,12 +169,6 @@ export const MemberActivitySection = styled.div`
   margin-top: 1rem;
 `;
 
-export const MemberActivityTitle = styled.h3`
-  margin: 0;
-  ${font.title2.medium}
-  color: ${({ theme }) => theme.label.alternative};
-`;
-
 export const MemberGrid = styled.div`
   display: grid;
   grid-template-columns: repeat(5, minmax(0, 1fr));
@@ -240,47 +233,4 @@ export const MemberInfoBox = styled.div`
   flex-direction: column;
   align-items: center;
   gap: 0.375rem;
-`;
-
-export const MoreIcon = styled(More)`
-  cursor: pointer;
-`;
-
-export const MoreIconWrapper = styled.div`
-  position: relative;
-`;
-
-export const MenuList = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
-
-export const MenuItem = styled.button`
-  display: block;
-  width: 100%;
-  padding: 0.75rem 1.5rem;
-  text-align: left;
-  background: none;
-  border: none;
-  ${font.body.regular};
-  color: ${({ theme }) => theme.label.normal};
-  cursor: pointer;
-
-  &:hover {
-    background-color: ${({ theme }) => theme.fill.alternative};
-  }
-
-  &:not(:last-child) {
-    border-bottom: 1px solid ${({ theme }) => theme.line.normal};
-  }
-`;
-
-export const IconButton = styled.button`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 0;
 `;
