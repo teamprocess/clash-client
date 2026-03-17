@@ -59,7 +59,7 @@ export const HeaderTitle = styled.h2`
   ${font.title1.medium}
   color: ${({ theme }) => theme.label.strong};
   word-break: keep-all;
-  line-height: 1.35;
+  line-height: 1.25;
 `;
 
 export const HeaderMeta = styled.p`
@@ -319,17 +319,15 @@ export const QuizContent = styled.div`
   margin-block: auto;
 `;
 
-export const QuestionText = styled.p`
-  ${font.title1.medium}
-  color: ${({ theme }) => theme.label.strong};
-  line-height: 1.4;
-  word-break: keep-all;
-  text-align: center;
+export const QuestionText = styled.div`
+  width: 100%;
   max-width: 32rem;
-  span {
-      color: ${({ theme }) => theme.primary.normal};
-      margin-right: 0.2rem;
-  }
+  min-width: 0;
+`;
+
+export const QuestionPrefix = styled.span`
+  ${font.title1.medium}
+  color: ${({ theme }) => theme.primary.normal};
 `;
 
 export const OptionList = styled.div`
@@ -338,6 +336,36 @@ export const OptionList = styled.div`
   gap: 0.875rem;
   width: 100%;
   align-items: center;
+`;
+
+export const OptionsSection = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
+`;
+
+export const OptionsDivider = styled.div`
+  display: flex;
+  align-items: center;
+  width: min(100%, 32rem);
+  gap: 0.85rem;
+  align-self: center;
+
+  &::before,
+  &::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: ${subtleBorder};
+  }
+`;
+
+export const OptionsDividerLabel = styled.span`
+  ${font.caption.medium}
+  color: ${({ theme }) => theme.label.assistive};
+  letter-spacing: 0.02em;
+  white-space: nowrap;
 `;
 
 export const ResultCard = styled(QuizCard)`
@@ -379,15 +407,8 @@ export const ExplanationBox = styled.div`
   background-color: ${neutralSurface};
   border: 1px solid ${subtleBorder};
   align-self: center;
-`;
-
-export const ExplanationText = styled.p`
-  ${font.body.regular}
-  color: ${({ theme }) => theme.label.normal};
-  line-height: 1.65;
-  white-space: pre-wrap;
-  word-break: keep-all;
-  text-align: center;
+  max-height: 14rem;
+  overflow: auto;
 `;
 
 export const ResultFooterActions = styled.div`

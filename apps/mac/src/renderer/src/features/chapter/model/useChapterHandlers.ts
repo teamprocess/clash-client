@@ -10,9 +10,11 @@ type UseChapterHandlersParams = {
   stages: Stage[];
   setStageOverrides: Dispatch<SetStateAction<Record<number, StageOverride>>>;
   currentStageId: number;
+  currentStageTitle: string;
   setCurrentStageId: Dispatch<SetStateAction<number>>;
   currentStageMissions: Mission[];
   setCurrentMission: Dispatch<SetStateAction<Mission | null>>;
+  setCurrentMissionStageTitle: Dispatch<SetStateAction<string | null>>;
   setMissionModalOpen: Dispatch<SetStateAction<boolean>>;
 };
 
@@ -20,9 +22,11 @@ export const useChapterHandlers = ({
   stages,
   setStageOverrides,
   currentStageId,
+  currentStageTitle,
   setCurrentStageId,
   currentStageMissions,
   setCurrentMission,
+  setCurrentMissionStageTitle,
   setMissionModalOpen,
 }: UseChapterHandlersParams) => {
   const queryClient = useQueryClient();
@@ -30,15 +34,18 @@ export const useChapterHandlers = ({
 
   const openMission = (mission: Mission) => {
     setMissionModalOpen(true);
+    setCurrentMissionStageTitle(currentStageTitle);
     setCurrentMission(mission);
   };
 
   const handleCloseQuizModal = () => {
     setCurrentMission(null);
+    setCurrentMissionStageTitle(null);
   };
 
   const handleCloseMissionPanel = () => {
     setCurrentMission(null);
+    setCurrentMissionStageTitle(null);
     setMissionModalOpen(false);
   };
 
@@ -117,6 +124,7 @@ export const useChapterHandlers = ({
     if (!stage || stage.status === "locked") return;
 
     setCurrentStageId(stageId);
+    setCurrentMissionStageTitle(null);
     setMissionModalOpen(true);
   };
 

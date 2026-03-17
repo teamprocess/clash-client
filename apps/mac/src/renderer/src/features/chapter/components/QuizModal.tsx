@@ -3,6 +3,7 @@ import { Button } from "@/shared/ui/button";
 import { Dialog } from "@/shared/ui";
 import type { Mission } from "@/features/chapter/model/chapter.types";
 import { QuizResult } from "@/features/chapter/components/QuizResult";
+import { MarkdownCodeContent } from "@/shared/ui/markdown-code-content/MarkdownCodeContent";
 import { useQuiz } from "../model/useQuiz";
 import { AnswerOptionButton } from "../ui/AnswerOptionButton";
 
@@ -22,6 +23,7 @@ export const QuizModal = ({
   const {
     state,
     error,
+    isPreparing,
     questions,
     currentQuestion,
     selectedChoiceId,
@@ -94,8 +96,11 @@ export const QuizModal = ({
 
         <S.QuestionWrapper>
           <S.QuestionTitle>
-            <S.QuestionPrefix>Q. </S.QuestionPrefix>
-            {currentQuestion.content}
+            <MarkdownCodeContent
+              content={currentQuestion.content}
+              variant="question"
+              prefix={<S.QuestionPrefix>Q.</S.QuestionPrefix>}
+            />
           </S.QuestionTitle>
         </S.QuestionWrapper>
       </S.ModalTop>
@@ -107,6 +112,7 @@ export const QuizModal = ({
               key={choice.id}
               id={choice.id}
               content={choice.content}
+              disabled={isPreparing}
               selectedId={selectedChoiceId}
               onSelect={handleSelectChoice}
             />
@@ -116,10 +122,10 @@ export const QuizModal = ({
             variant="primary"
             size="lg"
             onClick={handleConfirm}
-            disabled={!selectedChoiceId}
+            disabled={!selectedChoiceId || isPreparing}
             fullWidth
           >
-            선택 완료하기
+            {isPreparing ? "문제 준비 중..." : "선택 완료하기"}
           </Button>
           {error && <S.ErrorMessage>{error}</S.ErrorMessage>}
           {error && (

@@ -210,6 +210,7 @@ export const ChapterPage = () => {
           isOpen={view.missionModalOpen}
           currentStage={domain.currentStage}
           currentMission={view.currentMission}
+          currentMissionStageTitle={view.currentMissionStageTitle}
           description={
             domain.currentStageDetailsError
               ? "챕터 설명을 불러오지 못했습니다. 잠시 후 다시 확인해주세요."
