@@ -22,16 +22,23 @@ export const Timer = ({
 }: TimerProps) => {
   const { activeSessionType, stop } = useRecordStore();
   const { totalStudyTime } = useLiveRecordStudyTime(selectedDate);
+  const isTodaySelected = selectedDate === undefined;
   const isPreviousDateEnabled = typeof onPreviousDate === "function";
   const isNextDateEnabled = typeof onNextDate === "function" && canGoNextDate;
+  const isStopButtonDisabled = !isTodaySelected;
   const stopButton =
     activeSessionType !== null ? (
       <S.PlayButton
+        type="button"
+        disabled={isStopButtonDisabled}
         onClick={() => {
+          if (isStopButtonDisabled) {
+            return;
+          }
           void stop();
         }}
       >
-        <S.PauseIcon />
+        <S.PauseIcon $disabled={isStopButtonDisabled} />
       </S.PlayButton>
     ) : null;
 
@@ -46,7 +53,7 @@ export const Timer = ({
         >
           <S.ArrowIcon rotate="LEFT" $disabled={!isPreviousDateEnabled} />
         </S.ArrowButton>
-        <S.Date>{date}</S.Date>
+        <S.Date $muted={!isTodaySelected}>{date}</S.Date>
         <S.ArrowButton
           type="button"
           aria-label="다음 날짜 조회"
