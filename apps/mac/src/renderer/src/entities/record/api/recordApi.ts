@@ -39,7 +39,8 @@ export type MonitoredApp =
   | "CLION"
   | "RIDER"
   | "ANDROID_STUDIO"
-  | "XCODE";
+  | "XCODE"
+  | "UNITY";
 
 export interface TaskRecordSession {
   id: number;
