@@ -19,6 +19,7 @@ interface MissionContainerProps {
   isOpen: boolean;
   currentStage: CurrentStageMeta;
   currentMission: Mission | null;
+  currentMissionStageTitle: string | null;
   description: string | null;
   isLoading: boolean;
   isSolveDisabled: boolean;
@@ -286,6 +287,7 @@ export const MissionContainer = ({
   isOpen,
   currentStage,
   currentMission,
+  currentMissionStageTitle,
   description,
   isLoading,
   isSolveDisabled,
@@ -306,6 +308,9 @@ export const MissionContainer = ({
       }
     };
   }, []);
+  const displayStageTitle = currentMission
+    ? currentMissionStageTitle ?? currentStage.title
+    : currentStage.title;
 
   const handleRequestClose = () => {
     if (isClosing) return;
@@ -360,7 +365,9 @@ export const MissionContainer = ({
     >
       <S.PanelContent>
         <S.PanelHeader>
-          <S.HeaderMain>{!currentMission && <S.HeaderTitle>{currentStage.title}</S.HeaderTitle>}</S.HeaderMain>
+          <S.HeaderMain>
+            <S.HeaderTitle>{displayStageTitle}</S.HeaderTitle>
+          </S.HeaderMain>
 
           <S.HeaderActions>
             <S.IconButton type="button" onClick={handleRequestClose} aria-label="챕터 패널 닫기">
@@ -372,7 +379,7 @@ export const MissionContainer = ({
         {currentMission ? (
           <QuizPanelContent
             mission={currentMission}
-            stageTitle={currentStage.title}
+            stageTitle={displayStageTitle}
             onBackToOverview={onBackToOverview}
             onMissionComplete={onMissionComplete}
           />
