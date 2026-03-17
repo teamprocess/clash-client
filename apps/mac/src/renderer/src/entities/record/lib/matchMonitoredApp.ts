@@ -1,7 +1,7 @@
 import type { MonitoredApp } from "../api/recordApi";
 
 const MONITORED_APP_LABELS: Record<MonitoredApp, string> = {
-  VSCODE: "VS Code",
+  VSCODE: "Visual Studio Code",
   WEBSTORM: "WebStorm",
   INTELLIJ_IDEA: "IntelliJ IDEA",
   PYCHARM: "PyCharm",
@@ -12,6 +12,7 @@ const MONITORED_APP_LABELS: Record<MonitoredApp, string> = {
   RIDER: "Rider",
   ANDROID_STUDIO: "Android Studio",
   XCODE: "Xcode",
+  UNITY: "Unity",
 };
 
 const MONITORED_APP_ALIASES: Record<MonitoredApp, string[]> = {
@@ -26,6 +27,7 @@ const MONITORED_APP_ALIASES: Record<MonitoredApp, string[]> = {
   RIDER: ["Rider"],
   ANDROID_STUDIO: ["Android Studio"],
   XCODE: ["Xcode"],
+  UNITY: ["Unity"],
 };
 
 const normalize = (value: string) => value.toLowerCase().replace(/[^a-z0-9]/g, "");
