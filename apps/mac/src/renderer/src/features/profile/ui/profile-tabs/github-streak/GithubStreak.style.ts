@@ -22,7 +22,8 @@ export const GrassBox = styled.div`
   max-width: 100%;
   overflow-x: auto;
   scrollbar-width: none;
-  padding: 0.25rem 0;
+  padding: 0.25rem 0.35rem;
+  box-sizing: border-box;
 
   &::-webkit-scrollbar {
     display: none;
@@ -63,9 +64,8 @@ export const Grass = styled.div<{
     return GRASS_COLORS[$level];
   }};
 
-  outline: ${({ $selected, $hidden }) =>
-    !$hidden && $selected ? "2px solid rgba(61, 205, 95, 0.9)" : "none"};
-  outline-offset: 2px;
+  box-shadow: ${({ $selected, $hidden }) =>
+    !$hidden && $selected ? "inset 0 0 0 2px rgba(61, 205, 95, 0.9)" : "none"};
 
   ${({ $hidden }) =>
     $hidden &&

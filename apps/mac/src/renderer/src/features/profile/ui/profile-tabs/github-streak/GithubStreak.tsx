@@ -1,16 +1,26 @@
 import { useEffect, useRef } from "react";
 import * as S from "./GithubStreak.style";
-import { useProfileGithubStreak } from "@/features/profile/model/useProfileTabs";
+import type { Level } from "@/features/profile/model/useProfileTabs";
 
 interface GithubStreakProps {
-  onSelectDate?: (date: string, count: number) => void;
+  paddedDaysForView: Array<{
+    date: string;
+    detailedInfo: number;
+    colorRatio: number;
+    isPadding?: boolean;
+  }>;
+  getLevel: (count: number, ratio?: number) => Level;
+  selectedId: string | number | null;
+  onGrassClick: (date: string) => void;
 }
 
-export const GithubStreak = ({ onSelectDate, ...streakProps }: GithubStreakProps) => {
+export const GithubStreak = ({
+  paddedDaysForView,
+  getLevel,
+  selectedId,
+  onGrassClick,
+}: GithubStreakProps) => {
   const grassRef = useRef<HTMLDivElement>(null);
-
-  const { paddedDaysForView, getLevel, selectedId, selectedDay, handleGrassClick } =
-    useProfileGithubStreak(streakProps);
 
   useEffect(() => {
     const el = grassRef.current;
@@ -18,13 +28,6 @@ export const GithubStreak = ({ onSelectDate, ...streakProps }: GithubStreakProps
 
     el.scrollLeft = el.scrollWidth - el.clientWidth;
   }, [paddedDaysForView]);
-
-  useEffect(() => {
-    const date = typeof selectedDay?.id === "string" ? selectedDay.id : "";
-    const count = selectedDay?.count ?? 0;
-
-    onSelectDate?.(date, count);
-  }, [onSelectDate, selectedDay]);
 
   return (
     <S.ActiveContainer>
@@ -45,7 +48,7 @@ export const GithubStreak = ({ onSelectDate, ...streakProps }: GithubStreakProps
                 $hidden={isPadding}
                 onClick={() => {
                   if (isPadding) return;
-                  handleGrassClick(day.date);
+                  onGrassClick(day.date);
                 }}
               />
             );
