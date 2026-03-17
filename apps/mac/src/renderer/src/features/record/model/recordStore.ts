@@ -100,6 +100,26 @@ const updateSubjectList = (
   updater: (subject: Subject) => Subject
 ) => subjects.map(subject => (subject.id === subjectId ? updater(subject) : subject));
 
+const applyTaskCompletionState = (
+  subjects: Subject[],
+  tasks: Task[],
+  taskId: number,
+  subjectId: number | null,
+  completed: boolean
+) => ({
+  tasks: tasks.map(task => (task.id === taskId ? { ...task, completed } : task)),
+  subjects:
+    subjectId === null
+      ? subjects
+      : updateSubjectList(subjects, subjectId, subject => ({
+          ...subject,
+          tasks: updateNestedSubjectTasks(subject.tasks, taskId, nestedTask => ({
+            ...nestedTask,
+            completed,
+          })),
+        })),
+});
+
 let stopInFlight: Promise<boolean> | null = null;
 
 export const useRecordStore = create<RecordStore>((set, get) => ({
@@ -457,6 +477,7 @@ export const useRecordStore = create<RecordStore>((set, get) => ({
 
   updateTaskCompletion: async (taskId, completed) => {
     const task = get().tasks.find(item => item.id === taskId);
+    let previousState: Pick<RecordStore, "subjects" | "tasks"> | null = null;
 
     if (!task) {
       return false;
@@ -474,34 +495,53 @@ export const useRecordStore = create<RecordStore>((set, get) => ({
         }
       }
 
+      previousState = {
+        subjects: get().subjects,
+        tasks: get().tasks,
+      };
+
+      set(state =>
+        applyTaskCompletionState(state.subjects, state.tasks, taskId, task.subjectId, completed)
+      );
+
       const response = await recordApi.updateTaskCompletion(taskId, { completed });
       if (!response.success) {
+        set(previousState);
+        await Promise.all([
+          queryClient.invalidateQueries({ queryKey: recordQueryKeys.subjects }),
+          queryClient.invalidateQueries({ queryKey: recordQueryKeys.tasks }),
+        ]);
         return false;
       }
 
-      set(state => ({
-        tasks: state.tasks.map(item =>
-          item.id === taskId ? { ...item, completed: response.data?.completed ?? completed } : item
-        ),
-        subjects:
-          task.subjectId === null
-            ? state.subjects
-            : updateSubjectList(state.subjects, task.subjectId, subject => ({
-                ...subject,
-                tasks: updateNestedSubjectTasks(subject.tasks, taskId, nestedTask => ({
-                  ...nestedTask,
-                  completed: response.data?.completed ?? completed,
-                })),
-              })),
-      }));
+      const resolvedCompleted = response.data?.completed ?? completed;
+      if (resolvedCompleted !== completed) {
+        set(state =>
+          applyTaskCompletionState(
+            state.subjects,
+            state.tasks,
+            taskId,
+            task.subjectId,
+            resolvedCompleted
+          )
+        );
+      }
+
       await Promise.all([
         queryClient.invalidateQueries({ queryKey: recordQueryKeys.subjects }),
         queryClient.invalidateQueries({ queryKey: recordQueryKeys.tasks }),
       ]);
       return true;
     } catch (error: unknown) {
+      if (previousState) {
+        set(previousState);
+      }
       const errorMessage = getErrorMessage(error, "할 일 완료 상태 변경에 실패했습니다.");
       console.error("할 일 완료 상태 변경 실패:", errorMessage, error);
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: recordQueryKeys.subjects }),
+        queryClient.invalidateQueries({ queryKey: recordQueryKeys.tasks }),
+      ]);
       return false;
     }
   },

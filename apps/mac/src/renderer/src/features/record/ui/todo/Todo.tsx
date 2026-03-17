@@ -16,6 +16,7 @@ export const Todo = ({ selectedDate }: TodoProps) => {
     todoNameInputMaxLength,
     todoNameErrorMessage,
     isTodoNameInvalid,
+    isSavingTodo,
     shouldShowTodoNameTooltip,
     selectedParentTaskId,
     parentTaskOptions,
@@ -49,6 +50,7 @@ export const Todo = ({ selectedDate }: TodoProps) => {
         placeholder="할 일 제목"
         value={todoName}
         maxLength={todoNameInputMaxLength}
+        disabled={isSavingTodo}
         aria-invalid={isTodoNameInvalid}
         onChange={handleTodoNameChange}
         onKeyDown={handleTodoNameKeyDown}
@@ -83,6 +85,7 @@ export const Todo = ({ selectedDate }: TodoProps) => {
                       <S.ActionIconButton
                         type="button"
                         aria-label="할 일 추가 취소"
+                        disabled={isSavingTodo}
                         onClick={handleCancelEdit}
                       >
                         <S.CancelIcon />
@@ -90,6 +93,7 @@ export const Todo = ({ selectedDate }: TodoProps) => {
                       <S.ActionIconButton
                         type="button"
                         aria-label="할 일 저장"
+                        disabled={isSavingTodo}
                         onClick={handleSaveClick}
                       >
                         <S.SaveIcon />
@@ -131,8 +135,10 @@ export const Todo = ({ selectedDate }: TodoProps) => {
                       minWidth="max-content"
                     >
                       <S.MenuList>
-                        <S.MenuItem onClick={() => handleCompleteClick(todoItem.id)}>
-                          완료로 표시
+                        <S.MenuItem
+                          onClick={() => handleCompleteClick(todoItem.id, !todoItem.isCompleted)}
+                        >
+                          {todoItem.isCompleted ? "할 일로 표시" : "완료로 표시"}
                         </S.MenuItem>
                         <S.MenuItem onClick={() => handleEditClick(todoItem.id)}>
                           할 일 수정
@@ -162,6 +168,7 @@ export const Todo = ({ selectedDate }: TodoProps) => {
                   <S.ActionIconButton
                     type="button"
                     aria-label="할 일 추가 취소"
+                    disabled={isSavingTodo}
                     onClick={handleCancelEdit}
                   >
                     <S.CancelIcon />
@@ -169,6 +176,7 @@ export const Todo = ({ selectedDate }: TodoProps) => {
                   <S.ActionIconButton
                     type="button"
                     aria-label="할 일 저장"
+                    disabled={isSavingTodo}
                     onClick={handleSaveClick}
                   >
                     <S.SaveIcon />
@@ -177,7 +185,9 @@ export const Todo = ({ selectedDate }: TodoProps) => {
               </S.TodoRightBox>
             </S.TodoItem>
           )}
-          <S.AddTodoButton onClick={handleAddClick}>+ 할 일 추가</S.AddTodoButton>
+          <S.AddTodoButton disabled={isSavingTodo} onClick={handleAddClick}>
+            + 할 일 추가
+          </S.AddTodoButton>
         </S.TodoBox>
       </S.TodoList>
     </S.TodoContainer>
