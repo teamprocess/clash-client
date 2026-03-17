@@ -151,7 +151,7 @@ export const MenuItem = styled.button`
   display: block;
   width: auto;
   padding: 0.75rem 1.5rem;
-  text-align: left;
+  text-align: center;
   background: none;
   border: none;
   ${font.body.regular};

@@ -179,8 +179,8 @@ export const useTodoList = (selectedDate?: string) => {
     await startTask(todoId);
   };
 
-  const handleCompleteClick = async (todoId: number) => {
-    const completed = await updateTaskCompletion(todoId, true);
+  const handleCompleteClick = async (todoId: number, nextCompleted: boolean) => {
+    const completed = await updateTaskCompletion(todoId, nextCompleted);
     if (completed) {
       handleCloseMenu();
     }
