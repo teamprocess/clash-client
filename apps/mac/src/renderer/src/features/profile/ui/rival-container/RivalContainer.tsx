@@ -19,7 +19,7 @@ export const RivalContainer = () => {
           activeTime={rivalUser.activeTime}
           usingApp={rivalUser.usingApp}
           isStudying={rivalUser.isStudying}
-          profileSrc={S.profileSrcMap["default"]}
+          profileSrc={rivalUser.profileImage}
           username={rivalUser.username}
           tier={rivalUser.tier}
         />
