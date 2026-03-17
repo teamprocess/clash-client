@@ -24,5 +24,7 @@ export const AnswerOption = styled.button<{ $selected: boolean }>`
 
   &:disabled {
     color: ${palette.neutral[70]};
+    cursor: not-allowed;
+    opacity: 0.7;
   }
 `;

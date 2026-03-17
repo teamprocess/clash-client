@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useEffectEvent, useRef, useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import type { Mission } from "@/features/chapter/model/chapter.types";
 import { chapterApi } from "@/entities/roadmap/chapter/api/chapterApi";
@@ -17,19 +17,16 @@ type QuizState = {
   isPassed: boolean | null;
 };
 
-const createInitialState = (mission: Mission): QuizState => {
-  const maxIndex = Math.max(mission.questions.length - 1, 0);
-  const resolvedIndex = Math.min(Math.max(mission.currentQuestionIndex, 0), maxIndex);
-
+const createInitialState = (): QuizState => {
   return {
-    currentIndex: resolvedIndex,
+    currentIndex: 0,
     answers: {},
-    correctCount: mission.correctCount,
-    view: mission.completed ? "final" : "quiz",
+    correctCount: 0,
+    view: "quiz",
     lastResult: null,
     explanation: "",
     isSubmitting: false,
-    isPassed: mission.completed ? true : null,
+    isPassed: null,
   };
 };
 
@@ -41,14 +38,17 @@ type UseQuizParams = {
 
 export const useQuiz = ({ mission, onMissionComplete, onClose }: UseQuizParams) => {
   const queryClient = useQueryClient();
-  const [state, setState] = useState<QuizState>(() => createInitialState(mission));
+  const [state, setState] = useState<QuizState>(() => createInitialState());
   const [error, setError] = useState<string | null>(null);
+  const [isPreparing, setIsPreparing] = useState(!mission.completed);
 
   const isClosingRef = useRef(false);
   const isRequestingChapterResultRef = useRef(false);
   const chapterResultDoneRef = useRef(false);
   const isResettingChapterRef = useRef(false);
+  const isMountedRef = useRef(true);
 
+  const isReviewMode = mission.completed;
   const questions = mission.questions;
   const currentQuestion = questions[state.currentIndex];
   const selectedChoiceId = state.answers[state.currentIndex];
@@ -64,6 +64,87 @@ export const useQuiz = ({ mission, onMissionComplete, onClose }: UseQuizParams) 
       old => (old ? updater(old) : old)
     );
   };
+
+  const applyResetToCache = () => {
+    syncChapterCache(old => ({
+      ...old,
+      currentQuestionIndex: 0,
+      correctCount: 0,
+      isCleared: false,
+    }));
+  };
+
+  const resetState = () => {
+    chapterResultDoneRef.current = false;
+    setState(createInitialState());
+    setError(null);
+  };
+
+  const performResetMission = async () => {
+    if (isReviewMode) {
+      if (isMountedRef.current) {
+        resetState();
+        setIsPreparing(false);
+      }
+      return true;
+    }
+
+    if (isResettingChapterRef.current) return false;
+    isResettingChapterRef.current = true;
+
+    if (isMountedRef.current) {
+      setIsPreparing(true);
+    }
+
+    try {
+      const response = await chapterApi.resetChapter({ chapterId: mission.id });
+
+      if (!response.success) {
+        if (isMountedRef.current) {
+          setError(response.message || "챕터 초기화에 실패했습니다.");
+        }
+        return false;
+      }
+
+      applyResetToCache();
+
+      if (isMountedRef.current) {
+        resetState();
+      }
+
+      return true;
+    } catch (error: unknown) {
+      if (isMountedRef.current) {
+        setError(getErrorMessage(error, "챕터 초기화에 실패했습니다."));
+      }
+      return false;
+    } finally {
+      isResettingChapterRef.current = false;
+
+      if (isMountedRef.current) {
+        setIsPreparing(false);
+      }
+    }
+  };
+
+  const resetMissionOnOpen = useEffectEvent(async () => {
+    await performResetMission();
+  });
+
+  useEffect(() => {
+    isMountedRef.current = true;
+    resetState();
+
+    if (isReviewMode) {
+      setIsPreparing(false);
+    } else {
+      void resetMissionOnOpen();
+    }
+
+    return () => {
+      isMountedRef.current = false;
+    };
+  }, [isReviewMode, mission.id]);
 
   const requestChapterResult = async (fallbackCorrectCount?: number) => {
     if (chapterResultDoneRef.current) return;
@@ -127,6 +208,8 @@ export const useQuiz = ({ mission, onMissionComplete, onClose }: UseQuizParams) 
   };
 
   const handleSelectChoice = (choiceId: number) => {
+    if (isReviewMode) return;
+
     setState(prev => ({
       ...prev,
       answers: {
@@ -137,7 +220,15 @@ export const useQuiz = ({ mission, onMissionComplete, onClose }: UseQuizParams) 
   };
 
   const handleConfirm = async () => {
-    if (!currentQuestion || selectedChoiceId == null || state.isSubmitting) return;
+    if (
+      isReviewMode ||
+      !currentQuestion ||
+      selectedChoiceId == null ||
+      state.isSubmitting ||
+      isPreparing
+    ) {
+      return;
+    }
 
     setState(prev => ({ ...prev, isSubmitting: true }));
 
@@ -158,14 +249,6 @@ export const useQuiz = ({ mission, onMissionComplete, onClose }: UseQuizParams) 
       const result = response.data;
       const isLastQuestion = state.currentIndex === questions.length - 1;
       const nextCorrectCount = result.isCorrect ? state.correctCount + 1 : state.correctCount;
-      const nextIndex = Math.min(result.currentProgress, Math.max(questions.length - 1, 0));
-
-      syncChapterCache(old => ({
-        ...old,
-        currentQuestionIndex: nextIndex,
-        correctCount: nextCorrectCount,
-        isCleared: result.isChapterCleared,
-      }));
 
       setState(prev => ({
         ...prev,
@@ -201,38 +284,10 @@ export const useQuiz = ({ mission, onMissionComplete, onClose }: UseQuizParams) 
     });
   };
 
-  const resetState = () => {
-    chapterResultDoneRef.current = false;
-    setState(
-      createInitialState({ ...mission, completed: false, currentQuestionIndex: 0, correctCount: 0 })
-    );
-    setError(null);
-  };
-
   const handleRestart = async () => {
-    if (isResettingChapterRef.current) return;
-    isResettingChapterRef.current = true;
+    if (isReviewMode) return;
 
-    try {
-      const response = await chapterApi.resetChapter({ chapterId: mission.id });
-      if (!response.success) {
-        setError(response.message || "챕터 초기화에 실패했습니다.");
-        return;
-      }
-
-      syncChapterCache(old => ({
-        ...old,
-        currentQuestionIndex: 0,
-        correctCount: 0,
-        isCleared: false,
-      }));
-
-      resetState();
-    } catch (error: unknown) {
-      setError(getErrorMessage(error, "챕터 초기화에 실패했습니다."));
-    } finally {
-      isResettingChapterRef.current = false;
-    }
+    await performResetMission();
   };
 
   const handleClose = async () => {
@@ -257,6 +312,8 @@ export const useQuiz = ({ mission, onMissionComplete, onClose }: UseQuizParams) 
   return {
     state,
     error,
+    isPreparing,
+    isReviewMode,
     questions,
     currentQuestion,
     selectedChoiceId,

@@ -1,5 +1,6 @@
 import * as S from "./QuizModal.style";
 import { Button } from "@/shared/ui/button";
+import { MarkdownCodeContent } from "@/shared/ui/markdown-code-content/MarkdownCodeContent";
 
 interface QuizResultFinalProps {
   isFinal: true;
@@ -99,7 +100,9 @@ export const QuizResult = (props: QuizResultProps) => {
           </S.ResultTitle>
         </S.ResultWrapper>
 
-        <S.CommentaryBox>{explanation}</S.CommentaryBox>
+        <S.CommentaryBox>
+          <MarkdownCodeContent content={explanation} variant="body" />
+        </S.CommentaryBox>
 
         <Button variant="primary" size="lg" onClick={onNext} fullWidth>
           다음

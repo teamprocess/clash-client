@@ -218,6 +218,7 @@ export const RankingUserProfile = styled.img`
   width: 1.8rem;
   height: 1.8rem;
   border-radius: 50%;
+  object-fit: cover;
 `;
 
 export const RankingUsername = styled.span`
