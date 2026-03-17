@@ -57,6 +57,5 @@ export interface GroupMember {
 }
 
 export interface GetGroupActivityResponse {
-  pagination: Pagination;
   members: GroupMember[];
 }
