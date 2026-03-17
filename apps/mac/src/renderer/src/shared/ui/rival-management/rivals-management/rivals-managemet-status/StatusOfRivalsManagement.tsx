@@ -15,18 +15,15 @@ const STATUS_UI: Record<
   {
     title: string;
     variant: ButtonVariant;
-    disabled?: boolean;
   }
 > = {
   ACCEPTED: {
     title: "수락됨",
     variant: "accept",
-    disabled: true,
   },
   REJECTED: {
     title: "거절됨",
     variant: "primary",
-    disabled: true,
   },
   PENDING: {
     title: "대기중",
@@ -38,21 +35,11 @@ const STATUS_UI: Record<
   },
 };
 
-export const RivalLinkingStatusButton = ({
-  status,
-  onClick,
-  className,
-}: ButtonOfRivalsManagementProps) => {
+export const RivalLinkingStatusButton = ({ status, className }: ButtonOfRivalsManagementProps) => {
   const ui = STATUS_UI[status];
 
   return (
-    <S.RivalStatusButton
-      type="button"
-      $variant={ui.variant}
-      disabled={ui.disabled}
-      onClick={ui.disabled ? undefined : onClick}
-      className={className}
-    >
+    <S.RivalStatusButton type="button" $variant={ui.variant} className={className}>
       {ui.title}
     </S.RivalStatusButton>
   );
