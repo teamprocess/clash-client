@@ -1,6 +1,8 @@
 import * as S from "./Sidebar.style";
 import { useLocation } from "react-router-dom";
+import type { MonitoredApp } from "@/entities/record";
 import { useSidebarMonitor } from "@/features/app-monitor";
+import { IdeIcons } from "@/shared/ui/assets/ide-img";
 
 interface SidebarProps {
   isOpen: boolean;
@@ -17,6 +19,11 @@ const menuItems = [
 export const Sidebar = ({ isOpen }: SidebarProps) => {
   const location = useLocation();
   const { isElectron, activeSession, displayTime } = useSidebarMonitor();
+  const hasIdeIcon = (appId: MonitoredApp | null): appId is keyof typeof IdeIcons => {
+    return !!appId && appId in IdeIcons;
+  };
+  const activeSessionAppId = activeSession?.appId ?? null;
+  const SessionIdeIcon = hasIdeIcon(activeSessionAppId) ? IdeIcons[activeSessionAppId] : null;
 
   return (
     <S.SidebarContainer $isOpen={isOpen}>
@@ -29,7 +36,10 @@ export const Sidebar = ({ isOpen }: SidebarProps) => {
           </S.ActiveNoneBox>
         ) : activeSession ? (
           <S.ActiveSessionBox>
-            <S.SessionNameText>{activeSession.appName}</S.SessionNameText>
+            <S.SessionNameRow>
+              {SessionIdeIcon ? <SessionIdeIcon /> : null}
+              <S.SessionNameText>{activeSession.appName}</S.SessionNameText>
+            </S.SessionNameRow>
             <S.TimeText>{displayTime}</S.TimeText>
           </S.ActiveSessionBox>
         ) : (

@@ -23,7 +23,7 @@ export interface MonitoredAppInfo {
 }
 
 const MONITORED_APPS: MonitoredAppDefinition[] = [
-  { id: "VSCODE", name: "VS Code", aliases: ["VS Code", "Code", "Visual Studio Code"] },
+  { id: "VSCODE", name: "Visual Studio Code", aliases: ["VS Code", "Code", "Visual Studio Code"] },
   { id: "WEBSTORM", name: "WebStorm", aliases: ["WebStorm"] },
   {
     id: "INTELLIJ_IDEA",
