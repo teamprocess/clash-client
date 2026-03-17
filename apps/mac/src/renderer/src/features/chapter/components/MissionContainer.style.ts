@@ -59,7 +59,7 @@ export const HeaderTitle = styled.h2`
   ${font.title1.medium}
   color: ${({ theme }) => theme.label.strong};
   word-break: keep-all;
-  line-height: 1.35;
+  line-height: 1.25;
 `;
 
 export const HeaderMeta = styled.p`
