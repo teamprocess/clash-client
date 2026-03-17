@@ -360,17 +360,29 @@ export const DefaultBattleText = styled.p`
 export const BattleApplyListContainer = styled.div<{ $hasApply: boolean }>`
   ${flexCol};
   width: 100%;
-  height: 100%;
+  flex: 1;
+  min-height: 0;
   align-items: ${({ $hasApply }) => ($hasApply ? "stretch" : "center")};
   justify-content: ${({ $hasApply }) => ($hasApply ? "flex-start" : "center")};
+  overflow-y: auto;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `;
 
 export const UserChoiceContainer = styled.div`
   ${flexCol};
   width: 100%;
-  height: 16.25rem;
+  flex: 1;
+  min-height: 0;
   overflow-y: auto;
   scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `;
 
 export const UserChoiceBox = styled.div<{ $isSelected?: boolean; $isRival?: boolean }>`
@@ -445,7 +457,22 @@ export const ModalContainer = styled.div`
   ${flexCol};
   height: 100%;
   padding: 0.625rem;
-  align-items: flex-end;
+  min-height: 0;
+  gap: 1rem;
+  align-items: stretch;
+  justify-content: flex-start;
+`;
+
+export const ModalHeader = styled.div`
+  ${flexCol};
+  width: 100%;
+`;
+
+export const ModalBody = styled.div`
+  ${flexCol};
+  flex: 1;
+  min-height: 0;
+  width: 100%;
   justify-content: space-between;
 `;
 
@@ -470,7 +497,6 @@ export const DateChoiceBox = styled.button<{ $active: boolean }>`
   transition: 0.1s ease-in-out;
 
   &:hover {
-    scale: 1.1;
     background-color: ${({ theme }) => theme.primary.normal};
   }
 `;
@@ -496,7 +522,6 @@ export const EmptyStateBox = styled.div`
   justify-content: center;
   width: 100%;
   height: 100%;
-  margin-top: 2rem;
   border: 1px dashed ${({ theme }) => theme.line.alternative};
   border-radius: 0.75rem;
   background-color: ${({ theme }) => theme.fill.normal};
