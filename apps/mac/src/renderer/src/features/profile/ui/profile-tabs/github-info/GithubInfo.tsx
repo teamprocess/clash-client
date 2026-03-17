@@ -13,6 +13,8 @@ export type GithubInfoProps = {
   dailyAddedLines: number;
   dailyDeletedLines: number;
   hasDetail?: boolean;
+  emptyTitle?: string;
+  emptyDescription?: string;
 };
 
 export const GithubInfo = ({
@@ -26,6 +28,8 @@ export const GithubInfo = ({
   dailyAddedLines,
   dailyDeletedLines,
   hasDetail = true,
+  emptyTitle = "잔디를 눌러 상세정보를 확인해보세요",
+  emptyDescription = "스트릭(잔디)에서 날짜를 선택하면 커밋/이슈/PR 등의 상세 활동이 표시돼요.",
 }: GithubInfoProps) => {
   const stats = useMemo(
     () =>
@@ -56,10 +60,8 @@ export const GithubInfo = ({
         </S.Title>
 
         <S.EmptyBox>
-          <S.EmptyTitle>잔디를 눌러 상세정보를 확인해보세요</S.EmptyTitle>
-          <S.EmptyDesc>
-            스트릭(잔디)에서 날짜를 선택하면 커밋/이슈/PR 등의 상세 활동이 표시돼요.
-          </S.EmptyDesc>
+          <S.EmptyTitle>{emptyTitle}</S.EmptyTitle>
+          <S.EmptyDesc>{emptyDescription}</S.EmptyDesc>
         </S.EmptyBox>
       </S.ActiveContainer>
     );

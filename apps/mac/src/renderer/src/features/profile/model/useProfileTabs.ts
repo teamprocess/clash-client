@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { useActiveQuery } from "@/entities/home";
 import type { StreakItem } from "@/entities/home";
 import { buildPaddedStreak } from "@/shared/lib";
@@ -47,23 +47,6 @@ export const useGithubStreak = ({
       }))
     );
   }, [daysForView]);
-
-  useEffect(() => {
-    const onPointerDown = (e: PointerEvent) => {
-      if (selectedId === null) return;
-
-      const target = e.target as HTMLElement | null;
-      if (!target) return;
-
-      const clickedGrass = target.closest('[data-grass-cell="true"]');
-      if (clickedGrass) return;
-
-      setSelectedId(null);
-    };
-
-    window.addEventListener("pointerdown", onPointerDown);
-    return () => window.removeEventListener("pointerdown", onPointerDown);
-  }, [selectedId]);
 
   const handleGrassClick = (id: string | number) => {
     setSelectedId(prev => (prev === id ? null : id));
