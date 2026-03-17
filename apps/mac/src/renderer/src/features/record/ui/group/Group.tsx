@@ -10,6 +10,7 @@ interface GroupProps {
   displayDate: string;
   onPreviousDate: () => void;
   onNextDate: () => void;
+  onResetToToday: () => void;
   canGoNextDate: boolean;
 }
 
@@ -19,6 +20,7 @@ export const Group = ({
   displayDate,
   onPreviousDate,
   onNextDate,
+  onResetToToday,
   canGoNextDate,
 }: GroupProps) => {
   const { totalStudyTime, isStudying, groupMembers, activeStudyingCount } =
@@ -47,8 +49,10 @@ export const Group = ({
                     selectedDate={selectedDate}
                     onPreviousDate={onPreviousDate}
                     onNextDate={onNextDate}
+                    onResetToToday={onResetToToday}
                     canGoNextDate={canGoNextDate}
                     stopButtonPosition="RIGHT"
+                    nonTodayStopBehavior="hide"
                   />
                 </S.HeaderTimerSection>
                 <S.MyStudySummary $isActive={isStudying}>
