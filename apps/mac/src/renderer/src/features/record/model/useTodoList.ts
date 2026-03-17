@@ -180,10 +180,8 @@ export const useTodoList = (selectedDate?: string) => {
   };
 
   const handleCompleteClick = async (todoId: number, nextCompleted: boolean) => {
-    const completed = await updateTaskCompletion(todoId, nextCompleted);
-    if (completed) {
-      handleCloseMenu();
-    }
+    handleCloseMenu();
+    await updateTaskCompletion(todoId, nextCompleted);
   };
 
   const handleDeleteClick = async (todoId: number) => {
