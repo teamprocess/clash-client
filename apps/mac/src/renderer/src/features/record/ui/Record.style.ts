@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import More from "../assets/more.svg";
 
 export const RecordContainer = styled.div`
   display: flex;
@@ -25,8 +24,4 @@ export const BottomContainer = styled.div`
   display: flex;
   gap: 1.5rem;
   justify-content: space-between;
-`;
-
-export const MoreIcon = styled(More)`
-  cursor: pointer;
 `;
