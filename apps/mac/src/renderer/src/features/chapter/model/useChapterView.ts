@@ -14,6 +14,7 @@ export const useChapterView = ({ loading, sectionId }: UseChapterViewParams) => 
   const [viewState, setViewState] = useState({
     sectionId,
     currentMission: null as Mission | null,
+    currentMissionStageTitle: null as string | null,
     missionModalOpen: false,
   });
 
@@ -23,11 +24,12 @@ export const useChapterView = ({ loading, sectionId }: UseChapterViewParams) => 
       : {
           sectionId,
           currentMission: null,
+          currentMissionStageTitle: null,
           missionModalOpen: false,
         };
 
   const setSectionScopedState = useCallback(
-    <T extends "currentMission" | "missionModalOpen">(
+    <T extends "currentMission" | "currentMissionStageTitle" | "missionModalOpen">(
       key: T,
       value: SetStateAction<(typeof resolvedViewState)[T]>
     ) => {
@@ -38,6 +40,7 @@ export const useChapterView = ({ loading, sectionId }: UseChapterViewParams) => 
             : {
                 sectionId,
                 currentMission: null,
+                currentMissionStageTitle: null,
                 missionModalOpen: false,
               };
 
@@ -68,6 +71,13 @@ export const useChapterView = ({ loading, sectionId }: UseChapterViewParams) => 
   const setMissionModalOpen = useCallback(
     (value: SetStateAction<boolean>) => {
       setSectionScopedState("missionModalOpen", value);
+    },
+    [setSectionScopedState]
+  );
+
+  const setCurrentMissionStageTitle = useCallback(
+    (value: SetStateAction<string | null>) => {
+      setSectionScopedState("currentMissionStageTitle", value);
     },
     [setSectionScopedState]
   );
@@ -127,7 +137,9 @@ export const useChapterView = ({ loading, sectionId }: UseChapterViewParams) => 
   return {
     chapterRef,
     currentMission: resolvedViewState.currentMission,
+    currentMissionStageTitle: resolvedViewState.currentMissionStageTitle,
     setCurrentMission,
+    setCurrentMissionStageTitle,
     missionModalOpen: resolvedViewState.missionModalOpen,
     setMissionModalOpen,
   };

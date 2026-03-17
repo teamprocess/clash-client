@@ -203,9 +203,11 @@ export const useChapter = (sectionId: number) => {
     stages: domain.stages,
     setStageOverrides: domain.setStageOverrides,
     currentStageId,
+    currentStageTitle: currentStage.title,
     setCurrentStageId: domain.setCurrentStageId,
     currentStageMissions,
     setCurrentMission: view.setCurrentMission,
+    setCurrentMissionStageTitle: view.setCurrentMissionStageTitle,
     setMissionModalOpen: view.setMissionModalOpen,
   });
 
@@ -228,6 +230,7 @@ export const useChapter = (sectionId: number) => {
     },
     view: {
       currentMission: view.currentMission,
+      currentMissionStageTitle: view.currentMissionStageTitle,
       missionModalOpen: view.missionModalOpen,
     },
     handlers: {
