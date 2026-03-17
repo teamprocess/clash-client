@@ -68,6 +68,7 @@ export const useBattle = () => {
     [MATCHVALUE.DRAW]: "무승부",
     [MATCHVALUE.CANCELED]: "취소된 배틀",
     [MATCHVALUE.PENDING]: "수락 대기중",
+    [MATCHVALUE.NOT_STARTED]: "시작 전",
   } as const;
 
   const judgeUpperHand = (result: MatchValue): string => {
