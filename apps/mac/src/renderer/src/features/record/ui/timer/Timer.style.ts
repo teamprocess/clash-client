@@ -45,8 +45,9 @@ export const DateBox = styled.div`
   gap: 1rem;
 `;
 
-export const Date = styled.span`
+export const Date = styled.span<{ $muted?: boolean }>`
   color: ${({ theme }) => theme.label.assistive};
+  opacity: ${({ $muted }) => ($muted ? 0.6 : 1)};
   ${font.title2.medium};
 `;
 
@@ -66,10 +67,10 @@ export const Time = styled.span`
   font-feature-settings: "tnum";
 `;
 
-export const PauseIcon = styled(Pause)`
-  cursor: pointer;
+export const PauseIcon = styled(Pause)<{ $disabled?: boolean }>`
   width: 2rem;
   height: 2rem;
+  opacity: ${({ $disabled }) => ($disabled ? 0.32 : 1)};
 `;
 
 export const PlayButton = styled.button`
@@ -80,4 +81,8 @@ export const PlayButton = styled.button`
   border: none;
   cursor: pointer;
   padding: 0;
+
+  &:disabled {
+    cursor: default;
+  }
 `;
