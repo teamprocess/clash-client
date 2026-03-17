@@ -1,7 +1,6 @@
 import styled from "styled-components";
 import { font } from "@clash/design-tokens/font";
 import { palette } from "@clash/design-tokens/theme";
-import Profile from "@/features/home/assets/home/profile.svg";
 import DetailArrow from "@/shared/ui/assets/front.svg";
 
 export const HorizontalLine = styled.div`
@@ -70,9 +69,10 @@ export const ProfileContent = styled.div`
   gap: 0.5rem;
 `;
 
-export const ProfileIcon = styled(Profile)`
+export const ProfileImg = styled.img`
   width: 2rem;
   height: 2rem;
+  border-radius: 50%;
 `;
 
 export const NameBox = styled.div`
