@@ -41,9 +41,11 @@ export const useTodoList = (selectedDate?: string) => {
   const [selectedParentTaskId, setSelectedParentTaskId] = useState<number | null>(null);
   const [openMenuTodoId, setOpenMenuTodoId] = useState<number | null>(null);
   const [isTodoNameTooltipOpen, setIsTodoNameTooltipOpen] = useState(false);
+  const [isSavingTodo, setIsSavingTodo] = useState(false);
 
   const menuRef = useRef<HTMLDivElement>(null);
   const todoNameInputRef = useRef<HTMLInputElement>(null);
+  const isSavingTodoRef = useRef(false);
 
   const todoNameErrorMessage = getTodoNameErrorMessage(todoName);
   const isTodoNameInvalid = todoNameErrorMessage !== null;
@@ -76,6 +78,10 @@ export const useTodoList = (selectedDate?: string) => {
   };
 
   const handleAddClick = () => {
+    if (isSavingTodoRef.current) {
+      return;
+    }
+
     setEditMode("ADD");
     setEditingTodoId(null);
     setTodoName("");
@@ -85,6 +91,10 @@ export const useTodoList = (selectedDate?: string) => {
   };
 
   const handleEditClick = (todoId: number) => {
+    if (isSavingTodoRef.current) {
+      return;
+    }
+
     const todo = tasks.find(item => item.id === todoId);
 
     if (!todo) {
@@ -134,8 +144,19 @@ export const useTodoList = (selectedDate?: string) => {
   };
 
   const handleSaveClick = async () => {
-    const isSaved = await handleSaveTodo();
-    setIsTodoNameTooltipOpen(!isSaved);
+    if (isSavingTodoRef.current) {
+      return;
+    }
+
+    isSavingTodoRef.current = true;
+    setIsSavingTodo(true);
+    try {
+      const isSaved = await handleSaveTodo();
+      setIsTodoNameTooltipOpen(!isSaved);
+    } finally {
+      isSavingTodoRef.current = false;
+      setIsSavingTodo(false);
+    }
   };
 
   const handleTodoNameChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -222,6 +243,7 @@ export const useTodoList = (selectedDate?: string) => {
     todoNameInputMaxLength: TODO_NAME_INPUT_MAX_LENGTH,
     todoNameErrorMessage,
     isTodoNameInvalid,
+    isSavingTodo,
     shouldShowTodoNameTooltip,
     selectedParentTaskId,
     parentTaskOptions,

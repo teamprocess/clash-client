@@ -130,6 +130,11 @@ export const TodoTextInput = styled.input`
   &::placeholder {
     color: ${({ theme }) => theme.label.assistive};
   }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
 `;
 
 export const MoreIcon = styled(More)`
@@ -184,6 +189,11 @@ export const ActionIconButton = styled.button`
   border: none;
   background: none;
   cursor: pointer;
+
+  &:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
 `;
 
 export const CancelIcon = styled(Close)`
@@ -208,4 +218,9 @@ export const AddTodoButton = styled.button`
   background-color: ${({ theme }) => theme.line.neutral};
   ${font.headline2.medium};
   cursor: pointer;
+
+  &:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
 `;
