@@ -5,6 +5,7 @@ import { MyRivalsRequest, MyRivalsResponse } from "@/entities/competition";
 import { useMemo } from "react";
 import { RankTier, RivalsManagementDialog } from "@/shared/ui";
 import { IdeIcons } from "@/shared/ui/assets/ide-img";
+import Profile from "@/features/profile/assets/rival-profile.png";
 
 interface MyRivalsProps {
   data: MyRivalsResponse;
@@ -48,11 +49,21 @@ const RivalRow = ({ user }: { user: MyRivalsRequest }) => {
         <S.RankTierWrap>
           <RankTier tier={user.tier} />
         </S.RankTierWrap>
-        <S.ProfileIcon />
+
+        <S.ProfileImg
+          src={user.profileImage || Profile}
+          alt="프로필"
+          onError={e => {
+            e.currentTarget.onerror = null;
+            e.currentTarget.src = Profile;
+          }}
+        />
+
         <S.NameBox>
           <S.ProfileName>{user.name}</S.ProfileName>
           <S.ProfileMention>@{user.username}</S.ProfileMention>
         </S.NameBox>
+
         <S.Status $status={user.status}>{getStatus(user.status)}</S.Status>
       </S.ProfileContent>
 

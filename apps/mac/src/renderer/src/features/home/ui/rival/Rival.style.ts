@@ -2,8 +2,18 @@ import styled, { css } from "styled-components";
 import { font } from "@clash/design-tokens/font";
 import DetailArrow from "../../../../shared/ui/assets/front.svg";
 import { palette } from "@clash/design-tokens/theme";
-import Profile from "../../assets/home/profile.svg";
 import Plus from "../../assets/home/plus.svg";
+import DefaultProfile from "../../assets/home/profile.svg";
+
+export const ProfileIcon = styled.img`
+  width: 2.25rem;
+  height: 2.25rem;
+  flex-shrink: 0;
+  border-radius: 50%;
+  object-fit: cover;
+`;
+
+export const DefaultProfileIcon = styled(DefaultProfile)``;
 
 const flexRow = css`
   display: flex;
@@ -146,12 +156,6 @@ export const ProfileContent = styled.div`
   gap: 0.75rem;
   width: 100%;
   min-width: 0;
-`;
-
-export const ProfileIcon = styled(Profile)`
-  width: 2.25rem;
-  height: 2.25rem;
-  flex-shrink: 0;
 `;
 
 export const NameBox = styled.div`

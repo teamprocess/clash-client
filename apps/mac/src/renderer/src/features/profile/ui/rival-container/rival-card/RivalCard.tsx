@@ -4,6 +4,7 @@ import { formatTime, resolveUsingApp, useRealtimeRivalActiveTime } from "@/share
 import { useMemo } from "react";
 import { IdeIcons } from "@/shared/ui/assets/ide-img";
 import { RankTier } from "@/shared/ui";
+import DefaultProfile from "@/features/profile/assets/rival-profile.png";
 
 interface RivalCardProps {
   profileSrc: string;
@@ -64,7 +65,7 @@ export function RivalCard({
         <S.RankTierWrap>
           <RankTier tier={tier} />
         </S.RankTierWrap>
-        <S.ProfileImg src={profileSrc} alt="라이벌 프로필" />
+        <S.ProfileImg src={profileSrc || DefaultProfile} alt="라이벌 프로필" />
         <S.NameStatus>
           <S.NameBox>
             <S.Name>{name}</S.Name>
