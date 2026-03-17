@@ -45,6 +45,8 @@ const QuizPanelContent = ({
   const {
     state,
     error,
+    isPreparing,
+    isReviewMode,
     questions,
     currentQuestion,
     selectedChoiceId,
@@ -61,6 +63,7 @@ const QuizPanelContent = ({
 
   const quizProgressPercent =
     questions.length > 0 ? ((state.currentIndex + 1) / questions.length) * 100 : 0;
+  const isLastQuestion = state.currentIndex === questions.length - 1;
 
   if (!currentQuestion || questions.length === 0) {
     return (
@@ -224,6 +227,7 @@ const QuizPanelContent = ({
                   key={choice.id}
                   id={choice.id}
                   content={choice.content}
+                  disabled={isPreparing || isReviewMode}
                   selectedId={selectedChoiceId}
                   onSelect={handleSelectChoice}
                 />
@@ -234,25 +238,44 @@ const QuizPanelContent = ({
       </S.QuizViewport>
 
       <S.FooterActions>
-        <S.PrimaryActionButton
-          variant="primary"
-          size="lg"
-          onClick={() => void handleConfirm()}
-          disabled={!selectedChoiceId || state.isSubmitting}
-          fullWidth
-        >
-          {state.isSubmitting ? "제출 중..." : "선택 완료하기"}
-        </S.PrimaryActionButton>
-        {error && <S.InlineMessage $tone="error">{error}</S.InlineMessage>}
-        {error && (
-          <S.SecondaryActionButton
-            variant="secondary"
-            size="lg"
-            onClick={() => void handleRestart()}
-            fullWidth
-          >
-            챕터 다시 시작하기
-          </S.SecondaryActionButton>
+        {isReviewMode ? (
+          <>
+            <S.InlineMessage>
+              이미 클리어한 챕터는 제출 없이 문제만 다시 볼 수 있습니다.
+            </S.InlineMessage>
+            <S.PrimaryActionButton
+              variant="primary"
+              size="lg"
+              onClick={isLastQuestion ? handleClose : handleNextOrClose}
+              disabled={isPreparing}
+              fullWidth
+            >
+              {isPreparing ? "문제 준비 중..." : isLastQuestion ? "챕터 보기" : "다음 문제 보기"}
+            </S.PrimaryActionButton>
+          </>
+        ) : (
+          <>
+            <S.PrimaryActionButton
+              variant="primary"
+              size="lg"
+              onClick={() => void handleConfirm()}
+              disabled={!selectedChoiceId || state.isSubmitting || isPreparing}
+              fullWidth
+            >
+              {isPreparing ? "문제 준비 중..." : state.isSubmitting ? "제출 중..." : "선택 완료하기"}
+            </S.PrimaryActionButton>
+            {error && <S.InlineMessage $tone="error">{error}</S.InlineMessage>}
+            {error && (
+              <S.SecondaryActionButton
+                variant="secondary"
+                size="lg"
+                onClick={() => void handleRestart()}
+                fullWidth
+              >
+                챕터 다시 시작하기
+              </S.SecondaryActionButton>
+            )}
+          </>
         )}
       </S.FooterActions>
     </S.QuizBody>
@@ -322,6 +345,8 @@ export const MissionContainer = ({
     currentStage.totalMissions > 0
       ? Math.min((currentStage.currentProgress / currentStage.totalMissions) * 100, 100)
       : 0;
+  const isCompletedStage =
+    currentStage.totalMissions > 0 && currentStage.currentProgress >= currentStage.totalMissions;
   const hasStudyMaterial = Boolean(studyMaterialUrl?.trim());
   const isOverviewLoading = isLoading && !currentMission;
 
@@ -421,7 +446,7 @@ export const MissionContainer = ({
                     onClick={onSolve}
                     disabled={isSolveDisabled}
                   >
-                    문제 풀러 가기
+                    {isCompletedStage ? "문제 다시 보기" : "문제 풀러 가기"}
                   </S.SecondaryActionButton>
                 </>
               )}
