@@ -3,40 +3,6 @@ import { font } from "@clash/design-tokens/font";
 
 export type TooltipPosition = "top" | "right" | "bottom" | "left";
 
-interface TooltipBubbleProps {
-  $position: TooltipPosition;
-  $offset: number;
-  $maxWidth?: string;
-  $open: boolean;
-}
-
-interface TooltipWrapperProps {
-  $triggerOnHover: boolean;
-}
-
-const bubblePositionStyleMap = {
-  top: css<TooltipBubbleProps>`
-    bottom: calc(100% + ${({ $offset }) => $offset}px);
-    left: 50%;
-    transform: translateX(-50%);
-  `,
-  right: css<TooltipBubbleProps>`
-    left: calc(100% + ${({ $offset }) => $offset}px);
-    top: 50%;
-    transform: translateY(-50%);
-  `,
-  bottom: css<TooltipBubbleProps>`
-    top: calc(100% + ${({ $offset }) => $offset}px);
-    left: 50%;
-    transform: translateX(-50%);
-  `,
-  left: css<TooltipBubbleProps>`
-    right: calc(100% + ${({ $offset }) => $offset}px);
-    top: 50%;
-    transform: translateY(-50%);
-  `,
-} as const;
-
 const arrowPositionStyleMap = {
   top: css`
     top: 100%;
@@ -68,25 +34,15 @@ const arrowPositionStyleMap = {
   `,
 } as const;
 
-export const TooltipWrapper = styled.span<TooltipWrapperProps>`
-  position: relative;
+export const TooltipWrapper = styled.span`
   display: inline-flex;
   max-width: 100%;
-
-  ${({ $triggerOnHover }) =>
-    $triggerOnHover &&
-    css`
-      &:hover > [data-role="tooltip-bubble"],
-      &:focus-within > [data-role="tooltip-bubble"] {
-        opacity: 1;
-        visibility: visible;
-      }
-    `}
 `;
 
-export const TooltipBubble = styled.span<TooltipBubbleProps>`
-  position: absolute;
-  ${({ $position }) => bubblePositionStyleMap[$position]}
+export const TooltipBubble = styled.span<{ $maxWidth?: string }>`
+  position: fixed;
+  top: 0;
+  left: 0;
   max-width: ${({ $maxWidth }) => $maxWidth ?? "14rem"};
   width: max-content;
   padding: 0.4rem 0.6rem;
@@ -98,12 +54,12 @@ export const TooltipBubble = styled.span<TooltipBubbleProps>`
   word-break: break-word;
   overflow-wrap: break-word;
   pointer-events: none;
-  opacity: ${({ $open }) => ($open ? 1 : 0)};
-  visibility: ${({ $open }) => ($open ? "visible" : "hidden")};
+  opacity: 0;
+  visibility: hidden;
   transition:
     opacity 0.15s ease,
     visibility 0.15s ease;
-  z-index: 99;
+  z-index: 1200;
   box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.15);
 `;
 
