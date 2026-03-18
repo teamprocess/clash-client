@@ -1,7 +1,6 @@
 import styled, { css } from "styled-components";
 import { font } from "@clash/design-tokens/font";
 import { palette } from "@clash/design-tokens/theme";
-import Profile from "@/features/home/assets/home/profile.svg";
 import Date from "@/features/home/assets/home/date.svg";
 import BackArrow from "@/features/home/assets/home/back.svg";
 import Fire from "@/features/home/assets/home/fire.svg";
@@ -64,9 +63,9 @@ export const ProfileContent = styled.div<{ $height?: string }>`
   height: ${({ $height }) => $height ?? "auto"};
 `;
 
-export const ProfileIcon = styled(Profile)`
-  width: 2rem;
-  height: 2rem;
+export const ProfileIcon = styled.div`
+  width: 2.5rem;
+  height: 2.5rem;
 `;
 
 export const NameBox = styled.div`
@@ -207,8 +206,8 @@ export const UpperHandProfile = styled.div`
 `;
 
 export const ProfileImg = styled.img`
-  width: 4rem;
-  height: 4rem;
+  width: 100%;
+  height: 100%;
   border-radius: 50%;
   object-fit: cover;
 `;
