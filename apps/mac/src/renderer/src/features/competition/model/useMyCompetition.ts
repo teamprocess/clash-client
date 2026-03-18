@@ -9,8 +9,8 @@ import {
 // compare - 날짜별 드롭다운
 const competitionDropDownValue: { key: CompareStandard; label: string }[] = [
   { key: "YESTERDAY", label: "어제" },
-  { key: "LAST_WEEK", label: "일주일 전" },
-  { key: "LAST_MONTH", label: "한달 전" },
+  { key: "LAST_WEEK", label: "최근 일주일 평균" },
+  { key: "LAST_MONTH", label: "최근 한 달 평균" },
 ] as const;
 
 // growthRate - 날짜별 드롭다운
