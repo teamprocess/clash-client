@@ -5,24 +5,21 @@ export const Banner = styled.div`
   display: flex;
   flex-direction: column;
   gap: 1.125rem;
-  margin-left: 0;
   margin-top: 3.125rem;
   align-items: center;
-  flex: 0 0 40rem;
-  min-width: 0;
+  width: 80%;
+  height: 46.25vh;
 `;
 
 export const Background = styled.div`
   width: 100%;
-  height: 23.4rem;
+  height: 100%;
   border-radius: 1rem;
   background: ${({ theme }) => theme.background.alternative};
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
-  align-items: stretch;
+  flex: 1;
   padding: 1.5rem;
-  box-sizing: border-box;
   gap: 0.5rem;
 `;
 

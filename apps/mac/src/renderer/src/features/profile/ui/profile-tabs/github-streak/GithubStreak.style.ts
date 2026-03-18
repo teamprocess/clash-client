@@ -7,6 +7,7 @@ const RADIUS = 0.2;
 
 export const ActiveContainer = styled.div`
   width: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
   gap: 0.3rem;
