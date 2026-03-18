@@ -1,6 +1,7 @@
 import * as S from "./Ranking.style";
+import { rankingRewardTooltipContent } from "./Ranking.constants";
 import { useRanking } from "@/features/home/model/useRanking";
-import { UserRanking, Select } from "@/shared/ui";
+import { UserRanking, Select, QuestionTooltip } from "@/shared/ui";
 import { CategoryType, RankingItem, PeriodType } from "@/entities/home";
 
 export const Ranking = () => {
@@ -20,7 +21,10 @@ export const Ranking = () => {
   return (
     <S.RankingContainer>
       <S.TitleBox>
-        <S.Title>우리 학교 랭킹</S.Title>
+        <S.TitleRow>
+          <S.Title>우리 학교 랭킹</S.Title>
+          <QuestionTooltip content={rankingRewardTooltipContent} />
+        </S.TitleRow>
         <S.DropDown>
           <Select<CategoryType>
             value={filters.RankingDropdown}

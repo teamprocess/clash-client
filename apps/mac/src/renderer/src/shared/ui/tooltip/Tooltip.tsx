@@ -32,6 +32,8 @@ export const Tooltip = ({
   const bubbleRef = useRef<HTMLSpanElement>(null);
   const [isHovered, setIsHovered] = useState(false);
   const isVisible = open || (triggerOnHover && isHovered);
+  const normalizedContent =
+    typeof content === "string" ? content.replace(/\\n/g, "\n").replace(/\\t/g, "\t") : content;
 
   useLayoutEffect(() => {
     const bubbleElement = bubbleRef.current;
@@ -132,7 +134,7 @@ export const Tooltip = ({
       {typeof document !== "undefined" &&
         createPortal(
           <S.TooltipBubble ref={bubbleRef} role="tooltip" $maxWidth={maxWidth}>
-            {content}
+            {normalizedContent}
             <S.TooltipArrow $position={position} />
           </S.TooltipBubble>,
           document.body
