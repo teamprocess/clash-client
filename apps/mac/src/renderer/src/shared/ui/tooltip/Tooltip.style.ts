@@ -50,7 +50,7 @@ export const TooltipBubble = styled.span<{ $maxWidth?: string }>`
   ${font.caption.bold}
   color: ${({ theme }) => theme.label.normal};
   background-color: ${({ theme }) => theme.background.neutral};
-  white-space: normal;
+  white-space: pre-line;
   word-break: break-word;
   overflow-wrap: break-word;
   pointer-events: none;

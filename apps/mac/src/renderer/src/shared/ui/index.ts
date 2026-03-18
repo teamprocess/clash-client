@@ -9,6 +9,8 @@ export { Popover } from "./popover";
 export type { PopoverProps } from "./popover";
 export { Tooltip } from "./tooltip";
 export type { TooltipPosition, TooltipProps } from "./tooltip";
+export { QuestionTooltip } from "./question-tooltip";
+export type { QuestionTooltipProps } from "./question-tooltip";
 export { ModalActions } from "./dialog-actions";
 export type { ModalActionsProps } from "./dialog-actions";
 export { RivalsManagementDialog, DeleteRivalsConfirmDialog } from "./rival-management";
