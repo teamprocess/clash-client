@@ -1,13 +1,23 @@
 import styled from "styled-components";
 import { font } from "@clash/design-tokens/font";
-import Web from "../../assets/web.svg";
-import Server from "../../assets/server.svg";
+import Web from "../../assets/web.svg?url";
+import Server from "../../assets/server.svg?url";
 
-export const WebIcon = styled(Web)`
+export const WebIcon = styled.img.attrs({
+  src: Web,
+  alt: "",
+  "aria-hidden": true,
+})`
+  display: block;
   width: 5rem;
 `;
 
-export const ServerIcon = styled(Server)`
+export const ServerIcon = styled.img.attrs({
+  src: Server,
+  alt: "",
+  "aria-hidden": true,
+})`
+  display: block;
   width: 5rem;
 `;
 
