@@ -1,12 +1,10 @@
 import styled, { css } from "styled-components";
 import { font } from "@clash/design-tokens/font";
 import { palette } from "@clash/design-tokens/theme";
-import Profile from "@/features/home/assets/home/profile.svg";
 import Date from "@/features/home/assets/home/date.svg";
 import BackArrow from "@/features/home/assets/home/back.svg";
 import Fire from "@/features/home/assets/home/fire.svg";
 import Checked from "@/features/home/assets/home/check-box.svg";
-import DetailArrow from "@/shared/ui/assets/front.svg";
 
 const flexRow = css`
   display: flex;
@@ -65,9 +63,14 @@ export const ProfileContent = styled.div<{ $height?: string }>`
   height: ${({ $height }) => $height ?? "auto"};
 `;
 
-export const ProfileIcon = styled(Profile)`
-  width: 2rem;
-  height: 2rem;
+export const ProfileIcon = styled.div`
+  width: 2.5rem;
+  height: 2.5rem;
+`;
+
+export const BattleDetailProfileBox = styled.div`
+  width: 4rem;
+  height: 4rem;
 `;
 
 export const NameBox = styled.div`
@@ -207,9 +210,11 @@ export const UpperHandProfile = styled.div`
   align-items: center;
 `;
 
-export const UpperHandProfileIcon = styled(Profile)`
-  width: 4rem;
-  height: 4rem;
+export const ProfileImg = styled.img`
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
 `;
 
 export const UpperHandName = styled.p`
@@ -544,19 +549,4 @@ export const ErrorText = styled.p`
   ${font.label.medium};
   color: ${palette.red[60]};
   width: 100%;
-`;
-
-export const DetailArrowIcon = styled(DetailArrow)`
-  width: 0.5rem;
-  height: 1rem;
-`;
-
-export const ArrowBox = styled.button`
-  ${font.label.medium}
-  color: ${({ theme }) => theme.label.alternative};
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 0.25rem;
-  cursor: pointer;
 `;
