@@ -8,13 +8,19 @@ interface SelectOption<T extends string> {
 interface SelectProps<T extends string> {
   value: T;
   options: SelectOption<T>[];
+  width?: number;
   onChange: (value: T) => void;
 }
 
-export const Select = <T extends string>({ value, options, onChange }: SelectProps<T>) => {
+export const Select = <T extends string>({
+  value,
+  options,
+  width = 7.5,
+  onChange,
+}: SelectProps<T>) => {
   return (
     <S.SelectWrapper>
-      <S.Select value={value} onChange={e => onChange(e.target.value as T)}>
+      <S.Select $width={width} value={value} onChange={e => onChange(e.target.value as T)}>
         {options.map(option => (
           <option key={option.key} value={option.key}>
             {option.label}
