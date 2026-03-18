@@ -27,7 +27,7 @@ interface RecordStore extends ActiveSessionState {
   addSubject: (name: string) => Promise<boolean>;
   updateSubject: (subjectId: number, name: string) => Promise<boolean>;
   deleteSubject: (subjectId: number) => Promise<boolean>;
-  addTask: (name: string, subjectId: number | null) => Promise<boolean>;
+  addTask: (name: string, subjectId: number | null, date?: string) => Promise<boolean>;
   updateTask: (taskId: number, name: string, subjectId: number | null) => Promise<boolean>;
   deleteTask: (taskId: number) => Promise<boolean>;
   updateTaskCompletion: (taskId: number, completed: boolean) => Promise<boolean>;
@@ -353,9 +353,9 @@ export const useRecordStore = create<RecordStore>((set, get) => ({
     }
   },
 
-  addTask: async (name, subjectId) => {
+  addTask: async (name, subjectId, date) => {
     try {
-      const response = await recordApi.createTask({ name, subjectId });
+      const response = await recordApi.createTask({ name, subjectId, date });
       if (!response.success) {
         return false;
       }
