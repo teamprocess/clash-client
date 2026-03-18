@@ -3,7 +3,7 @@ import { getStatus, useMyRivals } from "@/features/competition/model/useMyRivals
 import { formatTime, resolveUsingApp, useRealtimeRivalActiveTime, useRival } from "@/shared/lib";
 import { MyRivalsRequest, MyRivalsResponse } from "@/entities/competition";
 import { useMemo } from "react";
-import { RankTier, RivalsManagementDialog } from "@/shared/ui";
+import { RankTier, RivalsManagementDialog, Tooltip } from "@/shared/ui";
 import { IdeIcons } from "@/shared/ui/assets/ide-img";
 import Profile from "@/features/profile/assets/rival-profile.png";
 
@@ -43,6 +43,21 @@ const RivalRow = ({ user }: { user: MyRivalsRequest }) => {
 
   const isOnline = user.status === "ONLINE";
 
+  const renderRivalId = (username: string) => {
+    return (
+      <Tooltip
+        content={username}
+        position="top"
+        maxWidth="10rem"
+        wrapperStyle={{ flex: 1, minWidth: 0 }}
+      >
+        <S.ProfileMention>
+          <span>@{username}</span>
+        </S.ProfileMention>
+      </Tooltip>
+    );
+  };
+
   return (
     <S.ProfileContainer>
       <S.ProfileContent>
@@ -61,7 +76,7 @@ const RivalRow = ({ user }: { user: MyRivalsRequest }) => {
 
         <S.NameBox>
           <S.ProfileName>{user.name}</S.ProfileName>
-          <S.ProfileMention>@{user.username}</S.ProfileMention>
+          {renderRivalId(user.username)}
         </S.NameBox>
 
         <S.Status $status={user.status}>{getStatus(user.status)}</S.Status>
