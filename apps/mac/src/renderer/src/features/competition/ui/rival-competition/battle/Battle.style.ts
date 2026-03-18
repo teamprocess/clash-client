@@ -6,7 +6,6 @@ import Date from "@/features/home/assets/home/date.svg";
 import BackArrow from "@/features/home/assets/home/back.svg";
 import Fire from "@/features/home/assets/home/fire.svg";
 import Checked from "@/features/home/assets/home/check-box.svg";
-import DetailArrow from "@/shared/ui/assets/front.svg";
 
 const flexRow = css`
   display: flex;
@@ -207,9 +206,11 @@ export const UpperHandProfile = styled.div`
   align-items: center;
 `;
 
-export const UpperHandProfileIcon = styled(Profile)`
+export const ProfileImg = styled.img`
   width: 4rem;
   height: 4rem;
+  border-radius: 50%;
+  object-fit: cover;
 `;
 
 export const UpperHandName = styled.p`
@@ -544,19 +545,4 @@ export const ErrorText = styled.p`
   ${font.label.medium};
   color: ${palette.red[60]};
   width: 100%;
-`;
-
-export const DetailArrowIcon = styled(DetailArrow)`
-  width: 0.5rem;
-  height: 1rem;
-`;
-
-export const ArrowBox = styled.button`
-  ${font.label.medium}
-  color: ${({ theme }) => theme.label.alternative};
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 0.25rem;
-  cursor: pointer;
 `;
