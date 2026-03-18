@@ -107,13 +107,15 @@ export const Todo = ({ selectedDate }: TodoProps) => {
             return (
               <S.TodoItem key={todoItem.id} $isMenuOpen={isMenuOpen}>
                 <S.TodoLeftBox>
-                  <S.IconButton
-                    type="button"
-                    aria-label={todoItem.isActive ? "할 일 일시정지" : "할 일 시작"}
-                    onClick={() => handlePlayPauseClick(todoItem.id)}
-                  >
-                    {todoItem.isActive ? <S.PauseIcon /> : <S.PlayIcon />}
-                  </S.IconButton>
+                  {todoItem.canTogglePlayback ? (
+                    <S.IconButton
+                      type="button"
+                      aria-label={todoItem.isActive ? "할 일 일시정지" : "할 일 시작"}
+                      onClick={() => handlePlayPauseClick(todoItem.id)}
+                    >
+                      {todoItem.isActive ? <S.PauseIcon /> : <S.PlayIcon />}
+                    </S.IconButton>
+                  ) : null}
                   <S.TodoText $completed={todoItem.isCompleted}>{todoItem.name}</S.TodoText>
                 </S.TodoLeftBox>
                 <S.TodoRightBox>
