@@ -1,8 +1,8 @@
 import styled from "styled-components";
 import { font } from "@clash/design-tokens/font";
 import { palette } from "@clash/design-tokens/theme";
-import Web from "../../../assets/web.svg";
-import Server from "../../../assets/server.svg";
+import Web from "../../../assets/web.svg?url";
+import Server from "../../../assets/server.svg?url";
 
 export const ResultContainer = styled.div`
   display: flex;
@@ -45,9 +45,21 @@ export const ResultDescription = styled.span`
   color: ${({ theme }) => theme.label.assistive};
 `;
 
-export const WebIcon = styled(Web)``;
+export const WebIcon = styled.img.attrs({
+  src: Web,
+  alt: "",
+  "aria-hidden": true,
+})`
+  display: block;
+`;
 
-export const ServerIcon = styled(Server)``;
+export const ServerIcon = styled.img.attrs({
+  src: Server,
+  alt: "",
+  "aria-hidden": true,
+})`
+  display: block;
+`;
 
 export const ResultCard = styled.div`
   display: flex;

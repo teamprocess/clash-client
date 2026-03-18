@@ -2,8 +2,8 @@ import styled, { css, keyframes } from "styled-components";
 import { font } from "@clash/design-tokens/font";
 import { palette } from "@clash/design-tokens/theme";
 import Close from "@/features/profile/assets/close.svg";
-import Correct from "../assets/correct.svg";
-import InCorrect from "../assets/in-correct.svg";
+import Correct from "../assets/correct.svg?url";
+import InCorrect from "../assets/in-correct.svg?url";
 import Clear from "../assets/clear.svg";
 import Fail from "../assets/fail.svg";
 import { Button } from "@/shared/ui/button/Button";
@@ -478,13 +478,23 @@ export const ButtonRow = styled.div`
   }
 `;
 
-export const CorrectIcon = styled(Correct)`
+export const CorrectIcon = styled.img.attrs({
+  src: Correct,
+  alt: "",
+  "aria-hidden": true,
+})`
+  display: block;
   flex-shrink: 0;
   width: 3rem;
   height: 3rem;
 `;
 
-export const IncorrectIcon = styled(InCorrect)`
+export const IncorrectIcon = styled.img.attrs({
+  src: InCorrect,
+  alt: "",
+  "aria-hidden": true,
+})`
+  display: block;
   flex-shrink: 0;
   width: 3rem;
   height: 3rem;

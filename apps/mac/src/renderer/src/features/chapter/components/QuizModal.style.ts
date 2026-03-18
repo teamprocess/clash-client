@@ -1,8 +1,8 @@
 import styled from "styled-components";
 import { font } from "@clash/design-tokens/font";
 import { palette } from "@clash/design-tokens/theme";
-import Correct from "../assets/correct.svg";
-import InCorrect from "../assets/in-correct.svg";
+import Correct from "../assets/correct.svg?url";
+import InCorrect from "../assets/in-correct.svg?url";
 import Clear from "../assets/clear.svg";
 import Fail from "../assets/fail.svg";
 
@@ -144,9 +144,21 @@ export const ResultTitle = styled.span`
   flex-wrap: wrap;
 `;
 
-export const CorrectIcon = styled(Correct)``;
+export const CorrectIcon = styled.img.attrs({
+  src: Correct,
+  alt: "",
+  "aria-hidden": true,
+})`
+  display: block;
+`;
 
-export const IncorrectIcon = styled(InCorrect)``;
+export const IncorrectIcon = styled.img.attrs({
+  src: InCorrect,
+  alt: "",
+  "aria-hidden": true,
+})`
+  display: block;
+`;
 
 export const CommentaryBox = styled.div`
   display: flex;
