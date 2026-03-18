@@ -247,7 +247,9 @@ export const Battle = () => {
                         onClick={() => battle.handleUserSelect(user.id)}
                       >
                         <S.ProfileContent $height="3rem">
-                          <S.ProfileIcon />
+                          <S.ProfileIcon>
+                            <S.ProfileImg src={user.profileImage || DefaultProfile} />
+                          </S.ProfileIcon>
                           <S.ProfileTagBox>
                             <S.ProfileName>{user.name}</S.ProfileName>
                           </S.ProfileTagBox>
@@ -292,7 +294,9 @@ export const Battle = () => {
                   battleApplyItems.map(applyItem => (
                     <S.UserChoiceBox key={applyItem.id} $isSelected={false} $isRival>
                       <S.ProfileContent $height="3rem">
-                        <S.ProfileIcon />
+                        <S.ProfileIcon>
+                          <S.ProfileImg src={applyItem.enemy.profileImage || DefaultProfile} />
+                        </S.ProfileIcon>
                         <S.ProfileTagBox>
                           <S.ProfileName>{applyItem.enemy.name}</S.ProfileName>
                           <S.ProfileSubText>
