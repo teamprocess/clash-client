@@ -1,6 +1,7 @@
 import { SyntheticEvent, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import * as S from "./Topbar.style";
+import { expTooltipContent } from "./Topbar.constants";
 import { useGetMyProfile } from "@/entities/user";
 import { TopbarNotice } from "@/features/notice";
 import { formatPrice } from "@/shared/lib";
@@ -57,23 +58,7 @@ export const Topbar = ({ onToggleSidebar }: TopbarProps) => {
         <S.GoodsBox>
           <S.EXPIcon />
           <span>{formatPrice(user?.totalExp || 0)}</span>
-          <QuestionTooltip
-            position="bottom"
-            content="Github (1시간 간격으로 반영)\n
-                      커밋: 1개당 50점 (최대 50개)
-                      리뷰: 1개당 100점 (최대 5개)
-                      PR: 1개당 100점 (최대 5개)
-                      이슈: 1개당 10점 (최대 5개)\n
-                      학습 시간\n
-                      1분당 10점 (최대 10시간)
-                      오전 6시 갱신\n
-                      출석\n
-                      하루: 100점
-                      7일 연속 출석: 500 * 연속 출석 주\n
-                      로드맵\n
-                      챕터 클리어: 300점
-                      섹션 클리어: 2000점"
-          />
+          <QuestionTooltip position="bottom" content={expTooltipContent} />
         </S.GoodsBox>
 
         <S.GoodsBox>
