@@ -125,7 +125,7 @@ export const useTodoList = (selectedDate?: string) => {
     const trimmedTodoName = todoName.trim();
 
     if (editMode === "ADD") {
-      const saved = await addTask(trimmedTodoName, selectedParentTaskId);
+      const saved = await addTask(trimmedTodoName, selectedParentTaskId, selectedDate);
       if (saved) {
         handleCancelEdit();
       }
@@ -181,12 +181,18 @@ export const useTodoList = (selectedDate?: string) => {
   };
 
   const handlePlayPauseClick = async (todoId: number) => {
-    if (!isTodaySelected) {
+    const todo = tasks.find(item => item.id === todoId);
+
+    if (!todo || !isTodaySelected) {
       return;
     }
 
     if (activeSessionType === "TASK" && activeTaskId === todoId) {
       await stop();
+      return;
+    }
+
+    if (todo.completed) {
       return;
     }
 
@@ -229,13 +235,18 @@ export const useTodoList = (selectedDate?: string) => {
   };
 
   return {
-    todos: tasks.map(task => ({
-      id: task.id,
-      name: task.name,
-      isActive: activeSessionType === "TASK" && activeTaskId === task.id,
-      isCompleted: task.completed,
-      parentTaskId: task.subjectId,
-    })),
+    todos: tasks.map(task => {
+      const isActive = activeSessionType === "TASK" && activeTaskId === task.id;
+
+      return {
+        id: task.id,
+        name: task.name,
+        isActive,
+        isCompleted: task.completed,
+        parentTaskId: task.subjectId,
+        canTogglePlayback: isTodaySelected && (isActive || !task.completed),
+      };
+    }),
     editMode,
     editingTodoId,
     todoName,

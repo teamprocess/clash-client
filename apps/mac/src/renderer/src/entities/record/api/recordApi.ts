@@ -136,6 +136,7 @@ export interface RecordTasksResponse {
 export interface RecordTaskCreateRequest {
   subjectId: number | null;
   name: string;
+  date?: string;
 }
 
 export interface RecordTaskUpdateRequest {
