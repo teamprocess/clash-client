@@ -68,6 +68,11 @@ export const ProfileIcon = styled.div`
   height: 2.5rem;
 `;
 
+export const BattleDetailProfileBox = styled.div`
+  width: 4rem;
+  height: 4rem;
+`;
+
 export const NameBox = styled.div`
   ${flexRow};
   align-items: center;
