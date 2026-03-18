@@ -105,7 +105,7 @@ export const Todo = ({ selectedDate }: TodoProps) => {
             }
 
             return (
-              <S.TodoItem key={todoItem.id}>
+              <S.TodoItem key={todoItem.id} $isMenuOpen={isMenuOpen}>
                 <S.TodoLeftBox>
                   <S.IconButton
                     type="button"

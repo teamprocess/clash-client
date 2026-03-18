@@ -54,7 +54,7 @@ export const TodoBox = styled.div`
   flex-direction: column;
 `;
 
-export const TodoItem = styled.div`
+export const TodoItem = styled.div<{ $isMenuOpen?: boolean }>`
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -62,6 +62,7 @@ export const TodoItem = styled.div`
   gap: 1rem;
   padding: 1.25rem 1.5rem;
   border-bottom: 2px solid ${({ theme }) => theme.fill.alternative};
+  z-index: ${({ $isMenuOpen }) => ($isMenuOpen ? 2 : "auto")};
 `;
 
 export const TodoLeftBox = styled.div`
