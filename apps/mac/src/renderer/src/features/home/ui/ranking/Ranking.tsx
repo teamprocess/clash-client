@@ -1,6 +1,6 @@
 import * as S from "./Ranking.style";
 import { useRanking } from "@/features/home/model/useRanking";
-import { UserRanking, Select } from "@/shared/ui";
+import { UserRanking, Select, QuestionTooltip } from "@/shared/ui";
 import { CategoryType, RankingItem, PeriodType } from "@/entities/home";
 
 export const Ranking = () => {
@@ -20,7 +20,14 @@ export const Ranking = () => {
   return (
     <S.RankingContainer>
       <S.TitleBox>
-        <S.Title>우리 학교 랭킹</S.Title>
+        <S.TitleRow>
+          <S.Title>우리 학교 랭킹</S.Title>
+          <QuestionTooltip
+            content="Aura: 100,000 EXP & 상위 1등 \n Master: 75,000 EXP & 상위 3등 \n Diamond: 50,000 EXP
+           Gold: 30,000 EXP \n Silver: 10,000 EXP \n Bronze: 1,000 EXP
+           Unranked: 1,000 EXP"
+          />
+        </S.TitleRow>
         <S.DropDown>
           <Select<CategoryType>
             value={filters.RankingDropdown}

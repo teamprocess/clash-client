@@ -29,6 +29,12 @@ export const TitleBox = styled.div`
   }
 `;
 
+export const TitleRow = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+`;
+
 export const Title = styled.div`
   ${font.title2.bold};
   min-width: 0;
