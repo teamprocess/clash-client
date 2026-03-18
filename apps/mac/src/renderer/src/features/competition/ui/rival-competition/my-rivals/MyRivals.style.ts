@@ -57,8 +57,6 @@ export const ProfileContainer = styled.button`
   flex-direction: row;
   padding: 0.75rem;
   border-bottom: 1px solid ${({ theme }) => theme.line.alternative};
-  &:hover {
-  }
 `;
 
 export const ProfileContent = styled.div`
@@ -73,6 +71,7 @@ export const ProfileImg = styled.img`
   width: 2rem;
   height: 2rem;
   border-radius: 50%;
+  flex-shrink: 0;
 `;
 
 export const NameBox = styled.div`
@@ -90,6 +89,20 @@ export const ProfileName = styled.span`
 export const ProfileMention = styled.span`
   ${font.label.regular}
   color: ${({ theme }) => theme.label.alternative};
+  cursor: pointer;
+
+  display: block;
+  min-width: 0;
+  max-width: 100%;
+
+  overflow: hidden;
+
+  > span {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
 `;
 
 export const Status = styled.div<{ $status: "ONLINE" | "AWAY" | "OFFLINE" }>`
@@ -100,6 +113,7 @@ export const Status = styled.div<{ $status: "ONLINE" | "AWAY" | "OFFLINE" }>`
   padding: 0.125rem 0.5rem;
   border-radius: 0.5rem;
   color: ${palette.neutral[5]};
+  flex-shrink: 0;
   background-color: ${({ $status, theme }) => {
     switch ($status) {
       case "ONLINE":
@@ -196,4 +210,5 @@ export const ArrowBox = styled.button`
 export const RankTierWrap = styled.div`
   width: 2rem;
   height: 2rem;
+  flex-shrink: 0;
 `;
