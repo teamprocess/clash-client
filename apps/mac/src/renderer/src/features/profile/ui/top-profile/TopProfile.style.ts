@@ -41,7 +41,7 @@ export const Button = styled.div`
 
 export const ProfileCard = styled.div`
   position: absolute;
-  left: 10rem;
+  left: 15%;
   top: 30%;
 
   @media (min-height: 56.25rem) {
