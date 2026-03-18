@@ -1,10 +1,11 @@
 import { SyntheticEvent, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import * as S from "./Topbar.style";
+import { expTooltipContent } from "./Topbar.constants";
 import { useGetMyProfile } from "@/entities/user";
 import { TopbarNotice } from "@/features/notice";
 import { formatPrice } from "@/shared/lib";
-import { Popover } from "@/shared/ui";
+import { Popover, QuestionTooltip } from "@/shared/ui";
 import { useSignOut } from "@/features/auth";
 
 interface TopbarProps {
@@ -57,6 +58,7 @@ export const Topbar = ({ onToggleSidebar }: TopbarProps) => {
         <S.GoodsBox>
           <S.EXPIcon />
           <span>{formatPrice(user?.totalExp || 0)}</span>
+          <QuestionTooltip position="bottom" content={expTooltipContent} />
         </S.GoodsBox>
 
         <S.GoodsBox>
