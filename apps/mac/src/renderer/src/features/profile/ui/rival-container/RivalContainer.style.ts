@@ -1,5 +1,4 @@
 import styled, { css } from "styled-components";
-import ProfileIcon from "../../assets/rival-profile.png";
 
 const flexCol = css`
   display: flex;
@@ -8,16 +7,12 @@ const flexCol = css`
 
 export const Container = styled.div`
   display: flex;
-  width: 100%;
+  width: 60%;
   flex-direction: column;
   gap: 0.75rem;
-  min-height: 5.325rem;
+  height: 100%;
   margin-top: 7.25rem;
 `;
-
-export const profileSrcMap = {
-  default: ProfileIcon,
-} as const;
 
 export const AddRivalButton = styled.button`
   width: 100%;

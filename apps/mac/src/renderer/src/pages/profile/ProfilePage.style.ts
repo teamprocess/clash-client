@@ -21,7 +21,8 @@ export const BodyRow = styled.div`
   gap: 1rem;
   align-items: flex-start;
   width: 100%;
-  justify-content: flex-start;
+  height: 50%;
+  justify-content: space-between;
   > * {
     min-width: 0;
   }
