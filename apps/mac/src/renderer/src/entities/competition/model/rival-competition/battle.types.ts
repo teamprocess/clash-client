@@ -6,6 +6,7 @@ export const MATCHVALUE = {
   DRAW: "DRAW",
   PENDING: "PENDING",
   CANCELED: "CANCELED",
+  NOT_STARTED: "NOT_STARTED",
 } as const;
 
 export type MatchValueType = (typeof MATCHVALUE)[keyof typeof MATCHVALUE];

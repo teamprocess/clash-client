@@ -51,7 +51,8 @@ export const Battle = () => {
 
                     const cannotOpen =
                       battleItem.result === MATCHVALUE.PENDING ||
-                      battleItem.result === MATCHVALUE.CANCELED;
+                      battleItem.result === MATCHVALUE.CANCELED ||
+                      battleItem.result === MATCHVALUE.NOT_STARTED;
 
                     return (
                       <S.BattleProfileBox
