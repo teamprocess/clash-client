@@ -51,6 +51,7 @@ export const WithMyCompetition = () => {
             <S.TextBox>
               <S.CompareBoxTitle>이전의 활동량</S.CompareBoxTitle>
               <Select<CompareStandard>
+                width={10}
                 value={competitionDropdown}
                 options={competitionDropDownValue}
                 onChange={setCompetitionDropdown}
