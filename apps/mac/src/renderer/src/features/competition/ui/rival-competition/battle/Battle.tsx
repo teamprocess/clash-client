@@ -4,6 +4,8 @@ import { AnalyzeCategory, MATCHVALUE } from "@/entities/competition";
 import { useBattle } from "@/features/competition/model/useBattle";
 import { formatTime } from "@/shared/lib";
 import { useState } from "react";
+import DefaultProfile from "@/features/profile/assets/rival-profile.png";
+import { useGetMyProfile } from "@/entities/user";
 
 export const Battle = () => {
   const battle = useBattle();
@@ -17,6 +19,9 @@ export const Battle = () => {
 
   const battleApplyItems = battle.battleApplyList?.data?.battles ?? [];
   const hasBattleApplyList = battleApplyItems.length > 0;
+
+  const myProfileData = useGetMyProfile();
+  const myProfileImg = myProfileData?.data?.profileImage;
 
   return (
     <>
@@ -94,7 +99,9 @@ export const Battle = () => {
                   <S.DetailWrapper>
                     <S.UpperHandContainer>
                       <S.UpperHandProfile>
-                        <S.UpperHandProfileIcon />
+                        <S.ProfileImg
+                          src={battle.battleDetailData?.enemy.profileImage || DefaultProfile}
+                        />
                         <S.UpperHandName>{battle.battleDetailData?.enemy.name}</S.UpperHandName>
                       </S.UpperHandProfile>
 
@@ -121,7 +128,7 @@ export const Battle = () => {
                       </S.TransitionBox>
 
                       <S.UpperHandProfile>
-                        <S.UpperHandProfileIcon />
+                        <S.ProfileImg src={myProfileImg || DefaultProfile} />
                         <S.UpperHandName>나</S.UpperHandName>
                       </S.UpperHandProfile>
                     </S.UpperHandContainer>
