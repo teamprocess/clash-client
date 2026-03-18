@@ -1,6 +1,7 @@
 import { BrowserWindow, shell } from "electron";
 import { join } from "path";
 import { is } from "@electron-toolkit/utils";
+import { initializeWindowZoom } from "./zoom";
 
 // 개발/배포 환경에 맞는 렌더러 URL 로드
 const loadRenderer = async (mainWindow: BrowserWindow) => {
@@ -24,6 +25,8 @@ export const createMainWindow = () => {
       sandbox: false,
     },
   });
+
+  initializeWindowZoom(mainWindow);
 
   // 준비되면 최대화 후 표시
   mainWindow.on("ready-to-show", () => {

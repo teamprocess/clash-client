@@ -1,8 +1,44 @@
-import { Menu, type MenuItemConstructorOptions } from "electron";
+import { BrowserWindow, Menu, type MenuItemConstructorOptions } from "electron";
+import { resetWindowZoom, zoomInWindow, zoomOutWindow } from "../window/zoom";
 
 interface RegisterApplicationMenuParams {
   onCheckForUpdates: () => void | Promise<void>;
 }
+
+const getFocusedWindow = () => BrowserWindow.getFocusedWindow();
+
+const createViewMenu = (): MenuItemConstructorOptions => ({
+  label: "View",
+  submenu: [
+    { role: "reload" },
+    { role: "forceReload" },
+    { role: "toggleDevTools" },
+    { type: "separator" },
+    {
+      label: "100%",
+      accelerator: "CommandOrControl+0",
+      click: () => {
+        resetWindowZoom(getFocusedWindow());
+      },
+    },
+    {
+      label: "확대",
+      accelerator: "CommandOrControl+=",
+      click: () => {
+        zoomInWindow(getFocusedWindow());
+      },
+    },
+    {
+      label: "축소",
+      accelerator: "CommandOrControl+-",
+      click: () => {
+        zoomOutWindow(getFocusedWindow());
+      },
+    },
+    { type: "separator" },
+    { role: "togglefullscreen" },
+  ],
+});
 
 const createMenuTemplate = ({
   onCheckForUpdates,
@@ -16,7 +52,7 @@ const createMenuTemplate = ({
   template.push(
     { role: "fileMenu" },
     { role: "editMenu" },
-    { role: "viewMenu" },
+    createViewMenu(),
     { role: "windowMenu" },
     {
       role: "help",
