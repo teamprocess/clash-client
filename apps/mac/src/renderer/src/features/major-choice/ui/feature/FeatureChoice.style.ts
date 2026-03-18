@@ -1,13 +1,23 @@
 import styled from "styled-components";
 import { font } from "@clash/design-tokens/font";
-import Test from "@/features/major-choice/assets/test.svg";
-import Choice from "@/features/major-choice/assets/choice.svg";
+import Test from "@/features/major-choice/assets/test.svg?url";
+import Choice from "@/features/major-choice/assets/choice.svg?url";
 
-export const TestIcon = styled(Test)`
+export const TestIcon = styled.img.attrs({
+  src: Test,
+  alt: "",
+  "aria-hidden": true,
+})`
+  display: block;
   width: 5rem;
 `;
 
-export const ChoiceIcon = styled(Choice)`
+export const ChoiceIcon = styled.img.attrs({
+  src: Choice,
+  alt: "",
+  "aria-hidden": true,
+})`
+  display: block;
   width: 5rem;
 `;
 
