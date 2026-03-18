@@ -99,9 +99,11 @@ export const Battle = () => {
                   <S.DetailWrapper>
                     <S.UpperHandContainer>
                       <S.UpperHandProfile>
-                        <S.ProfileImg
-                          src={battle.battleDetailData?.enemy.profileImage || DefaultProfile}
-                        />
+                        <S.BattleDetailProfileBox>
+                          <S.ProfileImg
+                            src={battle.battleDetailData?.enemy.profileImage || DefaultProfile}
+                          />
+                        </S.BattleDetailProfileBox>
                         <S.UpperHandName>{battle.battleDetailData?.enemy.name}</S.UpperHandName>
                       </S.UpperHandProfile>
 
@@ -128,7 +130,9 @@ export const Battle = () => {
                       </S.TransitionBox>
 
                       <S.UpperHandProfile>
-                        <S.ProfileImg src={myProfileImg || DefaultProfile} />
+                        <S.BattleDetailProfileBox>
+                          <S.ProfileImg src={myProfileImg || DefaultProfile} />
+                        </S.BattleDetailProfileBox>
                         <S.UpperHandName>나</S.UpperHandName>
                       </S.UpperHandProfile>
                     </S.UpperHandContainer>
