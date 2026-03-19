@@ -2,17 +2,18 @@ import styled from "styled-components";
 
 export const Wrapper = styled.div`
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
   height: 100%;
+  flex: 1;
 `;
 
 export const Background = styled.div`
   width: 100%;
-  height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: space-between;
   background: ${({ theme }) => theme.background.normal};
   border-radius: 1rem;
   padding: 2rem;
@@ -20,10 +21,11 @@ export const Background = styled.div`
 
 export const BodyRow = styled.div`
   display: flex;
+  margin-top: 3.25rem;
   gap: 1rem;
-  align-items: flex-start;
+  align-items: flex-end;
   width: 100%;
-  height: 50%;
+  flex: 1;
   justify-content: space-between;
   > * {
     min-width: 0;

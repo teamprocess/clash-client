@@ -6,7 +6,7 @@ import ChangeProfileImg from "../../assets/change-profile-img-icon.svg";
 
 export const Banner = styled.div<{ $accent?: string; $bgImage?: string }>`
   width: 100%;
-  height: 20.5%;
+  //aspect-ratio: 19 / 4;
   border-radius: 1rem;
   background: ${({ theme }) => theme.background.alternative};
 
@@ -23,13 +23,9 @@ export const Banner = styled.div<{ $accent?: string; $bgImage?: string }>`
 
   padding: 1.5rem;
   display: flex;
-  justify-content: flex-end;
-  align-items: flex-end;
+  justify-content: flex-start;
+  align-items: flex-start;
   position: relative;
-
-  @media (min-height: 56.25rem) {
-    height: 30%;
-  }
 `;
 
 export const Button = styled.div`
@@ -40,10 +36,6 @@ export const Button = styled.div`
 `;
 
 export const ProfileCard = styled.div`
-  position: absolute;
-  left: 15%;
-  top: 30%;
-
   @media (min-height: 56.25rem) {
     top: 60%;
   }

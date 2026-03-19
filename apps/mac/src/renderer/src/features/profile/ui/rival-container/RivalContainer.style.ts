@@ -11,7 +11,6 @@ export const Container = styled.div`
   flex-direction: column;
   gap: 0.75rem;
   height: 100%;
-  margin-top: 7.25rem;
 `;
 
 export const AddRivalButton = styled.button`
