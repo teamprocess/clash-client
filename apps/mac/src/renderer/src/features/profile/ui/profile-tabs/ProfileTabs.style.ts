@@ -5,7 +5,6 @@ export const Banner = styled.div`
   display: flex;
   flex-direction: column;
   gap: 1.125rem;
-  margin-top: 3.125rem;
   align-items: center;
   width: 80%;
   height: 46.25vh;
