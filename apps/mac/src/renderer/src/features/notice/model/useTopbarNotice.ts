@@ -205,10 +205,8 @@ export const useTopbarNotice = () => {
     return notices.filter(notice => {
       return (
         notice.message.toLowerCase().includes(normalizedKeyword) ||
-        `${notice.senderId}`.includes(normalizedKeyword) ||
         (notice.senderUsername?.toLowerCase().includes(normalizedKeyword) ?? false) ||
-        (notice.senderName?.toLowerCase().includes(normalizedKeyword) ?? false) ||
-        (notice.receiverName?.toLowerCase().includes(normalizedKeyword) ?? false)
+        (notice.senderName?.toLowerCase().includes(normalizedKeyword) ?? false)
       );
     });
   }, [notices, searchKeyword]);
