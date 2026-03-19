@@ -81,6 +81,7 @@ export const CodeIcon = styled.img.attrs({
 export const ActiveContainer = styled.section`
   width: 100%;
   display: flex;
+  height: 100%;
   flex-direction: column;
   gap: 0.75rem;
 `;
@@ -121,9 +122,9 @@ export const TotalText = styled.p`
 
 export const GithubBox = styled.div`
   width: 100%;
-  height: 6.625rem;
+  height: 100%;
   border-radius: 1.25rem;
-  padding: 1.25rem;
+  padding: 0 1.25rem;
   background: ${({ theme }) => theme.label.disable};
   display: flex;
   align-items: center;
