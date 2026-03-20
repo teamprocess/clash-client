@@ -3,11 +3,21 @@ import { font } from "@clash/design-tokens";
 
 export const Banner = styled.div`
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   gap: 1.125rem;
   align-items: center;
-  width: 80%;
+  justify-content: space-between;
   height: 46.25vh;
+`;
+
+export const BannerBox = styled.div`
+  display: flex;
+  gap: 1.125rem;
+  flex-direction: column;
+  align-items: center;
+  width: 55%;
+  min-width: 55%;
+  height: 100%;
 `;
 
 export const Background = styled.div`

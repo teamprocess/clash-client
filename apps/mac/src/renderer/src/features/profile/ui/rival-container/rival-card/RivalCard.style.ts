@@ -6,6 +6,7 @@ import { palette } from "@clash/design-tokens/theme";
 export const RivalBox = styled.div`
   width: 100%;
   min-height: 5.25rem;
+  max-height: 100%;
   flex: 1;
   border-radius: 0.75rem;
   background: ${({ theme }) => theme.background.alternative};

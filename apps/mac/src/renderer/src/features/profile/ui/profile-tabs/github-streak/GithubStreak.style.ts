@@ -20,7 +20,6 @@ export const Title = styled.p`
 
 export const GrassBox = styled.div`
   width: 100%;
-  max-width: 100%;
   overflow-x: auto;
   scrollbar-width: none;
   padding: 0.25rem 0.35rem;

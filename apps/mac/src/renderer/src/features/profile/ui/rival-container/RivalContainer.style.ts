@@ -7,7 +7,7 @@ const flexCol = css`
 
 export const Container = styled.div`
   display: flex;
-  width: 60%;
+  width: 100%;
   flex-direction: column;
   gap: 0.75rem;
   height: 100%;
@@ -20,8 +20,6 @@ export const AddRivalButton = styled.button`
   padding: 1rem 0.75rem;
   ${flexCol};
   justify-content: flex-start;
-  gap: 1rem;
-  border: 0;
   cursor: pointer;
   flex: 1;
 
