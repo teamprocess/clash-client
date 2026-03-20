@@ -7,7 +7,7 @@ export const EmptyStateBox = styled.div`
   align-items: center;
   justify-content: center;
   width: 100%;
-  min-height: 44.5%;
+  height: 100%;
   border: 1px dashed ${({ theme }) => theme.fill.alternative};
   border-radius: 0.75rem;
   background-color: ${({ theme }) => theme.fill.neutral};

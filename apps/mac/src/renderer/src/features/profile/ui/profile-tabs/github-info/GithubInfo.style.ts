@@ -80,8 +80,8 @@ export const CodeIcon = styled.img.attrs({
 
 export const ActiveContainer = styled.section`
   width: 100%;
-  display: flex;
   height: 100%;
+  display: flex;
   flex-direction: column;
   gap: 0.75rem;
 `;

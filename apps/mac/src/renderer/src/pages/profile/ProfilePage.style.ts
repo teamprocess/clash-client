@@ -20,10 +20,8 @@ export const Background = styled.div`
 `;
 
 export const BodyRow = styled.div`
-  display: flex;
   margin-top: 3.25rem;
-  gap: 1rem;
-  align-items: flex-end;
+  align-items: center;
   width: 100%;
   flex: 1;
   justify-content: space-between;
