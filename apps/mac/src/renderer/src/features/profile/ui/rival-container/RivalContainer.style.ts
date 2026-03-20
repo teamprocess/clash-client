@@ -9,12 +9,14 @@ export const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  width: 100%;
+  width: 50%;
+  height: 100%;
 `;
 
 export const Container = styled.div`
   display: flex;
   flex-direction: column;
+  height: 100%;
   gap: 0.75rem;
 `;
 

@@ -26,9 +26,7 @@ export const TopProfile = ({
     const file = event.target.files?.[0];
     event.target.value = "";
 
-    if (!file) {
-      return;
-    }
+    if (!file) return;
 
     try {
       await uploadProfileImageMutation.mutateAsync(file);
@@ -38,50 +36,48 @@ export const TopProfile = ({
   };
 
   const handleSelectProfileImage = () => {
-    if (uploadProfileImageMutation.isPending) {
-      return;
-    }
-
+    if (uploadProfileImageMutation.isPending) return;
     fileInputRef.current?.click();
   };
 
   return (
     <S.Banner $accent={bannerAccentColor} $bgImage={bannerBgImageUrl}>
       <S.ProfileCard>
-        <S.ProfileImgWrap $accent={badgeAccentColor} $bgImage={badgeBgImageUrl}>
-          <S.ImgBox>
-            <S.ProfileImageButton
-              type="button"
-              onClick={handleSelectProfileImage}
-              disabled={uploadProfileImageMutation.isPending}
-              $hasImage={Boolean(user?.profileImage)}
-            >
-              <S.ProfileImg
-                src={user?.profileImage || S.FallbackProfileImage}
-                onError={handleProfileImageError}
-              />
+        <S.ProfileImgWrapper>
+          <S.ProfileImgContainer $accent={badgeAccentColor} $bgImage={badgeBgImageUrl}>
+            <S.ImgBox>
+              <S.ProfileImageButton
+                type="button"
+                onClick={handleSelectProfileImage}
+                disabled={uploadProfileImageMutation.isPending}
+                $hasImage={Boolean(user?.profileImage)}
+              >
+                <S.ProfileImg
+                  src={user?.profileImage || S.FallbackProfileImage}
+                  onError={handleProfileImageError}
+                />
 
-              {user?.profileImage ? (
-                <S.ChangeProfileImageIconWrap className="profile-image-overlay">
-                  <S.ChangeProfileImageIcon />
-                </S.ChangeProfileImageIconWrap>
-              ) : (
-                <S.AddProfileImageIconWrap className="profile-image-overlay">
-                  <S.AddProfileImageIcon />
-                </S.AddProfileImageIconWrap>
-              )}
-            </S.ProfileImageButton>
-          </S.ImgBox>
+                {user?.profileImage ? (
+                  <S.ChangeProfileImageIconWrap>
+                    <S.ChangeProfileImageIcon />
+                  </S.ChangeProfileImageIconWrap>
+                ) : (
+                  <S.AddProfileImageIconWrap>
+                    <S.AddProfileImageIcon />
+                  </S.AddProfileImageIconWrap>
+                )}
+              </S.ProfileImageButton>
+            </S.ImgBox>
 
-          <S.RankTierWrap>
-            <RankTier tier={String(user?.tier)} />
-          </S.RankTierWrap>
-        </S.ProfileImgWrap>
-
-        <S.UserInfo>
-          <S.Name>{user?.name}</S.Name>
-          {badgeBgImageUrl ? <S.BadgeDot /> : <></>}
-        </S.UserInfo>
+            <S.RankTierWrap>
+              <RankTier tier={String(user?.tier)} />
+            </S.RankTierWrap>
+          </S.ProfileImgContainer>
+          <S.UserInfo>
+            <S.Name>{user?.name}</S.Name>
+            {badgeBgImageUrl && <S.BadgeDot />}
+          </S.UserInfo>
+        </S.ProfileImgWrapper>
       </S.ProfileCard>
 
       <S.Button>
