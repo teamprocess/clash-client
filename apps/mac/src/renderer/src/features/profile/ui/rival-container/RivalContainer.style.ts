@@ -5,12 +5,17 @@ const flexCol = css`
   flex-direction: column;
 `;
 
+export const Wrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  width: 100%;
+`;
+
 export const Container = styled.div`
   display: flex;
-  width: 100%;
   flex-direction: column;
   gap: 0.75rem;
-  height: 100%;
 `;
 
 export const AddRivalButton = styled.button`
