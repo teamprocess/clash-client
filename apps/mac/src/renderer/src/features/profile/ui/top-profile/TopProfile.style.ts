@@ -6,7 +6,6 @@ import ChangeProfileImg from "../../assets/change-profile-img-icon.svg";
 
 export const Banner = styled.div<{ $accent?: string; $bgImage?: string }>`
   width: 100%;
-  //aspect-ratio: 19 / 4;
   border-radius: 1rem;
   background: ${({ theme }) => theme.background.alternative};
 
@@ -36,17 +35,22 @@ export const Button = styled.div`
 `;
 
 export const ProfileCard = styled.div`
-  @media (min-height: 56.25rem) {
-    top: 60%;
-  }
+  height: 100%;
+  min-height: 12rem;
 `;
 
-export const ProfileImgWrap = styled.div<{ $accent?: string; $bgImage?: string }>`
+export const ProfileImgWrapper = styled.div`
+  position: absolute;
+  bottom: -40%;
+  left: 16%;
+`;
+
+export const ProfileImgContainer = styled.div<{ $accent?: string; $bgImage?: string }>`
   position: relative;
   width: 7.5rem;
   height: 7.5rem;
+  margin-bottom: 20%;
   border-radius: 50%;
-  box-sizing: border-box;
   border: ${({ $accent }) => ($accent ? `0.5rem solid ${$accent}` : "none")};
 
   ${({ $bgImage }) =>
@@ -120,11 +124,9 @@ export const ProfileImageButton = styled.button<{ $hasImage: boolean }>`
 `;
 
 export const UserInfo = styled.div`
-  width: 100%;
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  margin-top: 0.875rem;
 `;
 
 export const Name = styled.div`

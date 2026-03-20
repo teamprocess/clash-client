@@ -3,9 +3,9 @@ import { font } from "@clash/design-tokens";
 
 export const Banner = styled.div`
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
+  align-items: flex-end;
   gap: 1.125rem;
-  align-items: center;
   justify-content: space-between;
   height: 46.25vh;
 `;
@@ -13,15 +13,15 @@ export const Banner = styled.div`
 export const BannerBox = styled.div`
   display: flex;
   gap: 1.125rem;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
-  width: 55%;
+  width: 100%;
   min-width: 55%;
   height: 100%;
 `;
 
 export const Background = styled.div`
-  width: 100%;
+  width: 55%;
   height: 100%;
   border-radius: 1rem;
   background: ${({ theme }) => theme.background.alternative};
@@ -34,7 +34,7 @@ export const Background = styled.div`
 
 export const TabHeader = styled.div`
   display: flex;
-  width: 100%;
+  width: 40.5vw;
   flex-direction: column;
   gap: 0.75rem;
 `;

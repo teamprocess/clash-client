@@ -258,8 +258,8 @@ export const EmptyStateBox = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 100%;
-  min-height: 100%;
+  width: 37.5vw;
+  height: 100%;
   border: 1px dashed ${({ theme }) => theme.fill.alternative};
   border-radius: 0.75rem;
   background-color: transparent;
