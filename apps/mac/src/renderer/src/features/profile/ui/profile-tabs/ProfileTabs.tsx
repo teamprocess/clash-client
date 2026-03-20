@@ -41,46 +41,62 @@ export const ProfileTabs = () => {
     });
   }, [active]);
 
+  const tabHeaderRef = useRef<HTMLDivElement>(null);
+  const [headerWidth, setHeaderWidth] = useState(0);
+
+  useEffect(() => {
+    if (!tabHeaderRef.current) return;
+
+    const observer = new ResizeObserver(entries => {
+      for (const entry of entries) {
+        setHeaderWidth(entry.contentRect.width);
+      }
+    });
+
+    observer.observe(tabHeaderRef.current);
+
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <S.Banner>
-      <RivalContainer />
+      <S.TabHeader ref={tabHeaderRef}>
+        <S.Tabs ref={tabsRef}>
+          <S.Tab
+            ref={githubTabRef}
+            type="button"
+            $isActive={active === "github"}
+            onClick={() => setActive("github")}
+          >
+            Github
+          </S.Tab>
+
+          <S.Tab
+            ref={itemTabRef}
+            type="button"
+            $isActive={active === "item"}
+            onClick={() => setActive("item")}
+          >
+            아이템
+          </S.Tab>
+
+          <S.Tab
+            ref={timeTabRef}
+            type="button"
+            $isActive={active === "time"}
+            onClick={() => setActive("time")}
+          >
+            시간
+          </S.Tab>
+        </S.Tabs>
+
+        <S.TabRail>
+          <S.TabActiveRail $left={activeRail.left} $width={activeRail.width} />
+        </S.TabRail>
+      </S.TabHeader>
       <S.BannerBox>
-        <S.TabHeader>
-          <S.Tabs ref={tabsRef}>
-            <S.Tab
-              ref={githubTabRef}
-              type="button"
-              $isActive={active === "github"}
-              onClick={() => setActive("github")}
-            >
-              Github
-            </S.Tab>
-
-            <S.Tab
-              ref={itemTabRef}
-              type="button"
-              $isActive={active === "item"}
-              onClick={() => setActive("item")}
-            >
-              아이템
-            </S.Tab>
-
-            <S.Tab
-              ref={timeTabRef}
-              type="button"
-              $isActive={active === "time"}
-              onClick={() => setActive("time")}
-            >
-              시간
-            </S.Tab>
-          </S.Tabs>
-
-          <S.TabRail>
-            <S.TabActiveRail $left={activeRail.left} $width={activeRail.width} />
-          </S.TabRail>
-        </S.TabHeader>
-
-        <S.Background>
+        <RivalContainer />
+        <S.Background style={{ width: headerWidth }}>
           {active === "github" && <GithubActivityPanel />}
           {active === "item" && <ItemPanel />}
           {active === "time" && <TimePanel />}
