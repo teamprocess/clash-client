@@ -10,13 +10,10 @@ interface DeepLinkAuthPayload {
 }
 
 const PENDING_GITHUB_STATE_KEY = "clash:github:pending-state";
+const GITHUB_OAUTH_BASE_URL = "https://github.com";
+const GITHUB_OAUTH_REDIRECT_URI = "clashapp://";
+const GITHUB_OAUTH_SCOPE = "read:user user:email repo read:org";
 const GITHUB_CLIENT_ID = import.meta.env.VITE_GITHUB_CLIENT_ID || "";
-const GITHUB_OAUTH_REDIRECT_URI = (import.meta.env.VITE_GITHUB_OAUTH_REDIRECT_URI || "").trim();
-const GITHUB_OAUTH_SCOPE = (
-  import.meta.env.VITE_GITHUB_OAUTH_SCOPE || "read:user user:email repo read:org"
-)
-  .split(",")
-  .join(" ");
 
 const getPendingState = (): string | null => {
   if (typeof window === "undefined") {
@@ -61,7 +58,7 @@ const buildAuthorizeUrl = (state: string) => {
     state,
   });
 
-  return `https://github.com/login/oauth/authorize?${params.toString()}`;
+  return `${GITHUB_OAUTH_BASE_URL}/login/oauth/authorize?${params.toString()}`;
 };
 
 export const useGitHub = () => {
