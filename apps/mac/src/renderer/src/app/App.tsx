@@ -19,7 +19,7 @@ import { ComparePage } from "@/pages/home/compare/ComparePage";
 import { ProfilePage } from "@/pages/profile";
 import { OfflinePage } from "@/pages/offline";
 import { TabLayout } from "@/app/layouts/tab";
-import { MyCompetitionPage, RivalCompetitionPage } from "@/pages/competition";
+import { CompetitionTabs, MyCompetitionPage, RivalCompetitionPage } from "@/pages/competition";
 
 const RECAPTCHA_SITE_KEY = import.meta.env.VITE_RECAPTCHA_SITE_KEY || "";
 
@@ -63,17 +63,7 @@ function App() {
                 <Route path="/roadmap/major-choice" element={<RoadmapMajorChoicePage />} />
                 <Route path="/roadmap/:sectionId" element={<ChapterPage />} />
                 <Route path="/profile" element={<ProfilePage />} />
-                {/* Competition */}
-                <Route
-                  element={
-                    <TabLayout
-                      tabs={[
-                        { name: "나와의 경쟁", url: "/competition" },
-                        { name: "라이벌과의 경쟁", url: "/competition/rival" },
-                      ]}
-                    />
-                  }
-                >
+                <Route element={<CompetitionTabs />}>
                   <Route path="/competition" element={<MyCompetitionPage />} />
                   <Route path="/competition/rival" element={<RivalCompetitionPage />} />
                 </Route>
@@ -84,7 +74,6 @@ function App() {
                 <Route path="/sign-in" element={<SignInPage />} />
                 <Route path="/sign-up" element={<Navigate to="/sign-in" replace />} />
               </Route>
-
               <Route path="*" element={<NotFoundPage />} />
             </Routes>
           </HashRouter>
