@@ -16,15 +16,7 @@ const buildCookieHeader = (
   cookies: Awaited<ReturnType<typeof session.defaultSession.cookies.get>>
 ) => cookies.map(cookie => `${cookie.name}=${cookie.value}`).join("; ");
 
-const buildRecordStopUrl = () => {
-  const normalizedApiUrl = VITE_API_URL?.endsWith("/") ? VITE_API_URL : `${VITE_API_URL}/`;
-  return new URL("v2/record/stop", normalizedApiUrl).toString();
-};
-
-const buildRecordCurrentUrl = () => {
-  const normalizedApiUrl = VITE_API_URL?.endsWith("/") ? VITE_API_URL : `${VITE_API_URL}/`;
-  return new URL("v2/record/current", normalizedApiUrl).toString();
-};
+const buildApiUrl = (pathname: string) => new URL(pathname, `${VITE_API_URL}/`).toString();
 
 // API 응답에서 종료해야 할 활성 세션이 있는지 확인
 const hasActiveRecordSession = (payload: unknown) => {
@@ -46,7 +38,7 @@ const hasActiveRecordSession = (payload: unknown) => {
 
 // 앱 종료 직전에 서버에 기록 중지 요청
 const stopRecordSessionOnShutdown = async () => {
-  if (!VITE_API_URL) {
+  if (!app.isReady() || !VITE_API_URL) {
     return;
   }
 
@@ -58,7 +50,7 @@ const stopRecordSessionOnShutdown = async () => {
     }
 
     const cookieHeader = buildCookieHeader(cookies);
-    const currentUrl = buildRecordCurrentUrl();
+    const currentUrl = buildApiUrl("v2/record/current");
     const currentResponse = await fetch(currentUrl, {
       method: "GET",
       headers: {
@@ -78,7 +70,7 @@ const stopRecordSessionOnShutdown = async () => {
       return;
     }
 
-    const stopUrl = buildRecordStopUrl();
+    const stopUrl = buildApiUrl("v2/record/stop");
 
     const response = await fetch(stopUrl, {
       method: "POST",
@@ -133,7 +125,9 @@ export const registerQuitHandlers = ({ getAppMonitor }: RegisterQuitHandlersPara
       try {
         await Promise.race([stopRecordSessionOnShutdown(), wait(SHUTDOWN_CLEANUP_TIMEOUT_MS)]);
       } finally {
-        await session.defaultSession.cookies.flushStore();
+        if (app.isReady()) {
+          await session.defaultSession.cookies.flushStore();
+        }
         app.exit(0);
       }
     })();

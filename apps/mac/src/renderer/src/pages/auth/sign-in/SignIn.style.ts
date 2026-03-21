@@ -15,7 +15,7 @@ export const LeftContainer = styled.div`
   flex-direction: column;
   align-items: center;
   width: 34rem;
-  gap: 5rem;
+  gap: 3rem;
 `;
 
 export const ClashLogo = styled(Clash)`
