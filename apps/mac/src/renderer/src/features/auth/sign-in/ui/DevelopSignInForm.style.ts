@@ -2,23 +2,51 @@ import styled from "styled-components";
 import { palette } from "@clash/design-tokens/theme";
 import { font } from "@clash/design-tokens/font";
 
-export const FormContainer = styled.div`
+export const FormContainer = styled.form`
   display: flex;
   flex-direction: column;
   align-items: center;
   width: 100%;
-  gap: 3rem;
+  gap: 2rem;
 `;
 
-export const InputBox = styled.div`
+export const FieldGroup = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: center;
+  width: 24rem;
   gap: 1rem;
 `;
 
+export const Field = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  width: 100%;
+`;
+
+export const Label = styled.label`
+  ${font.headline2.medium};
+  color: ${({ theme }) => theme.label.normal};
+`;
+
+export const Input = styled.input`
+  width: 100%;
+  height: 3rem;
+  padding: 1rem;
+  border: none;
+  outline: none;
+  border-radius: 0.5rem;
+  background-color: ${({ theme }) => theme.label.disable};
+  color: ${({ theme }) => theme.label.normal};
+  ${font.body.medium};
+
+  &::placeholder {
+    color: ${({ theme }) => theme.label.assistive};
+  }
+`;
+
 export const Title = styled.h1`
-  ${font.title1.bold};
+  ${font.title1.medium};
   color: ${({ theme }) => theme.label.neutral};
   margin: 0;
 `;
@@ -43,24 +71,4 @@ export const ButtonWrapper = styled.div`
   align-items: center;
   width: 24rem;
   gap: 1rem;
-`;
-
-export const HelpTextBox = styled.div`
-  display: flex;
-  gap: 1rem;
-`;
-
-export const HelpText = styled.button`
-  ${font.caption.medium};
-  text-decoration: underline;
-  color: ${({ theme }) => theme.label.neutral};
-  background: transparent;
-  border: 0;
-  padding: 0;
-  cursor: pointer;
-
-  &:disabled {
-    color: ${({ theme }) => theme.label.alternative};
-    cursor: not-allowed;
-  }
 `;
