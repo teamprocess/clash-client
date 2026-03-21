@@ -10,7 +10,7 @@ export const RivalBox = styled.div`
   flex: 1;
   border-radius: 0.75rem;
   background: ${({ theme }) => theme.background.alternative};
-  padding: 0.875rem 1rem;
+  padding: 0.875rem 2rem;
   display: flex;
   align-items: center;
   justify-content: space-between;

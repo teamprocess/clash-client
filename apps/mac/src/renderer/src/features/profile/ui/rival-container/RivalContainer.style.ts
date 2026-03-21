@@ -9,7 +9,8 @@ export const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  width: 50%;
+  width: 100%;
+  min-width: 0;
   height: 100%;
 `;
 
