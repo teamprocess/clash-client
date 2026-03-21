@@ -16,19 +16,30 @@ const flexCol = css`
 
 export const ContentArea = styled.div`
   ${flexCol};
-  justify-content: space-between;
   height: 100%;
+  min-height: 0;
   border-radius: 1rem;
   padding: 1.5rem;
+  gap: 1rem;
   background: ${({ theme }) => theme.background.normal};
 `;
 
-export const GraphWrapper = styled.div`
+const sectionBase = css`
   ${flexCol};
   padding: 0.75rem;
   width: 100%;
   gap: 0.625rem;
-  height: 100%;
+  min-height: 0;
+`;
+
+export const AnalyzeSection = styled.div`
+  ${sectionBase};
+  flex-shrink: 0;
+`;
+
+export const CompareSection = styled.div`
+  ${sectionBase};
+  flex: 1;
 `;
 
 export const AnalyzeTitle = styled.p`
@@ -39,6 +50,7 @@ export const AnalyzeTitle = styled.p`
 export const Line = styled.div`
   width: 100%;
   height: 1px;
+  flex-shrink: 0;
   background: ${({ theme }) => theme.line.neutral};
 `;
 
@@ -58,12 +70,14 @@ export const CompareContainer = styled.div`
   ${flexRow};
   gap: 1rem;
   height: 100%;
+  min-height: 0;
 `;
 
 export const CompareBox = styled.div`
   padding: 1rem;
   height: 100%;
   width: 100%;
+  min-height: 0;
   ${flexCol};
   gap: 1rem;
   justify-content: space-between;
@@ -142,9 +156,10 @@ export const GrowthRateBox = styled.div<{ $direction?: GrowthDirection; $gap?: s
 export const ChartWrapper = styled.div`
   width: 100%;
   position: relative;
-  min-height: 85%;
-  height: 100%;
-  flex: 1;
+  min-height: 12rem;
+  height: clamp(12rem, 30vh, 15rem);
+  max-height: 15rem;
+  flex: none;
 
   canvas {
     width: 100% !important;

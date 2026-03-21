@@ -23,7 +23,7 @@ export const WithMyCompetition = () => {
 
   return (
     <S.ContentArea>
-      <S.GraphWrapper>
+      <S.AnalyzeSection>
         <S.TitleBox $justify="space-between">
           <S.AnalyzeTitle>내 성장도 분석</S.AnalyzeTitle>
           <Select<GrowthRateStandard>
@@ -36,11 +36,11 @@ export const WithMyCompetition = () => {
         <S.ChartWrapper>
           <MyCompetitionLineChart dataPoint={chartData.dataPoint} />
         </S.ChartWrapper>
-      </S.GraphWrapper>
+      </S.AnalyzeSection>
 
       <S.Line />
 
-      <S.GraphWrapper>
+      <S.CompareSection>
         <S.TitleBox>
           <S.AnalyzeTitle>내 기록 비교</S.AnalyzeTitle>
           <S.SubText>각 기간 동안 기록한 스탯의 평균을 비교합니다.</S.SubText>
@@ -175,7 +175,7 @@ export const WithMyCompetition = () => {
             </S.GridBox>
           </S.CompareBox>
         </S.CompareContainer>
-      </S.GraphWrapper>
+      </S.CompareSection>
     </S.ContentArea>
   );
 };
