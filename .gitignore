@@ -8,6 +8,8 @@ out
 apps/mac/build
 .idea
 .env
+.env.*
+!**/.env.example
 CLAUDE.md
 AGENTS.md
 apps/mac/certs
