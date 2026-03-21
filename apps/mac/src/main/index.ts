@@ -202,7 +202,7 @@ const registerAutoUpdater = () => {
 
 configureCertificateHandling();
 registerQuitHandlers({ getAppMonitor });
-registerDeepLinkEvents(getMainWindow);
+registerDeepLinkEvents(getMainWindow, createWindow);
 app.whenReady().then(() => {
   registerAutoUpdater();
   registerApplicationMenu({

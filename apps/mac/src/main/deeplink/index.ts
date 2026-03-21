@@ -60,7 +60,10 @@ export const registerProtocol = () => {
 };
 
 // 딥링크 이벤트 등록
-export const registerDeepLinkEvents = (getMainWindow: () => BrowserWindow | null) => {
+export const registerDeepLinkEvents = (
+  getMainWindow: () => BrowserWindow | null,
+  createWindow: () => void
+) => {
   const gotTheLock = app.requestSingleInstanceLock();
 
   if (!gotTheLock) {
@@ -74,7 +77,12 @@ export const registerDeepLinkEvents = (getMainWindow: () => BrowserWindow | null
       handleDeepLink(url, getMainWindow);
     }
 
-    const mainWindow = getMainWindow();
+    let mainWindow = getMainWindow();
+    if (!mainWindow) {
+      createWindow();
+      mainWindow = getMainWindow();
+    }
+
     if (mainWindow) {
       focusMainWindow(mainWindow);
     }

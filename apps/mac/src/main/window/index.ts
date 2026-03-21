@@ -1,16 +1,17 @@
 import { BrowserWindow, shell } from "electron";
 import { join } from "path";
-import { is } from "@electron-toolkit/utils";
+import { getRendererEntryUrl } from "../appProtocol";
 import { initializeWindowZoom } from "./zoom";
 
 // 개발/배포 환경에 맞는 렌더러 URL 로드
 const loadRenderer = async (mainWindow: BrowserWindow) => {
-  if (is.dev && process.env["ELECTRON_RENDERER_URL"]) {
-    await mainWindow.loadURL(process.env["ELECTRON_RENDERER_URL"]);
-    return;
-  }
+  const entryUrl = getRendererEntryUrl();
 
-  await mainWindow.loadFile(join(__dirname, "../renderer/index.html"));
+  try {
+    await mainWindow.loadURL(entryUrl);
+  } catch (error) {
+    console.error("renderer entry load failed:", entryUrl, error);
+  }
 };
 
 // 메인 브라우저 윈도우 생성 + 기본 동작 연결
@@ -28,11 +29,18 @@ export const createMainWindow = () => {
 
   initializeWindowZoom(mainWindow);
 
-  // 준비되면 최대화 후 표시
-  mainWindow.on("ready-to-show", () => {
+  const showMainWindow = () => {
+    if (mainWindow.isDestroyed() || mainWindow.isVisible()) {
+      return;
+    }
+
     mainWindow.maximize();
     mainWindow.show();
-  });
+  };
+
+  // 준비되면 최대화 후 표시
+  mainWindow.on("ready-to-show", showMainWindow);
+  mainWindow.webContents.once("did-finish-load", showMainWindow);
 
   mainWindow.webContents.setWindowOpenHandler(details => {
     void shell.openExternal(details.url);
