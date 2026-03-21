@@ -46,7 +46,7 @@ const hasActiveRecordSession = (payload: unknown) => {
 
 // 앱 종료 직전에 서버에 기록 중지 요청
 const stopRecordSessionOnShutdown = async () => {
-  if (!VITE_API_URL) {
+  if (!app.isReady() || !VITE_API_URL) {
     return;
   }
 
@@ -133,7 +133,9 @@ export const registerQuitHandlers = ({ getAppMonitor }: RegisterQuitHandlersPara
       try {
         await Promise.race([stopRecordSessionOnShutdown(), wait(SHUTDOWN_CLEANUP_TIMEOUT_MS)]);
       } finally {
-        await session.defaultSession.cookies.flushStore();
+        if (app.isReady()) {
+          await session.defaultSession.cookies.flushStore();
+        }
         app.exit(0);
       }
     })();
