@@ -7,6 +7,7 @@ const RADIUS = 0.2;
 
 export const ActiveContainer = styled.div`
   width: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
   gap: 0.3rem;
@@ -19,7 +20,6 @@ export const Title = styled.p`
 
 export const GrassBox = styled.div`
   width: 100%;
-  max-width: 100%;
   overflow-x: auto;
   scrollbar-width: none;
   padding: 0.25rem 0.35rem;

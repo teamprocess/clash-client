@@ -21,8 +21,7 @@ export const GithubActivityPanel = () => {
   const detailQuery = useProfileGithubDetailQuery(selectedDate);
   const detail = detailQuery.data?.data;
   const matchedDetail = detail?.date === selectedDate ? detail : null;
-  const displayDetail =
-    matchedDetail ?? (detailQuery.isPlaceholderData && detail ? detail : null);
+  const displayDetail = matchedDetail ?? (detailQuery.isPlaceholderData && detail ? detail : null);
 
   const infoProps = useMemo(() => {
     if (!selectedDate) return null;
