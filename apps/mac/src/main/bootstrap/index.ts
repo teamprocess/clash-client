@@ -3,6 +3,7 @@ import { electronApp, is } from "@electron-toolkit/utils";
 import type { AppMonitor } from "../services";
 import { registerIpcHandlers } from "../ipc";
 import { registerCspHeaders } from "../security";
+import { registerAppProtocol } from "../appProtocol";
 import { registerProtocol } from "../deeplink";
 
 interface BootstrapMainProcessParams {
@@ -75,6 +76,7 @@ export const bootstrapMainProcess = ({
   getAppMonitor,
 }: BootstrapMainProcessParams) => {
   app.whenReady().then(() => {
+    registerAppProtocol();
     registerProtocol();
     electronApp.setAppUserModelId("com.electron");
 
