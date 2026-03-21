@@ -27,6 +27,17 @@ export interface ElectronAuthStartSignupResponse {
   state: string;
 }
 
+export interface ElectronAuthLoginRequest {
+  username: string;
+  password: string;
+  state: string;
+  redirectUri: string;
+}
+
+export interface ElectronAuthLoginResponse {
+  redirectUrl: string;
+}
+
 export interface ElectronAuthExchangeRequest {
   code: string;
   state: string;
@@ -76,6 +87,13 @@ export interface getMyProfileResponse {
 }
 
 export const authApi = {
+  noRecaptchaSignIn: async (data: SignInRequest) => {
+    const result = await api.post<ApiResponse<SignInResponse>>("/auth/no-recaptcha-sign-in", {
+      ...data,
+    });
+    return result.data;
+  },
+
   // Electron 로그인 시작
   electronAuthStart: async (options?: RecaptchaOptions) => {
     const result = await api.post<ApiResponse<ElectronAuthStartResponse>>(
@@ -99,6 +117,31 @@ export const authApi = {
         headers: options?.recaptchaToken
           ? { "X-Recaptcha-Token": options.recaptchaToken }
           : undefined,
+      }
+    );
+    return result.data;
+  },
+
+  electronSignIn: async (data: ElectronAuthLoginRequest, options?: RecaptchaOptions) => {
+    const result = await api.post<ApiResponse<ElectronAuthLoginResponse>>(
+      "/auth/electron/sign-in",
+      {
+        ...data,
+      },
+      {
+        headers: options?.recaptchaToken
+          ? { "X-Recaptcha-Token": options.recaptchaToken }
+          : undefined,
+      }
+    );
+    return result.data;
+  },
+
+  electronNoRecaptchaSignIn: async (data: ElectronAuthLoginRequest) => {
+    const result = await api.post<ApiResponse<ElectronAuthLoginResponse>>(
+      "/auth/electron/no-recaptcha-sign-in",
+      {
+        ...data,
       }
     );
     return result.data;
