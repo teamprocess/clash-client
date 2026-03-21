@@ -1,23 +1,25 @@
 import styled, { css } from "styled-components";
-import ProfileIcon from "../../assets/rival-profile.png";
 
 const flexCol = css`
   display: flex;
   flex-direction: column;
 `;
 
-export const Container = styled.div`
+export const Wrapper = styled.div`
   display: flex;
-  width: 100%;
   flex-direction: column;
-  gap: 0.75rem;
-  min-height: 5.325rem;
-  margin-top: 7.25rem;
+  justify-content: flex-end;
+  width: 100%;
+  min-width: 0;
+  height: 100%;
 `;
 
-export const profileSrcMap = {
-  default: ProfileIcon,
-} as const;
+export const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  gap: 0.75rem;
+`;
 
 export const AddRivalButton = styled.button`
   width: 100%;
@@ -26,8 +28,6 @@ export const AddRivalButton = styled.button`
   padding: 1rem 0.75rem;
   ${flexCol};
   justify-content: flex-start;
-  gap: 1rem;
-  border: 0;
   cursor: pointer;
   flex: 1;
 
