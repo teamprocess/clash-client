@@ -21,6 +21,16 @@ export const TabLayout = ({ tabs }: TabLayoutProps) => {
     return;
   }
 
+  const handleTabClick = (tab: Tab) => {
+    const shouldNavigate = tab.onSelect?.();
+
+    if (shouldNavigate === false) {
+      return;
+    }
+
+    navigate(tab.url);
+  };
+
   return (
     <S.Wrapper>
       <S.TabContainer>
@@ -30,7 +40,7 @@ export const TabLayout = ({ tabs }: TabLayoutProps) => {
             key={idx}
             type="button"
             $isActive={tab.url === currentTab.url}
-            onClick={() => navigate(tab.url)}
+            onClick={() => handleTabClick(tab)}
           >
             {tab.name}
           </S.TabItem>
