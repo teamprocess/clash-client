@@ -2,10 +2,16 @@ import { app, session } from "electron";
 import { is } from "@electron-toolkit/utils";
 
 const FALLBACK_SOCKET_ENDPOINT = "wss://api.clash.kr/socket.io";
+const LOCAL_SOCKET_PORT = "9092";
+const LOCAL_SOCKET_HOSTS = new Set(["localhost", "127.0.0.1", "local.clash.kr"]);
 const DEFAULT_PROFILE_IMAGE_SOURCES = [
   "https://cdn.clash.kr",
   "https://*.amazonaws.com",
   "https://*.cloudfront.net",
+];
+const DEFAULT_CONNECT_SOURCES = [
+  "https://*.clash.kr",
+  "wss://*.clash.kr",
 ];
 
 const parseOrigin = (rawUrl: string | undefined) => {
@@ -17,6 +23,27 @@ const parseOrigin = (rawUrl: string | undefined) => {
     return new URL(rawUrl).origin;
   } catch {
     return null;
+  }
+};
+
+const resolveSocketEndpoint = () => {
+  const configuredEndpoint = process.env.VITE_SOCKET_IO_URL?.trim();
+  if (configuredEndpoint) {
+    return configuredEndpoint;
+  }
+
+  const apiUrl = process.env.VITE_API_URL?.trim();
+  if (!apiUrl) {
+    return FALLBACK_SOCKET_ENDPOINT;
+  }
+
+  try {
+    const url = new URL(apiUrl);
+    const protocol = url.protocol === "https:" ? "wss:" : "ws:";
+    const port = LOCAL_SOCKET_HOSTS.has(url.hostname) ? `:${LOCAL_SOCKET_PORT}` : url.port ? `:${url.port}` : "";
+    return `${protocol}//${url.hostname}${port}/socket.io`;
+  } catch {
+    return FALLBACK_SOCKET_ENDPOINT;
   }
 };
 
@@ -43,8 +70,11 @@ export const registerCspHeaders = () => {
   const connectSourceSet = new Set(["'self'", "https://www.google.com"]);
   const imageSourceSet = new Set(["'self'", "data:", "https://www.gstatic.com"]);
   const apiOrigin = parseOrigin(process.env.VITE_API_URL);
-  const socketOrigin =
-    parseOrigin(process.env.VITE_SOCKET_IO_URL) ?? parseOrigin(FALLBACK_SOCKET_ENDPOINT);
+  const socketOrigin = parseOrigin(resolveSocketEndpoint());
+
+  for (const source of DEFAULT_CONNECT_SOURCES) {
+    connectSourceSet.add(source);
+  }
 
   if (apiOrigin) {
     connectSourceSet.add(apiOrigin);
