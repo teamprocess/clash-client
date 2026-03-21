@@ -22,7 +22,7 @@ api.interceptors.response.use(
         "/auth/sign-up",
         "/auth/username-duplicate-check",
         "/auth/verify-email",
-        "/auth/electron/login",
+        "/auth/electron/sign-in",
       ];
       const isPublicPath = publicPaths.some(path => error.config?.url?.includes(path));
 
