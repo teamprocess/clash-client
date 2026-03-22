@@ -153,12 +153,16 @@ export const ProgressLabel = styled.span`
   white-space: nowrap;
 `;
 
-export const PreviousBox = styled.div`
+export const PreviousBox = styled.button`
   display: flex;
+  align-items: center;
   gap: 0.75rem;
   position: absolute;
   top: 2rem;
   left: 2.5rem;
+  padding: 0;
+  background: transparent;
+  border: none;
   cursor: pointer;
 `;
 
