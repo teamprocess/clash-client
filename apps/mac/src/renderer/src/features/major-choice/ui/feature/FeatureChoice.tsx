@@ -45,7 +45,7 @@ export const FeatureChoice = ({
           onClick={handleFeatureChoiceSubmit}
           fullWidth={true}
         >
-          선택 완료하기
+          선택하기
         </Button>
       </S.RoadMapContents>
     </S.RoadMapContainer>
