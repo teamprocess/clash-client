@@ -5,8 +5,8 @@ import { useChapterDetailsQuery } from "@/entities/roadmap/chapter/api/query/use
 import type { Mission } from "@/features/chapter/model/chapter.types";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
-import { chapterApi } from "@/entities/roadmap/chapter/api/chapterApi";
 import { chapterQueryKeys } from "@/entities/roadmap/chapter/api/query/chapterQueryKeys";
+import { useResetChapterMutation } from "@/entities/roadmap/chapter";
 import type {
   GetChapterDetailsResponse,
   GetSectionDetailsResponse,
@@ -53,6 +53,7 @@ export const useChapter = (sectionId: number) => {
   const queryClient = useQueryClient();
   const domain = useChapterDomain(sectionId);
   const view = useChapterView({ loading: domain.loading, sectionId });
+  const resetChapterMutation = useResetChapterMutation();
   const currentStageId = domain.currentStageId;
   const [resetOnOpenState, setResetOnOpenState] = useState({
     isLoading: false,
@@ -101,7 +102,7 @@ export const useChapter = (sectionId: number) => {
       });
 
       try {
-        const response = await chapterApi.resetChapter({ chapterId });
+        const response = await resetChapterMutation.mutateAsync({ chapterId });
 
         if (!response.success) {
           throw new Error(response.message ?? "챕터 초기화에 실패했습니다.");
@@ -147,7 +148,7 @@ export const useChapter = (sectionId: number) => {
     return () => {
       cancelled = true;
     };
-  }, [currentStageId, queryClient, resetDetailKey, sectionId]);
+  }, [currentStageId, queryClient, resetChapterMutation, resetDetailKey, sectionId]);
 
   const currentStageMissions = useMemo(() => {
     const chapter = chapterDetailsQuery.data;
