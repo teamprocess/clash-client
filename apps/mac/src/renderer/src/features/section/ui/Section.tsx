@@ -11,10 +11,12 @@ import { ConfirmDialog } from "@/shared/ui";
 import { SectionItemBox } from "../components/SectionItemBox";
 import { majorApi, Major } from "@/entities/major";
 import { useQueryClient } from "@tanstack/react-query";
+import { useDragScroll } from "@/shared/lib/useDragScroll";
 
 export const Section = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const roadmapScrollProps = useDragScroll<HTMLDivElement>();
 
   const [isTutorialModalOpen, setIsTutorialModalOpen] = useState(false);
   const [isChangeMajorModalOpen, setIsChangeMajorModalOpen] = useState(false);
@@ -83,7 +85,7 @@ export const Section = () => {
 
   return (
     <S.RoadmapContainer>
-      <S.RoadmapScrollable>
+      <S.RoadmapScrollable {...roadmapScrollProps}>
         <S.SectionItemWrapper>
           {sectionData?.categories.map(category => (
             <SectionItemBox

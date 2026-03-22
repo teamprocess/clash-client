@@ -41,19 +41,12 @@ export const ChapterScrollable = styled.div`
   position: relative;
   isolation: isolate;
   overscroll-behavior: contain;
+  cursor: grab;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 
   &::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
-  }
-
-  &::-webkit-scrollbar-track {
-    background: transparent; /* 스크롤바 배경(길) */
-  }
-
-  &::-webkit-scrollbar-thumb {
-    background: ${({ theme }) => theme.line.normal};
-    border-radius: 10px;
+    display: none;
   }
 `;
 
@@ -62,7 +55,7 @@ export const ChapterCanvas = styled.div`
   width: max-content;
   min-width: 100%;
   min-height: 100%;
-  padding: 5rem 4rem 7rem 20rem;
+  padding: 10rem 10rem 10rem 22rem;
   background-color: ${({ theme }) => theme.background.normal};
   background-image:
     linear-gradient(to right, ${({ theme }) => theme.line.alternative} 1px, transparent 1px),

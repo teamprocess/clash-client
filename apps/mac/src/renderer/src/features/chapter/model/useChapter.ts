@@ -213,6 +213,7 @@ export const useChapter = (sectionId: number) => {
 
   return {
     chapterRef: view.chapterRef,
+    chapterScrollProps: view.chapterScrollProps,
     domain: {
       roadmapNodes: domain.roadmapNodes,
       currentStage,

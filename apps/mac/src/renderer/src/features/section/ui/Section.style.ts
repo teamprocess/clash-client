@@ -56,18 +56,13 @@ export const RoadmapScrollable = styled.div`
   background-color: ${({ theme }) => theme.background.normal};
   border-radius: 1rem;
   overflow-x: auto;
-  overflow-y: hidden;
+  overflow-y: auto;
+  cursor: grab;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+
   &::-webkit-scrollbar {
-    height: 8px;
-  }
-
-  &::-webkit-scrollbar-track {
-    background: transparent;
-  }
-
-  &::-webkit-scrollbar-thumb {
-    background: ${({ theme }) => theme.line.normal}; /* 스크롤바 핸들 */
-    border-radius: 10px;
+    display: none;
   }
 `;
 
@@ -76,7 +71,8 @@ export const SectionItemWrapper = styled.div`
   justify-content: flex-start;
   align-items: center;
   gap: 3rem;
-  height: 35rem;
-  padding-left: 24rem;
+  min-height: 35rem;
+  padding: 10rem 10rem 10rem 22rem;
   min-width: max-content;
+  box-sizing: border-box;
 `;
