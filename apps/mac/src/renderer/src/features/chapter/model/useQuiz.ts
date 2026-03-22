@@ -1,9 +1,13 @@
 import { useEffect, useEffectEvent, useRef, useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import type { Mission } from "@/features/chapter/model/chapter.types";
-import { chapterApi } from "@/entities/roadmap/chapter/api/chapterApi";
 import type { GetChapterDetailsResponse } from "@/entities/roadmap/chapter/model/chapter.types";
 import { chapterQueryKeys } from "@/entities/roadmap/chapter/api/query/chapterQueryKeys";
+import {
+  useChapterResultMutation,
+  useResetChapterMutation,
+  useSubmitAnswerMutation,
+} from "@/entities/roadmap/chapter";
 import { getErrorMessage } from "@/shared/lib";
 
 type QuizState = {
@@ -38,6 +42,9 @@ type UseQuizParams = {
 
 export const useQuiz = ({ mission, onMissionComplete, onClose }: UseQuizParams) => {
   const queryClient = useQueryClient();
+  const resetChapterMutation = useResetChapterMutation();
+  const chapterResultMutation = useChapterResultMutation();
+  const submitAnswerMutation = useSubmitAnswerMutation();
   const [state, setState] = useState<QuizState>(() => createInitialState());
   const [error, setError] = useState<string | null>(null);
   const [isPreparing, setIsPreparing] = useState(!mission.completed);
@@ -97,7 +104,7 @@ export const useQuiz = ({ mission, onMissionComplete, onClose }: UseQuizParams) 
     }
 
     try {
-      const response = await chapterApi.resetChapter({ chapterId: mission.id });
+      const response = await resetChapterMutation.mutateAsync({ chapterId: mission.id });
 
       if (!response.success) {
         if (isMountedRef.current) {
@@ -152,7 +159,7 @@ export const useQuiz = ({ mission, onMissionComplete, onClose }: UseQuizParams) 
     isRequestingChapterResultRef.current = true;
 
     try {
-      const response = await chapterApi.getChapterResult(mission.id);
+      const response = await chapterResultMutation.mutateAsync(mission.id);
       const passedByServer = response.success && response.data?.isCleared === true;
       const passedByLocal =
         fallbackCorrectCount != null ? isLocallyPassed(fallbackCorrectCount) : undefined;
@@ -233,7 +240,7 @@ export const useQuiz = ({ mission, onMissionComplete, onClose }: UseQuizParams) 
     setState(prev => ({ ...prev, isSubmitting: true }));
 
     try {
-      const response = await chapterApi.submitAnswer({
+      const response = await submitAnswerMutation.mutateAsync({
         questionId: currentQuestion.id,
         submittedChoiceId: selectedChoiceId,
       });
