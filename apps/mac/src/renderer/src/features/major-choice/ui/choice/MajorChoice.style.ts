@@ -71,3 +71,9 @@ export const ChoiceWrapper = styled.div`
   width: 26rem;
   height: 13rem;
 `;
+
+export const SubmitLoading = styled.span`
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+`;
