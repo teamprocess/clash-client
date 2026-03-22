@@ -5,7 +5,7 @@ export {
   type getMajorSectionRequest,
   type section,
 } from "./model/section.types";
-export { previewApi } from "./preview";
+export { previewApi, useSectionPreviewQuery } from "./preview";
 export type {
   GetSectionPreviewResponse,
   PreviewChapter,

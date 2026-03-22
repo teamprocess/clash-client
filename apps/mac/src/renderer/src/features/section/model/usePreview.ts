@@ -1,11 +1,9 @@
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useMemo } from "react";
 import {
-  PreviewData,
-  GetSectionPreviewResponse,
+  type PreviewData,
+  type GetSectionPreviewResponse,
 } from "@/entities/roadmap/section/preview/model/preview.types";
-import { previewApi } from "@/entities/roadmap/section/preview/api/previewApi";
-import { getErrorMessage } from "@/shared/lib";
+import { useSectionPreviewQuery } from "@/entities/roadmap/section";
 
 const transformPreviewData = (serverData: GetSectionPreviewResponse): PreviewData => {
   const sortedChapters = [...serverData.chapters].sort((a, b) => a.orderIndex - b.orderIndex);
@@ -28,63 +26,16 @@ const transformPreviewData = (serverData: GetSectionPreviewResponse): PreviewDat
 };
 
 export const usePreview = (sectionId: number) => {
-  const navigate = useNavigate();
-  const [previewData, setPreviewData] = useState<PreviewData | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [currentStep, setCurrentStep] = useState(1);
-
-  useEffect(() => {
-    navigate("/roadmap");
-  }, [navigate]);
-
-  useEffect(() => {
-    const fetchPreview = async () => {
-      try {
-        setLoading(true);
-        setError(null);
-        const response = await previewApi.getSectionPreview(sectionId);
-
-        if (response.success && response.data) {
-          const transformed = transformPreviewData(response.data);
-          setPreviewData(transformed);
-        } else {
-          setError(response.message || "섹션 미리보기를 불러오는데 실패했습니다.");
-        }
-      } catch (error: unknown) {
-        console.error("섹션 미리보기를 불러오는데 실패했습니다:", error);
-        setError(getErrorMessage(error, "섹션 미리보기를 불러오는데 실패했습니다."));
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchPreview();
-  }, [sectionId]);
-
-  const activeStep = previewData?.steps.find(step => step.id === currentStep);
-  const totalSteps = previewData?.steps.length || 0;
-
-  const handlePrev = () => {
-    if (currentStep > 1) {
-      setCurrentStep(prev => prev - 1);
-    }
-  };
-
-  const handleNext = () => {
-    if (currentStep < totalSteps) {
-      setCurrentStep(prev => prev + 1);
-    }
-  };
+  const previewQuery = useSectionPreviewQuery(sectionId);
+  const previewData = useMemo(
+    () => (previewQuery.data ? transformPreviewData(previewQuery.data) : null),
+    [previewQuery.data]
+  );
 
   return {
     previewData,
-    loading,
-    error,
-    currentStep,
-    activeStep,
-    totalSteps,
-    handlePrev,
-    handleNext,
+    loading: previewQuery.isLoading,
+    error: previewQuery.error instanceof Error ? previewQuery.error.message : null,
+    totalSteps: previewData?.steps.length ?? 0,
   };
 };
