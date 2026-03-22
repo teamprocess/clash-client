@@ -11,7 +11,7 @@ export const MajorChoice = ({ selectedMajor, major, isValid, username, onSubmit 
           <S.ChoiceContentsTop>
             <S.ChoiceTitle>원하는 전공을 선택해주세요!</S.ChoiceTitle>
             <S.ChoiceDescription>
-              안녕하세요. {username}님. 원하는 전공을 선택하여 주세요.
+              안녕하세요. {username}님. 원하는 전공을 선택해 주세요.
               <br />
               희망하는 전공을 선택하여 나의 전공에 맞는 로드맵을 수행할 수 있습니다.
             </S.ChoiceDescription>
@@ -39,7 +39,7 @@ export const MajorChoice = ({ selectedMajor, major, isValid, username, onSubmit 
             onClick={onSubmit}
             fullWidth={true}
           >
-            선택 완료하기
+            선택하기
           </Button>
         </S.ChoiceContents>
       </S.ChoiceContainer>
