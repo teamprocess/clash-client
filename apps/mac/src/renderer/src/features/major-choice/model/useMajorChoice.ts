@@ -148,7 +148,7 @@ export const useMajorChoice = () => {
       answers,
       isAllAnswered,
       setAnswers,
-      navigate,
+      setStep,
       handleSelect,
       handleComplete,
       getTestQuestion,
