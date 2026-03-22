@@ -46,7 +46,7 @@ export const PanelContent = styled.div`
 export const PanelHeader = styled.div`
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
+  align-items: center;
   gap: 1.5rem;
 `;
 
@@ -100,8 +100,8 @@ export const IconButton = styled.button`
 `;
 
 export const CloseIcon = styled(Close)`
-  width: 1.4rem;
-  height: 1.4rem;
+  width: 2.5rem;
+  height: 2.5rem;
 `;
 
 export const OverviewBody = styled.div`
