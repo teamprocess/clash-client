@@ -164,8 +164,8 @@ export const Battle = () => {
                             <S.DataBox>
                               <div>
                                 {battle.category === "ACTIVE_TIME"
-                                  ? formatTime(Math.round(battle.rivalAnalyzePoint) ?? 0)
-                                  : Math.round(battle.rivalAnalyzePoint ?? 0)}{" "}
+                                  ? formatTime(Math.round(Math.abs(battle.rivalAnalyzePoint)) ?? 0)
+                                  : Math.round(Math.abs(battle.rivalAnalyzePoint) ?? 0)}{" "}
                                 {battle.detailTextTranslate(battle.category)}
                               </div>
                               <S.AnalyzeBar $width={battle.rivalAnalyzeRate ?? 0} $isRival>
@@ -180,8 +180,8 @@ export const Battle = () => {
                             <S.DataBox>
                               <div>
                                 {battle.category === "ACTIVE_TIME"
-                                  ? formatTime(Math.round(battle.myAnalyzePoint) ?? 0)
-                                  : Math.round(battle.myAnalyzePoint ?? 0)}{" "}
+                                  ? formatTime(Math.round(Math.abs(battle.myAnalyzePoint)) ?? 0)
+                                  : Math.round(Math.abs(battle.myAnalyzePoint) ?? 0)}{" "}
                                 {battle.detailTextTranslate(battle.category)}
                               </div>
                               <S.AnalyzeBar $width={battle.myAnalyzeRate ?? 0} $isRival={false}>
