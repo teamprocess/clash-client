@@ -16,24 +16,11 @@ import {
 import { getErrorMessage, queryClient } from "@/shared/lib";
 import { useBattleApplyListQuery } from "@/entities/competition/api/rival-competition/api/query/useBattle.query";
 import { useMutation } from "@tanstack/react-query";
-
-const analyzeCategoryOptions: { key: AnalyzeCategory; label: string }[] = [
-  { key: "EXP", label: "EXP" },
-  { key: "GITHUB", label: "Github" },
-  { key: "ACTIVE_TIME", label: "총 학습 시간" },
-];
-
-const judgeUpperHandMap = {
-  [MATCHVALUE.LOSING]: "열세",
-  [MATCHVALUE.WINNING]: "우세",
-  [MATCHVALUE.LOST]: "패배",
-  [MATCHVALUE.WON]: "승리",
-  [MATCHVALUE.DRAW]: "무승부",
-  [MATCHVALUE.DRAWING]: "동률",
-  [MATCHVALUE.CANCELED]: "취소된 배틀",
-  [MATCHVALUE.PENDING]: "수락 대기중",
-  [MATCHVALUE.NOT_STARTED]: "시작 전",
-} as const;
+import {
+  ANALYZE_CATEGORY_OPTIONS,
+  JUDGE_UPPER_HAND_MAP,
+  PERIOD_OPTIONS,
+} from "@/features/competition/constants/battle.constants";
 
 export const useBattle = () => {
   const [battleTargetId, setBattleTargetId] = useState<number | null>(null);
@@ -90,7 +77,7 @@ export const useBattle = () => {
     myAnalyzeRate !== null && rivalAnalyzeRate !== null ? rivalAnalyzeRate > myAnalyzeRate : false;
 
   const judgeUpperHand = (result: (typeof MATCHVALUE)[keyof typeof MATCHVALUE]): string => {
-    return judgeUpperHandMap[result] ?? "";
+    return JUDGE_UPPER_HAND_MAP[result] ?? "";
   };
 
   const detailTextTranslate = (category: AnalyzeCategory) => {
@@ -130,8 +117,6 @@ export const useBattle = () => {
     setIsSubmitting(false);
     setError(null);
   };
-
-  const periodOptions: PeriodDay[] = [3, 5, 7];
 
   const handleUserSelect = (id: number) => {
     setError(null);
@@ -205,7 +190,6 @@ export const useBattle = () => {
     }
   };
 
-  /* ===== return ===== */
   return {
     isModalOpen,
     openModal,
@@ -215,7 +199,7 @@ export const useBattle = () => {
     duration,
     setDuration,
     selectedDay,
-    periodOptions,
+    periodOptions: PERIOD_OPTIONS,
     handlePeriodSelect,
     canCreateBattle,
     createBattle,
@@ -241,7 +225,7 @@ export const useBattle = () => {
     rivalSelectedId,
     handleUserSelect,
 
-    analyzeCategoryOptions,
+    analyzeCategoryOptions: ANALYZE_CATEGORY_OPTIONS,
     category,
     setCategory,
 
