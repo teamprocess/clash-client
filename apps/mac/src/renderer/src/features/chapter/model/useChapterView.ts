@@ -1,32 +1,28 @@
 import { useCallback, useEffect, useRef, useState, type SetStateAction } from "react";
 import type { Mission } from "@/features/chapter/model/chapter.types";
+import { useDragScroll } from "@/shared/lib/useDragScroll";
 
 type UseChapterViewParams = {
   loading: boolean;
   sectionId: number;
 };
 
+const createInitialViewState = (sectionId: number) => ({
+  sectionId,
+  currentMission: null as Mission | null,
+  currentMissionStageTitle: null as string | null,
+  missionModalOpen: false,
+});
+
 export const useChapterView = ({ loading, sectionId }: UseChapterViewParams) => {
   const chapterRef = useRef<HTMLDivElement>(null);
+  const chapterScrollProps = useDragScroll<HTMLDivElement>();
 
   const clamp = (value: number, min: number, max: number) => Math.min(Math.max(value, min), max);
 
-  const [viewState, setViewState] = useState({
-    sectionId,
-    currentMission: null as Mission | null,
-    currentMissionStageTitle: null as string | null,
-    missionModalOpen: false,
-  });
+  const [viewState, setViewState] = useState(() => createInitialViewState(sectionId));
 
-  const resolvedViewState =
-    viewState.sectionId === sectionId
-      ? viewState
-      : {
-          sectionId,
-          currentMission: null,
-          currentMissionStageTitle: null,
-          missionModalOpen: false,
-        };
+  const resolvedViewState = viewState.sectionId === sectionId ? viewState : createInitialViewState(sectionId);
 
   const setSectionScopedState = useCallback(
     <T extends "currentMission" | "currentMissionStageTitle" | "missionModalOpen">(
@@ -34,15 +30,7 @@ export const useChapterView = ({ loading, sectionId }: UseChapterViewParams) => 
       value: SetStateAction<(typeof resolvedViewState)[T]>
     ) => {
       setViewState(prev => {
-        const base =
-          prev.sectionId === sectionId
-            ? prev
-            : {
-                sectionId,
-                currentMission: null,
-                currentMissionStageTitle: null,
-                missionModalOpen: false,
-              };
+        const base = prev.sectionId === sectionId ? prev : createInitialViewState(sectionId);
 
         const nextValue =
           typeof value === "function"
@@ -142,5 +130,6 @@ export const useChapterView = ({ loading, sectionId }: UseChapterViewParams) => 
     setCurrentMissionStageTitle,
     missionModalOpen: resolvedViewState.missionModalOpen,
     setMissionModalOpen,
+    chapterScrollProps,
   };
 };

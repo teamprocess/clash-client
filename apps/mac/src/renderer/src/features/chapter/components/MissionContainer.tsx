@@ -170,19 +170,19 @@ const QuizPanelContent = ({
           </S.SummaryCard>
 
           <S.ButtonRow>
+            <S.SecondaryActionButton variant="primary" size="lg" fullWidth onClick={handleClose}>
+              챕터 보기
+            </S.SecondaryActionButton>
             {!isPassed && (
-              <S.SecondaryActionButton
+              <S.PrimaryActionButton
                 variant="secondary"
                 size="lg"
                 fullWidth
                 onClick={handleRestart}
               >
                 다시하기
-              </S.SecondaryActionButton>
+              </S.PrimaryActionButton>
             )}
-            <S.PrimaryActionButton variant="primary" size="lg" fullWidth onClick={handleClose}>
-              챕터 보기
-            </S.PrimaryActionButton>
           </S.ButtonRow>
         </S.FinalContent>
       </S.QuizBody>
@@ -260,10 +260,10 @@ const QuizPanelContent = ({
               variant="primary"
               size="lg"
               onClick={() => void handleConfirm()}
-              disabled={!selectedChoiceId || state.isSubmitting || isPreparing}
+              disabled={!selectedChoiceId || isPreparing}
               fullWidth
             >
-              {isPreparing ? "문제 준비 중..." : state.isSubmitting ? "제출 중..." : "선택 완료하기"}
+              {isPreparing ? "문제 준비 중..." : state.isSubmitting ? "제출 중..." : "제출"}
             </S.PrimaryActionButton>
             {error && <S.InlineMessage $tone="error">{error}</S.InlineMessage>}
             {error && (
@@ -309,7 +309,7 @@ export const MissionContainer = ({
     };
   }, []);
   const displayStageTitle = currentMission
-    ? currentMissionStageTitle ?? currentStage.title
+    ? (currentMissionStageTitle ?? currentStage.title)
     : currentStage.title;
 
   const handleRequestClose = () => {
@@ -431,30 +431,28 @@ export const MissionContainer = ({
               ) : (
                 <>
                   {studyMaterialError && (
-                    <S.InlineMessage $tone="error">
-                      {studyMaterialError}
-                    </S.InlineMessage>
+                    <S.InlineMessage $tone="error">{studyMaterialError}</S.InlineMessage>
                   )}
                   {hasStudyMaterial && (
-                    <S.PrimaryActionButton
-                      variant="primary"
+                    <S.SecondaryActionButton
+                      variant="secondary"
                       size="lg"
                       fullWidth
                       onClick={() => void handleOpenStudyMaterial()}
                       disabled={isLoading}
                     >
                       학습하러 가기
-                    </S.PrimaryActionButton>
+                    </S.SecondaryActionButton>
                   )}
-                  <S.SecondaryActionButton
-                    variant="secondary"
+                  <S.PrimaryActionButton
+                    variant="primary"
                     size="lg"
                     fullWidth
                     onClick={onSolve}
                     disabled={isSolveDisabled}
                   >
                     {isCompletedStage ? "문제 다시 보기" : "문제 풀러 가기"}
-                  </S.SecondaryActionButton>
+                  </S.PrimaryActionButton>
                 </>
               )}
             </S.FooterActions>

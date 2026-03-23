@@ -41,19 +41,12 @@ export const ChapterScrollable = styled.div`
   position: relative;
   isolation: isolate;
   overscroll-behavior: contain;
+  cursor: grab;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 
   &::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
-  }
-
-  &::-webkit-scrollbar-track {
-    background: transparent; /* 스크롤바 배경(길) */
-  }
-
-  &::-webkit-scrollbar-thumb {
-    background: ${({ theme }) => theme.line.normal};
-    border-radius: 10px;
+    display: none;
   }
 `;
 
@@ -62,7 +55,7 @@ export const ChapterCanvas = styled.div`
   width: max-content;
   min-width: 100%;
   min-height: 100%;
-  padding: 5rem 4rem 7rem 20rem;
+  padding: 10rem 10rem 10rem 22rem;
   background-color: ${({ theme }) => theme.background.normal};
   background-image:
     linear-gradient(to right, ${({ theme }) => theme.line.alternative} 1px, transparent 1px),
@@ -265,14 +258,18 @@ export const LoadingSectionProgress = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 70rem;
+  gap: 2rem;
+  width: auto;
+  max-width: calc(100% - 6rem);
   height: 3rem;
   padding: 0.75rem 3rem;
+  box-sizing: border-box;
   background-color: ${({ theme }) => theme.background.alternative};
   border-radius: 0.5rem;
   position: absolute;
   bottom: 2rem;
   left: 3rem;
+  right: 3rem;
   z-index: 110;
 `;
 
@@ -280,11 +277,14 @@ export const LoadingProgressInfo = styled.div`
   display: flex;
   align-items: center;
   gap: 1.25rem;
+  flex-shrink: 0;
 `;
 
 export const LoadingProgressBar = styled.div`
   display: flex;
   align-items: center;
   gap: 2.5rem;
-  width: 50rem;
+  flex: 1;
+  min-width: 0;
+  width: auto;
 `;

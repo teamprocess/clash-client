@@ -51,6 +51,7 @@ export const useMajorChoice = () => {
   const navigate = useNavigate();
 
   const [major, setMajor] = useState<MajorItem>(null);
+  const [isSubmittingMajor, setIsSubmittingMajor] = useState(false);
 
   const selectedMajor = (path: MajorItem) => setMajor(prev => (prev === path ? null : path));
 
@@ -96,18 +97,26 @@ export const useMajorChoice = () => {
     setAnswers(Array(questionData.length).fill(null));
   };
 
-  const onSubmit = () => {
-    postMyMajor({
-      major: major as Major,
-    }).then(() => {
-      queryClient
-        .invalidateQueries({
-          queryKey: ["user"],
-        })
-        .then(() => {
-          navigate("/roadmap");
-        });
-    });
+  const onSubmit = async () => {
+    if (!major || isSubmittingMajor) return;
+
+    setIsSubmittingMajor(true);
+
+    try {
+      await postMyMajor({
+        major: major as Major,
+      });
+
+      await queryClient.invalidateQueries({
+        queryKey: ["user"],
+      });
+
+      navigate("/roadmap");
+    } catch (error) {
+      console.error("Failed to submit major", error);
+    } finally {
+      setIsSubmittingMajor(false);
+    }
   };
 
   // 질문 객체를 return 해주는 함수
@@ -130,6 +139,7 @@ export const useMajorChoice = () => {
     major: {
       selectedMajor,
       isValid: major !== null,
+      isSubmittingMajor,
       major,
       username,
       onSubmit,
@@ -138,7 +148,7 @@ export const useMajorChoice = () => {
       answers,
       isAllAnswered,
       setAnswers,
-      navigate,
+      setStep,
       handleSelect,
       handleComplete,
       getTestQuestion,
