@@ -115,9 +115,9 @@ export const BattleListContainer = styled.div`
 export const UpperHandJudge = styled.div<{ $type: string }>`
   padding: 0.25rem 0.625rem;
   ${({ $type }) =>
-    $type === "우세"
+    $type === "우세" || $type === "승리"
       ? `background-color: ${palette.blue[50]}`
-      : $type === "열세"
+      : $type === "열세" || $type === "패배"
         ? `background-color: ${palette.red[50]};`
         : `background-color: ${palette.neutral[60]}`};
   ${font.caption.bold}
