@@ -14,7 +14,7 @@ export const ChapterPage = () => {
   const { sectionId } = useParams<{ sectionId: string }>();
   const numericSectionId = sectionId ? Number(sectionId) : 0;
 
-  const { chapterRef, domain, view, handlers } = useChapter(numericSectionId);
+  const { chapterRef, chapterScrollProps, domain, view, handlers } = useChapter(numericSectionId);
 
   const { data: myProfile } = useGetMyProfile();
   const major = myProfile?.major as MajorEnum;
@@ -73,7 +73,7 @@ export const ChapterPage = () => {
   if (domain.loading) {
     return (
       <S.ChapterContainer>
-        <S.ChapterScrollable>
+        <S.ChapterScrollable ref={chapterRef} {...chapterScrollProps}>
           <S.ChapterCanvas>
             <S.RoadmapStageArea>
               <S.LoadingRoadmapWrapper>
@@ -161,7 +161,7 @@ export const ChapterPage = () => {
 
   return (
     <S.ChapterContainer>
-      <S.ChapterScrollable ref={chapterRef}>
+      <S.ChapterScrollable ref={chapterRef} {...chapterScrollProps}>
         <S.ChapterCanvas>
           <S.RoadmapStageArea>
             {domain.roadmapNodes.length > 0 ? (

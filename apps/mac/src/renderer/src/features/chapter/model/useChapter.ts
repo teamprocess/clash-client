@@ -3,10 +3,10 @@ import { useChapterHandlers } from "./useChapterHandlers";
 import { useChapterView } from "./useChapterView";
 import { useChapterDetailsQuery } from "@/entities/roadmap/chapter/api/query/useChapterDetails.query";
 import type { Mission } from "@/features/chapter/model/chapter.types";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useEffectEvent, useMemo, useRef, useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
-import { chapterApi } from "@/entities/roadmap/chapter/api/chapterApi";
 import { chapterQueryKeys } from "@/entities/roadmap/chapter/api/query/chapterQueryKeys";
+import { useResetChapterMutation } from "@/entities/roadmap/chapter";
 import type {
   GetChapterDetailsResponse,
   GetSectionDetailsResponse,
@@ -53,12 +53,16 @@ export const useChapter = (sectionId: number) => {
   const queryClient = useQueryClient();
   const domain = useChapterDomain(sectionId);
   const view = useChapterView({ loading: domain.loading, sectionId });
+  const resetChapterMutation = useResetChapterMutation();
   const currentStageId = domain.currentStageId;
   const [resetOnOpenState, setResetOnOpenState] = useState({
     isLoading: false,
     error: null as string | null,
   });
   const lastResetDetailKeyRef = useRef<string | null>(null);
+  const resetChapterAsync = useEffectEvent((chapterId: number) =>
+    resetChapterMutation.mutateAsync({ chapterId })
+  );
 
   const chapterDetailsQuery = useChapterDetailsQuery(currentStageId, {
     enabled: view.missionModalOpen,
@@ -101,7 +105,7 @@ export const useChapter = (sectionId: number) => {
       });
 
       try {
-        const response = await chapterApi.resetChapter({ chapterId });
+        const response = await resetChapterAsync(chapterId);
 
         if (!response.success) {
           throw new Error(response.message ?? "챕터 초기화에 실패했습니다.");
@@ -198,6 +202,9 @@ export const useChapter = (sectionId: number) => {
   const currentStageDetailsError =
     resetOnOpenState.error ??
     (chapterDetailsQuery.error instanceof Error ? chapterDetailsQuery.error.message : null);
+  const hasCurrentStageDetails = Boolean(chapterDetailsQuery.data);
+  const isCurrentStageInitialLoading =
+    !hasCurrentStageDetails && (chapterDetailsQuery.isLoading || resetOnOpenState.isLoading);
 
   const handlers = useChapterHandlers({
     stages: domain.stages,
@@ -213,14 +220,15 @@ export const useChapter = (sectionId: number) => {
 
   return {
     chapterRef: view.chapterRef,
+    chapterScrollProps: view.chapterScrollProps,
     domain: {
       roadmapNodes: domain.roadmapNodes,
       currentStage,
       currentStageDescription: chapterDetailsQuery.data?.description ?? null,
       currentStageStudyMaterialUrl: chapterDetailsQuery.data?.studyMaterialUrl ?? null,
       currentStageMissions,
-      currentStageMissionsLoading: chapterDetailsQuery.isLoading || resetOnOpenState.isLoading,
-      currentStageDetailsLoading: chapterDetailsQuery.isLoading || resetOnOpenState.isLoading,
+      currentStageMissionsLoading: isCurrentStageInitialLoading,
+      currentStageDetailsLoading: isCurrentStageInitialLoading,
       currentStageDetailsError,
       sectionTitle: domain.sectionTitle,
       completedChapters: domain.completedChapters,

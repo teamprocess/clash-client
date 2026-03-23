@@ -25,12 +25,15 @@ export const SectionProgress = ({
   const completed = Math.min(
     resolveCount(
       completedProp,
-      resolveCount(sectionData?.completedSections, sections.filter(section => section.completed).length)
+      resolveCount(
+        sectionData?.completedSections,
+        sections.filter(section => section.completed).length
+      )
     ),
     total
   );
-  const percent =
-    total === 0 ? 0 : Math.min(100, Math.max(0, Math.round((completed / total) * 100)));
+  const percent = total === 0 ? 0 : Math.floor((completed / total) * 100);
+  // Math.min(100, Math.max(0, Math.round((completed / total) * 100)));
 
   return (
     <S.SectionProgressContainer>

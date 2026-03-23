@@ -1,4 +1,7 @@
 export { chapterApi } from "./api/chapterApi";
+export { useResetChapterMutation } from "./api/mutation/useResetChapter.mutation";
+export { useSubmitAnswerMutation } from "./api/mutation/useSubmitAnswer.mutation";
+export { useChapterResultMutation } from "./api/mutation/useChapterResult.mutation";
 export type {
   ChapterChoice,
   ChapterQuestion,
