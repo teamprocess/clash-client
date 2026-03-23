@@ -258,14 +258,18 @@ export const LoadingSectionProgress = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 70rem;
+  gap: 2rem;
+  width: auto;
+  max-width: calc(100% - 6rem);
   height: 3rem;
   padding: 0.75rem 3rem;
+  box-sizing: border-box;
   background-color: ${({ theme }) => theme.background.alternative};
   border-radius: 0.5rem;
   position: absolute;
   bottom: 2rem;
   left: 3rem;
+  right: 3rem;
   z-index: 110;
 `;
 
@@ -273,11 +277,14 @@ export const LoadingProgressInfo = styled.div`
   display: flex;
   align-items: center;
   gap: 1.25rem;
+  flex-shrink: 0;
 `;
 
 export const LoadingProgressBar = styled.div`
   display: flex;
   align-items: center;
   gap: 2.5rem;
-  width: 50rem;
+  flex: 1;
+  min-width: 0;
+  width: auto;
 `;
