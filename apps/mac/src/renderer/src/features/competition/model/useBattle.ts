@@ -1,4 +1,4 @@
-import { useState, useMemo, useRef } from "react";
+import { useState, useRef } from "react";
 import {
   battleApi,
   useBattleInfoQuery,
@@ -17,9 +17,6 @@ import { getErrorMessage, queryClient } from "@/shared/lib";
 import { useBattleApplyListQuery } from "@/entities/competition/api/rival-competition/api/query/useBattle.query";
 import { useMutation } from "@tanstack/react-query";
 
-/* =========================
-   상수 (정적 데이터)
-========================= */
 const analyzeCategoryOptions: { key: AnalyzeCategory; label: string }[] = [
   { key: "EXP", label: "EXP" },
   { key: "GITHUB", label: "Github" },
@@ -38,13 +35,7 @@ const judgeUpperHandMap = {
   [MATCHVALUE.NOT_STARTED]: "시작 전",
 } as const;
 
-/* =========================
-   Hook
-========================= */
 export const useBattle = () => {
-  /* =========================
-     UI 상태
-  ========================= */
   const [battleTargetId, setBattleTargetId] = useState<number | null>(null);
   const [isBattleSelected, setIsBattleSelected] = useState(false);
   const [category, setCategory] = useState<AnalyzeCategory>("EXP");
@@ -58,9 +49,6 @@ export const useBattle = () => {
   const submittingRef = useRef(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  /* =========================
-     서버 데이터 조회
-  ========================= */
   const { data: battleInfoRes } = useBattleInfoQuery();
   const { data: battleDetailRes } = useBattleDetailQuery(battleTargetId ?? 0);
   const { data: analyzeRes } = useAnalyzeBattleQuery(battleDetailRes?.data?.id ?? 0, category);
@@ -72,9 +60,6 @@ export const useBattle = () => {
   const analyzeData: AnalyzeBattleResponse | null = analyzeRes?.data ?? null;
   const battleList: BattleListResponse | null = battleListRes?.data ?? null;
 
-  /* =========================
-     배틀 선택 로직
-  ========================= */
   const selectBattleTarget = (id: number) => {
     setBattleTargetId(prevId => {
       if (prevId === id) {
@@ -86,46 +71,24 @@ export const useBattle = () => {
     });
   };
 
-  /* =========================
-     퍼센트 계산 (우세 바)
-  ========================= */
   const raw = battleDetailData?.myOverallPercentage;
   const myPercent = raw == null || raw === 0 ? 50 : raw;
   const rivalPercent = 100 - myPercent;
 
-  /* =========================
-     분석 데이터 가공
-  ========================= */
-  const myAnalyzePoint = useMemo(() => {
-    if (!analyzeData) return 0;
-    return analyzeData.myPoint;
-  }, [analyzeData]);
-
-  const rivalAnalyzePoint = useMemo(() => {
-    if (!analyzeData) return 0;
-    return analyzeData.enemyPoint;
-  }, [analyzeData]);
+  const myAnalyzePoint = analyzeData ? analyzeData.myPoint : 0;
+  const rivalAnalyzePoint = analyzeData ? analyzeData.enemyPoint : 0;
 
   const analyzeTotal = myAnalyzePoint + rivalAnalyzePoint;
 
   const myAnalyzeRate = analyzeTotal > 0 ? (myAnalyzePoint / analyzeTotal) * 100 : null;
-
   const rivalAnalyzeRate = analyzeTotal > 0 ? (rivalAnalyzePoint / analyzeTotal) * 100 : null;
 
-  const diff = useMemo(() => {
-    const max = Math.max(myAnalyzePoint, rivalAnalyzePoint);
-    if (max <= 0) return 0;
-
-    const percent = (Math.abs(myAnalyzePoint - rivalAnalyzePoint) / max) * 100;
-    return Math.round(percent);
-  }, [myAnalyzePoint, rivalAnalyzePoint]);
+  const max = Math.max(myAnalyzePoint, rivalAnalyzePoint);
+  const diff = max > 0 ? Math.round((Math.abs(myAnalyzePoint - rivalAnalyzePoint) / max) * 100) : 0;
 
   const isRivalHigher =
     myAnalyzeRate !== null && rivalAnalyzeRate !== null ? rivalAnalyzeRate > myAnalyzeRate : false;
 
-  /* =========================
-     텍스트/표현 로직
-  ========================= */
   const judgeUpperHand = (result: (typeof MATCHVALUE)[keyof typeof MATCHVALUE]): string => {
     return judgeUpperHandMap[result] ?? "";
   };
@@ -136,9 +99,6 @@ export const useBattle = () => {
     return "EXP";
   };
 
-  /* =========================
-     날짜 계산
-  ========================= */
   const getRemainDays = (targetDate?: string) => {
     if (!targetDate) return null;
 
@@ -155,9 +115,6 @@ export const useBattle = () => {
 
   const remainDays = getRemainDays(battleDetailData?.expireDate);
 
-  /* =========================
-     모달 제어
-  ========================= */
   const openModal = () => {
     setError(null);
     setIsModalOpen(true);
@@ -174,9 +131,6 @@ export const useBattle = () => {
     setError(null);
   };
 
-  /* =========================
-     배틀 생성 (폼 로직)
-  ========================= */
   const periodOptions: PeriodDay[] = [3, 5, 7];
 
   const handleUserSelect = (id: number) => {
@@ -226,9 +180,6 @@ export const useBattle = () => {
     }
   };
 
-  /* =========================
-     배틀 신청 취소
-  ========================= */
   const cancelBattleApplyMutation = useMutation({
     mutationFn: battleApi.postCancelBattle,
     onSuccess: async () => {
@@ -245,9 +196,7 @@ export const useBattle = () => {
 
     try {
       setError(null);
-
       await cancelBattleApplyMutation.mutateAsync({ id });
-
       return true;
     } catch (error: unknown) {
       console.error("배틀 신청 취소 실패:", error);
@@ -256,9 +205,7 @@ export const useBattle = () => {
     }
   };
 
-  /* =========================
-     반환값
-  ========================= */
+  /* ===== return ===== */
   return {
     isModalOpen,
     openModal,
