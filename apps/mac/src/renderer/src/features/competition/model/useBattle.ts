@@ -1,4 +1,4 @@
-import { useState, useMemo, useRef } from "react";
+import { useState, useRef } from "react";
 import {
   battleApi,
   useBattleInfoQuery,
@@ -16,12 +16,11 @@ import {
 import { getErrorMessage, queryClient } from "@/shared/lib";
 import { useBattleApplyListQuery } from "@/entities/competition/api/rival-competition/api/query/useBattle.query";
 import { useMutation } from "@tanstack/react-query";
-
-const analyzeCategoryOptions: { key: AnalyzeCategory; label: string }[] = [
-  { key: "EXP", label: "EXP" },
-  { key: "GITHUB", label: "Github" },
-  { key: "ACTIVE_TIME", label: "총 학습 시간" },
-];
+import {
+  ANALYZE_CATEGORY_OPTIONS,
+  JUDGE_UPPER_HAND_MAP,
+  PERIOD_OPTIONS,
+} from "@/features/competition/constants/battle.constants";
 
 export const useBattle = () => {
   const [battleTargetId, setBattleTargetId] = useState<number | null>(null);
@@ -29,17 +28,13 @@ export const useBattle = () => {
   const [category, setCategory] = useState<AnalyzeCategory>("EXP");
   const [error, setError] = useState<string | null>(null);
 
-  const selectBattleTarget = (id: number) => {
-    setBattleTargetId(prevId => {
-      if (prevId === id) {
-        setIsBattleSelected(prev => !prev);
-        return prevId;
-      }
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [rivalSelectedId, setRivalSelectedId] = useState<number | null>(null);
+  const [duration, setDuration] = useState<PeriodDay | null>(null);
+  const [selectedDay, setSelectedDay] = useState<PeriodDay | null>(null);
 
-      setIsBattleSelected(true);
-      return id;
-    });
-  };
+  const submittingRef = useRef(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const { data: battleInfoRes } = useBattleInfoQuery();
   const { data: battleDetailRes } = useBattleDetailQuery(battleTargetId ?? 0);
@@ -52,61 +47,37 @@ export const useBattle = () => {
   const analyzeData: AnalyzeBattleResponse | null = analyzeRes?.data ?? null;
   const battleList: BattleListResponse | null = battleListRes?.data ?? null;
 
-  const raw = battleDetailData?.myOverallPercentage;
+  const selectBattleTarget = (id: number) => {
+    setBattleTargetId(prevId => {
+      if (prevId === id) {
+        setIsBattleSelected(prev => !prev);
+        return prevId;
+      }
+      setIsBattleSelected(true);
+      return id;
+    });
+  };
 
+  const raw = battleDetailData?.myOverallPercentage;
   const myPercent = raw == null || raw === 0 ? 50 : raw;
   const rivalPercent = 100 - myPercent;
 
-  // 배틀 신청 목록 상태 정리
-  type MatchValue = (typeof MATCHVALUE)[keyof typeof MATCHVALUE];
-
-  const judgeUpperHandMap = {
-    [MATCHVALUE.LOSING]: "열세",
-    [MATCHVALUE.WINNING]: "우세",
-    [MATCHVALUE.LOST]: "패배",
-    [MATCHVALUE.WON]: "승리",
-    [MATCHVALUE.DRAW]: "무승부",
-    [MATCHVALUE.CANCELED]: "취소된 배틀",
-    [MATCHVALUE.PENDING]: "수락 대기중",
-    [MATCHVALUE.NOT_STARTED]: "시작 전",
-  } as const;
-
-  const judgeUpperHand = (result: MatchValue): string => {
-    return judgeUpperHandMap[result] ?? "";
-  };
-
-  const myAnalyzePoint = useMemo(() => {
-    if (!analyzeData) return 0;
-    return analyzeData.myPoint;
-  }, [analyzeData]);
-
-  const rivalAnalyzePoint = useMemo(() => {
-    if (!analyzeData) return 0;
-    return analyzeData.enemyPoint;
-  }, [analyzeData]);
+  const myAnalyzePoint = analyzeData ? analyzeData.myPoint : 0;
+  const rivalAnalyzePoint = analyzeData ? analyzeData.enemyPoint : 0;
 
   const analyzeTotal = myAnalyzePoint + rivalAnalyzePoint;
 
   const myAnalyzeRate = analyzeTotal > 0 ? (myAnalyzePoint / analyzeTotal) * 100 : null;
-
   const rivalAnalyzeRate = analyzeTotal > 0 ? (rivalAnalyzePoint / analyzeTotal) * 100 : null;
 
-  const diff = useMemo(() => {
-    const max = Math.max(myAnalyzePoint, rivalAnalyzePoint);
-    if (max <= 0) return 0;
-
-    const percent = (Math.abs(myAnalyzePoint - rivalAnalyzePoint) / max) * 100;
-    return Math.round(percent);
-  }, [myAnalyzePoint, rivalAnalyzePoint]);
+  const max = Math.max(myAnalyzePoint, rivalAnalyzePoint);
+  const diff = max > 0 ? Math.round((Math.abs(myAnalyzePoint - rivalAnalyzePoint) / max) * 100) : 0;
 
   const isRivalHigher =
     myAnalyzeRate !== null && rivalAnalyzeRate !== null ? rivalAnalyzeRate > myAnalyzeRate : false;
 
-  const [rivalSelectedId, setRivalSelectedId] = useState<number | null>(null);
-
-  const handleUserSelect = (id: number) => {
-    setError(null);
-    setRivalSelectedId(prev => (prev === id ? null : id));
+  const judgeUpperHand = (result: (typeof MATCHVALUE)[keyof typeof MATCHVALUE]): string => {
+    return JUDGE_UPPER_HAND_MAP[result] ?? "";
   };
 
   const detailTextTranslate = (category: AnalyzeCategory) => {
@@ -120,6 +91,7 @@ export const useBattle = () => {
 
     const today = new Date();
     const target = new Date(targetDate);
+
     today.setHours(0, 0, 0, 0);
     target.setHours(0, 0, 0, 0);
 
@@ -129,18 +101,11 @@ export const useBattle = () => {
   };
 
   const remainDays = getRemainDays(battleDetailData?.expireDate);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+
   const openModal = () => {
     setError(null);
     setIsModalOpen(true);
   };
-
-  const [duration, setDuration] = useState<PeriodDay | null>(null);
-  const periodOptions: PeriodDay[] = [3, 5, 7];
-  const [selectedDay, setSelectedDay] = useState<PeriodDay | null>(null);
-
-  const submittingRef = useRef(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const closeModal = () => {
     if (submittingRef.current) return;
@@ -151,6 +116,11 @@ export const useBattle = () => {
     setSelectedDay(null);
     setIsSubmitting(false);
     setError(null);
+  };
+
+  const handleUserSelect = (id: number) => {
+    setError(null);
+    setRivalSelectedId(prev => (prev === id ? null : id));
   };
 
   const handlePeriodSelect = (day: PeriodDay) => {
@@ -185,8 +155,6 @@ export const useBattle = () => {
         queryClient.invalidateQueries({ queryKey: ["battleApplyList"] }),
       ]);
 
-      submittingRef.current = false;
-      setIsSubmitting(false);
       closeModal();
     } catch (error: unknown) {
       console.error("배틀 신청 실패:", error);
@@ -213,11 +181,7 @@ export const useBattle = () => {
 
     try {
       setError(null);
-
-      await cancelBattleApplyMutation.mutateAsync({
-        id,
-      });
-
+      await cancelBattleApplyMutation.mutateAsync({ id });
       return true;
     } catch (error: unknown) {
       console.error("배틀 신청 취소 실패:", error);
@@ -229,16 +193,16 @@ export const useBattle = () => {
   return {
     isModalOpen,
     openModal,
-    isSubmitting,
     closeModal,
+    isSubmitting,
+
     duration,
     setDuration,
     selectedDay,
-    periodOptions,
-    createBattle,
-    setSelectedDay,
+    PERIOD_OPTIONS,
     handlePeriodSelect,
     canCreateBattle,
+    createBattle,
 
     selectBattleTarget,
     isBattleSelected,
@@ -261,9 +225,9 @@ export const useBattle = () => {
     rivalSelectedId,
     handleUserSelect,
 
-    analyzeCategoryOptions,
-    setCategory,
+    ANALYZE_CATEGORY_OPTIONS,
     category,
+    setCategory,
 
     battleData,
     battleDetailData,

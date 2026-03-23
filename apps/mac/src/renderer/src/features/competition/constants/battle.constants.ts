@@ -1,0 +1,21 @@
+import { AnalyzeCategory, PeriodDay, MATCHVALUE } from "@/entities/competition";
+
+export const ANALYZE_CATEGORY_OPTIONS: { key: AnalyzeCategory; label: string }[] = [
+  { key: "EXP", label: "EXP" },
+  { key: "GITHUB", label: "Github" },
+  { key: "ACTIVE_TIME", label: "총 학습 시간" },
+];
+
+export const JUDGE_UPPER_HAND_MAP = {
+  [MATCHVALUE.LOSING]: "열세",
+  [MATCHVALUE.WINNING]: "우세",
+  [MATCHVALUE.LOST]: "패배",
+  [MATCHVALUE.WON]: "승리",
+  [MATCHVALUE.DRAW]: "무승부",
+  [MATCHVALUE.DRAWING]: "동률",
+  [MATCHVALUE.CANCELED]: "취소된 배틀",
+  [MATCHVALUE.PENDING]: "수락 대기중",
+  [MATCHVALUE.NOT_STARTED]: "시작 전",
+} as const;
+
+export const PERIOD_OPTIONS: PeriodDay[] = [3, 5, 7];

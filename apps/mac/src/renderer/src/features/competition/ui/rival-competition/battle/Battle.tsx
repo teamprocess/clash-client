@@ -1,27 +1,24 @@
+import { useState } from "react";
 import * as S from "./Battle.style";
 import { Button, Dialog, Select, SlideSelector } from "@/shared/ui";
 import { AnalyzeCategory, MATCHVALUE } from "@/entities/competition";
 import { useBattle } from "@/features/competition/model/useBattle";
-import { formatTime } from "@/shared/lib";
-import { useState } from "react";
 import DefaultProfile from "@/features/profile/assets/rival-profile.png";
 import { useGetMyProfile } from "@/entities/user";
 
 export const Battle = () => {
   const battle = useBattle();
 
-  const battles = battle.battleData?.battles ?? [];
-  const hasBattles = battles.length > 0;
-
   const [activeTab, setActiveTab] = useState<"battle-create" | "battle-request-list">(
     "battle-create"
   );
 
-  const battleApplyItems = battle.battleApplyList?.data?.battles ?? [];
-  const hasBattleApplyList = battleApplyItems.length > 0;
+  const myProfileImg = useGetMyProfile()?.data?.profileImage;
 
-  const myProfileData = useGetMyProfile();
-  const myProfileImg = myProfileData?.data?.profileImage;
+  const battles = battle.battleData?.battles ?? [];
+  const battleApplyItems = battle.battleApplyList?.data?.battles ?? [];
+
+  const hasBattleApplyList = battleApplyItems.length > 0;
 
   return (
     <>
@@ -47,9 +44,8 @@ export const Battle = () => {
 
             <S.GaroLine />
 
-            {hasBattles ? (
+            {battles.length > 0 ? (
               <>
-                {/* 배틀 리스트 */}
                 <S.BattleListContainer>
                   {battles.map(battleItem => {
                     const judge = battle.judgeUpperHand(battleItem.result);
@@ -64,8 +60,9 @@ export const Battle = () => {
                         key={battleItem.id}
                         $disabled={cannotOpen}
                         onClick={() => {
-                          if (cannotOpen) return;
-                          battle.selectBattleTarget(battleItem.id);
+                          if (!cannotOpen) {
+                            battle.selectBattleTarget(battleItem.id);
+                          }
                         }}
                       >
                         <S.ProfileContent>
@@ -94,7 +91,6 @@ export const Battle = () => {
                   })}
                 </S.BattleListContainer>
 
-                {/* 상세 영역 */}
                 {battle.isBattleSelected ? (
                   <S.DetailWrapper>
                     <S.UpperHandContainer>
@@ -111,13 +107,13 @@ export const Battle = () => {
                         <S.UpperHandTransition>
                           <S.UpperHandBar $width={battle.rivalPercent ?? 0} $isRival>
                             <S.PercentText $isRival>
-                              {battle.rivalPercent != null ? Math.round(battle.rivalPercent) : 0}%
+                              {Math.round(battle.rivalPercent ?? 0)}%
                             </S.PercentText>
                           </S.UpperHandBar>
 
                           <S.UpperHandBar $width={battle.myPercent ?? 0} $isRival={false}>
                             <S.PercentText $isRival={false}>
-                              {battle.myPercent != null ? Math.round(battle.myPercent) : 0}%
+                              {Math.round(battle.myPercent ?? 0)}%
                             </S.PercentText>
                           </S.UpperHandBar>
                         </S.UpperHandTransition>
@@ -145,7 +141,7 @@ export const Battle = () => {
                         <S.DropDownBox>
                           <Select<AnalyzeCategory>
                             value={battle.category}
-                            options={battle.analyzeCategoryOptions}
+                            options={battle.ANALYZE_CATEGORY_OPTIONS}
                             onChange={battle.setCategory}
                           />
                         </S.DropDownBox>
@@ -163,15 +159,13 @@ export const Battle = () => {
                           <S.AnalyzeContent $width="100%">
                             <S.DataBox>
                               <div>
-                                {battle.category === "ACTIVE_TIME"
-                                  ? formatTime(Math.round(battle.rivalAnalyzePoint) ?? 0)
-                                  : Math.round(battle.rivalAnalyzePoint ?? 0)}{" "}
+                                {battle.rivalAnalyzePoint}{" "}
                                 {battle.detailTextTranslate(battle.category)}
                               </div>
                               <S.AnalyzeBar $width={battle.rivalAnalyzeRate ?? 0} $isRival>
                                 <S.AnalyzeLabel>
-                                  {battle.isRivalHigher && (battle.diff ?? 0) > 0 && (
-                                    <S.CompareDiff>+{Math.round(battle.diff ?? 0)}%</S.CompareDiff>
+                                  {battle.isRivalHigher && battle.diff > 0 && (
+                                    <S.CompareDiff>+{battle.diff}%</S.CompareDiff>
                                   )}
                                 </S.AnalyzeLabel>
                               </S.AnalyzeBar>
@@ -179,15 +173,13 @@ export const Battle = () => {
 
                             <S.DataBox>
                               <div>
-                                {battle.category === "ACTIVE_TIME"
-                                  ? formatTime(Math.round(battle.myAnalyzePoint) ?? 0)
-                                  : Math.round(battle.myAnalyzePoint ?? 0)}{" "}
+                                {battle.myAnalyzePoint}{" "}
                                 {battle.detailTextTranslate(battle.category)}
                               </div>
                               <S.AnalyzeBar $width={battle.myAnalyzeRate ?? 0} $isRival={false}>
                                 <S.AnalyzeLabel>
-                                  {!battle.isRivalHigher && (battle.diff ?? 0) > 0 && (
-                                    <S.CompareDiff>+{Math.round(battle.diff ?? 0)}%</S.CompareDiff>
+                                  {!battle.isRivalHigher && battle.diff > 0 && (
+                                    <S.CompareDiff>+{battle.diff}%</S.CompareDiff>
                                   )}
                                 </S.AnalyzeLabel>
                               </S.AnalyzeBar>
@@ -221,7 +213,6 @@ export const Battle = () => {
         </S.Content>
       </S.ContentBox>
 
-      {/* 배틀 생성 모달 */}
       {battle.isModalOpen && (
         <Dialog width={43} height={30} isOpen={battle.isModalOpen} onClose={battle.closeModal}>
           <S.ModalContainer>
@@ -266,7 +257,7 @@ export const Battle = () => {
                 </S.UserChoiceContainer>
 
                 <S.DateChoiceRow>
-                  {battle.periodOptions.map(day => (
+                  {battle.PERIOD_OPTIONS.map(day => (
                     <S.DateChoiceBox
                       key={day}
                       onClick={() => battle.handlePeriodSelect(day)}
@@ -276,6 +267,7 @@ export const Battle = () => {
                     </S.DateChoiceBox>
                   ))}
                 </S.DateChoiceRow>
+
                 <S.BottomBox>
                   <S.ButtonBox>
                     <Button size="sm" onClick={battle.closeModal}>
