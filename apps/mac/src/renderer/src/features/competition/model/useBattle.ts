@@ -199,7 +199,7 @@ export const useBattle = () => {
     duration,
     setDuration,
     selectedDay,
-    periodOptions: PERIOD_OPTIONS,
+    PERIOD_OPTIONS,
     handlePeriodSelect,
     canCreateBattle,
     createBattle,
@@ -225,7 +225,7 @@ export const useBattle = () => {
     rivalSelectedId,
     handleUserSelect,
 
-    analyzeCategoryOptions: ANALYZE_CATEGORY_OPTIONS,
+    ANALYZE_CATEGORY_OPTIONS,
     category,
     setCategory,
 
