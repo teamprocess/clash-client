@@ -18,7 +18,6 @@ export const Battle = () => {
   const battles = battle.battleData?.battles ?? [];
   const battleApplyItems = battle.battleApplyList?.data?.battles ?? [];
 
-  const periodOptions = battle.periodOptions;
   const hasBattleApplyList = battleApplyItems.length > 0;
 
   return (
@@ -142,7 +141,7 @@ export const Battle = () => {
                         <S.DropDownBox>
                           <Select<AnalyzeCategory>
                             value={battle.category}
-                            options={battle.analyzeCategoryOptions}
+                            options={battle.ANALYZE_CATEGORY_OPTIONS}
                             onChange={battle.setCategory}
                           />
                         </S.DropDownBox>
@@ -258,7 +257,7 @@ export const Battle = () => {
                 </S.UserChoiceContainer>
 
                 <S.DateChoiceRow>
-                  {periodOptions.map(day => (
+                  {battle.PERIOD_OPTIONS.map(day => (
                     <S.DateChoiceBox
                       key={day}
                       onClick={() => battle.handlePeriodSelect(day)}
