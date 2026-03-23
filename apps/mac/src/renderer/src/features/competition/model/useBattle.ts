@@ -17,30 +17,50 @@ import { getErrorMessage, queryClient } from "@/shared/lib";
 import { useBattleApplyListQuery } from "@/entities/competition/api/rival-competition/api/query/useBattle.query";
 import { useMutation } from "@tanstack/react-query";
 
+/* =========================
+   상수 (정적 데이터)
+========================= */
 const analyzeCategoryOptions: { key: AnalyzeCategory; label: string }[] = [
   { key: "EXP", label: "EXP" },
   { key: "GITHUB", label: "Github" },
   { key: "ACTIVE_TIME", label: "총 학습 시간" },
 ];
 
+const judgeUpperHandMap = {
+  [MATCHVALUE.LOSING]: "열세",
+  [MATCHVALUE.WINNING]: "우세",
+  [MATCHVALUE.LOST]: "패배",
+  [MATCHVALUE.WON]: "승리",
+  [MATCHVALUE.DRAW]: "무승부",
+  [MATCHVALUE.DRAWING]: "동률",
+  [MATCHVALUE.CANCELED]: "취소된 배틀",
+  [MATCHVALUE.PENDING]: "수락 대기중",
+  [MATCHVALUE.NOT_STARTED]: "시작 전",
+} as const;
+
+/* =========================
+   Hook
+========================= */
 export const useBattle = () => {
+  /* =========================
+     UI 상태
+  ========================= */
   const [battleTargetId, setBattleTargetId] = useState<number | null>(null);
   const [isBattleSelected, setIsBattleSelected] = useState(false);
   const [category, setCategory] = useState<AnalyzeCategory>("EXP");
   const [error, setError] = useState<string | null>(null);
 
-  const selectBattleTarget = (id: number) => {
-    setBattleTargetId(prevId => {
-      if (prevId === id) {
-        setIsBattleSelected(prev => !prev);
-        return prevId;
-      }
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [rivalSelectedId, setRivalSelectedId] = useState<number | null>(null);
+  const [duration, setDuration] = useState<PeriodDay | null>(null);
+  const [selectedDay, setSelectedDay] = useState<PeriodDay | null>(null);
 
-      setIsBattleSelected(true);
-      return id;
-    });
-  };
+  const submittingRef = useRef(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
+  /* =========================
+     서버 데이터 조회
+  ========================= */
   const { data: battleInfoRes } = useBattleInfoQuery();
   const { data: battleDetailRes } = useBattleDetailQuery(battleTargetId ?? 0);
   const { data: analyzeRes } = useAnalyzeBattleQuery(battleDetailRes?.data?.id ?? 0, category);
@@ -52,30 +72,30 @@ export const useBattle = () => {
   const analyzeData: AnalyzeBattleResponse | null = analyzeRes?.data ?? null;
   const battleList: BattleListResponse | null = battleListRes?.data ?? null;
 
-  const raw = battleDetailData?.myOverallPercentage;
+  /* =========================
+     배틀 선택 로직
+  ========================= */
+  const selectBattleTarget = (id: number) => {
+    setBattleTargetId(prevId => {
+      if (prevId === id) {
+        setIsBattleSelected(prev => !prev);
+        return prevId;
+      }
+      setIsBattleSelected(true);
+      return id;
+    });
+  };
 
+  /* =========================
+     퍼센트 계산 (우세 바)
+  ========================= */
+  const raw = battleDetailData?.myOverallPercentage;
   const myPercent = raw == null || raw === 0 ? 50 : raw;
   const rivalPercent = 100 - myPercent;
 
-  // 배틀 신청 목록 상태 정리
-  type MatchValue = (typeof MATCHVALUE)[keyof typeof MATCHVALUE];
-
-  const judgeUpperHandMap = {
-    [MATCHVALUE.LOSING]: "열세",
-    [MATCHVALUE.WINNING]: "우세",
-    [MATCHVALUE.LOST]: "패배",
-    [MATCHVALUE.WON]: "승리",
-    [MATCHVALUE.DRAW]: "무승부",
-    [MATCHVALUE.DRAWING]: "동률",
-    [MATCHVALUE.CANCELED]: "취소된 배틀",
-    [MATCHVALUE.PENDING]: "수락 대기중",
-    [MATCHVALUE.NOT_STARTED]: "시작 전",
-  } as const;
-
-  const judgeUpperHand = (result: MatchValue): string => {
-    return judgeUpperHandMap[result] ?? "";
-  };
-
+  /* =========================
+     분석 데이터 가공
+  ========================= */
   const myAnalyzePoint = useMemo(() => {
     if (!analyzeData) return 0;
     return analyzeData.myPoint;
@@ -103,11 +123,11 @@ export const useBattle = () => {
   const isRivalHigher =
     myAnalyzeRate !== null && rivalAnalyzeRate !== null ? rivalAnalyzeRate > myAnalyzeRate : false;
 
-  const [rivalSelectedId, setRivalSelectedId] = useState<number | null>(null);
-
-  const handleUserSelect = (id: number) => {
-    setError(null);
-    setRivalSelectedId(prev => (prev === id ? null : id));
+  /* =========================
+     텍스트/표현 로직
+  ========================= */
+  const judgeUpperHand = (result: (typeof MATCHVALUE)[keyof typeof MATCHVALUE]): string => {
+    return judgeUpperHandMap[result] ?? "";
   };
 
   const detailTextTranslate = (category: AnalyzeCategory) => {
@@ -116,11 +136,15 @@ export const useBattle = () => {
     return "EXP";
   };
 
+  /* =========================
+     날짜 계산
+  ========================= */
   const getRemainDays = (targetDate?: string) => {
     if (!targetDate) return null;
 
     const today = new Date();
     const target = new Date(targetDate);
+
     today.setHours(0, 0, 0, 0);
     target.setHours(0, 0, 0, 0);
 
@@ -130,18 +154,14 @@ export const useBattle = () => {
   };
 
   const remainDays = getRemainDays(battleDetailData?.expireDate);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  /* =========================
+     모달 제어
+  ========================= */
   const openModal = () => {
     setError(null);
     setIsModalOpen(true);
   };
-
-  const [duration, setDuration] = useState<PeriodDay | null>(null);
-  const periodOptions: PeriodDay[] = [3, 5, 7];
-  const [selectedDay, setSelectedDay] = useState<PeriodDay | null>(null);
-
-  const submittingRef = useRef(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const closeModal = () => {
     if (submittingRef.current) return;
@@ -152,6 +172,16 @@ export const useBattle = () => {
     setSelectedDay(null);
     setIsSubmitting(false);
     setError(null);
+  };
+
+  /* =========================
+     배틀 생성 (폼 로직)
+  ========================= */
+  const periodOptions: PeriodDay[] = [3, 5, 7];
+
+  const handleUserSelect = (id: number) => {
+    setError(null);
+    setRivalSelectedId(prev => (prev === id ? null : id));
   };
 
   const handlePeriodSelect = (day: PeriodDay) => {
@@ -186,8 +216,6 @@ export const useBattle = () => {
         queryClient.invalidateQueries({ queryKey: ["battleApplyList"] }),
       ]);
 
-      submittingRef.current = false;
-      setIsSubmitting(false);
       closeModal();
     } catch (error: unknown) {
       console.error("배틀 신청 실패:", error);
@@ -198,6 +226,9 @@ export const useBattle = () => {
     }
   };
 
+  /* =========================
+     배틀 신청 취소
+  ========================= */
   const cancelBattleApplyMutation = useMutation({
     mutationFn: battleApi.postCancelBattle,
     onSuccess: async () => {
@@ -215,9 +246,7 @@ export const useBattle = () => {
     try {
       setError(null);
 
-      await cancelBattleApplyMutation.mutateAsync({
-        id,
-      });
+      await cancelBattleApplyMutation.mutateAsync({ id });
 
       return true;
     } catch (error: unknown) {
@@ -227,19 +256,22 @@ export const useBattle = () => {
     }
   };
 
+  /* =========================
+     반환값
+  ========================= */
   return {
     isModalOpen,
     openModal,
-    isSubmitting,
     closeModal,
+    isSubmitting,
+
     duration,
     setDuration,
     selectedDay,
     periodOptions,
-    createBattle,
-    setSelectedDay,
     handlePeriodSelect,
     canCreateBattle,
+    createBattle,
 
     selectBattleTarget,
     isBattleSelected,
@@ -263,8 +295,8 @@ export const useBattle = () => {
     handleUserSelect,
 
     analyzeCategoryOptions,
-    setCategory,
     category,
+    setCategory,
 
     battleData,
     battleDetailData,
