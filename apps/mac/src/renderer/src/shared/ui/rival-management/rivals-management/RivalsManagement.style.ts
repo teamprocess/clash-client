@@ -60,7 +60,14 @@ export const ProfileTagBox = styled.div`
   gap: 0.125rem;
 `;
 
-export const ProfileIcon = styled(Profile)`
+export const ProfileImg = styled.img`
+  width: 2.25rem;
+  height: 2.25rem;
+  object-fit: cover;
+  border-radius: 50%;
+`;
+
+export const DefaultProfileImg = styled(Profile)`
   width: 2.25rem;
   height: 2.25rem;
 `;
