@@ -55,10 +55,15 @@ export const Test = ({
                     {answerBoxData.map(answer => (
                       <S.ItemWrapper key={answer.id}>
                         <S.AnswerItem
-                          $itemSize={answer.size}
                           $isActive={answers[idx] === answer.id}
                           onClick={() => handleSelect(idx, answer.id)}
-                        />
+                        >
+                          {answers[idx] === answer.id ? (
+                            <S.CheckedAnswerIcon $itemSize={answer.size} />
+                          ) : (
+                            <S.NotCheckedAnswerIcon $itemSize={answer.size} />
+                          )}
+                        </S.AnswerItem>
                       </S.ItemWrapper>
                     ))}
                   </S.AnswerBox>

@@ -7,16 +7,9 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useGetMyProfile } from "@/entities/user";
 
 export type FeatureItem = "TEST" | "CHOICE" | null;
-export type MajorItem = "WEB" | "SERVER" | null;
-export type AnalyzedMajorItem = "Web" | "Server" | null;
 export type StepType = "FEATURE" | "TEST" | "LOADING" | "RESULT" | "CHOICE";
 
 type MajorScoreKey = "web" | "server";
-
-const majorNames: Record<MajorScoreKey, Exclude<AnalyzedMajorItem, null>> = {
-  web: "Web",
-  server: "Server",
-};
 
 export const useMajorChoice = () => {
   const queryClient = useQueryClient();
@@ -50,13 +43,13 @@ export const useMajorChoice = () => {
   // Major Choice 컴포넌트
   const navigate = useNavigate();
 
-  const [major, setMajor] = useState<MajorItem>(null);
+  const [major, setMajor] = useState<Major | null>(null);
   const [isSubmittingMajor, setIsSubmittingMajor] = useState(false);
 
-  const selectedMajor = (path: MajorItem) => setMajor(prev => (prev === path ? null : path));
+  const selectedMajor = (path: Major | null) => setMajor(prev => (prev === path ? null : path));
 
   // Test 컴포넌트
-  const [analyzedMajor, setAnalyzedMajor] = useState<AnalyzedMajorItem>(null);
+  const [analyzedMajor, setAnalyzedMajor] = useState<Major | null>(null);
   const isAllAnswered =
     questionData.length > 0 &&
     answers.length === questionData.length &&
@@ -85,7 +78,7 @@ export const useMajorChoice = () => {
     });
 
     const resultMajorKey: MajorScoreKey = scores.web > scores.server ? "web" : "server";
-    const finalMajor = majorNames[resultMajorKey];
+    const finalMajor = resultMajorKey === "web" ? Major.WEB : Major.SERVER;
 
     setAnalyzedMajor(finalMajor);
     // 임시로 2초 로딩
@@ -97,14 +90,12 @@ export const useMajorChoice = () => {
     setAnswers(Array(questionData.length).fill(null));
   };
 
-  const onSubmit = async () => {
-    if (!major || isSubmittingMajor) return;
-
+  const submitMajor = async (major: Major) => {
     setIsSubmittingMajor(true);
 
     try {
       await postMyMajor({
-        major: major as Major,
+        major,
       });
 
       await queryClient.invalidateQueries({
@@ -117,6 +108,19 @@ export const useMajorChoice = () => {
     } finally {
       setIsSubmittingMajor(false);
     }
+  };
+
+  const onSubmit = async () => {
+    if (!major || isSubmittingMajor) return;
+
+    await submitMajor(major);
+  };
+
+  const handleSelectAnalyzedMajor = async () => {
+    if (!analyzedMajor || isSubmittingMajor) return;
+
+    setMajor(analyzedMajor);
+    await submitMajor(analyzedMajor);
   };
 
   // 질문 객체를 return 해주는 함수
@@ -159,6 +163,8 @@ export const useMajorChoice = () => {
       analyzedMajor,
       username,
       setStep,
+      isSubmittingMajor,
+      handleSelectAnalyzedMajor,
     },
   };
 };
