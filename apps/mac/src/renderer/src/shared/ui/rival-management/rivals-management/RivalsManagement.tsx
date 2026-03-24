@@ -160,19 +160,6 @@ export const RivalsManagementDialog = ({ isOpen, onClose, rival }: AddRivalsDial
                     : rival.error}
                 </S.ErrorText>
               )}
-              <S.SearchInputBox>
-                <SearchInput
-                  placeholder={"이름 또는 깃허브 아이디 검색"}
-                  inputSize={"md"}
-                  variant={"light"}
-                  fullWidth={true}
-                  value={rival.applySearchText}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                    rival.setApplySearchText(e.target.value)
-                  }
-                />
-              </S.SearchInputBox>
-
               <S.DetermineList>
                 <S.UserChoiceContainer>
                   {hasSignRivals ? (
