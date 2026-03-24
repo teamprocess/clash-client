@@ -1,6 +1,8 @@
 import styled from "styled-components";
 import { font } from "@clash/design-tokens/font";
 import Previous from "@/pages/roadmap/chapter/assets/previous.svg";
+import Check from "../../assets/check.svg";
+import NotCheck from "../../assets/not-check.svg";
 
 export const TestContainer = styled.div`
   display: flex;
@@ -97,21 +99,40 @@ export const LabelWrapper = styled.div`
   align-items: center;
 `;
 
-export const AnswerItem = styled.div<{ $itemSize: string; $isActive: boolean }>`
-  width: ${({ $itemSize }) =>
-    $itemSize === "Large" ? "4rem" : $itemSize === "Medium" ? "3rem" : "2rem"};
-  aspect-ratio: 1 / 1;
-  border-radius: 50%;
-  border: 4px solid
-    ${({ theme, $isActive }) => ($isActive ? theme.primary.normal : theme.line.normal)};
+export const AnswerItem = styled.button<{ $isActive: boolean }>`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  background: transparent;
+  border: none;
   flex-shrink: 0;
   cursor: pointer;
-  transition: border-color 0.2s ease;
+  line-height: 0;
+  transition:
+    opacity 0.2s ease,
+    transform 0.2s ease;
 
   &:hover {
-    border-color: ${({ theme, $isActive }) =>
-      $isActive ? theme.primary.normal : theme.background.neutral};
+    opacity: 0.85;
+    transform: scale(1.03);
   }
+`;
+
+export const CheckedAnswerIcon = styled(Check)<{ $itemSize: string }>`
+  width: ${({ $itemSize }) =>
+    $itemSize === "Large" ? "4rem" : $itemSize === "Medium" ? "3rem" : "2.5rem"};
+  height: ${({ $itemSize }) =>
+    $itemSize === "Large" ? "4rem" : $itemSize === "Medium" ? "3rem" : "2.5rem"};
+  flex-shrink: 0;
+`;
+
+export const NotCheckedAnswerIcon = styled(NotCheck)<{ $itemSize: string }>`
+  width: ${({ $itemSize }) =>
+    $itemSize === "Large" ? "4rem" : $itemSize === "Medium" ? "3rem" : "2.5rem"};
+  height: ${({ $itemSize }) =>
+    $itemSize === "Large" ? "4rem" : $itemSize === "Medium" ? "3rem" : "2.5rem"};
+  flex-shrink: 0;
 `;
 
 export const AnswerItemTitle = styled.div`
@@ -178,4 +199,5 @@ export const QuestionBoxWrapper = styled.div`
   flex-direction: column;
   align-items: center;
   gap: 9rem;
+  margin-top: 4rem;
 `;
