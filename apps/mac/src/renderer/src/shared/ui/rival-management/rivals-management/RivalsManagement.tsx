@@ -68,7 +68,11 @@ export const RivalsManagementDialog = ({ isOpen, onClose, rival }: AddRivalsDial
                     >
                       <S.ProfileContent $height="3rem">
                         <S.ProfileBox>
-                          <S.ProfileIcon />
+                          {user.profileImage ? (
+                            <S.ProfileImg src={user.profileImage} />
+                          ) : (
+                            <S.DefaultProfileImg />
+                          )}
                           <S.ProfileTagBox>
                             <S.ProfileName>{user.name}</S.ProfileName>
                             <S.ProfileMention>@{user.username}</S.ProfileMention>
@@ -112,7 +116,11 @@ export const RivalsManagementDialog = ({ isOpen, onClose, rival }: AddRivalsDial
                     <S.UserChoiceBox key={user.rivalId ?? user.id} $isRival={true}>
                       <S.ProfileContent $height="3rem">
                         <S.ProfileBox>
-                          <S.ProfileIcon />
+                          {user.profileImage ? (
+                            <S.ProfileImg src={user.profileImage} />
+                          ) : (
+                            <S.DefaultProfileImg />
+                          )}
                           <S.ProfileTagBox>
                             <S.ProfileName>{user.name}</S.ProfileName>
                             <S.ProfileMention>@{user.username}</S.ProfileMention>
@@ -172,7 +180,11 @@ export const RivalsManagementDialog = ({ isOpen, onClose, rival }: AddRivalsDial
                       <S.UserChoiceBox key={user.rivalId} $isRival={true}>
                         <S.ProfileContent $height="3rem">
                           <S.ProfileBox>
-                            <S.ProfileIcon />
+                            {user.profileImage ? (
+                              <S.ProfileImg src={user.profileImage} />
+                            ) : (
+                              <S.DefaultProfileImg />
+                            )}
                             <S.ProfileTagBox>
                               <S.ProfileName>{user.name}</S.ProfileName>
                               <S.ProfileMention>@{user.githubId}</S.ProfileMention>
