@@ -19,10 +19,6 @@ export interface MajorQuestionsResponse {
 export enum Major {
   SERVER = "SERVER",
   WEB = "WEB",
-  APP = "APP",
-  AI = "AI",
-  GAME = "GAME",
-  NONE = "NONE",
 }
 
 export interface PostMyMajorRequest {
