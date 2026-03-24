@@ -68,7 +68,11 @@ export const RivalsManagementDialog = ({ isOpen, onClose, rival }: AddRivalsDial
                     >
                       <S.ProfileContent $height="3rem">
                         <S.ProfileBox>
-                          <S.ProfileIcon />
+                          {user.profileImage ? (
+                            <S.ProfileImg src={user.profileImage} />
+                          ) : (
+                            <S.DefaultProfileImg />
+                          )}
                           <S.ProfileTagBox>
                             <S.ProfileName>{user.name}</S.ProfileName>
                             <S.ProfileMention>@{user.username}</S.ProfileMention>
@@ -112,7 +116,11 @@ export const RivalsManagementDialog = ({ isOpen, onClose, rival }: AddRivalsDial
                     <S.UserChoiceBox key={user.rivalId ?? user.id} $isRival={true}>
                       <S.ProfileContent $height="3rem">
                         <S.ProfileBox>
-                          <S.ProfileIcon />
+                          {user.profileImage ? (
+                            <S.ProfileImg src={user.profileImage} />
+                          ) : (
+                            <S.DefaultProfileImg />
+                          )}
                           <S.ProfileTagBox>
                             <S.ProfileName>{user.name}</S.ProfileName>
                             <S.ProfileMention>@{user.username}</S.ProfileMention>
@@ -152,19 +160,6 @@ export const RivalsManagementDialog = ({ isOpen, onClose, rival }: AddRivalsDial
                     : rival.error}
                 </S.ErrorText>
               )}
-              <S.SearchInputBox>
-                <SearchInput
-                  placeholder={"이름 또는 깃허브 아이디 검색"}
-                  inputSize={"md"}
-                  variant={"light"}
-                  fullWidth={true}
-                  value={rival.applySearchText}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                    rival.setApplySearchText(e.target.value)
-                  }
-                />
-              </S.SearchInputBox>
-
               <S.DetermineList>
                 <S.UserChoiceContainer>
                   {hasSignRivals ? (
@@ -172,7 +167,11 @@ export const RivalsManagementDialog = ({ isOpen, onClose, rival }: AddRivalsDial
                       <S.UserChoiceBox key={user.rivalId} $isRival={true}>
                         <S.ProfileContent $height="3rem">
                           <S.ProfileBox>
-                            <S.ProfileIcon />
+                            {user.profileImage ? (
+                              <S.ProfileImg src={user.profileImage} />
+                            ) : (
+                              <S.DefaultProfileImg />
+                            )}
                             <S.ProfileTagBox>
                               <S.ProfileName>{user.name}</S.ProfileName>
                               <S.ProfileMention>@{user.githubId}</S.ProfileMention>
