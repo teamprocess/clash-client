@@ -227,28 +227,10 @@ export const useRival = () => {
 
   const [pendingDeleteId, setPendingDeleteId] = useState<number | null>(null);
 
-  const [applySearchText, setApplySearchText] = useState("");
-
-  const myRivalIdSet = useMemo(() => {
-    const list = rivalsData?.myRivals ?? [];
-    return new Set(list.map(u => u.rivalId ?? u.id).filter((_): _ is number => true));
-  }, [rivalsData?.myRivals]);
-
   const filteredSignRivals = useMemo(() => {
     const list = rivalSignAll?.rivals ?? [];
-
-    const withoutMyRivals = list.filter(u => !myRivalIdSet.has(u.rivalId));
-
-    const q = applySearchText.trim().toLowerCase();
-    if (!q) return withoutMyRivals;
-
-    return withoutMyRivals.filter(u => {
-      const name = (u.name ?? "").toLowerCase();
-      const githubId = (u.githubId ?? "").toLowerCase();
-
-      return name.includes(q) || githubId.includes(q);
-    });
-  }, [rivalSignAll?.rivals, myRivalIdSet, applySearchText]);
+    return list.filter(u => u.rivalLinkingStatus === "PENDING");
+  }, [rivalSignAll?.rivals]);
 
   return {
     userList,
@@ -286,8 +268,7 @@ export const useRival = () => {
     setSearchText,
     filteredUsers,
 
-    applySearchText,
-    setApplySearchText,
+    // filtered sign list
     filteredSignRivals,
 
     // error

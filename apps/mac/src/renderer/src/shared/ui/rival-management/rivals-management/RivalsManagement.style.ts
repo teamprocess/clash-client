@@ -24,6 +24,8 @@ export const DialogLayout = styled.div`
 export const TopSection = styled.div`
   ${flexCol};
   flex: 1;
+
+  padding: 1rem 0 0 0;
   min-height: 0;
 `;
 
@@ -60,7 +62,14 @@ export const ProfileTagBox = styled.div`
   gap: 0.125rem;
 `;
 
-export const ProfileIcon = styled(Profile)`
+export const ProfileImg = styled.img`
+  width: 2.25rem;
+  height: 2.25rem;
+  object-fit: cover;
+  border-radius: 50%;
+`;
+
+export const DefaultProfileImg = styled(Profile)`
   width: 2.25rem;
   height: 2.25rem;
 `;
@@ -152,8 +161,8 @@ export const ApplyContainer = styled.div`
   width: 100%;
   flex: 1;
   min-height: 0;
-  padding: 1rem;
-  gap: 1rem;
+  padding: 2rem 1rem 1rem;
+  gap: 2.25rem;
 
   overflow-y: auto;
   scrollbar-width: none;
