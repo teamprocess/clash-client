@@ -2,6 +2,7 @@ import * as S from "./MajorChoice.style";
 import { MajorProps } from "@/features/major-choice/model/useMajorChoice";
 import { Button } from "@/shared/ui/button";
 import { ChoiceBox } from "@/features/major-choice/ui/choice-box/ChoiceBox";
+import { majorLabels } from "@/features/major-choice/model/major.constants";
 
 export const MajorChoice = ({
   selectedMajor,
@@ -28,14 +29,14 @@ export const MajorChoice = ({
               size="md"
               selected={major === "WEB"}
               icon={<S.WebIcon />}
-              label="웹"
+              label={majorLabels.WEB}
               onClick={() => !isSubmittingMajor && selectedMajor("WEB")}
             />
             <ChoiceBox
               size="md"
               selected={major === "SERVER"}
               icon={<S.ServerIcon />}
-              label="서버"
+              label={majorLabels.SERVER}
               onClick={() => !isSubmittingMajor && selectedMajor("SERVER")}
             />
           </S.ChoiceWrapper>

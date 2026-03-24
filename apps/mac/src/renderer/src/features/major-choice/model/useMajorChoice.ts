@@ -5,18 +5,12 @@ import { useMajorQuestionsQuery } from "@/entities/major/api/query/useMajorQuest
 import { Major } from "@/entities/major/model/major.types";
 import { useQueryClient } from "@tanstack/react-query";
 import { useGetMyProfile } from "@/entities/user";
+import { majorScoreToItem, MajorScoreKey, SupportedMajorItem } from "./major.constants";
 
 export type FeatureItem = "TEST" | "CHOICE" | null;
-export type MajorItem = "WEB" | "SERVER" | null;
-export type AnalyzedMajorItem = "Web" | "Server" | null;
+export type MajorItem = SupportedMajorItem | null;
+export type AnalyzedMajorItem = SupportedMajorItem | null;
 export type StepType = "FEATURE" | "TEST" | "LOADING" | "RESULT" | "CHOICE";
-
-type MajorScoreKey = "web" | "server";
-
-const majorNames: Record<MajorScoreKey, Exclude<AnalyzedMajorItem, null>> = {
-  web: "Web",
-  server: "Server",
-};
 
 export const useMajorChoice = () => {
   const queryClient = useQueryClient();
@@ -85,7 +79,7 @@ export const useMajorChoice = () => {
     });
 
     const resultMajorKey: MajorScoreKey = scores.web > scores.server ? "web" : "server";
-    const finalMajor = majorNames[resultMajorKey];
+    const finalMajor = majorScoreToItem[resultMajorKey];
 
     setAnalyzedMajor(finalMajor);
     // 임시로 2초 로딩
