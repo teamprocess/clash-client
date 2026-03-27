@@ -17,7 +17,7 @@ export const MyCompetitionLineChart = ({ dataPoint, category }: MyCompetitionLin
     return `${Number(month)}월 ${Number(day)}일`;
   });
 
-  const values = dataPoint.values;
+  const values = dataPoint.values.map(v => Math.round((v ?? 0) * 10) / 10);
 
   return (
     <Line
@@ -59,7 +59,7 @@ export const MyCompetitionLineChart = ({ dataPoint, category }: MyCompetitionLin
                   return formatTime(value);
                 }
 
-                return value.toString();
+                return value.toFixed(1);
               },
             },
           },
