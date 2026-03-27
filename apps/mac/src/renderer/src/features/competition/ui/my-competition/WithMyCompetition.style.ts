@@ -14,6 +14,11 @@ const flexCol = css`
   flex-direction: column;
 `;
 
+export const GrowthControlBox = styled.div`
+  ${flexRow};
+  gap: 1rem;
+`;
+
 export const ContentArea = styled.div`
   ${flexCol};
   height: 100%;

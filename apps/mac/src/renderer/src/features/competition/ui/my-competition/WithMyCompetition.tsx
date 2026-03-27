@@ -2,7 +2,7 @@ import * as S from "./WithMyCompetition.style";
 import { GrowthRate, Select, MyCompetitionLineChart } from "@/shared/ui";
 import { useMyCompetition } from "@/features/competition/model/useMyCompetition";
 import { toLineChartData } from "@/shared/ui/my-compete-chart/formatMyCompeteChartData";
-import { CompareStandard, GrowthRateStandard } from "@/entities/competition";
+import { CompareStandard, GrowthRateStandard, AnalyzeCategory } from "@/entities/competition";
 import { formatTime } from "@/shared/lib";
 
 export const WithMyCompetition = () => {
@@ -12,10 +12,13 @@ export const WithMyCompetition = () => {
     compareData,
     competitionDropdown,
     setCompetitionDropdown,
-    growthRateDropdown,
-    setGrowthRateDropdown,
-    growthRateDropDownValue,
     competitionDropDownValue,
+    growthRatePeriod,
+    setGrowthRatePeriod,
+    growthRatePeriodOptions,
+    growthRateCategory,
+    setGrowthRateCategory,
+    growthRateCategoryOptions,
     roundOneDecimal,
   } = useMyCompetition();
 
@@ -26,11 +29,18 @@ export const WithMyCompetition = () => {
       <S.AnalyzeSection>
         <S.TitleBox $justify="space-between">
           <S.AnalyzeTitle>내 성장도 분석</S.AnalyzeTitle>
-          <Select<GrowthRateStandard>
-            value={growthRateDropdown}
-            options={growthRateDropDownValue}
-            onChange={setGrowthRateDropdown}
-          />
+          <S.GrowthControlBox>
+            <Select<AnalyzeCategory>
+              value={growthRateCategory}
+              options={growthRateCategoryOptions}
+              onChange={setGrowthRateCategory}
+            />
+            <Select<GrowthRateStandard>
+              value={growthRatePeriod}
+              options={growthRatePeriodOptions}
+              onChange={setGrowthRatePeriod}
+            />
+          </S.GrowthControlBox>
         </S.TitleBox>
 
         <S.ChartWrapper>
