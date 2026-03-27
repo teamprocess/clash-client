@@ -20,6 +20,10 @@ export const MyCompetitionLineChart = ({ dataPoint, category }: MyCompetitionLin
   const values = dataPoint.values.map(v => {
     const value = v ?? 0;
 
+    if (category === "EXP") {
+      return Math.round(value);
+    }
+
     if (category === "GITHUB") {
       return Math.round(value * 10) / 10;
     }
