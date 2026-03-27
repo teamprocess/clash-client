@@ -12,7 +12,11 @@ interface MyCompetitionLineChartProps {
 }
 
 export const MyCompetitionLineChart = ({ dataPoint, category }: MyCompetitionLineChartProps) => {
-  const labels = dataPoint.labels;
+  const labels = dataPoint.labels.map(label => {
+    const [month, day] = label.split("-");
+    return `${Number(month)}월 ${Number(day)}일`;
+  });
+
   const values = dataPoint.values;
 
   return (
