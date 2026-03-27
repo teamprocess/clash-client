@@ -69,7 +69,7 @@ export const useSignIn = () => {
       if (result.success && result.data?.redirectUrl) {
         navigate(
           {
-            pathname: "/sign-in-complete",
+            pathname: "/redirect",
             search: location.search,
           },
           {
