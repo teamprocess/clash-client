@@ -33,7 +33,7 @@ export const useSignIn = () => {
     if (!state || !redirectUri) {
       setError("root", {
         type: "manual",
-        message: "필수 인증 정보가 없습니다. 앱에서 다시 시도해주세요.",
+        message: "인증 정보가 없습니다. 앱에서 다시 로그인 페이지를 열어주세요.",
       });
     }
   }, [state, redirectUri, setError]);
@@ -43,7 +43,7 @@ export const useSignIn = () => {
       if (!state || !redirectUri) {
         setError("root", {
           type: "manual",
-          message: "필수 인증 정보가 없습니다. 앱에서 다시 시도해주세요.",
+          message: "인증 정보가 없습니다. 앱에서 다시 로그인 페이지를 열어주세요.",
         });
         return;
       }
@@ -69,7 +69,7 @@ export const useSignIn = () => {
       if (result.success && result.data?.redirectUrl) {
         navigate(
           {
-            pathname: "/sign-in-complete",
+            pathname: "/redirect",
             search: location.search,
           },
           {
