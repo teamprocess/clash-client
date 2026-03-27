@@ -1,16 +1,35 @@
 import { Line } from "react-chartjs-2";
 import "chart.js/auto";
+import { formatTime } from "@/shared/lib";
+import { AnalyzeCategory } from "@/entities/competition";
 
 interface MyCompetitionLineChartProps {
   dataPoint: {
     labels: string[];
     values: number[];
   };
+  category: AnalyzeCategory;
 }
 
-export const MyCompetitionLineChart = (data: MyCompetitionLineChartProps) => {
-  const labels = data.dataPoint.labels.map(v => v);
-  const values = data.dataPoint.values.map(v => v);
+export const MyCompetitionLineChart = ({ dataPoint, category }: MyCompetitionLineChartProps) => {
+  const labels = dataPoint.labels.map(label => {
+    const [month, day] = label.split("-");
+    return `${Number(month)}월 ${Number(day)}일`;
+  });
+
+  const values = dataPoint.values.map(v => {
+    const value = v ?? 0;
+
+    if (category === "EXP") {
+      return Math.round(value);
+    }
+
+    if (category === "GITHUB") {
+      return Math.round(value * 10) / 10;
+    }
+
+    return Math.abs(value);
+  });
 
   return (
     <Line
@@ -45,8 +64,13 @@ export const MyCompetitionLineChart = (data: MyCompetitionLineChartProps) => {
             callbacks: {
               title: () => "",
               label: tooltipItem => {
-                const value = tooltipItem.raw;
+                const value = tooltipItem.raw as number;
                 if (value === null || value === undefined) return "";
+
+                if (category === "ACTIVE_TIME") {
+                  return formatTime(value);
+                }
+
                 return value.toString();
               },
             },
