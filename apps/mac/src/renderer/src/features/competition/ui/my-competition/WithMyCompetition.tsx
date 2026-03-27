@@ -44,7 +44,7 @@ export const WithMyCompetition = () => {
         </S.TitleBox>
 
         <S.ChartWrapper>
-          <MyCompetitionLineChart dataPoint={chartData.dataPoint} />
+          <MyCompetitionLineChart dataPoint={chartData.dataPoint} category={growthRateCategory} />
         </S.ChartWrapper>
       </S.AnalyzeSection>
 
