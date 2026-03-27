@@ -22,7 +22,7 @@ const growthRatePeriodOptions: { key: GrowthRateStandard; label: string }[] = [
 const growthRateCategoryOptions: { key: AnalyzeCategory; label: string }[] = [
   { key: "EXP", label: "EXP" },
   { key: "GITHUB", label: "Github" },
-  { key: "ACTIVE_TIME", label: "학습시간" },
+  { key: "ACTIVE_TIME", label: "학습 시간" },
 ];
 
 export const useMyCompetition = () => {
