@@ -95,7 +95,7 @@ export const useRealtimeSync = () => {
           path: socketConfig.path,
           transports: ["websocket", "polling"],
           withCredentials: true,
-          query: { token },
+          query: { token, clientChannel: socketConfig.clientChannel },
           reconnection: false,
         });
 
