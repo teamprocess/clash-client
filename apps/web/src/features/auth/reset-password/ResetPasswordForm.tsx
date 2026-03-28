@@ -40,14 +40,6 @@ export const ResetPasswordForm = () => {
             <S.Description>{message}</S.Description>
             <S.SubMessage>메일이 보이지 않으면 스팸함도 함께 확인해주세요.</S.SubMessage>
           </S.Content>
-          <S.ButtonWrapper>
-            <S.HelpTextBox>
-              <S.ActionButton type="button" onClick={moveToRequestView}>
-                다시 입력
-              </S.ActionButton>
-              <S.HelpText to={{ pathname: "/sign-in", search: authSearch }}>로그인</S.HelpText>
-            </S.HelpTextBox>
-          </S.ButtonWrapper>
         </S.StatusContainer>
       </>
     );
@@ -65,7 +57,6 @@ export const ResetPasswordForm = () => {
             <S.HelpText to={{ pathname: "/reset-password", search: authSearch }}>
               재설정 요청
             </S.HelpText>
-            <S.HelpText to={{ pathname: "/sign-in", search: authSearch }}>로그인</S.HelpText>
           </S.HelpTextBox>
         </S.ButtonWrapper>
       </S.StatusContainer>
