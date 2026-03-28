@@ -119,6 +119,7 @@ const QuizPanelContent = ({
               <MarkdownCodeContent
                 content={state.explanation || "해설이 제공되지 않았습니다."}
                 variant="body"
+                size="large"
               />
             </S.ExplanationBox>
           </S.ResultCard>
@@ -212,6 +213,7 @@ const QuizPanelContent = ({
               <MarkdownCodeContent
                 content={currentQuestion.content}
                 variant="question"
+                size="large"
                 prefix={<S.QuestionPrefix>Q.</S.QuestionPrefix>}
               />
             </S.QuestionText>
