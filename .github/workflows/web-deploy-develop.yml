@@ -59,6 +59,7 @@ jobs:
           host: ${{ secrets.DEVELOP_SERVER_IP }}
           username: ${{ secrets.DEVELOP_SSH_USER }}
           key: ${{ secrets.DEVELOP_SSH_PRIVATE_KEY }}
+          port: ${{ secrets.DEVELOP_SSH_PORT }}
           script_stop: true
           script: |
             set -eu
