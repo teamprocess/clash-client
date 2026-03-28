@@ -59,13 +59,38 @@ const getAuthSearch = (search?: string) => {
   return nextSearch ? `?${nextSearch}` : "";
 };
 
+const getAuthSearchWithOverrides = (
+  search: string | undefined,
+  nextState?: string,
+  nextRedirectUri?: string
+) => {
+  const { state, redirectUri } = getAuthParams(search);
+  const params = new URLSearchParams();
+
+  const resolvedState = nextState || state;
+  const resolvedRedirectUri = nextRedirectUri || redirectUri;
+
+  if (resolvedState) {
+    params.set("state", resolvedState);
+  }
+
+  if (resolvedRedirectUri) {
+    params.set("redirectUri", resolvedRedirectUri);
+  }
+
+  const nextSearch = params.toString();
+  return nextSearch ? `?${nextSearch}` : "";
+};
+
 export const useResetPassword = () => {
   const location = useLocation();
   const { executeRecaptcha } = useGoogleReCaptcha();
   const token = getResetToken(location.search);
-  const authSearch = getAuthSearch(location.search);
+  const defaultAuthSearch = getAuthSearch(location.search);
   const [view, setView] = useState<ResetPasswordView>(token ? "TOKEN_VALIDATING" : "REQUEST");
   const [message, setMessage] = useState("");
+  const [resetState, setResetState] = useState("");
+  const [resetRedirectUri, setResetRedirectUri] = useState("");
 
   const requestForm = useForm<PasswordResetRequestFormData>({
     resolver: zodResolver(passwordResetRequestSchema),
@@ -192,6 +217,8 @@ export const useResetPassword = () => {
 
       if (result.success) {
         resetForm.reset();
+        setResetState(result.data?.state ?? "");
+        setResetRedirectUri(result.data?.redirectUri ?? "");
         setView("COMPLETE");
         setMessage(result.message || "비밀번호가 변경되었습니다.");
         return;
@@ -223,13 +250,17 @@ export const useResetPassword = () => {
   const moveToRequestView = () => {
     requestForm.reset();
     setMessage("");
+    setResetState("");
+    setResetRedirectUri("");
     setView("REQUEST");
   };
 
   return {
     view,
     message,
-    authSearch,
+    authSearch: resetState || resetRedirectUri
+      ? getAuthSearchWithOverrides(location.search, resetState, resetRedirectUri)
+      : defaultAuthSearch,
     moveToRequestView,
     request: {
       register: requestForm.register,
