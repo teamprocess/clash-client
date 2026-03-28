@@ -23,6 +23,9 @@ api.interceptors.response.use(
         "/auth/username-duplicate-check",
         "/auth/verify-email",
         "/auth/electron/sign-in",
+        "/auth/password-reset/send",
+        "/auth/password-reset/validate",
+        "/auth/password-reset/confirm",
       ];
       const isPublicPath = publicPaths.some(path => error.config?.url?.includes(path));
 

@@ -27,7 +27,7 @@ export const SignInForm = () => {
         {errors.root && <S.ErrorText>{errors.root.message}</S.ErrorText>}
         <S.HelpTextBox>
           <S.HelpText to={{ pathname: "/sign-up", search }}>회원가입</S.HelpText>
-          <S.HelpText to={{ pathname: "/forgot-passwrod", search }}>비밀번호 찾기</S.HelpText>
+          <S.HelpText to={{ pathname: "/reset-password", search }}>비밀번호 찾기</S.HelpText>
         </S.HelpTextBox>
       </S.ButtonWrapper>
     </S.FormContainer>

@@ -3,6 +3,7 @@ import { GoogleReCaptchaProvider } from "react-google-recaptcha-v3";
 import { SignInPage, SignUpPage } from "@/pages/auth";
 import { AuthLayout } from "@/app/layouts/auth";
 import { OnboardingPage } from "@/pages/onboarding";
+import { ResetPasswordPage } from "@/pages/auth/reset-password/ResetPassword.tsx";
 import { RedirectPage } from "@/pages/redirect";
 
 const RootRoute = () => {
@@ -31,6 +32,7 @@ function App() {
             <Route path="/" element={<RootRoute />} />
             <Route path="/redirect" element={<RedirectPage />} />
             <Route path="/sign-in" element={<SignInPage />} />
+            <Route path="/reset-password" element={<ResetPasswordPage />} />
             <Route path="/sign-up" element={<SignUpPage />} />
             <Route path="*" element={<SignInRedirect />} />
           </Route>
