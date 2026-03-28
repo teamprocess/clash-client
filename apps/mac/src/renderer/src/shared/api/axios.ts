@@ -1,4 +1,5 @@
 import axios from "axios";
+import { appRuntimeProfile } from "@/shared/config/appRuntime";
 
 const BASE_URL = import.meta.env.VITE_API_URL;
 
@@ -8,6 +9,7 @@ export const api = axios.create({
   timeout: 10000,
   headers: {
     "Content-Type": "application/json",
+    "X-Client-Channel": appRuntimeProfile.clientChannel,
   },
   withCredentials: true, // 쿠키를 자동으로 보내고 받음
 });
