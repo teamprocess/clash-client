@@ -9,6 +9,7 @@ import { bootstrapMainProcess } from "./bootstrap";
 import { registerApplicationMenu } from "./menu";
 import { registerTray } from "./tray";
 import { markUpdateInstallInProgress } from "./updateInstallState";
+import { configureAppRuntime } from "./runtimeProfile";
 
 let mainWindow: BrowserWindow | null = null;
 let appMonitor: AppMonitor | null = null;
@@ -200,6 +201,7 @@ const registerAutoUpdater = () => {
   }, AUTO_UPDATE_CHECK_INTERVAL_MS);
 };
 
+configureAppRuntime();
 configureCertificateHandling();
 registerQuitHandlers({ getAppMonitor });
 registerDeepLinkEvents(getMainWindow, createWindow);
