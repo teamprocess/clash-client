@@ -8,10 +8,10 @@ import {
 
 export const myCompetitionApi = {
   // 내 성장도 분석
-  getMyGrowthRate: async (data: MyGrowthRateRequest) => {
-    const result = await api.get<ApiResponse<MyGrowthRateResponse>>("/compete/my/growth-rate", {
-      params: data,
-    });
+  getMyGrowthRate: async ({ category, period }: MyGrowthRateRequest) => {
+    const result = await api.get<ApiResponse<MyGrowthRateResponse>>(
+      `/compete/my/analyze/category/${category}/period/${period}`
+    );
     return result.data;
   },
 
