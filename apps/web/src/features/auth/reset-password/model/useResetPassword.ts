@@ -85,6 +85,7 @@ const getAuthSearchWithOverrides = (
 export const useResetPassword = () => {
   const location = useLocation();
   const { executeRecaptcha } = useGoogleReCaptcha();
+  const { state: currentState, redirectUri: currentRedirectUri } = getAuthParams(location.search);
   const token = getResetToken(location.search);
   const defaultAuthSearch = getAuthSearch(location.search);
   const [view, setView] = useState<ResetPasswordView>(token ? "TOKEN_VALIDATING" : "REQUEST");
@@ -164,6 +165,8 @@ export const useResetPassword = () => {
       const result = await authApi.sendPasswordResetEmail(
         {
           email: data.email,
+          state: currentState || undefined,
+          redirectUri: currentRedirectUri || undefined,
         },
         { recaptchaToken }
       );
