@@ -63,7 +63,7 @@ jobs:
           script_stop: true
           script: |
             set -eu
-            cd /home/ubuntu/app
+            cd /home/${{ secrets.DEVELOP_SSH_USER }}/app
 
             touch .deploy.env
 
