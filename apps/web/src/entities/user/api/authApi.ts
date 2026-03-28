@@ -38,6 +38,8 @@ export interface EmailVerifyRequest {
 
 export interface PasswordResetSendRequest {
   email: string;
+  state?: string;
+  redirectUri?: string;
 }
 
 export interface PasswordResetValidateRequest {
