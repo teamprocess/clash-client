@@ -6,4 +6,7 @@ export type {
   EmailVerifyRequest,
   UsernameDuplicateCheckRequest,
   UsernameDuplicateCheckResponse,
+  PasswordResetSendRequest,
+  PasswordResetValidateRequest,
+  PasswordResetConfirmRequest,
 } from "./api/authApi";
