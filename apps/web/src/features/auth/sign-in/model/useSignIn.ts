@@ -56,6 +56,7 @@ export const useSignIn = () => {
         return;
       }
 
+      // 리캡차로 사용자가 인간인지 검증하고 signIn 요청 전송.
       const recaptchaToken = await executeRecaptcha("electron_login");
 
       const result = await authApi.signIn({
