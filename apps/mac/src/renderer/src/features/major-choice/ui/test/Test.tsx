@@ -2,9 +2,28 @@ import * as S from "./Test.style";
 import { TestProps } from "@/features/major-choice/model/useMajorChoice";
 import { Button } from "@/shared/ui/button";
 import { AGREEMENT_LABELS, LevelSlider } from "@/shared/ui/level-slider";
+import { LEVEL_ENUM } from "@/shared/ui/level-slider/types";
+
+const answerToLevel = (answer?: number | null): LEVEL_ENUM | undefined => {
+  if (answer == null) {
+    return undefined;
+  }
+
+  return (answer - 3) as LEVEL_ENUM;
+};
+
+const levelToAnswer = (level?: LEVEL_ENUM): number | null => {
+  if (level == null) {
+    return null;
+  }
+
+  return level + 3;
+};
 
 export const Test = ({
+  answers,
   isAllAnswered,
+  handleSelect,
   handleComplete,
   getTestQuestion,
   setStep,
@@ -33,12 +52,16 @@ export const Test = ({
             <S.PreviousLabel>이전으로</S.PreviousLabel>
           </S.PreviousBox>
           <S.QuestionBoxWrapper>
-            {questionData.map(({ id, content }) => (
+            {questionData.map(({ id, content }, idx) => (
               <S.QuestionBox key={id}>
                 <S.QuestionTitle>
                   <S.QuestionNumber>{id}.</S.QuestionNumber> {content}
                 </S.QuestionTitle>
-                <LevelSlider labels={AGREEMENT_LABELS} />
+                <LevelSlider
+                  labels={AGREEMENT_LABELS}
+                  selectedLevel={answerToLevel(answers[idx])}
+                  onChange={level => handleSelect(idx, levelToAnswer(level))}
+                />
               </S.QuestionBox>
             ))}
           </S.QuestionBoxWrapper>

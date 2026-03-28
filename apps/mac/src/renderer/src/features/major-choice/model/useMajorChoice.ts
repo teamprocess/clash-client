@@ -56,10 +56,12 @@ export const useMajorChoice = () => {
     questionData.every((_, idx) => answers[idx] != null);
 
   // 전공 성향 검사에서 답을 선택받는 함수
-  const handleSelect = (questionId: number, answerId: number) => {
-    const newAnswers = [...answers];
-    newAnswers[questionId] = newAnswers[questionId] === answerId ? null : answerId;
-    setAnswers(newAnswers);
+  const handleSelect = (questionId: number, answerId: number | null) => {
+    setAnswers(prevAnswers => {
+      const nextAnswers = Array.from({ length: questionData.length }, (_, idx) => prevAnswers[idx] ?? null);
+      nextAnswers[questionId] = answerId;
+      return nextAnswers;
+    });
   };
 
   // 전공 성향 검사 테스트 제출 시 점수 계산 및 결과 도출 함수
