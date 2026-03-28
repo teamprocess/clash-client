@@ -73,7 +73,10 @@ export const authApi = {
   },
 
   // 아이디 중복 검사
-  usernameDuplicateCheck: async (data: UsernameDuplicateCheckRequest, options?: RecaptchaOptions) => {
+  usernameDuplicateCheck: async (
+    data: UsernameDuplicateCheckRequest,
+    options?: RecaptchaOptions
+  ) => {
     const result = await api.get<ApiResponse<UsernameDuplicateCheckResponse>>(
       "/auth/username-duplicate-check",
       {
@@ -102,6 +105,7 @@ export const authApi = {
     return result.data;
   },
 
+  // 이메일 인증
   verifyEmail: async (data: EmailVerifyRequest, options?: RecaptchaOptions) => {
     const result = await api.post<ApiResponse<void>>(
       "/auth/verify-email",
@@ -139,10 +143,7 @@ export const authApi = {
     return result.data;
   },
 
-  confirmPasswordReset: async (
-    data: PasswordResetConfirmRequest,
-    options?: RecaptchaOptions
-  ) => {
+  confirmPasswordReset: async (data: PasswordResetConfirmRequest, options?: RecaptchaOptions) => {
     const result = await api.post<ApiResponse<PasswordResetConfirmResponse>>(
       "/auth/password-reset/confirm",
       {
