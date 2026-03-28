@@ -2,16 +2,22 @@ import styled, { css } from "styled-components";
 import { font } from "@clash/design-tokens/font";
 import ExitIconSvg from "@/shared/ui/assets/exit.svg";
 
-export const DialogOverlay = styled.div`
+export const DialogWrapper = styled.div`
   position: fixed;
   inset: 0;
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1000;
   width: 100%;
   height: 100%;
   padding: 1rem;
+  z-index: 1000;
+`;
+
+export const DialogOverlay = styled.div`
+  position: absolute;
+  inset: 0;
+  z-index: 0;
   background: rgba(0, 0, 0, 0.5);
 `;
 
@@ -21,11 +27,12 @@ export const DialogContainer = styled.div<{
   $fullWidth?: boolean;
   $fullHeight?: boolean;
 }>`
+  position: relative;
+  z-index: 1;
   padding: 1.25rem;
   border-radius: 1.25rem;
   background-color: ${({ theme }) => theme.background.normal};
   box-shadow: 0 0 7px 0 ${({ theme }) => theme.line.normal};
-  position: relative;
   display: flex;
   flex-direction: column;
 

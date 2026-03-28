@@ -29,7 +29,8 @@ export const Dialog = ({
   if (!isOpen) return null;
 
   return (
-    <S.DialogOverlay>
+    <S.DialogWrapper>
+      <S.DialogOverlay onClick={onClose} aria-hidden />
       <S.DialogContainer
         $width={width}
         $height={height}
@@ -46,6 +47,6 @@ export const Dialog = ({
         )}
         <S.DialogContent $gap={gap}>{children}</S.DialogContent>
       </S.DialogContainer>
-    </S.DialogOverlay>
+    </S.DialogWrapper>
   );
 };
