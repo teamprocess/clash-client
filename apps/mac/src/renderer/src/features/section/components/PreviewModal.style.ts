@@ -326,6 +326,7 @@ export const StepLabel = styled.div`
   display: flex;
   ${font.title2.medium}
   color: ${({ theme }) => theme.label.alternative};
+  gap: 5px;
 `;
 
 export const TotalStepLabel = styled.span`
@@ -404,7 +405,7 @@ export const TargetStar = styled(Star)`
 `;
 
 export const TargetItemText = styled.span`
-  ${font.headline2.medium}
+  ${font.body.medium}
   color: ${({ theme }) => theme.label.assistive};
 `;
 
