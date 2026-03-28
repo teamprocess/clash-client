@@ -165,7 +165,7 @@ const QuizPanelContent = ({
             <S.SummaryDescription>
               {isPassed
                 ? `${stageTitle}의 문제 풀이를 모두 마쳤습니다.`
-                : `${stageTitle} 문제를 다시 풀어볼 수 있습니다.`}
+                : `꼼꼼히 공부하고, 다시 한번 도전해 보세요!`}
             </S.SummaryDescription>
             {error && <S.InlineMessage $tone="error">{error}</S.InlineMessage>}
           </S.SummaryCard>
@@ -220,10 +220,6 @@ const QuizPanelContent = ({
           </S.QuizCard>
 
           <S.OptionsSection>
-            <S.OptionsDivider>
-              <S.OptionsDividerLabel>보기 선택</S.OptionsDividerLabel>
-            </S.OptionsDivider>
-
             <S.OptionList>
               {currentQuestion.choices.map(choice => (
                 <AnswerOptionButton
@@ -262,10 +258,10 @@ const QuizPanelContent = ({
               variant="primary"
               size="lg"
               onClick={() => void handleConfirm()}
-              disabled={!selectedChoiceId || isPreparing}
+              disabled={!selectedChoiceId || isPreparing || state.isSubmitting}
               fullWidth
             >
-              {isPreparing ? "문제 준비 중..." : state.isSubmitting ? "제출 중..." : "제출"}
+              {isPreparing ? "문제 준비 중..." : "제출"}
             </S.PrimaryActionButton>
             {error && <S.InlineMessage $tone="error">{error}</S.InlineMessage>}
             {error && (
@@ -348,14 +344,9 @@ export const MissionContainer = ({
   const descriptionText = isLoading
     ? "챕터 정보를 불러오는 중입니다."
     : description?.trim() || "이 챕터에 대한 설명이 아직 준비되지 않았습니다.";
-  const progressPercent =
-    currentStage.totalMissions > 0
-      ? Math.min((currentStage.currentProgress / currentStage.totalMissions) * 100, 100)
-      : 0;
   const isCompletedStage =
     currentStage.totalMissions > 0 && currentStage.currentProgress >= currentStage.totalMissions;
   const hasStudyMaterial = Boolean(studyMaterialUrl?.trim());
-  const isOverviewLoading = isLoading && !currentMission;
 
   return (
     <SidePanel
@@ -366,10 +357,12 @@ export const MissionContainer = ({
       position="fixed"
     >
       <S.PanelContent>
-        <S.PanelHeader>
-          <S.HeaderMain>
-            <S.HeaderTitle>{displayStageTitle}</S.HeaderTitle>
-          </S.HeaderMain>
+        <S.PanelHeader $showTitle={!currentMission}>
+          {!currentMission && (
+            <S.HeaderMain>
+              <S.HeaderTitle>{displayStageTitle}</S.HeaderTitle>
+            </S.HeaderMain>
+          )}
 
           <S.HeaderActions>
             <S.IconButton type="button" onClick={handleRequestClose} aria-label="챕터 패널 닫기">
@@ -389,74 +382,36 @@ export const MissionContainer = ({
           <>
             <S.OverviewBody>
               <S.SectionCard>
-                <S.SectionTitle>진행 상태</S.SectionTitle>
-                {isOverviewLoading ? (
-                  <>
-                    <S.LoadingBlock $width="6rem" $height="2rem" $radius="0.5rem" />
-                    <S.LoadingBlock $width="100%" $height="0.5rem" $radius="999px" />
-                  </>
-                ) : (
-                  <>
-                    <S.ProgressSummary>
-                      <S.ProgressCurrent>{currentStage.currentProgress}</S.ProgressCurrent>
-                      <S.ProgressTotal>/ {currentStage.totalMissions || 0}</S.ProgressTotal>
-                    </S.ProgressSummary>
-
-                    <S.ProgressTrack aria-hidden>
-                      <S.ProgressFill $value={progressPercent} />
-                    </S.ProgressTrack>
-                  </>
-                )}
-              </S.SectionCard>
-
-              <S.SectionCard>
-                <S.SectionTitle>챕터 설명</S.SectionTitle>
-                {isOverviewLoading ? (
-                  <S.LoadingDescriptionStack>
-                    <S.LoadingBlock $width="100%" $height="0.95rem" $radius="0.45rem" />
-                    <S.LoadingBlock $width="92%" $height="0.95rem" $radius="0.45rem" />
-                    <S.LoadingBlock $width="78%" $height="0.95rem" $radius="0.45rem" />
-                  </S.LoadingDescriptionStack>
-                ) : (
-                  <S.DescriptionText>{descriptionText}</S.DescriptionText>
-                )}
+                <S.DescriptionText>{descriptionText}</S.DescriptionText>
               </S.SectionCard>
             </S.OverviewBody>
 
             <S.FooterActions>
-              {isOverviewLoading ? (
-                <>
-                  <S.LoadingBlock $width="48%" $height="0.8rem" $radius="0.45rem" />
-                  <S.LoadingBlock $width="100%" $height="3.25rem" $radius="0.8rem" />
-                  <S.LoadingBlock $width="100%" $height="3.25rem" $radius="0.8rem" />
-                </>
-              ) : (
-                <>
-                  {studyMaterialError && (
-                    <S.InlineMessage $tone="error">{studyMaterialError}</S.InlineMessage>
-                  )}
-                  {hasStudyMaterial && (
-                    <S.SecondaryActionButton
-                      variant="secondary"
-                      size="lg"
-                      fullWidth
-                      onClick={() => void handleOpenStudyMaterial()}
-                      disabled={isLoading}
-                    >
-                      학습하러 가기
-                    </S.SecondaryActionButton>
-                  )}
-                  <S.PrimaryActionButton
-                    variant="primary"
+              <>
+                {studyMaterialError && (
+                  <S.InlineMessage $tone="error">{studyMaterialError}</S.InlineMessage>
+                )}
+                {hasStudyMaterial && (
+                  <S.SecondaryActionButton
+                    variant="secondary"
                     size="lg"
                     fullWidth
-                    onClick={onSolve}
-                    disabled={isSolveDisabled}
+                    onClick={() => void handleOpenStudyMaterial()}
+                    disabled={isLoading}
                   >
-                    {isCompletedStage ? "문제 다시 보기" : "문제 풀러 가기"}
-                  </S.PrimaryActionButton>
-                </>
-              )}
+                    학습하러 가기
+                  </S.SecondaryActionButton>
+                )}
+                <S.PrimaryActionButton
+                  variant="primary"
+                  size="lg"
+                  fullWidth
+                  onClick={onSolve}
+                  disabled={isSolveDisabled}
+                >
+                  {isCompletedStage ? "문제 다시 보기" : "문제 풀러 가기"}
+                </S.PrimaryActionButton>
+              </>
             </S.FooterActions>
           </>
         )}
