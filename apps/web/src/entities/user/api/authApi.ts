@@ -121,6 +121,7 @@ export const authApi = {
     return result.data;
   },
 
+  // 비밀번호 초기화 이메일 전송
   sendPasswordResetEmail: async (data: PasswordResetSendRequest, options?: RecaptchaOptions) => {
     const result = await api.post<ApiResponse<void>>(
       "/auth/password-reset/send",
