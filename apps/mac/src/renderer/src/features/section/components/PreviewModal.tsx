@@ -67,7 +67,13 @@ export const PreviewModal = ({
 
   if (loading) {
     return (
-      <Dialog width={74} height={48} isOpen={isOpen} onClose={onClose}>
+      <Dialog
+        width={74}
+        height={48}
+        isOpen={isOpen}
+        onClose={onClose}
+        closeOnOverlayClick={true}
+      >
         <S.PreviewModalWrapper>
           <div>로딩 중...</div>
         </S.PreviewModalWrapper>
@@ -77,7 +83,13 @@ export const PreviewModal = ({
 
   if (error || !previewData) {
     return (
-      <Dialog width={74} height={48} isOpen={isOpen} onClose={onClose}>
+      <Dialog
+        width={74}
+        height={48}
+        isOpen={isOpen}
+        onClose={onClose}
+        closeOnOverlayClick={true}
+      >
         <S.PreviewModalWrapper>
           <div>데이터를 불러올 수 없습니다.</div>
         </S.PreviewModalWrapper>
@@ -88,7 +100,7 @@ export const PreviewModal = ({
   const hasSteps = previewData.steps.length > 0;
 
   return (
-    <Dialog width={74} height={48} isOpen={isOpen} onClose={onClose}>
+    <Dialog width={74} height={48} isOpen={isOpen} onClose={onClose} closeOnOverlayClick={true}>
       <S.PreviewModalWrapper>
         <S.PreviewModalTop>
           <S.PreviewModalIntro>
