@@ -36,6 +36,24 @@ export interface EmailVerifyRequest {
   verificationCode: string;
 }
 
+export interface PasswordResetSendRequest {
+  email: string;
+}
+
+export interface PasswordResetValidateRequest {
+  token: string;
+}
+
+export interface PasswordResetConfirmRequest {
+  token: string;
+  newPassword: string;
+}
+
+export interface PasswordResetConfirmResponse {
+  state: string;
+  redirectUri: string;
+}
+
 export const authApi = {
   // 로그인
   signIn: async (data: SignInRequest) => {
@@ -85,6 +103,46 @@ export const authApi = {
   verifyEmail: async (data: EmailVerifyRequest, options?: RecaptchaOptions) => {
     const result = await api.post<ApiResponse<void>>(
       "/auth/verify-email",
+      {
+        ...data,
+      },
+      {
+        headers: options?.recaptchaToken
+          ? { "X-Recaptcha-Token": options.recaptchaToken }
+          : undefined,
+      }
+    );
+    return result.data;
+  },
+
+  sendPasswordResetEmail: async (data: PasswordResetSendRequest, options?: RecaptchaOptions) => {
+    const result = await api.post<ApiResponse<void>>(
+      "/auth/password-reset/send",
+      {
+        ...data,
+      },
+      {
+        headers: options?.recaptchaToken
+          ? { "X-Recaptcha-Token": options.recaptchaToken }
+          : undefined,
+      }
+    );
+    return result.data;
+  },
+
+  validatePasswordResetToken: async (data: PasswordResetValidateRequest) => {
+    const result = await api.get<ApiResponse<void>>("/auth/password-reset/validate", {
+      params: data,
+    });
+    return result.data;
+  },
+
+  confirmPasswordReset: async (
+    data: PasswordResetConfirmRequest,
+    options?: RecaptchaOptions
+  ) => {
+    const result = await api.post<ApiResponse<PasswordResetConfirmResponse>>(
+      "/auth/password-reset/confirm",
       {
         ...data,
       },

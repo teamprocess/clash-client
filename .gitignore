@@ -12,4 +12,4 @@ apps/mac/build
 !**/.env.example
 CLAUDE.md
 AGENTS.md
-apps/mac/certs
+packages/certs

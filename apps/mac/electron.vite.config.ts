@@ -8,7 +8,7 @@ export default defineConfig(({ mode }) => {
   const appRoot = __dirname;
   const env = loadEnv(mode, appRoot);
   const isDev = mode === "development";
-  const certBaseDir = resolve(__dirname, "certs");
+  const certBaseDir = resolve(__dirname, "../../packages/certs");
   const hasLocalHttpsCert =
     existsSync(resolve(certBaseDir, "local.clash.kr+3-key.pem")) &&
     existsSync(resolve(certBaseDir, "local.clash.kr+3.pem"));
