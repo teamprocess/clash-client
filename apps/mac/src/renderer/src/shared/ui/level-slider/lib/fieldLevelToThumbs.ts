@@ -15,26 +15,27 @@ export const fieldLevelToThumbs: FieldLevelToThumbsFunction = (
   const absLevel = Math.abs(level);
 
   // level이 선택되지 않았을 때 고정값 return.
-  if (selectedLevel == null) {
-    if (absLevel === 0)
+  if (selectedLevel == undefined) {
+    if (absLevel === 0) {
       thumbs = [
         { step: 2, isActive: false },
         { step: 1, isActive: true },
         { step: 2, isActive: false },
       ];
-    if (absLevel === 1)
+    } else if (absLevel === 1) {
       thumbs = [
         { step: 3, isActive: false },
         { step: 4, isActive: false },
         { step: 5, isActive: false },
       ];
-    if (absLevel === 2)
+    } else if (absLevel === 2) {
       thumbs = [
         { step: 6, isActive: false },
         { step: 7, isActive: false },
         { step: 8, isActive: false },
       ];
-    return thumbs.toReversed();
+    }
+    return level < 0 ? thumbs.toReversed() : thumbs;
   }
 
   const absSelectedLevel = Math.abs(selectedLevel);
