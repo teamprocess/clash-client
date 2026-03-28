@@ -19,8 +19,8 @@ export const StatusContainer = styled.div`
   align-items: center;
   width: 24rem;
   gap: 3rem;
-  padding-top: 2rem;
   box-sizing: border-box;
+  margin-bottom: 3rem;
 `;
 
 export const TopActionButton = styled.button`

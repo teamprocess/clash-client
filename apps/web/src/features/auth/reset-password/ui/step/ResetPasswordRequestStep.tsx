@@ -2,7 +2,6 @@ import * as S from "../../ResetPassword.style";
 import type { ResetPasswordRequestProps } from "../../model/useResetPassword";
 
 export const ResetPasswordRequestStep = ({
-  authSearch,
   register,
   handleSubmit,
   errors,
@@ -26,10 +25,6 @@ export const ResetPasswordRequestStep = ({
           {isSubmitting ? "이메일 전송 중..." : "이메일 전송"}
         </S.SubmitButton>
         {errors.root && <S.ErrorText>{errors.root.message}</S.ErrorText>}
-        <S.HelpTextBox>
-          <S.HelpText to={{ pathname: "/sign-in", search: authSearch }}>로그인</S.HelpText>
-          <S.HelpText to={{ pathname: "/sign-up", search: authSearch }}>회원가입</S.HelpText>
-        </S.HelpTextBox>
       </S.ButtonWrapper>
     </S.FormContainer>
   );
