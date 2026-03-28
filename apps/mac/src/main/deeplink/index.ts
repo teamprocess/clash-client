@@ -1,7 +1,8 @@
 import { app, BrowserWindow } from "electron";
 import { resolve } from "path";
+import { APP_RUNTIME_PROFILE } from "../runtimeProfile";
 
-const PROTOCOL = "clashapp";
+const PROTOCOL = APP_RUNTIME_PROFILE.protocolScheme;
 
 let pendingDeepLink: string | null = null;
 

@@ -1,8 +1,9 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useQueryClient } from "@tanstack/react-query";
 import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
 import { authApi, startUserProfileSyncWindow } from "@/entities/user";
+import { appRuntimeProfile } from "@/shared/config/appRuntime";
 import { getErrorMessage } from "@/shared/lib";
 
 interface DeepLinkAuthPayload {
@@ -18,7 +19,7 @@ interface ExchangePayload {
   state: string;
 }
 
-const DEFAULT_ELECTRON_AUTH_REDIRECT_URI = "clashapp://auth";
+const DEFAULT_ELECTRON_AUTH_REDIRECT_URI = appRuntimeProfile.authRedirectUri;
 
 export const useElectronAuthFlow = () => {
   const navigate = useNavigate();
@@ -42,23 +43,26 @@ export const useElectronAuthFlow = () => {
     setIsStarting(false);
   };
 
-  const completeElectronAuth = async (payload: ExchangePayload, flowLabel: string) => {
-    const result = await authApi.electronAuthExchange({
-      code: payload.code,
-      state: payload.state,
-    });
+  const completeElectronAuth = useCallback(
+    async (payload: ExchangePayload, flowLabel: string) => {
+      const result = await authApi.electronAuthExchange({
+        code: payload.code,
+        state: payload.state,
+      });
 
-    if (!result.success) {
-      setError(result.message || `${flowLabel}에 실패했습니다.`);
-      return false;
-    }
+      if (!result.success) {
+        setError(result.message || `${flowLabel}에 실패했습니다.`);
+        return false;
+      }
 
-    startUserProfileSyncWindow();
-    await queryClient.invalidateQueries({ queryKey: ["user"] });
-    setPendingAuth(null);
-    navigate("/");
-    return true;
-  };
+      startUserProfileSyncWindow();
+      await queryClient.invalidateQueries({ queryKey: ["user"] });
+      setPendingAuth(null);
+      navigate("/");
+      return true;
+    },
+    [navigate, queryClient]
+  );
 
   const getRedirectUri = (loginUrl: string) => {
     try {
@@ -131,7 +135,7 @@ export const useElectronAuthFlow = () => {
     return () => {
       unsubscribe?.();
     };
-  }, [navigate, pendingAuth, queryClient]);
+  }, [completeElectronAuth, pendingAuth]);
 
   const startWebSignIn = async () => {
     try {

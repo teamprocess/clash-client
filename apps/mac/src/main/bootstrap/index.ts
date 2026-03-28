@@ -5,6 +5,7 @@ import { registerIpcHandlers } from "../ipc";
 import { registerCspHeaders } from "../security";
 import { registerAppProtocol } from "../appProtocol";
 import { registerProtocol } from "../deeplink";
+import { APP_RUNTIME_PROFILE } from "../runtimeProfile";
 
 interface BootstrapMainProcessParams {
   createWindow: () => void;
@@ -78,7 +79,7 @@ export const bootstrapMainProcess = ({
   app.whenReady().then(() => {
     registerAppProtocol();
     registerProtocol();
-    electronApp.setAppUserModelId("com.electron");
+    electronApp.setAppUserModelId(APP_RUNTIME_PROFILE.appUserModelId);
 
     // CSP 설정
     registerCspHeaders();
