@@ -1,4 +1,4 @@
-import styled, { css, keyframes } from "styled-components";
+import styled from "styled-components";
 import { font } from "@clash/design-tokens/font";
 import { palette } from "@clash/design-tokens/theme";
 import Close from "@/features/profile/assets/close.svg";
@@ -10,42 +10,20 @@ import { Button } from "@/shared/ui/button/Button";
 
 const panelBackground = "#27282b";
 const neutralSurface = "rgba(255, 255, 255, 0.035)";
-const neutralSurfaceStrong = "rgba(255, 255, 255, 0.055)";
 const subtleBorder = "rgba(255, 255, 255, 0.08)";
-
-const skeletonWave = keyframes`
-  0% {
-    background-position: 200% 0;
-  }
-
-  100% {
-    background-position: -200% 0;
-  }
-`;
-
-const skeletonBase = css`
-  background: linear-gradient(
-    90deg,
-    rgba(255, 255, 255, 0.05) 0%,
-    rgba(255, 255, 255, 0.11) 50%,
-    rgba(255, 255, 255, 0.05) 100%
-  );
-  background-size: 200% 100%;
-  animation: ${skeletonWave} 1.6s ease-in-out infinite;
-`;
 
 export const PanelContent = styled.div`
   display: flex;
   flex-direction: column;
   height: 100%;
   padding: 2rem 2.5rem 2rem;
-  gap: 1.25rem;
+  gap: 0.5rem;
   background-color: ${panelBackground};
 `;
 
-export const PanelHeader = styled.div`
+export const PanelHeader = styled.div<{ $showTitle: boolean }>`
   display: flex;
-  justify-content: space-between;
+  justify-content: ${({ $showTitle }) => ($showTitle ? "space-between" : "flex-end")};
   align-items: center;
   gap: 1.5rem;
 `;
@@ -57,21 +35,10 @@ export const HeaderMain = styled.div`
 
 export const HeaderTitle = styled.h2`
   ${font.title1.medium}
+  font-size: 1.85rem;
   color: ${({ theme }) => theme.label.strong};
   word-break: keep-all;
   line-height: 1.25;
-`;
-
-export const HeaderMeta = styled.p`
-  ${font.body.regular}
-  color: ${({ theme }) => theme.label.normal};
-  margin-top: 1rem;
-  padding: 1rem 1.2rem;
-  border-radius: 0.95rem;
-  background-color: ${neutralSurfaceStrong};
-  box-shadow: none;
-  line-height: 1.65;
-  word-break: keep-all;
 `;
 
 export const HeaderActions = styled.div`
@@ -110,6 +77,7 @@ export const OverviewBody = styled.div`
   flex-direction: column;
   gap: 1.35rem;
   min-height: 0;
+  margin-top: 2rem;
 `;
 
 export const SectionCard = styled.section`
@@ -126,37 +94,6 @@ export const SectionCard = styled.section`
   }
 `;
 
-export const SectionTitle = styled.h3`
-  ${font.body.medium}
-  color: ${({ theme }) => theme.label.strong};
-  letter-spacing: -0.01em;
-`;
-
-export const ProgressSummary = styled.div`
-  display: flex;
-  align-items: baseline;
-  gap: 0.45rem;
-`;
-
-export const ProgressCurrent = styled.span`
-  ${font.headline1.medium}
-  color: ${({ theme }) => theme.primary.normal};
-`;
-
-export const ProgressTotal = styled.span`
-  ${font.body.regular}
-  color: ${({ theme }) => theme.label.assistive};
-`;
-
-export const ProgressTrack = styled.div`
-  position: relative;
-  width: 100%;
-  height: 0.5rem;
-  border-radius: 999px;
-  overflow: hidden;
-  background-color: rgba(255, 255, 255, 0.1);
-`;
-
 export const ProgressFill = styled.div<{ $value: number }>`
   width: ${({ $value }) => `${$value}%`};
   height: 100%;
@@ -167,6 +104,7 @@ export const ProgressFill = styled.div<{ $value: number }>`
 
 export const DescriptionText = styled.p`
   ${font.body.regular}
+  font-size: 1.1rem;
   color: ${({ theme }) => theme.label.normal};
   line-height: 1.65;
   white-space: pre-wrap;
@@ -176,26 +114,10 @@ export const DescriptionText = styled.p`
 
 export const InlineMessage = styled.p<{ $tone?: "error" | "neutral" }>`
   ${font.caption.regular}
+  font-size: 0.85rem;
   color: ${({ theme, $tone = "neutral" }) =>
     $tone === "error" ? palette.red[60] : theme.label.assistive};
   line-height: 1.45;
-`;
-
-export const LoadingBlock = styled.div<{
-  $width: string;
-  $height: string;
-  $radius?: string;
-}>`
-  width: ${({ $width }) => $width};
-  height: ${({ $height }) => $height};
-  border-radius: ${({ $radius = "0.75rem" }) => $radius};
-  ${skeletonBase}
-`;
-
-export const LoadingDescriptionStack = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 0.6rem;
 `;
 
 export const FooterActions = styled.div`
@@ -204,7 +126,6 @@ export const FooterActions = styled.div`
   gap: 0.75rem;
   margin-top: auto;
   padding-top: 1.5rem;
-  border-top: 1px solid ${subtleBorder};
 `;
 
 export const PrimaryActionButton = styled(Button)`
@@ -266,6 +187,7 @@ export const QuizProgress = styled.div`
 
 export const QuizStep = styled.span`
   ${font.body.regular}
+  font-size: 1.1rem;
   color: ${({ theme }) => theme.primary.normal};
 `;
 
@@ -314,7 +236,7 @@ export const QuizContent = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.75rem;
+  gap: 2rem;
   width: 100%;
   margin-block: auto;
 `;
@@ -345,29 +267,6 @@ export const OptionsSection = styled.div`
   width: 100%;
 `;
 
-export const OptionsDivider = styled.div`
-  display: flex;
-  align-items: center;
-  width: min(100%, 32rem);
-  gap: 0.85rem;
-  align-self: center;
-
-  &::before,
-  &::after {
-    content: "";
-    flex: 1;
-    height: 1px;
-    background: ${subtleBorder};
-  }
-`;
-
-export const OptionsDividerLabel = styled.span`
-  ${font.caption.medium}
-  color: ${({ theme }) => theme.label.assistive};
-  letter-spacing: 0.02em;
-  white-space: nowrap;
-`;
-
 export const ResultCard = styled(QuizCard)`
   width: 100%;
   gap: 1.35rem;
@@ -390,24 +289,26 @@ export const ResultTextGroup = styled.div`
 
 export const ResultTitle = styled.span`
   ${font.title1.medium}
+  font-size: 1.85rem;
   color: ${({ theme }) => theme.label.strong};
   line-height: 1.35;
 `;
 
 export const ResultCaption = styled.span`
   ${font.body.regular}
+  font-size: 1.1rem;
   color: ${({ theme }) => theme.label.assistive};
   line-height: 1.55;
 `;
 
 export const ExplanationBox = styled.div`
   width: min(100%, 29rem);
-  padding: 1.5rem 1.25rem;
+  padding: 2rem 1.5rem;
   border-radius: 1.1rem;
   background-color: ${neutralSurface};
   border: 1px solid ${subtleBorder};
   align-self: center;
-  max-height: 14rem;
+  max-height: 20rem;
   overflow: auto;
 `;
 
@@ -440,12 +341,14 @@ export const FinalContent = styled.div`
 
 export const SummaryTitle = styled.h3`
   ${font.title1.medium}
+  font-size: 1.85rem;
   color: ${({ theme }) => theme.label.strong};
   line-height: 1.35;
 `;
 
 export const SummaryDescription = styled.p`
   ${font.body.regular}
+  font-size: 1.1rem;
   color: ${({ theme }) => theme.label.assistive};
   line-height: 1.6;
   white-space: pre-wrap;
@@ -458,11 +361,13 @@ export const SummaryScore = styled.div`
   align-items: baseline;
   gap: 0.3rem;
   ${font.title1.medium}
+  font-size: 1.85rem;
   color: ${({ theme }) => theme.primary.normal};
 `;
 
 export const SummaryScoreTotal = styled.span`
   ${font.body.medium}
+  font-size: 1.1rem;
   color: ${({ theme }) => theme.label.assistive};
 `;
 
