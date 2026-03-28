@@ -49,6 +49,11 @@ export interface PasswordResetConfirmRequest {
   newPassword: string;
 }
 
+export interface PasswordResetConfirmResponse {
+  state: string;
+  redirectUri: string;
+}
+
 export const authApi = {
   // 로그인
   signIn: async (data: SignInRequest) => {
@@ -136,7 +141,7 @@ export const authApi = {
     data: PasswordResetConfirmRequest,
     options?: RecaptchaOptions
   ) => {
-    const result = await api.post<ApiResponse<void>>(
+    const result = await api.post<ApiResponse<PasswordResetConfirmResponse>>(
       "/auth/password-reset/confirm",
       {
         ...data,

@@ -9,4 +9,5 @@ export type {
   PasswordResetSendRequest,
   PasswordResetValidateRequest,
   PasswordResetConfirmRequest,
+  PasswordResetConfirmResponse,
 } from "./api/authApi";
