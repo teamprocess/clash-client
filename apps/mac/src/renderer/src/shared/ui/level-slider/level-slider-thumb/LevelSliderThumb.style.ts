@@ -20,6 +20,6 @@ export const LevelSliderThumbLine = styled.div<{
   width: 100%;
   opacity: ${({ $isActive }) => ($isActive ? 1 : 0.3)};
   height: ${({ $step }) => `${12.5 * $step}%`};
-  transition: opacity 0.5s ease-in-out;
+  transition: opacity 0.2s ease-in-out;
   border-radius: 8px 8px 0 0;
 `;

@@ -12,7 +12,7 @@ interface LevelSliderFieldProps {
 export const LevelSliderField = ({ level, selectedLevel, onMouseEnter }: LevelSliderFieldProps) => {
   const thumbs = fieldLevelToThumbs(level, selectedLevel);
   return (
-    <S.LevelSliderFieldWrapper onMouseEnter={onMouseEnter}>
+    <S.LevelSliderFieldWrapper onMouseEnter={onMouseEnter} $isActive={level == selectedLevel}>
       {thumbs.map(({ step, isActive }, idx) => (
         <LevelSliderThumb key={idx} step={step} isActive={isActive} />
       ))}
