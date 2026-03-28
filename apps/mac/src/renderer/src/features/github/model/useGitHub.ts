@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { githubApi, startUserProfileSyncWindow } from "@/entities/user";
+import { appRuntimeProfile } from "@/shared/config/appRuntime";
 import { getErrorMessage } from "@/shared/lib";
 
 interface DeepLinkAuthPayload {
@@ -11,7 +12,7 @@ interface DeepLinkAuthPayload {
 
 const PENDING_GITHUB_STATE_KEY = "clash:github:pending-state";
 const GITHUB_OAUTH_BASE_URL = "https://github.com";
-const GITHUB_OAUTH_REDIRECT_URI = "clashapp://";
+const GITHUB_OAUTH_REDIRECT_URI = appRuntimeProfile.githubRedirectUri;
 const GITHUB_OAUTH_SCOPE = "read:user user:email repo read:org";
 const GITHUB_CLIENT_ID = import.meta.env.VITE_GITHUB_CLIENT_ID || "";
 
