@@ -13,7 +13,10 @@ export const ProfileIcon = styled.img`
   object-fit: cover;
 `;
 
-export const DefaultProfileIcon = styled(DefaultProfile)``;
+export const DefaultProfileIcon = styled(DefaultProfile)`
+  width: 2.25rem;
+  height: 2.25rem;
+`;
 
 const flexRow = css`
   display: flex;
