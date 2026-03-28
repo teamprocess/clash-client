@@ -6,13 +6,15 @@ import { fieldLevelToThumbs } from "@/shared/ui/level-slider/lib/fieldLevelToThu
 interface LevelSliderFieldProps {
   level: LEVEL_ENUM;
   selectedLevel?: LEVEL_ENUM;
+  hoverLevel?: LEVEL_ENUM;
   onMouseEnter: () => void;
+  onClick: () => void;
 }
 
-export const LevelSliderField = ({ level, selectedLevel, onMouseEnter }: LevelSliderFieldProps) => {
-  const thumbs = fieldLevelToThumbs(level, selectedLevel);
+export const LevelSliderField = ({ level, selectedLevel, onMouseEnter, hoverLevel, onClick }: LevelSliderFieldProps) => {
+  const thumbs = fieldLevelToThumbs(level, hoverLevel ?? selectedLevel);
   return (
-    <S.LevelSliderFieldWrapper onMouseEnter={onMouseEnter} $isActive={level == selectedLevel}>
+    <S.LevelSliderFieldWrapper onMouseEnter={onMouseEnter} onClick={onClick} $isActive={level == selectedLevel}>
       {thumbs.map(({ step, isActive }, idx) => (
         <LevelSliderThumb key={idx} step={step} isActive={isActive} />
       ))}
