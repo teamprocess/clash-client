@@ -1,19 +1,10 @@
 import * as S from "./Test.style";
 import { TestProps } from "@/features/major-choice/model/useMajorChoice";
 import { Button } from "@/shared/ui/button";
-
-const answerBoxData = [
-  { id: 1, content: "매우 그렇지 않다", size: "Large" },
-  { id: 2, content: "그렇지 않다", size: "Medium" },
-  { id: 3, content: "보통이다", size: "Small" },
-  { id: 4, content: "그렇다", size: "Medium" },
-  { id: 5, content: "매우 그렇다", size: "Large" },
-];
+import { AGREEMENT_LABELS, LevelSlider } from "@/shared/ui/level-slider";
 
 export const Test = ({
-  answers,
   isAllAnswered,
-  handleSelect,
   handleComplete,
   getTestQuestion,
   setStep,
@@ -42,40 +33,12 @@ export const Test = ({
             <S.PreviousLabel>이전으로</S.PreviousLabel>
           </S.PreviousBox>
           <S.QuestionBoxWrapper>
-            {questionData.map(({ id, content }, idx) => (
+            {questionData.map(({ id, content }) => (
               <S.QuestionBox key={id}>
-                <S.QuestionTitleBox>
-                  <S.QuestionTitle>
-                    <S.QuestionNumber>{id}.</S.QuestionNumber>
-                    {content}
-                  </S.QuestionTitle>
-                </S.QuestionTitleBox>
-                <S.AnswerContainer>
-                  <S.AnswerBox>
-                    {answerBoxData.map(answer => (
-                      <S.ItemWrapper key={answer.id}>
-                        <S.AnswerItem
-                          $isActive={answers[idx] === answer.id}
-                          onClick={() => handleSelect(idx, answer.id)}
-                        >
-                          {answers[idx] === answer.id ? (
-                            <S.CheckedAnswerIcon $itemSize={answer.size} />
-                          ) : (
-                            <S.NotCheckedAnswerIcon $itemSize={answer.size} />
-                          )}
-                        </S.AnswerItem>
-                      </S.ItemWrapper>
-                    ))}
-                  </S.AnswerBox>
-
-                  <S.LabelBox>
-                    {answerBoxData.map(({ id, content }) => (
-                      <S.LabelWrapper key={id}>
-                        <S.AnswerItemTitle>{content}</S.AnswerItemTitle>
-                      </S.LabelWrapper>
-                    ))}
-                  </S.LabelBox>
-                </S.AnswerContainer>
+                <S.QuestionTitle>
+                  <S.QuestionNumber>{id}.</S.QuestionNumber> {content}
+                </S.QuestionTitle>
+                <LevelSlider labels={AGREEMENT_LABELS} />
               </S.QuestionBox>
             ))}
           </S.QuestionBoxWrapper>
