@@ -5,29 +5,36 @@ import Previous from "@/pages/roadmap/chapter/assets/previous.svg";
 export const TestContainer = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
-  gap: 3.5rem;
-  min-height: 100%;
+  gap: 2.5rem;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
   background-color: ${({ theme }) => theme.background.normal};
   border-radius: 1rem;
   padding: 0 11rem 3rem;
-  position: relative;
+  box-sizing: border-box;
+  overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior: contain;
+  scrollbar-gutter: stable;
 `;
 
-export const ProgressSticky = styled.div`
+export const StickyHeader = styled.div`
   position: sticky;
-  top: 2.75rem;
+  top: 0;
   z-index: 10;
   display: flex;
   align-items: center;
-  justify-content: flex-end;
+  justify-content: space-between;
+  gap: 1.5rem;
   box-sizing: border-box;
   width: calc(100% + 22rem);
   margin: 0 -11rem;
-  padding: 0 2.5rem;
-  height: 0;
-  pointer-events: none;
+  padding: 2rem 2.5rem 1rem;
+  background-color: ${({ theme }) => theme.background.normal};
+  border-radius: 1rem 1rem 0 0;
 `;
 
 export const QuestionWrapper = styled.div`
@@ -35,6 +42,7 @@ export const QuestionWrapper = styled.div`
   flex-direction: column;
   align-items: center;
   gap: 4rem;
+  width: 100%;
 `;
 
 export const QuestionBox = styled.div`
@@ -61,7 +69,6 @@ export const ProgressBarWrapper = styled.div`
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  pointer-events: auto;
   background-color: ${({ theme }) => theme.background.normal};
   border-radius: 1rem;
   padding: 0 1rem;
@@ -93,13 +100,11 @@ export const PreviousBox = styled.button`
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  position: absolute;
-  top: 2rem;
-  left: 2.5rem;
   padding: 0;
   background: transparent;
   border: none;
   cursor: pointer;
+  flex-shrink: 0;
 `;
 
 export const PreviousIcon = styled(Previous)``;
@@ -114,5 +119,5 @@ export const QuestionBoxWrapper = styled.div`
   flex-direction: column;
   align-items: center;
   gap: 6rem;
-  margin-top: 4rem;
+  width: 100%;
 `;
