@@ -9,7 +9,7 @@ const getSearchFromWindow = () => {
 };
 
 export const getAuthParams = (search?: string) => {
-  const query = search ?? getSearchFromWindow();
+  const query = search && search.length > 0 ? search : getSearchFromWindow();
   const params = new URLSearchParams(query);
   const stateParam = params.get("state");
   const redirectUriParam = params.get("redirectUri");
