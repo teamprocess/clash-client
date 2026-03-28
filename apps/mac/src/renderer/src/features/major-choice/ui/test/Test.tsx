@@ -36,7 +36,11 @@ export const Test = ({
   return (
     <>
       <S.TestContainer>
-        <S.ProgressSticky>
+        <S.StickyHeader>
+          <S.PreviousBox type="button" onClick={() => setStep("FEATURE")}>
+            <S.PreviousIcon />
+            <S.PreviousLabel>이전으로</S.PreviousLabel>
+          </S.PreviousBox>
           <S.ProgressBarWrapper>
             <S.ProgressTrack>
               <S.ProgressFill $progress={progress} />
@@ -45,12 +49,8 @@ export const Test = ({
               {answeredCount}/{totalCount}
             </S.ProgressLabel>
           </S.ProgressBarWrapper>
-        </S.ProgressSticky>
+        </S.StickyHeader>
         <S.QuestionWrapper>
-          <S.PreviousBox type="button" onClick={() => setStep("FEATURE")}>
-            <S.PreviousIcon />
-            <S.PreviousLabel>이전으로</S.PreviousLabel>
-          </S.PreviousBox>
           <S.QuestionBoxWrapper>
             {questionData.map(({ id, content }, idx) => (
               <S.QuestionBox key={id}>
