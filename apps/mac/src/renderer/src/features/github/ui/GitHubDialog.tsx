@@ -33,6 +33,7 @@ export const GitHubDialog = ({
       width={28}
       height={15}
       isOpen={isOpen}
+      closeOnOverlayClick={false}
       showClose={false}
       gap={1.25}
     >

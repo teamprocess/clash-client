@@ -7,6 +7,7 @@ export interface DialogProps {
   height: number;
   isOpen: boolean;
   onClose?: () => void;
+  closeOnOverlayClick?: boolean;
   showClose?: boolean;
   children?: ReactNode;
   gap?: number;
@@ -22,6 +23,7 @@ export const Dialog = ({
   height,
   children,
   gap = 0,
+  closeOnOverlayClick = true,
   showClose = true,
   fullWidth = false,
   fullHeight = false,
@@ -29,7 +31,8 @@ export const Dialog = ({
   if (!isOpen) return null;
 
   return (
-    <S.DialogOverlay>
+    <S.DialogWrapper>
+      <S.DialogOverlay onClick={closeOnOverlayClick ? onClose : undefined} aria-hidden />
       <S.DialogContainer
         $width={width}
         $height={height}
@@ -46,6 +49,6 @@ export const Dialog = ({
         )}
         <S.DialogContent $gap={gap}>{children}</S.DialogContent>
       </S.DialogContainer>
-    </S.DialogOverlay>
+    </S.DialogWrapper>
   );
 };

@@ -5,11 +5,13 @@ import { oneDark, oneLight } from "react-syntax-highlighter/dist/esm/styles/pris
 import styled, { css, useTheme } from "styled-components";
 
 type MarkdownCodeContentVariant = "question" | "body";
+type MarkdownCodeContentSize = "default" | "large";
 
 interface MarkdownCodeContentProps {
   content: string;
   variant?: MarkdownCodeContentVariant;
   prefix?: ReactNode;
+  size?: MarkdownCodeContentSize;
 }
 
 type ContentSegment =
@@ -143,7 +145,10 @@ const textVariantStyles = {
   `,
 };
 
-const TextBlock = styled.p<{ $variant: MarkdownCodeContentVariant }>`
+const TextBlock = styled.p<{
+  $variant: MarkdownCodeContentVariant;
+  $size: MarkdownCodeContentSize;
+}>`
   margin: 0;
   color: ${({ theme }) => theme.label.normal};
   white-space: pre-wrap;
@@ -151,6 +156,15 @@ const TextBlock = styled.p<{ $variant: MarkdownCodeContentVariant }>`
   min-width: 0;
 
   ${({ $variant }) => textVariantStyles[$variant]}
+  ${({ $variant, $size }) =>
+    $size === "large" &&
+    ($variant === "question"
+      ? css`
+          font-size: 1.5rem;
+        `
+      : css`
+          font-size: 1.2rem;
+        `)}
 `;
 
 const PrefixSlot = styled.span`
@@ -169,7 +183,7 @@ const CodeBlockFrame = styled.div`
   overflow: hidden;
 `;
 
-const CodeBlockHeader = styled.div`
+const CodeBlockHeader = styled.div<{ $size: MarkdownCodeContentSize }>`
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -178,6 +192,7 @@ const CodeBlockHeader = styled.div`
   background: ${({ theme }) => theme.fill.neutral};
   border-bottom: 1px solid ${({ theme }) => theme.line.alternative};
   ${font.caption.medium}
+  font-size: ${({ $size }) => ($size === "large" ? "0.82rem" : "0.75rem")};
   color: ${({ theme }) => theme.label.assistive};
   text-transform: uppercase;
   letter-spacing: 0.04em;
@@ -187,6 +202,7 @@ export const MarkdownCodeContent = ({
   content,
   variant = "body",
   prefix,
+  size = "default",
 }: MarkdownCodeContentProps) => {
   const theme = useTheme();
   const segments = parseContentSegments(content);
@@ -197,7 +213,7 @@ export const MarkdownCodeContent = ({
     margin: 0,
     padding: "1rem",
     background: isLightTheme ? theme.background.neutral : "#1d1f21",
-    fontSize: "0.8rem",
+    fontSize: size === "large" ? "0.875rem" : "0.8rem",
     lineHeight: 1.6,
     overflowX: "auto",
   };
@@ -220,7 +236,11 @@ export const MarkdownCodeContent = ({
         }
 
         renderedNodes.push(
-          <TextBlock key={`text-${segmentIndex}-${paragraphIndex}`} $variant={variant}>
+          <TextBlock
+            key={`text-${segmentIndex}-${paragraphIndex}`}
+            $variant={variant}
+            $size={size}
+          >
             {shouldRenderPrefix ? <PrefixSlot>{prefix}</PrefixSlot> : null}
             {paragraph}
           </TextBlock>
@@ -232,7 +252,7 @@ export const MarkdownCodeContent = ({
 
     renderedNodes.push(
       <CodeBlockFrame key={`code-${segmentIndex}`}>
-        <CodeBlockHeader>{formatLanguageLabel(segment.language)}</CodeBlockHeader>
+        <CodeBlockHeader $size={size}>{formatLanguageLabel(segment.language)}</CodeBlockHeader>
         <SyntaxHighlighter
           language={resolveLanguage(segment.language)}
           style={syntaxTheme}
@@ -255,7 +275,7 @@ export const MarkdownCodeContent = ({
 
   if (prefix && !hasRenderedPrefix) {
     renderedNodes.unshift(
-      <TextBlock key="prefix-only" $variant={variant}>
+      <TextBlock key="prefix-only" $variant={variant} $size={size}>
         <PrefixSlot>{prefix}</PrefixSlot>
       </TextBlock>
     );
