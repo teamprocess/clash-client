@@ -2,6 +2,7 @@ import * as S from "./ChapterRanking.style";
 import Profile from "../assets/profile.svg?url";
 import { useChapterRanking } from "@/features/chapter-ranking/model/useChapterRanking";
 import { RankingPageEnum } from "./ChapterRanking.style";
+import { QuestionTooltip } from "@/shared/ui";
 
 interface ChapterRankingProps {
   page: RankingPageEnum;
@@ -23,7 +24,12 @@ export const ChapterRanking = ({ page }: ChapterRankingProps) => {
   if (isLoading) {
     return (
       <S.RankingContainer $page={page}>
-        <S.RankingLabel>챕터 랭킹</S.RankingLabel>
+        <S.RankingLabel>
+          <S.LabelGroup>
+            챕터 랭킹
+            <QuestionTooltip content="해당 전공 챕터를 클리어하여 순위권에 들고 쿠키도 얻어보세요" />
+          </S.LabelGroup>
+        </S.RankingLabel>
         <S.RankingBox>
           <S.RankingLoadingTop3Box>
             <S.RankingLoadingPodium>
@@ -60,7 +66,12 @@ export const ChapterRanking = ({ page }: ChapterRankingProps) => {
   if (error) {
     return (
       <S.RankingContainer $page={page}>
-        <S.RankingLabel>챕터 랭킹</S.RankingLabel>
+        <S.RankingLabel>
+          <S.LabelGroup>
+            챕터 랭킹
+            <QuestionTooltip content="해당 전공 챕터를 클리어하면서 순위권에 들고 쿠키도 얻어보세요" />
+          </S.LabelGroup>
+        </S.RankingLabel>
         <div>랭킹을 불러오는데 실패했습니다.</div>
       </S.RankingContainer>
     );
@@ -70,7 +81,12 @@ export const ChapterRanking = ({ page }: ChapterRankingProps) => {
   if (!myData || !allRankers.length) {
     return (
       <S.RankingContainer $page={page}>
-        <S.RankingLabel>챕터 랭킹</S.RankingLabel>
+        <S.RankingLabel>
+          <S.LabelGroup>
+            챕터 랭킹
+            <QuestionTooltip content="해당 전공 챕터를 클리어하면서 순위권에 들고 쿠키도 얻어보세요" />
+          </S.LabelGroup>
+        </S.RankingLabel>
         <div>랭킹 데이터가 없습니다.</div>
       </S.RankingContainer>
     );
@@ -78,7 +94,12 @@ export const ChapterRanking = ({ page }: ChapterRankingProps) => {
 
   return (
     <S.RankingContainer $page={page}>
-      <S.RankingLabel>챕터 랭킹</S.RankingLabel>
+      <S.RankingLabel>
+          <S.LabelGroup>
+            챕터 랭킹
+            <QuestionTooltip content="해당 전공 챕터를 클리어하면서 순위권에 들고 쿠키도 얻어보세요" />
+          </S.LabelGroup>
+        </S.RankingLabel>
       <S.RankingBox>
         <S.RankingTop3Box>
           {allRankers
