@@ -9,6 +9,7 @@ import { MajorEnum, section } from "@/entities/roadmap/section/model/section.typ
 import { useGetMyProfile } from "@/entities/user";
 import { SectionItemBox } from "../components/SectionItemBox";
 import { useDragScroll } from "@/shared/lib/useDragScroll";
+import { Tooltip } from "@/shared/ui";
 
 export const Section = () => {
   const navigate = useNavigate();
@@ -71,9 +72,15 @@ export const Section = () => {
 
       <S.RoadmapTitleBox>
         <S.RoadmapTitle>{roadmapTitle}</S.RoadmapTitle>
-        <S.ChangeButton type="button" onClick={handleChangeMajor} aria-label="전공 변경">
-          <S.RoadmapTitleArrowIcon />
-        </S.ChangeButton>
+        <Tooltip
+          content="전공 테스트와 새로운 전공을 만나러 가보세요"
+          position="bottom"
+          wrapperStyle={{ pointerEvents: "auto" }}
+        >
+          <S.ChangeButton type="button" onClick={handleChangeMajor} aria-label="전공 변경">
+            <S.RoadmapTitleArrowIcon />
+          </S.ChangeButton>
+        </Tooltip>
       </S.RoadmapTitleBox>
       <ChapterRanking page="chapter" />
       <SectionProgress />
