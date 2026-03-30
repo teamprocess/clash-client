@@ -5,6 +5,8 @@ import { useMemo, useRef } from "react";
 import { createPortal } from "react-dom";
 import { ActiveResponse } from "@/entities/home";
 import { useActive } from "@/features/home/model/useActive";
+import { QuestionTooltip } from "@/shared/ui";
+import { activeDataTooltipContent } from "@/features/home/ui/active/Active.constants";
 
 interface ActiveProps {
   activeData: ActiveResponse | null;
@@ -38,6 +40,7 @@ export const Active = ({ activeData }: ActiveProps) => {
       <S.ActiveContainer>
         <S.TitleBox>
           <S.Title>내 활동 분석</S.Title>
+          <QuestionTooltip position="right" content={activeDataTooltipContent}></QuestionTooltip>
         </S.TitleBox>
 
         <S.StreakContainer>
