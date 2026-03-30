@@ -23,8 +23,9 @@ export const Group = ({
   onResetToToday,
   canGoNextDate,
 }: GroupProps) => {
-  const { totalStudyTime, isStudying, groupMembers, activeStudyingCount } =
+  const { totalStudyTime, isLoading, isStudying, groupMembers, activeStudyingCount } =
     useGroupRealtimeActivity(currentGroup?.id ?? null, selectedDate);
+  const displayStudyTime = isLoading ? "--:--:--" : formatTime(totalStudyTime);
 
   return (
     <>
@@ -57,7 +58,9 @@ export const Group = ({
                 </S.HeaderTimerSection>
                 <S.MyStudySummary $isActive={isStudying}>
                   <S.MyStudyFireIcon />
-                  <S.MyStudyTime $isActive={isStudying}>{formatTime(totalStudyTime)}</S.MyStudyTime>
+                  <S.MyStudyTime $isActive={isStudying} $loading={isLoading}>
+                    {displayStudyTime}
+                  </S.MyStudyTime>
                 </S.MyStudySummary>
               </S.HeaderTimer>
               <S.GroupBodySection>
