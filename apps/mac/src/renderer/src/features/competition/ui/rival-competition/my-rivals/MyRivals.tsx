@@ -111,7 +111,7 @@ export const MyRivals = ({ data }: MyRivalsProps) => {
             <S.TitleGroup>
               <S.Title>내 라이벌</S.Title>
               <QuestionTooltip
-                content="라이벌은 최대 4명까지 가능합니다."
+                content="최대 라이벌 수는 4명입니다."
                 label="라이벌 최대 인원 안내"
               />
             </S.TitleGroup>
