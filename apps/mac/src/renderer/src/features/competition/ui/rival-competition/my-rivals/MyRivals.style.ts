@@ -37,6 +37,13 @@ export const TitleBox = styled.div`
   width: 100%;
 `;
 
+export const TitleGroup = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.5rem;
+`;
+
 export const Title = styled.p`
   ${font.title2.bold}
   color: ${({ theme }) => theme.label.normal};

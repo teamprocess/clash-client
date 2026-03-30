@@ -1,5 +1,10 @@
 import { useMemo, useState } from "react";
-import { useMyRivalsQuery, MyRivalsRequest, MyRivalsResponse } from "@/entities/competition";
+import {
+  myRivalsApi,
+  useMyRivalsQuery,
+  MyRivalsRequest,
+  MyRivalsResponse,
+} from "@/entities/competition";
 import {
   useRivalListQuery,
   RivalUsersResponse,
@@ -34,7 +39,9 @@ export const useRival = () => {
   const RIVAL_LIST_KEY = ["rivalList"];
   const RIVAL_SIGN_ALL_KEY = ["rivalSignAll"];
 
-  const [error, setError] = useState<string | null>(null);
+  const [createError, setCreateError] = useState<string | null>(null);
+  const [signListError, setSignListError] = useState<string | null>(null);
+  const [deleteError, setDeleteError] = useState<string | null>(null);
 
   const rivalsData: MyRivalsResponse | null = myRivalsRes?.data ?? null;
   const userList: RivalUsersResponse | null = rivalListRes?.data ?? null;
@@ -58,8 +65,20 @@ export const useRival = () => {
   const [searchText, setSearchText] = useState("");
   const [rivalSelectedId, setRivalSelectedId] = useState<number[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isDeleteSubmitting, setIsDeleteSubmitting] = useState(false);
+
+  const clearAllErrors = () => {
+    setCreateError(null);
+    setSignListError(null);
+    setDeleteError(null);
+  };
 
   const resetSearch = () => setSearchText("");
+  const resetCreateForm = () => {
+    setRivalSelectedId([]);
+    resetSearch();
+    setCreateError(null);
+  };
 
   const filteredUsers = useMemo(() => {
     const users = userList?.users ?? [];
@@ -79,29 +98,42 @@ export const useRival = () => {
     setModalOpen(false);
     setRivalSelectedId([]);
     resetSearch();
-    setError(null);
+    clearAllErrors();
   };
 
   const handleSelectClose = () => {
     setRivalSelectedId([]);
     resetSearch();
-    setError(null);
+    clearAllErrors();
   };
 
   const handleUserSelect = (id: number) => {
     const currentRivalCount = rivalsData?.myRivals.length ?? 0;
     const maxAvailableSlots = 4 - currentRivalCount;
 
-    setRivalSelectedId(prev => {
-      if (prev.includes(id)) return prev.filter(item => item !== id);
-      if (prev.length < maxAvailableSlots) return [...prev, id];
-      return prev;
-    });
+    if (maxAvailableSlots <= 0) {
+      setCreateError("최대 라이벌 수에 도달했습니다.");
+      return;
+    }
+
+    if (rivalSelectedId.includes(id)) {
+      setCreateError(null);
+      setRivalSelectedId(prev => prev.filter(item => item !== id));
+      return;
+    }
+
+    if (rivalSelectedId.length >= maxAvailableSlots) {
+      setCreateError("최대 라이벌 수에 도달했습니다.");
+      return;
+    }
+
+    setCreateError(null);
+    setRivalSelectedId(prev => [...prev, id]);
   };
 
   const handleRivalCreate = async () => {
-    if (isSubmitting) return;
-    if (rivalSelectedId.length === 0) return;
+    if (isSubmitting) return false;
+    if (rivalSelectedId.length === 0) return false;
 
     const payload: RivalApplyRequest = {
       ids: rivalSelectedId.map(id => ({ id })),
@@ -109,7 +141,7 @@ export const useRival = () => {
 
     try {
       setIsSubmitting(true);
-      setError(null);
+      setCreateError(null);
 
       await rivalsApi.postRivalApply(payload);
 
@@ -119,32 +151,65 @@ export const useRival = () => {
         queryClient.invalidateQueries({ queryKey: RIVAL_LIST_KEY }),
       ]);
 
-      handleClose();
+      resetCreateForm();
+      return true;
     } catch (error: unknown) {
       console.error("라이벌 신청 실패:", error);
-      setError(getErrorMessage(error, "라이벌 신청 중 오류가 발생했습니다."));
+      setCreateError(getErrorMessage(error, "라이벌 신청 중 오류가 발생했습니다."));
+      return false;
     } finally {
       setIsSubmitting(false);
     }
   };
 
+  const refreshRivalQueries = async () => {
+    await Promise.allSettled([
+      queryClient.invalidateQueries({ queryKey: MY_RIVALS_KEY }),
+      queryClient.invalidateQueries({ queryKey: RIVAL_LIST_KEY }),
+      queryClient.invalidateQueries({ queryKey: RIVAL_SIGN_ALL_KEY }),
+    ]);
+  };
+
+  const hasDeletedRivalBeenRemoved = async (rivalId: number) => {
+    const latestMyRivals = await queryClient.fetchQuery({
+      queryKey: MY_RIVALS_KEY,
+      queryFn: myRivalsApi.getMyRivals,
+      staleTime: 0,
+    });
+
+    const currentMyRivals = latestMyRivals.data?.myRivals ?? [];
+
+    return !currentMyRivals.some(rival => rival.rivalId === rivalId || rival.id === rivalId);
+  };
+
   const handleRivalDelete = async (rivalId: number) => {
-    if (!rivalId) return false;
+    if (!rivalId || isDeleteSubmitting) return false;
 
     try {
-      setError(null);
+      setIsDeleteSubmitting(true);
+      setDeleteError(null);
       await rivalsApi.deleteRival(rivalId);
-
-      await Promise.all([
-        queryClient.invalidateQueries({ queryKey: ["myRivals"] }),
-        queryClient.invalidateQueries({ queryKey: ["rivalList"] }),
-      ]);
+      await refreshRivalQueries();
 
       return true;
     } catch (error: unknown) {
+      try {
+        const wasDeleted = await hasDeletedRivalBeenRemoved(rivalId);
+
+        if (wasDeleted) {
+          setDeleteError(null);
+          await refreshRivalQueries();
+          return true;
+        }
+      } catch (refetchError) {
+        console.error("라이벌 삭제 후 상태 확인 실패:", refetchError);
+      }
+
       console.error("라이벌 삭제 실패:", error);
-      setError(getErrorMessage(error, "라이벌 삭제 중 오류가 발생했습니다."));
+      setDeleteError(getErrorMessage(error, "라이벌 삭제 중 오류가 발생했습니다."));
       return false;
+    } finally {
+      setIsDeleteSubmitting(false);
     }
   };
 
@@ -152,7 +217,7 @@ export const useRival = () => {
     mutationFn: (rivalId: number) => rivalsApi.postRivalCancel({ id: rivalId }),
 
     onMutate: async (rivalId: number) => {
-      setError(null);
+      setSignListError(null);
 
       await queryClient.cancelQueries({ queryKey: RIVAL_SIGN_ALL_KEY });
 
@@ -172,7 +237,7 @@ export const useRival = () => {
 
     onError: (error, _rivalId: number, context) => {
       console.error("라이벌 신청 취소 실패:", error);
-      setError(getErrorMessage(error, "라이벌 신청 취소 중 오류가 발생했습니다."));
+      setSignListError(getErrorMessage(error, "라이벌 신청 취소 중 오류가 발생했습니다."));
 
       if (context?.previous !== undefined) {
         queryClient.setQueryData(RIVAL_SIGN_ALL_KEY, context.previous);
@@ -189,12 +254,12 @@ export const useRival = () => {
     if (!rivalId) return false;
 
     try {
-      setError(null);
+      setSignListError(null);
       await cancelRivalSignMutation.mutateAsync(rivalId);
       return true;
     } catch (error: unknown) {
       console.error("라이벌 신청 취소 실패:", error);
-      setError(getErrorMessage(error, "라이벌 신청 취소 중 오류가 발생했습니다."));
+      setSignListError(getErrorMessage(error, "라이벌 신청 취소 중 오류가 발생했습니다."));
       return false;
     }
   };
@@ -205,22 +270,22 @@ export const useRival = () => {
   const openDeleteConfirm = (id: number, name?: string) => {
     setPendingDelete({ id, name });
     setDeleteConfirmOpen(true);
-    setError(null);
+    setDeleteError(null);
   };
 
   const closeDeleteConfirm = () => {
     setDeleteConfirmOpen(false);
     setPendingDelete(null);
-    setError(null);
+    setDeleteError(null);
   };
 
   const confirmDeleteRival = async () => {
     const id = pendingDelete?.id;
     if (!id) return;
 
-    await handleRivalDelete(id);
+    const ok = await handleRivalDelete(id);
 
-    if (!error) {
+    if (ok) {
       closeDeleteConfirm();
     }
   };
@@ -252,6 +317,7 @@ export const useRival = () => {
     // actions
     handleRivalCreate,
     handleRivalDelete,
+    isSubmitting,
 
     // delete confirm
     deleteConfirmOpen,
@@ -262,6 +328,7 @@ export const useRival = () => {
     pendingDeleteId,
     setPendingDeleteId,
     handleRivalSignCancel,
+    isDeleteSubmitting,
 
     // search
     searchText,
@@ -272,6 +339,8 @@ export const useRival = () => {
     filteredSignRivals,
 
     // error
-    error,
+    createError,
+    signListError,
+    deleteError,
   };
 };

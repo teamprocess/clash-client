@@ -57,7 +57,7 @@ export const TitleBox = styled.div`
 export const TitleLeft = styled.div`
   ${flexRow};
   align-items: center;
-  gap: 1rem;
+  gap: 0.75rem;
   min-width: 0;
 `;
 
