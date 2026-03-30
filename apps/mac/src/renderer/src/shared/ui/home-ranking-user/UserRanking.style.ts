@@ -2,6 +2,7 @@ import styled from "styled-components";
 import { font } from "@clash/design-tokens/font";
 import { palette } from "@clash/design-tokens/theme";
 import DefaultProfile from "@/features/home/assets/home/profile.svg";
+import { ProfileAvatar } from "@/shared/ui/profile-avatar";
 
 export const ProfileIcon = styled.img`
   width: 2rem;
@@ -9,6 +10,11 @@ export const ProfileIcon = styled.img`
   flex-shrink: 0;
   border-radius: 50%;
   object-fit: cover;
+`;
+
+export const RankingAvatar = styled(ProfileAvatar)`
+  width: 2rem;
+  height: 2rem;
 `;
 
 export const DefaultProfileIcon = styled(DefaultProfile)`
@@ -38,13 +44,21 @@ export const ProfileContent = styled.div`
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
+  min-width: 0;
 `;
 
 export const NameBox = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: 0.125rem;
+  gap: 0.35rem;
+  min-width: 0;
+  flex: 1 1 auto;
+
+  > *:first-child {
+    min-width: 0;
+    flex: 0 1 auto;
+  }
 `;
 
 export const ProfileName = styled.p`
@@ -53,10 +67,14 @@ export const ProfileName = styled.p`
 `;
 
 export const ProfileMention = styled.div`
-  display: flex;
-  height: 100%;
+  display: block;
+  min-width: 0;
+  flex: 0 1 auto;
   ${font.caption.medium}
   color: ${({ theme }) => theme.label.alternative};
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 
 export const RivalMention = styled.div`

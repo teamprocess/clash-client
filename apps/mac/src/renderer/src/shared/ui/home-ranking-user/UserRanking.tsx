@@ -1,7 +1,9 @@
 import * as S from "./UserRanking.style";
 import { forwardRef } from "react";
 import { RankingItem } from "@/entities/home/model/useRanking.types";
-import { RankTier } from "@/shared/ui";
+import { resolveProfileDecorations } from "@/shared/lib";
+import { NameTag } from "@/shared/ui/name-tag";
+import { RankTier } from "@/shared/ui/rank-tier/RankTier";
 
 interface UserRankingProps {
   user: RankingItem;
@@ -14,6 +16,8 @@ interface UserRankingProps {
 
 export const UserRanking = forwardRef<HTMLDivElement, UserRankingProps>(
   ({ user, isRival, rank, isSticky, unit, formatValue }, ref) => {
+    const { badgeImage, nameplateImage } = resolveProfileDecorations(user.equippedItems);
+
     return (
       <S.UserContainer ref={ref} $sticky={isSticky}>
         <S.Content>
@@ -25,13 +29,9 @@ export const UserRanking = forwardRef<HTMLDivElement, UserRankingProps>(
                 <RankTier tier={user.tier} />
               </S.RankTierWrap>
             </S.ProfileMention>
-            {user.profileImage ? (
-              <S.ProfileIcon src={user.profileImage} />
-            ) : (
-              <S.DefaultProfileIcon />
-            )}
+            <S.RankingAvatar profileImage={user.profileImage} badgeImage={badgeImage} />
             <S.NameBox>
-              <S.ProfileName>{user.name}</S.ProfileName>
+              <NameTag text={user.name} backgroundImage={nameplateImage} size="compact" />
               <S.ProfileMention>@{user.linkedId}</S.ProfileMention>
             </S.NameBox>
 

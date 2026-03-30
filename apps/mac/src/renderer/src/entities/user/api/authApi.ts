@@ -68,22 +68,36 @@ export interface EmailVerifyRequest {
   code: string;
 }
 
+export interface EquippedItemResponse {
+  id: number;
+  name: string;
+  image: string;
+}
+
+export interface EquippedItemsResponse {
+  insigma: EquippedItemResponse | null;
+  nameplate: EquippedItemResponse | null;
+  banner: EquippedItemResponse | null;
+}
+
 export interface getMyProfileResponse {
   id: number;
   createdAt: string;
   updatedAt: string;
   username: string;
   name: string;
-  tier: string;
   email: string;
   role: string;
   profileImage: string;
   totalExp: number;
   totalCookie: number;
+  totalToken: number;
   major: string;
   userStatus: string;
   githubLinked: boolean;
   activityStatus: string;
+  equippedItems: EquippedItemsResponse;
+  tier: string;
 }
 
 export const authApi = {

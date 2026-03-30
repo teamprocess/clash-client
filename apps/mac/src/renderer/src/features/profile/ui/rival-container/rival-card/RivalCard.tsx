@@ -56,6 +56,7 @@ export function RivalCard({
     activeTime,
     isStudying,
   });
+  const formattedDisplayTime = formatTime(displayActiveTime);
 
   const { Icon, label } = useMemo(() => getUsingAppMeta(usingApp, status), [usingApp, status]);
 
@@ -65,7 +66,7 @@ export function RivalCard({
         <S.RankTierWrap>
           <RankTier tier={tier} />
         </S.RankTierWrap>
-        <S.ProfileImg src={profileSrc || DefaultProfile} alt="라이벌 프로필" />
+        <S.RivalAvatar profileImage={profileSrc} fallbackSrc={DefaultProfile} alt="라이벌 프로필" />
         <S.NameStatus>
           <S.NameBox>
             <S.Name>{name}</S.Name>
@@ -83,7 +84,7 @@ export function RivalCard({
           </S.AppRow>
         )}
 
-        <S.Time>{formatTime(displayActiveTime)}</S.Time>
+        <S.Time>{formattedDisplayTime}</S.Time>
       </S.Right>
     </S.RivalBox>
   );

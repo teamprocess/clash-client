@@ -65,14 +65,7 @@ const RivalRow = ({ user }: { user: MyRivalsRequest }) => {
           <RankTier tier={user.tier} />
         </S.RankTierWrap>
 
-        <S.ProfileImg
-          src={user.profileImage || Profile}
-          alt="프로필"
-          onError={e => {
-            e.currentTarget.onerror = null;
-            e.currentTarget.src = Profile;
-          }}
-        />
+        <S.RivalAvatar profileImage={user.profileImage} fallbackSrc={Profile} alt="프로필" />
 
         <S.NameBox>
           <S.ProfileName>{user.name}</S.ProfileName>
