@@ -1,5 +1,10 @@
 import { useMemo, useState } from "react";
-import { useMyRivalsQuery, MyRivalsRequest, MyRivalsResponse } from "@/entities/competition";
+import {
+  myRivalsApi,
+  useMyRivalsQuery,
+  MyRivalsRequest,
+  MyRivalsResponse,
+} from "@/entities/competition";
 import {
   useRivalListQuery,
   RivalUsersResponse,
@@ -60,6 +65,7 @@ export const useRival = () => {
   const [searchText, setSearchText] = useState("");
   const [rivalSelectedId, setRivalSelectedId] = useState<number[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isDeleteSubmitting, setIsDeleteSubmitting] = useState(false);
 
   const clearAllErrors = () => {
     setCreateError(null);
@@ -149,23 +155,54 @@ export const useRival = () => {
     }
   };
 
+  const refreshRivalQueries = async () => {
+    await Promise.allSettled([
+      queryClient.invalidateQueries({ queryKey: MY_RIVALS_KEY }),
+      queryClient.invalidateQueries({ queryKey: RIVAL_LIST_KEY }),
+      queryClient.invalidateQueries({ queryKey: RIVAL_SIGN_ALL_KEY }),
+    ]);
+  };
+
+  const hasDeletedRivalBeenRemoved = async (rivalId: number) => {
+    const latestMyRivals = await queryClient.fetchQuery({
+      queryKey: MY_RIVALS_KEY,
+      queryFn: myRivalsApi.getMyRivals,
+      staleTime: 0,
+    });
+
+    const currentMyRivals = latestMyRivals.data?.myRivals ?? [];
+
+    return !currentMyRivals.some(rival => rival.rivalId === rivalId || rival.id === rivalId);
+  };
+
   const handleRivalDelete = async (rivalId: number) => {
-    if (!rivalId) return false;
+    if (!rivalId || isDeleteSubmitting) return false;
 
     try {
+      setIsDeleteSubmitting(true);
       setDeleteError(null);
       await rivalsApi.deleteRival(rivalId);
-
-      await Promise.all([
-        queryClient.invalidateQueries({ queryKey: ["myRivals"] }),
-        queryClient.invalidateQueries({ queryKey: ["rivalList"] }),
-      ]);
+      await refreshRivalQueries();
 
       return true;
     } catch (error: unknown) {
+      try {
+        const wasDeleted = await hasDeletedRivalBeenRemoved(rivalId);
+
+        if (wasDeleted) {
+          setDeleteError(null);
+          await refreshRivalQueries();
+          return true;
+        }
+      } catch (refetchError) {
+        console.error("라이벌 삭제 후 상태 확인 실패:", refetchError);
+      }
+
       console.error("라이벌 삭제 실패:", error);
       setDeleteError(getErrorMessage(error, "라이벌 삭제 중 오류가 발생했습니다."));
       return false;
+    } finally {
+      setIsDeleteSubmitting(false);
     }
   };
 
@@ -283,6 +320,7 @@ export const useRival = () => {
     pendingDeleteId,
     setPendingDeleteId,
     handleRivalSignCancel,
+    isDeleteSubmitting,
 
     // search
     searchText,

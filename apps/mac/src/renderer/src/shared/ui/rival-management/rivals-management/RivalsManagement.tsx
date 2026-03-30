@@ -203,8 +203,7 @@ export const RivalsManagementDialog = ({ isOpen, onClose, rival }: AddRivalsDial
                 isOpen={rival.deleteConfirmOpen}
                 onClose={rival.closeDeleteConfirm}
                 rival={rival}
-                rivalId={rival.pendingDelete.id}
-                userName={rival.pendingDelete.name}
+                username={rival.pendingDelete.name}
               />
             )}
           </S.ApplyContainer>
