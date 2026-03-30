@@ -1,26 +1,18 @@
 import * as S from "./TopProfile.style";
-import { ChangeEvent, SyntheticEvent, useRef } from "react";
-import { TopProfileProps } from "@/features/profile/model/useTopProfile";
+import { ChangeEvent, useRef } from "react";
 import { useGetMyProfile } from "@/entities/user";
 import { useUploadProfileImageMutation } from "@/entities/profile/api/query/useUserProfileImage.query";
-import { RankTier } from "@/shared/ui";
+import { resolveProfileDecorations } from "@/shared/lib";
+import { NameTag, RankTier } from "@/shared/ui";
 
 const ACCEPTED_IMAGE_TYPES = ["image/png", "image/jpeg", "image/webp", "image/gif"];
 
-export const TopProfile = ({
-  bannerAccentColor,
-  bannerBgImageUrl,
-  badgeAccentColor,
-  badgeBgImageUrl,
-}: TopProfileProps) => {
+export const TopProfile = () => {
   const { data: user } = useGetMyProfile();
   const uploadProfileImageMutation = useUploadProfileImageMutation();
   const fileInputRef = useRef<HTMLInputElement>(null);
-
-  const handleProfileImageError = (event: SyntheticEvent<HTMLImageElement>) => {
-    event.currentTarget.onerror = null;
-    event.currentTarget.src = S.FallbackProfileImage;
-  };
+  const { bannerImage, badgeImage, nameplateImage } = resolveProfileDecorations(user?.equippedItems);
+  const displayName = user?.name || user?.username || "이름 없음";
 
   const handleFileChange = async (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -41,22 +33,22 @@ export const TopProfile = ({
   };
 
   return (
-    <S.Banner $accent={bannerAccentColor} $bgImage={bannerBgImageUrl}>
+    <S.Banner $bgImage={bannerImage}>
       <S.ProfileCard>
         <S.ProfileImgWrapper>
-          <S.ProfileImgContainer $accent={badgeAccentColor} $bgImage={badgeBgImageUrl}>
-            <S.ImgBox>
-              <S.ProfileImageButton
-                type="button"
-                onClick={handleSelectProfileImage}
-                disabled={uploadProfileImageMutation.isPending}
-                $hasImage={Boolean(user?.profileImage)}
+          <S.ProfileImgContainer>
+            <S.ProfileImageButton
+              type="button"
+              onClick={handleSelectProfileImage}
+              disabled={uploadProfileImageMutation.isPending}
+              $hasImage={Boolean(user?.profileImage)}
+            >
+              <S.ProfileAvatarWrap
+                profileImage={user?.profileImage}
+                badgeImage={badgeImage}
+                fallbackSrc={S.FallbackProfileImage}
+                alt="프로필"
               >
-                <S.ProfileImg
-                  src={user?.profileImage || S.FallbackProfileImage}
-                  onError={handleProfileImageError}
-                />
-
                 {user?.profileImage ? (
                   <S.ChangeProfileImageIconWrap>
                     <S.ChangeProfileImageIcon />
@@ -66,16 +58,17 @@ export const TopProfile = ({
                     <S.AddProfileImageIcon />
                   </S.AddProfileImageIconWrap>
                 )}
-              </S.ProfileImageButton>
-            </S.ImgBox>
+              </S.ProfileAvatarWrap>
+            </S.ProfileImageButton>
 
             <S.RankTierWrap>
               <RankTier tier={String(user?.tier)} />
             </S.RankTierWrap>
           </S.ProfileImgContainer>
           <S.UserInfo>
-            <S.Name>{user?.name}</S.Name>
-            {badgeBgImageUrl && <S.BadgeDot />}
+            <S.DisplayNameWrap>
+              <NameTag text={displayName} backgroundImage={nameplateImage} size="hero" />
+            </S.DisplayNameWrap>
           </S.UserInfo>
         </S.ProfileImgWrapper>
       </S.ProfileCard>

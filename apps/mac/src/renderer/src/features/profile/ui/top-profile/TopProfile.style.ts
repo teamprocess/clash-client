@@ -1,18 +1,17 @@
 import styled from "styled-components";
-import { font } from "@clash/design-tokens/font";
 import MypageProfileSrc from "../../assets/rival-profile.png";
 import AddProfileImg from "../../assets/add-profile-img-icon.svg";
 import ChangeProfileImg from "../../assets/change-profile-img-icon.svg";
+import { ProfileAvatar } from "@/shared/ui/profile-avatar";
 
-export const Banner = styled.div<{ $accent?: string; $bgImage?: string }>`
+export const Banner = styled.div<{ $bgImage?: string }>`
   width: 100%;
   border-radius: 1rem;
   background: ${({ theme }) => theme.background.alternative};
 
-  ${({ $accent, $bgImage }) =>
-    $accent || $bgImage
+  ${({ $bgImage }) =>
+    $bgImage
       ? `
-        background-color: ${$accent ?? "transparent"};
         background-image: ${$bgImage ? `url(${$bgImage})` : "none"};
         background-size: cover;
         background-position: center;
@@ -20,7 +19,7 @@ export const Banner = styled.div<{ $accent?: string; $bgImage?: string }>`
       `
       : ""}
 
-  padding: 1.5rem;
+  padding: 1.25rem 1.5rem;
   display: flex;
   justify-content: flex-start;
   align-items: flex-start;
@@ -36,50 +35,35 @@ export const Button = styled.div`
 
 export const ProfileCard = styled.div`
   height: 100%;
-  min-height: 12rem;
+  min-height: 9.75rem;
 `;
 
 export const ProfileImgWrapper = styled.div`
   position: absolute;
-  bottom: -40%;
-  left: 16%;
+  bottom: -31%;
+  left: 13%;
 `;
 
-export const ProfileImgContainer = styled.div<{ $accent?: string; $bgImage?: string }>`
+export const ProfileImgContainer = styled.div`
   position: relative;
-  width: 7.5rem;
-  height: 7.5rem;
-  margin-bottom: 20%;
-  border-radius: 50%;
-  border: ${({ $accent }) => ($accent ? `0.5rem solid ${$accent}` : "none")};
+  width: 6.25rem;
+  height: 6.25rem;
+  margin-bottom: 0.95rem;
+`;
 
-  ${({ $bgImage }) =>
-    $bgImage
-      ? `
-        background-image: url(${$bgImage});
-        background-size: cover;
-        background-position: center;
-      `
-      : ""}
+export const ProfileAvatarWrap = styled(ProfileAvatar)`
+  width: 100%;
+  height: 100%;
 `;
 
 export const RankTierWrap = styled.div`
   position: absolute;
-  right: 1rem;
-  width: 3rem;
-  height: 3rem;
+  right: 0.7rem;
+  width: 2.4rem;
+  height: 2.4rem;
   bottom: 0;
   transform: translate(35%, 35%);
   z-index: 3;
-`;
-
-export const ProfileImg = styled.img.attrs(() => ({
-  alt: "프로필",
-}))`
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
 `;
 
 export const AddProfileImageIconWrap = styled.div`
@@ -92,6 +76,7 @@ export const AddProfileImageIconWrap = styled.div`
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
+  z-index: 3;
 `;
 
 export const ChangeProfileImageIconWrap = styled.div`
@@ -104,6 +89,7 @@ export const ChangeProfileImageIconWrap = styled.div`
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
+  z-index: 3;
 `;
 
 export const ProfileImageButton = styled.button<{ $hasImage: boolean }>`
@@ -114,8 +100,8 @@ export const ProfileImageButton = styled.button<{ $hasImage: boolean }>`
   border: none;
   background: transparent;
   cursor: pointer;
-  border-radius: 50%;
-  overflow: hidden;
+  display: block;
+  overflow: visible;
 
   &:hover ${AddProfileImageIconWrap}, &:hover ${ChangeProfileImageIconWrap} {
     opacity: 1;
@@ -129,25 +115,8 @@ export const UserInfo = styled.div`
   gap: 0.5rem;
 `;
 
-export const Name = styled.div`
-  color: ${({ theme }) => theme.label.normal};
-  ${font.title1.medium};
-  margin-left: 1.5rem;
-`;
-
-export const BadgeDot = styled.div<{ $accent?: string }>`
-  width: 2rem;
-  height: 2rem;
-  margin-bottom: 0.625rem;
-  border-radius: 100%;
-  background: ${({ $accent, theme }) => $accent ?? theme.label.normal};
-  transform: translate(15%, 15%);
-`;
-
-export const ImgBox = styled.div`
-  position: relative;
-  width: 100%;
-  height: 100%;
+export const DisplayNameWrap = styled.div`
+  margin-left: 1.15rem;
 `;
 
 export const HiddenFileInput = styled.input`

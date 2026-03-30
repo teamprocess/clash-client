@@ -11,3 +11,9 @@ export { getGrowthInfo } from "./getGrowthInfo";
 export type { MyRivalItem } from "./useRival";
 export { resolveUsingApp } from "./resolveUsingApp";
 export { useRealtimeRivalActiveTime } from "./useRealtimeRivalActiveTime";
+export { resolveProfileDecorations } from "./profileDecorations";
+export type {
+  ProfileDecorationsInput,
+  ProfileDecorationImageLike,
+  ResolvedProfileDecorations,
+} from "./profileDecorations";
