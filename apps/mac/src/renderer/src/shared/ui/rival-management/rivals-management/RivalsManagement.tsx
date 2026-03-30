@@ -19,7 +19,8 @@ export const RivalsManagementDialog = ({ isOpen, onClose, rival }: AddRivalsDial
   };
 
   const isMaxRivalError =
-    rival.error === "라이벌이 너무 많습니다." || rival.error === "최대 라이벌 수에 도달했습니다.";
+    rival.createError === "라이벌이 너무 많습니다." ||
+    rival.createError === "최대 라이벌 수에 도달했습니다.";
 
   const users = rival.filteredUsers ?? [];
   const currentRivals = rival.rivalsData?.myRivals ?? [];
@@ -92,11 +93,11 @@ export const RivalsManagementDialog = ({ isOpen, onClose, rival }: AddRivalsDial
 
             <S.BottomRow>
               <S.ButtonBox>
-                {rival.error && (
+                {rival.createError && (
                   <S.ErrorText>
                     {isMaxRivalError
                       ? `최대 라이벌 수는 4명입니다. 신청 목록을 확인해주세요!`
-                      : rival.error}
+                      : rival.createError}
                   </S.ErrorText>
                 )}
                 <Button size="sm" variant="primary" onClick={rival.handleRivalCreate}>
@@ -153,13 +154,7 @@ export const RivalsManagementDialog = ({ isOpen, onClose, rival }: AddRivalsDial
 
             <S.DetermineContent>
               <S.DetermineTitle>라이벌 신청 목록</S.DetermineTitle>
-              {rival.error && (
-                <S.ErrorText>
-                  {isMaxRivalError
-                    ? `라이벌 신청을 보낸 내역이 있다면 취소한 후, 다른 사용자를 추가해보세요!`
-                    : rival.error}
-                </S.ErrorText>
-              )}
+              {rival.signListError && <S.ErrorText>{rival.signListError}</S.ErrorText>}
               <S.DetermineList>
                 <S.UserChoiceContainer>
                   {hasSignRivals ? (

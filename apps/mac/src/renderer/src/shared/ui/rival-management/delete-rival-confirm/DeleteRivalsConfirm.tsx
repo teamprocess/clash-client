@@ -31,7 +31,7 @@ export const DeleteRivalsConfirmDialog = ({
           {userName ? `${userName}님을 ` : ""}정말 라이벌에서 삭제하시겠습니까?
         </S.Description>
 
-        {rival.error && <S.ErrorText>{rival.error}</S.ErrorText>}
+        {rival.deleteError && <S.ErrorText>{rival.deleteError}</S.ErrorText>}
 
         <S.ButtonBox>
           <Button size="sm" variant="secondary" fullWidth onClick={onClose}>
