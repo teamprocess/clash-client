@@ -21,6 +21,7 @@ export const createMainWindow = () => {
     height: 670,
     show: false,
     autoHideMenuBar: true,
+    backgroundColor: "#2a2b2c",
     webPreferences: {
       preload: join(__dirname, "../preload/index.js"),
       sandbox: false,
