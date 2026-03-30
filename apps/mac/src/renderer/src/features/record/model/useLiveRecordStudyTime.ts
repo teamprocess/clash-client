@@ -7,6 +7,7 @@ export const useLiveRecordStudyTime = (selectedDate?: string) => {
   const activeSessionType = useRecordStore(state => state.activeSessionType);
   const baseStudyTime = useRecordStore(state => state.baseStudyTime);
   const currentStudyTime = useRecordStore(state => state.currentStudyTime);
+  const isTodaySelected = selectedDate === undefined;
 
   const hasServerActiveSession = useMemo(() => {
     if (!todayResponse?.success || !todayResponse.data) {
@@ -17,7 +18,7 @@ export const useLiveRecordStudyTime = (selectedDate?: string) => {
   }, [todayResponse]);
 
   const totalStudyTime = useMemo(() => {
-    if (selectedDate === undefined && activeSessionType !== null) {
+    if (isTodaySelected && activeSessionType !== null) {
       return baseStudyTime + currentStudyTime;
     }
 
@@ -25,11 +26,11 @@ export const useLiveRecordStudyTime = (selectedDate?: string) => {
       return todayResponse.data.totalStudyTime;
     }
 
-    return baseStudyTime + currentStudyTime;
-  }, [activeSessionType, baseStudyTime, currentStudyTime, selectedDate, todayResponse]);
+    return isTodaySelected ? baseStudyTime + currentStudyTime : 0;
+  }, [activeSessionType, baseStudyTime, currentStudyTime, isTodaySelected, todayResponse]);
 
   return {
     totalStudyTime,
-    isStudying: hasServerActiveSession || (selectedDate === undefined && activeSessionType !== null),
+    isStudying: hasServerActiveSession || (isTodaySelected && activeSessionType !== null),
   };
 };
