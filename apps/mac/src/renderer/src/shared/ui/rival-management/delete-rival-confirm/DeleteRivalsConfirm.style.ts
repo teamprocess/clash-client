@@ -14,6 +14,10 @@ const flexCol = css`
 
 export const Description = styled.p`
   ${font.headline2.medium}
+  display: flex;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
 `;
 
 export const DialogBody = styled.div`

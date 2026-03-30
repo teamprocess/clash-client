@@ -24,8 +24,8 @@ export const ActiveContainer = styled.div`
 export const TitleBox = styled.div`
   width: 100%;
   ${flexRow};
-  justify-content: space-between;
   align-items: center;
+  gap: 0.5rem;
   margin-bottom: 0.725rem;
 `;
 

@@ -21,6 +21,7 @@ api.interceptors.response.use(
   },
   error => {
     if (error.response) {
+      const status = error.response.status;
       const publicPaths = [
         "/auth/sign-in",
         "/auth/no-recaptcha-sign-in",
@@ -35,7 +36,7 @@ api.interceptors.response.use(
       ];
       const isPublicPath = publicPaths.some(path => error.config?.url?.includes(path));
 
-      switch (error.response.status) {
+      switch (status) {
         case 401:
           // Auth 관련 API는 리다이렉트 X
           if (!isPublicPath) {

@@ -44,6 +44,15 @@ const invalidateRecordQueries = async () => {
   ]);
 };
 
+export const invalidateRealtimeQueries = async () => {
+  await Promise.all([
+    invalidateRecordQueries(),
+    invalidateGroupQueries(),
+    invalidateCompeteQueries(),
+    invalidateUserQueries(),
+  ]);
+};
+
 export const invalidateByDomain = async (domain?: string) => {
   if (domain === "GROUP") {
     await invalidateGroupQueries();
