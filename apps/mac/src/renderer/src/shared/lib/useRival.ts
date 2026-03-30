@@ -74,6 +74,11 @@ export const useRival = () => {
   };
 
   const resetSearch = () => setSearchText("");
+  const resetCreateForm = () => {
+    setRivalSelectedId([]);
+    resetSearch();
+    setCreateError(null);
+  };
 
   const filteredUsers = useMemo(() => {
     const users = userList?.users ?? [];
@@ -127,8 +132,8 @@ export const useRival = () => {
   };
 
   const handleRivalCreate = async () => {
-    if (isSubmitting) return;
-    if (rivalSelectedId.length === 0) return;
+    if (isSubmitting) return false;
+    if (rivalSelectedId.length === 0) return false;
 
     const payload: RivalApplyRequest = {
       ids: rivalSelectedId.map(id => ({ id })),
@@ -146,10 +151,12 @@ export const useRival = () => {
         queryClient.invalidateQueries({ queryKey: RIVAL_LIST_KEY }),
       ]);
 
-      handleClose();
+      resetCreateForm();
+      return true;
     } catch (error: unknown) {
       console.error("라이벌 신청 실패:", error);
       setCreateError(getErrorMessage(error, "라이벌 신청 중 오류가 발생했습니다."));
+      return false;
     } finally {
       setIsSubmitting(false);
     }
@@ -310,6 +317,7 @@ export const useRival = () => {
     // actions
     handleRivalCreate,
     handleRivalDelete,
+    isSubmitting,
 
     // delete confirm
     deleteConfirmOpen,
