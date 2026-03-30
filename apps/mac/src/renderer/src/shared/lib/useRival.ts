@@ -34,7 +34,9 @@ export const useRival = () => {
   const RIVAL_LIST_KEY = ["rivalList"];
   const RIVAL_SIGN_ALL_KEY = ["rivalSignAll"];
 
-  const [error, setError] = useState<string | null>(null);
+  const [createError, setCreateError] = useState<string | null>(null);
+  const [signListError, setSignListError] = useState<string | null>(null);
+  const [deleteError, setDeleteError] = useState<string | null>(null);
 
   const rivalsData: MyRivalsResponse | null = myRivalsRes?.data ?? null;
   const userList: RivalUsersResponse | null = rivalListRes?.data ?? null;
@@ -59,6 +61,12 @@ export const useRival = () => {
   const [rivalSelectedId, setRivalSelectedId] = useState<number[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  const clearAllErrors = () => {
+    setCreateError(null);
+    setSignListError(null);
+    setDeleteError(null);
+  };
+
   const resetSearch = () => setSearchText("");
 
   const filteredUsers = useMemo(() => {
@@ -79,13 +87,13 @@ export const useRival = () => {
     setModalOpen(false);
     setRivalSelectedId([]);
     resetSearch();
-    setError(null);
+    clearAllErrors();
   };
 
   const handleSelectClose = () => {
     setRivalSelectedId([]);
     resetSearch();
-    setError(null);
+    clearAllErrors();
   };
 
   const handleUserSelect = (id: number) => {
@@ -93,22 +101,22 @@ export const useRival = () => {
     const maxAvailableSlots = 4 - currentRivalCount;
 
     if (maxAvailableSlots <= 0) {
-      setError("최대 라이벌 수에 도달했습니다.");
+      setCreateError("최대 라이벌 수에 도달했습니다.");
       return;
     }
 
     if (rivalSelectedId.includes(id)) {
-      setError(null);
+      setCreateError(null);
       setRivalSelectedId(prev => prev.filter(item => item !== id));
       return;
     }
 
     if (rivalSelectedId.length >= maxAvailableSlots) {
-      setError("최대 라이벌 수에 도달했습니다.");
+      setCreateError("최대 라이벌 수에 도달했습니다.");
       return;
     }
 
-    setError(null);
+    setCreateError(null);
     setRivalSelectedId(prev => [...prev, id]);
   };
 
@@ -122,7 +130,7 @@ export const useRival = () => {
 
     try {
       setIsSubmitting(true);
-      setError(null);
+      setCreateError(null);
 
       await rivalsApi.postRivalApply(payload);
 
@@ -135,7 +143,7 @@ export const useRival = () => {
       handleClose();
     } catch (error: unknown) {
       console.error("라이벌 신청 실패:", error);
-      setError(getErrorMessage(error, "라이벌 신청 중 오류가 발생했습니다."));
+      setCreateError(getErrorMessage(error, "라이벌 신청 중 오류가 발생했습니다."));
     } finally {
       setIsSubmitting(false);
     }
@@ -145,7 +153,7 @@ export const useRival = () => {
     if (!rivalId) return false;
 
     try {
-      setError(null);
+      setDeleteError(null);
       await rivalsApi.deleteRival(rivalId);
 
       await Promise.all([
@@ -156,7 +164,7 @@ export const useRival = () => {
       return true;
     } catch (error: unknown) {
       console.error("라이벌 삭제 실패:", error);
-      setError(getErrorMessage(error, "라이벌 삭제 중 오류가 발생했습니다."));
+      setDeleteError(getErrorMessage(error, "라이벌 삭제 중 오류가 발생했습니다."));
       return false;
     }
   };
@@ -165,7 +173,7 @@ export const useRival = () => {
     mutationFn: (rivalId: number) => rivalsApi.postRivalCancel({ id: rivalId }),
 
     onMutate: async (rivalId: number) => {
-      setError(null);
+      setSignListError(null);
 
       await queryClient.cancelQueries({ queryKey: RIVAL_SIGN_ALL_KEY });
 
@@ -185,7 +193,7 @@ export const useRival = () => {
 
     onError: (error, _rivalId: number, context) => {
       console.error("라이벌 신청 취소 실패:", error);
-      setError(getErrorMessage(error, "라이벌 신청 취소 중 오류가 발생했습니다."));
+      setSignListError(getErrorMessage(error, "라이벌 신청 취소 중 오류가 발생했습니다."));
 
       if (context?.previous !== undefined) {
         queryClient.setQueryData(RIVAL_SIGN_ALL_KEY, context.previous);
@@ -202,12 +210,12 @@ export const useRival = () => {
     if (!rivalId) return false;
 
     try {
-      setError(null);
+      setSignListError(null);
       await cancelRivalSignMutation.mutateAsync(rivalId);
       return true;
     } catch (error: unknown) {
       console.error("라이벌 신청 취소 실패:", error);
-      setError(getErrorMessage(error, "라이벌 신청 취소 중 오류가 발생했습니다."));
+      setSignListError(getErrorMessage(error, "라이벌 신청 취소 중 오류가 발생했습니다."));
       return false;
     }
   };
@@ -218,22 +226,22 @@ export const useRival = () => {
   const openDeleteConfirm = (id: number, name?: string) => {
     setPendingDelete({ id, name });
     setDeleteConfirmOpen(true);
-    setError(null);
+    setDeleteError(null);
   };
 
   const closeDeleteConfirm = () => {
     setDeleteConfirmOpen(false);
     setPendingDelete(null);
-    setError(null);
+    setDeleteError(null);
   };
 
   const confirmDeleteRival = async () => {
     const id = pendingDelete?.id;
     if (!id) return;
 
-    await handleRivalDelete(id);
+    const ok = await handleRivalDelete(id);
 
-    if (!error) {
+    if (ok) {
       closeDeleteConfirm();
     }
   };
@@ -285,6 +293,8 @@ export const useRival = () => {
     filteredSignRivals,
 
     // error
-    error,
+    createError,
+    signListError,
+    deleteError,
   };
 };
