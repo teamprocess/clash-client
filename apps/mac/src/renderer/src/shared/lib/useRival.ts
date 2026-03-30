@@ -92,11 +92,24 @@ export const useRival = () => {
     const currentRivalCount = rivalsData?.myRivals.length ?? 0;
     const maxAvailableSlots = 4 - currentRivalCount;
 
-    setRivalSelectedId(prev => {
-      if (prev.includes(id)) return prev.filter(item => item !== id);
-      if (prev.length < maxAvailableSlots) return [...prev, id];
-      return prev;
-    });
+    if (maxAvailableSlots <= 0) {
+      setError("최대 라이벌 수에 도달했습니다.");
+      return;
+    }
+
+    if (rivalSelectedId.includes(id)) {
+      setError(null);
+      setRivalSelectedId(prev => prev.filter(item => item !== id));
+      return;
+    }
+
+    if (rivalSelectedId.length >= maxAvailableSlots) {
+      setError("최대 라이벌 수에 도달했습니다.");
+      return;
+    }
+
+    setError(null);
+    setRivalSelectedId(prev => [...prev, id]);
   };
 
   const handleRivalCreate = async () => {
