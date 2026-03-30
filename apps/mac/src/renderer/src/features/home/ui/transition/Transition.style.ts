@@ -2,8 +2,6 @@ import styled from "styled-components";
 import { font } from "@clash/design-tokens/font";
 import DetailArrow from "../../../../shared/ui/assets/front.svg";
 
-const MAX_BAR_HEIGHT = "clamp(5rem, 20vw, 8rem)";
-
 export const TransitionContainer = styled.div`
   padding: clamp(1rem, 2vw, 1.5rem);
   width: 100%;
@@ -126,20 +124,29 @@ export const VerticalLine = styled.div`
   }
 `;
 
+export const GraphContainer = styled.div`
+  width: 100%;
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+`;
+
 export const GraphBox = styled.div`
   display: flex;
   flex-direction: row;
   align-items: flex-end;
   width: 100%;
   flex: 1;
+  padding-bottom: 0.625rem;
   min-height: 0;
 `;
 
 export const Bars = styled.div`
   position: relative;
   width: 100%;
-  height: ${MAX_BAR_HEIGHT};
-  min-height: 5rem;
+  height: 95%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -156,8 +163,13 @@ export const Value = styled.p<BarProps>`
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
-  bottom: ${({ value, max }) =>
-    max <= 0 ? "0rem" : `calc(${value / max} * ${MAX_BAR_HEIGHT} + 0.4rem)`};
+
+  bottom: ${({ value, max }) => {
+    if (max <= 0) return "0%";
+    const ratio = Math.min(Math.max(value / max, 0), 1);
+    return `calc(${ratio * 100}% + 0.4rem)`;
+  }};
+
   transition: bottom 0.4s ease;
   white-space: nowrap;
   font-size: clamp(0.75rem, 1.8vw, 1rem);

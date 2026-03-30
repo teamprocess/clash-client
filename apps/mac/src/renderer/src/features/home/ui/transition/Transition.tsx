@@ -27,35 +27,39 @@ export const Transition = ({ data }: TransitionProps) => {
           <S.Content>
             <S.SubTitle>활동 시간</S.SubTitle>
             <S.InfoBox>
-              <S.GraphBox>
-                <S.Bars>
-                  <S.Value
-                    value={getTransitionData.transitionData?.activeTime.yesterdayActiveTime ?? 0}
-                    max={getTransitionData.maxActive}
-                  >
-                    {formatTime(
-                      getTransitionData.transitionData?.activeTime.yesterdayActiveTime ?? 0
-                    )}
-                  </S.Value>
-                  <S.Bar
-                    value={getTransitionData.transitionData?.activeTime.yesterdayActiveTime ?? 0}
-                    max={getTransitionData.maxActive}
-                  />
-                </S.Bars>
-                <S.Bars>
-                  <S.Value
-                    value={getTransitionData.transitionData?.activeTime.todayActiveTime ?? 0}
-                    max={getTransitionData.maxActive}
-                  >
-                    {formatTime(getTransitionData.transitionData?.activeTime.todayActiveTime ?? 0)}
-                  </S.Value>
-                  <S.Bar
-                    value={getTransitionData.transitionData?.activeTime.todayActiveTime ?? 0}
-                    max={getTransitionData.maxActive}
-                  />
-                </S.Bars>
-              </S.GraphBox>
-              <S.Line />
+              <S.GraphContainer>
+                <S.GraphBox>
+                  <S.Bars>
+                    <S.Value
+                      value={getTransitionData.transitionData?.activeTime.yesterdayActiveTime ?? 0}
+                      max={getTransitionData.maxActive}
+                    >
+                      {formatTime(
+                        getTransitionData.transitionData?.activeTime.yesterdayActiveTime ?? 0
+                      )}
+                    </S.Value>
+                    <S.Bar
+                      value={getTransitionData.transitionData?.activeTime.yesterdayActiveTime ?? 0}
+                      max={getTransitionData.maxActive}
+                    />
+                  </S.Bars>
+                  <S.Bars>
+                    <S.Value
+                      value={getTransitionData.transitionData?.activeTime.todayActiveTime ?? 0}
+                      max={getTransitionData.maxActive}
+                    >
+                      {formatTime(
+                        getTransitionData.transitionData?.activeTime.todayActiveTime ?? 0
+                      )}
+                    </S.Value>
+                    <S.Bar
+                      value={getTransitionData.transitionData?.activeTime.todayActiveTime ?? 0}
+                      max={getTransitionData.maxActive}
+                    />
+                  </S.Bars>
+                </S.GraphBox>
+                <S.Line />
+              </S.GraphContainer>
               <S.DateBox>
                 <S.DateTitle>어제</S.DateTitle>
                 <S.DateTitle>오늘</S.DateTitle>
@@ -66,37 +70,40 @@ export const Transition = ({ data }: TransitionProps) => {
           <S.Content>
             <S.SubTitle>Contributions</S.SubTitle>
             <S.InfoBox>
-              <S.GraphBox>
-                <S.Bars>
-                  <S.Value
-                    value={
-                      getTransitionData.transitionData?.contributors.yesterdayContributors ?? 0
-                    }
-                    max={getTransitionData.maxContributors}
-                  >
-                    {getTransitionData.transitionData?.contributors.yesterdayContributors ?? 0}
-                  </S.Value>
-                  <S.Bar
-                    value={
-                      getTransitionData.transitionData?.contributors.yesterdayContributors ?? 0
-                    }
-                    max={getTransitionData.maxContributors}
-                  />
-                </S.Bars>
-                <S.Bars>
-                  <S.Value
-                    value={getTransitionData.transitionData?.contributors.todayContributors ?? 0}
-                    max={getTransitionData.maxContributors}
-                  >
-                    {getTransitionData.transitionData?.contributors.todayContributors ?? 0}
-                  </S.Value>
-                  <S.Bar
-                    value={getTransitionData.transitionData?.contributors.todayContributors ?? 0}
-                    max={getTransitionData.maxContributors}
-                  />
-                </S.Bars>
-              </S.GraphBox>
-              <S.Line />
+              <S.GraphContainer>
+                <S.GraphBox>
+                  <S.Bars>
+                    <S.Value
+                      value={
+                        getTransitionData.transitionData?.contributors.yesterdayContributors ?? 0
+                      }
+                      max={getTransitionData.maxContributors}
+                    >
+                      {getTransitionData.transitionData?.contributors.yesterdayContributors ?? 0}
+                    </S.Value>
+                    <S.Bar
+                      value={
+                        getTransitionData.transitionData?.contributors.yesterdayContributors ?? 0
+                      }
+                      max={getTransitionData.maxContributors}
+                    />
+                  </S.Bars>
+                  <S.Bars>
+                    <S.Value
+                      value={getTransitionData.transitionData?.contributors.todayContributors ?? 0}
+                      max={getTransitionData.maxContributors}
+                    >
+                      {getTransitionData.transitionData?.contributors.todayContributors ?? 0}
+                    </S.Value>
+                    <S.Bar
+                      value={getTransitionData.transitionData?.contributors.todayContributors ?? 0}
+                      max={getTransitionData.maxContributors}
+                    />
+                  </S.Bars>
+                </S.GraphBox>
+                <S.Line />
+              </S.GraphContainer>
+
               <S.DateBox>
                 <S.DateTitle>어제</S.DateTitle>
                 <S.DateTitle>오늘</S.DateTitle>
