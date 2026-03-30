@@ -6,38 +6,35 @@ interface DeleteRivalsDialogProps {
   isOpen: boolean;
   onClose: () => void;
   rival: ReturnType<typeof useRival>;
-  rivalId: number;
-  userName?: string;
+  username?: string;
 }
 
 export const DeleteRivalsConfirmDialog = ({
   isOpen,
   onClose,
   rival,
-  rivalId,
-  userName,
+  username,
 }: DeleteRivalsDialogProps) => {
   const handleConfirm = async () => {
-    const ok = await rival.handleRivalDelete(rivalId);
-    if (!ok) return;
-    window.location.reload();
+    await rival.confirmDeleteRival();
   };
 
   return (
-    <Dialog title="라이벌 삭제" width={23.5} height={14} isOpen={isOpen} onClose={onClose}>
+    <Dialog title="라이벌 삭제" width={24} height={14} isOpen={isOpen} onClose={onClose}>
       <S.DialogBody>
-        <div />
-        <S.Description>
-          {userName ? `${userName}님을 ` : ""}정말 라이벌에서 삭제하시겠습니까?
-        </S.Description>
-
+        <S.Description>{`정말 ${username}님과의 라이벌 관계를 끊으시겠어요?`}</S.Description>
         {rival.deleteError && <S.ErrorText>{rival.deleteError}</S.ErrorText>}
-
         <S.ButtonBox>
           <Button size="sm" variant="secondary" fullWidth onClick={onClose}>
             취소
           </Button>
-          <Button size="sm" variant="primary" fullWidth onClick={handleConfirm}>
+          <Button
+            size="sm"
+            variant="primary"
+            fullWidth
+            onClick={handleConfirm}
+            disabled={rival.isDeleteSubmitting}
+          >
             삭제
           </Button>
         </S.ButtonBox>
