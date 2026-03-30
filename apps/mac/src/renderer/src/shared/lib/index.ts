@@ -3,6 +3,11 @@ export { getPageNumbers } from "./pagination";
 export { formatPrice } from "./formatPrice";
 export { useTheme } from "./useTheme";
 export { useNetworkStatus } from "./useNetworkStatus";
+export {
+  clearServiceUnavailable,
+  markServiceUnavailable,
+  useServiceUnavailable,
+} from "./useServiceUnavailable";
 export { queryClient } from "./queryClient";
 export { getErrorMessage } from "./error";
 export { useRival } from "./useRival";
