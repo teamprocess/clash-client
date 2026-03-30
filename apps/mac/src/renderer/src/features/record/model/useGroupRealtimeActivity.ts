@@ -6,7 +6,7 @@ import { useLiveRecordStudyTime } from "./useLiveRecordStudyTime";
 export const useGroupRealtimeActivity = (groupId: number | null, selectedDate?: string) => {
   const { data: myProfile } = useGetMyProfile();
   const myUserId = myProfile?.id ?? null;
-  const { totalStudyTime, isStudying } = useLiveRecordStudyTime(selectedDate);
+  const { totalStudyTime, isLoading, isStudying } = useLiveRecordStudyTime(selectedDate);
   const { groupMembers, activeStudyingCount, incrementStudyingMembers } = useGroupMembersActivity(
     groupId,
     myUserId,
@@ -23,6 +23,7 @@ export const useGroupRealtimeActivity = (groupId: number | null, selectedDate?: 
 
   return {
     totalStudyTime,
+    isLoading,
     isStudying,
     groupMembers,
     activeStudyingCount,

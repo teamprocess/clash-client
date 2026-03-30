@@ -169,6 +169,10 @@ export const RepositoryName = styled.p`
 export const CodeGap = styled.div`
   ${font.label.bold};
   color: ${({ theme }) => theme.label.alternative};
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.15rem;
 `;
 
 export const PlusText = styled.span`

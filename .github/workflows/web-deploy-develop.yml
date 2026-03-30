@@ -44,7 +44,7 @@ jobs:
           FRONTEND_ENV_FILE: ${{ secrets.DEVELOP_FRONTEND_ENV_FILE }}
         run: |
           docker buildx build \
-            --platform linux/arm64 \
+            --platform linux/amd64 \
             -f apps/web/Dockerfile \
             -t ${{ secrets.DEVELOP_WEB_DOCKER_IMAGE }}:${WEB_IMAGE_TAG} \
             --secret id=frontend_env,env=FRONTEND_ENV_FILE \
@@ -59,10 +59,11 @@ jobs:
           host: ${{ secrets.DEVELOP_SERVER_IP }}
           username: ${{ secrets.DEVELOP_SSH_USER }}
           key: ${{ secrets.DEVELOP_SSH_PRIVATE_KEY }}
+          port: ${{ secrets.DEVELOP_SSH_PORT }}
           script_stop: true
           script: |
             set -eu
-            cd /home/ubuntu/app
+            cd /home/${{ secrets.DEVELOP_SSH_USER }}/app
 
             touch .deploy.env
 

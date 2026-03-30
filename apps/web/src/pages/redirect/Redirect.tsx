@@ -13,6 +13,7 @@ export const RedirectPage = () => {
   const redirectUrl = (location.state as RedirectLocationState | null)?.redirectUrl;
 
   useEffect(() => {
+    // redirectUrl이 설정되지 않은 경우, 로그인 페이지로 이동
     if (!redirectUrl) {
       navigate(
         {

@@ -81,9 +81,10 @@ export const MyStudyFireIcon = styled(Fire)`
   height: 4rem;
 `;
 
-export const MyStudyTime = styled.span<{ $isActive: boolean }>`
+export const MyStudyTime = styled.span<{ $isActive: boolean; $loading?: boolean }>`
   ${font.headline1.medium}
   color: ${({ $isActive, theme }) => ($isActive ? theme.primary.normal : theme.label.assistive)};
+  opacity: ${({ $loading }) => ($loading ? 0.48 : 1)};
 `;
 
 export const GroupInfoRow = styled.div`
