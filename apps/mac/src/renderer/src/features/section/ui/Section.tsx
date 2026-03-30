@@ -10,6 +10,7 @@ import { useGetMyProfile } from "@/entities/user";
 import { SectionItemBox } from "../components/SectionItemBox";
 import { useDragScroll } from "@/shared/lib/useDragScroll";
 import { Tooltip } from "@/shared/ui";
+import { changeMajorTooltipContent } from "./Section.constants";
 
 export const Section = () => {
   const navigate = useNavigate();
@@ -73,7 +74,7 @@ export const Section = () => {
       <S.RoadmapTitleBox>
         <S.RoadmapTitle>{roadmapTitle}</S.RoadmapTitle>
         <Tooltip
-          content="전공 테스트와 새로운 전공을 만나러 가보세요"
+          content={changeMajorTooltipContent}
           position="bottom"
           wrapperStyle={{ pointerEvents: "auto" }}
         >
