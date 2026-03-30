@@ -1,16 +1,25 @@
 import * as S from "./OfflinePage.style";
-import { Button } from "@/shared/ui";
 
 export const OfflinePage = () => {
   return (
     <S.OfflineContainer>
-      <S.OfflineBox>
-        <S.Title>인터넷 연결이 필요합니다.</S.Title>
-        <S.Description>네트워크 연결 상태를 확인한 뒤 다시 시도해주세요.</S.Description>
-        <Button variant="primary" onClick={() => window.location.reload()}>
-          다시 시도
-        </Button>
+      <S.OfflineBox role="status">
+        <S.LoadingIcon focusable="false" />
       </S.OfflineBox>
+      <S.ActionBox>
+        <S.ActionHelpText>Clash 사용에 문제가 있나요?</S.ActionHelpText>
+        <S.ActionButtonBox>
+          <S.ActionButton
+            type="button"
+            onClick={() => window.api.openExternalUrl("https://forms.gle/nUmoyatwQp3zJ4Gy7")}
+          >
+            버그 제보
+          </S.ActionButton>
+          <S.ActionButton type="button" onClick={() => window.location.reload()}>
+            새로고침
+          </S.ActionButton>
+        </S.ActionButtonBox>
+      </S.ActionBox>
     </S.OfflineContainer>
   );
 };
