@@ -1,6 +1,6 @@
 import * as S from "./Rival.style";
 import { useRival } from "@/shared/lib";
-import { RivalsManagementDialog, MyRivalUsers } from "@/shared/ui";
+import { MyRivalUsers, QuestionTooltip, RivalsManagementDialog } from "@/shared/ui";
 
 export const Rival = () => {
   const rival = useRival();
@@ -13,6 +13,10 @@ export const Rival = () => {
       <S.TitleBox>
         <S.TitleLeft>
           <S.Title>내 라이벌</S.Title>
+          <QuestionTooltip
+            content="라이벌은 최대 4명까지 가능합니다."
+            label="라이벌 최대 인원 안내"
+          />
         </S.TitleLeft>
 
         <S.RightSIde>

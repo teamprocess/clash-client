@@ -3,7 +3,7 @@ import { getStatus, useMyRivals } from "@/features/competition/model/useMyRivals
 import { formatTime, resolveUsingApp, useRealtimeRivalActiveTime, useRival } from "@/shared/lib";
 import { MyRivalsRequest, MyRivalsResponse } from "@/entities/competition";
 import { useMemo } from "react";
-import { RankTier, RivalsManagementDialog, Tooltip } from "@/shared/ui";
+import { QuestionTooltip, RankTier, RivalsManagementDialog, Tooltip } from "@/shared/ui";
 import { IdeIcons } from "@/shared/ui/assets/ide-img";
 import Profile from "@/features/profile/assets/rival-profile.png";
 
@@ -108,7 +108,13 @@ export const MyRivals = ({ data }: MyRivalsProps) => {
       <S.ListContent>
         <S.RivalList>
           <S.TitleBox>
-            <S.Title>내 라이벌</S.Title>
+            <S.TitleGroup>
+              <S.Title>내 라이벌</S.Title>
+              <QuestionTooltip
+                content="라이벌은 최대 4명까지 가능합니다."
+                label="라이벌 최대 인원 안내"
+              />
+            </S.TitleGroup>
             <S.ArrowBox onClick={rival.handleOpen}>
               라이벌 관리
               <S.DetailArrowIcon />
