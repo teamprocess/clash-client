@@ -25,12 +25,13 @@ export const Timer = ({
   nonTodayStopBehavior = "disable",
 }: TimerProps) => {
   const { activeSessionType, stop } = useRecordStore();
-  const { totalStudyTime } = useLiveRecordStudyTime(selectedDate);
+  const { totalStudyTime, isLoading } = useLiveRecordStudyTime(selectedDate);
   const isTodaySelected = selectedDate === undefined;
   const isPreviousDateEnabled = typeof onPreviousDate === "function";
   const isNextDateEnabled = typeof onNextDate === "function" && canGoNextDate;
   const isStopButtonDisabled = !isTodaySelected;
   const shouldHideStopButton = nonTodayStopBehavior === "hide" && !isTodaySelected;
+  const displayTime = isLoading ? "--:--:--" : formatTime(totalStudyTime);
   const stopButton =
     activeSessionType !== null && !shouldHideStopButton ? (
       <S.PlayButton
@@ -81,7 +82,7 @@ export const Timer = ({
       </S.DateBox>
       <S.TimeBox>
         {stopButtonPosition === "LEFT" && stopButton}
-        <S.Time>{formatTime(totalStudyTime)}</S.Time>
+        <S.Time $loading={isLoading}>{displayTime}</S.Time>
         {stopButtonPosition === "RIGHT" && stopButton}
       </S.TimeBox>
     </>

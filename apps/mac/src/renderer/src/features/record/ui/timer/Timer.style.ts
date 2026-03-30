@@ -76,11 +76,12 @@ export const TimeBox = styled.div`
   gap: 0.625rem;
 `;
 
-export const Time = styled.span`
+export const Time = styled.span<{ $loading?: boolean }>`
   display: inline-block;
   min-width: 8ch;
   text-align: center;
   color: ${({ theme }) => theme.label.alternative};
+  opacity: ${({ $loading }) => ($loading ? 0.48 : 1)};
   ${font.display1.medium};
   font-variant-numeric: tabular-nums;
   font-feature-settings: "tnum";
