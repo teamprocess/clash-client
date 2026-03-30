@@ -14,16 +14,16 @@ export const DateIcon = styled.img.attrs({
   src: DateImg,
   alt: "날짜",
 })`
-  width: 1.25rem;
-  height: 1.25rem;
+  width: 1.05rem;
+  height: 1.05rem;
 `;
 
 export const CommitIcon = styled.img.attrs({
   src: CommitImg,
   alt: "커밋",
 })`
-  width: 1.875rem;
-  height: 1.875rem;
+  width: 1.55rem;
+  height: 1.55rem;
   opacity: 0.9;
   flex: 0 0 auto;
 `;
@@ -32,8 +32,8 @@ export const IssueIcon = styled.img.attrs({
   src: IssueImg,
   alt: "이슈",
 })`
-  width: 1.875rem;
-  height: 1.875rem;
+  width: 1.55rem;
+  height: 1.55rem;
   opacity: 0.9;
   flex: 0 0 auto;
 `;
@@ -42,8 +42,8 @@ export const PullRequestsIcon = styled.img.attrs({
   src: PullRequestsImg,
   alt: "풀리퀘",
 })`
-  width: 1.875rem;
-  height: 1.875rem;
+  width: 1.55rem;
+  height: 1.55rem;
   opacity: 0.9;
   flex: 0 0 auto;
 `;
@@ -52,8 +52,8 @@ export const ReviewIcon = styled.img.attrs({
   src: ReviewImg,
   alt: "리뷰",
 })`
-  width: 1.875rem;
-  height: 1.875rem;
+  width: 1.55rem;
+  height: 1.55rem;
   opacity: 0.9;
   flex: 0 0 auto;
 `;
@@ -62,8 +62,8 @@ export const FireIcon = styled.img.attrs({
   src: FireImg,
   alt: "최다 커밋 레포지토리",
 })`
-  width: 1.25rem;
-  height: 1.25rem;
+  width: 1.05rem;
+  height: 1.05rem;
   opacity: 0.9;
   flex: 0 0 auto;
 `;
@@ -72,8 +72,8 @@ export const CodeIcon = styled.img.attrs({
   src: CodeImg,
   alt: "하루 동안 변경 라인",
 })`
-  width: 1.25rem;
-  height: 1.25rem;
+  width: 1.05rem;
+  height: 1.05rem;
   opacity: 0.9;
   flex: 0 0 auto;
 `;
@@ -81,6 +81,7 @@ export const CodeIcon = styled.img.attrs({
 export const ActiveContainer = styled.section`
   width: 100%;
   height: 100%;
+  min-height: 0;
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
@@ -91,6 +92,7 @@ export const Title = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 1rem;
 `;
 
 export const Date = styled.span`
@@ -101,7 +103,7 @@ export const Date = styled.span`
 
 export const DateText = styled.p`
   color: ${({ theme }) => theme.label.assistive};
-  ${font.body.medium}
+  ${font.label.medium}
 `;
 
 export const Total = styled.span`
@@ -111,33 +113,33 @@ export const Total = styled.span`
 `;
 
 export const Number = styled.p`
-  ${font.headline1.bold}
+  ${font.title2.bold}
   color: ${({ theme }) => theme.label.assistive};
 `;
 
 export const TotalText = styled.p`
   color: ${({ theme }) => theme.label.assistive};
-  ${font.label.medium}
+  ${font.caption.medium}
 `;
 
 export const GithubBox = styled.div`
   width: 100%;
-  height: 100%;
+  min-height: 6.625rem;
   border-radius: 1.25rem;
-  padding: 0 1.25rem;
+  padding: 1rem 1.25rem;
   background: ${({ theme }) => theme.label.disable};
   display: flex;
-  align-items: center;
+  align-items: stretch;
   justify-content: flex-start;
-  gap: 3rem;
+  gap: 2rem;
   min-width: 0;
+  box-sizing: border-box;
 `;
 
 export const Github = styled.div`
   display: grid;
   grid-template-columns: repeat(2, max-content);
   column-gap: 1.25rem;
-  row-gap: 0.625rem;
   flex: 1;
   min-width: 0;
 `;
@@ -159,12 +161,12 @@ export const StatTextGroup = styled.div`
 `;
 
 export const StatCount = styled.p`
-  ${font.title1.bold}
+  ${font.headline2.bold}
   color: ${({ theme }) => theme.label.strong};
 `;
 
 export const StatLabel = styled.p`
-  ${font.label.medium}
+  ${font.caption.medium}
   color: ${({ theme }) => theme.label.normal};
   white-space: nowrap;
 `;
@@ -172,6 +174,7 @@ export const StatLabel = styled.p`
 export const Info = styled.div`
   display: flex;
   flex-direction: column;
+  justify-content: center;
   gap: 0.5rem;
   flex: 1;
   width: 100%;
@@ -194,14 +197,14 @@ export const MetaText = styled.div`
 `;
 
 export const MetaLabel = styled.p`
-  ${font.body.medium}
+  ${font.label.medium}
   color: ${({ theme }) => theme.label.alternative};
   white-space: nowrap;
   flex: 0 0 auto;
 `;
 
 export const MetaValue = styled.p`
-  ${font.body.bold}
+  ${font.label.bold}
   color: ${({ theme }) => theme.label.alternative};
   flex: 1;
   min-width: 0;
@@ -225,28 +228,28 @@ export const Lines = styled.div`
 `;
 
 export const Plus = styled.span`
-  ${font.body.bold}
+  ${font.label.bold}
   color: ${palette.green[40]};
 `;
 
 export const Minus = styled.span`
-  ${font.body.bold}
+  ${font.label.bold}
   color: ${palette.red[60]};
 `;
 
 export const Slash = styled.span`
-  ${font.label.medium}
+  ${font.caption.medium}
   color: ${({ theme }) => theme.label.alternative};
 `;
 
 export const LinesUnit = styled.span`
-  ${font.label.medium}
+  ${font.caption.medium}
   color: ${({ theme }) => theme.label.alternative};
 `;
 
 export const EmptyBox = styled.div`
   width: 100%;
-  height: 6.625rem;
+  min-height: 6.625rem;
   border-radius: 1.25rem;
   padding: 1.25rem;
   background: ${({ theme }) => theme.label.disable};
