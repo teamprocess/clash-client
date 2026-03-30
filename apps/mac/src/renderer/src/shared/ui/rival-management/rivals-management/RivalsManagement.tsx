@@ -18,6 +18,10 @@ export const RivalsManagementDialog = ({ isOpen, onClose, rival }: AddRivalsDial
     onClose();
   };
 
+  const isMaxRivalError =
+    rival.createError === "라이벌이 너무 많습니다." ||
+    rival.createError === "최대 라이벌 수에 도달했습니다.";
+
   const users = rival.filteredUsers ?? [];
   const currentRivals = rival.rivalsData?.myRivals ?? [];
   const signRivals = rival.filteredSignRivals ?? [];
@@ -27,6 +31,26 @@ export const RivalsManagementDialog = ({ isOpen, onClose, rival }: AddRivalsDial
   const [activeTab, setActiveTab] = useState<"rivals-management" | "rivalList">(
     "rivals-management"
   );
+  const [createSuccessMessage, setCreateSuccessMessage] = useState<string | null>(null);
+
+  const handleTabChange = (tab: "rivals-management" | "rivalList") => {
+    setActiveTab(tab);
+
+    if (tab === "rivals-management") return;
+
+    setCreateSuccessMessage(null);
+  };
+
+  const handleCreateSubmit = async () => {
+    const ok = await rival.handleRivalCreate();
+
+    if (ok) {
+      setCreateSuccessMessage("라이벌 신청을 보냈습니다.");
+      return;
+    }
+
+    setCreateSuccessMessage(null);
+  };
 
   return (
     <Dialog width={43} height={40} isOpen={isOpen} onClose={handleClose}>
@@ -37,7 +61,7 @@ export const RivalsManagementDialog = ({ isOpen, onClose, rival }: AddRivalsDial
             { key: "rivals-management", label: "라이벌 추가" },
             { key: "rivalList", label: "신청 목록" },
           ]}
-          onChange={setActiveTab}
+          onChange={handleTabChange}
         />
 
         {activeTab === "rivals-management" ? (
@@ -89,18 +113,22 @@ export const RivalsManagementDialog = ({ isOpen, onClose, rival }: AddRivalsDial
 
             <S.BottomRow>
               <S.ButtonBox>
-                {rival.error && (
+                {createSuccessMessage ? (
+                  <S.SuccessText>{createSuccessMessage}</S.SuccessText>
+                ) : rival.createError ? (
                   <S.ErrorText>
-                    {rival.error === "라이벌이 너무 많습니다."
-                      ? `라이벌은 최대 4명까지 설정할 수 있습니다.\n신청 목록을 확인해주세요!`
-                      : rival.error}
+                    {isMaxRivalError
+                      ? `최대 라이벌 수는 4명입니다. 신청 목록을 확인해주세요!`
+                      : rival.createError}
                   </S.ErrorText>
-                )}
-                <Button size="sm" variant="secondary" onClick={rival.handleSelectClose}>
-                  초기화
-                </Button>
-                <Button size="sm" variant="primary" onClick={rival.handleRivalCreate}>
-                  확인
+                ) : null}
+                <Button
+                  size="sm"
+                  variant="primary"
+                  onClick={() => void handleCreateSubmit()}
+                  disabled={rival.isSubmitting}
+                >
+                  {rival.isSubmitting ? "신청 중" : "신청"}
                 </Button>
               </S.ButtonBox>
             </S.BottomRow>
@@ -153,13 +181,7 @@ export const RivalsManagementDialog = ({ isOpen, onClose, rival }: AddRivalsDial
 
             <S.DetermineContent>
               <S.DetermineTitle>라이벌 신청 목록</S.DetermineTitle>
-              {rival.error && (
-                <S.ErrorText>
-                  {rival.error === "라이벌이 너무 많습니다."
-                    ? `라이벌 신청을 보낸 내역이 있다면 취소를 한 후, 다른 사용자를 추가해보세요!`
-                    : rival.error}
-                </S.ErrorText>
-              )}
+              {rival.signListError && <S.ErrorText>{rival.signListError}</S.ErrorText>}
               <S.DetermineList>
                 <S.UserChoiceContainer>
                   {hasSignRivals ? (
@@ -208,8 +230,7 @@ export const RivalsManagementDialog = ({ isOpen, onClose, rival }: AddRivalsDial
                 isOpen={rival.deleteConfirmOpen}
                 onClose={rival.closeDeleteConfirm}
                 rival={rival}
-                rivalId={rival.pendingDelete.id}
-                userName={rival.pendingDelete.name}
+                username={rival.pendingDelete.name}
               />
             )}
           </S.ApplyContainer>
