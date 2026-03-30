@@ -1,17 +1,33 @@
 import { useCallback, useEffect, useRef } from "react";
+import axios from "axios";
 import { io, type Socket } from "socket.io-client";
 import { realtimeApi } from "@/shared/api";
 import { socketConfig } from "@/shared/config/socket";
-import { invalidateByDomain } from "./invalidateRealtimeQueries";
+import { clearServiceUnavailable, markServiceUnavailable } from "@/shared/lib";
+import { invalidateByDomain, invalidateRealtimeQueries } from "./invalidateRealtimeQueries";
 import { usePresenceStatus } from "./usePresenceStatus";
 import type { PresenceStatus } from "./realtimeSync.types";
 
 const RECONNECT_DELAY_MS = 3000;
+const MAX_RECONNECT_ATTEMPTS = 5;
+const isOffline = () => typeof navigator !== "undefined" && !navigator.onLine;
+const shouldRetrySocketToken = (error: unknown) => {
+  if (!axios.isAxiosError(error)) {
+    return true;
+  }
+
+  if (!error.response) {
+    return true;
+  }
+
+  return error.response.status >= 500;
+};
 
 export const useRealtimeSync = () => {
   const presenceStatus = usePresenceStatus();
   const socketRef = useRef<Socket | null>(null);
   const reconnectTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const reconnectAttemptsRef = useRef(0);
   const isMountedRef = useRef(true);
   const currentPresenceRef = useRef<PresenceStatus>(presenceStatus);
   const sentPresenceRef = useRef<PresenceStatus | null>(null);
@@ -38,6 +54,10 @@ export const useRealtimeSync = () => {
 
     socket.emit(nextPresence === "ONLINE" ? "presence:online" : "presence:away");
     sentPresenceRef.current = nextPresence;
+  }, []);
+
+  const resetReconnectAttempts = useCallback(() => {
+    reconnectAttemptsRef.current = 0;
   }, []);
 
   useEffect(() => {
@@ -69,8 +89,19 @@ export const useRealtimeSync = () => {
         return;
       }
 
+      if (isOffline()) {
+        clearServiceUnavailable();
+        return;
+      }
+
+      if (reconnectAttemptsRef.current >= MAX_RECONNECT_ATTEMPTS) {
+        markServiceUnavailable();
+        return;
+      }
+
       reconnectTimerRef.current = setTimeout(() => {
         reconnectTimerRef.current = null;
+        reconnectAttemptsRef.current += 1;
         void connect();
       }, RECONNECT_DELAY_MS);
     };
@@ -102,7 +133,17 @@ export const useRealtimeSync = () => {
         socketRef.current = socket;
 
         socket.on("connect", () => {
+          const reconnected = reconnectAttemptsRef.current > 0;
+
+          clearReconnectTimer();
+          clearServiceUnavailable();
+          resetReconnectAttempts();
           sentPresenceRef.current = null;
+
+          if (reconnected) {
+            void invalidateRealtimeQueries();
+          }
+
           flushPresence();
         });
 
@@ -131,16 +172,23 @@ export const useRealtimeSync = () => {
         }
 
         console.error("실시간 토큰 발급 요청에 실패했습니다.", error);
+
+        if (!shouldRetrySocketToken(error)) {
+          return;
+        }
+
         scheduleReconnect();
       }
     };
 
+    clearServiceUnavailable();
     void connect();
 
     return () => {
       isMountedRef.current = false;
       clearReconnectTimer();
+      resetReconnectAttempts();
       disconnect(true);
     };
-  }, [clearReconnectTimer, flushPresence]);
+  }, [clearReconnectTimer, flushPresence, resetReconnectAttempts]);
 };
