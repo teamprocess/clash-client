@@ -156,6 +156,13 @@ export const ErrorText = styled.span`
   white-space: pre-line;
 `;
 
+export const SuccessText = styled.span`
+  ${font.label.medium};
+  color: ${palette.green[40]};
+  width: 100%;
+  white-space: pre-line;
+`;
+
 export const ApplyContainer = styled.div`
   ${flexCol};
   width: 100%;
