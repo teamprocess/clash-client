@@ -72,7 +72,7 @@ export const Active = ({ activeData }: ActiveProps) => {
           </S.StreakBox>
 
           <S.StreakBox>
-            <S.StreakTitle>Contributions 변화 추이</S.StreakTitle>
+            <S.StreakTitle>Contribution 변화 추이</S.StreakTitle>
             <S.ChartWrapper>
               <ActiveLineChart data={fullChartData} />
             </S.ChartWrapper>

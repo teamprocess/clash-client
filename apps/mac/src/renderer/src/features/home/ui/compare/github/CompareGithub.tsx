@@ -1,6 +1,7 @@
 import * as S from "./CompareGithub.style";
 import { GrowthRate, Tooltip } from "@/shared/ui";
 import { CompareResponse } from "@/entities/home/model/useCompare.types";
+import { getCountLabel } from "@/shared/lib";
 
 const renderRepositoryName = (
   name: string | null | undefined,
@@ -15,14 +16,22 @@ const renderRepositoryName = (
       maxWidth="100rem"
       wrapperStyle={{ flex: 1, maxWidth: "100%", minWidth: 0 }}
     >
-      <S.RepositoryName>
-        <span>{repositoryText}</span>
-      </S.RepositoryName>
+      <S.RepositoryName>{repositoryText}</S.RepositoryName>
     </Tooltip>
   );
 };
 
 export const Github = ({ today, yesterday }: CompareResponse) => {
+  const yesterdayCommitCount = yesterday?.commit.count ?? 0;
+  const yesterdayPullRequestCount = yesterday?.pullRequest.count ?? 0;
+  const yesterdayIssueCount = yesterday?.issue.count ?? 0;
+  const yesterdayReviewCount = yesterday?.review.count ?? 0;
+
+  const todayCommitCount = today?.commit.count ?? 0;
+  const todayPullRequestCount = today?.pullRequest.count ?? 0;
+  const todayIssueCount = today?.issue.count ?? 0;
+  const todayReviewCount = today?.review.count ?? 0;
+
   return (
     <S.ContentBox>
       <S.Content>
@@ -40,8 +49,10 @@ export const Github = ({ today, yesterday }: CompareResponse) => {
               <S.GithubInfoBox>
                 <S.GitCommitIcon />
                 <S.InfoSubtitleBox>
-                  <S.CountText>{yesterday?.commit.count ?? 0}</S.CountText>
-                  <S.InfoSubtitle>Commit</S.InfoSubtitle>
+                  <S.CountText>{yesterdayCommitCount}</S.CountText>
+                  <S.InfoSubtitle>
+                    {getCountLabel(yesterdayCommitCount, "Commit", "Commits")}
+                  </S.InfoSubtitle>
                 </S.InfoSubtitleBox>
               </S.GithubInfoBox>
               <S.CalculateContainer>
@@ -81,8 +92,10 @@ export const Github = ({ today, yesterday }: CompareResponse) => {
               <S.GithubInfoBox>
                 <S.GitPRIcon />
                 <S.InfoSubtitleBox>
-                  <S.CountText>{yesterday?.pullRequest.count ?? 0}</S.CountText>
-                  <S.InfoSubtitle>Pull Request</S.InfoSubtitle>
+                  <S.CountText>{yesterdayPullRequestCount}</S.CountText>
+                  <S.InfoSubtitle>
+                    {getCountLabel(yesterdayPullRequestCount, "Pull Request", "Pull Requests")}
+                  </S.InfoSubtitle>
                 </S.InfoSubtitleBox>
               </S.GithubInfoBox>
               <S.CalculateContainer>
@@ -112,8 +125,10 @@ export const Github = ({ today, yesterday }: CompareResponse) => {
               <S.GroupTitle>이슈 수</S.GroupTitle>
               <S.MainStat>
                 <S.GitIssueIcon />
-                <span className="count">{yesterday?.issue.count ?? 0}</span>
-                <span className="unit">Issues</span>
+                <span className="count">{yesterdayIssueCount}</span>
+                <span className="unit">
+                  {getCountLabel(yesterdayIssueCount, "Issue", "Issues")}
+                </span>
               </S.MainStat>
             </S.FooterItem>
             <S.HeightLine />
@@ -121,8 +136,10 @@ export const Github = ({ today, yesterday }: CompareResponse) => {
               <S.GroupTitle>리뷰 수</S.GroupTitle>
               <S.MainStat>
                 <S.ReviewIcon $width={2.25} />
-                <span className="count">{yesterday?.review.count ?? 0}</span>
-                <span className="unit">Review</span>
+                <span className="count">{yesterdayReviewCount}</span>
+                <span className="unit">
+                  {getCountLabel(yesterdayReviewCount, "Review", "Reviews")}
+                </span>
               </S.MainStat>
             </S.FooterItem>
           </S.GridFooter>
@@ -146,14 +163,13 @@ export const Github = ({ today, yesterday }: CompareResponse) => {
                   <S.GithubInfoBox>
                     <S.GitCommitIcon />
                     <S.InfoSubtitleBox>
-                      <S.CountText>{today?.commit.count ?? 0}</S.CountText>
-                      <S.InfoSubtitle>Commit</S.InfoSubtitle>
+                      <S.CountText>{todayCommitCount}</S.CountText>
+                      <S.InfoSubtitle>
+                        {getCountLabel(todayCommitCount, "Commit", "Commits")}
+                      </S.InfoSubtitle>
                     </S.InfoSubtitleBox>
                   </S.GithubInfoBox>
-                  <GrowthRate
-                    yesterday={yesterday?.commit.count ?? 0}
-                    today={today?.commit.count ?? 0}
-                  />
+                  <GrowthRate yesterday={yesterdayCommitCount} today={todayCommitCount} />
                 </S.RateBox>
               </S.GrowthBox>
               <S.CalculateContainer>
@@ -194,14 +210,13 @@ export const Github = ({ today, yesterday }: CompareResponse) => {
                   <S.GithubInfoBox>
                     <S.GitPRIcon />
                     <S.InfoSubtitleBox>
-                      <S.CountText>{today?.pullRequest.count ?? 0}</S.CountText>
-                      <S.InfoSubtitle>Pull Request</S.InfoSubtitle>
+                      <S.CountText>{todayPullRequestCount}</S.CountText>
+                      <S.InfoSubtitle>
+                        {getCountLabel(todayPullRequestCount, "Pull Request", "Pull Requests")}
+                      </S.InfoSubtitle>
                     </S.InfoSubtitleBox>
                   </S.GithubInfoBox>
-                  <GrowthRate
-                    yesterday={yesterday?.pullRequest.count ?? 0}
-                    today={today?.pullRequest.count ?? 0}
-                  />
+                  <GrowthRate yesterday={yesterdayPullRequestCount} today={todayPullRequestCount} />
                 </S.RateBox>
               </S.GrowthBox>
               <S.CalculateContainer>
@@ -234,13 +249,12 @@ export const Github = ({ today, yesterday }: CompareResponse) => {
                   <S.RateBox>
                     <S.MainStat>
                       <S.GitIssueIcon />
-                      <span className="count">{today?.issue.count ?? 0}</span>
-                      <span className="unit">Issues</span>
+                      <span className="count">{todayIssueCount}</span>
+                      <span className="unit">
+                        {getCountLabel(todayIssueCount, "Issue", "Issues")}
+                      </span>
                     </S.MainStat>
-                    <GrowthRate
-                      yesterday={yesterday?.issue.count ?? 0}
-                      today={today?.issue.count ?? 0}
-                    />
+                    <GrowthRate yesterday={yesterdayIssueCount} today={todayIssueCount} />
                   </S.RateBox>
                 </S.GrowthBox>
               </S.FooterCenter>
@@ -253,13 +267,12 @@ export const Github = ({ today, yesterday }: CompareResponse) => {
                   <S.RateBox>
                     <S.MainStat>
                       <S.ReviewIcon $width={2.25} />
-                      <span className="count">{today?.review.count ?? 0}</span>
-                      <span className="unit">Reviews</span>
+                      <span className="count">{todayReviewCount}</span>
+                      <span className="unit">
+                        {getCountLabel(todayReviewCount, "Review", "Reviews")}
+                      </span>
                     </S.MainStat>
-                    <GrowthRate
-                      yesterday={yesterday?.review.count ?? 0}
-                      today={today?.review.count ?? 0}
-                    />
+                    <GrowthRate yesterday={yesterdayReviewCount} today={todayReviewCount} />
                   </S.RateBox>
                 </S.GrowthBox>
               </S.FooterCenter>
