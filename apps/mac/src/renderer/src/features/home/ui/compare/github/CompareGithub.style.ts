@@ -155,15 +155,10 @@ export const RepositoryName = styled.p`
   flex: 1;
   min-width: 0;
   overflow: hidden;
-  cursor: pointer;
-
-  > span {
-    display: block;
-    width: 100%;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
+  cursor: default;
+  width: 100%;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 `;
 
 export const CodeGap = styled.div`

@@ -15,9 +15,7 @@ const renderRepositoryName = (
       maxWidth="100rem"
       wrapperStyle={{ flex: 1, maxWidth: "100%", minWidth: 0 }}
     >
-      <S.RepositoryName>
-        <span>{repositoryText}</span>
-      </S.RepositoryName>
+      <S.RepositoryName>{repositoryText}</S.RepositoryName>
     </Tooltip>
   );
 };
