@@ -55,6 +55,13 @@ export const RankingLabel = styled.span`
   padding: 0 1.5rem;
 `;
 
+export const LabelGroup = styled.span`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.75rem;
+`;
+
 export const RankingBox = styled.div`
   display: flex;
   flex-direction: column;
