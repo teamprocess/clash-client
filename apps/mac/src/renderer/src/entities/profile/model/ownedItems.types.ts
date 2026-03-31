@@ -10,8 +10,6 @@ export type OwnedItemDisplayCategory =
   | OwnedItemCategory.NAMEPLATE
   | OwnedItemCategory.BANNER;
 
-export type OwnedItemApiCategory = OwnedItemDisplayCategory | "INSIGMA";
-
 export interface OwnedItemSeason {
   id: number;
   name: string;
@@ -24,7 +22,7 @@ export interface OwnedItem {
   title: string;
   image: string;
   description: string;
-  category: OwnedItemApiCategory;
+  category: OwnedItemDisplayCategory;
   price: number;
   discount: number;
   popularity: number;
@@ -38,20 +36,4 @@ export type OwnedItemRequest = {
 
 export type OwnedItemResponse = {
   items: OwnedItem[];
-};
-
-export const normalizeOwnedItemCategory = (
-  category: string
-): OwnedItemDisplayCategory | null => {
-  switch (category) {
-    case "INSIGMA":
-    case OwnedItemCategory.INSIGNIA:
-      return OwnedItemCategory.INSIGNIA;
-    case OwnedItemCategory.NAMEPLATE:
-      return OwnedItemCategory.NAMEPLATE;
-    case OwnedItemCategory.BANNER:
-      return OwnedItemCategory.BANNER;
-    default:
-      return null;
-  }
 };

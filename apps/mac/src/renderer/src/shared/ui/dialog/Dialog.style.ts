@@ -35,6 +35,8 @@ export const DialogContainer = styled.div<{
   box-shadow: 0 0 7px 0 ${({ theme }) => theme.line.normal};
   display: flex;
   flex-direction: column;
+  gap: 1rem;
+  min-width: 0;
 
   width: ${({ $width }) => $width}rem;
   height: ${({ $height }) => $height}rem;
@@ -54,6 +56,8 @@ export const DialogContainer = styled.div<{
 
 export const DialogTitle = styled.p`
   ${font.title2.medium}
+  margin: 0;
+  padding-right: 2rem;
 `;
 
 export const CloseButton = styled.button`
@@ -80,6 +84,7 @@ export const DialogContent = styled.div<{ $gap: number }>`
   display: flex;
   flex-direction: column;
   width: 100%;
-  height: 100%;
+  flex: 1;
+  min-height: 0;
   gap: ${({ $gap }) => $gap}rem;
 `;

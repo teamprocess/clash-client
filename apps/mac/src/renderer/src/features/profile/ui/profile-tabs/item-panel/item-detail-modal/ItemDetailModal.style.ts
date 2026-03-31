@@ -1,8 +1,8 @@
 import styled, { css } from "styled-components";
 import { font } from "@clash/design-tokens/font";
 import { palette } from "@clash/design-tokens/theme";
-import Close from "@/features/profile/assets/close.svg";
 import MypageProfile from "@/features/profile/assets/mypage-profile.png";
+import Cookie from "@/shared/ui/assets/cookie.svg";
 import { ProfileAvatar } from "@/shared/ui/profile-avatar";
 
 const previewImageCss = css<{ $image?: string }>`
@@ -19,65 +19,19 @@ const previewImageCss = css<{ $image?: string }>`
 
 export const FallbackProfileImage = MypageProfile;
 
-export const Overlay = styled.div`
-  position: fixed;
-  inset: 0;
-  z-index: 3000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 2rem;
-  background: rgba(0, 0, 0, 0.62);
-  -webkit-app-region: no-drag;
-`;
-
-export const Dialog = styled.div`
-  width: min(72rem, calc(100vw - 4rem));
-  min-height: 43rem;
-  max-height: calc(100vh - 4rem);
-  border-radius: 1.5rem;
-  background: ${({ theme }) => theme.background.normal};
-  border: 1px solid ${({ theme }) => theme.line.alternative};
-  box-shadow: 0 1.5rem 4rem rgba(0, 0, 0, 0.42);
-  padding: 4rem 1.5rem 1.5rem;
+export const DialogLayout = styled.div`
+  height: 100%;
+  min-height: 0;
   display: grid;
   grid-template-columns: minmax(0, 1.4fr) minmax(18rem, 0.9fr);
   gap: 1.5rem;
-  overflow: hidden;
-  position: relative;
-`;
-
-export const CloseButton = styled.button`
-  position: absolute;
-  top: 1.25rem;
-  right: 1.25rem;
-  width: 2.5rem;
-  height: 2.5rem;
-  border: none;
-  border-radius: 0.875rem;
-  background: ${({ theme }) => theme.fill.alternative};
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-`;
-
-export const CloseIcon = styled(Close)`
-  width: 1.25rem;
-  height: 1.25rem;
 `;
 
 export const PreviewSection = styled.section`
   min-width: 0;
   display: flex;
   flex-direction: column;
-  gap: 1rem;
-`;
-
-export const SectionTitle = styled.p`
-  ${font.headline1.medium}
-  color: ${({ theme }) => theme.label.normal};
-  margin: 0;
+  min-height: 0;
 `;
 
 export const PreviewShell = styled.div`
@@ -544,6 +498,18 @@ export const InfoValue = styled.span`
   ${font.body.medium}
   color: ${({ theme }) => theme.label.normal};
   text-align: right;
+`;
+
+export const InfoValueWithIcon = styled.span`
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+`;
+
+export const CookieIcon = styled(Cookie)`
+  width: 1rem;
+  height: 1rem;
+  flex: 0 0 auto;
 `;
 
 export const ErrorText = styled.p`

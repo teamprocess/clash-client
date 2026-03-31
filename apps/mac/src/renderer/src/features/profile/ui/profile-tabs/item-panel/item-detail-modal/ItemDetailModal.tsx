@@ -1,9 +1,8 @@
-import { useEffect } from "react";
 import * as S from "./ItemDetailModal.style";
 import type { OwnedItem, OwnedItemDisplayCategory } from "@/entities/profile/model/ownedItems.types";
 import type { getMyProfileResponse } from "@/entities/user";
 import { formatPrice, resolveProfileDecorations } from "@/shared/lib";
-import { NameTag } from "@/shared/ui";
+import { Dialog, NameTag } from "@/shared/ui";
 
 interface ItemDetailModalProps {
   isOpen: boolean;
@@ -42,23 +41,6 @@ export const ItemDetailModal = ({
   onClose,
   onEquip,
 }: ItemDetailModalProps) => {
-  useEffect(() => {
-    if (!isOpen) return;
-
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") {
-        onClose();
-      }
-    };
-
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [isOpen, onClose]);
-
-  if (!isOpen) {
-    return null;
-  }
-
   const { bannerImage, badgeImage, nameplateImage } = resolveProfileDecorations(user?.equippedItems);
   const previewProfileImage = user?.profileImage || S.FallbackProfileImage;
   const previewName = buildInfoValue(user?.name || user?.username);
@@ -66,17 +48,25 @@ export const ItemDetailModal = ({
   const previewBadgeImage = category === "INSIGNIA" ? item.image : badgeImage;
   const previewNameplateImage = category === "NAMEPLATE" ? item.image : nameplateImage;
   const previewHandle = `@${buildInfoValue(user?.username)}`;
+  const submitLabel = isSubmitting
+    ? isEquipped
+      ? "장착 해제 중..."
+      : "장착 중..."
+    : isEquipped
+      ? "장착 해제"
+      : "장착하기";
 
   return (
-    <S.Overlay onClick={onClose}>
-      <S.Dialog onClick={event => event.stopPropagation()} role="dialog" aria-modal="true">
-        <S.CloseButton type="button" onClick={onClose} aria-label="닫기">
-          <S.CloseIcon aria-hidden />
-        </S.CloseButton>
-
+    <Dialog
+      title="착용 미리보기 / 아이템 정보"
+      width={72}
+      height={43}
+      isOpen={isOpen}
+      onClose={onClose}
+      closeOnOverlayClick={true}
+    >
+      <S.DialogLayout>
         <S.PreviewSection>
-          <S.SectionTitle>착용 미리보기</S.SectionTitle>
-
           <S.PreviewShell>
             <S.PreviewCanvas>
               <S.PreviewPanel>
@@ -153,8 +143,6 @@ export const ItemDetailModal = ({
         </S.PreviewSection>
 
         <S.InfoSection>
-          <S.SectionTitle>아이템 정보</S.SectionTitle>
-
           <S.InfoPanel>
             <S.InfoHero>
               {category === "BANNER" && <S.InfoBannerHero $image={item.image} />}
@@ -185,7 +173,10 @@ export const ItemDetailModal = ({
             <S.InfoList>
               <S.InfoRow>
                 <S.InfoLabel>획득 가격</S.InfoLabel>
-                <S.InfoValue>{formatPrice(item.price)}</S.InfoValue>
+                <S.InfoValueWithIcon>
+                  <S.CookieIcon aria-hidden />
+                  <S.InfoValue>{formatPrice(item.price)}</S.InfoValue>
+                </S.InfoValueWithIcon>
               </S.InfoRow>
 
               <S.InfoRow>
@@ -206,11 +197,11 @@ export const ItemDetailModal = ({
               onClick={onEquip}
               disabled={isSubmitting}
             >
-              {isSubmitting ? "처리 중..." : isEquipped ? "장착 해제" : "장착하기"}
+              {submitLabel}
             </S.PrimaryButton>
           </S.InfoPanel>
         </S.InfoSection>
-      </S.Dialog>
-    </S.Overlay>
+      </S.DialogLayout>
+    </Dialog>
   );
 };
