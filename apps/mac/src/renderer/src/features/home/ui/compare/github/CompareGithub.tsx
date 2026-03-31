@@ -1,6 +1,7 @@
 import * as S from "./CompareGithub.style";
 import { GrowthRate, Tooltip } from "@/shared/ui";
 import { CompareResponse } from "@/entities/home/model/useCompare.types";
+import { getCountLabel } from "@/shared/lib";
 
 const renderRepositoryName = (
   name: string | null | undefined,
@@ -18,10 +19,6 @@ const renderRepositoryName = (
       <S.RepositoryName>{repositoryText}</S.RepositoryName>
     </Tooltip>
   );
-};
-
-const getCountLabel = (count: number, singular: string, plural: string) => {
-  return Math.abs(count) === 1 ? singular : plural;
 };
 
 export const Github = ({ today, yesterday }: CompareResponse) => {
