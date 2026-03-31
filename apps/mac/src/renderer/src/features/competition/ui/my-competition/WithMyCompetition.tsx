@@ -102,7 +102,7 @@ export const WithMyCompetition = () => {
                     {roundOneDecimal(compareData?.commitCount)}개
                   </S.DataText>
                   <S.DataText>
-                    <S.SubText>Contributions</S.SubText>
+                    <S.SubText>Contribution</S.SubText>
                     {roundOneDecimal(compareData?.gitHubAttribution)}개
                   </S.DataText>
                 </S.GrowthRateBox>
@@ -171,7 +171,7 @@ export const WithMyCompetition = () => {
                   </S.GithubCompareBox>
 
                   <S.GithubCompareBox>
-                    <S.SubText>Contributions</S.SubText>
+                    <S.SubText>Contribution</S.SubText>
                     <S.StatCompareRow>
                       <S.DataText>{roundOneDecimal(todayData?.gitHubAttribution)}개</S.DataText>
                       <GrowthRate
