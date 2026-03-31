@@ -93,8 +93,8 @@ export const PreviewHeroContent = styled.div`
 
 export const PreviewAvatarSlot = styled.div`
   flex: 0 0 auto;
-  width: 6.25rem;
-  height: 6.25rem;
+  width: 5.5rem;
+  height: 5.5rem;
 `;
 
 export const PreviewAvatarWrap = styled(ProfileAvatar)`
