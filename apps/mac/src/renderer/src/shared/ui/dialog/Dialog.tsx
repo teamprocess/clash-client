@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import { ReactNode, useEffect } from "react";
 import * as S from "./Dialog.style";
 
 export interface DialogProps {
@@ -28,6 +28,21 @@ export const Dialog = ({
   fullWidth = false,
   fullHeight = false,
 }: DialogProps) => {
+  useEffect(() => {
+    if (!isOpen || !onClose) {
+      return;
+    }
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        onClose();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [isOpen, onClose]);
+
   if (!isOpen) return null;
 
   return (

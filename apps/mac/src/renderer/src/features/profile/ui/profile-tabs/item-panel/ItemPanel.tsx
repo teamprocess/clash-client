@@ -4,7 +4,6 @@ import { ItemDetailModal } from "./item-detail-modal/ItemDetailModal";
 import { useEquipItemMutation } from "@/entities/profile/api/query/useEquipItem.mutation";
 import { useOwnedItemsQuery } from "@/entities/profile/api/query/useOwnedItems.query";
 import {
-  normalizeOwnedItemCategory,
   OwnedItemCategory,
   type OwnedItem,
   type OwnedItemDisplayCategory,
@@ -47,7 +46,7 @@ export const ItemPanel = () => {
     }
   };
 
-  const selectedCategory = selectedItem ? normalizeOwnedItemCategory(selectedItem.category) : null;
+  const selectedCategory = selectedItem?.category ?? null;
   const equipErrorMessage = equipItemMutation.isError
     ? getErrorMessage(equipItemMutation.error, "아이템을 장착하지 못했어요.")
     : null;
@@ -112,11 +111,7 @@ export const ItemPanel = () => {
           <S.GridScrollArea aria-busy={isFetching}>
             <S.Grid>
               {items.map(item => {
-                const category = normalizeOwnedItemCategory(item.category);
-
-                if (!category) {
-                  return null;
-                }
+                const category = item.category;
 
                 return (
                   <S.CardButton
