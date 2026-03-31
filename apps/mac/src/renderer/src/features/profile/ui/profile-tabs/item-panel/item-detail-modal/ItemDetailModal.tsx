@@ -58,7 +58,7 @@ export const ItemDetailModal = ({
 
   return (
     <Dialog
-      title="착용 미리보기 / 아이템 정보"
+      title="아이템 정보"
       width={72}
       height={43}
       isOpen={isOpen}
@@ -88,7 +88,7 @@ export const ItemDetailModal = ({
                         <NameTag
                           text={previewName}
                           backgroundImage={previewNameplateImage}
-                          size="hero"
+                          size="regular"
                         />
                       </S.PreviewNameRow>
                       <S.PreviewHandle>{previewHandle}</S.PreviewHandle>
