@@ -6,6 +6,10 @@ export const configureCertificateHandling = () => {
   // 개발 환경에서 자체 서명 인증서 허용
   if (is.dev) {
     app.commandLine.appendSwitch("ignore-certificate-errors");
+    app.commandLine.appendSwitch(
+      "disable-features",
+      "EncryptedClientHello,UseDnsHttpsSvcb,UseDnsHttpsSvcbAlpn"
+    );
   }
 
   app.on("certificate-error", (event, _webContents, _url, _error, _certificate, callback) => {

@@ -1,6 +1,7 @@
 import { useMemo } from "react";
 import * as S from "./GithubInfo.style";
 import { Tooltip } from "@/shared/ui";
+import { getCountLabel } from "@/shared/lib";
 
 export type GithubInfoProps = {
   dateText: string;
@@ -34,10 +35,30 @@ export const GithubInfo = ({
   const stats = useMemo(
     () =>
       [
-        { key: "commits", Icon: S.CommitIcon, count: commits, label: "Commits" },
-        { key: "issues", Icon: S.IssueIcon, count: issues, label: "Issues" },
-        { key: "prs", Icon: S.PullRequestsIcon, count: pullRequests, label: "Pull requests" },
-        { key: "reviews", Icon: S.ReviewIcon, count: reviews, label: "Reviews" },
+        {
+          key: "commits",
+          Icon: S.CommitIcon,
+          count: commits,
+          label: getCountLabel(commits, "Commit", "Commits"),
+        },
+        {
+          key: "issues",
+          Icon: S.IssueIcon,
+          count: issues,
+          label: getCountLabel(issues, "Issue", "Issues"),
+        },
+        {
+          key: "prs",
+          Icon: S.PullRequestsIcon,
+          count: pullRequests,
+          label: getCountLabel(pullRequests, "Pull request", "Pull requests"),
+        },
+        {
+          key: "reviews",
+          Icon: S.ReviewIcon,
+          count: reviews,
+          label: getCountLabel(reviews, "Review", "Reviews"),
+        },
       ] as const,
     [commits, issues, pullRequests, reviews]
   );
@@ -55,7 +76,9 @@ export const GithubInfo = ({
 
           <S.Total>
             <S.Number>{totalContributions.toLocaleString("ko-KR")}</S.Number>
-            <S.TotalText>Contributions</S.TotalText>
+            <S.TotalText>
+              {getCountLabel(totalContributions, "Contribution", "Contributions")}
+            </S.TotalText>
           </S.Total>
         </S.Title>
 
@@ -77,7 +100,9 @@ export const GithubInfo = ({
 
         <S.Total>
           <S.Number>{totalContributions.toLocaleString("ko-KR")}</S.Number>
-          <S.TotalText>Contributions</S.TotalText>
+          <S.TotalText>
+            {getCountLabel(totalContributions, "Contribution", "Contributions")}
+          </S.TotalText>
         </S.Total>
       </S.Title>
 
