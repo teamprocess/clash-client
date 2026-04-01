@@ -2,8 +2,6 @@ import styled from "styled-components";
 import { font } from "@clash/design-tokens/font";
 import DetailArrow from "../../../../shared/ui/assets/front.svg";
 
-const MAX_BAR_HEIGHT = "clamp(5rem, 20vw, 8rem)";
-
 export const TransitionContainer = styled.div`
   padding: clamp(1rem, 2vw, 1.5rem);
   width: 100%;
@@ -19,7 +17,6 @@ export const TransitionContainer = styled.div`
 export const TitleBox = styled.div`
   width: 100%;
   display: flex;
-  flex-direction: row;
   justify-content: space-between;
   align-items: center;
   gap: 0.75rem;
@@ -34,7 +31,6 @@ export const ArrowBox = styled.div`
   ${font.label.medium}
   color: ${({ theme }) => theme.label.alternative};
   display: flex;
-  flex-direction: row;
   align-items: center;
   gap: 0.25rem;
 `;
@@ -52,7 +48,6 @@ export const SubTitle = styled.div`
 export const ContentContainer = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: center;
   width: 100%;
   flex: 1;
   min-height: 0;
@@ -61,7 +56,6 @@ export const ContentContainer = styled.div`
 
 export const ContentBox = styled.div`
   display: flex;
-  flex-direction: row;
   align-items: stretch;
   justify-content: center;
   width: 100%;
@@ -98,7 +92,6 @@ export const InfoBox = styled.div`
 
 export const DateBox = styled.div`
   display: flex;
-  flex-direction: row;
 `;
 
 export const DateTitle = styled.div`
@@ -126,53 +119,55 @@ export const VerticalLine = styled.div`
   }
 `;
 
+export const GraphContainer = styled.div`
+  width: 100%;
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+`;
+
 export const GraphBox = styled.div`
   display: flex;
-  flex-direction: row;
   align-items: flex-end;
   width: 100%;
   flex: 1;
+  padding-bottom: 0.625rem;
   min-height: 0;
 `;
 
 export const Bars = styled.div`
   position: relative;
   width: 100%;
-  height: ${MAX_BAR_HEIGHT};
-  min-height: 5rem;
+  height: 95%;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-end;
 `;
 
-type BarProps = {
+type RatioProps = {
   value: number;
-  max: number;
 };
 
-export const Value = styled.p<BarProps>`
+export const Value = styled.p<RatioProps>`
   ${font.body.medium}
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
-  bottom: ${({ value, max }) =>
-    max <= 0 ? "0rem" : `calc(${value / max} * ${MAX_BAR_HEIGHT} + 0.4rem)`};
+  bottom: ${({ value }) => `calc(${value * 100}% + 0.4rem)`};
   transition: bottom 0.4s ease;
   white-space: nowrap;
   font-size: clamp(0.75rem, 1.8vw, 1rem);
 `;
 
-export const Bar = styled.div<BarProps>`
+export const Bar = styled.div<RatioProps>`
   width: clamp(1.5rem, 6vw, 2.5rem);
   height: 100%;
   border-radius: 0.25rem;
   background-color: ${({ theme }) => theme.primary.normal};
   transform-origin: bottom;
-  transform: ${({ value, max }) => {
-    if (max <= 0) return "scaleY(0)";
-    const ratio = Math.min(Math.max(value / max, 0), 1);
-    return `scaleY(${ratio})`;
-  }};
+  transform: ${({ value }) => `scaleY(${value})`};
   transition: transform 0.4s ease;
 `;
