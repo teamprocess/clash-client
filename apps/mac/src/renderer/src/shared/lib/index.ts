@@ -13,6 +13,7 @@ export { getErrorMessage } from "./error";
 export { useRival } from "./useRival";
 export { buildPaddedStreak } from "./buildPaddedStreaks";
 export { getGrowthInfo } from "./getGrowthInfo";
+export { getCountLabel } from "./getCountLabel";
 export type { MyRivalItem } from "./useRival";
 export { resolveUsingApp } from "./resolveUsingApp";
 export { useRealtimeRivalActiveTime } from "./useRealtimeRivalActiveTime";
