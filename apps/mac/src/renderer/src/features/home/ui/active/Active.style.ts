@@ -49,9 +49,8 @@ export const StreakContainer = styled.div`
 `;
 
 export const StreakBox = styled.div`
-  min-width: 100%;
+  width: 100%;
   height: 100%;
-  max-width: 33.125rem;
 `;
 
 export const StreakTitle = styled.p`
@@ -105,20 +104,17 @@ export const GrassWrapper = styled.div`
 
 export const ChartWrapper = styled.div`
   width: 100%;
-  min-width: 0;
-  min-height: 0;
-  max-height: 8rem;
   position: relative;
-  flex: 1;
-  height: 100%;
-
-  @media (max-height: 56.25rem) {
-    height: clamp(0rem, 24vh, 6.5rem);
-  }
-
-  @media (max-height: 48rem) {
-    height: clamp(9rem, 22vh, 12rem);
-  }
+  min-height: 0;
+  height: 82%;
+  //
+  //@media (max-height: 56.25rem) {
+  //  height: clamp(0rem, 24vh, 6.5rem);
+  //}
+  //
+  //@media (max-height: 48rem) {
+  //  height: clamp(9rem, 22vh, 12rem);
+  //}
 `;
 
 export const PortalTooltip = styled.div<{ $top: number; $left: number }>`
@@ -133,6 +129,6 @@ export const PortalTooltip = styled.div<{ $top: number; $left: number }>`
   border-radius: 0.4rem;
   white-space: nowrap;
   pointer-events: none;
-  z-index: 99;
+  z-index: 0;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 `;
