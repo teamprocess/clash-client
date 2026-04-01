@@ -80,7 +80,8 @@ export const Battle = () => {
                         <S.DetailBox>
                           <S.DetailButton $disabled={cannotOpen}>
                             {battleItem.result === MATCHVALUE.WON ||
-                            battleItem.result === MATCHVALUE.LOST
+                            battleItem.result === MATCHVALUE.LOST ||
+                            battleItem.result === MATCHVALUE.DRAWN
                               ? "결과 보기"
                               : "상세 내용 보기"}
                           </S.DetailButton>
