@@ -156,9 +156,7 @@ export const Value = styled.p<RatioProps>`
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
-
   bottom: ${({ value }) => `calc(${value * 100}% + 0.4rem)`};
-
   transition: bottom 0.4s ease;
   white-space: nowrap;
   font-size: clamp(0.75rem, 1.8vw, 1rem);
@@ -169,9 +167,7 @@ export const Bar = styled.div<RatioProps>`
   height: 100%;
   border-radius: 0.25rem;
   background-color: ${({ theme }) => theme.primary.normal};
-
   transform-origin: bottom;
   transform: ${({ value }) => `scaleY(${value})`};
-
   transition: transform 0.4s ease;
 `;
