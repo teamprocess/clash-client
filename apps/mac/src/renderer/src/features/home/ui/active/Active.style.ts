@@ -107,14 +107,6 @@ export const ChartWrapper = styled.div`
   position: relative;
   min-height: 0;
   height: 82%;
-  //
-  //@media (max-height: 56.25rem) {
-  //  height: clamp(0rem, 24vh, 6.5rem);
-  //}
-  //
-  //@media (max-height: 48rem) {
-  //  height: clamp(9rem, 22vh, 12rem);
-  //}
 `;
 
 export const PortalTooltip = styled.div<{ $top: number; $left: number }>`
