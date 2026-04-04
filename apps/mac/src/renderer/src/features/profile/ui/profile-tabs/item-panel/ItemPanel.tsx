@@ -8,6 +8,7 @@ import {
   type OwnedItem,
   type OwnedItemDisplayCategory,
 } from "@/entities/profile/model/ownedItems.types";
+import { sortEquippedItemsFirst } from "@/features/profile/lib/sortEquippedItemsFirst";
 import { useGetMyProfile } from "@/entities/user";
 import { getErrorMessage } from "@/shared/lib";
 
@@ -50,10 +51,20 @@ export const ItemPanel = () => {
   const equipErrorMessage = equipItemMutation.isError
     ? getErrorMessage(equipItemMutation.error, "아이템을 장착하지 못했어요.")
     : null;
+  const sortedItems = sortEquippedItemsFirst(items, item => isEquippedItem(item.category, item.id));
 
   const handleCloseModal = () => {
     setSelectedItem(null);
     equipItemMutation.reset();
+  };
+
+  const handleFilterChange = (nextFilter: OwnedItemCategory) => {
+    if (nextFilter === filter) {
+      return;
+    }
+
+    handleCloseModal();
+    setFilter(nextFilter);
   };
 
   const handleEquipItem = async () => {
@@ -84,7 +95,7 @@ export const ItemPanel = () => {
                 key={option.key}
                 $active={filter === option.key}
                 type="button"
-                onClick={() => setFilter(option.key)}
+                onClick={() => handleFilterChange(option.key)}
               >
                 {option.label}
               </S.FilterChip>
@@ -110,7 +121,7 @@ export const ItemPanel = () => {
         ) : (
           <S.GridScrollArea aria-busy={isFetching}>
             <S.Grid>
-              {items.map(item => {
+              {sortedItems.map(item => {
                 const category = item.category;
 
                 return (

@@ -16,26 +16,17 @@ export const ProductPreview = ({
 }: ProductPreviewProps) => {
   if (category === ProductCategory.BANNER) {
     return (
-      <S.Root $size={size} className={className}>
-        <S.BannerStage $size={size} $image={image}>
-          <S.BannerIdentity $size={size}>
-            <S.BannerAvatarSlot $size={size}>
-              <S.GuestAvatar alt="" />
-            </S.BannerAvatarSlot>
-
-            <S.BannerTextBlock>
-              <S.BannerPrimaryLine $size={size} />
-              <S.BannerSecondaryLine $size={size} />
-            </S.BannerTextBlock>
-          </S.BannerIdentity>
-        </S.BannerStage>
+      <S.Root $size={size} $category={category} className={className}>
+        <S.BannerFrame $size={size}>
+          <S.BannerStage $size={size} $image={image} />
+        </S.BannerFrame>
       </S.Root>
     );
   }
 
   if (category === ProductCategory.INSIGNIA) {
     return (
-      <S.Root $size={size} className={className}>
+      <S.Root $size={size} $category={category} className={className}>
         <S.BadgeStage $size={size}>
           <S.BadgeAvatarSlot $size={size}>
             <S.GuestAvatar alt="" />
@@ -47,7 +38,7 @@ export const ProductPreview = ({
   }
 
   return (
-    <S.Root $size={size} className={className}>
+    <S.Root $size={size} $category={category} className={className}>
       <S.NameplateStage $size={size}>
         <S.NameplateMutedRow $size={size}>
           <S.NameplateDot $size={size} />
@@ -58,7 +49,7 @@ export const ProductPreview = ({
           <S.NameplateAvatarSlot $size={size}>
             <S.GuestAvatar alt="" />
           </S.NameplateAvatarSlot>
-          <S.NameplateBar $image={image} />
+          <S.NameplateBar $size={size} $image={image} />
         </S.NameplateActiveRow>
 
         <S.NameplateMutedRow $size={size}>

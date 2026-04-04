@@ -18,8 +18,11 @@ export type { MyRivalItem } from "./useRival";
 export { resolveUsingApp } from "./resolveUsingApp";
 export { useRealtimeRivalActiveTime } from "./useRealtimeRivalActiveTime";
 export { resolveProfileDecorations } from "./profileDecorations";
+export { createNameplateOverlayTuningCss } from "./nameplateFrame";
+export { nameplateFrameCss } from "./nameplateFrame";
 export type {
   ProfileDecorationsInput,
   ProfileDecorationImageLike,
   ResolvedProfileDecorations,
 } from "./profileDecorations";
+export type { NameplateFrameProps, NameplateOverlayTuning } from "./nameplateFrame";

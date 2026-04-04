@@ -21,6 +21,7 @@ export const PurchaseModal = ({ isOpen, product, onClose, onPurchase }: Purchase
     isSubmitting,
     discountedPrice,
     afterBalance,
+    successBalance,
     canPurchase,
     errorMessage,
     handlePurchase,
@@ -91,8 +92,7 @@ export const PurchaseModal = ({ isOpen, product, onClose, onPurchase }: Purchase
 
               <S.SubText>
                 잔액 {MoneyIcon}
-                {formatPrice(afterBalance + discountedPrice)}{" "}
-                {/* afterBalance가 결제 후에 discountedPrice만큼 차감되기에 다시 더해줘야 함. */}
+                {formatPrice(successBalance ?? afterBalance)}
               </S.SubText>
             </S.SuccessBox>
 

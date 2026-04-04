@@ -13,27 +13,54 @@ interface MainProductsProps {
   recommendedProducts: Product[];
   popularProducts: Product[];
   isLoading?: boolean;
+  isError?: boolean;
+  errorMessage?: string | null;
+  onRetry?: () => void;
 }
 
 export const MainProducts = ({
   recommendedProducts,
   popularProducts,
   isLoading,
+  isError,
+  errorMessage,
+  onRetry,
 }: MainProductsProps) => {
   const products: Product[] = recommendedProducts.concat(popularProducts);
+  const hasRecommendedProducts = recommendedProducts.length > 0;
+  const hasProducts = products.length > 0;
 
   const selectedId = useProductDetailStore(s => s.selectedProductId);
+  const selectedProductKey = useProductDetailStore(s => s.selectedProductKey);
   const pendingProduct = useProductDetailStore(s => s.pendingProduct);
+  const close = useProductDetailStore(s => s.close);
 
   const [isPurchaseOpen, setIsPurchaseOpen] = useState(false);
-  const isPanelOpen = selectedId !== null;
+  const isPanelOpen = selectedProductKey !== null;
 
   const selectedProduct = useMemo(() => {
     if (selectedId == null) return null;
+
+    if (selectedProductKey?.startsWith("recommended:")) {
+      return (
+        recommendedProducts.find(product => `recommended:${product.id}` === selectedProductKey) ??
+        pendingProduct ??
+        null
+      );
+    }
+
+    if (selectedProductKey?.startsWith("popular:")) {
+      return (
+        popularProducts.find(product => `popular:${product.id}` === selectedProductKey) ??
+        pendingProduct ??
+        null
+      );
+    }
+
     return (
       products.find(product => String(product.id) === String(selectedId)) ?? pendingProduct ?? null
     );
-  }, [products, selectedId, pendingProduct]);
+  }, [popularProducts, products, recommendedProducts, selectedId, selectedProductKey, pendingProduct]);
 
   const handleOpenPurchase = () => {
     if (!selectedProduct) return;
@@ -54,12 +81,22 @@ export const MainProducts = ({
     const activeDiv = document.querySelector("div.active");
     activeDiv?.classList.remove("active");
 
-    const productDiv = document.querySelector(`div[data-product-id="${selectedId}"]`);
+    if (!selectedProductKey) {
+      return;
+    }
+
+    const productDiv = document.querySelector(`div[data-product-key="${selectedProductKey}"]`);
     if (productDiv == null) return;
     productDiv.classList.add("active");
 
-    productDiv.scrollIntoView({ behavior: "smooth" });
-  }, [selectedId]);
+    productDiv.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "nearest" });
+  }, [selectedProductKey]);
+
+  useEffect(() => {
+    return () => {
+      close();
+    };
+  }, [close]);
 
   if (isLoading) {
     return (
@@ -69,11 +106,35 @@ export const MainProducts = ({
     );
   }
 
+  if (isError && !hasProducts) {
+    return (
+      <S.MainContainer>
+        <S.ContentWrapper>
+          <S.StateBox role="alert">
+            <S.StateTitle>상점 상품을 불러오지 못했어요.</S.StateTitle>
+            <S.StateDescription>
+              {errorMessage ?? "잠시 후 다시 시도해 주세요."}
+            </S.StateDescription>
+            {onRetry && <S.RetryButton onClick={onRetry}>다시 시도</S.RetryButton>}
+          </S.StateBox>
+        </S.ContentWrapper>
+      </S.MainContainer>
+    );
+  }
+
   return (
     <S.MainContainer>
       <S.ContentWrapper>
+        {isError && (
+          <S.ErrorNotice role="alert">
+            <S.ErrorNoticeText>
+              {errorMessage ?? "일부 상품을 불러오지 못했어요. 다시 시도해 주세요."}
+            </S.ErrorNoticeText>
+            {onRetry && <S.RetryButton onClick={onRetry}>다시 시도</S.RetryButton>}
+          </S.ErrorNotice>
+        )}
         <S.BannerImage aria-hidden />
-        <Recommend products={recommendedProducts} />
+        {hasRecommendedProducts && <Recommend products={recommendedProducts} />}
         <Popularity products={popularProducts} />
       </S.ContentWrapper>
       {isPanelOpen && selectedProduct && (
