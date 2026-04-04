@@ -2,7 +2,6 @@ import { useMemo } from "react";
 import * as S from "@/features/home/ui/rival/Rival.style";
 import { formatTime, MyRivalItem, resolveUsingApp, useRealtimeRivalActiveTime } from "@/shared/lib";
 import { IdeIcons } from "@/shared/ui/assets/ide-img";
-import { NameTag } from "@/shared/ui/name-tag";
 import { Tooltip } from "@/shared/ui/tooltip";
 
 const getUsingAppMeta = (usingApp?: string | null, status?: string) => {
@@ -57,7 +56,7 @@ export const MyRivalUsers = ({ user, getStatus }: MyRivalItem) => {
           <S.RivalProfileAvatar profileImage={user.profileImage} />
 
           <S.NameBox>
-            <NameTag text={user.name} size="compact" />
+            <S.ProfileName>{user.name}</S.ProfileName>
             {renderRivalId(user.username)}
           </S.NameBox>
         </S.ProfileContent>
