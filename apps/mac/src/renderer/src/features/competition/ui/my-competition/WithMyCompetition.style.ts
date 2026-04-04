@@ -22,10 +22,10 @@ export const GrowthControlBox = styled.div`
 export const ContentArea = styled.div`
   ${flexCol};
   height: 100%;
-  min-height: 42.5rem;
   border-radius: 1rem;
   padding: 1.5rem;
   gap: 1rem;
+  overflow: hidden;
   background: ${({ theme }) => theme.background.normal};
 `;
 
@@ -39,12 +39,13 @@ const sectionBase = css`
 
 export const AnalyzeSection = styled.div`
   ${sectionBase};
-  flex-shrink: 0;
+  flex: 1 1 0;
+  min-height: 0;
 `;
 
 export const CompareSection = styled.div`
   ${sectionBase};
-  flex: 1;
+  flex: 0 0 auto;
 `;
 
 export const AnalyzeTitle = styled.p`
@@ -74,15 +75,15 @@ export const SubText = styled.p`
 export const CompareContainer = styled.div`
   ${flexRow};
   gap: 1rem;
-  height: 100%;
+  flex: 1;
   min-height: 0;
 `;
 
 export const CompareBox = styled.div`
   padding: 1rem;
-  height: 100%;
-  width: 100%;
+  flex: 1;
   min-height: 0;
+  overflow-y: auto;
   ${flexCol};
   gap: 1rem;
   justify-content: space-between;
@@ -117,6 +118,7 @@ export const GridContainer = styled.div`
 export const GridBox = styled.div`
   width: 100%;
   height: 100%;
+  //max-height: 6rem;
   border-radius: 0.75rem;
   background: ${({ theme }) => theme.background.normal};
   border: 1px solid ${({ theme }) => theme.line.alternative};
@@ -161,24 +163,8 @@ export const GrowthRateBox = styled.div<{ $direction?: GrowthDirection; $gap?: s
 export const ChartWrapper = styled.div`
   width: 100%;
   position: relative;
-  min-height: 12rem;
-  height: clamp(12rem, 30vh, 15rem);
-  max-height: 15rem;
-  flex: none;
-
-  canvas {
-    width: 100% !important;
-    height: 100% !important;
-  }
-
-  @media (max-height: 64rem) {
-    flex: none;
-    height: clamp(10rem, 24vh, 14rem);
-  }
-
-  @media (max-height: 48rem) {
-    height: clamp(9rem, 22vh, 12rem);
-  }
+  flex: 1;
+  min-height: 6rem;
 `;
 
 export const GithubCompareBox = styled.div`
