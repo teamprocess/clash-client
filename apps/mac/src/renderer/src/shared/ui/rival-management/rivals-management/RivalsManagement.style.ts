@@ -94,6 +94,10 @@ export const UserChoiceContainer = styled.div<{ $uiStatus?: "create" }>`
       ? `
         overflow-y: auto;
         scrollbar-width: none;
+
+        &::-webkit-scrollbar {
+          display: none;
+        }
       `
       : `
       height: 100%;

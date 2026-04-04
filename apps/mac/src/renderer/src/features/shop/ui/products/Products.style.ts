@@ -51,16 +51,6 @@ export const CardContainer = styled.div<LayoutProps>`
     css`
       padding-right: 0.5rem;
     `}
-  &::-webkit-scrollbar {
-    width: 6px;
-  }
-  &::-webkit-scrollbar-thumb {
-    background-color: ${({ theme }) => theme.line.neutral};
-    border-radius: 3px;
-  }
-  &::-webkit-scrollbar-track {
-    background-color: transparent;
-  }
 `;
 
 export const DetailPanel = styled.div`

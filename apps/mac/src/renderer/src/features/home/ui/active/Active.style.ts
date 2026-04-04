@@ -63,6 +63,10 @@ export const GrassScroll = styled.div`
   width: 100%;
   overflow-x: auto;
   scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `;
 
 export const Grid = styled.div`
