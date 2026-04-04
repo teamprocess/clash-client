@@ -150,8 +150,6 @@ export const GithubInfo = ({
               </S.Lines>
             </S.MetaText>
           </S.MetaRow>
-
-          <S.HDivider />
         </S.Info>
       </S.GithubBox>
     </S.ActiveContainer>

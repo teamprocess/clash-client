@@ -1,16 +1,11 @@
 import { useState } from "react";
 import * as S from "./ProfileTabs.style";
-import { ItemPanel, ItemPreviewPayload } from "./item-panel/ItemPanel";
+import { ItemPanel } from "./item-panel/ItemPanel";
 import { RivalContainer, TimePanel } from "@/features/profile";
 import { GithubActivityPanel } from "@/features/profile/ui/profile-tabs/github-activity-panel/GithubAcivityPanel";
 
-export interface ProfileTabsProps {
-  onPreviewChange?: (payload: ItemPreviewPayload) => void;
-}
-
 export type TabKey = "github" | "item" | "time";
 
-// origin props: { onPreviewChange }: ProfileTabsProps
 export const ProfileTabs = () => {
   const [active, setActive] = useState<TabKey>("github");
 
@@ -19,7 +14,7 @@ export const ProfileTabs = () => {
       <S.TabHeader>
         <S.Tabs>
           <S.Tab type="button" $isActive={active === "github"} onClick={() => setActive("github")}>
-            Github
+            깃허브
           </S.Tab>
 
           <S.Tab type="button" $isActive={active === "item"} onClick={() => setActive("item")}>

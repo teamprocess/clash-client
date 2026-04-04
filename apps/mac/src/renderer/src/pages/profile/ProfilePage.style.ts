@@ -17,10 +17,11 @@ export const Background = styled.div`
   display: flex;
   flex-direction: column;
   align-items: stretch;
-  gap: 3.25rem;
+  gap: 2rem;
   background: ${({ theme }) => theme.background.normal};
   border-radius: 1rem;
-  padding: 2rem;
+  padding: 1.75rem;
+  overflow: hidden;
 `;
 
 export const BodyRow = styled.div`
@@ -30,6 +31,7 @@ export const BodyRow = styled.div`
   flex: 1;
   min-height: 0;
   justify-content: center;
+  overflow: hidden;
   > * {
     min-width: 0;
   }

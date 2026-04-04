@@ -5,6 +5,7 @@ import Date from "@/features/home/assets/home/date.svg";
 import BackArrow from "@/features/home/assets/home/back.svg";
 import Fire from "@/features/home/assets/home/fire.svg";
 import Checked from "@/features/home/assets/home/check-box.svg";
+import { ProfileAvatar } from "@/shared/ui/profile-avatar";
 
 const flexRow = css`
   display: flex;
@@ -71,6 +72,11 @@ export const ProfileIcon = styled.div`
 export const BattleDetailProfileBox = styled.div`
   width: 4rem;
   height: 4rem;
+`;
+
+export const BattleDetailAvatar = styled(ProfileAvatar)`
+  width: 100%;
+  height: 100%;
 `;
 
 export const NameBox = styled.div`
@@ -234,6 +240,11 @@ export const ProfileImg = styled.img`
   height: 100%;
   border-radius: 50%;
   object-fit: cover;
+`;
+
+export const ProfileChoiceAvatar = styled(ProfileAvatar)`
+  width: 100%;
+  height: 100%;
 `;
 
 export const UpperHandName = styled.p`
