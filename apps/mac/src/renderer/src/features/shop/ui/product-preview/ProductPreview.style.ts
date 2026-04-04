@@ -1,7 +1,10 @@
 import styled, { css } from "styled-components";
+import { ProductCategory } from "@/entities/product";
+import { createNameplateOverlayTuningCss, nameplateFrameCss } from "@/shared/lib";
 import { ProfileAvatar } from "@/shared/ui";
 
 type PreviewSize = "card" | "detail";
+const bannerAspectRatio = "1126 / 198";
 
 const previewImageCss = css<{ $image?: string }>`
   ${({ $image }) =>
@@ -15,13 +18,39 @@ const previewImageCss = css<{ $image?: string }>`
       : ""}
 `;
 
-export const Root = styled.div<{ $size: PreviewSize }>`
+const nameplateOverlayTuningCss = css<{ $size: PreviewSize }>`
+  ${({ $size }) =>
+    $size === "detail"
+      ? createNameplateOverlayTuningCss({
+          insetX: "0rem",
+          scaleX: 1.2,
+          scaleY: 2.6,
+          shiftY: "1.45rem",
+        })
+      : createNameplateOverlayTuningCss({
+          insetX: "0rem",
+          scaleX: 1.15,
+          scaleY: 2,
+          shiftY: "0.75rem",
+        })}
+`;
+
+export const Root = styled.div<{ $size: PreviewSize; $category: ProductCategory }>`
   width: 100%;
-  aspect-ratio: 1 / 1;
+  aspect-ratio: ${({ $category, $size }) =>
+    $category === ProductCategory.BANNER && $size === "detail" ? bannerAspectRatio : "1 / 1"};
   min-height: 0;
   display: flex;
   align-items: center;
   justify-content: center;
+`;
+
+export const BannerFrame = styled.div<{ $size: PreviewSize }>`
+  width: 100%;
+  padding: ${({ $size }) => ($size === "detail" ? "0.75rem" : "0.55rem")};
+  border-radius: ${({ $size }) => ($size === "detail" ? "0.9rem" : "0.75rem")};
+  background: ${({ theme }) => theme.fill.alternative};
+  box-sizing: border-box;
 `;
 
 export const GuestAvatar = styled(ProfileAvatar)`
@@ -31,20 +60,12 @@ export const GuestAvatar = styled(ProfileAvatar)`
 
 export const BannerStage = styled.div<{ $size: PreviewSize; $image?: string }>`
   width: 100%;
-  height: ${({ $size }) => ($size === "detail" ? "72%" : "68%")};
-  border-radius: ${({ $size }) => ($size === "detail" ? "1.1rem" : "0.8rem")};
+  aspect-ratio: ${bannerAspectRatio};
+  border-radius: ${({ $size }) => ($size === "detail" ? "0.72rem" : "0.58rem")};
   background-color: ${({ theme }) => theme.background.alternative};
   position: relative;
   overflow: hidden;
   ${previewImageCss}
-
-  &::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.14);
-    pointer-events: none;
-  }
 `;
 
 export const BannerIdentity = styled.div<{ $size: PreviewSize }>`
@@ -90,8 +111,8 @@ export const BannerSecondaryLine = styled.div<{ $size: PreviewSize }>`
 `;
 
 export const BadgeStage = styled.div<{ $size: PreviewSize }>`
-  width: ${({ $size }) => ($size === "detail" ? "8rem" : "5.6rem")};
-  height: ${({ $size }) => ($size === "detail" ? "8rem" : "5.6rem")};
+  width: ${({ $size }) => ($size === "detail" ? "8rem" : "7rem")};
+  height: ${({ $size }) => ($size === "detail" ? "8rem" : "7rem")};
   position: relative;
   display: flex;
   align-items: center;
@@ -99,15 +120,18 @@ export const BadgeStage = styled.div<{ $size: PreviewSize }>`
 `;
 
 export const BadgeAvatarSlot = styled.div<{ $size: PreviewSize }>`
-  width: ${({ $size }) => ($size === "detail" ? "5.9rem" : "4.3rem")};
-  height: ${({ $size }) => ($size === "detail" ? "5.9rem" : "4.3rem")};
+  width: ${({ $size }) => ($size === "detail" ? "8rem" : "6rem")};
+  height: ${({ $size }) => ($size === "detail" ? "8rem" : "6rem")};
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 export const BadgeImage = styled.div<{ $size: PreviewSize; $image?: string }>`
   position: absolute;
   inset: 50% auto auto 50%;
-  width: ${({ $size }) => ($size === "detail" ? "128%" : "120%")};
-  height: ${({ $size }) => ($size === "detail" ? "128%" : "120%")};
+  width: ${({ $size }) => ($size === "detail" ? "145%" : "130%")};
+  height: ${({ $size }) => ($size === "detail" ? "145%" : "130%")};
   transform: translate(-50%, -50%);
   pointer-events: none;
   ${({ $image }) =>
@@ -174,10 +198,13 @@ export const NameplateAvatarSlot = styled.div<{ $size: PreviewSize }>`
   height: ${({ $size }) => ($size === "detail" ? "2.1rem" : "1.6rem")};
 `;
 
-export const NameplateBar = styled.div<{ $image?: string }>`
+export const NameplateBar = styled.div<{ $size: PreviewSize; $image?: string }>`
+  ${nameplateOverlayTuningCss};
   flex: 1;
-  align-self: stretch;
+  min-width: 0;
+  height: ${({ $size }) => ($size === "detail" ? "1.7rem" : "1.35rem")};
   border-radius: 999px;
   background-color: ${({ theme }) => theme.background.neutral};
-  ${previewImageCss}
+  overflow: visible;
+  ${nameplateFrameCss}
 `;

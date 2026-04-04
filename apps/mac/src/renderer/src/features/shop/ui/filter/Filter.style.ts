@@ -5,10 +5,12 @@ import { font } from "@clash/design-tokens/font";
 export const FilterContainer = styled.div`
   flex-shrink: 0;
   display: flex;
+  align-items: center;
   justify-content: space-between;
-  padding: 1rem 1.5rem;
+  gap: 1rem;
+  padding: 1.25rem 1.5rem 1rem;
   width: 100%;
-  border-bottom: 1px solid ${({ theme }) => theme.line.neutral};
+  border-bottom: 1px solid ${({ theme }) => theme.line.alternative};
   box-sizing: border-box;
 `;
 
@@ -16,6 +18,7 @@ export const FilterBox = styled.div`
   display: flex;
   align-items: center;
   gap: 0.625rem;
+  min-width: 0;
 `;
 
 export const ArrowIcon = styled(Arrow)`
