@@ -182,25 +182,6 @@ export const MemberGrid = styled.div`
   overflow: auto;
   min-height: 0;
   flex: 1;
-
-  &::-webkit-scrollbar {
-    height: 0.5rem;
-    width: 0.5rem;
-  }
-
-  &::-webkit-scrollbar-track {
-    background: transparent;
-  }
-
-  &::-webkit-scrollbar-thumb {
-    background: ${({ theme }) => theme.line.normal};
-    border-radius: 10px;
-  }
-
-  &::-webkit-scrollbar-thumb {
-    background: ${({ theme }) => theme.line.normal};
-    border-radius: 10px;
-  }
 `;
 
 export const MemberStudyTime = styled.span`

@@ -217,19 +217,6 @@ export const QuizViewport = styled.div`
   display: flex;
   flex-direction: column;
   padding: 1rem 0 1.25rem;
-
-  &::-webkit-scrollbar {
-    width: 8px;
-  }
-
-  &::-webkit-scrollbar-track {
-    background: transparent;
-  }
-
-  &::-webkit-scrollbar-thumb {
-    background: ${({ theme }) => theme.line.normal};
-    border-radius: 999px;
-  }
 `;
 
 export const QuizContent = styled.div`

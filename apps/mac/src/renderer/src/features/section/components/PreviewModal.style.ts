@@ -164,11 +164,7 @@ export const RoadmapStepsContainer = styled.div`
   box-sizing: border-box;
   overflow-x: auto;
   overflow-y: hidden;
-  padding: 4.75rem 1.5rem 0.25rem;
-
-  &::-webkit-scrollbar {
-    height: 0;
-  }
+  padding: 4.75rem 1.5rem 1.25rem;
 `;
 
 export const EmptyRoadmapState = styled.div`

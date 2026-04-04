@@ -34,19 +34,6 @@ export const GroupList = styled.div`
   margin-top: 1rem;
   padding-bottom: 4rem;
   overflow-y: auto;
-
-  &::-webkit-scrollbar {
-    width: 0.5rem;
-  }
-
-  &::-webkit-scrollbar-track {
-    background: transparent;
-  }
-
-  &::-webkit-scrollbar-thumb {
-    background: ${({ theme }) => theme.line.normal};
-    border-radius: 10px;
-  }
 `;
 
 export const GroupListItem = styled.div<{ $isSelected: boolean }>`
