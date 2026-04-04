@@ -165,6 +165,7 @@ export const GroupsWrapper = styled.div`
   flex: 1;
   min-height: 0;
   overflow-y: auto;
+  padding-right: 0.75rem;
 `;
 
 export const EmptyState = styled.div`
