@@ -110,6 +110,10 @@ export const BattleListContainer = styled.div`
   max-height: 14.65rem;
   overflow-y: auto;
   scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `;
 
 export const UpperHandJudge = styled.div<{ $type: string }>`

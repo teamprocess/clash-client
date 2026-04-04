@@ -46,19 +46,6 @@ export const NoticePanel = styled.div`
   overflow-y: auto;
   scrollbar-gutter: stable;
   background-color: ${({ theme }) => theme.label.disable};
-
-  &::-webkit-scrollbar {
-    width: 0.625rem;
-  }
-
-  &::-webkit-scrollbar-track {
-    background: transparent;
-  }
-
-  &::-webkit-scrollbar-thumb {
-    background: ${({ theme }) => theme.line.normal};
-    border-radius: 0.625rem;
-  }
 `;
 
 export const NoticeHeader = styled.div`

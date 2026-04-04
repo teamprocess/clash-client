@@ -26,15 +26,6 @@ export const FormFieldsArea = styled.div`
   min-height: 0;
   overflow-y: auto;
   padding-right: 0.25rem;
-
-  &::-webkit-scrollbar {
-    width: 0.45rem;
-  }
-
-  &::-webkit-scrollbar-thumb {
-    background: ${({ theme }) => theme.line.normal};
-    border-radius: 999px;
-  }
 `;
 
 export const Groups = styled.div`
@@ -174,15 +165,7 @@ export const GroupsWrapper = styled.div`
   flex: 1;
   min-height: 0;
   overflow-y: auto;
-
-  &::-webkit-scrollbar {
-    width: 0.45rem;
-  }
-
-  &::-webkit-scrollbar-thumb {
-    background: ${({ theme }) => theme.line.normal};
-    border-radius: 999px;
-  }
+  padding-right: 0.75rem;
 `;
 
 export const EmptyState = styled.div`

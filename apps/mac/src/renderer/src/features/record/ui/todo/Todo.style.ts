@@ -34,19 +34,6 @@ export const TodoList = styled.div`
   overflow-x: hidden;
   gap: 1rem;
   background-color: ${({ theme }) => theme.background.alternative};
-
-  &::-webkit-scrollbar {
-    width: 0.5rem;
-  }
-
-  &::-webkit-scrollbar-track {
-    background: transparent;
-  }
-
-  &::-webkit-scrollbar-thumb {
-    background: ${({ theme }) => theme.line.normal};
-    border-radius: 10px;
-  }
 `;
 
 export const TodoBox = styled.div`
