@@ -3,13 +3,14 @@ import { font } from "@clash/design-tokens";
 
 export const Banner = styled.div`
   display: grid;
-  grid-template-columns: minmax(0, 10fr) minmax(22rem, 11fr);
+  grid-template-columns: 3fr 4fr;
   grid-template-rows: auto minmax(0, 1fr);
-  column-gap: 1.125rem;
-  row-gap: 1.125rem;
+  column-gap: 1.75rem;
+  row-gap: 1rem;
   width: 100%;
   height: 100%;
   min-height: 0;
+  justify-content: center;
 `;
 
 export const RivalSection = styled.div`
@@ -17,6 +18,8 @@ export const RivalSection = styled.div`
   grid-row: 2;
   min-width: 0;
   height: 100%;
+  min-height: 0;
+  overflow: hidden;
 `;
 
 export const Background = styled.div`
@@ -26,12 +29,13 @@ export const Background = styled.div`
   min-width: 0;
   height: 100%;
   min-height: 0;
-  border-radius: 1rem;
+  border-radius: 1.5rem;
   background: ${({ theme }) => theme.background.alternative};
   display: flex;
   flex-direction: column;
-  padding: 1.5rem;
-  gap: 0.5rem;
+  padding: 1.75rem;
+  gap: 1rem;
+  overflow: hidden;
 `;
 
 export const TabHeader = styled.div`
@@ -47,10 +51,10 @@ export const Tabs = styled.div`
   display: grid;
   grid-template-columns: repeat(3, max-content);
   align-items: center;
-  gap: 1rem;
+  gap: 1.5rem;
   width: 100%;
   position: relative;
-  padding-bottom: 1rem;
+  padding-bottom: 1.125rem;
 
   &::after {
     content: "";
@@ -78,12 +82,11 @@ export const Tab = styled.button<{ $isActive: boolean }>`
     content: "";
     position: absolute;
     right: 0;
-    bottom: -1rem;
+    bottom: -1.125rem;
     left: 0;
     height: 0.25rem;
     border-radius: 1rem;
     background-color: ${({ theme }) => theme.primary.normal};
     opacity: ${({ $isActive }) => ($isActive ? 1 : 0)};
-    transition: opacity 0.2s ease;
   }
 `;

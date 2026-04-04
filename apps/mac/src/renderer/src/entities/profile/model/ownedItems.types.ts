@@ -5,20 +5,35 @@ export enum OwnedItemCategory {
   BANNER = "BANNER",
 }
 
+export type OwnedItemDisplayCategory =
+  | OwnedItemCategory.INSIGNIA
+  | OwnedItemCategory.NAMEPLATE
+  | OwnedItemCategory.BANNER;
+
+export interface OwnedItemSeason {
+  id: number;
+  name: string;
+  startDate: string;
+  endDate: string;
+}
+
+export interface OwnedItem {
+  id: number;
+  title: string;
+  image: string;
+  description: string;
+  category: OwnedItemDisplayCategory;
+  price: number;
+  discount: number;
+  popularity: number;
+  isSeasonal: boolean;
+  season?: OwnedItemSeason | null;
+}
+
 export type OwnedItemRequest = {
   category: OwnedItemCategory;
 };
 
 export type OwnedItemResponse = {
-  items: {
-    id: number;
-    title: string;
-    description: string;
-    category: string;
-    price: number;
-    priceType: string;
-    discount: string;
-    popularity: string;
-    isSeasonal: boolean;
-  }[];
+  items: OwnedItem[];
 };

@@ -1,10 +1,10 @@
-import { SyntheticEvent, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import * as S from "./Topbar.style";
 import { expTooltipContent } from "./Topbar.constants";
 import { useGetMyProfile } from "@/entities/user";
 import { TopbarNotice } from "@/features/notice";
-import { formatPrice } from "@/shared/lib";
+import { formatPrice, resolveProfileDecorations } from "@/shared/lib";
 import { Popover, QuestionTooltip } from "@/shared/ui";
 import { useSignOut } from "@/features/auth";
 
@@ -16,6 +16,7 @@ export const Topbar = ({ onToggleSidebar }: TopbarProps) => {
   const { data: user } = useGetMyProfile();
   const { signOut } = useSignOut();
   const navigate = useNavigate();
+  const { badgeImage } = resolveProfileDecorations(user?.equippedItems);
 
   const profileMenuRef = useRef<HTMLButtonElement>(null);
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
@@ -36,11 +37,6 @@ export const Topbar = ({ onToggleSidebar }: TopbarProps) => {
   const handleLogout = () => {
     handleCloseProfileMenu();
     signOut();
-  };
-
-  const handleProfileImageError = (event: SyntheticEvent<HTMLImageElement>) => {
-    event.currentTarget.onerror = null;
-    event.currentTarget.src = S.FallbackProfileIcon;
   };
 
   return (
@@ -75,9 +71,11 @@ export const Topbar = ({ onToggleSidebar }: TopbarProps) => {
             aria-haspopup="menu"
             aria-expanded={isProfileMenuOpen}
           >
-            <S.ProfileIcon
-              src={user?.profileImage || S.FallbackProfileIcon}
-              onError={handleProfileImageError}
+            <S.ProfileAvatarWrap
+              profileImage={user?.profileImage}
+              badgeImage={badgeImage}
+              fallbackSrc={S.FallbackProfileIcon}
+              alt="프로필 이미지"
             />
             <S.NameBox>
               <S.Name>{user?.name}</S.Name>

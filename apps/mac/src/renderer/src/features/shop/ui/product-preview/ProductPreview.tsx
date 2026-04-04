@@ -1,0 +1,71 @@
+import * as S from "./ProductPreview.style";
+import { ProductCategory } from "@/entities/product";
+
+interface ProductPreviewProps {
+  category: ProductCategory;
+  image: string;
+  size?: "card" | "detail";
+  className?: string;
+}
+
+export const ProductPreview = ({
+  category,
+  image,
+  size = "card",
+  className,
+}: ProductPreviewProps) => {
+  if (category === ProductCategory.BANNER) {
+    return (
+      <S.Root $size={size} className={className}>
+        <S.BannerStage $size={size} $image={image}>
+          <S.BannerIdentity $size={size}>
+            <S.BannerAvatarSlot $size={size}>
+              <S.GuestAvatar alt="" />
+            </S.BannerAvatarSlot>
+
+            <S.BannerTextBlock>
+              <S.BannerPrimaryLine $size={size} />
+              <S.BannerSecondaryLine $size={size} />
+            </S.BannerTextBlock>
+          </S.BannerIdentity>
+        </S.BannerStage>
+      </S.Root>
+    );
+  }
+
+  if (category === ProductCategory.INSIGNIA) {
+    return (
+      <S.Root $size={size} className={className}>
+        <S.BadgeStage $size={size}>
+          <S.BadgeAvatarSlot $size={size}>
+            <S.GuestAvatar alt="" />
+          </S.BadgeAvatarSlot>
+          <S.BadgeImage $size={size} $image={image} />
+        </S.BadgeStage>
+      </S.Root>
+    );
+  }
+
+  return (
+    <S.Root $size={size} className={className}>
+      <S.NameplateStage $size={size}>
+        <S.NameplateMutedRow $size={size}>
+          <S.NameplateDot $size={size} />
+          <S.NameplateMutedBar $size={size} />
+        </S.NameplateMutedRow>
+
+        <S.NameplateActiveRow $size={size}>
+          <S.NameplateAvatarSlot $size={size}>
+            <S.GuestAvatar alt="" />
+          </S.NameplateAvatarSlot>
+          <S.NameplateBar $image={image} />
+        </S.NameplateActiveRow>
+
+        <S.NameplateMutedRow $size={size}>
+          <S.NameplateDot $size={size} />
+          <S.NameplateMutedBar $size={size} $short />
+        </S.NameplateMutedRow>
+      </S.NameplateStage>
+    </S.Root>
+  );
+};

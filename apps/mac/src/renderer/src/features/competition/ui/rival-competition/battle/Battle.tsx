@@ -5,6 +5,7 @@ import { AnalyzeCategory, MATCHVALUE } from "@/entities/competition";
 import { useBattle } from "@/features/competition/model/useBattle";
 import DefaultProfile from "@/features/profile/assets/rival-profile.png";
 import { useGetMyProfile } from "@/entities/user";
+import { resolveProfileDecorations } from "@/shared/lib";
 
 export const Battle = () => {
   const battle = useBattle();
@@ -13,7 +14,9 @@ export const Battle = () => {
     "battle-create"
   );
 
-  const myProfileImg = useGetMyProfile()?.data?.profileImage;
+  const { data: myProfile } = useGetMyProfile();
+  const myProfileImg = myProfile?.profileImage;
+  const { badgeImage: myBadgeImage } = resolveProfileDecorations(myProfile?.equippedItems);
 
   const battles = battle.battleData?.battles ?? [];
   const battleApplyItems = battle.battleApplyList?.data?.battles ?? [];
@@ -97,8 +100,10 @@ export const Battle = () => {
                     <S.UpperHandContainer>
                       <S.UpperHandProfile>
                         <S.BattleDetailProfileBox>
-                          <S.ProfileImg
-                            src={battle.battleDetailData?.enemy.profileImage || DefaultProfile}
+                          <S.BattleDetailAvatar
+                            profileImage={battle.battleDetailData?.enemy.profileImage}
+                            fallbackSrc={DefaultProfile}
+                            alt={battle.battleDetailData?.enemy.name || "상대 프로필"}
                           />
                         </S.BattleDetailProfileBox>
                         <S.UpperHandName>{battle.battleDetailData?.enemy.name}</S.UpperHandName>
@@ -128,7 +133,12 @@ export const Battle = () => {
 
                       <S.UpperHandProfile>
                         <S.BattleDetailProfileBox>
-                          <S.ProfileImg src={myProfileImg || DefaultProfile} />
+                          <S.BattleDetailAvatar
+                            profileImage={myProfileImg}
+                            badgeImage={myBadgeImage}
+                            fallbackSrc={DefaultProfile}
+                            alt="내 프로필"
+                          />
                         </S.BattleDetailProfileBox>
                         <S.UpperHandName>나</S.UpperHandName>
                       </S.UpperHandProfile>
@@ -244,7 +254,11 @@ export const Battle = () => {
                       >
                         <S.ProfileContent $height="3rem">
                           <S.ProfileIcon>
-                            <S.ProfileImg src={user.profileImage || DefaultProfile} />
+                            <S.ProfileChoiceAvatar
+                              profileImage={user.profileImage}
+                              fallbackSrc={DefaultProfile}
+                              alt={user.name}
+                            />
                           </S.ProfileIcon>
                           <S.ProfileTagBox>
                             <S.ProfileName>{user.name}</S.ProfileName>
@@ -292,7 +306,11 @@ export const Battle = () => {
                     <S.UserChoiceBox key={applyItem.id} $isSelected={false} $isRival>
                       <S.ProfileContent $height="3rem">
                         <S.ProfileIcon>
-                          <S.ProfileImg src={applyItem.enemy.profileImage || DefaultProfile} />
+                          <S.ProfileChoiceAvatar
+                            profileImage={applyItem.enemy.profileImage}
+                            fallbackSrc={DefaultProfile}
+                            alt={applyItem.enemy.name}
+                          />
                         </S.ProfileIcon>
                         <S.ProfileTagBox>
                           <S.ProfileName>{applyItem.enemy.name}</S.ProfileName>
