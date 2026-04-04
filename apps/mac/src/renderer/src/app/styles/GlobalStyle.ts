@@ -7,6 +7,7 @@ export const GlobalStyle = createGlobalStyle`
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    scrollbar-gutter: stable;
     scrollbar-width: thin;
     scrollbar-color: ${({ theme }) => theme.line.normal} transparent;
   }
@@ -89,10 +90,16 @@ export const GlobalStyle = createGlobalStyle`
   *::-webkit-scrollbar-thumb {
     background-color: ${({ theme }) => theme.line.normal};
     border-radius: 999px;
+    border: 1px solid transparent;
+    background-clip: padding-box;
   }
 
   *::-webkit-scrollbar-thumb:hover {
     background-color: ${({ theme }) => theme.primary.normal};
+  }
+
+  *::-webkit-scrollbar-corner {
+    background: transparent;
   }
 
   .grecaptcha-badge {
