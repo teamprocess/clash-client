@@ -29,7 +29,7 @@ export const Dialog = ({
   fullHeight = false,
 }: DialogProps) => {
   useEffect(() => {
-    if (!isOpen || !onClose) {
+    if (!isOpen || !onClose || !closeOnOverlayClick) {
       return;
     }
 
@@ -40,8 +40,11 @@ export const Dialog = ({
     };
 
     window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [isOpen, onClose]);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [closeOnOverlayClick, isOpen, onClose]);
 
   if (!isOpen) return null;
 
