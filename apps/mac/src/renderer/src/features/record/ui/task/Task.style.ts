@@ -15,19 +15,6 @@ export const TaskContainer = styled.div`
   gap: 1rem;
   border-radius: 1rem;
   background-color: ${({ theme }) => theme.background.alternative};
-
-  &::-webkit-scrollbar {
-    width: 0.5rem;
-  }
-
-  &::-webkit-scrollbar-track {
-    background: transparent;
-  }
-
-  &::-webkit-scrollbar-thumb {
-    background: ${({ theme }) => theme.line.normal};
-    border-radius: 10px;
-  }
 `;
 
 export const TaskBox = styled.div`

@@ -173,19 +173,6 @@ export const RankingList = styled.div<{ $page: RankingPageEnum }>`
   overflow-y: auto;
   padding-left: 8px;
   scrollbar-gutter: stable;
-
-  &::-webkit-scrollbar {
-    width: 8px;
-  }
-
-  ::-webkit-scrollbar-track {
-    background: transparent;
-  }
-
-  &::-webkit-scrollbar-thumb {
-    background: ${({ theme }) => theme.line.normal}; /* 스크롤바 핸들 */
-    border-radius: 10px;
-  }
 `;
 
 export const RankingItem = styled.div<{ $isMe?: boolean }>`
