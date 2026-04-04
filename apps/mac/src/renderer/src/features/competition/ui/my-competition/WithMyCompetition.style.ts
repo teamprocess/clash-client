@@ -22,7 +22,7 @@ export const GrowthControlBox = styled.div`
 export const ContentArea = styled.div`
   ${flexCol};
   height: 100%;
-  min-height: 0;
+  min-height: 42.5rem;
   border-radius: 1rem;
   padding: 1.5rem;
   gap: 1rem;
