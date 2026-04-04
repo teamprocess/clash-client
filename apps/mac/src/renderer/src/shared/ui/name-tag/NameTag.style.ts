@@ -2,43 +2,69 @@ import styled, { css } from "styled-components";
 import { font } from "@clash/design-tokens/font";
 
 export type NameTagSize = "compact" | "regular" | "hero";
+export type NameTagWidth = "content" | "short" | "long" | "full";
+export type NameTagTextAlign = "left" | "center";
 
 const sizeCssMap: Record<NameTagSize, ReturnType<typeof css>> = {
   compact: css`
     ${font.label.bold}
     min-height: 1.75rem;
-    padding: 0.35rem 0.72rem 0.35rem 0.9rem;
+    padding: 0.35rem 1.5rem;
     border-radius: 999px;
   `,
   regular: css`
     ${font.body.bold}
     min-height: 2rem;
-    padding: 0.45rem 0.8rem 0.45rem 0.98rem;
+    padding: 0.3rem 3rem;
     border-radius: 999px;
   `,
   hero: css`
-    ${font.title1.medium}
-    min-height: 3rem;
-    padding: 0.58rem 1.1rem 0.58rem 1.35rem;
+    ${font.title2.medium}
+    min-height: 2.5rem;
+    padding: 0.3rem 3rem;
     border-radius: 1.1rem;
   `,
 };
 
-export const Wrapper = styled.span<{ $backgroundImage?: string; $size: NameTagSize }>`
+const widthCssMap: Record<NameTagWidth, ReturnType<typeof css>> = {
+  content: css`
+    width: auto;
+  `,
+  short: css`
+    width: min(100%, 7.5rem);
+  `,
+  long: css`
+    width: min(100%, 14rem);
+  `,
+  full: css`
+    width: 100%;
+  `,
+};
+
+export const Wrapper = styled.span<{
+  $backgroundImage?: string;
+  $backgroundSize?: string;
+  $backgroundPosition?: string;
+  $size: NameTagSize;
+  $width: NameTagWidth;
+  $textAlign: NameTagTextAlign;
+}>`
   display: inline-flex;
   align-items: center;
+  justify-content: ${({ $textAlign }) => ($textAlign === "left" ? "flex-start" : "center")};
   min-width: 0;
   max-width: 100%;
+  box-sizing: border-box;
   color: ${({ theme }) => theme.label.normal};
   ${({ $size }) => sizeCssMap[$size]}
 
-  ${({ $backgroundImage, theme }) =>
+  ${({ $backgroundImage, $backgroundPosition, $backgroundSize, $width }) =>
     $backgroundImage
       ? css`
-          background-color: ${theme.fill.alternative};
+          ${widthCssMap[$width]}
           background-image: url(${$backgroundImage});
-          background-size: cover;
-          background-position: center;
+          background-size: ${$backgroundSize ?? "cover"};
+          background-position: ${$backgroundPosition ?? "center"};
           background-repeat: no-repeat;
         `
       : css`
@@ -49,10 +75,12 @@ export const Wrapper = styled.span<{ $backgroundImage?: string; $size: NameTagSi
         `}
 `;
 
-export const Text = styled.span`
+export const Text = styled.span<{ $textAlign: NameTagTextAlign }>`
   display: block;
   min-width: 0;
   max-width: 100%;
+  width: 100%;
+  text-align: ${({ $textAlign }) => $textAlign};
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
