@@ -1,6 +1,16 @@
 import styled from "styled-components";
 import { font, palette } from "@clash/design-tokens";
 import MypageProfileSrc from "../../../assets/mypage-profile.png";
+import { createNameplateOverlayTuningCss, nameplateFrameCss } from "@/shared/lib";
+
+const itemCardNameplateTuningCss = createNameplateOverlayTuningCss({
+  insetX: 0,
+  scaleX: 1,
+  scaleY: 1.2,
+  shiftY: "0.25rem",
+});
+
+const bannerAspectRatio = "11 / 2";
 
 export const Wrapper = styled.section`
   -webkit-app-region: no-drag;
@@ -75,11 +85,6 @@ export const CardButton = styled.button<{ $equipped: boolean }>`
     $equipped ? "0 0 0 1px rgba(241, 7, 10, 0.15)" : "0 0.75rem 2rem rgba(0, 0, 0, 0.12)"};
   text-align: left;
   cursor: pointer;
-
-  &:focus-visible {
-    outline: 2px solid ${({ theme }) => theme.primary.normal};
-    outline-offset: 2px;
-  }
 `;
 
 export const CardPreview = styled.div`
@@ -92,9 +97,9 @@ export const CardPreview = styled.div`
 
 export const BannerPreview = styled.div`
   width: 100%;
-  height: 5.85rem;
+  aspect-ratio: ${bannerAspectRatio};
   padding: 0.2rem;
-  border-radius: 1rem;
+  border-radius: 0.78rem;
   background: ${({ theme }) => theme.background.alternative};
   box-sizing: border-box;
 `;
@@ -102,7 +107,7 @@ export const BannerPreview = styled.div`
 export const BannerArtwork = styled.div<{ $image: string }>`
   width: 100%;
   height: 100%;
-  border-radius: 0.8rem;
+  border-radius: 0.2rem;
   background-color: ${({ theme }) => theme.background.neutral};
   background-image: url(${({ $image }) => $image});
   background-position: center;
@@ -147,8 +152,8 @@ export const BadgeAvatar = styled.img.attrs({
 export const BadgeItemImage = styled.div<{ $image: string }>`
   position: absolute;
   inset: 50% auto auto 50%;
-  width: 118%;
-  height: 118%;
+  width: 105%;
+  height: 105%;
   transform: translate(-50%, -50%);
   background-image: url(${({ $image }) => $image});
   background-position: center;
@@ -160,7 +165,7 @@ export const NameplatePreview = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 0.45rem;
+  gap: 0.35rem;
 `;
 
 export const NameplateMutedRow = styled.div`
@@ -186,13 +191,13 @@ export const NameplateMutedBar = styled.div`
 
 export const NameplateActiveRow = styled.div`
   width: 100%;
-  min-height: 2.25rem;
+  min-height: 2.8rem;
   border-radius: 0.875rem;
   background: ${({ theme }) => theme.fill.alternative};
-  padding: 0.375rem 0.5rem;
+  padding: 0.42rem 0.58rem;
   display: flex;
   align-items: center;
-  gap: 0.45rem;
+  gap: 0.55rem;
   box-sizing: border-box;
 `;
 
@@ -200,22 +205,21 @@ export const NameplateHeroAvatar = styled.img.attrs({
   src: MypageProfileSrc,
   alt: "",
 })`
-  width: 1.75rem;
-  height: 1.75rem;
+  width: 1.95rem;
+  height: 1.95rem;
   border-radius: 50%;
   object-fit: cover;
   display: block;
 `;
 
 export const NameplateBar = styled.div<{ $image: string }>`
+  ${itemCardNameplateTuningCss};
   flex: 1;
   height: 1.45rem;
   border-radius: 999px;
-  background-color: ${({ theme }) => theme.background.neutral};
-  background-image: url(${({ $image }) => $image});
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
+  background: ${({ theme }) => theme.background.neutral};
+  overflow: visible;
+  ${nameplateFrameCss}
 `;
 
 export const CardFooter = styled.div`
