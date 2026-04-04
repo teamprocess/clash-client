@@ -35,7 +35,7 @@ export const ProductDetailPanel = ({
     <S.DetailPanel>
       <S.DetailPanelSticky>
         <S.InfoContainer>
-          <S.ProductImg $isBanner={selectedProduct.category === "BANNER"}>
+          <S.ProductImg>
             <ProductPreview
               category={selectedProduct.category}
               image={selectedProduct.image}

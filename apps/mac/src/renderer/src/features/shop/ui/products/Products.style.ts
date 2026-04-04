@@ -74,7 +74,7 @@ export const CardContainer = styled.div<LayoutProps>`
   ${({ $isPanelOpen }) =>
     $isPanelOpen &&
     css`
-      padding-right: 0.5rem;
+      padding-right: 1.5rem;
     `}
 `;
 
@@ -170,9 +170,9 @@ export const InfoContainer = styled.div`
   }
 `;
 
-export const ProductImg = styled.div<{ $isBanner?: boolean }>`
+export const ProductImg = styled.div`
   width: 100%;
-  aspect-ratio: ${({ $isBanner }) => ($isBanner ? "1126 / 198" : "1 / 1")};
+  aspect-ratio: 1 / 1;
   border-radius: 0.85rem;
   background-color: ${({ theme }) => theme.background.alternative};
   padding: 0.95rem;
