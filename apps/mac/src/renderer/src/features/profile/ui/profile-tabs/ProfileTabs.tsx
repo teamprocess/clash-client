@@ -1,10 +1,10 @@
 import { useState } from "react";
 import * as S from "./ProfileTabs.style";
 import { ItemPanel } from "./item-panel/ItemPanel";
-import { RivalContainer, TimePanel } from "@/features/profile";
+import { RivalContainer } from "@/features/profile";
 import { GithubActivityPanel } from "@/features/profile/ui/profile-tabs/github-activity-panel/GithubAcivityPanel";
 
-export type TabKey = "github" | "item" | "time";
+export type TabKey = "github" | "item";
 
 export const ProfileTabs = () => {
   const [active, setActive] = useState<TabKey>("github");
@@ -20,10 +20,6 @@ export const ProfileTabs = () => {
           <S.Tab type="button" $isActive={active === "item"} onClick={() => setActive("item")}>
             아이템
           </S.Tab>
-
-          <S.Tab type="button" $isActive={active === "time"} onClick={() => setActive("time")}>
-            시간
-          </S.Tab>
         </S.Tabs>
       </S.TabHeader>
 
@@ -34,7 +30,6 @@ export const ProfileTabs = () => {
       <S.Background>
         {active === "github" && <GithubActivityPanel />}
         {active === "item" && <ItemPanel />}
-        {active === "time" && <TimePanel />}
       </S.Background>
     </S.Banner>
   );
