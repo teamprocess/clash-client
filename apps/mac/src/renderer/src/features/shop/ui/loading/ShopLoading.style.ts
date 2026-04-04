@@ -1,24 +1,7 @@
-import styled, { css, keyframes } from "styled-components";
-
-const shimmer = keyframes`
-  0% {
-    background-position: 100% 50%;
-  }
-
-  100% {
-    background-position: 0 50%;
-  }
-`;
+import styled, { css } from "styled-components";
 
 const skeleton = css`
-  background: linear-gradient(
-    90deg,
-    ${({ theme }) => theme.fill.neutral} 0%,
-    ${({ theme }) => theme.fill.alternative} 50%,
-    ${({ theme }) => theme.fill.neutral} 100%
-  );
-  background-size: 200% 100%;
-  animation: ${shimmer} 1.4s ease-in-out infinite;
+  background-color: ${({ theme }) => theme.fill.neutral};
 `;
 
 export const LoadingContainer = styled.div<{ $variant: "main" | "products" }>`
@@ -35,6 +18,7 @@ export const BannerSkeleton = styled.div`
   ${skeleton};
   width: 100%;
   aspect-ratio: 74.5 / 15;
+  border-radius: 1rem;
 `;
 
 export const SectionSkeleton = styled.section`

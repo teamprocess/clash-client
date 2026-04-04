@@ -9,11 +9,13 @@ export const CookieIcon = styled(Cookie)`
 
 export const MainContainer = styled.div`
   display: flex;
-  flex-direction: column;
-  align-items: center;
+  align-items: stretch;
   width: 100%;
   height: 100%;
-  border-radius: 0.75rem;
+  min-height: 100%;
+  flex: 1;
+  min-width: 0;
+  border-radius: 1rem;
   background-color: ${({ theme }) => theme.background.normal};
   overflow: hidden;
 `;
@@ -22,29 +24,52 @@ interface LayoutProps {
   $isPanelOpen?: boolean;
 }
 
-export const ContentWrapper = styled.div<LayoutProps>`
+export const ListPane = styled.div`
   display: flex;
-  width: 100%;
-  flex: 1;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-width: 0;
   min-height: 0;
   height: 100%;
 `;
 
+export const ContentWrapper = styled.div<LayoutProps>`
+  display: flex;
+  align-items: stretch;
+  width: 100%;
+  flex: 1 1 auto;
+  height: 100%;
+  min-height: 0;
+`;
+
 export const CardContainer = styled.div<LayoutProps>`
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(13.5rem, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(12.75rem, 1fr));
+  grid-auto-rows: max-content;
   align-content: start;
+  align-items: start;
   gap: 1rem;
-  padding: 1.5rem;
-  width: ${({ $isPanelOpen }) => ($isPanelOpen ? "60%" : "100%")};
-  height: 100%;
+  padding: 1.25rem ${({ $isPanelOpen }) => ($isPanelOpen ? "0" : "1.5rem")} 2rem 1.5rem;
+  flex: 1 1 auto;
+  min-width: 0;
   overflow-y: auto;
+  scroll-padding-bottom: 1.5rem;
   &::after {
     content: "";
     display: block;
     width: 100%;
-    height: 2rem; /* 원하는 하단 여백 크기 */
-    grid-column: 1 / -1; /* 그리드 전체 한 줄을 차지하게 함 */
+    height: 0.5rem;
+    grid-column: 1 / -1;
+  }
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: ${({ theme }) => theme.line.neutral};
+    border-radius: 3px;
+  }
+  &::-webkit-scrollbar-track {
+    background-color: transparent;
   }
   ${({ $isPanelOpen }) =>
     $isPanelOpen &&
@@ -53,44 +78,105 @@ export const CardContainer = styled.div<LayoutProps>`
     `}
 `;
 
-export const DetailPanel = styled.div`
+export const StateBox = styled.div`
+  width: 100%;
+  flex: 1 1 auto;
+  min-height: 0;
   display: flex;
   flex-direction: column;
-  width: 40%;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 2rem 1.5rem;
+  text-align: center;
+`;
+
+export const StateTitle = styled.h2`
+  ${font.title2.medium};
+  color: ${({ theme }) => theme.label.normal};
+  margin: 0;
+`;
+
+export const StateDescription = styled.p`
+  ${font.body.medium};
+  color: ${({ theme }) => theme.label.assistive};
+  margin: 0;
+  white-space: pre-wrap;
+`;
+
+export const RetryButton = styled.button`
+  margin-top: 0.5rem;
+  min-width: 8rem;
+  height: 2.75rem;
+  padding: 0 1rem;
+  border: none;
+  border-radius: 0.625rem;
+  background-color: ${({ theme }) => theme.primary.normal};
+  color: ${({ theme }) => theme.label.normal};
+  ${font.headline2.bold};
+  cursor: pointer;
+`;
+
+export const DetailPanel = styled.div`
+  display: flex;
+  width: 32rem;
+  min-width: 23rem;
   height: 100%;
-  border-left: 1px solid ${({ theme }) => theme.line.neutral};
-  padding: 1.5rem 1.5rem 5.25rem 1.5rem;
-  justify-content: space-between;
+  min-height: 100%;
+  border-left: 1px solid ${({ theme }) => theme.line.alternative};
+  background-color: ${({ theme }) => theme.fill.neutral};
+  align-self: stretch;
+  flex: 0 0 23rem;
+`;
+
+export const DetailPanelSticky = styled.div`
+  position: sticky;
+  top: 0;
+  display: flex;
+  flex: 1;
+  height: 100%;
+  min-height: 100%;
+  width: 100%;
+  flex-direction: column;
+  justify-content: flex-start;
   align-items: flex-start;
-  animation: slideIn 0.3s ease-out;
-  @keyframes slideIn {
-    from {
-      opacity: 0;
-      transform: translateX(20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateX(0);
-    }
-  }
+  gap: 1rem;
+  padding: 1.25rem 1.25rem 1.5rem;
+  overflow: hidden;
 `;
 
 export const InfoContainer = styled.div`
   display: flex;
-  height: 35.25rem;
+  flex: 1;
+  min-height: 0;
   flex-direction: column;
   align-items: flex-start;
   gap: 1rem;
+  width: 100%;
+  overflow-y: auto;
+  padding-right: 0.25rem;
+
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: ${({ theme }) => theme.line.neutral};
+    border-radius: 3px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background-color: transparent;
+  }
 `;
 
-export const ProductImg = styled.div<{ $imgUrl: string }>`
-  width: 27rem;
-  height: 16.25rem;
-  border-radius: 0.25rem;
-  background-image: url(${({ $imgUrl }) => $imgUrl});
-  background-repeat: no-repeat;
-  background-color: ${({ theme }) => theme.fill.neutral};
-  background-position: center;
+export const ProductImg = styled.div<{ $isBanner?: boolean }>`
+  width: 100%;
+  aspect-ratio: ${({ $isBanner }) => ($isBanner ? "1126 / 198" : "1 / 1")};
+  border-radius: 0.85rem;
+  background-color: ${({ theme }) => theme.background.alternative};
+  padding: 0.95rem;
+  box-sizing: border-box;
 `;
 
 export const MajorInfoWrapper = styled.div`
@@ -103,7 +189,7 @@ export const MajorInfoWrapper = styled.div`
 export const ProductTitleDetail = styled.h2`
   color: ${({ theme }) => theme.label.normal};
   ${font.title2.medium};
-  margin-bottom: 0.25rem;
+  margin: 0 0 0.25rem;
 `;
 
 export const ProductCategoryText = styled.p`
@@ -122,6 +208,13 @@ export const PriceTextDetail = styled.p`
   ${font.headline1.bold};
 `;
 
+export const OriginalPriceTextDetail = styled.p`
+  color: ${({ theme }) => theme.label.assistive};
+  ${font.body.medium};
+  margin: 0 0 0 0.4rem;
+  text-decoration: line-through;
+`;
+
 export const DiscountTextDetail = styled.p`
   color: ${palette.green[40]};
   ${font.headline1.bold};
@@ -135,6 +228,7 @@ export const DescriptionBox = styled.div`
   color: ${({ theme }) => theme.label.assistive};
   ${font.label.medium};
   gap: 0.25rem;
+  white-space: pre-wrap;
 `;
 
 export const DescriptionTitle = styled.h3`
@@ -146,6 +240,7 @@ export const PurchaseBtn = styled.div<{ $isBought?: boolean }>`
   display: flex;
   height: 3rem;
   width: 100%;
+  flex: 0 0 auto;
   padding: 0.625rem;
   justify-content: center;
   align-items: center;

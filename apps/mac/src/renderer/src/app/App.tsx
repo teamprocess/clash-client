@@ -78,8 +78,19 @@ function App() {
                   <Route path="/competition" element={<MyCompetitionPage />} />
                   <Route path="/competition/rival" element={<RivalCompetitionPage />} />
                 </Route>
-                <Route path="/shop" element={<ShopPage />} />
-                <Route path="/shop/products" element={<ProductsPage />} />
+                <Route
+                  element={
+                    <TabLayout
+                      tabs={[
+                        { name: "메인", url: "/shop" },
+                        { name: "전체 상품 목록", url: "/shop/products" },
+                      ]}
+                    />
+                  }
+                >
+                  <Route path="/shop" element={<ShopPage />} />
+                  <Route path="/shop/products" element={<ProductsPage />} />
+                </Route>
               </Route>
               <Route element={<AuthLayout />}>
                 <Route path="/sign-in" element={<SignInPage />} />
