@@ -3,7 +3,7 @@ import { ChangeEvent, useRef } from "react";
 import { useGetMyProfile } from "@/entities/user";
 import { useUploadProfileImageMutation } from "@/entities/profile/api/query/useUserProfileImage.query";
 import { resolveProfileDecorations } from "@/shared/lib";
-import { NameTag, RankTier } from "@/shared/ui";
+import { RankTier } from "@/shared/ui";
 
 const ACCEPTED_IMAGE_TYPES = ["image/png", "image/jpeg", "image/webp", "image/gif"];
 
@@ -13,6 +13,7 @@ export const TopProfile = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { bannerImage, badgeImage, nameplateImage } = resolveProfileDecorations(user?.equippedItems);
   const displayName = user?.name || user?.username || "이름 없음";
+  const displayNameNode = <S.DisplayName>{displayName}</S.DisplayName>;
 
   const handleFileChange = async (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -67,7 +68,11 @@ export const TopProfile = () => {
           </S.ProfileImgContainer>
           <S.UserInfo>
             <S.DisplayNameWrap>
-              <NameTag text={displayName} backgroundImage={nameplateImage} size="hero" />
+              {nameplateImage ? (
+                <S.DisplayNamePlate $image={nameplateImage}>{displayNameNode}</S.DisplayNamePlate>
+              ) : (
+                displayNameNode
+              )}
             </S.DisplayNameWrap>
           </S.UserInfo>
         </S.ProfileImgWrapper>

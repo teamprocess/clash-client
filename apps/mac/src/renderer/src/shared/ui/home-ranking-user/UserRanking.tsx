@@ -1,9 +1,9 @@
 import * as S from "./UserRanking.style";
 import { forwardRef } from "react";
+import DefaultProfile from "@/features/home/assets/home/profile.svg?url";
 import { RankingItem } from "@/entities/home/model/useRanking.types";
 import { resolveProfileDecorations } from "@/shared/lib";
-import { NameTag } from "@/shared/ui/name-tag";
-import { RankTier } from "@/shared/ui/rank-tier/RankTier";
+import { RankTier } from "@/shared/ui";
 
 interface UserRankingProps {
   user: RankingItem;
@@ -17,6 +17,36 @@ interface UserRankingProps {
 export const UserRanking = forwardRef<HTMLDivElement, UserRankingProps>(
   ({ user, isRival, rank, isSticky, unit, formatValue }, ref) => {
     const { badgeImage, nameplateImage } = resolveProfileDecorations(user.equippedItems);
+    const githubHandle = user.linkedId.trim().replace(/^@+/, "");
+    const githubProfileUrl = githubHandle
+      ? `https://github.com/${encodeURIComponent(githubHandle)}`
+      : null;
+    const handleOpenGithubProfile = async () => {
+      if (!githubProfileUrl) return;
+
+      try {
+        await window.api.openExternalUrl(githubProfileUrl);
+      } catch (error) {
+        console.error("깃허브 프로필을 열지 못했습니다.", error);
+      }
+    };
+    const identity = (
+      <S.NameBox>
+        <S.ProfileName>{user.name}</S.ProfileName>
+        {githubProfileUrl ? (
+          <S.ProfileHandleButton
+            type="button"
+            onClick={handleOpenGithubProfile}
+            title={`@${githubHandle} 깃허브 프로필 열기`}
+            aria-label={`@${githubHandle} 깃허브 프로필 열기`}
+          >
+            @{githubHandle}
+          </S.ProfileHandleButton>
+        ) : (
+          <S.ProfileHandle>@{user.linkedId}</S.ProfileHandle>
+        )}
+      </S.NameBox>
+    );
 
     return (
       <S.UserContainer ref={ref} $sticky={isSticky}>
@@ -24,16 +54,19 @@ export const UserRanking = forwardRef<HTMLDivElement, UserRankingProps>(
           <S.Rank $rank={rank}>{rank}</S.Rank>
 
           <S.ProfileContent>
-            <S.ProfileMention>
-              <S.RankTierWrap>
-                <RankTier tier={user.tier} />
-              </S.RankTierWrap>
-            </S.ProfileMention>
-            <S.RankingAvatar profileImage={user.profileImage} badgeImage={badgeImage} />
-            <S.NameBox>
-              <NameTag text={user.name} backgroundImage={nameplateImage} size="compact" />
-              <S.ProfileMention>@{user.linkedId}</S.ProfileMention>
-            </S.NameBox>
+            <S.RankTierSlot>
+              <RankTier tier={user.tier} />
+            </S.RankTierSlot>
+            <S.RankingAvatar
+              profileImage={user.profileImage}
+              badgeImage={badgeImage}
+              fallbackSrc={DefaultProfile}
+            />
+            {nameplateImage ? (
+              <S.NameplateSurface $image={nameplateImage}>{identity}</S.NameplateSurface>
+            ) : (
+              identity
+            )}
 
             {isRival && <S.RivalMention>RIVAL</S.RivalMention>}
           </S.ProfileContent>
