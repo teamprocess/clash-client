@@ -37,8 +37,7 @@ const nameplateOverlayTuningCss = css<{ $size: PreviewSize }>`
 
 export const Root = styled.div<{ $size: PreviewSize; $category: ProductCategory }>`
   width: 100%;
-  aspect-ratio: ${({ $category, $size }) =>
-    $category === ProductCategory.BANNER && $size === "detail" ? bannerAspectRatio : "1 / 1"};
+  aspect-ratio: 1 / 1;
   min-height: 0;
   display: flex;
   align-items: center;
