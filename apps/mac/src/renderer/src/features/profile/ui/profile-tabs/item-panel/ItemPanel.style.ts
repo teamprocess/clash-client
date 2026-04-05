@@ -1,7 +1,10 @@
 import styled from "styled-components";
 import { font, palette } from "@clash/design-tokens";
-import MypageProfileSrc from "../../../assets/mypage-profile.png";
-import { createNameplateOverlayTuningCss, nameplateFrameCss } from "@/shared/lib";
+import {
+  createNameplateOverlayTuningCss,
+  defaultProfileImageDark,
+  nameplateFrameCss,
+} from "@/shared/lib";
 
 const itemCardNameplateTuningCss = createNameplateOverlayTuningCss({
   insetX: 0,
@@ -168,7 +171,7 @@ export const BadgeAvatarShell = styled.div`
 `;
 
 export const BadgeAvatar = styled.img.attrs({
-  src: MypageProfileSrc,
+  src: defaultProfileImageDark,
   alt: "",
 })`
   width: 100%;
@@ -230,7 +233,7 @@ export const NameplateActiveRow = styled.div`
 `;
 
 export const NameplateHeroAvatar = styled.img.attrs({
-  src: MypageProfileSrc,
+  src: defaultProfileImageDark,
   alt: "",
 })`
   width: 1.95rem;

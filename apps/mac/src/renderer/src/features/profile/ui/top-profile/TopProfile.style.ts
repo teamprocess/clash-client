@@ -1,10 +1,13 @@
 import styled from "styled-components";
-import MypageProfileSrc from "../../assets/rival-profile.png";
 import AddProfileImg from "../../assets/add-profile-img-icon.svg";
 import ChangeProfileImg from "../../assets/change-profile-img-icon.svg";
+import {
+  createNameplateOverlayTuningCss,
+  defaultProfileImageLight,
+  nameplateFrameCss,
+} from "@/shared/lib";
 import { ProfileAvatar } from "@/shared/ui/profile-avatar";
 import { font } from "@clash/design-tokens";
-import { createNameplateOverlayTuningCss, nameplateFrameCss } from "@/shared/lib";
 
 const topProfileNameplateTuningCss = createNameplateOverlayTuningCss({
   insetX: "-0.5rem",
@@ -191,7 +194,7 @@ export const HiddenFileInput = styled.input`
   display: none;
 `;
 
-export const FallbackProfileImage = MypageProfileSrc;
+export const FallbackProfileImage = defaultProfileImageLight;
 
 export const AddProfileImageIcon = styled(AddProfileImg)`
   width: 100%;

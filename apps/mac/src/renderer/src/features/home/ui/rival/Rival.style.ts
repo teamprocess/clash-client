@@ -3,7 +3,6 @@ import { font } from "@clash/design-tokens/font";
 import DetailArrow from "../../../../shared/ui/assets/front.svg";
 import { palette } from "@clash/design-tokens/theme";
 import Plus from "../../assets/home/plus.svg";
-import DefaultProfile from "../../assets/home/profile.svg";
 import { ProfileAvatar } from "@/shared/ui/profile-avatar";
 
 export const ProfileIcon = styled.img`
@@ -18,11 +17,6 @@ export const RivalProfileAvatar = styled(ProfileAvatar)`
   width: 2.25rem;
   height: 2.25rem;
   flex-shrink: 0;
-`;
-
-export const DefaultProfileIcon = styled(DefaultProfile)`
-  width: 2.25rem;
-  height: 2.25rem;
 `;
 
 const flexRow = css`

@@ -1,6 +1,12 @@
 import { useMemo } from "react";
 import * as S from "@/features/home/ui/rival/Rival.style";
-import { formatTime, MyRivalItem, resolveUsingApp, useRealtimeRivalActiveTime } from "@/shared/lib";
+import {
+  defaultProfileImageLight,
+  formatTime,
+  MyRivalItem,
+  resolveUsingApp,
+  useRealtimeRivalActiveTime,
+} from "@/shared/lib";
 import { IdeIcons } from "@/shared/ui/assets/ide-img";
 import { Tooltip } from "@/shared/ui/tooltip";
 
@@ -53,7 +59,11 @@ export const MyRivalUsers = ({ user, getStatus }: MyRivalItem) => {
     <S.ProfileContainer>
       <S.ProfileBox>
         <S.ProfileContent>
-          <S.RivalProfileAvatar profileImage={user.profileImage} />
+          <S.RivalProfileAvatar
+            profileImage={user.profileImage}
+            fallbackSrc={defaultProfileImageLight}
+            alt="라이벌 프로필"
+          />
 
           <S.NameBox>
             <S.ProfileName>{user.name}</S.ProfileName>

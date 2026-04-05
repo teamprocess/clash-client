@@ -20,6 +20,7 @@ export { useRealtimeRivalActiveTime } from "./useRealtimeRivalActiveTime";
 export { resolveProfileDecorations } from "./profileDecorations";
 export { createNameplateOverlayTuningCss } from "./nameplateFrame";
 export { nameplateFrameCss } from "./nameplateFrame";
+export { defaultProfileImageDark, defaultProfileImageLight } from "./defaultProfileImages";
 export type {
   ProfileDecorationsInput,
   ProfileDecorationImageLike,
