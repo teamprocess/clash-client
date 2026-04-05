@@ -12,6 +12,7 @@ export const rankingPeriodDropDownValue: { key: PeriodType; label: string }[] = 
   { key: "DAY", label: "오늘" },
   { key: "WEEK", label: "이번 주" },
   { key: "MONTH", label: "이번 달" },
+  { key: "SEASON", label: "이번 시즌" },
 ];
 
 export const useRankingDomain = () => {

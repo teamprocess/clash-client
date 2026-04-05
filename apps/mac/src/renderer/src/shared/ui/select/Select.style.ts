@@ -12,7 +12,7 @@ export const SelectWrapper = styled.div`
 
 export const Select = styled.select<{ $width: number }>`
   ${font.body.regular};
-  width: $width rem;
+  width: ${({ $width }) => `${$width}rem`};
   max-width: 100%;
   height: 2rem;
   padding: 0 2.25rem 0 0.75rem;
