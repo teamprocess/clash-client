@@ -7,7 +7,6 @@ export const GlobalStyle = createGlobalStyle`
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    scrollbar-gutter: stable;
     scrollbar-width: thin;
     scrollbar-color: ${({ theme }) => theme.line.normal} transparent;
   }

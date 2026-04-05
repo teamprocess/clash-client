@@ -58,7 +58,7 @@ export const PlaceholderBody = styled.div`
   position: absolute;
   left: 50%;
   bottom: 13%;
-  width: 47%;
+  width: 60%;
   height: 25%;
   transform: translateX(-50%);
   background: currentColor;

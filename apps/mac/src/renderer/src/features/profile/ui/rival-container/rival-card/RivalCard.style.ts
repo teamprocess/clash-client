@@ -7,12 +7,12 @@ import { ProfileAvatar } from "@/shared/ui/profile-avatar";
 export const RivalBox = styled.div`
   width: 100%;
   height: 100%;
-  min-height: 5.25rem;
+  min-height: clamp(4.35rem, 8.2vh, 5.25rem);
   max-height: 100%;
   flex: 0 0 auto;
   border-radius: 0.75rem;
   background: ${({ theme }) => theme.background.alternative};
-  padding: 0.875rem clamp(1rem, 2vw, 2rem);
+  padding: clamp(0.7rem, 1.4vh, 0.875rem) clamp(1rem, 2vw, 2rem);
   display: flex;
   align-items: center;
   justify-content: space-between;

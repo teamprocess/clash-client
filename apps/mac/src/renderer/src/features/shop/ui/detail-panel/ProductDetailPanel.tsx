@@ -26,10 +26,7 @@ export const ProductDetailPanel = ({
   handleOpenPurchase,
 }: ProductDetailPanelProps) => {
   const originalPrice = selectedProduct.price.toLocaleString();
-  const discountedPrice = calculateDiscountedPrice(
-    selectedProduct.price,
-    selectedProduct.discount
-  );
+  const discountedPrice = calculateDiscountedPrice(selectedProduct.price, selectedProduct.discount);
 
   return (
     <S.DetailPanel>
@@ -66,9 +63,7 @@ export const ProductDetailPanel = ({
 
         <S.PurchaseBtn $isBought={selectedProduct.isBought} onClick={handleOpenPurchase}>
           {!selectedProduct.isBought && <S.CookieIcon />}
-          {selectedProduct.isBought
-            ? "이미 구매한 상품입니다."
-            : `${discountedPrice}에 구매하기`}
+          {selectedProduct.isBought ? "이미 소유한 상품입니다." : `${discountedPrice}에 구매하기`}
         </S.PurchaseBtn>
       </S.DetailPanelSticky>
     </S.DetailPanel>
