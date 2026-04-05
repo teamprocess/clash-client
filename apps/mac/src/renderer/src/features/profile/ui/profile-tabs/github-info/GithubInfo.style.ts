@@ -10,7 +10,7 @@ import FireImg from "../../../assets/fire.svg?url";
 import CodeImg from "../../../assets/code.svg?url";
 import ReviewImg from "../../../assets/review.svg?url";
 
-const desktopSize = "@media (min-width: 100rem) and (min-height: 60rem)";
+const largeDesktopQuery = "@media (min-width: 100rem) and (min-height: 60rem)";
 
 export const DateIcon = styled.img.attrs({
   src: DateImg,
@@ -190,7 +190,7 @@ export const StatCount = styled.p`
   ${font.headline2.bold}
   color: ${({ theme }) => theme.label.strong};
 
-  ${desktopSize} {
+  ${largeDesktopQuery} {
     ${font.title2.bold}
   }
 `;
@@ -200,7 +200,7 @@ export const StatLabel = styled.p`
   color: ${({ theme }) => theme.label.normal};
   white-space: nowrap;
 
-  ${desktopSize} {
+  ${largeDesktopQuery} {
     ${font.body.medium}
   }
 `;
@@ -246,7 +246,7 @@ export const MetaLabel = styled.p`
   white-space: nowrap;
   flex: 0 0 auto;
 
-  ${desktopSize} {
+  ${largeDesktopQuery} {
     ${font.body.medium}
   }
 `;
@@ -260,7 +260,7 @@ export const MetaValue = styled.p`
   text-overflow: ellipsis;
   white-space: nowrap;
 
-  ${desktopSize} {
+  ${largeDesktopQuery} {
     ${font.body.bold}
   }
 `;
@@ -287,7 +287,7 @@ export const Plus = styled.span`
   ${font.label.bold}
   color: ${palette.green[40]};
 
-  ${desktopSize} {
+  ${largeDesktopQuery} {
     ${font.body.bold}
   }
 `;
@@ -296,7 +296,7 @@ export const Minus = styled.span`
   ${font.label.bold}
   color: ${palette.red[60]};
 
-  ${desktopSize} {
+  ${largeDesktopQuery} {
     ${font.body.bold}
   }
 `;
@@ -310,7 +310,7 @@ export const LinesUnit = styled.span`
   ${font.caption.medium}
   color: ${({ theme }) => theme.label.alternative};
 
-  ${desktopSize} {
+  ${largeDesktopQuery} {
     ${font.body.medium}
   }
 `;

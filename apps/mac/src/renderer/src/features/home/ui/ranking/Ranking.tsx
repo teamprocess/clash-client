@@ -15,6 +15,7 @@ export const Ranking = () => {
     unit,
     formatActiveRankingPoint,
   } = useRanking();
+  const isGithubRanking = filters.RankingDropdown === "GITHUB";
 
   if (!domain.userList) return null;
 
@@ -58,6 +59,7 @@ export const Ranking = () => {
                 unit={unit}
                 formatValue={formatActiveRankingPoint}
                 isRival={user.userId !== domain.currentUser?.userId && user.isRival}
+                enableGithubProfileLink={isGithubRanking}
                 ref={user.userId === domain.currentUser?.userId ? currentUserRef : null}
               />
             ))
@@ -74,6 +76,7 @@ export const Ranking = () => {
             isSticky
             unit={unit}
             formatValue={formatActiveRankingPoint}
+            enableGithubProfileLink={isGithubRanking}
           />
         </S.StickyUser>
       )}
