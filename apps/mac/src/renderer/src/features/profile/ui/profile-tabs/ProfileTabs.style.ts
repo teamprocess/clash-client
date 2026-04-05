@@ -49,7 +49,7 @@ export const TabHeader = styled.div`
 
 export const Tabs = styled.div`
   display: grid;
-  grid-template-columns: repeat(3, max-content);
+  grid-template-columns: repeat(2, max-content);
   align-items: center;
   gap: 1.5rem;
   width: 100%;

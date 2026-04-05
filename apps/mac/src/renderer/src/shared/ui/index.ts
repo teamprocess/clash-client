@@ -28,4 +28,4 @@ export { RankTier } from "@/shared/ui/rank-tier/RankTier";
 export { ProfileAvatar } from "./profile-avatar";
 export type { ProfileAvatarProps } from "./profile-avatar";
 export { NameTag } from "./name-tag";
-export type { NameTagProps, NameTagSize } from "./name-tag";
+export type { NameTagProps, NameTagSize, NameTagTextAlign, NameTagWidth } from "./name-tag";

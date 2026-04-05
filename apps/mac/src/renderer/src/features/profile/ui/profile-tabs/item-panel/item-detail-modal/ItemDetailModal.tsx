@@ -2,7 +2,7 @@ import * as S from "./ItemDetailModal.style";
 import type { OwnedItem, OwnedItemDisplayCategory } from "@/entities/profile/model/ownedItems.types";
 import type { getMyProfileResponse } from "@/entities/user";
 import { formatPrice, resolveProfileDecorations } from "@/shared/lib";
-import { Dialog, NameTag } from "@/shared/ui";
+import { Dialog } from "@/shared/ui";
 
 interface ItemDetailModalProps {
   isOpen: boolean;
@@ -55,6 +55,13 @@ export const ItemDetailModal = ({
     : isEquipped
       ? "장착 해제"
       : "장착하기";
+  const previewHeroName = <S.PreviewHeroName>{previewName}</S.PreviewHeroName>;
+  const previewRankingIdentity = (
+    <S.PreviewRankingNameplateContent>
+      <S.PreviewRankingName>{previewName}</S.PreviewRankingName>
+      <S.PreviewRankingHandle>{previewHandle}</S.PreviewRankingHandle>
+    </S.PreviewRankingNameplateContent>
+  );
 
   return (
     <Dialog
@@ -72,7 +79,9 @@ export const ItemDetailModal = ({
               <S.PreviewPanel>
                 <S.PreviewPanelTitle>프로필 페이지 미리보기</S.PreviewPanelTitle>
 
-                <S.PreviewHero $image={previewBannerImage}>
+                <S.PreviewHero>
+                  <S.PreviewBannerBox $image={previewBannerImage} />
+
                   <S.PreviewHeroContent>
                     <S.PreviewAvatarSlot>
                       <S.PreviewAvatarWrap
@@ -85,11 +94,13 @@ export const ItemDetailModal = ({
 
                     <S.PreviewIdentity>
                       <S.PreviewNameRow>
-                        <NameTag
-                          text={previewName}
-                          backgroundImage={previewNameplateImage}
-                          size="regular"
-                        />
+                        {previewNameplateImage ? (
+                          <S.PreviewHeroNameplate $image={previewNameplateImage}>
+                            {previewHeroName}
+                          </S.PreviewHeroNameplate>
+                        ) : (
+                          previewHeroName
+                        )}
                       </S.PreviewNameRow>
                       <S.PreviewHandle>{previewHandle}</S.PreviewHandle>
                     </S.PreviewIdentity>
@@ -109,7 +120,7 @@ export const ItemDetailModal = ({
                       <S.PreviewRankingMutedBar />
                     </S.PreviewRankingMutedRow>
 
-                    <S.PreviewRankingFocusRow $image={previewBannerImage}>
+                    <S.PreviewRankingFocusRow>
                       <S.PreviewRankingAvatarSlot>
                         <S.PreviewRankingAvatarWrap
                           profileImage={previewProfileImage}
@@ -120,14 +131,15 @@ export const ItemDetailModal = ({
                       </S.PreviewRankingAvatarSlot>
 
                       <S.PreviewRankingInfo>
-                        <S.PreviewRankingIdentityRow>
-                          <NameTag
-                            text={previewName}
-                            backgroundImage={previewNameplateImage}
-                            size="compact"
-                          />
-                          <S.PreviewRankingHandle>{previewHandle}</S.PreviewRankingHandle>
-                        </S.PreviewRankingIdentityRow>
+                        <S.PreviewRankingNameRow>
+                          {previewNameplateImage ? (
+                            <S.PreviewRankingNameplate $image={previewNameplateImage}>
+                              {previewRankingIdentity}
+                            </S.PreviewRankingNameplate>
+                          ) : (
+                            previewRankingIdentity
+                          )}
+                        </S.PreviewRankingNameRow>
                       </S.PreviewRankingInfo>
                     </S.PreviewRankingFocusRow>
 
@@ -156,7 +168,9 @@ export const ItemDetailModal = ({
               {category === "NAMEPLATE" && (
                 <S.InfoNameplateHero>
                   <S.InfoNameplateMuted />
-                  <S.InfoNameplateShowcase $image={item.image} />
+                  <S.InfoNameplateShowcaseFrame>
+                    <S.InfoNameplateShowcase $image={item.image} />
+                  </S.InfoNameplateShowcaseFrame>
                   <S.InfoNameplateMuted />
                 </S.InfoNameplateHero>
               )}
@@ -172,16 +186,11 @@ export const ItemDetailModal = ({
 
             <S.InfoList>
               <S.InfoRow>
-                <S.InfoLabel>획득 가격</S.InfoLabel>
+                <S.InfoLabel>정가</S.InfoLabel>
                 <S.InfoValueWithIcon>
                   <S.CookieIcon aria-hidden />
                   <S.InfoValue>{formatPrice(item.price)}</S.InfoValue>
                 </S.InfoValueWithIcon>
-              </S.InfoRow>
-
-              <S.InfoRow>
-                <S.InfoLabel>인기도</S.InfoLabel>
-                <S.InfoValue>{item.popularity.toLocaleString("ko-KR")}</S.InfoValue>
               </S.InfoRow>
 
               <S.InfoRow>
