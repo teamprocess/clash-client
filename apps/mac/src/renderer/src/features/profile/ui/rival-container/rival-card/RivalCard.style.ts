@@ -6,16 +6,24 @@ import { ProfileAvatar } from "@/shared/ui/profile-avatar";
 
 export const RivalBox = styled.div`
   width: 100%;
+  height: 100%;
   min-height: 5.25rem;
   max-height: 100%;
   flex: 0 0 auto;
   border-radius: 0.75rem;
   background: ${({ theme }) => theme.background.alternative};
-  padding: 0.875rem 2rem;
+  padding: 0.875rem clamp(1rem, 2vw, 2rem);
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 0.875rem;
+
+  @media (max-width: 52rem) {
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 0.75rem;
+  }
 `;
 
 export const Left = styled.div`
@@ -24,6 +32,10 @@ export const Left = styled.div`
   gap: 0.425rem;
   flex: 1 1 auto;
   min-width: 0;
+
+  @media (max-width: 52rem) {
+    width: 100%;
+  }
 `;
 
 export const ProfileImg = styled.img`
@@ -41,6 +53,7 @@ export const RivalAvatar = styled(ProfileAvatar)`
 export const NameStatus = styled.div`
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
   gap: 0.5rem;
   flex: 1 1 auto;
   min-width: 0;
@@ -101,8 +114,14 @@ export const Right = styled.div`
   flex-direction: column;
   align-items: flex-end;
   gap: 0.35rem;
-  flex: 0 0 10.5rem;
-  min-width: 10.5rem;
+  flex: 0 1 10.5rem;
+  min-width: 8rem;
+
+  @media (max-width: 52rem) {
+    width: 100%;
+    min-width: 0;
+    align-items: flex-start;
+  }
 `;
 
 export const AppRow = styled.div`
@@ -112,6 +131,10 @@ export const AppRow = styled.div`
   gap: 0.375rem;
   width: 100%;
   min-width: 0;
+
+  @media (max-width: 52rem) {
+    justify-content: flex-start;
+  }
 `;
 
 export const AppName = styled.p`
@@ -131,6 +154,10 @@ export const Time = styled.p`
   overflow: hidden;
   text-overflow: ellipsis;
   text-align: right;
+
+  @media (max-width: 52rem) {
+    text-align: left;
+  }
 `;
 
 export const RankTierWrap = styled.div`
