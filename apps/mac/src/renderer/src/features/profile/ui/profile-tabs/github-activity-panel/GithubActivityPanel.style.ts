@@ -9,7 +9,7 @@ export const Panel = styled.div`
   flex-direction: column;
   flex: 1 1 auto;
   justify-content: space-between;
-  gap: clamp(1rem, 3vh, 2rem);
+  gap: clamp(0.75rem, 2vh, 2rem);
   overflow: hidden;
 `;
 

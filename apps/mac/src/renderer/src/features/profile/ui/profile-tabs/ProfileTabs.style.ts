@@ -17,6 +17,10 @@ export const Banner = styled.div`
     grid-template-columns: 1fr;
     grid-template-rows: auto minmax(0, 1fr) clamp(12rem, 28vh, 18rem);
   }
+
+  @media (max-height: 52rem) {
+    row-gap: 0.75rem;
+  }
 `;
 
 export const RivalSection = styled.div`
@@ -61,6 +65,11 @@ export const Background = styled.div`
   @media (max-width: 40rem) {
     border-radius: 1rem;
   }
+
+  @media (max-height: 52rem) {
+    padding: 0.875rem 1rem 1rem;
+    gap: 0.75rem;
+  }
 `;
 
 export const TabHeader = styled.div`
@@ -90,6 +99,10 @@ export const Tabs = styled.div`
   @media (max-width: 40rem) {
     gap: 1rem;
     padding-bottom: 1rem;
+  }
+
+  @media (max-height: 52rem) {
+    padding-bottom: 0.875rem;
   }
 
   &::after {
@@ -127,6 +140,10 @@ export const Tab = styled.button<{ $isActive: boolean }>`
 
     @media (max-width: 40rem) {
       bottom: -1rem;
+    }
+
+    @media (max-height: 52rem) {
+      bottom: -0.875rem;
     }
   }
 `;

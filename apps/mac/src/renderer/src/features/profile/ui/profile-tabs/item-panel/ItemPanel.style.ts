@@ -22,6 +22,10 @@ export const Wrapper = styled.section`
   flex-direction: column;
   gap: 1.25rem;
   overflow: hidden;
+
+  @media (max-height: 52rem) {
+    gap: 0.875rem;
+  }
 `;
 
 export const Header = styled.div`
@@ -79,7 +83,7 @@ export const GridScrollArea = styled.div`
 export const Grid = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(9.75rem, 1fr));
-  gap: 1rem;
+  gap: clamp(0.75rem, 1.4vh, 1rem);
   align-content: start;
 
   @media (max-width: 72rem) {
@@ -92,7 +96,7 @@ export const Grid = styled.div`
 `;
 
 export const CardButton = styled.button<{ $equipped: boolean }>`
-  min-height: 10.75rem;
+  min-height: clamp(8.9rem, 17vh, 10.75rem);
   border-radius: 1.35rem;
   border: 1px solid
     ${({ $equipped, theme }) => ($equipped ? theme.primary.normal : theme.line.alternative)};

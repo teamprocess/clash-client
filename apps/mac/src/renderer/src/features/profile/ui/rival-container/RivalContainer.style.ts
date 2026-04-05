@@ -19,7 +19,7 @@ export const Wrapper = styled.div`
 
 export const Container = styled.div`
   display: grid;
-  grid-template-rows: repeat(4, minmax(5.25rem, 1fr));
+  grid-template-rows: repeat(4, minmax(clamp(4.35rem, 8.2vh, 5.25rem), 1fr));
   flex: 1 1 auto;
   height: 100%;
   min-height: 0;
@@ -39,11 +39,11 @@ export const AddRivalButton = styled.button`
   height: 100%;
   border-radius: 0.75rem;
   background-color: ${({ theme }) => theme.background.alternative};
-  padding: 1rem 0.75rem;
+  padding: clamp(0.75rem, 1.4vh, 1rem) 0.75rem;
   ${flexCol};
   justify-content: flex-start;
   cursor: pointer;
-  min-height: 5.25rem;
+  min-height: clamp(4.35rem, 8.2vh, 5.25rem);
 
   &:focus-visible {
     outline: 2px solid ${({ theme }) => theme.primary.normal};
