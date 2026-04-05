@@ -12,7 +12,7 @@ export const PreviewModalWrapper = styled.div`
   flex-direction: column;
   width: 100%;
   height: 100%;
-  padding: 3rem 5rem;
+  padding: 2rem;
   gap: 2rem;
 `;
 
@@ -95,7 +95,6 @@ export const PreviewModalHeadLabel = styled.span`
 
 export const PreviewModalBody = styled.div`
   display: flex;
-  justify-content: space-between;
   align-items: stretch;
   width: 100%;
   gap: 1rem;
@@ -103,11 +102,12 @@ export const PreviewModalBody = styled.div`
 
 export const RoadmapBox = styled.div`
   display: flex;
+  flex: 3;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding: 2rem;
-  gap: 2.5rem;
+  justify-content: flex-start;
+  align-items: stretch;
+  padding: 2rem 2rem 1.75rem;
+  gap: 1.75rem;
   width: 42rem;
   height: 26rem;
   background-color: ${({ theme }) => theme.background.normal};
@@ -115,10 +115,12 @@ export const RoadmapBox = styled.div`
   box-shadow: 0 0 7px 0 ${({ theme }) => theme.line.normal};
   min-width: 0;
   overflow: hidden;
+  box-sizing: border-box;
 `;
 
 export const TargetBox = styled.div`
   display: flex;
+  flex: 1;
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
@@ -141,9 +143,11 @@ export const RoadmapTop = styled.div`
 export const RoadmapBottom = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 2.5rem;
+  justify-content: flex-start;
+  align-items: stretch;
+  gap: 1.5rem;
+  flex: 1 1 auto;
+  min-height: 0;
   width: 100%;
   min-width: 0;
 `;
@@ -307,6 +311,7 @@ export const RoadmapStepBox = styled.div`
   justify-content: center;
   align-items: center;
   gap: 1rem;
+  margin-top: auto;
 `;
 
 export const ArrowIcon = styled(Arrow)<{ $direction: "left" | "right" }>`
