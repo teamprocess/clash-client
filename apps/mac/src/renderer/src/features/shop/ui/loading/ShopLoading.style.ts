@@ -1,32 +1,18 @@
-import styled, { css, keyframes } from "styled-components";
-
-const shimmer = keyframes`
-  0% {
-    background-position: 100% 50%;
-  }
-
-  100% {
-    background-position: 0 50%;
-  }
-`;
+import styled, { css } from "styled-components";
 
 const skeleton = css`
-  background: linear-gradient(
-    90deg,
-    ${({ theme }) => theme.fill.neutral} 0%,
-    ${({ theme }) => theme.fill.alternative} 50%,
-    ${({ theme }) => theme.fill.neutral} 100%
-  );
-  background-size: 200% 100%;
-  animation: ${shimmer} 1.4s ease-in-out infinite;
+  background-color: ${({ theme }) => theme.fill.neutral};
 `;
 
 export const LoadingContainer = styled.div<{ $variant: "main" | "products" }>`
   display: flex;
+  flex: 1 1 auto;
   flex-direction: column;
+  min-width: 0;
   width: 100%;
   height: 100%;
   padding: ${({ $variant }) => ($variant === "main" ? "0" : "1.5rem")};
+  box-sizing: border-box;
   gap: 1.5rem;
   overflow: hidden;
 `;
@@ -35,6 +21,7 @@ export const BannerSkeleton = styled.div`
   ${skeleton};
   width: 100%;
   aspect-ratio: 74.5 / 15;
+  border-radius: 1rem;
 `;
 
 export const SectionSkeleton = styled.section`
@@ -53,8 +40,9 @@ export const TitleSkeleton = styled.div<{ $width: string }>`
 
 export const CardGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(13.5rem, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(12.75rem, 1fr));
   gap: 1rem;
+  width: 100%;
 `;
 
 export const ProductCardSkeleton = styled.div`

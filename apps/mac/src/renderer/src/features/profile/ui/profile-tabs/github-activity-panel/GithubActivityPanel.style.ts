@@ -1,6 +1,38 @@
 import styled from "styled-components";
 import { font } from "@clash/design-tokens";
 
+export const Panel = styled.div`
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  justify-content: space-between;
+  gap: clamp(1rem, 3vh, 2rem);
+  overflow: hidden;
+`;
+
+export const StreakSection = styled.div`
+  width: 100%;
+  flex: 0 0 auto;
+  min-width: 0;
+`;
+
+export const InfoSection = styled.div`
+  width: 100%;
+  flex: 0 1 auto;
+  min-height: 0;
+  min-width: 0;
+  display: flex;
+  overflow: auto;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+`;
+
 export const EmptyStateBox = styled.div`
   display: flex;
   flex-direction: column;
@@ -8,6 +40,7 @@ export const EmptyStateBox = styled.div`
   justify-content: center;
   width: 100%;
   height: 100%;
+  min-height: 0;
   border: 1px dashed ${({ theme }) => theme.fill.alternative};
   border-radius: 0.75rem;
   background-color: ${({ theme }) => theme.fill.neutral};

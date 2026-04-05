@@ -7,22 +7,24 @@ const RADIUS = 0.2;
 
 export const ActiveContainer = styled.div`
   width: 100%;
-  height: 100%;
+  min-height: 0;
   display: flex;
   flex-direction: column;
-  gap: 0.3rem;
+  gap: 0.75rem;
   padding: 0;
 `;
 
 export const Title = styled.p`
-  ${font.title1.medium}
+  ${font.title2.medium}
+  margin: 0;
 `;
 
 export const GrassBox = styled.div`
   width: 100%;
+  overflow-y: hidden;
   overflow-x: auto;
   scrollbar-width: none;
-  padding: 0.25rem 0.35rem;
+  padding: 0.25rem 0.35rem 0.55rem;
   box-sizing: border-box;
 
   &::-webkit-scrollbar {
