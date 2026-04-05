@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export const Root = styled.span`
+export const Root = styled.div`
   position: relative;
   display: inline-flex;
   width: 100%;
@@ -9,7 +9,7 @@ export const Root = styled.span`
   overflow: visible;
 `;
 
-export const Photo = styled.span`
+export const Photo = styled.div`
   position: relative;
   width: 100%;
   height: 100%;
@@ -28,39 +28,44 @@ export const Image = styled.img`
   display: block;
 `;
 
-export const Placeholder = styled.span`
+export const Placeholder = styled.div`
   position: relative;
   width: 100%;
   height: 100%;
   border-radius: 50%;
   background: ${({ theme }) => theme.fill.alternative};
-
-  &::before {
-    content: "";
-    position: absolute;
-    top: 24%;
-    left: 50%;
-    width: 28%;
-    height: 28%;
-    border-radius: 50%;
-    transform: translateX(-50%);
-    background: ${({ theme }) => theme.line.normal};
-  }
-
-  &::after {
-    content: "";
-    position: absolute;
-    left: 50%;
-    bottom: 13%;
-    width: 47%;
-    height: 25%;
-    border-radius: 999px 999px 0.75rem 0.75rem;
-    transform: translateX(-50%);
-    background: ${({ theme }) => theme.line.normal};
-  }
+  overflow: hidden;
 `;
 
-export const Overlay = styled.span`
+export const PlaceholderFigure = styled.div`
+  position: absolute;
+  inset: 0;
+  color: ${({ theme }) => theme.line.normal};
+`;
+
+export const PlaceholderHead = styled.div`
+  position: absolute;
+  top: 24%;
+  left: 50%;
+  width: 28%;
+  aspect-ratio: 1 / 1;
+  border-radius: 50%;
+  transform: translateX(-50%);
+  background: currentColor;
+`;
+
+export const PlaceholderBody = styled.div`
+  position: absolute;
+  left: 50%;
+  bottom: 13%;
+  width: 47%;
+  height: 25%;
+  transform: translateX(-50%);
+  background: currentColor;
+  border-radius: 999px 999px 35% 35%;
+`;
+
+export const Overlay = styled.div`
   position: absolute;
   inset: 0;
   z-index: 2;

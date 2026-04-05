@@ -66,7 +66,16 @@ export const ProfileAvatar = ({
   return (
     <S.Root className={className}>
       <S.Photo>
-        {displaySrc ? <S.Image src={displaySrc} alt={alt} onError={handleImageError} /> : <S.Placeholder aria-hidden />}
+        {displaySrc ? (
+          <S.Image src={displaySrc} alt={alt} onError={handleImageError} />
+        ) : (
+          <S.Placeholder aria-hidden>
+            <S.PlaceholderFigure>
+              <S.PlaceholderHead />
+              <S.PlaceholderBody />
+            </S.PlaceholderFigure>
+          </S.Placeholder>
+        )}
 
         {children ? <S.Overlay>{children}</S.Overlay> : null}
       </S.Photo>
