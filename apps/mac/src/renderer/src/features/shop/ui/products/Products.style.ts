@@ -247,7 +247,7 @@ export const PurchaseBtn = styled.div<{ $isBought?: boolean }>`
   border-radius: 0.5rem;
   background-color: ${({ theme, $isBought }) =>
     $isBought ? theme.fill.neutral : theme.primary.normal};
-  ${font.headline2.bold};
+  ${font.headline2.medium};
   cursor: ${({ $isBought }) => ($isBought ? "default" : "pointer")};
   pointer-events: ${({ $isBought }) => ($isBought ? "none" : "auto")};
 `;

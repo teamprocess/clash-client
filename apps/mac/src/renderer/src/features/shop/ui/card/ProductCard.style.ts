@@ -56,8 +56,8 @@ export const ProductImage = styled.div<{ $imgUrl: string }>`
 
 export const OwnedBadge = styled.span`
   position: absolute;
-  top: 1.65rem;
-  right: 1.75rem;
+  top: 1rem;
+  right: 1rem;
   z-index: 2;
   padding: 0.22rem 0.6rem;
   border-radius: 999px;

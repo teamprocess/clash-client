@@ -12,10 +12,11 @@ interface UserRankingProps {
   isSticky?: boolean;
   unit: string;
   formatValue: (value: number) => string | number;
+  enableGithubProfileLink?: boolean;
 }
 
 export const UserRanking = forwardRef<HTMLDivElement, UserRankingProps>(
-  ({ user, isRival, rank, isSticky, unit, formatValue }, ref) => {
+  ({ user, isRival, rank, isSticky, unit, formatValue, enableGithubProfileLink = false }, ref) => {
     const { badgeImage, nameplateImage } = resolveProfileDecorations(user.equippedItems);
     const githubHandle = user.linkedId.trim().replace(/^@+/, "");
     const githubProfileUrl = githubHandle
@@ -33,7 +34,7 @@ export const UserRanking = forwardRef<HTMLDivElement, UserRankingProps>(
     const identity = (
       <S.NameBox>
         <S.ProfileName>{user.name}</S.ProfileName>
-        {githubProfileUrl ? (
+        {enableGithubProfileLink && githubProfileUrl ? (
           <S.ProfileHandleButton
             type="button"
             onClick={handleOpenGithubProfile}
