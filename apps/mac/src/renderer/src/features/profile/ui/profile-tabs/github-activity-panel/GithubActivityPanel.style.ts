@@ -8,8 +8,8 @@ export const Panel = styled.div`
   display: flex;
   flex-direction: column;
   flex: 1 1 auto;
-  justify-content: space-between;
-  gap: clamp(0.75rem, 2vh, 2rem);
+  justify-content: flex-start;
+  gap: clamp(0.75rem, 1.1vh, 1rem);
   overflow: hidden;
 `;
 
@@ -21,7 +21,7 @@ export const StreakSection = styled.div`
 
 export const InfoSection = styled.div`
   width: 100%;
-  flex: 0 1 auto;
+  flex: 1 1 auto;
   min-height: 0;
   min-width: 0;
   display: flex;
