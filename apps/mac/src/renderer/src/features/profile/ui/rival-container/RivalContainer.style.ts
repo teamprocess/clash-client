@@ -34,8 +34,7 @@ export const Container = styled.div`
   }
 `;
 
-export const AddRivalButton = styled.button<{ $rowSpan: number }>`
-  grid-row: span ${({ $rowSpan }) => $rowSpan};
+export const AddRivalButton = styled.button`
   width: 100%;
   height: 100%;
   border-radius: 0.75rem;

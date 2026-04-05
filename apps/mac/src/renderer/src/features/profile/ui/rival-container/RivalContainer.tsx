@@ -8,7 +8,6 @@ export const RivalContainer = () => {
   const rival = useRival();
   const rivals = rival.rivalsData?.myRivals ?? [];
   const canAddMore = rivals.length < 4;
-  const remainingSlots = Math.max(1, 4 - rivals.length);
 
   return (
     <S.Wrapper>
@@ -28,7 +27,7 @@ export const RivalContainer = () => {
         ))}
 
         {canAddMore && (
-          <S.AddRivalButton type="button" onClick={rival.handleOpen} $rowSpan={remainingSlots}>
+          <S.AddRivalButton type="button" onClick={rival.handleOpen}>
             <S.AddRivalBox>
               <PlusIcon />
             </S.AddRivalBox>
