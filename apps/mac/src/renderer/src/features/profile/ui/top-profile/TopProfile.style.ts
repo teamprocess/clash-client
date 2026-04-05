@@ -3,6 +3,15 @@ import MypageProfileSrc from "../../assets/rival-profile.png";
 import AddProfileImg from "../../assets/add-profile-img-icon.svg";
 import ChangeProfileImg from "../../assets/change-profile-img-icon.svg";
 import { ProfileAvatar } from "@/shared/ui/profile-avatar";
+import { font } from "@clash/design-tokens";
+import { createNameplateOverlayTuningCss, nameplateFrameCss } from "@/shared/lib";
+
+const topProfileNameplateTuningCss = createNameplateOverlayTuningCss({
+  insetX: "-0.5rem",
+  scaleX: 2,
+  scaleY: 2.25,
+  shiftY: "1.5rem",
+});
 
 export const Banner = styled.div<{ $bgImage?: string }>`
   width: 100%;
@@ -40,7 +49,7 @@ export const ProfileCard = styled.div`
 
 export const ProfileImgWrapper = styled.div`
   position: absolute;
-  bottom: -31%;
+  bottom: -38%;
   left: 13%;
 `;
 
@@ -116,7 +125,32 @@ export const UserInfo = styled.div`
 `;
 
 export const DisplayNameWrap = styled.div`
-  margin-left: 1.15rem;
+  margin-left: 0.5rem;
+  margin-top: 0.5rem;
+`;
+
+export const DisplayNamePlate = styled.div<{ $image?: string }>`
+  ${topProfileNameplateTuningCss};
+  min-width: 0;
+  max-width: min(100%, 16rem);
+  padding: 0.28rem 1.25rem 0.34rem;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  overflow: visible;
+  ${nameplateFrameCss}
+`;
+
+export const DisplayName = styled.p`
+  ${font.title2.bold};
+  color: ${({ theme }) => theme.label.normal};
+  margin: 0;
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 `;
 
 export const HiddenFileInput = styled.input`

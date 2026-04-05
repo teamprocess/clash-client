@@ -11,6 +11,5 @@ export const useOwnedItemsQuery = (category: OwnedItemCategory = OwnedItemCatego
   return useQuery({
     queryKey: ownedItemsQueryKeys.list(category),
     queryFn: () => ownedItemsApi.getOwnedItems({ category }),
-    placeholderData: previousData => previousData,
   });
 };

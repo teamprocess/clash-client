@@ -73,8 +73,8 @@ export const Overlay = styled.span`
 export const Badge = styled.img`
   position: absolute;
   inset: 50% auto auto 50%;
-  width: 124%;
-  height: 124%;
+  width: 145%;
+  height: 145%;
   object-fit: contain;
   pointer-events: none;
   z-index: 3;
