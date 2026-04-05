@@ -5,7 +5,7 @@ import { registerIpcHandlers } from "../ipc";
 import { registerCspHeaders } from "../security";
 import { registerAppProtocol } from "../appProtocol";
 import { registerProtocol } from "../deeplink";
-import { APP_RUNTIME_PROFILE } from "../runtimeProfile";
+import { APP_RUNTIME_PROFILE, IS_DEV_CHANNEL } from "../runtimeProfile";
 
 interface BootstrapMainProcessParams {
   createWindow: () => void;
@@ -54,11 +54,16 @@ const registerWindowShortcuts = () => {
         return;
       }
 
-      if (is.dev) {
+      if (is.dev && IS_DEV_CHANNEL) {
         if (isDevToolsShortcut(input)) {
           window.webContents.toggleDevTools();
           event.preventDefault();
         }
+        return;
+      }
+
+      if (isDevToolsShortcut(input)) {
+        event.preventDefault();
         return;
       }
 

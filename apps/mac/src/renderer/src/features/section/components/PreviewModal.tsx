@@ -75,7 +75,80 @@ export const PreviewModal = ({
         closeOnOverlayClick={true}
       >
         <S.PreviewModalWrapper>
-          <div>로딩 중...</div>
+          <S.LoadingState aria-hidden>
+            <S.PreviewModalTop>
+              <S.LoadingIntro>
+                <S.SkeletonBlock $width="42%" $height="2.75rem" $radius="0.75rem" />
+                <S.LoadingInfoRow>
+                  <S.SkeletonBlock $width="72%" $height="3.25rem" $radius="0.75rem" />
+                  <S.SkeletonBlock $width="7rem" $height="2.75rem" $radius="0.75rem" />
+                </S.LoadingInfoRow>
+              </S.LoadingIntro>
+              <S.SectionDivider $type="Preview" />
+            </S.PreviewModalTop>
+
+            <S.PreviewModalBottom>
+              <S.LoadingHead>
+                <S.SkeletonCircle $size="1.5rem" />
+                <S.SkeletonBlock $width="78%" $height="1.5rem" $radius="0.5rem" />
+              </S.LoadingHead>
+
+              <S.LoadingBody>
+                <S.RoadmapBox>
+                  <S.RoadmapTop>
+                    <S.SkeletonCircle $size="2rem" />
+                    <S.SkeletonBlock $width="11rem" $height="1.75rem" $radius="0.5rem" />
+                  </S.RoadmapTop>
+
+                  <S.LoadingRoadmapBottom>
+                    <S.LoadingStepsRail>
+                      <S.SkeletonCircle $size="2.25rem" />
+                      <S.SkeletonCircle $size="2.25rem" />
+                      <S.SkeletonCircle $size="2.25rem" />
+                      <S.SkeletonCircle $size="2.25rem" />
+                      <S.SkeletonCircle $size="2.25rem" />
+                    </S.LoadingStepsRail>
+
+                    <S.LoadingRoadmapDescription>
+                      <S.SkeletonBlock $width="2.8rem" $height="2.8rem" $radius="0.5rem" />
+                      <S.SkeletonBlock $width="70%" $height="1.5rem" $radius="0.5rem" />
+                    </S.LoadingRoadmapDescription>
+
+                    <S.LoadingStepper>
+                      <S.SkeletonCircle $size="1.75rem" />
+                      <S.SkeletonBlock $width="3.5rem" $height="1.5rem" $radius="0.5rem" />
+                      <S.SkeletonCircle $size="1.75rem" />
+                    </S.LoadingStepper>
+                  </S.LoadingRoadmapBottom>
+                </S.RoadmapBox>
+
+                <S.TargetBox>
+                  <S.TargetBoxTop>
+                    <S.LoadingTargetIntro>
+                      <S.SkeletonBlock $width="6rem" $height="2rem" $radius="1rem" />
+                      <S.SkeletonBlock $width="85%" $height="1.75rem" $radius="0.5rem" />
+                    </S.LoadingTargetIntro>
+                    <S.SectionDivider $type="Target" />
+                  </S.TargetBoxTop>
+
+                  <S.LoadingTargetList>
+                    <S.LoadingTargetItem>
+                      <S.SkeletonCircle $size="1.5rem" />
+                      <S.SkeletonBlock $width="80%" $height="1.25rem" $radius="0.5rem" />
+                    </S.LoadingTargetItem>
+                    <S.LoadingTargetItem>
+                      <S.SkeletonCircle $size="1.5rem" />
+                      <S.SkeletonBlock $width="72%" $height="1.25rem" $radius="0.5rem" />
+                    </S.LoadingTargetItem>
+                    <S.LoadingTargetItem>
+                      <S.SkeletonCircle $size="1.5rem" />
+                      <S.SkeletonBlock $width="76%" $height="1.25rem" $radius="0.5rem" />
+                    </S.LoadingTargetItem>
+                  </S.LoadingTargetList>
+                </S.TargetBox>
+              </S.LoadingBody>
+            </S.PreviewModalBottom>
+          </S.LoadingState>
         </S.PreviewModalWrapper>
       </Dialog>
     );

@@ -1,6 +1,7 @@
 import { BrowserWindow, shell } from "electron";
 import { join } from "path";
 import { getRendererEntryUrl } from "../appProtocol";
+import { IS_DEV_CHANNEL } from "../runtimeProfile";
 import { initializeWindowZoom } from "./zoom";
 
 // 개발/배포 환경에 맞는 렌더러 URL 로드
@@ -25,6 +26,7 @@ export const createMainWindow = () => {
     webPreferences: {
       preload: join(__dirname, "../preload/index.js"),
       sandbox: false,
+      devTools: IS_DEV_CHANNEL,
     },
   });
 
@@ -47,6 +49,12 @@ export const createMainWindow = () => {
     void shell.openExternal(details.url);
     return { action: "deny" };
   });
+
+  if (!IS_DEV_CHANNEL) {
+    mainWindow.webContents.on("devtools-opened", () => {
+      mainWindow.webContents.closeDevTools();
+    });
+  }
 
   void loadRenderer(mainWindow);
 

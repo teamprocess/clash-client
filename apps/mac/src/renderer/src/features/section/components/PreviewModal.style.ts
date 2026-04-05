@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, { css, keyframes } from "styled-components";
 import { font } from "@clash/design-tokens/font";
 import { palette } from "@clash/design-tokens/theme";
 import Check from "../assets/check.svg";
@@ -7,12 +7,33 @@ import Flag from "../assets/flag.svg";
 import Arrow from "../assets/arrow.svg";
 import Star from "../assets/star.svg";
 
+const skeletonWave = keyframes`
+  0% {
+    background-position: 200% 0;
+  }
+
+  100% {
+    background-position: -200% 0;
+  }
+`;
+
+const skeletonBase = css`
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.05) 0%,
+    rgba(255, 255, 255, 0.12) 50%,
+    rgba(255, 255, 255, 0.05) 100%
+  );
+  background-size: 200% 100%;
+  animation: ${skeletonWave} 1.6s ease-in-out infinite;
+`;
+
 export const PreviewModalWrapper = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
   height: 100%;
-  padding: 3rem 5rem;
+  padding: 2rem;
   gap: 2rem;
 `;
 
@@ -95,19 +116,39 @@ export const PreviewModalHeadLabel = styled.span`
 
 export const PreviewModalBody = styled.div`
   display: flex;
-  justify-content: space-between;
   align-items: stretch;
   width: 100%;
   gap: 1rem;
 `;
 
+export const SkeletonBlock = styled.div<{
+  $width: string;
+  $height: string;
+  $radius?: string;
+}>`
+  ${skeletonBase};
+  width: ${({ $width }) => $width};
+  height: ${({ $height }) => $height};
+  border-radius: ${({ $radius = "0.75rem" }) => $radius};
+  flex-shrink: 0;
+`;
+
+export const SkeletonCircle = styled.div<{ $size: string }>`
+  ${skeletonBase};
+  width: ${({ $size }) => $size};
+  height: ${({ $size }) => $size};
+  border-radius: 50%;
+  flex-shrink: 0;
+`;
+
 export const RoadmapBox = styled.div`
   display: flex;
+  flex: 3;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding: 2rem;
-  gap: 2.5rem;
+  justify-content: flex-start;
+  align-items: stretch;
+  padding: 2rem 2rem 1.75rem;
+  gap: 1.75rem;
   width: 42rem;
   height: 26rem;
   background-color: ${({ theme }) => theme.background.normal};
@@ -115,10 +156,12 @@ export const RoadmapBox = styled.div`
   box-shadow: 0 0 7px 0 ${({ theme }) => theme.line.normal};
   min-width: 0;
   overflow: hidden;
+  box-sizing: border-box;
 `;
 
 export const TargetBox = styled.div`
   display: flex;
+  flex: 1;
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
@@ -141,9 +184,11 @@ export const RoadmapTop = styled.div`
 export const RoadmapBottom = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 2.5rem;
+  justify-content: flex-start;
+  align-items: stretch;
+  gap: 1.5rem;
+  flex: 1 1 auto;
+  min-height: 0;
   width: 100%;
   min-width: 0;
 `;
@@ -307,6 +352,7 @@ export const RoadmapStepBox = styled.div`
   justify-content: center;
   align-items: center;
   gap: 1rem;
+  margin-top: auto;
 `;
 
 export const ArrowIcon = styled(Arrow)<{ $direction: "left" | "right" }>`
@@ -417,4 +463,109 @@ export const ArrowButton = styled.button<{ $disabled: boolean }>`
   &:hover:not([disabled]) {
     opacity: 0.8;
   }
+`;
+
+export const LoadingState = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  gap: 2rem;
+`;
+
+export const LoadingIntro = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  width: 100%;
+`;
+
+export const LoadingInfoRow = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1.5rem;
+  width: 100%;
+`;
+
+export const LoadingHead = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  width: 100%;
+  padding: 0.5rem 2.5rem;
+  background-color: ${({ theme }) => theme.background.neutral};
+  border-radius: 0.75rem;
+  box-sizing: border-box;
+`;
+
+export const LoadingBody = styled.div`
+  display: flex;
+  align-items: stretch;
+  width: 100%;
+  gap: 1rem;
+  flex: 1 1 auto;
+  min-height: 0;
+`;
+
+export const LoadingRoadmapBottom = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  width: 100%;
+  flex: 1 1 auto;
+  min-height: 0;
+`;
+
+export const LoadingStepsRail = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  width: 100%;
+  padding: 3.25rem 1.5rem 1rem;
+  box-sizing: border-box;
+`;
+
+export const LoadingRoadmapDescription = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+  min-height: 5rem;
+  padding: 1.25rem;
+  border-radius: 0.75rem;
+  background-color: ${({ theme }) => theme.background.neutral};
+  box-sizing: border-box;
+`;
+
+export const LoadingStepper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: auto;
+`;
+
+export const LoadingTargetIntro = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  width: 100%;
+`;
+
+export const LoadingTargetList = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 0.875rem;
+  width: 100%;
+  flex: 1 1 auto;
+  min-height: 0;
+`;
+
+export const LoadingTargetItem = styled.div`
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  width: 100%;
 `;
