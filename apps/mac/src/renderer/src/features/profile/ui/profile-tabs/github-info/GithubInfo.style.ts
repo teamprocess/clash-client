@@ -80,7 +80,7 @@ export const CodeIcon = styled.img.attrs({
 
 export const ActiveContainer = styled.section`
   width: 100%;
-  height: 100%;
+  height: auto;
   min-height: 0;
   display: flex;
   flex-direction: column;
@@ -92,13 +92,21 @@ export const Title = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-wrap: wrap;
   gap: 1rem;
+
+  @media (max-width: 52rem) {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
 `;
 
 export const Date = styled.span`
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  min-width: 0;
 `;
 
 export const DateText = styled.p`
@@ -110,6 +118,11 @@ export const Total = styled.span`
   display: flex;
   align-items: baseline;
   gap: 0.25rem;
+  margin-left: auto;
+
+  @media (max-width: 52rem) {
+    margin-left: 0;
+  }
 `;
 
 export const Number = styled.p`
@@ -131,17 +144,27 @@ export const GithubBox = styled.div`
   display: flex;
   align-items: stretch;
   justify-content: flex-start;
-  gap: 2rem;
+  flex-wrap: wrap;
+  gap: 1rem;
   min-width: 0;
   box-sizing: border-box;
+
+  @media (max-width: 52rem) {
+    padding: 1rem;
+  }
 `;
 
 export const Github = styled.div`
   display: grid;
-  grid-template-columns: repeat(2, max-content);
-  column-gap: 1.25rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: 1rem;
+  row-gap: 0.75rem;
   flex: 1;
   min-width: 0;
+
+  @media (max-width: 52rem) {
+    grid-template-columns: 1fr;
+  }
 `;
 
 export const Stat = styled.div`
@@ -186,6 +209,10 @@ export const MetaRow = styled.div`
   align-items: center;
   gap: 0.75rem;
   min-width: 0;
+
+  @media (max-width: 52rem) {
+    align-items: flex-start;
+  }
 `;
 
 export const MetaText = styled.div`
@@ -194,6 +221,12 @@ export const MetaText = styled.div`
   gap: 0.5rem;
   flex: 1;
   min-width: 0;
+
+  @media (max-width: 52rem) {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.25rem;
+  }
 `;
 
 export const MetaLabel = styled.p`
@@ -225,6 +258,10 @@ export const Lines = styled.div`
   gap: 0.25rem;
   min-width: 0;
   width: auto;
+
+  @media (max-width: 52rem) {
+    flex-wrap: wrap;
+  }
 `;
 
 export const Plus = styled.span`

@@ -9,6 +9,7 @@ export const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
+  flex: 1 1 auto;
   width: 100%;
   min-width: 0;
   height: 100%;
@@ -17,12 +18,14 @@ export const Wrapper = styled.div`
 `;
 
 export const Container = styled.div`
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-rows: repeat(4, minmax(5.25rem, 1fr));
+  flex: 1 1 auto;
   height: 100%;
   min-height: 0;
   gap: 0.75rem;
   overflow-y: auto;
+  overflow-x: hidden;
   padding-right: 0.25rem;
   scrollbar-width: none;
 
@@ -33,6 +36,7 @@ export const Container = styled.div`
 
 export const AddRivalButton = styled.button`
   width: 100%;
+  height: 100%;
   border-radius: 0.75rem;
   background-color: ${({ theme }) => theme.background.alternative};
   padding: 1rem 0.75rem;

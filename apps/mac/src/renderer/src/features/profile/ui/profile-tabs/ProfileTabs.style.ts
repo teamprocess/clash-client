@@ -3,23 +3,36 @@ import { font } from "@clash/design-tokens";
 
 export const Banner = styled.div`
   display: grid;
-  grid-template-columns: 3fr 4fr;
+  grid-template-columns: minmax(18rem, 32rem) minmax(0, 1fr);
   grid-template-rows: auto minmax(0, 1fr);
-  column-gap: 1.75rem;
+  column-gap: clamp(1rem, 2vw, 1.75rem);
   row-gap: 1rem;
   width: 100%;
   height: 100%;
   min-height: 0;
-  justify-content: center;
+  align-items: stretch;
+  overflow: hidden;
+
+  @media (max-width: 68rem) {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto minmax(0, 1fr) clamp(12rem, 28vh, 18rem);
+  }
 `;
 
 export const RivalSection = styled.div`
   grid-column: 1;
   grid-row: 2;
+  display: flex;
   min-width: 0;
   height: 100%;
   min-height: 0;
+  align-self: stretch;
   overflow: hidden;
+
+  @media (max-width: 68rem) {
+    grid-column: 1;
+    grid-row: 3;
+  }
 `;
 
 export const Background = styled.div`
@@ -33,18 +46,36 @@ export const Background = styled.div`
   background: ${({ theme }) => theme.background.alternative};
   display: flex;
   flex-direction: column;
-  padding: 1.75rem;
+  flex: 1 1 auto;
+  padding: clamp(1rem, 2vw, 1.75rem);
   gap: 1rem;
+  align-self: stretch;
   overflow: hidden;
+  box-sizing: border-box;
+
+  @media (max-width: 68rem) {
+    grid-column: 1;
+    grid-row: 2;
+  }
+
+  @media (max-width: 40rem) {
+    border-radius: 1rem;
+  }
 `;
 
 export const TabHeader = styled.div`
   grid-column: 2;
   grid-row: 1;
   display: flex;
+  flex: 0 0 auto;
   width: 100%;
   min-width: 0;
   flex-direction: column;
+
+  @media (max-width: 68rem) {
+    grid-column: 1;
+    grid-row: 1;
+  }
 `;
 
 export const Tabs = styled.div`
@@ -55,6 +86,11 @@ export const Tabs = styled.div`
   width: 100%;
   position: relative;
   padding-bottom: 1.125rem;
+
+  @media (max-width: 40rem) {
+    gap: 1rem;
+    padding-bottom: 1rem;
+  }
 
   &::after {
     content: "";
@@ -88,5 +124,9 @@ export const Tab = styled.button<{ $isActive: boolean }>`
     border-radius: 1rem;
     background-color: ${({ theme }) => theme.primary.normal};
     opacity: ${({ $isActive }) => ($isActive ? 1 : 0)};
+
+    @media (max-width: 40rem) {
+      bottom: -1rem;
+    }
   }
 `;
