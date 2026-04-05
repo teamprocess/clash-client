@@ -1,11 +1,16 @@
 import * as S from "./MyRivals.style";
 import { getStatus, useMyRivals } from "@/features/competition/model/useMyRivals";
-import { formatTime, resolveUsingApp, useRealtimeRivalActiveTime, useRival } from "@/shared/lib";
+import {
+  defaultProfileImageLight,
+  formatTime,
+  resolveUsingApp,
+  useRealtimeRivalActiveTime,
+  useRival,
+} from "@/shared/lib";
 import { MyRivalsRequest, MyRivalsResponse } from "@/entities/competition";
 import { useMemo } from "react";
 import { QuestionTooltip, RankTier, RivalsManagementDialog, Tooltip } from "@/shared/ui";
 import { IdeIcons } from "@/shared/ui/assets/ide-img";
-import Profile from "@/features/profile/assets/rival-profile.png";
 
 interface MyRivalsProps {
   data: MyRivalsResponse;
@@ -65,7 +70,11 @@ const RivalRow = ({ user }: { user: MyRivalsRequest }) => {
           <RankTier tier={user.tier} />
         </S.RankTierWrap>
 
-        <S.RivalAvatar profileImage={user.profileImage} fallbackSrc={Profile} alt="프로필" />
+        <S.RivalAvatar
+          profileImage={user.profileImage}
+          fallbackSrc={defaultProfileImageLight}
+          alt="프로필"
+        />
 
         <S.NameBox>
           <S.ProfileName>{user.name}</S.ProfileName>

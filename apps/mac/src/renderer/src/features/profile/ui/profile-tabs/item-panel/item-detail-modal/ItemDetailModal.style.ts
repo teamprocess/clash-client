@@ -1,8 +1,11 @@
 import styled, { css } from "styled-components";
 import { font } from "@clash/design-tokens/font";
 import { palette } from "@clash/design-tokens/theme";
-import MypageProfile from "@/features/profile/assets/mypage-profile.png";
-import { createNameplateOverlayTuningCss, nameplateFrameCss } from "@/shared/lib";
+import {
+  createNameplateOverlayTuningCss,
+  defaultProfileImageDark,
+  nameplateFrameCss,
+} from "@/shared/lib";
 import Cookie from "@/shared/ui/assets/cookie.svg";
 import { ProfileAvatar } from "@/shared/ui/profile-avatar";
 
@@ -46,7 +49,7 @@ const showcaseNameplateTuningCss = createNameplateOverlayTuningCss({
 
 const bannerAspectRatio = "1126 / 198";
 
-export const FallbackProfileImage = MypageProfile;
+export const FallbackProfileImage = defaultProfileImageDark;
 
 export const DialogLayout = styled.div`
   height: 100%;

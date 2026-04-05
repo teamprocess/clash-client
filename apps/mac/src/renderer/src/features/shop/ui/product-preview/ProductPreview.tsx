@@ -1,5 +1,6 @@
 import * as S from "./ProductPreview.style";
 import { ProductCategory } from "@/entities/product";
+import { defaultProfileImageDark } from "@/shared/lib";
 
 interface ProductPreviewProps {
   category: ProductCategory;
@@ -29,7 +30,7 @@ export const ProductPreview = ({
       <S.Root $size={size} $category={category} className={className}>
         <S.BadgeStage $size={size}>
           <S.BadgeAvatarSlot $size={size}>
-            <S.GuestAvatar alt="" />
+            <S.GuestAvatar alt="" fallbackSrc={defaultProfileImageDark} />
           </S.BadgeAvatarSlot>
           <S.BadgeImage $size={size} $image={image} />
         </S.BadgeStage>
@@ -47,7 +48,7 @@ export const ProductPreview = ({
 
         <S.NameplateActiveRow $size={size}>
           <S.NameplateAvatarSlot $size={size}>
-            <S.GuestAvatar alt="" />
+            <S.GuestAvatar alt="" fallbackSrc={defaultProfileImageDark} />
           </S.NameplateAvatarSlot>
           <S.NameplateBar $size={size} $image={image} />
         </S.NameplateActiveRow>

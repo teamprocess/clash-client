@@ -3,9 +3,8 @@ import * as S from "./Battle.style";
 import { Button, Dialog, Select, SlideSelector } from "@/shared/ui";
 import { AnalyzeCategory, MATCHVALUE } from "@/entities/competition";
 import { useBattle } from "@/features/competition/model/useBattle";
-import DefaultProfile from "@/features/profile/assets/rival-profile.png";
 import { useGetMyProfile } from "@/entities/user";
-import { resolveProfileDecorations } from "@/shared/lib";
+import { defaultProfileImageLight, resolveProfileDecorations } from "@/shared/lib";
 
 export const Battle = () => {
   const battle = useBattle();
@@ -102,7 +101,7 @@ export const Battle = () => {
                         <S.BattleDetailProfileBox>
                           <S.BattleDetailAvatar
                             profileImage={battle.battleDetailData?.enemy.profileImage}
-                            fallbackSrc={DefaultProfile}
+                            fallbackSrc={defaultProfileImageLight}
                             alt={battle.battleDetailData?.enemy.name || "상대 프로필"}
                           />
                         </S.BattleDetailProfileBox>
@@ -136,7 +135,7 @@ export const Battle = () => {
                           <S.BattleDetailAvatar
                             profileImage={myProfileImg}
                             badgeImage={myBadgeImage}
-                            fallbackSrc={DefaultProfile}
+                            fallbackSrc={defaultProfileImageLight}
                             alt="내 프로필"
                           />
                         </S.BattleDetailProfileBox>
@@ -256,7 +255,7 @@ export const Battle = () => {
                           <S.ProfileIcon>
                             <S.ProfileChoiceAvatar
                               profileImage={user.profileImage}
-                              fallbackSrc={DefaultProfile}
+                              fallbackSrc={defaultProfileImageLight}
                               alt={user.name}
                             />
                           </S.ProfileIcon>
@@ -308,7 +307,7 @@ export const Battle = () => {
                         <S.ProfileIcon>
                           <S.ProfileChoiceAvatar
                             profileImage={applyItem.enemy.profileImage}
-                            fallbackSrc={DefaultProfile}
+                            fallbackSrc={defaultProfileImageLight}
                             alt={applyItem.enemy.name}
                           />
                         </S.ProfileIcon>
