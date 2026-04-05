@@ -18,8 +18,10 @@ export const Wrapper = styled.section`
   height: 100%;
   min-height: 0;
   display: flex;
+  flex: 1 1 auto;
   flex-direction: column;
   gap: 1.25rem;
+  overflow: hidden;
 `;
 
 export const Header = styled.div`
@@ -27,6 +29,11 @@ export const Header = styled.div`
   align-items: flex-start;
   justify-content: space-between;
   gap: 1rem;
+
+  @media (max-width: 40rem) {
+    flex-direction: column;
+    align-items: stretch;
+  }
 `;
 
 export const Title = styled.h2`
@@ -40,6 +47,10 @@ export const FilterRow = styled.div`
   flex-wrap: wrap;
   justify-content: flex-end;
   gap: 0.5rem;
+
+  @media (max-width: 40rem) {
+    justify-content: flex-start;
+  }
 `;
 
 export const FilterChip = styled.button<{ $active: boolean }>`
@@ -53,9 +64,10 @@ export const FilterChip = styled.button<{ $active: boolean }>`
 `;
 
 export const GridScrollArea = styled.div`
-  flex: 1;
+  flex: 1 1 auto;
   min-height: 0;
   overflow-y: auto;
+  overflow-x: hidden;
   padding-right: 0.25rem;
   scrollbar-width: none;
 
@@ -66,9 +78,17 @@ export const GridScrollArea = styled.div`
 
 export const Grid = styled.div`
   display: grid;
-  grid-template-columns: repeat(3, minmax(10.75rem, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(9.75rem, 1fr));
   gap: 1rem;
   align-content: start;
+
+  @media (max-width: 72rem) {
+    grid-template-columns: repeat(2, minmax(10.75rem, 1fr));
+  }
+
+  @media (max-width: 40rem) {
+    grid-template-columns: minmax(0, 1fr);
+  }
 `;
 
 export const CardButton = styled.button<{ $equipped: boolean }>`
@@ -85,6 +105,10 @@ export const CardButton = styled.button<{ $equipped: boolean }>`
     $equipped ? "0 0 0 1px rgba(241, 7, 10, 0.15)" : "0 0.75rem 2rem rgba(0, 0, 0, 0.12)"};
   text-align: left;
   cursor: pointer;
+
+  @media (max-width: 40rem) {
+    min-height: 9.5rem;
+  }
 `;
 
 export const CardPreview = styled.div`
