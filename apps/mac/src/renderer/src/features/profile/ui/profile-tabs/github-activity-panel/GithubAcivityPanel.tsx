@@ -11,12 +11,23 @@ const formatKoreanDate = (ymd: string) => {
   return `${Number(y)}년 ${Number(m)}월 ${Number(d)}일`;
 };
 
+const formatLocalYmd = (date: Date) => {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+};
+
 export const GithubActivityPanel = () => {
-  const { paddedDaysForView, getLevel, selectedId, selectedDay, handleGrassClick } =
+  const { daysForView, paddedDaysForView, getLevel, selectedId, selectedDay, handleGrassClick } =
     useProfileGithubStreak();
 
   const selectedDate = typeof selectedDay?.id === "string" ? selectedDay.id : null;
   const fallbackCount = selectedDay?.count ?? 0;
+  const latestDay = daysForView[daysForView.length - 1] ?? null;
+  const initialDate =
+    typeof latestDay?.id === "string" ? latestDay.id : formatLocalYmd(new Date());
+  const initialContributions = latestDay?.count ?? 0;
 
   const detailQuery = useProfileGithubDetailQuery(selectedDate);
   const detail = detailQuery.data?.data;
@@ -24,15 +35,15 @@ export const GithubActivityPanel = () => {
   const displayDetail = matchedDetail ?? (detailQuery.isPlaceholderData && detail ? detail : null);
 
   const infoProps = useMemo(() => {
-    if (!selectedDate) return null;
-
-    const displayDate = displayDetail?.date ?? selectedDate;
+    const displayDate = displayDetail?.date ?? selectedDate ?? initialDate;
 
     const dateText = formatKoreanDate(displayDate);
 
     return {
       dateText,
-      totalContributions: displayDetail?.contributionCount ?? fallbackCount,
+      totalContributions:
+        displayDetail?.contributionCount ??
+        (selectedDate ? fallbackCount : initialContributions),
 
       commits: displayDetail?.commitsCount ?? 0,
       issues: displayDetail?.issuesCount ?? 0,
@@ -43,44 +54,43 @@ export const GithubActivityPanel = () => {
       dailyAddedLines: displayDetail?.additionLines ?? 0,
       dailyDeletedLines: displayDetail?.deletionLines ?? 0,
     };
-  }, [displayDetail, fallbackCount, selectedDate]);
+  }, [displayDetail, fallbackCount, initialContributions, initialDate, selectedDate]);
+
+  const emptyTitle = !selectedDate
+    ? "잔디를 선택하면 상세 정보를 확인할 수 있어요!"
+    : detailQuery.isError
+      ? "상세 정보를 불러오지 못했어요"
+      : detailQuery.isFetching || detailQuery.isLoading
+        ? "상세 정보를 불러오는 중이에요"
+        : "상세 정보가 없어요";
+
+  const emptyDescription = !selectedDate
+    ? "원하는 날짜의 잔디를 클릭해서 활동 내역과 자세한 정보를 확인해보세요."
+    : detailQuery.isError
+      ? "잠시 후 다시 시도해보세요."
+      : detailQuery.isFetching || detailQuery.isLoading
+        ? "선택한 날짜의 Github 활동 정보를 가져오고 있어요."
+        : "선택한 날짜의 상세 Github 활동 정보가 아직 없습니다.";
 
   return (
-    <>
-      <GithubStreak
-        paddedDaysForView={paddedDaysForView}
-        getLevel={getLevel}
-        selectedId={selectedId}
-        onGrassClick={handleGrassClick}
-      />
+    <S.Panel>
+      <S.StreakSection>
+        <GithubStreak
+          paddedDaysForView={paddedDaysForView}
+          getLevel={getLevel}
+          selectedId={selectedId}
+          onGrassClick={handleGrassClick}
+        />
+      </S.StreakSection>
 
-      {!selectedDate || !infoProps ? (
-        <S.EmptyStateBox>
-          <S.EmptyTitle>잔디를 선택하면 상세 정보를 확인할 수 있어요!</S.EmptyTitle>
-          <S.EmptyDescription>
-            원하는 날짜의 잔디를 클릭해서 활동 내역과 자세한 정보를 확인해보세요.
-          </S.EmptyDescription>
-        </S.EmptyStateBox>
-      ) : (
+      <S.InfoSection>
         <GithubInfo
           {...infoProps}
-          hasDetail={!!displayDetail}
-          emptyTitle={
-            detailQuery.isError
-              ? "상세 정보를 불러오지 못했어요"
-              : detailQuery.isFetching || detailQuery.isLoading
-                ? "상세 정보를 불러오는 중이에요"
-                : "상세 정보가 없어요"
-          }
-          emptyDescription={
-            detailQuery.isError
-              ? "잠시 후 다시 시도해보세요."
-              : detailQuery.isFetching || detailQuery.isLoading
-                ? "선택한 날짜의 Github 활동 정보를 가져오고 있어요."
-                : "선택한 날짜의 상세 Github 활동 정보가 아직 없습니다."
-          }
+          hasDetail={Boolean(selectedDate && displayDetail)}
+          emptyTitle={emptyTitle}
+          emptyDescription={emptyDescription}
         />
-      )}
-    </>
+      </S.InfoSection>
+    </S.Panel>
   );
 };

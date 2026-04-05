@@ -1,18 +1,26 @@
 import styled from "styled-components";
-import { font } from "@clash/design-tokens/font";
 import MypageProfileSrc from "../../assets/rival-profile.png";
 import AddProfileImg from "../../assets/add-profile-img-icon.svg";
 import ChangeProfileImg from "../../assets/change-profile-img-icon.svg";
+import { ProfileAvatar } from "@/shared/ui/profile-avatar";
+import { font } from "@clash/design-tokens";
+import { createNameplateOverlayTuningCss, nameplateFrameCss } from "@/shared/lib";
 
-export const Banner = styled.div<{ $accent?: string; $bgImage?: string }>`
+const topProfileNameplateTuningCss = createNameplateOverlayTuningCss({
+  insetX: "-0.5rem",
+  scaleX: 2,
+  scaleY: 2.25,
+  shiftY: "1.5rem",
+});
+
+export const Banner = styled.div<{ $bgImage?: string }>`
   width: 100%;
   border-radius: 1rem;
   background: ${({ theme }) => theme.background.alternative};
 
-  ${({ $accent, $bgImage }) =>
-    $accent || $bgImage
+  ${({ $bgImage }) =>
+    $bgImage
       ? `
-        background-color: ${$accent ?? "transparent"};
         background-image: ${$bgImage ? `url(${$bgImage})` : "none"};
         background-size: cover;
         background-position: center;
@@ -20,11 +28,15 @@ export const Banner = styled.div<{ $accent?: string; $bgImage?: string }>`
       `
       : ""}
 
-  padding: 1.5rem;
+  padding: clamp(1rem, 2vw, 1.25rem) clamp(1rem, 2.5vw, 1.5rem);
   display: flex;
   justify-content: flex-start;
   align-items: flex-start;
   position: relative;
+
+  @media (max-width: 56rem) {
+    border-radius: 0.875rem;
+  }
 `;
 
 export const Button = styled.div`
@@ -36,50 +48,45 @@ export const Button = styled.div`
 
 export const ProfileCard = styled.div`
   height: 100%;
-  min-height: 12rem;
+  min-height: clamp(8.5rem, 16vw, 9.75rem);
 `;
 
 export const ProfileImgWrapper = styled.div`
   position: absolute;
-  bottom: -40%;
-  left: 16%;
+  bottom: clamp(-4.25rem, -38%, -3rem);
+  left: clamp(1rem, 13%, 7rem);
+
+  @media (max-width: 56rem) {
+    left: 50%;
+    bottom: -3.5rem;
+    transform: translateX(-50%);
+    width: min(100%, 16rem);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
 `;
 
-export const ProfileImgContainer = styled.div<{ $accent?: string; $bgImage?: string }>`
+export const ProfileImgContainer = styled.div`
   position: relative;
-  width: 7.5rem;
-  height: 7.5rem;
-  margin-bottom: 20%;
-  border-radius: 50%;
-  border: ${({ $accent }) => ($accent ? `0.5rem solid ${$accent}` : "none")};
+  width: clamp(5rem, 10vw, 6.25rem);
+  height: clamp(5rem, 10vw, 6.25rem);
+  margin-bottom: clamp(0.7rem, 1.5vw, 0.95rem);
+`;
 
-  ${({ $bgImage }) =>
-    $bgImage
-      ? `
-        background-image: url(${$bgImage});
-        background-size: cover;
-        background-position: center;
-      `
-      : ""}
+export const ProfileAvatarWrap = styled(ProfileAvatar)`
+  width: 100%;
+  height: 100%;
 `;
 
 export const RankTierWrap = styled.div`
   position: absolute;
-  right: 1rem;
-  width: 3rem;
-  height: 3rem;
+  right: clamp(0.35rem, 1vw, 0.7rem);
+  width: clamp(2rem, 3.8vw, 2.4rem);
+  height: clamp(2rem, 3.8vw, 2.4rem);
   bottom: 0;
   transform: translate(35%, 35%);
   z-index: 3;
-`;
-
-export const ProfileImg = styled.img.attrs(() => ({
-  alt: "프로필",
-}))`
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
 `;
 
 export const AddProfileImageIconWrap = styled.div`
@@ -92,6 +99,7 @@ export const AddProfileImageIconWrap = styled.div`
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
+  z-index: 3;
 `;
 
 export const ChangeProfileImageIconWrap = styled.div`
@@ -104,6 +112,7 @@ export const ChangeProfileImageIconWrap = styled.div`
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
+  z-index: 3;
 `;
 
 export const ProfileImageButton = styled.button<{ $hasImage: boolean }>`
@@ -114,8 +123,8 @@ export const ProfileImageButton = styled.button<{ $hasImage: boolean }>`
   border: none;
   background: transparent;
   cursor: pointer;
-  border-radius: 50%;
-  overflow: hidden;
+  display: block;
+  overflow: visible;
 
   &:hover ${AddProfileImageIconWrap}, &:hover ${ChangeProfileImageIconWrap} {
     opacity: 1;
@@ -127,27 +136,51 @@ export const UserInfo = styled.div`
   display: flex;
   align-items: center;
   gap: 0.5rem;
+
+  @media (max-width: 56rem) {
+    justify-content: center;
+    width: 100%;
+  }
 `;
 
-export const Name = styled.div`
+export const DisplayNameWrap = styled.div`
+  margin-left: 0.5rem;
+  margin-top: 0.5rem;
+  max-width: min(60vw, 16rem);
+
+  @media (max-width: 56rem) {
+    margin-left: 0;
+    margin-top: 0.35rem;
+    max-width: 100%;
+  }
+`;
+
+export const DisplayNamePlate = styled.div<{ $image?: string }>`
+  ${topProfileNameplateTuningCss};
+  min-width: 0;
+  max-width: min(100%, 16rem);
+  padding: 0.28rem 1.25rem 0.34rem;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  overflow: visible;
+  ${nameplateFrameCss}
+`;
+
+export const DisplayName = styled.p`
+  ${font.title2.bold};
   color: ${({ theme }) => theme.label.normal};
-  ${font.title1.medium};
-  margin-left: 1.5rem;
-`;
+  margin: 0;
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 
-export const BadgeDot = styled.div<{ $accent?: string }>`
-  width: 2rem;
-  height: 2rem;
-  margin-bottom: 0.625rem;
-  border-radius: 100%;
-  background: ${({ $accent, theme }) => $accent ?? theme.label.normal};
-  transform: translate(15%, 15%);
-`;
-
-export const ImgBox = styled.div`
-  position: relative;
-  width: 100%;
-  height: 100%;
+  @media (max-width: 56rem) {
+    text-align: center;
+  }
 `;
 
 export const HiddenFileInput = styled.input`

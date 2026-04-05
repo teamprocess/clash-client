@@ -1,6 +1,7 @@
 import * as S from "@/features/shop/ui/products/Products.style";
 import { calculateDiscountedPrice } from "@/features/shop/lib/calculateDiscountedPrice";
 import { Product } from "@/entities/product";
+import { ProductPreview } from "../product-preview/ProductPreview";
 
 const getCategoryLabel = (category: Product["category"]) => {
   switch (category) {
@@ -24,37 +25,52 @@ export const ProductDetailPanel = ({
   selectedProduct,
   handleOpenPurchase,
 }: ProductDetailPanelProps) => {
+  const originalPrice = selectedProduct.price.toLocaleString();
+  const discountedPrice = calculateDiscountedPrice(
+    selectedProduct.price,
+    selectedProduct.discount
+  );
+
   return (
     <S.DetailPanel>
-      <S.InfoContainer>
-        <S.ProductImg $imgUrl={selectedProduct.image} />
-        <S.MajorInfoWrapper>
-          <S.ProductTitleDetail>{selectedProduct.title}</S.ProductTitleDetail>
-          <S.ProductCategoryText>
-            {`유형 : ${getCategoryLabel(selectedProduct.category)}`}
-          </S.ProductCategoryText>
-          <S.PriceBoxDetail>
-            <S.CookieIcon />
-            <S.PriceTextDetail>
-              {calculateDiscountedPrice(selectedProduct.price, selectedProduct.discount)}
-            </S.PriceTextDetail>
-            {selectedProduct.discount !== 0 && (
-              <S.DiscountTextDetail>{`(-${selectedProduct.discount}%)`}</S.DiscountTextDetail>
-            )}
-          </S.PriceBoxDetail>
-          <S.DescriptionBox>
-            <S.DescriptionTitle>설명</S.DescriptionTitle>
-            {selectedProduct.description}
-          </S.DescriptionBox>
-        </S.MajorInfoWrapper>
-      </S.InfoContainer>
+      <S.DetailPanelSticky>
+        <S.InfoContainer>
+          <S.ProductImg>
+            <ProductPreview
+              category={selectedProduct.category}
+              image={selectedProduct.image}
+              size="detail"
+            />
+          </S.ProductImg>
+          <S.MajorInfoWrapper>
+            <S.ProductTitleDetail>{selectedProduct.title}</S.ProductTitleDetail>
+            <S.ProductCategoryText>
+              {`유형 : ${getCategoryLabel(selectedProduct.category)}`}
+            </S.ProductCategoryText>
+            <S.PriceBoxDetail>
+              <S.CookieIcon />
+              <S.PriceTextDetail>{discountedPrice}</S.PriceTextDetail>
+              {selectedProduct.discount !== 0 && (
+                <>
+                  <S.OriginalPriceTextDetail>{originalPrice}</S.OriginalPriceTextDetail>
+                  <S.DiscountTextDetail>{`(-${selectedProduct.discount}%)`}</S.DiscountTextDetail>
+                </>
+              )}
+            </S.PriceBoxDetail>
+            <S.DescriptionBox>
+              <S.DescriptionTitle>설명</S.DescriptionTitle>
+              {selectedProduct.description}
+            </S.DescriptionBox>
+          </S.MajorInfoWrapper>
+        </S.InfoContainer>
 
-      <S.PurchaseBtn $isBought={selectedProduct.isBought} onClick={handleOpenPurchase}>
-        {!selectedProduct.isBought && <S.CookieIcon />}
-        {selectedProduct.isBought
-          ? "이미 구매한 상품입니다."
-          : `${calculateDiscountedPrice(selectedProduct.price, selectedProduct.discount)}에 구매하기`}
-      </S.PurchaseBtn>
+        <S.PurchaseBtn $isBought={selectedProduct.isBought} onClick={handleOpenPurchase}>
+          {!selectedProduct.isBought && <S.CookieIcon />}
+          {selectedProduct.isBought
+            ? "이미 구매한 상품입니다."
+            : `${discountedPrice}에 구매하기`}
+        </S.PurchaseBtn>
+      </S.DetailPanelSticky>
     </S.DetailPanel>
   );
 };

@@ -26,6 +26,7 @@ export const usePurchaseModal = ({
   const [step, setStep] = useState<Step>("confirm");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [successBalance, setSuccessBalance] = useState<number | null>(null);
 
   const discountedPrice = useMemo(() => {
     if (!product) return 0;
@@ -49,12 +50,15 @@ export const usePurchaseModal = ({
       return;
     }
 
+    const nextBalance = afterBalance;
+
     try {
       setIsSubmitting(true);
       setErrorMessage(null);
 
       await onPurchase?.(product);
 
+      setSuccessBalance(nextBalance);
       setStep("success");
     } catch (e) {
       if (axios.isAxiosError(e)) {
@@ -81,6 +85,7 @@ export const usePurchaseModal = ({
   const handleClose = () => {
     setStep("confirm");
     setErrorMessage(null);
+    setSuccessBalance(null);
     onClose();
   };
 
@@ -89,6 +94,7 @@ export const usePurchaseModal = ({
     isSubmitting,
     discountedPrice,
     afterBalance,
+    successBalance,
     canPurchase,
     errorMessage,
     handlePurchase,

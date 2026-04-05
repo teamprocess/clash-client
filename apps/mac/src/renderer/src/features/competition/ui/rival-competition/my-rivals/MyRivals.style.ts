@@ -2,6 +2,7 @@ import styled from "styled-components";
 import { font } from "@clash/design-tokens/font";
 import { palette } from "@clash/design-tokens/theme";
 import DetailArrow from "@/shared/ui/assets/front.svg";
+import { ProfileAvatar } from "@/shared/ui/profile-avatar";
 
 export const HorizontalLine = styled.div`
   width: 100%;
@@ -78,6 +79,12 @@ export const ProfileImg = styled.img`
   width: 2rem;
   height: 2rem;
   border-radius: 50%;
+  flex-shrink: 0;
+`;
+
+export const RivalAvatar = styled(ProfileAvatar)`
+  width: 2rem;
+  height: 2rem;
   flex-shrink: 0;
 `;
 

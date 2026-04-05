@@ -2,7 +2,7 @@ import { useMemo } from "react";
 import * as S from "@/features/home/ui/rival/Rival.style";
 import { formatTime, MyRivalItem, resolveUsingApp, useRealtimeRivalActiveTime } from "@/shared/lib";
 import { IdeIcons } from "@/shared/ui/assets/ide-img";
-import { Tooltip } from "@/shared/ui";
+import { Tooltip } from "@/shared/ui/tooltip";
 
 const getUsingAppMeta = (usingApp?: string | null, status?: string) => {
   if (status !== "ONLINE") {
@@ -53,7 +53,7 @@ export const MyRivalUsers = ({ user, getStatus }: MyRivalItem) => {
     <S.ProfileContainer>
       <S.ProfileBox>
         <S.ProfileContent>
-          {user.profileImage ? <S.ProfileIcon src={user.profileImage} /> : <S.DefaultProfileIcon />}
+          <S.RivalProfileAvatar profileImage={user.profileImage} />
 
           <S.NameBox>
             <S.ProfileName>{user.name}</S.ProfileName>

@@ -6,6 +6,7 @@ import Menu from "@/widgets/topbar/assets/menu.svg";
 import Profile from "@/widgets/topbar/assets/profile.svg?url";
 import EXP from "@/widgets/topbar/assets/exp.svg";
 import Cookie from "@/widgets/topbar/assets/cookie.svg";
+import { ProfileAvatar } from "@/shared/ui/profile-avatar";
 
 export const TopbarContainer = styled.header`
   position: relative;
@@ -74,6 +75,12 @@ export const ProfileIcon = styled.img.attrs({
   height: 2.5rem;
   border-radius: 50%;
   object-fit: cover;
+`;
+
+export const ProfileAvatarWrap = styled(ProfileAvatar)`
+  flex-shrink: 0;
+  width: 2.5rem;
+  height: 2.5rem;
 `;
 
 export const FallbackProfileIcon = Profile;

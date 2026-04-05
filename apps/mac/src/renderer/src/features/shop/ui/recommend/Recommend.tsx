@@ -10,35 +10,38 @@ interface RecommendProps {
 export const Recommend = ({ products }: RecommendProps) => {
   const toggle = useProductDetailStore(s => s.toggle);
 
-  const handleCardClick = (product: Product) => {
-    toggle(product.id);
+  if (products.length === 0) {
+    return null;
+  }
+
+  const handleCardClick = (product: Product, selectionKey: string) => {
+    toggle(product.id, product, selectionKey);
   };
 
   return (
     <S.CategoryContainer>
       <S.CategoryTitle>추천</S.CategoryTitle>
-      {products.length === 0 ? (
-        <S.EmptyBox>
-          <S.CryIcon />
-          <S.EmptyText>추천 상품이 없어요.</S.EmptyText>
-        </S.EmptyBox>
-      ) : (
-        <S.CardContainer>
-          {products.map(product => (
-            <ProductCard
-              key={product.id}
-              id={product.id}
-              image={product.image}
-              title={product.title}
-              price={product.price}
-              discount={product.discount}
-              isBought={product.isBought}
-              showOwnedBadge
-              onClick={() => handleCardClick(product)}
-            />
-          ))}
-        </S.CardContainer>
-      )}
+      <S.CardContainer>
+        {products.map(product => {
+          const selectionKey = `recommended:${product.id}`;
+
+          return (
+          <ProductCard
+            key={selectionKey}
+            id={product.id}
+            category={product.category}
+            image={product.image}
+            title={product.title}
+            price={product.price}
+            discount={product.discount}
+            isBought={product.isBought}
+            showOwnedBadge
+            selectionKey={selectionKey}
+            onClick={() => handleCardClick(product, selectionKey)}
+          />
+          );
+        })}
+      </S.CardContainer>
     </S.CategoryContainer>
   );
 };

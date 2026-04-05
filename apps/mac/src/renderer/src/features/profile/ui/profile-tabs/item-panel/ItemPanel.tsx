@@ -1,245 +1,199 @@
-// import React, { useMemo, useState } from "react";
+import { useState } from "react";
 import * as S from "./ItemPanel.style";
-// import { NameplateModal, NameplateModalContent } from "./nameplate-modal/NameplateModal";
-// import { useOwnedItemsQuery } from "@/entities/profile/api/query/useOwnedItems.query";
-// import { OwnedItemCategory } from "@/entities/profile/model/ownedItems.types";
+import { ItemDetailModal } from "./item-detail-modal/ItemDetailModal";
+import { useEquipItemMutation } from "@/entities/profile/api/query/useEquipItem.mutation";
+import { useOwnedItemsQuery } from "@/entities/profile/api/query/useOwnedItems.query";
+import {
+  OwnedItemCategory,
+  type OwnedItem,
+  type OwnedItemDisplayCategory,
+} from "@/entities/profile/model/ownedItems.types";
+import { sortEquippedItemsFirst } from "@/features/profile/lib/sortEquippedItemsFirst";
+import { useGetMyProfile } from "@/entities/user";
+import { getErrorMessage } from "@/shared/lib";
 
-export type ItemPreviewPayload =
-  | { kind: "none" }
-  | { kind: "background"; accentColor?: string; bgImageUrl?: string }
-  | { kind: "badge"; accentColor?: string; bgImageUrl?: string }
-  | { kind: "nameplate"; accentColor?: string; bgImageUrl?: string };
+const FILTER_OPTIONS = [
+  { key: OwnedItemCategory.ALL, label: "전체" },
+  { key: OwnedItemCategory.INSIGNIA, label: "휘장" },
+  { key: OwnedItemCategory.BANNER, label: "배경" },
+  { key: OwnedItemCategory.NAMEPLATE, label: "이름표" },
+] as const;
 
-// export type ItemCategory = "all" | "badge" | "background" | "nameplate";
-//
-// type BaseItem = {
-//   id: string;
-//   title: string;
-//   accentColor?: string;
-//   bgImageUrl?: string;
-// };
-
-// type BadgeItem = BaseItem & { category: "badge" };
-// type BackgroundItem = BaseItem & { category: "background" };
-// type NameplateItem = BaseItem & { category: "nameplate" };
-//
-// type Item = BadgeItem | BackgroundItem | NameplateItem;
-
-// type CSSVars = React.CSSProperties & Record<`--${string}`, string>;
-//
-export type ItemPanelProps = {
-  onPreviewChange?: (payload: ItemPreviewPayload) => void;
-  onStartEdit?: () => void;
+const CATEGORY_LABEL: Record<OwnedItemDisplayCategory, string> = {
+  [OwnedItemCategory.INSIGNIA]: "휘장",
+  [OwnedItemCategory.BANNER]: "배경",
+  [OwnedItemCategory.NAMEPLATE]: "이름표",
 };
-//
-// const chipLabel: Record<ItemCategory, string> = {
-//   all: "전체",
-//   badge: "휘장",
-//   background: "배경",
-//   nameplate: "이름표",
-// };
-//
-// const pillLabel: Record<Exclude<ItemCategory, "all">, string> = {
-//   badge: "휘장",
-//   background: "배경",
-//   nameplate: "이름표",
-// };
-//
-// const uiToApiCategory: Record<ItemCategory, OwnedItemCategory> = {
-//   all: OwnedItemCategory.ALL,
-//   badge: OwnedItemCategory.INSIGNIA,
-//   nameplate: OwnedItemCategory.NAMEPLATE,
-//   background: OwnedItemCategory.BANNER,
-// };
-//
-// const apiToUiCategory = (category: string): Item["category"] | null => {
-//   switch (category) {
-//     case OwnedItemCategory.INSIGNIA:
-//       return "badge";
-//     case OwnedItemCategory.NAMEPLATE:
-//       return "nameplate";
-//     case OwnedItemCategory.BANNER:
-//       return "background";
-//     default:
-//       return null;
-//   }
-// };
 
-// origin props: { onPreviewChange, onStartEdit }: ItemPanelProps
 export const ItemPanel = () => {
-  // const [filter, setFilter] = useState<ItemCategory>("all");
-  // const [selectedId, setSelectedId] = useState<string | null>(null);
-  // const [isNameplateModalOpen, setIsNameplateModalOpen] = useState(false);
-  //
-  // const { data, isLoading, error, setCategory } = useOwnedItemsQuery();
-  //
-  // const items: Item[] = useMemo(() => {
-  //   const apiItems = data?.data?.items ?? [];
-  //
-  //   return apiItems
-  //     .map(apiItem => {
-  //       const uiCategory = apiToUiCategory(apiItem.category);
-  //       if (!uiCategory) return null;
-  //
-  //       return {
-  //         id: String(apiItem.id),
-  //         title: apiItem.title,
-  //         category: uiCategory,
-  //         accentColor: undefined,
-  //         bgImageUrl: undefined,
-  //       } as Item;
-  //     })
-  //     .filter((v): v is Item => v !== null);
-  // }, [data]);
-  //
-  // const clearPreview = () => props.onPreviewChange?.({ kind: "none" });
-  //
-  // const emitPreview = (item: Item) => {
-  //   const payload: ItemPreviewPayload =
-  //     item.category === "background"
-  //       ? { kind: "background", accentColor: item.accentColor, bgImageUrl: item.bgImageUrl }
-  //       : item.category === "badge"
-  //         ? { kind: "badge", accentColor: item.accentColor, bgImageUrl: item.bgImageUrl }
-  //         : { kind: "nameplate", accentColor: item.accentColor, bgImageUrl: item.bgImageUrl };
-  //
-  //   onPreviewChange?.(payload);
-  //   onStartEdit?.();
-  // };
-  //
-  // const openNameplateModal = () => {
-  //   clearPreview();
-  //   setIsNameplateModalOpen(true);
-  // };
-  //
-  // const closeNameplateModal = () => setIsNameplateModalOpen(false);
-  //
-  // const handleCardClick = (item: Item) => {
-  //   setSelectedId(item.id);
-  //
-  //   if (item.category === "nameplate") {
-  //     openNameplateModal();
-  //     return;
-  //   }
-  //
-  //   emitPreview(item);
-  // };
-  //
-  // const handleFilterClick = (key: ItemCategory) => {
-  //   setFilter(key);
-  //   setSelectedId(null);
-  //   clearPreview();
-  //
-  //   setCategory(uiToApiCategory[key]);
-  // };
-  //
-  // if (isLoading) {
-  //   return <S.Wrapper>로딩 중...</S.Wrapper>;
-  // }
-  //
-  // if (error) {
-  //   return <S.Wrapper>아이템을 불러오지 못했어요.</S.Wrapper>;
-  // }
+  const [filter, setFilter] = useState<OwnedItemCategory>(OwnedItemCategory.ALL);
+  const [selectedItem, setSelectedItem] = useState<OwnedItem | null>(null);
+  const { data, isLoading, isFetching, error } = useOwnedItemsQuery(filter);
+  const { data: user } = useGetMyProfile();
+  const equipItemMutation = useEquipItemMutation();
+
+  const items = data?.data?.items ?? [];
+
+  const isEquippedItem = (category: OwnedItemDisplayCategory, itemId: number) => {
+    switch (category) {
+      case OwnedItemCategory.INSIGNIA:
+        return user?.equippedItems?.insigma?.id === itemId;
+      case OwnedItemCategory.NAMEPLATE:
+        return user?.equippedItems?.nameplate?.id === itemId;
+      case OwnedItemCategory.BANNER:
+        return user?.equippedItems?.banner?.id === itemId;
+      default:
+        return false;
+    }
+  };
+
+  const selectedCategory = selectedItem?.category ?? null;
+  const equipErrorMessage = equipItemMutation.isError
+    ? getErrorMessage(equipItemMutation.error, "아이템을 장착하지 못했어요.")
+    : null;
+  const sortedItems = sortEquippedItemsFirst(items, item => isEquippedItem(item.category, item.id));
+
+  const handleCloseModal = () => {
+    setSelectedItem(null);
+    equipItemMutation.reset();
+  };
+
+  const handleFilterChange = (nextFilter: OwnedItemCategory) => {
+    if (nextFilter === filter) {
+      return;
+    }
+
+    handleCloseModal();
+    setFilter(nextFilter);
+  };
+
+  const handleEquipItem = async () => {
+    if (!selectedItem) {
+      return;
+    }
+
+    try {
+      await equipItemMutation.mutateAsync({
+        productId: selectedItem.id,
+        shouldUnequip: selectedCategory ? isEquippedItem(selectedCategory, selectedItem.id) : false,
+      });
+      handleCloseModal();
+    } catch {
+      return;
+    }
+  };
 
   return (
     <>
-      {/*<S.Wrapper>*/}
-      {/*  <S.Header>*/}
-      {/*    <S.Title>아이템</S.Title>*/}
+      <S.Wrapper>
+        <S.Header>
+          <S.Title>아이템</S.Title>
 
-      {/*    <S.FilterRow>*/}
-      {/*      {(["all", "badge", "background", "nameplate"] as const).map(key => (*/}
-      {/*        <S.FilterChip*/}
-      {/*          key={key}*/}
-      {/*          $active={filter === key}*/}
-      {/*          onClick={() => handleFilterClick(key)}*/}
-      {/*          type="button"*/}
-      {/*        >*/}
-      {/*          {chipLabel[key]}*/}
-      {/*        </S.FilterChip>*/}
-      {/*      ))}*/}
-      {/*    </S.FilterRow>*/}
-      {/*  </S.Header>*/}
+          <S.FilterRow>
+            {FILTER_OPTIONS.map(option => (
+              <S.FilterChip
+                key={option.key}
+                $active={filter === option.key}
+                type="button"
+                onClick={() => handleFilterChange(option.key)}
+              >
+                {option.label}
+              </S.FilterChip>
+            ))}
+          </S.FilterRow>
+        </S.Header>
 
-      {/*  <S.GridScrollArea>*/}
-      {/*    <S.Grid>*/}
-      {/*      {items.map(item => {*/}
-      {/*        const isActive = selectedId === item.id;*/}
+        {error ? (
+          <S.StateBox>
+            <S.StateTitle>아이템을 불러오지 못했어요.</S.StateTitle>
+            <S.StateDescription>잠시 후 다시 시도해 주세요.</S.StateDescription>
+          </S.StateBox>
+        ) : isLoading ? (
+          <S.StateBox aria-busy="true">
+            <S.StateTitle>아이템을 불러오는 중...</S.StateTitle>
+            <S.StateDescription>잠시만 기다려 주세요.</S.StateDescription>
+          </S.StateBox>
+        ) : items.length === 0 ? (
+          <S.StateBox>
+            <S.StateTitle>보유한 아이템이 아직 없어요.</S.StateTitle>
+            <S.StateDescription>상점에서 아이템을 구매하면 이 탭에 표시됩니다.</S.StateDescription>
+          </S.StateBox>
+        ) : (
+          <S.GridScrollArea aria-busy={isFetching}>
+            <S.Grid>
+              {sortedItems.map(item => {
+                const category = item.category;
 
-      {/*        const styleVars: CSSVars = {};*/}
-      {/*        if (item.accentColor) styleVars["--item-accent"] = item.accentColor;*/}
-      {/*        if (item.bgImageUrl) styleVars["--item-bg-image"] = `url(${item.bgImageUrl})`;*/}
+                return (
+                  <S.CardButton
+                    key={item.id}
+                    type="button"
+                    $equipped={isEquippedItem(category, item.id)}
+                    onClick={() => setSelectedItem(item)}
+                  >
+                    <S.CardPreview>
+                      {category === OwnedItemCategory.BANNER && (
+                        <S.BannerPreview>
+                          <S.BannerArtwork $image={item.image} />
+                        </S.BannerPreview>
+                      )}
 
-      {/*        return (*/}
-      {/*          <S.CardButton*/}
-      {/*            key={item.id}*/}
-      {/*            type="button"*/}
-      {/*            $active={isActive}*/}
-      {/*            onClick={() => handleCardClick(item)}*/}
-      {/*          >*/}
-      {/*            <S.CardInner>*/}
-      {/*              {item.category === "background" && (*/}
-      {/*                <>*/}
-      {/*                  <S.ThumbBackground style={styleVars} />*/}
-      {/*                  <S.CardFooter>*/}
-      {/*                    <S.ItemTitle>{item.title}</S.ItemTitle>*/}
-      {/*                    <S.BadgePill>{pillLabel[item.category]}</S.BadgePill>*/}
-      {/*                  </S.CardFooter>*/}
-      {/*                </>*/}
-      {/*              )}*/}
+                      {category === OwnedItemCategory.INSIGNIA && (
+                        <S.BadgePreview>
+                          <S.BadgeStage>
+                            <S.BadgeAvatarShell>
+                              <S.BadgeAvatar />
+                            </S.BadgeAvatarShell>
+                            <S.BadgeItemImage $image={item.image} />
+                          </S.BadgeStage>
+                        </S.BadgePreview>
+                      )}
 
-      {/*              {item.category === "badge" && (*/}
-      {/*                <S.ThumbBadgeCard>*/}
-      {/*                  <S.BadgeLeftRing style={styleVars}>*/}
-      {/*                    <S.BadgeAvatar alt="profile" />*/}
-      {/*                  </S.BadgeLeftRing>*/}
+                      {category === OwnedItemCategory.NAMEPLATE && (
+                        <S.NameplatePreview>
+                          <S.NameplateMutedRow>
+                            <S.NameplateDot />
+                            <S.NameplateMutedBar />
+                          </S.NameplateMutedRow>
 
-      {/*                  <S.BadgeRight>*/}
-      {/*                    <S.BadgePillInline>{pillLabel[item.category]}</S.BadgePillInline>*/}
-      {/*                    <S.BadgeTitle>{item.title}</S.BadgeTitle>*/}
-      {/*                  </S.BadgeRight>*/}
-      {/*                </S.ThumbBadgeCard>*/}
-      {/*              )}*/}
+                          <S.NameplateActiveRow>
+                            <S.NameplateHeroAvatar />
+                            <S.NameplateBar $image={item.image} />
+                          </S.NameplateActiveRow>
 
-      {/*              {item.category === "nameplate" && (*/}
-      {/*                <>*/}
-      {/*                  <S.ThumbName>*/}
-      {/*                    <S.NameSmallRow>*/}
-      {/*                      <S.NameSmallAvatar alt="" />*/}
-      {/*                      <S.NameSmallBar />*/}
-      {/*                    </S.NameSmallRow>*/}
+                          <S.NameplateMutedRow>
+                            <S.NameplateDot />
+                            <S.NameplateMutedBar />
+                          </S.NameplateMutedRow>
+                        </S.NameplatePreview>
+                      )}
+                    </S.CardPreview>
 
-      {/*                    <S.NameMainRow>*/}
-      {/*                      <S.NameMainAvatar alt="" style={styleVars} />*/}
-      {/*                      <S.NameMainBar style={styleVars} />*/}
-      {/*                    </S.NameMainRow>*/}
+                    <S.CardFooter>
+                      <S.ItemTitle title={item.title}>{item.title}</S.ItemTitle>
+                      <S.CategoryPill>{CATEGORY_LABEL[category]}</S.CategoryPill>
+                    </S.CardFooter>
+                  </S.CardButton>
+                );
+              })}
+            </S.Grid>
+          </S.GridScrollArea>
+        )}
+      </S.Wrapper>
 
-      {/*                    <S.NameSmallRow>*/}
-      {/*                      <S.NameSmallAvatar alt="" />*/}
-      {/*                      <S.NameSmallBar />*/}
-      {/*                    </S.NameSmallRow>*/}
-      {/*                  </S.ThumbName>*/}
-
-      {/*                  <S.CardFooter>*/}
-      {/*                    <S.ItemTitle>{item.title}</S.ItemTitle>*/}
-      {/*                    <S.BadgePill>{pillLabel[item.category]}</S.BadgePill>*/}
-      {/*                  </S.CardFooter>*/}
-      {/*                </>*/}
-      {/*              )}*/}
-      {/*            </S.CardInner>*/}
-      {/*          </S.CardButton>*/}
-      {/*        );*/}
-      {/*      })}*/}
-      {/*    </S.Grid>*/}
-      {/*  </S.GridScrollArea>*/}
-      {/*</S.Wrapper>*/}
-
-      {/*<NameplateModal open={isNameplateModalOpen} onClose={closeNameplateModal}>*/}
-      {/*  <NameplateModalContent onClose={closeNameplateModal} />*/}
-      {/*</NameplateModal>*/}
-      <S.EmptyStateBox>
-        <S.EmptyTitle>아이템 기능은 현재 개발중인 탭입니다.</S.EmptyTitle>
-        <S.EmptyDescription>정식 출시 이후에 사용할 수 있어요!</S.EmptyDescription>
-      </S.EmptyStateBox>
+      {selectedItem && selectedCategory && (
+        <ItemDetailModal
+          isOpen
+          item={selectedItem}
+          category={selectedCategory}
+          user={user}
+          isEquipped={isEquippedItem(selectedCategory, selectedItem.id)}
+          isSubmitting={equipItemMutation.isPending}
+          errorMessage={equipErrorMessage}
+          onClose={handleCloseModal}
+          onEquip={handleEquipItem}
+        />
+      )}
     </>
   );
 };
