@@ -28,6 +28,11 @@ export const Background = styled.div`
   @media (max-width: 64rem) {
     border-radius: 0.75rem;
   }
+
+  @media (max-height: 52rem) {
+    gap: 1rem;
+    padding: 0.875rem 1rem 1rem;
+  }
 `;
 
 export const BodyRow = styled.div`

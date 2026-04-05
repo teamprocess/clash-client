@@ -1,7 +1,7 @@
 import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import * as S from "./Topbar.style";
-import { expTooltipContent } from "./Topbar.constants";
+import { cookieTooltipContent, expTooltipContent } from "./Topbar.constants";
 import { useGetMyProfile } from "@/entities/user";
 import { TopbarNotice } from "@/features/notice";
 import { formatPrice, resolveProfileDecorations } from "@/shared/lib";
@@ -60,6 +60,7 @@ export const Topbar = ({ onToggleSidebar }: TopbarProps) => {
         <S.GoodsBox>
           <S.CookieIcon />
           <span>{formatPrice(user?.totalCookie || 0)}</span>
+          <QuestionTooltip position="bottom" content={cookieTooltipContent} />
         </S.GoodsBox>
 
         <TopbarNotice />

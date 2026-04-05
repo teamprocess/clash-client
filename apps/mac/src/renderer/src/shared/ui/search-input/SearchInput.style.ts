@@ -5,13 +5,27 @@ import { palette } from "@clash/design-tokens/theme";
 import Search from "@/features/home/assets/home/search.svg";
 
 export const SearchIcon = styled(Search)`
-  position: absolute;
-  right: 1rem;
-  top: 50%;
-  transform: translateY(-50%);
   width: 1.85rem;
   height: 1.85rem;
   pointer-events: none;
+`;
+
+export const SearchIconButton = styled.button`
+  position: absolute;
+  right: 0.45rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 2.5rem;
+  height: 2.5rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: inherit;
+  line-height: 0;
+  cursor: pointer;
 `;
 
 export type SearchInputVariant = "light" | "dark";

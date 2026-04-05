@@ -37,6 +37,10 @@ export const Banner = styled.div<{ $bgImage?: string }>`
   @media (max-width: 56rem) {
     border-radius: 0.875rem;
   }
+
+  @media (max-height: 52rem) {
+    padding: 0.875rem 1rem;
+  }
 `;
 
 export const Button = styled.div`
@@ -48,12 +52,12 @@ export const Button = styled.div`
 
 export const ProfileCard = styled.div`
   height: 100%;
-  min-height: clamp(8.5rem, 16vw, 9.75rem);
+  min-height: clamp(7rem, 14vh, 9.75rem);
 `;
 
 export const ProfileImgWrapper = styled.div`
   position: absolute;
-  bottom: clamp(-4.25rem, -38%, -3rem);
+  bottom: clamp(-4rem, -7vh, -2.75rem);
   left: clamp(1rem, 13%, 7rem);
 
   @media (max-width: 56rem) {
@@ -69,9 +73,9 @@ export const ProfileImgWrapper = styled.div`
 
 export const ProfileImgContainer = styled.div`
   position: relative;
-  width: clamp(5rem, 10vw, 6.25rem);
-  height: clamp(5rem, 10vw, 6.25rem);
-  margin-bottom: clamp(0.7rem, 1.5vw, 0.95rem);
+  width: clamp(4.6rem, 8vh, 6.25rem);
+  height: clamp(4.6rem, 8vh, 6.25rem);
+  margin-bottom: clamp(0.55rem, 1vh, 0.95rem);
 `;
 
 export const ProfileAvatarWrap = styled(ProfileAvatar)`
@@ -145,7 +149,7 @@ export const UserInfo = styled.div`
 
 export const DisplayNameWrap = styled.div`
   margin-left: 0.5rem;
-  margin-top: 0.5rem;
+  margin-top: clamp(0.25rem, 0.8vh, 0.5rem);
   max-width: min(60vw, 16rem);
 
   @media (max-width: 56rem) {
