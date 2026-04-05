@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { useActiveAnnouncementsQuery } from "@/entities/announcement";
 import { useGetMyProfile } from "@/entities/user";
 import {
@@ -13,43 +13,33 @@ export const useGlobalAnnouncement = () => {
   const isAnnouncementEnabled = Boolean(user?.githubLinked) && !isUserLoading;
   const { data: announcements = [] } = useActiveAnnouncementsQuery(isAnnouncementEnabled);
   const [dismissedAnnouncementId, setDismissedAnnouncementId] = useState<number | null>(null);
-  const [isOpen, setIsOpen] = useState(false);
-  const [hideForThreeDays, setHideForThreeDays] = useState(false);
+  const [hideForThreeDaysChecked, setHideForThreeDaysChecked] = useState(false);
+  const [hideForThreeDaysAnnouncementId, setHideForThreeDaysAnnouncementId] = useState<
+    number | null
+  >(null);
 
   const announcement = useMemo(() => {
     const [latestAnnouncement] = sortAnnouncements(announcements);
     return latestAnnouncement ?? null;
   }, [announcements]);
 
-  useEffect(() => {
-    if (!isAnnouncementEnabled) {
-      setIsOpen(false);
-      setHideForThreeDays(false);
-      return;
-    }
+  const isOpen = Boolean(
+    isAnnouncementEnabled &&
+      announcement &&
+      announcement.id !== dismissedAnnouncementId &&
+      !isAnnouncementHidden(announcement.id)
+  );
 
-    if (!announcement) {
-      setIsOpen(false);
-      setHideForThreeDays(false);
-      return;
-    }
+  const hideForThreeDays =
+    announcement?.id === hideForThreeDaysAnnouncementId ? hideForThreeDaysChecked : false;
 
-    if (announcement.id === dismissedAnnouncementId) {
-      return;
-    }
-
-    if (isAnnouncementHidden(announcement.id)) {
-      setIsOpen(false);
-      return;
-    }
-
-    setHideForThreeDays(false);
-    setIsOpen(true);
-  }, [announcement, dismissedAnnouncementId, isAnnouncementEnabled]);
+  const setHideForThreeDays = (checked: boolean) => {
+    setHideForThreeDaysChecked(checked);
+    setHideForThreeDaysAnnouncementId(announcement?.id ?? null);
+  };
 
   const handleClose = () => {
     if (!announcement) {
-      setIsOpen(false);
       return;
     }
 
@@ -58,8 +48,8 @@ export const useGlobalAnnouncement = () => {
     }
 
     setDismissedAnnouncementId(announcement.id);
-    setHideForThreeDays(false);
-    setIsOpen(false);
+    setHideForThreeDaysChecked(false);
+    setHideForThreeDaysAnnouncementId(announcement.id);
   };
 
   return {
