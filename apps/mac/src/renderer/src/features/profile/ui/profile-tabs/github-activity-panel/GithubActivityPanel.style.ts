@@ -7,7 +7,9 @@ export const Panel = styled.div`
   min-height: 0;
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  flex: 1 1 auto;
+  justify-content: space-between;
+  gap: clamp(1rem, 3vh, 2rem);
   overflow: hidden;
 `;
 
@@ -19,10 +21,16 @@ export const StreakSection = styled.div`
 
 export const InfoSection = styled.div`
   width: 100%;
-  flex: 1 1 auto;
-  min-height: 11rem;
+  flex: 0 1 auto;
+  min-height: 0;
   min-width: 0;
   display: flex;
+  overflow: auto;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `;
 
 export const EmptyStateBox = styled.div`

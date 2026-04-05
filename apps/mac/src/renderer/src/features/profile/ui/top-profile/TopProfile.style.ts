@@ -28,11 +28,15 @@ export const Banner = styled.div<{ $bgImage?: string }>`
       `
       : ""}
 
-  padding: 1.25rem 1.5rem;
+  padding: clamp(1rem, 2vw, 1.25rem) clamp(1rem, 2.5vw, 1.5rem);
   display: flex;
   justify-content: flex-start;
   align-items: flex-start;
   position: relative;
+
+  @media (max-width: 56rem) {
+    border-radius: 0.875rem;
+  }
 `;
 
 export const Button = styled.div`
@@ -44,20 +48,30 @@ export const Button = styled.div`
 
 export const ProfileCard = styled.div`
   height: 100%;
-  min-height: 9.75rem;
+  min-height: clamp(8.5rem, 16vw, 9.75rem);
 `;
 
 export const ProfileImgWrapper = styled.div`
   position: absolute;
-  bottom: -38%;
-  left: 13%;
+  bottom: clamp(-4.25rem, -38%, -3rem);
+  left: clamp(1rem, 13%, 7rem);
+
+  @media (max-width: 56rem) {
+    left: 50%;
+    bottom: -3.5rem;
+    transform: translateX(-50%);
+    width: min(100%, 16rem);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
 `;
 
 export const ProfileImgContainer = styled.div`
   position: relative;
-  width: 6.25rem;
-  height: 6.25rem;
-  margin-bottom: 0.95rem;
+  width: clamp(5rem, 10vw, 6.25rem);
+  height: clamp(5rem, 10vw, 6.25rem);
+  margin-bottom: clamp(0.7rem, 1.5vw, 0.95rem);
 `;
 
 export const ProfileAvatarWrap = styled(ProfileAvatar)`
@@ -67,9 +81,9 @@ export const ProfileAvatarWrap = styled(ProfileAvatar)`
 
 export const RankTierWrap = styled.div`
   position: absolute;
-  right: 0.7rem;
-  width: 2.4rem;
-  height: 2.4rem;
+  right: clamp(0.35rem, 1vw, 0.7rem);
+  width: clamp(2rem, 3.8vw, 2.4rem);
+  height: clamp(2rem, 3.8vw, 2.4rem);
   bottom: 0;
   transform: translate(35%, 35%);
   z-index: 3;
@@ -122,11 +136,23 @@ export const UserInfo = styled.div`
   display: flex;
   align-items: center;
   gap: 0.5rem;
+
+  @media (max-width: 56rem) {
+    justify-content: center;
+    width: 100%;
+  }
 `;
 
 export const DisplayNameWrap = styled.div`
   margin-left: 0.5rem;
   margin-top: 0.5rem;
+  max-width: min(60vw, 16rem);
+
+  @media (max-width: 56rem) {
+    margin-left: 0;
+    margin-top: 0.35rem;
+    max-width: 100%;
+  }
 `;
 
 export const DisplayNamePlate = styled.div<{ $image?: string }>`
@@ -151,6 +177,10 @@ export const DisplayName = styled.p`
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+
+  @media (max-width: 56rem) {
+    text-align: center;
+  }
 `;
 
 export const HiddenFileInput = styled.input`
