@@ -1,4 +1,5 @@
 import { BrowserWindow, Menu, type MenuItemConstructorOptions } from "electron";
+import { IS_DEV_CHANNEL } from "../runtimeProfile";
 import { resetWindowZoom, zoomInWindow, zoomOutWindow } from "../window/zoom";
 
 interface RegisterApplicationMenuParams {
@@ -12,7 +13,7 @@ const createViewMenu = (): MenuItemConstructorOptions => ({
   submenu: [
     { role: "reload" },
     { role: "forceReload" },
-    { role: "toggleDevTools" },
+    ...(IS_DEV_CHANNEL ? ([{ role: "toggleDevTools" }] satisfies MenuItemConstructorOptions[]) : []),
     { type: "separator" },
     {
       label: "100%",

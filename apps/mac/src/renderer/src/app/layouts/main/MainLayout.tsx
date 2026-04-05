@@ -1,6 +1,7 @@
 import { useRef, useEffect, useState } from "react";
 import { Outlet, useLocation } from "react-router-dom";
 import { useDailyRefresh, useRealtimeSync } from "@/features/app-monitor";
+import { GlobalAnnouncementDialog } from "@/features/announcement";
 import { GitHubGuard } from "@/features/github";
 import { Topbar } from "@/widgets/topbar";
 import { Sidebar } from "@/widgets/sidebar";
@@ -30,6 +31,7 @@ export const MainLayout = () => {
           <Outlet />
         </S.MainContent>
       </S.ContentWrapper>
+      <GlobalAnnouncementDialog />
       <GitHubGuard />
     </S.LayoutContainer>
   );

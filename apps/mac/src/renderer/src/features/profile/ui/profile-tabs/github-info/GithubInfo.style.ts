@@ -10,6 +10,8 @@ import FireImg from "../../../assets/fire.svg?url";
 import CodeImg from "../../../assets/code.svg?url";
 import ReviewImg from "../../../assets/review.svg?url";
 
+const largeDesktopQuery = "@media (min-width: 100rem) and (min-height: 60rem)";
+
 export const DateIcon = styled.img.attrs({
   src: DateImg,
   alt: "날짜",
@@ -80,7 +82,7 @@ export const CodeIcon = styled.img.attrs({
 
 export const ActiveContainer = styled.section`
   width: 100%;
-  height: auto;
+  height: 100%;
   min-height: 0;
   display: flex;
   flex-direction: column;
@@ -137,6 +139,7 @@ export const TotalText = styled.p`
 
 export const GithubBox = styled.div`
   width: 100%;
+  flex: 1 1 auto;
   min-height: 6.625rem;
   border-radius: 1.25rem;
   padding: 1rem 1.25rem;
@@ -186,12 +189,20 @@ export const StatTextGroup = styled.div`
 export const StatCount = styled.p`
   ${font.headline2.bold}
   color: ${({ theme }) => theme.label.strong};
+
+  ${largeDesktopQuery} {
+    ${font.title2.bold}
+  }
 `;
 
 export const StatLabel = styled.p`
   ${font.caption.medium}
   color: ${({ theme }) => theme.label.normal};
   white-space: nowrap;
+
+  ${largeDesktopQuery} {
+    ${font.body.medium}
+  }
 `;
 
 export const Info = styled.div`
@@ -234,6 +245,10 @@ export const MetaLabel = styled.p`
   color: ${({ theme }) => theme.label.alternative};
   white-space: nowrap;
   flex: 0 0 auto;
+
+  ${largeDesktopQuery} {
+    ${font.body.medium}
+  }
 `;
 
 export const MetaValue = styled.p`
@@ -244,6 +259,10 @@ export const MetaValue = styled.p`
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+
+  ${largeDesktopQuery} {
+    ${font.body.bold}
+  }
 `;
 
 export const HDivider = styled.div`
@@ -267,11 +286,19 @@ export const Lines = styled.div`
 export const Plus = styled.span`
   ${font.label.bold}
   color: ${palette.green[40]};
+
+  ${largeDesktopQuery} {
+    ${font.body.bold}
+  }
 `;
 
 export const Minus = styled.span`
   ${font.label.bold}
   color: ${palette.red[60]};
+
+  ${largeDesktopQuery} {
+    ${font.body.bold}
+  }
 `;
 
 export const Slash = styled.span`
@@ -282,10 +309,15 @@ export const Slash = styled.span`
 export const LinesUnit = styled.span`
   ${font.caption.medium}
   color: ${({ theme }) => theme.label.alternative};
+
+  ${largeDesktopQuery} {
+    ${font.body.medium}
+  }
 `;
 
 export const EmptyBox = styled.div`
   width: 100%;
+  flex: 1 1 auto;
   min-height: 6.625rem;
   border-radius: 1.25rem;
   padding: 1.25rem;
