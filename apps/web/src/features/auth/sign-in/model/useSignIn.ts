@@ -8,7 +8,7 @@ import { authApi } from "@/entities/user";
 import { getAuthParams, getErrorMessage } from "@/shared/lib";
 
 const signInSchema = z.object({
-  id: z.string().min(4, "아이디를 입력하세요."),
+  id: z.string().min(1, "아이디를 입력하세요."),
   password: z.string().min(8, "비밀번호를 입력하세요."),
 });
 
