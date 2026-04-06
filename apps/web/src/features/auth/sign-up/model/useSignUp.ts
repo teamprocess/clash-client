@@ -7,9 +7,48 @@ import { authApi } from "@/entities/user";
 import { useLocation, useNavigate } from "react-router-dom";
 import { getApiError, getErrorMessage } from "@/shared/lib";
 
+const USERNAME_REQUIRED_MESSAGE = "아이디를 입력하세요.";
+const USERNAME_RULE_MESSAGE =
+  "아이디는 3~20자이며 영문, 숫자, 밑줄(_), 하이픈(-)만 사용할 수 있습니다.";
+const USERNAME_CHECK_ERROR_MESSAGE = "아이디 중복 확인 중 오류가 발생했습니다.";
+const USERNAME_REGEX = /^[a-zA-Z0-9_-]+$/;
+
+const getUsernameValidationMessage = (username: string) => {
+  if (username.length === 0) {
+    return USERNAME_REQUIRED_MESSAGE;
+  }
+
+  if (username.length < 3 || username.length > 20) {
+    return USERNAME_RULE_MESSAGE;
+  }
+
+  if (!USERNAME_REGEX.test(username)) {
+    return USERNAME_RULE_MESSAGE;
+  }
+
+  return null;
+};
+
+const usernameSchema = z.string().superRefine((value, ctx) => {
+  const message = getUsernameValidationMessage(value);
+
+  if (message) {
+    ctx.addIssue({
+      code: "custom",
+      message,
+    });
+  }
+});
+
+const isUsernameDuplicateError = (code?: string, status?: number) =>
+  status === 409 ||
+  code === "USERNAME_ALREADY_EXIST" ||
+  code === "USERNAME_ALREADY_EXISTS" ||
+  code === "USERNAME_DUPLICATED";
+
 // SignUp Schema
 const signUpSchema = z.object({
-  username: z.string().min(4, "아이디는 최소 4자 이상이어야 합니다."),
+  username: usernameSchema,
   name: z.string().min(1, "이름을 입력하세요."),
   email: z.email("유효한 이메일 주소를 입력하세요."),
   password: z.string().min(8, "비밀번호는 최소 8자 이상이어야 합니다."),
@@ -55,17 +94,21 @@ export const useSignUp = () => {
   // 아이디 중복 확인 API
   const handleUsernameCheck = async () => {
     const currentUsername = signUpForm.getValues("username");
+    const validationResult = usernameSchema.safeParse(currentUsername);
 
-    if (!currentUsername) {
+    if (!validationResult.success) {
+      setCheckedUsername("");
+      setUsernameAvailable(false);
       signUpForm.setError("username", {
         type: "manual",
-        message: "아이디를 입력하세요.",
+        message: validationResult.error.issues[0]?.message ?? USERNAME_REQUIRED_MESSAGE,
       });
       return;
     }
 
     try {
       setIsCheckingUsername(true);
+      signUpForm.clearErrors("username");
 
       if (!executeRecaptcha) {
         signUpForm.setError("username", {
@@ -83,18 +126,43 @@ export const useSignUp = () => {
         { recaptchaToken }
       );
 
-      if (result.success && result.data?.duplicated === false) {
+      if (result.data?.duplicated === false) {
         setUsernameAvailable(true);
         setCheckedUsername(currentUsername);
-      } else {
+        signUpForm.clearErrors("username");
+        return;
+      }
+
+      if (result.data?.duplicated === true) {
         setUsernameAvailable(false);
         setCheckedUsername(currentUsername);
+        signUpForm.clearErrors("username");
+        return;
       }
-    } catch (error: unknown) {
-      console.error("사용자 아이디 중복 검증에 실패했습니다.", error);
+
+      setCheckedUsername("");
+      setUsernameAvailable(false);
       signUpForm.setError("username", {
         type: "manual",
-        message: "아이디 중복 확인 중 오류가 발생했습니다.",
+        message: result.message || USERNAME_CHECK_ERROR_MESSAGE,
+      });
+    } catch (error: unknown) {
+      console.error("사용자 아이디 중복 검증에 실패했습니다.", error);
+
+      const { code, status, message } = getApiError(error, USERNAME_CHECK_ERROR_MESSAGE);
+
+      if (isUsernameDuplicateError(code, status)) {
+        setUsernameAvailable(false);
+        setCheckedUsername(currentUsername);
+        signUpForm.clearErrors("username");
+        return;
+      }
+
+      setCheckedUsername("");
+      setUsernameAvailable(false);
+      signUpForm.setError("username", {
+        type: "manual",
+        message,
       });
     } finally {
       setIsCheckingUsername(false);
