@@ -8,15 +8,21 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { getApiError, getErrorMessage } from "@/shared/lib";
 
 const USERNAME_REQUIRED_MESSAGE = "아이디를 입력하세요.";
-const USERNAME_RULE_MESSAGE = "아이디는 3~20자 사이여야 하며 마침표(.)는 사용할 수 없습니다.";
+const USERNAME_RULE_MESSAGE =
+  "아이디는 3~20자이며 영문, 숫자, 밑줄(_), 하이픈(-)만 사용할 수 있습니다.";
 const USERNAME_CHECK_ERROR_MESSAGE = "아이디 중복 확인 중 오류가 발생했습니다.";
+const USERNAME_REGEX = /^[a-zA-Z0-9_-]+$/;
 
 const getUsernameValidationMessage = (username: string) => {
   if (username.length === 0) {
     return USERNAME_REQUIRED_MESSAGE;
   }
 
-  if (username.length < 3 || username.length > 20 || username.includes(".")) {
+  if (username.length < 3 || username.length > 20) {
+    return USERNAME_RULE_MESSAGE;
+  }
+
+  if (!USERNAME_REGEX.test(username)) {
     return USERNAME_RULE_MESSAGE;
   }
 
