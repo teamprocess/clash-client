@@ -40,7 +40,7 @@ export const SignUp = ({
           {usernameChecked && usernameAvailable && (
             <S.SuccessMessage>사용 가능한 아이디입니다.</S.SuccessMessage>
           )}
-          {usernameChecked && !usernameAvailable && (
+          {!errors.username && usernameChecked && !usernameAvailable && (
             <S.ErrorText>이미 사용 중인 아이디입니다.</S.ErrorText>
           )}
         </div>
