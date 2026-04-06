@@ -4,8 +4,8 @@ import { Tooltip } from "@/shared/ui";
 import { getCountLabel } from "@/shared/lib";
 
 export type GithubInfoProps = {
-  dateText: string;
-  totalContributions: number;
+  dateText?: string | null;
+  totalContributions?: number | null;
   commits: number;
   issues: number;
   pullRequests: number;
@@ -13,6 +13,7 @@ export type GithubInfoProps = {
   topCommitRepo: string;
   dailyAddedLines: number;
   dailyDeletedLines: number;
+  showSummary?: boolean;
   hasDetail?: boolean;
   emptyTitle?: string;
   emptyDescription?: string;
@@ -28,6 +29,7 @@ export const GithubInfo = ({
   topCommitRepo,
   dailyAddedLines,
   dailyDeletedLines,
+  showSummary = true,
   hasDetail = true,
   emptyTitle = "잔디를 눌러 상세정보를 확인해보세요",
   emptyDescription = "스트릭(잔디)에서 날짜를 선택하면 커밋/이슈/PR 등의 상세 활동이 표시돼요.",
@@ -68,6 +70,33 @@ export const GithubInfo = ({
   if (!hasDetail) {
     return (
       <S.ActiveContainer>
+        {showSummary && dateText && typeof totalContributions === "number" && (
+          <S.Title>
+            <S.Date>
+              <S.DateIcon />
+              <S.DateText>{dateText}</S.DateText>
+            </S.Date>
+
+            <S.Total>
+              <S.Number>{totalContributions.toLocaleString("ko-KR")}</S.Number>
+              <S.TotalText>
+                {getCountLabel(totalContributions, "Contribution", "Contributions")}
+              </S.TotalText>
+            </S.Total>
+          </S.Title>
+        )}
+
+        <S.EmptyBox>
+          <S.EmptyTitle>{emptyTitle}</S.EmptyTitle>
+          <S.EmptyDesc>{emptyDescription}</S.EmptyDesc>
+        </S.EmptyBox>
+      </S.ActiveContainer>
+    );
+  }
+
+  return (
+    <S.ActiveContainer>
+      {showSummary && dateText && typeof totalContributions === "number" && (
         <S.Title>
           <S.Date>
             <S.DateIcon />
@@ -81,30 +110,7 @@ export const GithubInfo = ({
             </S.TotalText>
           </S.Total>
         </S.Title>
-
-        <S.EmptyBox>
-          <S.EmptyTitle>{emptyTitle}</S.EmptyTitle>
-          <S.EmptyDesc>{emptyDescription}</S.EmptyDesc>
-        </S.EmptyBox>
-      </S.ActiveContainer>
-    );
-  }
-
-  return (
-    <S.ActiveContainer>
-      <S.Title>
-        <S.Date>
-          <S.DateIcon />
-          <S.DateText>{dateText}</S.DateText>
-        </S.Date>
-
-        <S.Total>
-          <S.Number>{totalContributions.toLocaleString("ko-KR")}</S.Number>
-          <S.TotalText>
-            {getCountLabel(totalContributions, "Contribution", "Contributions")}
-          </S.TotalText>
-        </S.Total>
-      </S.Title>
+      )}
 
       <S.GithubBox>
         <S.Github>
@@ -135,8 +141,6 @@ export const GithubInfo = ({
               </Tooltip>
             </S.MetaText>
           </S.MetaRow>
-
-          <S.HDivider />
 
           <S.MetaRow>
             <S.CodeIcon />
