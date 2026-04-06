@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { useForm, useWatch } from "react-hook-form";
+import axios from "axios";
+import { useForm, useWatch, type UseFormSetError } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import {
@@ -23,6 +24,23 @@ const groupEditSchema = z.object({
 });
 
 export type GroupEditFormData = z.infer<typeof groupEditSchema>;
+
+const DUPLICATE_GROUP_NAME_MESSAGE = "이미 사용 중인 그룹 이름입니다.";
+
+const applyDuplicateGroupNameError = (
+  error: unknown,
+  setError: UseFormSetError<GroupEditFormData>
+) => {
+  if (axios.isAxiosError(error) && error.response?.status === 409) {
+    setError("name", {
+      type: "server",
+      message: DUPLICATE_GROUP_NAME_MESSAGE,
+    });
+    return true;
+  }
+
+  return false;
+};
 
 export const useGroup = (currentGroupId: number | null) => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -213,6 +231,8 @@ export const useGroup = (currentGroupId: number | null) => {
   };
 
   const handleCreateSubmit = async (data: GroupEditFormData) => {
+    createForm.clearErrors("name");
+
     try {
       const result = await groupApi.createGroup({
         name: data.name,
@@ -234,6 +254,10 @@ export const useGroup = (currentGroupId: number | null) => {
         console.error("그룹 생성 실패:", result.message);
       }
     } catch (error: unknown) {
+      if (applyDuplicateGroupNameError(error, createForm.setError)) {
+        return;
+      }
+
       const errorMessage = getErrorMessage(error, "그룹 생성 중 오류가 발생했습니다.");
       console.error("그룹 생성 실패:", errorMessage, error);
     }
@@ -272,6 +296,8 @@ export const useGroup = (currentGroupId: number | null) => {
       return;
     }
 
+    editForm.clearErrors("name");
+
     try {
       const nextPassword = isEditPasswordChangeEnabled ? (data.password ?? "") : "";
       const passwordRequired = editPasswordRequired || nextPassword.length > 0;
@@ -297,6 +323,10 @@ export const useGroup = (currentGroupId: number | null) => {
         console.error("그룹 수정 실패:", result.message);
       }
     } catch (error: unknown) {
+      if (applyDuplicateGroupNameError(error, editForm.setError)) {
+        return;
+      }
+
       const errorMessage = getErrorMessage(error, "그룹 수정 중 오류가 발생했습니다.");
       console.error("그룹 수정 실패:", errorMessage, error);
     }
