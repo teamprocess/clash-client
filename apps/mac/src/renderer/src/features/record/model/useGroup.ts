@@ -12,8 +12,14 @@ import {
 } from "@/entities/group";
 import { getErrorMessage, queryClient } from "@/shared/lib";
 
+export const GROUP_NAME_MAX_LENGTH = 10;
+export const GROUP_NAME_MAX_ERROR_MESSAGE = "그룹명은 10자 이하로 입력해주세요.";
+
 const groupEditSchema = z.object({
-  name: z.string().min(1, "그룹명을 입력하세요"),
+  name: z
+    .string()
+    .min(1, "그룹명을 입력해주세요.")
+    .max(GROUP_NAME_MAX_LENGTH, GROUP_NAME_MAX_ERROR_MESSAGE),
   password: z.string().optional(),
   type: z.enum(GROUP_CATEGORIES),
   maxMembers: z

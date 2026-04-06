@@ -1,6 +1,12 @@
+import { type ChangeEvent, type FocusEvent, useState } from "react";
 import { GROUP_CATEGORIES, GROUP_CATEGORY_LABELS, type GroupCategory } from "@/entities/group";
-import type { GroupEditFormData } from "../../../model/useGroup";
+import {
+  GROUP_NAME_MAX_ERROR_MESSAGE,
+  GROUP_NAME_MAX_LENGTH,
+  type GroupEditFormData,
+} from "../../../model/useGroup";
 import type { FieldErrors, UseFormRegister } from "react-hook-form";
+import { Tooltip } from "@/shared/ui";
 import * as S from "./GroupFormFields.style";
 
 interface GroupFormFieldsProps {
@@ -53,18 +59,49 @@ export const GroupFormFields = ({
     label: GROUP_CATEGORY_LABELS[category],
   }));
   const isCreatePanel = variant === "createPanel";
+  const nameField = register("name");
+  const [isNameLimitTooltipOpen, setIsNameLimitTooltipOpen] = useState(false);
+
+  const handleNameChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const nextValue = event.currentTarget.value;
+    const isExceeded = nextValue.length > GROUP_NAME_MAX_LENGTH;
+
+    setIsNameLimitTooltipOpen(isExceeded);
+
+    if (isExceeded) {
+      event.currentTarget.value = nextValue.slice(0, GROUP_NAME_MAX_LENGTH);
+    }
+
+    nameField.onChange(event);
+  };
+
+  const handleNameBlur = (event: FocusEvent<HTMLInputElement>) => {
+    setIsNameLimitTooltipOpen(false);
+    nameField.onBlur(event);
+  };
 
   return (
     <S.FieldsContainer $variant={variant}>
       <S.InputWrapper>
         <S.InputBox>
           <S.Label htmlFor={nameInputId}>그룹 이름</S.Label>
-          <S.Input
-            id={nameInputId}
-            type="text"
-            placeholder={namePlaceholder}
-            {...register("name")}
-          />
+          <Tooltip
+            content={GROUP_NAME_MAX_ERROR_MESSAGE}
+            open={isNameLimitTooltipOpen}
+            triggerOnHover={false}
+            position="top"
+            maxWidth="16rem"
+            wrapperStyle={{ width: "100%", display: "block" }}
+          >
+            <S.Input
+              id={nameInputId}
+              type="text"
+              placeholder={namePlaceholder}
+              {...nameField}
+              onChange={handleNameChange}
+              onBlur={handleNameBlur}
+            />
+          </Tooltip>
           {errors.name && <S.ErrorText>{errors.name.message}</S.ErrorText>}
         </S.InputBox>
         <S.InputBox>
