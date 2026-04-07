@@ -1,14 +1,10 @@
 import * as S from "./MyRivals.style";
-import { getStatus, useMyRivals } from "@/features/competition/model/useMyRivals";
+import { defaultProfileImageLight, formatTime, resolveUsingApp, useRealtimeRivalActiveTime, useRival } from "@/shared/lib";
 import {
-  defaultProfileImageLight,
-  formatTime,
-  resolveUsingApp,
-  useRealtimeRivalActiveTime,
-  useRival,
-} from "@/shared/lib";
-import { MyRivalsRequest, MyRivalsResponse } from "@/entities/competition";
-import { useMemo } from "react";
+  MyRivalsRequest,
+  MyRivalsResponse,
+  USER_STATUS_LABELS,
+} from "@/entities/competition";
 import { QuestionTooltip, RankTier, RivalsManagementDialog, Tooltip } from "@/shared/ui";
 import { IdeIcons } from "@/shared/ui/assets/ide-img";
 
@@ -16,52 +12,13 @@ interface MyRivalsProps {
   data: MyRivalsResponse;
 }
 
-const getUsingAppMeta = (usingApp?: string | null, status?: string) => {
-  if (status !== "ONLINE") {
-    return { Icon: null, label: "" };
-  }
-
-  const resolvedApp = resolveUsingApp(usingApp);
-
-  if (!resolvedApp) {
-    return { Icon: null, label: "" };
-  }
-
-  const Icon = IdeIcons[resolvedApp.id as keyof typeof IdeIcons] ?? null;
-
-  return {
-    Icon,
-    label: resolvedApp.name,
-  };
-};
-
 const RivalRow = ({ user }: { user: MyRivalsRequest }) => {
   const displayActiveTime = useRealtimeRivalActiveTime({
     activeTime: user.activeTime,
     isStudying: user.isStudying,
   });
-
-  const { Icon, label } = useMemo(
-    () => getUsingAppMeta(user.usingApp, user.status),
-    [user.usingApp, user.status]
-  );
-
-  const isOnline = user.status === "ONLINE";
-
-  const renderRivalId = (username: string) => {
-    return (
-      <Tooltip
-        content={username}
-        position="top"
-        maxWidth="10rem"
-        wrapperStyle={{ flex: 1, minWidth: 0 }}
-      >
-        <S.ProfileMention>
-          <span>@{username}</span>
-        </S.ProfileMention>
-      </Tooltip>
-    );
-  };
+  const resolvedApp = user.status === "ONLINE" ? resolveUsingApp(user.usingApp) : null;
+  const Icon = resolvedApp ? IdeIcons[resolvedApp.id as keyof typeof IdeIcons] : null;
 
   return (
     <S.ProfileContainer>
@@ -78,18 +35,27 @@ const RivalRow = ({ user }: { user: MyRivalsRequest }) => {
 
         <S.NameBox>
           <S.ProfileName>{user.name}</S.ProfileName>
-          {renderRivalId(user.username)}
+          <Tooltip
+            content={user.username}
+            position="top"
+            maxWidth="10rem"
+            wrapperStyle={{ flex: 1, minWidth: 0 }}
+          >
+            <S.ProfileMention>
+              <span>@{user.username}</span>
+            </S.ProfileMention>
+          </Tooltip>
         </S.NameBox>
 
-        <S.Status $status={user.status}>{getStatus(user.status)}</S.Status>
+        <S.Status $status={user.status}>{USER_STATUS_LABELS[user.status]}</S.Status>
       </S.ProfileContent>
 
       <S.PlayTime>
-        {isOnline && (Icon || label) && (
+        {resolvedApp && (
           <>
             <S.UsingBox>
               {Icon ? <Icon /> : null}
-              {label && <S.UsingAppText>{label}</S.UsingAppText>}
+              <S.UsingAppText>{resolvedApp.name}</S.UsingAppText>
             </S.UsingBox>
             <S.Point>·</S.Point>
           </>
@@ -103,7 +69,7 @@ const RivalRow = ({ user }: { user: MyRivalsRequest }) => {
 
 export const MyRivals = ({ data }: MyRivalsProps) => {
   const rival = useRival();
-  const { myRivals } = useMyRivals({ data });
+  const rivals = data.myRivals;
 
   return (
     <>
@@ -126,10 +92,8 @@ export const MyRivals = ({ data }: MyRivalsProps) => {
           <S.HorizontalLine />
 
           <S.ProfileWrapper>
-            {myRivals.myRivalsData?.myRivals && myRivals.myRivalsData.myRivals.length > 0 ? (
-              myRivals.myRivalsData.myRivals.map((user, index) => (
-                <RivalRow key={user.username ?? index} user={user} />
-              ))
+            {rivals.length > 0 ? (
+              rivals.map(user => <RivalRow key={user.username} user={user} />)
             ) : (
               <S.DetailWrapper>
                 <S.DefaultBattleBox>
