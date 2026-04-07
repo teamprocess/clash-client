@@ -1,12 +1,6 @@
 import * as S from "./RivalCard.style";
-import type { UserStatus } from "@/features/competition/model/useMyRivals";
-import {
-  defaultProfileImageLight,
-  formatTime,
-  resolveUsingApp,
-  useRealtimeRivalActiveTime,
-} from "@/shared/lib";
-import { useMemo } from "react";
+import { defaultProfileImageLight, formatTime, resolveUsingApp, useRealtimeRivalActiveTime } from "@/shared/lib";
+import { USER_STATUS_LABELS, type UserStatus } from "@/entities/competition";
 import { IdeIcons } from "@/shared/ui/assets/ide-img";
 import { RankTier } from "@/shared/ui";
 
@@ -20,31 +14,6 @@ interface RivalCardProps {
   username: string;
   tier: string;
 }
-
-const statusLabelMap: Record<UserStatus, string> = {
-  ONLINE: "온라인",
-  OFFLINE: "오프라인",
-  AWAY: "자리비움",
-};
-
-const getUsingAppMeta = (usingApp?: string | null, status?: UserStatus) => {
-  if (status !== "ONLINE") {
-    return { Icon: null, label: "" };
-  }
-
-  const resolvedApp = resolveUsingApp(usingApp);
-
-  if (!resolvedApp) {
-    return { Icon: null, label: "" };
-  }
-
-  const Icon = IdeIcons[resolvedApp.id as keyof typeof IdeIcons] ?? null;
-
-  return {
-    Icon,
-    label: resolvedApp.name,
-  };
-};
 
 export function RivalCard({
   profileSrc,
@@ -61,8 +30,8 @@ export function RivalCard({
     isStudying,
   });
   const formattedDisplayTime = formatTime(displayActiveTime);
-
-  const { Icon, label } = useMemo(() => getUsingAppMeta(usingApp, status), [usingApp, status]);
+  const resolvedApp = status === "ONLINE" ? resolveUsingApp(usingApp) : null;
+  const Icon = resolvedApp ? IdeIcons[resolvedApp.id as keyof typeof IdeIcons] : null;
 
   return (
     <S.RivalBox>
@@ -80,15 +49,15 @@ export function RivalCard({
             <S.Name>{name}</S.Name>
             <S.UserName>{username}</S.UserName>
           </S.NameBox>
-          <S.StatusBadge $status={status}>{statusLabelMap[status]}</S.StatusBadge>
+          <S.StatusBadge $status={status}>{USER_STATUS_LABELS[status]}</S.StatusBadge>
         </S.NameStatus>
       </S.Left>
 
       <S.Right>
-        {(Icon || label) && (
+        {resolvedApp && (
           <S.AppRow>
             {Icon ? <Icon /> : null}
-            {label && <S.AppName>{label}</S.AppName>}
+            <S.AppName>{resolvedApp.name}</S.AppName>
           </S.AppRow>
         )}
 

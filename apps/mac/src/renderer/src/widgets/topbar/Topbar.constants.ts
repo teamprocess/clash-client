@@ -16,7 +16,7 @@ PR: 1개당 100점 (최대 5개)
 7일 연속 출석: 500 * 연속 출석 주
 `;
 
-export const cookieTooltipContent = `쿠키는 상접메서 사용 할 수 있어요!
+export const cookieTooltipContent = `쿠키는 상점에서 사용 할 수 있어요!
 
 로드맵
 

@@ -11,23 +11,13 @@ const formatKoreanDate = (ymd: string) => {
   return `${Number(y)}년 ${Number(m)}월 ${Number(d)}일`;
 };
 
-const formatLocalYmd = (date: Date) => {
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, "0");
-  const day = String(date.getDate()).padStart(2, "0");
-  return `${year}-${month}-${day}`;
-};
-
 export const GithubActivityPanel = () => {
-  const { daysForView, paddedDaysForView, getLevel, selectedId, selectedDay, handleGrassClick } =
+  const { paddedDaysForView, getLevel, selectedId, selectedDay, handleGrassClick } =
     useProfileGithubStreak();
 
   const selectedDate = typeof selectedDay?.id === "string" ? selectedDay.id : null;
+  const hasSelection = Boolean(selectedDate);
   const fallbackCount = selectedDay?.count ?? 0;
-  const latestDay = daysForView[daysForView.length - 1] ?? null;
-  const initialDate =
-    typeof latestDay?.id === "string" ? latestDay.id : formatLocalYmd(new Date());
-  const initialContributions = latestDay?.count ?? 0;
 
   const detailQuery = useProfileGithubDetailQuery(selectedDate);
   const detail = detailQuery.data?.data;
@@ -35,15 +25,14 @@ export const GithubActivityPanel = () => {
   const displayDetail = matchedDetail ?? (detailQuery.isPlaceholderData && detail ? detail : null);
 
   const infoProps = useMemo(() => {
-    const displayDate = displayDetail?.date ?? selectedDate ?? initialDate;
-
-    const dateText = formatKoreanDate(displayDate);
+    const dateText = selectedDate ? formatKoreanDate(displayDetail?.date ?? selectedDate) : null;
+    const totalContributions = selectedDate
+      ? displayDetail?.contributionCount ?? fallbackCount
+      : null;
 
     return {
       dateText,
-      totalContributions:
-        displayDetail?.contributionCount ??
-        (selectedDate ? fallbackCount : initialContributions),
+      totalContributions,
 
       commits: displayDetail?.commitsCount ?? 0,
       issues: displayDetail?.issuesCount ?? 0,
@@ -54,7 +43,7 @@ export const GithubActivityPanel = () => {
       dailyAddedLines: displayDetail?.additionLines ?? 0,
       dailyDeletedLines: displayDetail?.deletionLines ?? 0,
     };
-  }, [displayDetail, fallbackCount, initialContributions, initialDate, selectedDate]);
+  }, [displayDetail, fallbackCount, selectedDate]);
 
   const emptyTitle = !selectedDate
     ? "잔디를 선택하면 상세 정보를 확인할 수 있어요!"
@@ -86,6 +75,7 @@ export const GithubActivityPanel = () => {
       <S.InfoSection>
         <GithubInfo
           {...infoProps}
+          showSummary={hasSelection}
           hasDetail={Boolean(selectedDate && displayDetail)}
           emptyTitle={emptyTitle}
           emptyDescription={emptyDescription}

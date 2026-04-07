@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { font } from "@clash/design-tokens/font";
 import { palette } from "@clash/design-tokens/theme";
+import type { UserStatus } from "@/entities/competition";
 import DetailArrow from "@/shared/ui/assets/front.svg";
 import { ProfileAvatar } from "@/shared/ui/profile-avatar";
 
@@ -75,13 +76,6 @@ export const ProfileContent = styled.div`
   gap: 0.5rem;
 `;
 
-export const ProfileImg = styled.img`
-  width: 2rem;
-  height: 2rem;
-  border-radius: 50%;
-  flex-shrink: 0;
-`;
-
 export const RivalAvatar = styled(ProfileAvatar)`
   width: 2rem;
   height: 2rem;
@@ -119,7 +113,7 @@ export const ProfileMention = styled.span`
   }
 `;
 
-export const Status = styled.div<{ $status: "ONLINE" | "AWAY" | "OFFLINE" }>`
+export const Status = styled.div<{ $status: UserStatus }>`
   ${font.caption.bold};
   display: flex;
   justify-content: center;
@@ -133,6 +127,7 @@ export const Status = styled.div<{ $status: "ONLINE" | "AWAY" | "OFFLINE" }>`
       case "ONLINE":
         return palette.green[50];
       case "AWAY":
+      case "RECONNECTING":
         return palette.yellow[50];
       case "OFFLINE":
         return theme.label.assistive;
@@ -181,9 +176,7 @@ export const DefaultBattleText = styled.p`
   color: ${({ theme }) => theme.label.assistive};
 `;
 
-type StatusProps = {
-  $status: "ONLINE" | "AWAY" | "OFFLINE";
-};
+type StatusProps = { $status: UserStatus };
 
 export const ActiveTime = styled.p<StatusProps>`
   ${font.headline1.bold};
@@ -192,6 +185,7 @@ export const ActiveTime = styled.p<StatusProps>`
       case "ONLINE":
         return theme.label.normal;
       case "AWAY":
+      case "RECONNECTING":
         return theme.label.assistive;
       case "OFFLINE":
         return theme.line.normal;

@@ -1,4 +1,4 @@
-import { UserStatus } from "@/features/competition/model/useMyRivals";
+import type { UserStatus } from "./userStatus";
 
 export interface MyRivalsRequest {
   rivalId: number;
