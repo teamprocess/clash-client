@@ -1,6 +1,7 @@
 import * as S from "./Rival.style";
 import { useRival } from "@/shared/lib";
-import { MyRivalUsers, QuestionTooltip, RivalsManagementDialog } from "@/shared/ui";
+import { QuestionTooltip, RivalsManagementDialog } from "@/shared/ui";
+import { MyRivalUsers } from "./MyRivalUsers";
 
 export const Rival = () => {
   const rival = useRival();
@@ -29,7 +30,7 @@ export const Rival = () => {
 
       <S.RivalBox>
         {rivals.map(user => (
-          <MyRivalUsers key={user.username} user={user} getStatus={rival.getStatus} />
+          <MyRivalUsers key={user.username} user={user} />
         ))}
 
         {canAddMore && (

@@ -2,16 +2,9 @@ import styled, { css } from "styled-components";
 import { font } from "@clash/design-tokens/font";
 import DetailArrow from "../../../../shared/ui/assets/front.svg";
 import { palette } from "@clash/design-tokens/theme";
+import type { UserStatus } from "@/entities/competition";
 import Plus from "../../assets/home/plus.svg";
 import { ProfileAvatar } from "@/shared/ui/profile-avatar";
-
-export const ProfileIcon = styled.img`
-  width: 2.25rem;
-  height: 2.25rem;
-  flex-shrink: 0;
-  border-radius: 50%;
-  object-fit: cover;
-`;
 
 export const RivalProfileAvatar = styled(ProfileAvatar)`
   width: 2.25rem;
@@ -199,9 +192,7 @@ export const ProfileBox = styled.div`
   min-width: 0;
 `;
 
-type StatusProps = {
-  $status: "ONLINE" | "AWAY" | "OFFLINE";
-};
+type StatusProps = { $status: UserStatus };
 
 export const Status = styled.div<StatusProps>`
   ${font.caption.bold};
@@ -219,6 +210,7 @@ export const Status = styled.div<StatusProps>`
       case "ONLINE":
         return palette.green[50];
       case "AWAY":
+      case "RECONNECTING":
         return palette.yellow[50];
       case "OFFLINE":
         return theme.label.assistive;
@@ -260,6 +252,7 @@ export const ActiveTime = styled.p<StatusProps>`
       case "ONLINE":
         return theme.label.normal;
       case "AWAY":
+      case "RECONNECTING":
         return theme.label.assistive;
       case "OFFLINE":
         return theme.line.normal;

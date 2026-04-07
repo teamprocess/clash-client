@@ -2,7 +2,6 @@ import { useMemo, useState } from "react";
 import {
   myRivalsApi,
   useMyRivalsQuery,
-  MyRivalsRequest,
   MyRivalsResponse,
 } from "@/entities/competition";
 import {
@@ -11,24 +10,11 @@ import {
   RivalApplyRequest,
   rivalsApi,
 } from "@/entities/home";
-import { queryClient, getErrorMessage } from "@/shared/lib";
 import { useRivalSignAllQuery } from "@/entities/home";
 import { RivalSignAllResponse } from "@/entities/home/model/useRival.types";
 import { useMutation } from "@tanstack/react-query";
-
-const USER_STATUS = {
-  ONLINE: "ONLINE",
-  AWAY: "AWAY",
-  OFFLINE: "OFFLINE",
-} as const;
-
-export interface MyRivalItem {
-  user: MyRivalsRequest;
-  getStatus: (status: UserStatus) => StatusType;
-}
-
-type UserStatus = (typeof USER_STATUS)[keyof typeof USER_STATUS];
-type StatusType = "온라인" | "자리비움" | "오프라인" | "";
+import { getErrorMessage } from "./error";
+import { queryClient } from "./queryClient";
 
 export const useRival = () => {
   const { data: myRivalsRes } = useMyRivalsQuery();
@@ -46,19 +32,6 @@ export const useRival = () => {
   const rivalsData: MyRivalsResponse | null = myRivalsRes?.data ?? null;
   const userList: RivalUsersResponse | null = rivalListRes?.data ?? null;
   const rivalSignAll: RivalSignAllResponse | null = rivalSignAllRes?.data ?? null;
-
-  const getStatus = (status: UserStatus): StatusType => {
-    switch (status) {
-      case USER_STATUS.ONLINE:
-        return "온라인";
-      case USER_STATUS.AWAY:
-        return "자리비움";
-      case USER_STATUS.OFFLINE:
-        return "오프라인";
-      default:
-        return "";
-    }
-  };
 
   const [modalOpen, setModalOpen] = useState(false);
 
@@ -301,7 +274,6 @@ export const useRival = () => {
     userList,
     rivalsData,
     rivalSignAll,
-    getStatus,
 
     // add modal
     modalOpen,

@@ -144,15 +144,16 @@ export const GithubBox = styled.div`
   border-radius: 1.25rem;
   padding: 1rem 1.25rem;
   background: ${({ theme }) => theme.label.disable};
-  display: flex;
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
   align-items: stretch;
-  justify-content: flex-start;
-  flex-wrap: wrap;
-  gap: 1rem;
+  column-gap: 1.25rem;
+  row-gap: 1rem;
   min-width: 0;
   box-sizing: border-box;
 
   @media (max-width: 52rem) {
+    grid-template-columns: 1fr;
     padding: 1rem;
   }
 `;
@@ -160,10 +161,12 @@ export const GithubBox = styled.div`
 export const Github = styled.div`
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-auto-rows: minmax(0, 1fr);
+  align-items: center;
   column-gap: 1rem;
   row-gap: 0.75rem;
-  flex: 1;
   min-width: 0;
+  min-height: 0;
 
   @media (max-width: 52rem) {
     grid-template-columns: 1fr;
@@ -206,19 +209,35 @@ export const StatLabel = styled.p`
 `;
 
 export const Info = styled.div`
+  position: relative;
+  align-self: stretch;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  gap: 0.5rem;
-  flex: 1;
-  width: 100%;
+  gap: 0.75rem;
+  justify-content: stretch;
+  height: 100%;
   min-width: 0;
+  min-height: 0;
+
+  &::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 0.1rem;
+    transform: translateY(-50%);
+    background: ${({ theme }) => theme.line.neutral};
+    pointer-events: none;
+  }
 `;
 
 export const MetaRow = styled.div`
   display: flex;
+  flex: 1 1 0;
   align-items: center;
   gap: 0.75rem;
+  min-height: 0;
   min-width: 0;
 
   @media (max-width: 52rem) {
@@ -263,12 +282,6 @@ export const MetaValue = styled.p`
   ${largeDesktopQuery} {
     ${font.body.bold}
   }
-`;
-
-export const HDivider = styled.div`
-  width: 100%;
-  height: 0.1rem;
-  background: ${({ theme }) => theme.line.neutral};
 `;
 
 export const Lines = styled.div`
