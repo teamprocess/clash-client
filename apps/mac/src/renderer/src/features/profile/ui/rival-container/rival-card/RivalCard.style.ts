@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import type { UserStatus } from "@/features/competition/model/useMyRivals";
+import type { UserStatus } from "@/entities/competition";
 import { font } from "@clash/design-tokens/font";
 import { palette } from "@clash/design-tokens/theme";
 import { ProfileAvatar } from "@/shared/ui/profile-avatar";
@@ -36,13 +36,6 @@ export const Left = styled.div`
   @media (max-width: 52rem) {
     width: 100%;
   }
-`;
-
-export const ProfileImg = styled.img`
-  width: 2.5rem;
-  height: 2.5rem;
-  border-radius: 50%;
-  object-fit: cover;
 `;
 
 export const RivalAvatar = styled(ProfileAvatar)`
