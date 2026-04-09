@@ -17,7 +17,7 @@ export const WebSignInForm = () => {
           variant="primary"
           size="lg"
           fullWidth
-          disabled={isStarting}
+          isLoading={isStarting}
           onClick={startWebSignIn}
         >
           {isStarting ? "웹 페이지 여는 중..." : "웹에서 로그인"}

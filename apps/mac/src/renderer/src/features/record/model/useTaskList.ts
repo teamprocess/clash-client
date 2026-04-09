@@ -45,6 +45,8 @@ export const useTaskList = (selectedDate?: string) => {
   );
   const [isSwitchingFromDevelop, setIsSwitchingFromDevelop] = useState(false);
   const [isSubjectNameTooltipOpen, setIsSubjectNameTooltipOpen] = useState(false);
+  const [isSavingTask, setIsSavingTask] = useState(false);
+  const [isDeletingTask, setIsDeletingTask] = useState(false);
   const subjectNameErrorMessage = getTaskNameErrorMessage(subjectName);
   const isSubjectNameInvalid = subjectNameErrorMessage !== null;
   const isSubjectNameTooLong = subjectName.trim().length > MAX_TASK_NAME_LENGTH;
@@ -53,6 +55,8 @@ export const useTaskList = (selectedDate?: string) => {
 
   const menuRef = useRef<HTMLDivElement>(null);
   const subjectNameInputRef = useRef<HTMLInputElement>(null);
+  const isSavingTaskRef = useRef(false);
+  const isDeletingTaskRef = useRef(false);
 
   useEffect(() => {
     if (editMode === "NONE") return;
@@ -119,12 +123,20 @@ export const useTaskList = (selectedDate?: string) => {
   };
 
   const handleAddClick = () => {
+    if (isSavingTaskRef.current) {
+      return;
+    }
+
     setEditMode("ADD");
     setSubjectName("");
     closeSubjectNameTooltip();
   };
 
   const handleEditClick = (subjectId: number) => {
+    if (isSavingTaskRef.current) {
+      return;
+    }
+
     const subject = subjects.find(item => item.id === subjectId);
     if (subject) {
       setEditMode("EDIT");
@@ -177,8 +189,19 @@ export const useTaskList = (selectedDate?: string) => {
   };
 
   const handleSaveClick = async () => {
-    const isSaved = await handleSaveTask();
-    setIsSubjectNameTooltipOpen(!isSaved);
+    if (isSavingTaskRef.current) {
+      return;
+    }
+
+    isSavingTaskRef.current = true;
+    setIsSavingTask(true);
+    try {
+      const isSaved = await handleSaveTask();
+      setIsSubjectNameTooltipOpen(!isSaved);
+    } finally {
+      isSavingTaskRef.current = false;
+      setIsSavingTask(false);
+    }
   };
 
   const handleTaskNameChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -198,20 +221,38 @@ export const useTaskList = (selectedDate?: string) => {
   };
 
   const handleDeleteRequest = (subjectId: number) => {
+    if (isDeletingTaskRef.current) {
+      return;
+    }
+
     setDeleteTargetId(subjectId);
     setOpenMenuSubjectId(null);
   };
 
   const handleCancelDelete = () => {
+    if (isDeletingTaskRef.current) {
+      return;
+    }
+
     setDeleteTargetId(null);
   };
 
   const handleConfirmDelete = async () => {
-    if (deleteTargetId !== null) {
+    if (deleteTargetId === null || isDeletingTaskRef.current) {
+      return;
+    }
+
+    isDeletingTaskRef.current = true;
+    setIsDeletingTask(true);
+
+    try {
       const deleted = await deleteSubject(deleteTargetId);
       if (deleted) {
         setDeleteTargetId(null);
       }
+    } finally {
+      isDeletingTaskRef.current = false;
+      setIsDeletingTask(false);
     }
   };
 
@@ -233,9 +274,11 @@ export const useTaskList = (selectedDate?: string) => {
     taskNameInputMaxLength: TASK_NAME_INPUT_MAX_LENGTH,
     taskNameErrorMessage: subjectNameErrorMessage,
     isTaskNameInvalid: isSubjectNameInvalid,
+    isSavingTask,
     shouldShowTaskNameTooltip: shouldShowSubjectNameTooltip,
     openMenuTaskId: openMenuSubjectId,
     deleteTargetId,
+    isDeletingTask,
     isDeletingActiveTask: isDeletingActiveSubject,
     activitySwitchTargetTaskId: developSwitchTargetSubjectId,
     isSwitchingFromActivity: isSwitchingFromDevelop,

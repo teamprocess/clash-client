@@ -122,7 +122,8 @@ export const QuizModal = ({
             variant="primary"
             size="lg"
             onClick={handleConfirm}
-            disabled={!selectedChoiceId || isPreparing}
+            disabled={!selectedChoiceId}
+            isLoading={isPreparing}
             fullWidth
           >
             {isPreparing ? "문제 준비 중..." : "선택 완료하기"}

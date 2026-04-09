@@ -58,6 +58,7 @@ export const GitHubDialog = ({
             fullWidth
             onClick={onSignOut}
             disabled={isBusy}
+            isLoading={isSigningOut}
           >
             {isSigningOut ? "로그아웃 중..." : "로그아웃"}
           </Button>
@@ -68,6 +69,7 @@ export const GitHubDialog = ({
             fullWidth
             onClick={onStartGitHubConnect}
             disabled={isBusy}
+            isLoading={isConnecting}
           >
             {connectButtonLabel}
           </Button>

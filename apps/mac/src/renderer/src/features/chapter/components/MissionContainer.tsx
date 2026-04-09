@@ -246,7 +246,7 @@ const QuizPanelContent = ({
               variant="primary"
               size="lg"
               onClick={isLastQuestion ? handleClose : handleNextOrClose}
-              disabled={isPreparing}
+              isLoading={isPreparing}
               fullWidth
             >
               {isPreparing ? "문제 준비 중..." : isLastQuestion ? "챕터 보기" : "다음 문제 보기"}
@@ -258,7 +258,8 @@ const QuizPanelContent = ({
               variant="primary"
               size="lg"
               onClick={() => void handleConfirm()}
-              disabled={!selectedChoiceId || isPreparing || state.isSubmitting}
+              disabled={!selectedChoiceId || state.isSubmitting}
+              isLoading={isPreparing}
               fullWidth
             >
               {isPreparing ? "문제 준비 중..." : "제출"}

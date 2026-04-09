@@ -46,6 +46,7 @@ export const GroupEditModal = ({
           <ModalActions
             onCancel={onClose}
             confirmLabel={isSubmitting ? "저장 중..." : "저장"}
+            confirmLoading={isSubmitting}
             confirmType="submit"
             confirmDisabled={isSubmitting}
             size="md"

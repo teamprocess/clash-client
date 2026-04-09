@@ -126,7 +126,7 @@ export const RivalsManagementDialog = ({ isOpen, onClose, rival }: AddRivalsDial
                   size="sm"
                   variant="primary"
                   onClick={() => void handleCreateSubmit()}
-                  disabled={rival.isSubmitting}
+                  isLoading={rival.isSubmitting}
                 >
                   {rival.isSubmitting ? "신청 중" : "신청"}
                 </Button>

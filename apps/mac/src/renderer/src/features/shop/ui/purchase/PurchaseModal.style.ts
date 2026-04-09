@@ -3,6 +3,7 @@ import { font } from "@clash/design-tokens/font";
 import Close from "@/features/shop/assets/no.svg";
 import Cookie from "@/features/shop/assets/cookie.svg";
 import Money from "@/features/shop/assets/money.png";
+import { Button } from "@/shared/ui/button";
 
 export const CookieIcon = styled(Cookie)`
   margin-left: -0.25rem;
@@ -136,16 +137,14 @@ export const SubText = styled.div`
   text-align: center;
 `;
 
-export const PrimaryButton = styled.button`
+export const PrimaryButton = styled(Button)`
   margin-top: 1.5rem;
   width: 100%;
   height: 3.5rem;
-  border: none;
   border-radius: 0.75rem;
   background: ${({ theme }) => theme.primary.normal};
   color: ${({ theme }) => theme.label.normal};
   ${font.headline2.bold};
-  cursor: pointer;
 
   &:disabled {
     opacity: 0.6;
