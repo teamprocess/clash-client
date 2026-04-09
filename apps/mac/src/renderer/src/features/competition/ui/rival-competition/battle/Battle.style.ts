@@ -17,13 +17,13 @@ const flexCol = css`
   flex-direction: column;
 `;
 
-export const GaroLine = styled.div`
+export const HorizontalLine = styled.div`
   width: 100%;
   height: 1px;
   background-color: ${({ theme }) => theme.line.neutral};
 `;
 
-export const SeroLine = styled.div`
+export const VerticalLine = styled.div`
   width: 1px;
   height: 70%;
   background-color: ${({ theme }) => theme.line.neutral};
@@ -435,7 +435,7 @@ export const UserChoiceBox = styled.div<{ $isSelected?: boolean; $isRival?: bool
     css`
       &:hover {
         border-radius: 0.75rem;
-        padding: 0.5rem 1.25rem;
+        padding: 0.5rem 1rem;
         background-color: ${theme.fill.alternative};
       }
     `}
@@ -466,7 +466,7 @@ export const ProfileTagBox = styled.div`
 `;
 
 export const BottomBox = styled.div`
-  margin-top: 0.9rem;
+  margin-top: 1.5rem;
 `;
 
 export const ButtonBox = styled.div`
@@ -493,7 +493,7 @@ export const ModalContainer = styled.div`
   height: 100%;
   padding: 0.625rem;
   min-height: 0;
-  gap: 1rem;
+  gap: 1.1rem;
   align-items: stretch;
   justify-content: flex-start;
 `;
@@ -529,10 +529,11 @@ export const DateChoiceBox = styled.button<{ $active: boolean }>`
   ${flexRow};
   align-items: center;
   justify-content: center;
-  transition: 0.1s ease-in-out;
+  transition: 50ms ease-in-out;
 
   &:hover {
-    background-color: ${({ theme }) => theme.primary.normal};
+    background-color: ${({ theme, $active }) =>
+      $active ? theme.primary.normal : theme.fill.neutral};
   }
 `;
 

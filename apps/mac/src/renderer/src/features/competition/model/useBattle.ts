@@ -35,6 +35,8 @@ export const useBattle = () => {
 
   const submittingRef = useRef(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isCanceling, setIsCanceling] = useState(false);
+  const [cancelingId, setCancelingId] = useState<number | null>(null);
 
   const { data: battleInfoRes } = useBattleInfoQuery();
   const { data: battleDetailRes } = useBattleDetailQuery(battleTargetId ?? 0);
@@ -125,11 +127,18 @@ export const useBattle = () => {
 
   const handlePeriodSelect = (day: PeriodDay) => {
     setError(null);
-    setSelectedDay(day);
+
+    if (selectedDay === null) {
+      setSelectedDay(day);
+    } else {
+      setSelectedDay(null);
+    }
+
     setDuration(day);
   };
 
-  const canCreateBattle = rivalSelectedId !== null && duration !== null && !isSubmitting;
+  const canCreateBattle =
+    rivalSelectedId !== null && duration !== null && !isSubmitting && selectedDay;
 
   const createBattle = async () => {
     if (!rivalSelectedId || duration === null) {
@@ -162,6 +171,7 @@ export const useBattle = () => {
     } finally {
       submittingRef.current = false;
       setIsSubmitting(false);
+      setSelectedDay(null);
     }
   };
 
@@ -181,12 +191,18 @@ export const useBattle = () => {
 
     try {
       setError(null);
+      setIsCanceling(true);
+      setCancelingId(id);
+
       await cancelBattleApplyMutation.mutateAsync({ id });
       return true;
     } catch (error: unknown) {
       console.error("배틀 신청 취소 실패:", error);
       setError(getErrorMessage(error, "배틀 신청 취소 중 오류가 발생했습니다."));
       return false;
+    } finally {
+      setIsCanceling(false);
+      setCancelingId(null);
     }
   };
 
@@ -235,6 +251,8 @@ export const useBattle = () => {
 
     battleApplyList,
     handleBattleApplyCancel,
+    isCanceling,
+    cancelingId,
 
     error,
   };

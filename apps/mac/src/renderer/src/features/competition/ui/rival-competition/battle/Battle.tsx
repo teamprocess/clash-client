@@ -44,7 +44,7 @@ export const Battle = () => {
               </Button>
             </S.TitleBox>
 
-            <S.GaroLine />
+            <S.HorizontalLine />
 
             {battles.length > 0 ? (
               <>
@@ -143,7 +143,7 @@ export const Battle = () => {
                       </S.UpperHandProfile>
                     </S.UpperHandContainer>
 
-                    <S.GaroLine />
+                    <S.VerticalLine />
 
                     <S.DetailAnalyzeContainer>
                       <S.TitleBox>
@@ -164,7 +164,7 @@ export const Battle = () => {
                             <S.AnalyzeName>나</S.AnalyzeName>
                           </S.AnalyzeContent>
 
-                          <S.SeroLine />
+                          <S.HorizontalLine />
 
                           <S.AnalyzeContent $width="100%">
                             <S.DataBox>
@@ -224,7 +224,7 @@ export const Battle = () => {
       </S.ContentBox>
 
       {battle.isModalOpen && (
-        <Dialog width={43} height={30} isOpen={battle.isModalOpen} onClose={battle.closeModal}>
+        <Dialog width={43} height={32} isOpen={battle.isModalOpen} onClose={battle.closeModal}>
           <S.ModalContainer>
             <S.ModalHeader>
               <SlideSelector
@@ -284,16 +284,14 @@ export const Battle = () => {
 
                 <S.BottomBox>
                   <S.ButtonBox>
-                    <Button size="sm" onClick={battle.closeModal}>
-                      취소
-                    </Button>
                     <Button
                       size="sm"
                       variant="primary"
                       disabled={!battle.canCreateBattle}
+                      isLoading={battle.isSubmitting}
                       onClick={battle.createBattle}
                     >
-                      신청
+                      {battle.isSubmitting ? "신청 중..." : "신청"}
                     </Button>
                   </S.ButtonBox>
                 </S.BottomBox>
@@ -326,9 +324,12 @@ export const Battle = () => {
                         size="sm"
                         variant="primary"
                         disabled={!applyItem.isMine}
+                        isLoading={battle.isCanceling}
                         onClick={() => battle.handleBattleApplyCancel(applyItem.id)}
                       >
-                        취소
+                        {battle.isCanceling && applyItem.id === battle.cancelingId
+                          ? "취소 중..."
+                          : "취소"}
                       </Button>
                     </S.UserChoiceBox>
                   ))
