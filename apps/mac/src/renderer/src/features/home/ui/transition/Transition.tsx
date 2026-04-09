@@ -3,35 +3,11 @@ import { Link } from "react-router-dom";
 import { Fragment } from "react";
 import { useTransition } from "@/features/home/model/useTransition";
 import { TransitionResponse } from "@/entities/home";
-import { formatTime } from "@/shared/lib";
+import { createTransitionSections, Section } from "./Transition.utils";
 
 interface TransitionProps {
   data: TransitionResponse | null;
 }
-
-type Pair = {
-  yesterday: number;
-  today: number;
-};
-
-type Section = {
-  title: string;
-  leftLabel: string;
-  rightLabel: string;
-  leftValue: string;
-  rightValue: string;
-  leftRatio: number;
-  rightRatio: number;
-};
-
-const getRatioPair = ({ yesterday, today }: Pair) => {
-  const total = yesterday + today;
-
-  return {
-    leftRatio: total === 0 ? 0 : yesterday / total,
-    rightRatio: total === 0 ? 0 : today / total,
-  };
-};
 
 const GraphSection = (props: Section) => {
   const { title, leftLabel, rightLabel, leftValue, rightValue, leftRatio, rightRatio } = props;
@@ -65,47 +41,8 @@ const GraphSection = (props: Section) => {
 };
 
 export const Transition = ({ data }: TransitionProps) => {
-  const getTransitionData = useTransition(data);
-
-  const activeTime = getTransitionData.transitionData?.activeTime;
-  const contributors = getTransitionData.transitionData?.contributors;
-
-  const yesterdayTime = activeTime?.yesterdayActiveTime ?? 0;
-  const todayTime = activeTime?.todayActiveTime ?? 0;
-
-  const yesterdayContributors = contributors?.yesterdayContributors ?? 0;
-  const todayContributors = contributors?.todayContributors ?? 0;
-
-  const timeRatios = getRatioPair({
-    yesterday: yesterdayTime,
-    today: todayTime,
-  });
-
-  const contributorRatios = getRatioPair({
-    yesterday: yesterdayContributors,
-    today: todayContributors,
-  });
-
-  const sections: Section[] = [
-    {
-      title: "활동 시간",
-      leftLabel: "어제",
-      rightLabel: "오늘",
-      leftValue: formatTime(yesterdayTime),
-      rightValue: formatTime(todayTime),
-      leftRatio: timeRatios.leftRatio,
-      rightRatio: timeRatios.rightRatio,
-    },
-    {
-      title: "Contributions",
-      leftLabel: "어제",
-      rightLabel: "오늘",
-      leftValue: String(yesterdayContributors),
-      rightValue: String(todayContributors),
-      leftRatio: contributorRatios.leftRatio,
-      rightRatio: contributorRatios.rightRatio,
-    },
-  ];
+  const { transitionData } = useTransition(data);
+  const sections = createTransitionSections(transitionData);
 
   return (
     <S.TransitionContainer>
