@@ -3,7 +3,7 @@ import Profile from "../assets/profile.svg?url";
 import { useChapterRanking } from "@/features/chapter-ranking/model/useChapterRanking";
 import { RankingPageEnum } from "./ChapterRanking.style";
 import { QuestionTooltip } from "@/shared/ui";
-import { chapterRankingTooltipContent } from "./ChapterRanking.constants";
+import { chapterRankingTooltipContent } from "../constants/chapterRanking.constants";
 
 interface ChapterRankingProps {
   page: RankingPageEnum;
@@ -70,7 +70,7 @@ export const ChapterRanking = ({ page }: ChapterRankingProps) => {
         <S.RankingLabel>
           <S.LabelGroup>
             챕터 랭킹
-            <QuestionTooltip content="해당 전공 챕터를 클리어하면서 순위권에 들고 쿠키도 얻어보세요" />
+            <QuestionTooltip content={chapterRankingTooltipContent} />
           </S.LabelGroup>
         </S.RankingLabel>
         <div>랭킹을 불러오는데 실패했습니다.</div>
@@ -85,7 +85,7 @@ export const ChapterRanking = ({ page }: ChapterRankingProps) => {
         <S.RankingLabel>
           <S.LabelGroup>
             챕터 랭킹
-            <QuestionTooltip content="해당 전공 챕터를 클리어하면서 순위권에 들고 쿠키도 얻어보세요" />
+            <QuestionTooltip content={chapterRankingTooltipContent} />
           </S.LabelGroup>
         </S.RankingLabel>
         <div>랭킹 데이터가 없습니다.</div>
@@ -96,11 +96,11 @@ export const ChapterRanking = ({ page }: ChapterRankingProps) => {
   return (
     <S.RankingContainer $page={page}>
       <S.RankingLabel>
-          <S.LabelGroup>
-            챕터 랭킹
-            <QuestionTooltip content="해당 전공 챕터를 클리어하면서 순위권에 들고 쿠키도 얻어보세요" />
-          </S.LabelGroup>
-        </S.RankingLabel>
+        <S.LabelGroup>
+          챕터 랭킹
+          <QuestionTooltip content={chapterRankingTooltipContent} />
+        </S.LabelGroup>
+      </S.RankingLabel>
       <S.RankingBox>
         <S.RankingTop3Box>
           {allRankers
