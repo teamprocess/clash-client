@@ -47,7 +47,7 @@ export const Filter = ({
   return (
     <S.FilterContainer>
       <S.FilterBox>
-        <Select<ProductSort> value={sort} options={sortOptions} onChange={onSortChange} />
+        <Select<ProductSort> value={sort} options={sortOptions} onChange={onSortChange} width={8} />
         <Select<ProductCategory | "">
           value={category}
           options={categoryOptions}

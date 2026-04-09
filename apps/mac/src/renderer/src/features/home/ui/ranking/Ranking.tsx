@@ -31,12 +31,13 @@ export const Ranking = () => {
             value={filters.RankingDropdown}
             options={options.rankingDropDownValue}
             onChange={filters.setRankingDropdown}
+            width={10}
           />
           <Select<PeriodType>
             value={filters.RankingPeriodDropdown}
             options={options.rankingPeriodDropDownValue}
             onChange={filters.setRankingPeriodDropdown}
-            width={8}
+            width={9}
           />
         </S.DropDown>
       </S.TitleBox>
