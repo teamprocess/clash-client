@@ -25,7 +25,7 @@ export const getRatioPair = ({ yesterday, today }: Pair) => {
   };
 };
 
-export const createTransitionSections = (transitionData: TransitionResponse): Section[] => {
+export const createTransitionSections = (transitionData: TransitionResponse | null): Section[] => {
   const activeTime = transitionData?.activeTime;
   const contributors = transitionData?.contributors;
 
