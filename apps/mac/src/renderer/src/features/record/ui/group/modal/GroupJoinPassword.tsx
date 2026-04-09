@@ -43,6 +43,7 @@ export const GroupJoinPassword = ({
           onCancel={onClose}
           cancelDisabled={isJoining}
           confirmLabel={isJoining ? "가입 중..." : "가입"}
+          confirmLoading={isJoining}
           confirmType="submit"
           confirmDisabled={isJoining}
           size="sm"

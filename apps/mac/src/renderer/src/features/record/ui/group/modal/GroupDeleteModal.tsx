@@ -1,7 +1,13 @@
 import { ConfirmDialog } from "@/shared/ui";
 import type { GroupDeleteModalProps } from "../../../model/useGroup";
 
-export const GroupDeleteModal = ({ isOpen, onClose, onConfirm, action }: GroupDeleteModalProps) => {
+export const GroupDeleteModal = ({
+  isOpen,
+  onClose,
+  onConfirm,
+  isConfirming,
+  action,
+}: GroupDeleteModalProps) => {
   const isDelete = action === "delete";
   const title = isDelete ? "그룹 삭제" : "그룹 탈퇴";
   const description = isDelete
@@ -20,6 +26,7 @@ export const GroupDeleteModal = ({ isOpen, onClose, onConfirm, action }: GroupDe
       confirmMessage={warning}
       confirmLabel={confirmLabel}
       confirmVariant="primary"
+      isConfirming={isConfirming}
       onClose={onClose}
       onConfirm={onConfirm}
     />
