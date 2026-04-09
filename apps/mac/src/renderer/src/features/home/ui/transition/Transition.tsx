@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { Fragment } from "react";
 import { useTransition } from "@/features/home/model/useTransition";
 import { TransitionResponse } from "@/entities/home";
-import { createTransitionSections, Section } from "./Transition.utils";
+import { createTransitionSections, Section } from "@/features/home";
 
 interface TransitionProps {
   data: TransitionResponse | null;
