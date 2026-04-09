@@ -1,15 +1,48 @@
 import * as S from "./Transition.style";
 import { Link } from "react-router-dom";
-import { formatTime } from "@/shared/lib";
+import { Fragment } from "react";
 import { useTransition } from "@/features/home/model/useTransition";
 import { TransitionResponse } from "@/entities/home";
+import { createTransitionSections, Section } from "@/features/home";
 
 interface TransitionProps {
   data: TransitionResponse | null;
 }
 
+const GraphSection = (props: Section) => {
+  const { title, leftLabel, rightLabel, leftValue, rightValue, leftRatio, rightRatio } = props;
+
+  return (
+    <S.Content>
+      <S.SubTitle>{title}</S.SubTitle>
+      <S.InfoBox>
+        <S.GraphContainer>
+          <S.GraphBox>
+            <S.Bars>
+              <S.Value value={leftRatio}>{leftValue}</S.Value>
+              <S.Bar value={leftRatio} />
+            </S.Bars>
+
+            <S.Bars>
+              <S.Value value={rightRatio}>{rightValue}</S.Value>
+              <S.Bar value={rightRatio} />
+            </S.Bars>
+          </S.GraphBox>
+          <S.Line />
+        </S.GraphContainer>
+
+        <S.DateBox>
+          <S.DateTitle>{leftLabel}</S.DateTitle>
+          <S.DateTitle>{rightLabel}</S.DateTitle>
+        </S.DateBox>
+      </S.InfoBox>
+    </S.Content>
+  );
+};
+
 export const Transition = ({ data }: TransitionProps) => {
-  const getTransitionData = useTransition(data);
+  const { transitionData } = useTransition(data);
+  const sections = createTransitionSections(transitionData);
 
   return (
     <S.TransitionContainer>
@@ -22,87 +55,15 @@ export const Transition = ({ data }: TransitionProps) => {
           </S.ArrowBox>
         </Link>
       </S.TitleBox>
+
       <S.ContentContainer>
         <S.ContentBox>
-          <S.Content>
-            <S.SubTitle>활동 시간</S.SubTitle>
-            <S.InfoBox>
-              <S.GraphBox>
-                <S.Bars>
-                  <S.Value
-                    value={getTransitionData.transitionData?.activeTime.yesterdayActiveTime ?? 0}
-                    max={getTransitionData.maxActive}
-                  >
-                    {formatTime(
-                      getTransitionData.transitionData?.activeTime.yesterdayActiveTime ?? 0
-                    )}
-                  </S.Value>
-                  <S.Bar
-                    value={getTransitionData.transitionData?.activeTime.yesterdayActiveTime ?? 0}
-                    max={getTransitionData.maxActive}
-                  />
-                </S.Bars>
-                <S.Bars>
-                  <S.Value
-                    value={getTransitionData.transitionData?.activeTime.todayActiveTime ?? 0}
-                    max={getTransitionData.maxActive}
-                  >
-                    {formatTime(getTransitionData.transitionData?.activeTime.todayActiveTime ?? 0)}
-                  </S.Value>
-                  <S.Bar
-                    value={getTransitionData.transitionData?.activeTime.todayActiveTime ?? 0}
-                    max={getTransitionData.maxActive}
-                  />
-                </S.Bars>
-              </S.GraphBox>
-              <S.Line />
-              <S.DateBox>
-                <S.DateTitle>어제</S.DateTitle>
-                <S.DateTitle>오늘</S.DateTitle>
-              </S.DateBox>
-            </S.InfoBox>
-          </S.Content>
-          <S.VerticalLine />
-          <S.Content>
-            <S.SubTitle>Contributions</S.SubTitle>
-            <S.InfoBox>
-              <S.GraphBox>
-                <S.Bars>
-                  <S.Value
-                    value={
-                      getTransitionData.transitionData?.contributors.yesterdayContributors ?? 0
-                    }
-                    max={getTransitionData.maxContributors}
-                  >
-                    {getTransitionData.transitionData?.contributors.yesterdayContributors ?? 0}
-                  </S.Value>
-                  <S.Bar
-                    value={
-                      getTransitionData.transitionData?.contributors.yesterdayContributors ?? 0
-                    }
-                    max={getTransitionData.maxContributors}
-                  />
-                </S.Bars>
-                <S.Bars>
-                  <S.Value
-                    value={getTransitionData.transitionData?.contributors.todayContributors ?? 0}
-                    max={getTransitionData.maxContributors}
-                  >
-                    {getTransitionData.transitionData?.contributors.todayContributors ?? 0}
-                  </S.Value>
-                  <S.Bar
-                    value={getTransitionData.transitionData?.contributors.todayContributors ?? 0}
-                    max={getTransitionData.maxContributors}
-                  />
-                </S.Bars>
-              </S.GraphBox>
-              <S.Line />
-              <S.DateBox>
-                <S.DateTitle>어제</S.DateTitle>
-                <S.DateTitle>오늘</S.DateTitle>
-              </S.DateBox>
-            </S.InfoBox>
-          </S.Content>
+          {sections.map((section, index) => (
+            <Fragment key={section.title}>
+              <GraphSection {...section} />
+              {index === 0 && <S.VerticalLine />}
+            </Fragment>
+          ))}
         </S.ContentBox>
       </S.ContentContainer>
     </S.TransitionContainer>
