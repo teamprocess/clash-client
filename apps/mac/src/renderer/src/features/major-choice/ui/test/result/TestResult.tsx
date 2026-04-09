@@ -44,6 +44,7 @@ export const TestResult = ({
             size="lg"
             onClick={handleSelectAnalyzedMajor}
             disabled={!analyzedMajor || isSubmittingMajor}
+            isLoading={isSubmittingMajor}
           >
             {isSubmittingMajor ? "선택 중..." : "전공 선택"}
           </Button>

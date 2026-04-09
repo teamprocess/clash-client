@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { font } from "@clash/design-tokens/font";
 import Lock from "../../../assets/lock.svg";
+import { Button } from "@/shared/ui/button";
 
 export const PanelContent = styled.div`
   display: flex;
@@ -116,7 +117,7 @@ export const GroupMembers = styled.span`
   }
 `;
 
-export const GroupJoinButton = styled.button<{ $isMember?: boolean }>`
+export const GroupJoinButton = styled(Button)<{ $isMember?: boolean }>`
   ${font.label.medium};
   min-width: 4rem;
   padding: 0.375rem 0.25rem;
@@ -124,7 +125,6 @@ export const GroupJoinButton = styled.button<{ $isMember?: boolean }>`
   background-color: ${({ theme, $isMember }) =>
     $isMember ? theme.line.normal : theme.primary.normal};
   color: ${({ theme }) => theme.label.normal};
-  border: none;
   cursor: ${({ $isMember }) => ($isMember ? "default" : "pointer")};
 `;
 

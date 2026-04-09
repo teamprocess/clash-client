@@ -80,7 +80,12 @@ export const PurchaseModal = ({ isOpen, product, onClose, onPurchase }: Purchase
 
             {errorMessage && <S.ErrorText>{errorMessage}</S.ErrorText>}
 
-            <S.PrimaryButton disabled={isSubmitting || !canPurchase} onClick={handlePurchase}>
+            <S.PrimaryButton
+              variant="primary"
+              disabled={!canPurchase}
+              isLoading={isSubmitting}
+              onClick={handlePurchase}
+            >
               {isSubmitting ? "처리 중" : !canPurchase ? "잔액 부족" : "구매하기"}
             </S.PrimaryButton>
           </>
@@ -96,7 +101,9 @@ export const PurchaseModal = ({ isOpen, product, onClose, onPurchase }: Purchase
               </S.SubText>
             </S.SuccessBox>
 
-            <S.PrimaryButton onClick={handleClose}>확인</S.PrimaryButton>
+            <S.PrimaryButton variant="primary" onClick={handleClose}>
+              확인
+            </S.PrimaryButton>
           </>
         )}
       </S.Container>
