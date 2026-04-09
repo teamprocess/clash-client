@@ -70,3 +70,9 @@ export const Button = styled.button<ButtonProps>`
     opacity: 0.45;
   }
 `;
+
+export const Label = styled.span`
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+`;

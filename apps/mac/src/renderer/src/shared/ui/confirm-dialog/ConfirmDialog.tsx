@@ -46,6 +46,7 @@ export const ConfirmDialog = ({
           cancelDisabled={isConfirming}
           onConfirm={onConfirm}
           confirmLabel={isConfirming ? `${confirmLabel} 중...` : confirmLabel}
+          confirmLoading={isConfirming}
           confirmDisabled={isConfirming}
           confirmVariant={confirmVariant}
           size="sm"
