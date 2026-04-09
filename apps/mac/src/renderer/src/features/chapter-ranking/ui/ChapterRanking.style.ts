@@ -59,7 +59,7 @@ export const LabelGroup = styled.span`
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: 0.75rem;
+  gap: 0.5rem;
 `;
 
 export const RankingBox = styled.div`
@@ -123,7 +123,7 @@ export const ThirdFrame = styled(ThirdFrameIcon)`
   z-index: 200;
 `;
 export const Top3ProfileImage = styled.img<{ $isFirst: boolean }>`
-  width: ${({ $isFirst }) => $isFirst ? "95%" : "70%"};
+  width: ${({ $isFirst }) => ($isFirst ? "95%" : "70%")};
   object-fit: cover;
   height: ${({ $isFirst }) => ($isFirst ? "3.5rem" : "58%")};
   border-radius: 50%;
