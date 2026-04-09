@@ -258,7 +258,7 @@ const QuizPanelContent = ({
               variant="primary"
               size="lg"
               onClick={() => void handleConfirm()}
-              disabled={!selectedChoiceId || state.isSubmitting}
+              disabled={!selectedChoiceId}
               isLoading={isPreparing}
               fullWidth
             >
