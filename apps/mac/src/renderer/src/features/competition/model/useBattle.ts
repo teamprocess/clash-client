@@ -79,7 +79,7 @@ export const useBattle = () => {
     myAnalyzeRate !== null && rivalAnalyzeRate !== null ? rivalAnalyzeRate > myAnalyzeRate : false;
 
   const judgeUpperHand = (result: (typeof MATCHVALUE)[keyof typeof MATCHVALUE]): string => {
-    return JUDGE_UPPER_HAND_MAP[result] ?? "";
+    return JUDGE_UPPER_HAND_MAP[result] ?? "대기 중";
   };
 
   const detailTextTranslate = (category: AnalyzeCategory) => {

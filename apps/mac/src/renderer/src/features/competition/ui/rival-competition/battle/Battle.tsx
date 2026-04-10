@@ -53,9 +53,7 @@ export const Battle = () => {
                     const judge = battle.judgeUpperHand(battleItem.result);
 
                     const cannotOpen =
-                      battleItem.result === MATCHVALUE.PENDING ||
-                      battleItem.result === MATCHVALUE.CANCELED ||
-                      battleItem.result === MATCHVALUE.NOT_STARTED;
+                      battleItem.result === MATCHVALUE.PENDING;
 
                     return (
                       <S.BattleProfileBox
