@@ -205,9 +205,15 @@ export const RivalsManagementDialog = ({ isOpen, onClose, rival }: AddRivalsDial
                             <Button
                               size="sm"
                               variant="primary"
-                              onClick={() => rival.handleRivalSignCancel(user.rivalId)}
+                              onClick={() => void rival.handleRivalSignCancel(user.rivalId)}
+                              isLoading={
+                                rival.isCancelingSign && rival.cancelingRivalId === user.rivalId
+                              }
+                              disabled={rival.isCancelingSign}
                             >
-                              취소
+                              {rival.isCancelingSign && rival.cancelingRivalId === user.rivalId
+                                ? "취소 중"
+                                : "취소"}
                             </Button>
                           ) : null}
                         </S.ProfileContent>
