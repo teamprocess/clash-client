@@ -5,8 +5,6 @@ export const MATCHVALUE = {
   LOSING: "LOSING",
   DRAWING: "DRAWING",
   PENDING: "PENDING",
-  CANCELED: "CANCELED",
-  NOT_STARTED: "NOT_STARTED",
   DRAWN: "DRAWN",
 } as const;
 
