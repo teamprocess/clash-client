@@ -2,7 +2,15 @@ import styled from "styled-components";
 import type { UserStatus } from "@/entities/competition";
 import { font } from "@clash/design-tokens/font";
 import { palette } from "@clash/design-tokens/theme";
+import { createNameplateOverlayTuningCss, nameplateFrameCss } from "@/shared/lib";
 import { ProfileAvatar } from "@/shared/ui/profile-avatar";
+
+const rivalCardNameplateTuningCss = createNameplateOverlayTuningCss({
+  insetX: "0.05rem",
+  scaleX: 1.18,
+  scaleY: 2.45,
+  shiftY: "1.4rem",
+});
 
 export const RivalBox = styled.div`
   width: 100%;
@@ -56,6 +64,22 @@ export const NameBox = styled.div`
   display: flex;
   flex-direction: column;
   min-width: 0;
+  flex: 1 1 auto;
+`;
+
+export const NameplateSurface = styled.div<{ $image?: string }>`
+  ${rivalCardNameplateTuningCss};
+  min-width: 0;
+  max-width: min(100%, 16rem);
+  flex: 1 1 auto;
+  min-height: 1.65rem;
+  padding: 0.22rem 0.95rem 0.28rem;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-start;
+  overflow: visible;
+  ${nameplateFrameCss};
 `;
 
 export const Name = styled.p`

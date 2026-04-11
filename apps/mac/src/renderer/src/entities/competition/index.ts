@@ -33,7 +33,11 @@ export type {
   PeriodDay,
   PostBattleRequest,
 } from "./model/rival-competition/battle.types";
-export type { MyRivalsRequest, MyRivalsResponse } from "./model/rival-competition/myRivals.types";
+export type {
+  MyRivalsRequest,
+  MyRivalsResponse,
+  RivalEquippedItems,
+} from "./model/rival-competition/myRivals.types";
 export { USER_STATUS_LABELS } from "./model/rival-competition/userStatus";
 export type { UserStatus } from "./model/rival-competition/userStatus";
 export type {
