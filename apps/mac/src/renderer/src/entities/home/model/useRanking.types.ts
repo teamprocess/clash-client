@@ -9,7 +9,7 @@ export type RankingItem = {
   linkedId: string;
   point: number;
   equippedItems: {
-    insigma: { id: number; name: string; image: string };
+    insignia: { id: number; name: string; image: string };
     nameplate: string;
     banner: string;
   };

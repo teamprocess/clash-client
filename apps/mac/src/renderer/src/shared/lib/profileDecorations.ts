@@ -3,7 +3,7 @@ export interface ProfileDecorationImageLike {
 }
 
 export interface ProfileDecorationsInput {
-  insigma?: ProfileDecorationImageLike | string | null;
+  insignia?: ProfileDecorationImageLike | string | null;
   nameplate?: ProfileDecorationImageLike | string | null;
   banner?: ProfileDecorationImageLike | string | null;
 }
@@ -33,7 +33,7 @@ const resolveDecorationImage = (
 export const resolveProfileDecorations = (
   equippedItems?: ProfileDecorationsInput | null
 ): ResolvedProfileDecorations => ({
-  badgeImage: resolveDecorationImage(equippedItems?.insigma),
+  badgeImage: resolveDecorationImage(equippedItems?.insignia),
   nameplateImage: resolveDecorationImage(equippedItems?.nameplate),
   bannerImage: resolveDecorationImage(equippedItems?.banner),
 });
