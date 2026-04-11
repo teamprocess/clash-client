@@ -3,7 +3,6 @@ import AddProfileImg from "../../assets/add-profile-img-icon.svg";
 import ChangeProfileImg from "../../assets/change-profile-img-icon.svg";
 import {
   createNameplateOverlayTuningCss,
-  defaultProfileImageLight,
   nameplateFrameCss,
 } from "@/shared/lib";
 import { ProfileAvatar } from "@/shared/ui/profile-avatar";
@@ -193,8 +192,6 @@ export const DisplayName = styled.p`
 export const HiddenFileInput = styled.input`
   display: none;
 `;
-
-export const FallbackProfileImage = defaultProfileImageLight;
 
 export const AddProfileImageIcon = styled(AddProfileImg)`
   width: 100%;

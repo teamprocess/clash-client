@@ -4,6 +4,7 @@ import FirstFrameIcon from "../assets/first-frame.svg";
 import SecondFrameIcon from "../assets/second-frame.svg";
 import ThirdFrameIcon from "../assets/third-frame.svg";
 import { palette } from "@clash/design-tokens/theme";
+import { DefaultProfileIcon } from "@/shared/ui";
 
 export type RankingPageEnum = "section" | "chapter";
 export type RankingPositionEnum = "top" | "bottom";
@@ -132,6 +133,14 @@ export const Top3ProfileImage = styled.img<{ $isFirst: boolean }>`
   z-index: 150;
 `;
 
+export const Top3ProfileFallback = styled(DefaultProfileIcon)<{ $isFirst: boolean }>`
+  width: ${({ $isFirst }) => ($isFirst ? "95%" : "70%")};
+  height: ${({ $isFirst }) => ($isFirst ? "3.5rem" : "58%")};
+  position: absolute;
+  top: ${({ $isFirst }) => ($isFirst ? "0.5rem" : "0.8rem")};
+  z-index: 150;
+`;
+
 export const RankerName = styled.div`
   display: flex;
   flex-direction: column;
@@ -213,6 +222,12 @@ export const RankingUserProfile = styled.img`
   height: 1.8rem;
   border-radius: 50%;
   object-fit: cover;
+`;
+
+export const RankingUserProfileFallback = styled(DefaultProfileIcon)`
+  width: 1.8rem;
+  height: 1.8rem;
+  flex-shrink: 0;
 `;
 
 export const RankingUsername = styled.span`
