@@ -75,7 +75,7 @@ export interface EquippedItemResponse {
 }
 
 export interface EquippedItemsResponse {
-  insigma: EquippedItemResponse | null;
+  insignia: EquippedItemResponse | null;
   nameplate: EquippedItemResponse | null;
   banner: EquippedItemResponse | null;
 }
