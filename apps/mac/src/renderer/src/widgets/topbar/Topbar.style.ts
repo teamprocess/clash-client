@@ -3,7 +3,6 @@ import { font } from "@clash/design-tokens/font";
 import { Link } from "react-router-dom";
 import ClashLogo from "@/widgets/topbar/assets/clash-logo.svg";
 import Menu from "@/widgets/topbar/assets/menu.svg";
-import Profile from "@/widgets/topbar/assets/profile.svg?url";
 import EXP from "@/widgets/topbar/assets/exp.svg";
 import Cookie from "@/widgets/topbar/assets/cookie.svg";
 import { ProfileAvatar } from "@/shared/ui/profile-avatar";
@@ -82,8 +81,6 @@ export const ProfileAvatarWrap = styled(ProfileAvatar)`
   width: 2.5rem;
   height: 2.5rem;
 `;
-
-export const FallbackProfileIcon = Profile;
 
 export const NameBox = styled.div`
   display: flex;

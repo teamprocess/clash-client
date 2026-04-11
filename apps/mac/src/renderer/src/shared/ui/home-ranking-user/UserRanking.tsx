@@ -1,9 +1,8 @@
 import * as S from "./UserRanking.style";
 import { forwardRef } from "react";
-import DefaultProfile from "@/features/home/assets/home/profile.svg?url";
 import { RankingItem } from "@/entities/home/model/useRanking.types";
 import { resolveProfileDecorations } from "@/shared/lib";
-import { RankTier } from "@/shared/ui";
+import { DefaultProfileIcon, RankTier } from "@/shared/ui";
 
 interface UserRankingProps {
   user: RankingItem;
@@ -61,7 +60,7 @@ export const UserRanking = forwardRef<HTMLDivElement, UserRankingProps>(
             <S.RankingAvatar
               profileImage={user.profileImage}
               badgeImage={badgeImage}
-              fallbackSrc={DefaultProfile}
+              fallbackIcon={<DefaultProfileIcon />}
             />
             {nameplateImage ? (
               <S.NameplateSurface $image={nameplateImage}>{identity}</S.NameplateSurface>
