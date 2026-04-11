@@ -2,6 +2,7 @@ import * as S from "./Rival.style";
 import { MyRivalsRequest, USER_STATUS_LABELS } from "@/entities/competition";
 import {
   formatTime,
+  resolveProfileDecorations,
   resolveUsingApp,
   useRealtimeRivalActiveTime,
 } from "@/shared/lib";
@@ -18,8 +19,24 @@ export const MyRivalUsers = ({ user }: MyRivalUsersProps) => {
     activeTime: user.activeTime,
     isStudying: user.isStudying,
   });
+  const { badgeImage, nameplateImage } = resolveProfileDecorations(user.equippedItems);
   const resolvedApp = user.status === "ONLINE" ? resolveUsingApp(user.usingApp) : null;
   const Icon = resolvedApp ? IdeIcons[resolvedApp.id as keyof typeof IdeIcons] : null;
+  const identity = (
+    <S.NameBox>
+      <S.ProfileName>{user.name}</S.ProfileName>
+      <Tooltip
+        content={user.username}
+        position="top"
+        maxWidth="10rem"
+        wrapperStyle={{ flex: 1, minWidth: 0 }}
+      >
+        <S.ProfileMention>
+          <span>@{user.username}</span>
+        </S.ProfileMention>
+      </Tooltip>
+    </S.NameBox>
+  );
 
   return (
     <S.ProfileContainer>
@@ -27,22 +44,15 @@ export const MyRivalUsers = ({ user }: MyRivalUsersProps) => {
         <S.ProfileContent>
           <S.RivalProfileAvatar
             profileImage={user.profileImage}
+            badgeImage={badgeImage}
             fallbackIcon={<DefaultProfileIcon />}
           />
 
-          <S.NameBox>
-            <S.ProfileName>{user.name}</S.ProfileName>
-            <Tooltip
-              content={user.username}
-              position="top"
-              maxWidth="10rem"
-              wrapperStyle={{ flex: 1, minWidth: 0 }}
-            >
-              <S.ProfileMention>
-                <span>@{user.username}</span>
-              </S.ProfileMention>
-            </Tooltip>
-          </S.NameBox>
+          {nameplateImage ? (
+            <S.NameplateSurface $image={nameplateImage}>{identity}</S.NameplateSurface>
+          ) : (
+            identity
+          )}
         </S.ProfileContent>
         <S.Status $status={user.status}>{USER_STATUS_LABELS[user.status]}</S.Status>
       </S.ProfileBox>

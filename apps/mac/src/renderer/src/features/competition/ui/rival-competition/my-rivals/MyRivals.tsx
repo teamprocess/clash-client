@@ -1,6 +1,7 @@
 import * as S from "./MyRivals.style";
 import {
   formatTime,
+  resolveProfileDecorations,
   resolveUsingApp,
   useRealtimeRivalActiveTime,
   useRival,
@@ -28,8 +29,24 @@ const RivalRow = ({ user }: { user: MyRivalsRequest }) => {
     activeTime: user.activeTime,
     isStudying: user.isStudying,
   });
+  const { badgeImage, nameplateImage } = resolveProfileDecorations(user.equippedItems);
   const resolvedApp = user.status === "ONLINE" ? resolveUsingApp(user.usingApp) : null;
   const Icon = resolvedApp ? IdeIcons[resolvedApp.id as keyof typeof IdeIcons] : null;
+  const identity = (
+    <S.NameBox>
+      <S.ProfileName>{user.name}</S.ProfileName>
+      <Tooltip
+        content={user.username}
+        position="top"
+        maxWidth="10rem"
+        wrapperStyle={{ flex: 1, minWidth: 0 }}
+      >
+        <S.ProfileMention>
+          <span>@{user.username}</span>
+        </S.ProfileMention>
+      </Tooltip>
+    </S.NameBox>
+  );
 
   return (
     <S.ProfileContainer>
@@ -40,23 +57,16 @@ const RivalRow = ({ user }: { user: MyRivalsRequest }) => {
 
         <S.RivalAvatar
           profileImage={user.profileImage}
+          badgeImage={badgeImage}
           fallbackIcon={<DefaultProfileIcon />}
           alt="프로필"
         />
 
-        <S.NameBox>
-          <S.ProfileName>{user.name}</S.ProfileName>
-          <Tooltip
-            content={user.username}
-            position="top"
-            maxWidth="10rem"
-            wrapperStyle={{ flex: 1, minWidth: 0 }}
-          >
-            <S.ProfileMention>
-              <span>@{user.username}</span>
-            </S.ProfileMention>
-          </Tooltip>
-        </S.NameBox>
+        {nameplateImage ? (
+          <S.NameplateSurface $image={nameplateImage}>{identity}</S.NameplateSurface>
+        ) : (
+          identity
+        )}
 
         <S.Status $status={user.status}>{USER_STATUS_LABELS[user.status]}</S.Status>
       </S.ProfileContent>

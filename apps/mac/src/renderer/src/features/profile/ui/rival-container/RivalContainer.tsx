@@ -23,6 +23,7 @@ export const RivalContainer = () => {
             profileSrc={rivalUser.profileImage}
             username={rivalUser.username}
             tier={rivalUser.tier}
+            equippedItems={rivalUser.equippedItems}
           />
         ))}
 
