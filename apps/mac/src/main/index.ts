@@ -1,4 +1,4 @@
-import { app, BrowserWindow, dialog } from "electron";
+import { app, BrowserWindow, dialog, ipcMain } from "electron";
 import { autoUpdater } from "electron-updater";
 import { AppMonitor } from "./services";
 import { createMainWindow } from "./window";
@@ -40,24 +40,27 @@ const showUpdateMessage = async (message: string, detail?: string) => {
   await dialog.showMessageBox(options);
 };
 
-const confirmInstallUpdate = async (version: string | undefined) => {
-  const options = {
-    type: "info" as const,
-    buttons: ["나중에", "재시작"],
-    defaultId: 1,
-    cancelId: 0,
-    title: "업데이트 설치",
-    message: "업데이트 다운로드가 완료되었습니다.",
-    detail: version
-      ? `${version} 버전을 설치하려면 앱을 재시작해야 합니다. 지금 재시작할까요?`
-      : "업데이트를 설치하려면 앱을 재시작해야 합니다. 지금 재시작할까요?",
-  };
-  const targetWindow = BrowserWindow.getFocusedWindow() ?? mainWindow;
-  const result = targetWindow
-    ? await dialog.showMessageBox(targetWindow, options)
-    : await dialog.showMessageBox(options);
+const installDownloadedUpdate = async (version: string | null) => {
+  if (isInstallPromptOpen) {
+    return;
+  }
 
-  return result.response === 1;
+  isInstallPromptOpen = true;
+
+  try {
+    await showUpdateMessage(
+      "업데이트 다운로드가 완료되었습니다.",
+      version
+        ? `${version} 버전을 설치하기 위해 앱을 재시작합니다.`
+        : "업데이트를 설치하기 위해 앱을 재시작합니다."
+    );
+
+    downloadedUpdateVersion = null;
+    markUpdateInstallInProgress();
+    autoUpdater.quitAndInstall();
+  } finally {
+    isInstallPromptOpen = false;
+  }
 };
 
 const checkForUpdates = async (source: "auto" | "manual") => {
@@ -69,14 +72,7 @@ const checkForUpdates = async (source: "auto" | "manual") => {
   }
 
   if (downloadedUpdateVersion) {
-    if (source === "manual" && !isInstallPromptOpen) {
-      const shouldInstallNow = await confirmInstallUpdate(downloadedUpdateVersion);
-      if (shouldInstallNow) {
-        downloadedUpdateVersion = null;
-        markUpdateInstallInProgress();
-        autoUpdater.quitAndInstall();
-      }
-    }
+    await installDownloadedUpdate(downloadedUpdateVersion);
     return;
   }
 
@@ -115,23 +111,17 @@ const checkForUpdates = async (source: "auto" | "manual") => {
   }
 };
 
-// 현재 메인 윈도우 조회
 const getMainWindow = () => mainWindow;
 
-// 현재 앱 모니터 조회
 const getAppMonitor = () => appMonitor;
 
-// 메인 윈도우 + AppMonitor 초기화
 const createWindow = () => {
   mainWindow = createMainWindow();
-
-  // 윈도우 준비 후 앱 모니터 연결
   appMonitor = new AppMonitor(mainWindow);
 
   consumePendingDeepLink(getMainWindow);
 };
 
-// 패키지 앱에서 자동 업데이트를 확인
 const registerAutoUpdater = () => {
   if (!isUpdateSupported()) {
     return;
@@ -161,26 +151,7 @@ const registerAutoUpdater = () => {
   autoUpdater.on("update-downloaded", info => {
     isCheckingForUpdates = false;
     downloadedUpdateVersion = info.version ?? null;
-    if (isInstallPromptOpen) {
-      return;
-    }
-
-    isInstallPromptOpen = true;
-
-    void (async () => {
-      try {
-        const shouldInstallNow = await confirmInstallUpdate(info.version);
-        if (!shouldInstallNow) {
-          return;
-        }
-
-        downloadedUpdateVersion = null;
-        markUpdateInstallInProgress();
-        autoUpdater.quitAndInstall();
-      } finally {
-        isInstallPromptOpen = false;
-      }
-    })();
+    void installDownloadedUpdate(downloadedUpdateVersion);
   });
 
   autoUpdater.on("error", error => {
@@ -200,6 +171,10 @@ const registerAutoUpdater = () => {
     void checkForUpdates("auto");
   }, AUTO_UPDATE_CHECK_INTERVAL_MS);
 };
+
+ipcMain.handle("app:check-for-updates", async () => {
+  await checkForUpdates("manual");
+});
 
 configureAppRuntime();
 configureCertificateHandling();

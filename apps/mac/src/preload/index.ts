@@ -18,6 +18,7 @@ const api = {
 
   openExternalUrl: (url: string) => ipcRenderer.invoke("open-external-url", url),
   clearAuthSession: () => ipcRenderer.invoke("auth:clear-session"),
+  checkForUpdates: () => ipcRenderer.invoke("app:check-for-updates"),
 
   onAppChanged: callback => {
     const subscription = (_, app) => callback(app);
