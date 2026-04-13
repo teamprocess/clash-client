@@ -1,17 +1,5 @@
 import type { UserStatus } from "./userStatus";
 
-interface EquippedItem {
-  id: number;
-  name: string;
-  image: string;
-}
-
-export interface RivalEquippedItems {
-  insignia: EquippedItem | null;
-  nameplate: EquippedItem | null;
-  banner: EquippedItem | null;
-}
-
 export interface MyRivalsRequest {
   rivalId: number;
   id: number;
@@ -23,7 +11,6 @@ export interface MyRivalsRequest {
   status: UserStatus;
   isStudying: boolean;
   tier: string;
-  equippedItems: RivalEquippedItems;
 }
 
 export type MyRivalsResponse = {
