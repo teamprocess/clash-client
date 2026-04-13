@@ -21,7 +21,7 @@ import { ProfilePage } from "@/pages/profile";
 import { OfflinePage } from "@/pages/offline";
 import { ServiceUnavailablePage } from "@/pages/service-unavailable";
 import { TabLayout } from "@/app/layouts/tab";
-import { CompetitionTabs, MyCompetitionPage, RivalCompetitionPage } from "@/pages/competition";
+import { RivalCompetitionPage } from "@/pages/competition";
 
 const RECAPTCHA_SITE_KEY = import.meta.env.VITE_RECAPTCHA_SITE_KEY || "";
 
@@ -64,10 +64,8 @@ function App() {
                 <Route path="/roadmap/major-choice" element={<RoadmapMajorChoicePage />} />
                 <Route path="/roadmap/:sectionId" element={<ChapterPage />} />
                 <Route path="/profile" element={<ProfilePage />} />
-                <Route element={<CompetitionTabs />}>
-                  <Route path="/competition" element={<MyCompetitionPage />} />
-                  <Route path="/competition/rival" element={<RivalCompetitionPage />} />
-                </Route>
+                <Route path="/competition" element={<RivalCompetitionPage />} />
+                <Route path="/competition/rival" element={<Navigate to="/competition" replace />} />
                 <Route
                   element={
                     <TabLayout
