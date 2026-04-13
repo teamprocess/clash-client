@@ -26,7 +26,7 @@ export const Battle = () => {
   const formatAnalyzePoint = (value: number) =>
     battle.category === "ACTIVE_TIME"
       ? formatTime(Math.max(0, Math.floor(value)))
-      : [value, analyzeUnitLabel].filter(Boolean).join(" ");
+      : [value, analyzeUnitLabel].join(" ");
 
   return (
     <>
