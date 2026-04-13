@@ -20,6 +20,10 @@ export const ChapterPage = () => {
   const major = myProfile?.major as MajorEnum;
 
   const { data: sectionData } = useMajorSectionQuery(major);
+  const roadmapNodes = domain.roadmapNodes.map(n => ({
+    ...n,
+    status: domain.sectionCompleted ? "completed" : n.status,
+  }));
 
   const navigate = useNavigate();
 
@@ -95,9 +99,9 @@ export const ChapterPage = () => {
       <S.ChapterScrollable ref={chapterRef} {...chapterScrollProps}>
         <S.ChapterCanvas>
           <S.RoadmapStageArea>
-            {domain.roadmapNodes.length > 0 ? (
+            {roadmapNodes.length > 0 ? (
               <S.RoadmapWrapper>
-                <Roadmap nodes={domain.roadmapNodes} onSelectStage={handlers.handleSelectStage} />
+                <Roadmap nodes={roadmapNodes} onSelectStage={handlers.handleSelectStage} />
               </S.RoadmapWrapper>
             ) : (
               <S.EmptyRoadmapMessage>아직 등록된 챕터가 없습니다.</S.EmptyRoadmapMessage>
@@ -107,7 +111,10 @@ export const ChapterPage = () => {
       </S.ChapterScrollable>
 
       <ChapterRanking page="chapter" />
-      <SectionProgress completed={domain.completedChapters} total={domain.totalChapters} />
+      <SectionProgress
+        completed={domain.sectionCompleted ? domain.completedChapters + 1 : domain.completedChapters}
+        total={domain.totalChapters}
+      />
 
       <Link to="/roadmap">
         <S.PreviousBox>
@@ -156,6 +163,7 @@ export const ChapterPage = () => {
           onBackToOverview={handlers.handleCloseQuizModal}
           onSolve={handlers.handleStartCurrentStageMission}
           onMissionComplete={handlers.handleMissionComplete}
+          isFinishedSection={domain.sectionCompleted}
         />
       )}
     </S.ChapterContainer>

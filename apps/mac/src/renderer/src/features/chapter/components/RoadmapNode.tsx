@@ -37,6 +37,7 @@ export const RoadmapNode = ({ node, onClick }: RoadmapNodeProps) => {
     <S.NodeGroup
       onClick={onClick}
       data-roadmap-node-id={node.id}
+      data-roadmap-node-order-index={node.orderIndex}
       data-roadmap-node-status={node.status}
     >
       <S.NodeCircle cx={node.x} cy={node.y} r={NODE_RADIUS} $status={node.status} />
