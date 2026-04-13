@@ -45,7 +45,7 @@ export const HeaderTimer = styled.div`
   align-items: center;
   justify-content: space-between;
   gap: 1.5rem;
-  padding: 0.5rem 2rem 1.25rem 1.5rem;
+  padding: 0 1.5rem;
 `;
 
 export const HeaderTimerSection = styled.div`
