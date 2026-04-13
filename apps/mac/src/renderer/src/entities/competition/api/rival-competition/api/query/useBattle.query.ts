@@ -14,6 +14,7 @@ export const useBattleDetailQuery = (id: number) => {
     queryKey: ["battleDetail", id],
     queryFn: () => battleApi.getBattleDetailInfo(id),
     enabled: !!id,
+    placeholderData: previousData => previousData,
   });
 };
 
@@ -22,6 +23,7 @@ export const useAnalyzeBattleQuery = (id: number, category: AnalyzeBattleRequest
     queryKey: ["battleAnalyze", id, category],
     queryFn: () => battleApi.getAnalyzeBattleData({ id, category }),
     enabled: !!id && !!category,
+    placeholderData: previousData => previousData,
   });
 };
 

@@ -1,7 +1,7 @@
 import styled, { css } from "styled-components";
 import { font } from "@clash/design-tokens/font";
 import { palette } from "@clash/design-tokens/theme";
-import Profile from "@/features/home/assets/home/profile.svg";
+import Profile from "@/shared/ui/assets/default-profile.svg";
 import Checked from "@/features/home/assets/home/check-box.svg";
 
 const flexRow = css`

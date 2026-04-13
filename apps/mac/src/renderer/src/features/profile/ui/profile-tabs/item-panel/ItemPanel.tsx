@@ -37,7 +37,7 @@ export const ItemPanel = () => {
   const isEquippedItem = (category: OwnedItemDisplayCategory, itemId: number) => {
     switch (category) {
       case OwnedItemCategory.INSIGNIA:
-        return user?.equippedItems?.insigma?.id === itemId;
+        return user?.equippedItems?.insignia?.id === itemId;
       case OwnedItemCategory.NAMEPLATE:
         return user?.equippedItems?.nameplate?.id === itemId;
       case OwnedItemCategory.BANNER:
