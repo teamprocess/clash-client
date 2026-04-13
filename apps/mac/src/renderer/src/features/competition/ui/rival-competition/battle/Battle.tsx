@@ -4,7 +4,7 @@ import { Button, DefaultProfileIcon, Dialog, Select, SlideSelector } from "@/sha
 import { AnalyzeCategory, MATCHVALUE } from "@/entities/competition";
 import { useBattle } from "@/features/competition/model/useBattle";
 import { useGetMyProfile } from "@/entities/user";
-import { resolveProfileDecorations } from "@/shared/lib";
+import { formatTime, resolveProfileDecorations } from "@/shared/lib";
 
 export const Battle = () => {
   const battle = useBattle();
@@ -21,6 +21,12 @@ export const Battle = () => {
   const battleApplyItems = battle.battleApplyList?.data?.battles ?? [];
 
   const hasBattleApplyList = battleApplyItems.length > 0;
+  const analyzeUnitLabel = battle.detailTextTranslate(battle.category);
+
+  const formatAnalyzePoint = (value: number) =>
+    battle.category === "ACTIVE_TIME"
+      ? formatTime(Math.max(0, Math.floor(value)))
+      : [value, analyzeUnitLabel].filter(Boolean).join(" ");
 
   return (
     <>
@@ -52,8 +58,7 @@ export const Battle = () => {
                   {battles.map(battleItem => {
                     const judge = battle.judgeUpperHand(battleItem.result);
 
-                    const cannotOpen =
-                      battleItem.result === MATCHVALUE.PENDING;
+                    const cannotOpen = battleItem.result === MATCHVALUE.PENDING;
 
                     return (
                       <S.BattleProfileBox
@@ -141,7 +146,7 @@ export const Battle = () => {
                       </S.UpperHandProfile>
                     </S.UpperHandContainer>
 
-                    <S.VerticalLine />
+                    <S.HorizontalLine />
 
                     <S.DetailAnalyzeContainer>
                       <S.TitleBox>
@@ -151,6 +156,7 @@ export const Battle = () => {
                             value={battle.category}
                             options={battle.ANALYZE_CATEGORY_OPTIONS}
                             onChange={battle.setCategory}
+                            width={8}
                           />
                         </S.DropDownBox>
                       </S.TitleBox>
@@ -162,14 +168,11 @@ export const Battle = () => {
                             <S.AnalyzeName>나</S.AnalyzeName>
                           </S.AnalyzeContent>
 
-                          <S.HorizontalLine />
+                          <S.VerticalLine />
 
                           <S.AnalyzeContent $width="100%">
                             <S.DataBox>
-                              <div>
-                                {battle.rivalAnalyzePoint}{" "}
-                                {battle.detailTextTranslate(battle.category)}
-                              </div>
+                              <div>{formatAnalyzePoint(battle.rivalAnalyzePoint)}</div>
                               <S.AnalyzeBar $width={battle.rivalAnalyzeRate ?? 0} $isRival>
                                 <S.AnalyzeLabel>
                                   {battle.isRivalHigher && battle.diff > 0 && (
@@ -180,10 +183,7 @@ export const Battle = () => {
                             </S.DataBox>
 
                             <S.DataBox>
-                              <div>
-                                {battle.myAnalyzePoint}{" "}
-                                {battle.detailTextTranslate(battle.category)}
-                              </div>
+                              <div>{formatAnalyzePoint(battle.myAnalyzePoint)}</div>
                               <S.AnalyzeBar $width={battle.myAnalyzeRate ?? 0} $isRival={false}>
                                 <S.AnalyzeLabel>
                                   {!battle.isRivalHigher && battle.diff > 0 && (
