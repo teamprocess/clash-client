@@ -9,6 +9,7 @@ import { useEffect, useMemo } from "react";
 import { useGetMyProfile } from "@/entities/user";
 import { useMajorSectionQuery } from "@/entities/roadmap/section/api/query/useMajorSection.query";
 import { MissionContainer } from "@/features/chapter/components/MissionContainer";
+import { useSectionDetailsQuery } from "@/entities/roadmap/chapter/api/query/useSectionDetails.query";
 
 export const ChapterPage = () => {
   const { sectionId } = useParams<{ sectionId: string }>();
@@ -20,6 +21,8 @@ export const ChapterPage = () => {
   const major = myProfile?.major as MajorEnum;
 
   const { data: sectionData } = useMajorSectionQuery(major);
+  const { data: sectionDetailData } = useSectionDetailsQuery(+(sectionId ?? 0));
+  const roadmapNodes = domain.roadmapNodes.map(n => ({...n, status: sectionDetailData?.completed ? "completed" : n.status}));
 
   const navigate = useNavigate();
 
@@ -95,9 +98,9 @@ export const ChapterPage = () => {
       <S.ChapterScrollable ref={chapterRef} {...chapterScrollProps}>
         <S.ChapterCanvas>
           <S.RoadmapStageArea>
-            {domain.roadmapNodes.length > 0 ? (
+            {roadmapNodes.length > 0 ? (
               <S.RoadmapWrapper>
-                <Roadmap nodes={domain.roadmapNodes} onSelectStage={handlers.handleSelectStage} />
+                <Roadmap nodes={roadmapNodes} onSelectStage={handlers.handleSelectStage} />
               </S.RoadmapWrapper>
             ) : (
               <S.EmptyRoadmapMessage>아직 등록된 챕터가 없습니다.</S.EmptyRoadmapMessage>
@@ -107,7 +110,7 @@ export const ChapterPage = () => {
       </S.ChapterScrollable>
 
       <ChapterRanking page="chapter" />
-      <SectionProgress completed={domain.completedChapters} total={domain.totalChapters} />
+      <SectionProgress completed={sectionDetailData?.completed ? domain.completedChapters + 1 : domain.completedChapters} total={domain.totalChapters} />
 
       <Link to="/roadmap">
         <S.PreviousBox>
@@ -156,6 +159,7 @@ export const ChapterPage = () => {
           onBackToOverview={handlers.handleCloseQuizModal}
           onSolve={handlers.handleStartCurrentStageMission}
           onMissionComplete={handlers.handleMissionComplete}
+          isFinishedSection={Boolean(sectionDetailData?.completed)}
         />
       )}
     </S.ChapterContainer>
