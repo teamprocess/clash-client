@@ -52,7 +52,11 @@ const resetSectionDetails = (
 export const useChapter = (sectionId: number) => {
   const queryClient = useQueryClient();
   const domain = useChapterDomain(sectionId);
-  const view = useChapterView({ loading: domain.loading, sectionId });
+  const view = useChapterView({
+    loading: domain.loading,
+    sectionId,
+    sectionCompleted: domain.sectionCompleted,
+  });
   const resetChapterMutation = useResetChapterMutation();
   const currentStageId = domain.currentStageId;
   const [resetOnOpenState, setResetOnOpenState] = useState({
@@ -230,6 +234,7 @@ export const useChapter = (sectionId: number) => {
       currentStageMissionsLoading: isCurrentStageInitialLoading,
       currentStageDetailsLoading: isCurrentStageInitialLoading,
       currentStageDetailsError,
+      sectionCompleted: domain.sectionCompleted,
       sectionTitle: domain.sectionTitle,
       completedChapters: domain.completedChapters,
       totalChapters: domain.totalChapters,
