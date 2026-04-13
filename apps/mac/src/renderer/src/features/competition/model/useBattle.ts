@@ -83,7 +83,7 @@ export const useBattle = () => {
   };
 
   const detailTextTranslate = (category: AnalyzeCategory) => {
-    if (category === "GITHUB") return "Contributes";
+    if (category === "GITHUB") return "Contributions";
     if (category === "ACTIVE_TIME") return;
     return "EXP";
   };
