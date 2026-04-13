@@ -28,6 +28,7 @@ interface MissionContainerProps {
   onSolve: () => void;
   onBackToOverview: () => void;
   onMissionComplete?: (missionId: number) => void;
+  isFinishedSection: boolean;
 }
 
 interface QuizPanelContentProps {
@@ -295,6 +296,7 @@ export const MissionContainer = ({
   onSolve,
   onBackToOverview,
   onMissionComplete,
+  isFinishedSection
 }: MissionContainerProps) => {
   const [isClosing, setIsClosing] = useState(false);
   const [studyMaterialError, setStudyMaterialError] = useState<string | null>(null);
@@ -345,9 +347,13 @@ export const MissionContainer = ({
   const descriptionText = isLoading
     ? "챕터 정보를 불러오는 중입니다."
     : description?.trim() || "이 챕터에 대한 설명이 아직 준비되지 않았습니다.";
-  const isCompletedStage =
-    currentStage.totalMissions > 0 && currentStage.currentProgress >= currentStage.totalMissions;
+  const isCompletedStage = isFinishedSection ||
+    (currentStage.totalMissions > 0 && currentStage.currentProgress >= currentStage.totalMissions);
   const hasStudyMaterial = Boolean(studyMaterialUrl?.trim());
+  const processedCurrentMission: Mission | null = {
+    ...currentMission,
+    completed: isFinishedSection ? true : currentMission?.completed
+  };
 
   return (
     <SidePanel
@@ -374,7 +380,7 @@ export const MissionContainer = ({
 
         {currentMission ? (
           <QuizPanelContent
-            mission={currentMission}
+            mission={processedCurrentMission}
             stageTitle={displayStageTitle}
             onBackToOverview={onBackToOverview}
             onMissionComplete={onMissionComplete}
