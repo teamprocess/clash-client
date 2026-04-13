@@ -1,11 +1,22 @@
 import * as S from "./MyRivals.style";
-import { defaultProfileImageLight, formatTime, resolveUsingApp, useRealtimeRivalActiveTime, useRival } from "@/shared/lib";
+import {
+  formatTime,
+  resolveUsingApp,
+  useRealtimeRivalActiveTime,
+  useRival,
+} from "@/shared/lib";
 import {
   MyRivalsRequest,
   MyRivalsResponse,
   USER_STATUS_LABELS,
 } from "@/entities/competition";
-import { QuestionTooltip, RankTier, RivalsManagementDialog, Tooltip } from "@/shared/ui";
+import {
+  DefaultProfileIcon,
+  QuestionTooltip,
+  RankTier,
+  RivalsManagementDialog,
+  Tooltip,
+} from "@/shared/ui";
 import { IdeIcons } from "@/shared/ui/assets/ide-img";
 
 interface MyRivalsProps {
@@ -29,7 +40,7 @@ const RivalRow = ({ user }: { user: MyRivalsRequest }) => {
 
         <S.RivalAvatar
           profileImage={user.profileImage}
-          fallbackSrc={defaultProfileImageLight}
+          fallbackIcon={<DefaultProfileIcon />}
           alt="프로필"
         />
 

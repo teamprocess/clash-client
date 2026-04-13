@@ -1,10 +1,10 @@
 import { useState } from "react";
 import * as S from "./Battle.style";
-import { Button, Dialog, Select, SlideSelector } from "@/shared/ui";
+import { Button, DefaultProfileIcon, Dialog, Select, SlideSelector } from "@/shared/ui";
 import { AnalyzeCategory, MATCHVALUE } from "@/entities/competition";
 import { useBattle } from "@/features/competition/model/useBattle";
 import { useGetMyProfile } from "@/entities/user";
-import { defaultProfileImageLight, resolveProfileDecorations } from "@/shared/lib";
+import { formatTime, resolveProfileDecorations } from "@/shared/lib";
 
 export const Battle = () => {
   const battle = useBattle();
@@ -21,6 +21,12 @@ export const Battle = () => {
   const battleApplyItems = battle.battleApplyList?.data?.battles ?? [];
 
   const hasBattleApplyList = battleApplyItems.length > 0;
+  const analyzeUnitLabel = battle.detailTextTranslate(battle.category);
+
+  const formatAnalyzePoint = (value: number) =>
+    battle.category === "ACTIVE_TIME"
+      ? formatTime(Math.max(0, Math.floor(value)))
+      : [value, analyzeUnitLabel].join(" ");
 
   return (
     <>
@@ -44,7 +50,7 @@ export const Battle = () => {
               </Button>
             </S.TitleBox>
 
-            <S.GaroLine />
+            <S.HorizontalLine />
 
             {battles.length > 0 ? (
               <>
@@ -52,10 +58,7 @@ export const Battle = () => {
                   {battles.map(battleItem => {
                     const judge = battle.judgeUpperHand(battleItem.result);
 
-                    const cannotOpen =
-                      battleItem.result === MATCHVALUE.PENDING ||
-                      battleItem.result === MATCHVALUE.CANCELED ||
-                      battleItem.result === MATCHVALUE.NOT_STARTED;
+                    const cannotOpen = battleItem.result === MATCHVALUE.PENDING;
 
                     return (
                       <S.BattleProfileBox
@@ -101,7 +104,7 @@ export const Battle = () => {
                         <S.BattleDetailProfileBox>
                           <S.BattleDetailAvatar
                             profileImage={battle.battleDetailData?.enemy.profileImage}
-                            fallbackSrc={defaultProfileImageLight}
+                            fallbackIcon={<DefaultProfileIcon />}
                             alt={battle.battleDetailData?.enemy.name || "상대 프로필"}
                           />
                         </S.BattleDetailProfileBox>
@@ -135,7 +138,7 @@ export const Battle = () => {
                           <S.BattleDetailAvatar
                             profileImage={myProfileImg}
                             badgeImage={myBadgeImage}
-                            fallbackSrc={defaultProfileImageLight}
+                            fallbackIcon={<DefaultProfileIcon />}
                             alt="내 프로필"
                           />
                         </S.BattleDetailProfileBox>
@@ -143,7 +146,7 @@ export const Battle = () => {
                       </S.UpperHandProfile>
                     </S.UpperHandContainer>
 
-                    <S.GaroLine />
+                    <S.HorizontalLine />
 
                     <S.DetailAnalyzeContainer>
                       <S.TitleBox>
@@ -153,6 +156,7 @@ export const Battle = () => {
                             value={battle.category}
                             options={battle.ANALYZE_CATEGORY_OPTIONS}
                             onChange={battle.setCategory}
+                            width={8}
                           />
                         </S.DropDownBox>
                       </S.TitleBox>
@@ -164,14 +168,11 @@ export const Battle = () => {
                             <S.AnalyzeName>나</S.AnalyzeName>
                           </S.AnalyzeContent>
 
-                          <S.SeroLine />
+                          <S.VerticalLine />
 
                           <S.AnalyzeContent $width="100%">
                             <S.DataBox>
-                              <div>
-                                {battle.rivalAnalyzePoint}{" "}
-                                {battle.detailTextTranslate(battle.category)}
-                              </div>
+                              <div>{formatAnalyzePoint(battle.rivalAnalyzePoint)}</div>
                               <S.AnalyzeBar $width={battle.rivalAnalyzeRate ?? 0} $isRival>
                                 <S.AnalyzeLabel>
                                   {battle.isRivalHigher && battle.diff > 0 && (
@@ -182,10 +183,7 @@ export const Battle = () => {
                             </S.DataBox>
 
                             <S.DataBox>
-                              <div>
-                                {battle.myAnalyzePoint}{" "}
-                                {battle.detailTextTranslate(battle.category)}
-                              </div>
+                              <div>{formatAnalyzePoint(battle.myAnalyzePoint)}</div>
                               <S.AnalyzeBar $width={battle.myAnalyzeRate ?? 0} $isRival={false}>
                                 <S.AnalyzeLabel>
                                   {!battle.isRivalHigher && battle.diff > 0 && (
@@ -224,7 +222,7 @@ export const Battle = () => {
       </S.ContentBox>
 
       {battle.isModalOpen && (
-        <Dialog width={43} height={30} isOpen={battle.isModalOpen} onClose={battle.closeModal}>
+        <Dialog width={43} height={32} isOpen={battle.isModalOpen} onClose={battle.closeModal}>
           <S.ModalContainer>
             <S.ModalHeader>
               <SlideSelector
@@ -255,7 +253,7 @@ export const Battle = () => {
                           <S.ProfileIcon>
                             <S.ProfileChoiceAvatar
                               profileImage={user.profileImage}
-                              fallbackSrc={defaultProfileImageLight}
+                              fallbackIcon={<DefaultProfileIcon />}
                               alt={user.name}
                             />
                           </S.ProfileIcon>
@@ -284,16 +282,14 @@ export const Battle = () => {
 
                 <S.BottomBox>
                   <S.ButtonBox>
-                    <Button size="sm" onClick={battle.closeModal}>
-                      취소
-                    </Button>
                     <Button
                       size="sm"
                       variant="primary"
                       disabled={!battle.canCreateBattle}
+                      isLoading={battle.isSubmitting}
                       onClick={battle.createBattle}
                     >
-                      신청
+                      {battle.isSubmitting ? "신청 중..." : "신청"}
                     </Button>
                   </S.ButtonBox>
                 </S.BottomBox>
@@ -307,7 +303,7 @@ export const Battle = () => {
                         <S.ProfileIcon>
                           <S.ProfileChoiceAvatar
                             profileImage={applyItem.enemy.profileImage}
-                            fallbackSrc={defaultProfileImageLight}
+                            fallbackIcon={<DefaultProfileIcon />}
                             alt={applyItem.enemy.name}
                           />
                         </S.ProfileIcon>
@@ -326,9 +322,12 @@ export const Battle = () => {
                         size="sm"
                         variant="primary"
                         disabled={!applyItem.isMine}
+                        isLoading={battle.isCanceling}
                         onClick={() => battle.handleBattleApplyCancel(applyItem.id)}
                       >
-                        취소
+                        {battle.isCanceling && applyItem.id === battle.cancelingId
+                          ? "취소 중..."
+                          : "취소"}
                       </Button>
                     </S.UserChoiceBox>
                   ))

@@ -1,8 +1,12 @@
 import * as S from "./RivalCard.style";
-import { defaultProfileImageLight, formatTime, resolveUsingApp, useRealtimeRivalActiveTime } from "@/shared/lib";
+import {
+  formatTime,
+  resolveUsingApp,
+  useRealtimeRivalActiveTime,
+} from "@/shared/lib";
 import { USER_STATUS_LABELS, type UserStatus } from "@/entities/competition";
 import { IdeIcons } from "@/shared/ui/assets/ide-img";
-import { RankTier } from "@/shared/ui";
+import { DefaultProfileIcon, RankTier } from "@/shared/ui";
 
 interface RivalCardProps {
   profileSrc: string;
@@ -41,7 +45,7 @@ export function RivalCard({
         </S.RankTierWrap>
         <S.RivalAvatar
           profileImage={profileSrc}
-          fallbackSrc={defaultProfileImageLight}
+          fallbackIcon={<DefaultProfileIcon />}
           alt="라이벌 프로필"
         />
         <S.NameStatus>

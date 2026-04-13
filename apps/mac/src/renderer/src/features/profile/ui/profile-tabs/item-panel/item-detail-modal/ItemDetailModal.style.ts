@@ -3,9 +3,9 @@ import { font } from "@clash/design-tokens/font";
 import { palette } from "@clash/design-tokens/theme";
 import {
   createNameplateOverlayTuningCss,
-  defaultProfileImageDark,
   nameplateFrameCss,
 } from "@/shared/lib";
+import { defaultProfileImageDark } from "@/shared/ui";
 import Cookie from "@/shared/ui/assets/cookie.svg";
 import { Button } from "@/shared/ui/button";
 import { ProfileAvatar } from "@/shared/ui/profile-avatar";
