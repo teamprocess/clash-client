@@ -33,6 +33,7 @@ export const ContentBox = styled.div`
   ${flexCol};
   width: 100%;
   height: 100%;
+  min-width: 0;
   gap: 1rem;
 `;
 
@@ -40,6 +41,7 @@ export const Content = styled.div`
   padding: 1.5rem;
   width: 100%;
   height: 100%;
+  min-width: 0;
   border-radius: 1rem;
   background-color: ${({ theme }) => theme.background.normal};
 `;

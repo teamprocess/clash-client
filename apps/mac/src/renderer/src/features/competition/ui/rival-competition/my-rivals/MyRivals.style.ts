@@ -7,10 +7,10 @@ import DetailArrow from "@/shared/ui/assets/front.svg";
 import { ProfileAvatar } from "@/shared/ui/profile-avatar";
 
 const myRivalsNameplateTuningCss = createNameplateOverlayTuningCss({
-  insetX: "0.05rem",
-  scaleX: 1.15,
-  scaleY: 2.4,
-  shiftY: "1.3rem",
+  insetX: "0.03rem",
+  scaleX: 1.06,
+  scaleY: 2.08,
+  shiftY: "1.02rem",
 });
 
 export const HorizontalLine = styled.div`
@@ -28,6 +28,7 @@ export const Point = styled.p`
 export const ListContent = styled.div`
   padding: 1.5rem;
   width: 100%;
+  min-width: 0;
   border-radius: 1rem;
   background-color: ${({ theme }) => theme.background.normal};
 `;
@@ -61,6 +62,7 @@ export const Title = styled.p`
 
 export const ProfileWrapper = styled.div`
   width: 100%;
+  min-width: 0;
   min-height: 14.25rem;
   height: 100%;
   gap: 0.5rem;
@@ -80,8 +82,8 @@ export const ProfileContent = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
+  justify-content: flex-start;
+  gap: 0.625rem;
   min-width: 0;
   flex: 1 1 auto;
 `;
@@ -92,23 +94,33 @@ export const RivalAvatar = styled(ProfileAvatar)`
   flex-shrink: 0;
 `;
 
+export const IdentityStatus = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 0;
+  flex: 1 1 auto;
+`;
+
 export const NameBox = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
   gap: 0.125rem;
   min-width: 0;
-  flex: 1 1 auto;
+  flex: 0 1 auto;
+  max-width: min(100%, 15rem);
   overflow: hidden;
 `;
 
 export const NameplateSurface = styled.div<{ $image?: string }>`
   ${myRivalsNameplateTuningCss};
   min-width: 0;
-  max-width: 100%;
-  flex: 1 1 auto;
-  min-height: 1.5rem;
-  padding: 0.2rem 0.82rem 0.24rem;
+  max-width: min(100%, 15rem);
+  flex: 0 1 auto;
+  min-height: 1.45rem;
+  padding: 0.18rem 0.76rem 0.22rem;
   border-radius: 999px;
   display: inline-flex;
   align-items: center;
@@ -181,6 +193,8 @@ export const PlayTime = styled.div`
   gap: 0.75rem;
   ${font.headline1.bold}
   color: ${({ theme }) => theme.label.normal};
+  flex: 0 0 auto;
+  min-width: 0;
 `;
 
 export const DetailWrapper = styled.div`

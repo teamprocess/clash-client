@@ -39,7 +39,7 @@ const RivalRow = ({ user }: { user: MyRivalsRequest }) => {
         content={user.username}
         position="top"
         maxWidth="10rem"
-        wrapperStyle={{ flex: 1, minWidth: 0 }}
+        wrapperStyle={{ minWidth: 0, flex: "0 1 auto" }}
       >
         <S.ProfileMention>
           <span>@{user.username}</span>
@@ -62,13 +62,15 @@ const RivalRow = ({ user }: { user: MyRivalsRequest }) => {
           alt="프로필"
         />
 
-        {nameplateImage ? (
-          <S.NameplateSurface $image={nameplateImage}>{identity}</S.NameplateSurface>
-        ) : (
-          identity
-        )}
+        <S.IdentityStatus>
+          {nameplateImage ? (
+            <S.NameplateSurface $image={nameplateImage}>{identity}</S.NameplateSurface>
+          ) : (
+            identity
+          )}
 
-        <S.Status $status={user.status}>{USER_STATUS_LABELS[user.status]}</S.Status>
+          <S.Status $status={user.status}>{USER_STATUS_LABELS[user.status]}</S.Status>
+        </S.IdentityStatus>
       </S.ProfileContent>
 
       <S.PlayTime>
