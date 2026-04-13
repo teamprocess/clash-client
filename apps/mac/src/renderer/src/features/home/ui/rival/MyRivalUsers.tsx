@@ -20,28 +20,29 @@ export const MyRivalUsers = ({ user }: MyRivalUsersProps) => {
   });
   const resolvedApp = user.status === "ONLINE" ? resolveUsingApp(user.usingApp) : null;
   const Icon = resolvedApp ? IdeIcons[resolvedApp.id as keyof typeof IdeIcons] : null;
-  const identity = (
-    <S.NameBox>
-      <S.ProfileName>{user.name}</S.ProfileName>
-      <Tooltip
-        content={user.username}
-        position="top"
-        maxWidth="10rem"
-        wrapperStyle={{ flex: 1, minWidth: 0 }}
-      >
-        <S.ProfileMention>
-          <span>@{user.username}</span>
-        </S.ProfileMention>
-      </Tooltip>
-    </S.NameBox>
-  );
 
   return (
     <S.ProfileContainer>
       <S.ProfileBox>
         <S.ProfileContent>
-          <S.RivalProfileAvatar profileImage={user.profileImage} fallbackIcon={<DefaultProfileIcon />} />
-          {identity}
+          <S.RivalProfileAvatar
+            profileImage={user.profileImage}
+            fallbackIcon={<DefaultProfileIcon />}
+          />
+
+          <S.NameBox>
+            <S.ProfileName>{user.name}</S.ProfileName>
+            <Tooltip
+              content={user.username}
+              position="top"
+              maxWidth="10rem"
+              wrapperStyle={{ flex: 1, minWidth: 0 }}
+            >
+              <S.ProfileMention>
+                <span>@{user.username}</span>
+              </S.ProfileMention>
+            </Tooltip>
+          </S.NameBox>
         </S.ProfileContent>
         <S.Status $status={user.status}>{USER_STATUS_LABELS[user.status]}</S.Status>
       </S.ProfileBox>

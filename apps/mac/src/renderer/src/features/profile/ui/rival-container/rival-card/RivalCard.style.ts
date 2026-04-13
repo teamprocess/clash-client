@@ -46,26 +46,21 @@ export const RivalAvatar = styled(ProfileAvatar)`
 export const NameStatus = styled.div`
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
   gap: 0.5rem;
   flex: 1 1 auto;
   min-width: 0;
 `;
 
-export const IdentityColumn = styled.div`
+export const NameBox = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  gap: 0.1rem;
   min-width: 0;
-  flex: 1 1 auto;
 `;
 
 export const Name = styled.p`
   ${font.body.bold}
   color: ${({ theme }) => theme.label.neutral};
-  display: block;
-  min-width: 0;
-  max-width: 100%;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -74,8 +69,6 @@ export const Name = styled.p`
 export const UserName = styled.p`
   ${font.caption.bold}
   color: ${({ theme }) => theme.label.assistive};
-  display: block;
-  min-width: 0;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;

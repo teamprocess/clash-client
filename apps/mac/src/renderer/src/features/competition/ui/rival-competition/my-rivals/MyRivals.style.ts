@@ -20,7 +20,6 @@ export const Point = styled.p`
 export const ListContent = styled.div`
   padding: 1.5rem;
   width: 100%;
-  min-width: 0;
   border-radius: 1rem;
   background-color: ${({ theme }) => theme.background.normal};
 `;
@@ -54,7 +53,6 @@ export const Title = styled.p`
 
 export const ProfileWrapper = styled.div`
   width: 100%;
-  min-width: 0;
   min-height: 14.25rem;
   height: 100%;
   gap: 0.5rem;
@@ -74,10 +72,8 @@ export const ProfileContent = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: flex-start;
-  gap: 0.625rem;
-  min-width: 0;
-  flex: 1 1 auto;
+  justify-content: center;
+  gap: 0.5rem;
 `;
 
 export const RivalAvatar = styled(ProfileAvatar)`
@@ -86,33 +82,16 @@ export const RivalAvatar = styled(ProfileAvatar)`
   flex-shrink: 0;
 `;
 
-export const IdentityStatus = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 0.5rem;
-  min-width: 0;
-  flex: 1 1 auto;
-`;
-
 export const NameBox = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
   gap: 0.125rem;
-  min-width: 0;
-  flex: 0 1 auto;
-  max-width: min(100%, 15rem);
-  overflow: hidden;
 `;
 
 export const ProfileName = styled.span`
   ${font.headline2.medium}
   color: ${({ theme }) => theme.label.normal};
-  min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
 `;
 
 export const ProfileMention = styled.span`
@@ -170,8 +149,6 @@ export const PlayTime = styled.div`
   gap: 0.75rem;
   ${font.headline1.bold}
   color: ${({ theme }) => theme.label.normal};
-  flex: 0 0 auto;
-  min-width: 0;
 `;
 
 export const DetailWrapper = styled.div`

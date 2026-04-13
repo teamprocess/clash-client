@@ -37,22 +37,22 @@ export function RivalCard({
   const resolvedApp = status === "ONLINE" ? resolveUsingApp(usingApp) : null;
   const Icon = resolvedApp ? IdeIcons[resolvedApp.id as keyof typeof IdeIcons] : null;
 
-  const identity = (
-    <S.IdentityColumn>
-      <S.Name>{name}</S.Name>
-      <S.UserName>{username}</S.UserName>
-    </S.IdentityColumn>
-  );
-
   return (
     <S.RivalBox>
       <S.Left>
         <S.RankTierWrap>
           <RankTier tier={tier} />
         </S.RankTierWrap>
-        <S.RivalAvatar profileImage={profileSrc} fallbackIcon={<DefaultProfileIcon />} alt="라이벌 프로필" />
+        <S.RivalAvatar
+          profileImage={profileSrc}
+          fallbackIcon={<DefaultProfileIcon />}
+          alt="라이벌 프로필"
+        />
         <S.NameStatus>
-          {identity}
+          <S.NameBox>
+            <S.Name>{name}</S.Name>
+            <S.UserName>{username}</S.UserName>
+          </S.NameBox>
           <S.StatusBadge $status={status}>{USER_STATUS_LABELS[status]}</S.StatusBadge>
         </S.NameStatus>
       </S.Left>

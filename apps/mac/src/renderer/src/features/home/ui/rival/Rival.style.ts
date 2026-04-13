@@ -153,7 +153,6 @@ export const ProfileContent = styled.div`
   gap: 0.75rem;
   width: 100%;
   min-width: 0;
-  flex: 1 1 auto;
 `;
 
 export const NameBox = styled.div`
@@ -161,17 +160,11 @@ export const NameBox = styled.div`
   align-items: center;
   gap: 0.25rem;
   min-width: 0;
-  flex: 1 1 auto;
-  overflow: hidden;
 `;
 
 export const ProfileName = styled.p`
   ${font.headline2.medium};
   color: ${({ theme }) => theme.label.normal};
-  min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
 `;
 
 export const ProfileMention = styled.p`
