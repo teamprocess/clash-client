@@ -31,25 +31,18 @@ export const RivalsManagementDialog = ({ isOpen, onClose, rival }: AddRivalsDial
   const [activeTab, setActiveTab] = useState<"rivals-management" | "rivalList">(
     "rivals-management"
   );
-  const [createSuccessMessage, setCreateSuccessMessage] = useState<string | null>(null);
 
   const handleTabChange = (tab: "rivals-management" | "rivalList") => {
     setActiveTab(tab);
-
-    if (tab === "rivals-management") return;
-
-    setCreateSuccessMessage(null);
   };
 
   const handleCreateSubmit = async () => {
     const ok = await rival.handleRivalCreate();
 
     if (ok) {
-      setCreateSuccessMessage("라이벌 신청을 보냈습니다.");
+      handleClose();
       return;
     }
-
-    setCreateSuccessMessage(null);
   };
 
   return (
@@ -113,9 +106,7 @@ export const RivalsManagementDialog = ({ isOpen, onClose, rival }: AddRivalsDial
 
             <S.BottomRow>
               <S.ButtonBox>
-                {createSuccessMessage ? (
-                  <S.SuccessText>{createSuccessMessage}</S.SuccessText>
-                ) : rival.createError ? (
+                {rival.createError ? (
                   <S.ErrorText>
                     {isMaxRivalError
                       ? `최대 라이벌 수는 4명입니다. 신청 목록을 확인해주세요!`
