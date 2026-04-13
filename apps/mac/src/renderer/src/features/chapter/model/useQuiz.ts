@@ -9,7 +9,6 @@ import {
   useSubmitAnswerMutation,
 } from "@/entities/roadmap/chapter";
 import { getErrorMessage } from "@/shared/lib";
-import { useSectionDetailsQuery } from "@/entities/roadmap/chapter/api/query/useSectionDetails.query";
 
 type QuizState = {
   currentIndex: number;

@@ -39,11 +39,11 @@ interface QuizPanelContentProps {
 }
 
 const QuizPanelContent = ({
-  mission,
-  stageTitle,
-  onBackToOverview,
-  onMissionComplete,
-}: QuizPanelContentProps) => {
+                            mission,
+                            stageTitle,
+                            onBackToOverview,
+                            onMissionComplete,
+                          }: QuizPanelContentProps) => {
   const {
     state,
     error,
@@ -284,20 +284,20 @@ const QuizPanelContent = ({
 };
 
 export const MissionContainer = ({
-  isOpen,
-  currentStage,
-  currentMission,
-  currentMissionStageTitle,
-  description,
-  isLoading,
-  isSolveDisabled,
-  studyMaterialUrl,
-  onClose,
-  onSolve,
-  onBackToOverview,
-  onMissionComplete,
-  isFinishedSection
-}: MissionContainerProps) => {
+                                   isOpen,
+                                   currentStage,
+                                   currentMission,
+                                   currentMissionStageTitle,
+                                   description,
+                                   isLoading,
+                                   isSolveDisabled,
+                                   studyMaterialUrl,
+                                   onClose,
+                                   onSolve,
+                                   onBackToOverview,
+                                   onMissionComplete,
+                                   isFinishedSection
+                                 }: MissionContainerProps) => {
   const [isClosing, setIsClosing] = useState(false);
   const [studyMaterialError, setStudyMaterialError] = useState<string | null>(null);
   const closeTimeoutRef = useRef<number | null>(null);
@@ -350,10 +350,10 @@ export const MissionContainer = ({
   const isCompletedStage = isFinishedSection ||
     (currentStage.totalMissions > 0 && currentStage.currentProgress >= currentStage.totalMissions);
   const hasStudyMaterial = Boolean(studyMaterialUrl?.trim());
-  const processedCurrentMission: Mission | null = {
+  const processedCurrentMission: Mission | null = currentMission ? {
     ...currentMission,
-    completed: isFinishedSection ? true : currentMission?.completed
-  };
+    completed: (isFinishedSection ? true : currentMission?.completed) ?? false
+  } : null;
 
   return (
     <SidePanel
@@ -380,7 +380,7 @@ export const MissionContainer = ({
 
         {currentMission ? (
           <QuizPanelContent
-            mission={processedCurrentMission}
+            mission={processedCurrentMission ?? currentMission}
             stageTitle={displayStageTitle}
             onBackToOverview={onBackToOverview}
             onMissionComplete={onMissionComplete}
