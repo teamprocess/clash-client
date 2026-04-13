@@ -2,16 +2,8 @@ import styled from "styled-components";
 import { font } from "@clash/design-tokens/font";
 import { palette } from "@clash/design-tokens/theme";
 import type { UserStatus } from "@/entities/competition";
-import { createNameplateOverlayTuningCss, nameplateFrameCss } from "@/shared/lib";
 import DetailArrow from "@/shared/ui/assets/front.svg";
 import { ProfileAvatar } from "@/shared/ui/profile-avatar";
-
-const myRivalsNameplateTuningCss = createNameplateOverlayTuningCss({
-  insetX: "0.03rem",
-  scaleX: 1.06,
-  scaleY: 2.08,
-  shiftY: "1.02rem",
-});
 
 export const HorizontalLine = styled.div`
   width: 100%;
@@ -112,21 +104,6 @@ export const NameBox = styled.div`
   flex: 0 1 auto;
   max-width: min(100%, 15rem);
   overflow: hidden;
-`;
-
-export const NameplateSurface = styled.div<{ $image?: string }>`
-  ${myRivalsNameplateTuningCss};
-  min-width: 0;
-  max-width: min(100%, 15rem);
-  flex: 0 1 auto;
-  min-height: 1.45rem;
-  padding: 0.18rem 0.76rem 0.22rem;
-  border-radius: 999px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: flex-start;
-  overflow: visible;
-  ${nameplateFrameCss}
 `;
 
 export const ProfileName = styled.span`

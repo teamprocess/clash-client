@@ -1,7 +1,6 @@
 import * as S from "./MyRivals.style";
 import {
   formatTime,
-  resolveProfileDecorations,
   resolveUsingApp,
   useRealtimeRivalActiveTime,
   useRival,
@@ -29,7 +28,6 @@ const RivalRow = ({ user }: { user: MyRivalsRequest }) => {
     activeTime: user.activeTime,
     isStudying: user.isStudying,
   });
-  const { badgeImage, nameplateImage } = resolveProfileDecorations(user.equippedItems);
   const resolvedApp = user.status === "ONLINE" ? resolveUsingApp(user.usingApp) : null;
   const Icon = resolvedApp ? IdeIcons[resolvedApp.id as keyof typeof IdeIcons] : null;
   const identity = (
@@ -57,18 +55,12 @@ const RivalRow = ({ user }: { user: MyRivalsRequest }) => {
 
         <S.RivalAvatar
           profileImage={user.profileImage}
-          badgeImage={badgeImage}
           fallbackIcon={<DefaultProfileIcon />}
           alt="프로필"
         />
 
         <S.IdentityStatus>
-          {nameplateImage ? (
-            <S.NameplateSurface $image={nameplateImage}>{identity}</S.NameplateSurface>
-          ) : (
-            identity
-          )}
-
+          {identity}
           <S.Status $status={user.status}>{USER_STATUS_LABELS[user.status]}</S.Status>
         </S.IdentityStatus>
       </S.ProfileContent>

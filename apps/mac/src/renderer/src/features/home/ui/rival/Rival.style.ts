@@ -3,7 +3,6 @@ import { font } from "@clash/design-tokens/font";
 import DetailArrow from "../../../../shared/ui/assets/front.svg";
 import { palette } from "@clash/design-tokens/theme";
 import type { UserStatus } from "@/entities/competition";
-import { createNameplateOverlayTuningCss, nameplateFrameCss } from "@/shared/lib";
 import Plus from "../../assets/home/plus.svg";
 import { ProfileAvatar } from "@/shared/ui/profile-avatar";
 
@@ -12,13 +11,6 @@ export const RivalProfileAvatar = styled(ProfileAvatar)`
   height: 2.25rem;
   flex-shrink: 0;
 `;
-
-const homeRivalNameplateTuningCss = createNameplateOverlayTuningCss({
-  insetX: "0.05rem",
-  scaleX: 1.15,
-  scaleY: 2.45,
-  shiftY: "1.35rem",
-});
 
 const flexRow = css`
   display: flex;
@@ -171,21 +163,6 @@ export const NameBox = styled.div`
   min-width: 0;
   flex: 1 1 auto;
   overflow: hidden;
-`;
-
-export const NameplateSurface = styled.div<{ $image?: string }>`
-  ${homeRivalNameplateTuningCss};
-  min-width: 0;
-  max-width: 100%;
-  flex: 1 1 auto;
-  min-height: 1.55rem;
-  padding: 0.22rem 0.85rem 0.26rem;
-  border-radius: 999px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: flex-start;
-  overflow: visible;
-  ${nameplateFrameCss}
 `;
 
 export const ProfileName = styled.p`
