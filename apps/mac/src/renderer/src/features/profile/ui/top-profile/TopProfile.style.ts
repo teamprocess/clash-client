@@ -61,6 +61,11 @@ export const ProfileImgWrapper = styled.div`
   position: absolute;
   bottom: clamp(-4rem, -7vh, -2.75rem);
   left: clamp(1rem, 13%, 7rem);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: fit-content;
+  min-width: 0;
 
   @media (max-width: 56rem) {
     left: 50%;
@@ -87,7 +92,7 @@ export const ProfileAvatarWrap = styled(ProfileAvatar)`
 
 export const RankTierWrap = styled.div`
   position: absolute;
-  right: clamp(0.35rem, 1vw, 0.7rem);
+  right: clamp(0.2rem, 0.75vw, 0.5rem);
   width: clamp(2rem, 3.8vw, 2.4rem);
   height: clamp(2rem, 3.8vw, 2.4rem);
   bottom: 0;
@@ -141,7 +146,10 @@ export const ProfileImageButton = styled.button<{ $hasImage: boolean }>`
 export const UserInfo = styled.div`
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 0.5rem;
+  width: 100%;
+  min-width: 0;
 
   @media (max-width: 56rem) {
     justify-content: center;
@@ -150,9 +158,11 @@ export const UserInfo = styled.div`
 `;
 
 export const DisplayNameWrap = styled.div`
-  margin-left: 0.5rem;
+  margin-left: 0;
   margin-top: clamp(0.25rem, 0.8vh, 0.5rem);
+  width: fit-content;
   max-width: min(60vw, 16rem);
+  min-width: 0;
 
   @media (max-width: 56rem) {
     margin-left: 0;
