@@ -11,6 +11,11 @@ import Rider from "./ide-rider.svg";
 import Xcode from "./ide-xcode.svg";
 import AndroidStudio from "./ide-android-studio.svg";
 import Unity from "./unity.svg";
+import Blender from "./blender.svg";
+import DataGrip from "./datagrip.svg";
+import Notion from "./notion.svg";
+import Figma from "./figma.svg";
+import RobloxStudio from "./roblox-studio.svg";
 
 const ideIconStyle = css`
   width: 1rem;
@@ -53,6 +58,21 @@ export const IdeIcons = {
     ${ideIconStyle}
   `,
   UNITY: styled(Unity)`
+    ${ideIconStyle}
+  `,
+  BLENDER: styled(Blender)`
+    ${ideIconStyle}
+  `,
+  DATAGRIP: styled(DataGrip)`
+    ${ideIconStyle}
+  `,
+  NOTION: styled(Notion)`
+    ${ideIconStyle}
+  `,
+  FIGMA: styled(Figma)`
+    ${ideIconStyle}
+  `,
+  ROBLOX_STUDIO: styled(RobloxStudio)`
     ${ideIconStyle}
   `,
 } as const;
