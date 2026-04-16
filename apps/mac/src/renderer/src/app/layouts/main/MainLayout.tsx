@@ -1,5 +1,6 @@
 import { useRef, useEffect, useState } from "react";
 import { Outlet, useLocation } from "react-router-dom";
+import { AttendanceDialog, useAttendanceDialog } from "@/features/attendance";
 import { useDailyRefresh, useRealtimeSync } from "@/features/app-monitor";
 import { GlobalAnnouncementDialog } from "@/features/announcement";
 import { GitHubGuard } from "@/features/github";
@@ -12,6 +13,7 @@ export const MainLayout = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const mainContentRef = useRef<HTMLElement>(null);
   const { pathname } = useLocation();
+  const attendanceDialog = useAttendanceDialog();
   useRealtimeSync();
   useDailyRefresh();
   useNoticePushNotification();
@@ -26,13 +28,25 @@ export const MainLayout = () => {
 
   return (
     <S.LayoutContainer>
-      <Topbar onToggleSidebar={toggleSidebar} />
+      <Topbar
+        onToggleSidebar={toggleSidebar}
+        onOpenAttendance={attendanceDialog.open}
+        isAttendancePending={attendanceDialog.isAttendancePending}
+      />
       <S.ContentWrapper>
         <Sidebar isOpen={isSidebarOpen} />
         <S.MainContent ref={mainContentRef}>
           <Outlet />
         </S.MainContent>
       </S.ContentWrapper>
+      <AttendanceDialog
+        weeklyAttendance={attendanceDialog.weeklyAttendance}
+        isOpen={attendanceDialog.isOpen}
+        isSubmitting={attendanceDialog.isSubmitting}
+        errorMessage={attendanceDialog.errorMessage}
+        onClose={attendanceDialog.close}
+        onConfirm={attendanceDialog.confirm}
+      />
       <GlobalAnnouncementDialog />
       <GitHubGuard />
     </S.LayoutContainer>

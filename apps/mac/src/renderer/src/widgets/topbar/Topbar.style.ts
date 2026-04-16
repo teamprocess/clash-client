@@ -5,6 +5,7 @@ import ClashLogo from "@/widgets/topbar/assets/clash-logo.svg";
 import Menu from "@/widgets/topbar/assets/menu.svg";
 import EXP from "@/widgets/topbar/assets/exp.svg";
 import Cookie from "@/widgets/topbar/assets/cookie.svg";
+import Calendar from "@/shared/ui/assets/calendar.svg";
 import { ProfileAvatar } from "@/shared/ui/profile-avatar";
 
 export const TopbarContainer = styled.header`
@@ -117,6 +118,27 @@ export const GoodsBox = styled.div`
     ${font.headline2.medium}
     color: ${({ theme }) => theme.label.normal};
   }
+`;
+
+export const AttendanceButton = styled.button<{ $isPending: boolean }>`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+  opacity: ${({ $isPending }) => ($isPending ? 1 : 0.7)};
+  filter: ${({ $isPending }) => ($isPending ? "none" : "grayscale(1)")};
+
+  &:hover {
+    opacity: 0.85;
+  }
+`;
+
+export const AttendanceIcon = styled(Calendar)`
+  width: 1.5rem;
+  height: 1.5rem;
 `;
 
 export const MenuList = styled.div`
