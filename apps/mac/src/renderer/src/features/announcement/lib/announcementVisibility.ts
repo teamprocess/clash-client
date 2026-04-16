@@ -39,36 +39,6 @@ export const hideAnnouncementForThreeDays = (announcementId: number) => {
   window.localStorage.setItem(getHideStorageKey(announcementId), String(hiddenUntil));
 };
 
-export const formatAnnouncementPeriod = (startedAt: string | null, endedAt: string | null) => {
-  if (!startedAt && !endedAt) {
-    return null;
-  }
-
-  const formatDate = (value: string | null) => {
-    if (!value) return null;
-
-    const date = new Date(value);
-    if (Number.isNaN(date.getTime())) {
-      return value;
-    }
-
-    return new Intl.DateTimeFormat("ko-KR", {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-    }).format(date);
-  };
-
-  const startText = formatDate(startedAt);
-  const endText = formatDate(endedAt);
-
-  if (startText && endText) {
-    return `${startText} - ${endText}`;
-  }
-
-  return startText ?? endText;
-};
-
 export const sortAnnouncements = (announcements: AnnouncementItem[]) =>
   [...announcements].sort((left, right) => {
     const leftTime = left.startedAt ? new Date(left.startedAt).getTime() : 0;

@@ -2,7 +2,6 @@ import { useMemo, useState } from "react";
 import { useActiveAnnouncementsQuery } from "@/entities/announcement";
 import { useGetMyProfile } from "@/entities/user";
 import {
-  formatAnnouncementPeriod,
   hideAnnouncementForThreeDays,
   isAnnouncementHidden,
   sortAnnouncements,
@@ -12,23 +11,22 @@ export const useGlobalAnnouncement = () => {
   const { data: user, isLoading: isUserLoading } = useGetMyProfile();
   const isAnnouncementEnabled = Boolean(user?.githubLinked) && !isUserLoading;
   const { data: announcements = [] } = useActiveAnnouncementsQuery(isAnnouncementEnabled);
-  const [dismissedAnnouncementId, setDismissedAnnouncementId] = useState<number | null>(null);
+  const [dismissedAnnouncementIds, setDismissedAnnouncementIds] = useState<number[]>([]);
   const [hideForThreeDaysChecked, setHideForThreeDaysChecked] = useState(false);
   const [hideForThreeDaysAnnouncementId, setHideForThreeDaysAnnouncementId] = useState<
     number | null
   >(null);
 
   const announcement = useMemo(() => {
-    const [latestAnnouncement] = sortAnnouncements(announcements);
-    return latestAnnouncement ?? null;
-  }, [announcements]);
+    return (
+      sortAnnouncements(announcements).find(
+        announcement =>
+          !dismissedAnnouncementIds.includes(announcement.id) && !isAnnouncementHidden(announcement.id)
+      ) ?? null
+    );
+  }, [announcements, dismissedAnnouncementIds]);
 
-  const isOpen = Boolean(
-    isAnnouncementEnabled &&
-      announcement &&
-      announcement.id !== dismissedAnnouncementId &&
-      !isAnnouncementHidden(announcement.id)
-  );
+  const isOpen = Boolean(isAnnouncementEnabled && announcement);
 
   const hideForThreeDays =
     announcement?.id === hideForThreeDaysAnnouncementId ? hideForThreeDaysChecked : false;
@@ -47,7 +45,9 @@ export const useGlobalAnnouncement = () => {
       hideAnnouncementForThreeDays(announcement.id);
     }
 
-    setDismissedAnnouncementId(announcement.id);
+    setDismissedAnnouncementIds(previous =>
+      previous.includes(announcement.id) ? previous : [...previous, announcement.id]
+    );
     setHideForThreeDaysChecked(false);
     setHideForThreeDaysAnnouncementId(announcement.id);
   };
@@ -58,8 +58,5 @@ export const useGlobalAnnouncement = () => {
     hideForThreeDays,
     setHideForThreeDays,
     handleClose,
-    period: announcement
-      ? formatAnnouncementPeriod(announcement.startedAt, announcement.endedAt)
-      : null,
   };
 };
