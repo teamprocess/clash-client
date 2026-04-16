@@ -47,6 +47,7 @@ interface AppMonitorAPI {
     contentType: string
   ) => Promise<void>;
   openExternalUrl: (url: string) => Promise<void>;
+  setBadgeCount: (count: number) => Promise<boolean>;
   clearAuthSession: () => Promise<void>;
   checkForUpdates: () => Promise<void>;
   getStartupUpdateStateSync: () => StartupUpdateState;
