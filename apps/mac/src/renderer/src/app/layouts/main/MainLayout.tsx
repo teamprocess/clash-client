@@ -3,6 +3,7 @@ import { Outlet, useLocation } from "react-router-dom";
 import { useDailyRefresh, useRealtimeSync } from "@/features/app-monitor";
 import { GlobalAnnouncementDialog } from "@/features/announcement";
 import { GitHubGuard } from "@/features/github";
+import { useNoticePushNotification } from "@/features/notice";
 import { Topbar } from "@/widgets/topbar";
 import { Sidebar } from "@/widgets/sidebar";
 import * as S from "./MainLayout.style";
@@ -13,6 +14,7 @@ export const MainLayout = () => {
   const { pathname } = useLocation();
   useRealtimeSync();
   useDailyRefresh();
+  useNoticePushNotification();
 
   useEffect(() => {
     mainContentRef.current?.scrollTo(0, 0);
