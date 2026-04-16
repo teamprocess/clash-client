@@ -17,6 +17,7 @@ const api = {
     }),
 
   openExternalUrl: (url: string) => ipcRenderer.invoke("open-external-url", url),
+  setBadgeCount: (count: number) => ipcRenderer.invoke("app:set-badge-count", count),
   clearAuthSession: () => ipcRenderer.invoke("auth:clear-session"),
   checkForUpdates: () => ipcRenderer.invoke("app:check-for-updates"),
   getStartupUpdateStateSync: () => ipcRenderer.sendSync("app:get-startup-update-state-sync"),

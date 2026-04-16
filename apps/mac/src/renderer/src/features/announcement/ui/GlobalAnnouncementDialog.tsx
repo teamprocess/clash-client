@@ -8,7 +8,7 @@ import { Button, Dialog } from "@/shared/ui";
 import * as S from "./GlobalAnnouncementDialog.style";
 
 export const GlobalAnnouncementDialog = () => {
-  const { announcement, isOpen, hideForThreeDays, setHideForThreeDays, handleClose, period } =
+  const { announcement, isOpen, hideForThreeDays, setHideForThreeDays, handleClose } =
     useGlobalAnnouncement();
 
   const handleOpenLink = async (event: MouseEvent<HTMLAnchorElement>, href?: string) => {
@@ -35,12 +35,17 @@ export const GlobalAnnouncementDialog = () => {
   }
 
   const content = normalizeAnnouncementMarkdown(announcement.content);
+  const startedAtDate = announcement.startedAt ? new Date(announcement.startedAt) : null;
+  const period =
+    startedAtDate && !Number.isNaN(startedAtDate.getTime())
+      ? `${startedAtDate.getFullYear()}년 ${startedAtDate.getMonth() + 1}월 ${startedAtDate.getDate()}일 ${startedAtDate.getHours()}시 ${String(startedAtDate.getMinutes()).padStart(2, "0")}분`
+      : announcement.startedAt;
 
   return (
     <Dialog
       title={announcement.title}
-      width={44}
-      height={30}
+      width={54}
+      height={38}
       isOpen={isOpen}
       onClose={handleClose}
       closeOnOverlayClick={true}
@@ -48,8 +53,7 @@ export const GlobalAnnouncementDialog = () => {
       <S.Body>
         <S.Header>
           <S.Meta>
-            <S.Author>{announcement.author || "CLASH"}</S.Author>
-            {period ? <S.Period>{period}</S.Period> : null}
+            <S.Period>{period}</S.Period>
           </S.Meta>
         </S.Header>
 
