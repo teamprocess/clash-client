@@ -18,16 +18,12 @@ export const Meta = styled.div`
   display: flex;
   align-items: center;
   flex-wrap: wrap;
-  gap: 0.5rem 0.875rem;
+  gap: 0.5rem;
   color: ${({ theme }) => theme.label.assistive};
 `;
 
-export const Author = styled.span`
-  ${font.label.medium}
-`;
-
 export const Period = styled.span`
-  ${font.caption.medium}
+  ${font.label.medium}
 `;
 
 export const ContentBox = styled.div`
@@ -35,7 +31,7 @@ export const ContentBox = styled.div`
   flex: 1 1 auto;
   min-height: 0;
   margin-top: 1rem;
-  padding: 1rem 1.125rem;
+  padding: 1rem 1.125rem 1.75rem;
   border-radius: 1rem;
   background: ${({ theme }) => theme.background.alternative};
   overflow-y: auto;
@@ -55,6 +51,12 @@ export const Content = styled.div`
 
   & > * + * {
     margin-top: 0.875rem;
+  }
+
+  &::after {
+    content: "";
+    display: block;
+    height: 0.875rem;
   }
 
   p,

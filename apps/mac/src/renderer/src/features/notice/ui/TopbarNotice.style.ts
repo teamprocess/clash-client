@@ -22,6 +22,11 @@ export const NoticeButton = styled.button`
   border: none;
   background: none;
   cursor: pointer;
+  transition: opacity 0.2s ease;
+
+  &:hover {
+    opacity: 0.85;
+  }
 `;
 
 export const NoticeIcon = styled(Alarm)`
