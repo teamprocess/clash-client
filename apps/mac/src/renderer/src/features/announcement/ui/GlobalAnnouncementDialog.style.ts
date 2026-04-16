@@ -53,6 +53,12 @@ export const Content = styled.div`
     margin-top: 0.875rem;
   }
 
+  &::after {
+    content: "";
+    display: block;
+    height: 0.875rem;
+  }
+
   p,
   li {
     word-break: keep-all;
