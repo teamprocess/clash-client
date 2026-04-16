@@ -2,7 +2,6 @@ import { useMemo, useState } from "react";
 import { useActiveAnnouncementsQuery } from "@/entities/announcement";
 import { useGetMyProfile } from "@/entities/user";
 import {
-  formatAnnouncementPeriod,
   hideAnnouncementForThreeDays,
   isAnnouncementHidden,
   sortAnnouncements,
@@ -59,8 +58,5 @@ export const useGlobalAnnouncement = () => {
     hideForThreeDays,
     setHideForThreeDays,
     handleClose,
-    period: announcement
-      ? formatAnnouncementPeriod(announcement.startedAt, announcement.endedAt)
-      : null,
   };
 };
