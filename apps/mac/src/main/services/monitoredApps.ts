@@ -10,7 +10,12 @@ export type MonitoredAppId =
   | "RIDER"
   | "ANDROID_STUDIO"
   | "XCODE"
-  | "UNITY";
+  | "UNITY"
+  | "BLENDER"
+  | "DATAGRIP"
+  | "NOTION"
+  | "FIGMA"
+  | "ROBLOX_STUDIO";
 
 interface MonitoredAppDefinition {
   id: MonitoredAppId;
@@ -44,6 +49,11 @@ const MONITORED_APPS: MonitoredAppDefinition[] = [
   { id: "ANDROID_STUDIO", name: "Android Studio", aliases: ["Android Studio"] },
   { id: "XCODE", name: "Xcode", aliases: ["Xcode"] },
   { id: "UNITY", name: "Unity", aliases: ["Unity", "Unity Hub"] },
+  { id: "BLENDER", name: "Blender", aliases: ["Blender"] },
+  { id: "DATAGRIP", name: "DataGrip", aliases: ["DataGrip"] },
+  { id: "NOTION", name: "Notion", aliases: ["Notion"] },
+  { id: "FIGMA", name: "Figma", aliases: ["Figma"] },
+  { id: "ROBLOX_STUDIO", name: "Roblox Studio", aliases: ["Roblox Studio", "RobloxStudio"] },
 ];
 
 const normalize = (name: string) => name.toLowerCase().trim().replace(/\s+/g, " ");
