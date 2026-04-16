@@ -107,14 +107,13 @@ const showUpdateMessage = async (message: string, detail?: string) => {
   await dialog.showMessageBox(options);
 };
 
-const blockAppEntryWithUpdateError = (message: string, detail?: string) => {
-  setStartupUpdateState({
-    phase: "error",
-    version: null,
-    progressPercent: null,
+const continueAppLaunchAfterStartupUpdateError = async (message: string, detail?: string) => {
+  console.warn("시작 단계 업데이트를 건너뛰고 현재 버전으로 앱을 실행합니다.", {
     message,
     detail,
   });
+
+  await launchMainApplication();
 };
 
 const installDownloadedUpdate = async (
@@ -208,7 +207,7 @@ const checkForUpdates = async (source: UpdateCheckSource) => {
       }
 
       if (requestSource === "startup") {
-        blockAppEntryWithUpdateError(
+        await continueAppLaunchAfterStartupUpdateError(
           "업데이트 확인을 완료하지 못했어요.",
           "네트워크 상태를 확인한 뒤 다시 시도해주세요."
         );
@@ -226,7 +225,7 @@ const checkForUpdates = async (source: UpdateCheckSource) => {
     }
 
     if (requestSource === "startup") {
-      blockAppEntryWithUpdateError(
+      await continueAppLaunchAfterStartupUpdateError(
         "업데이트 확인에 실패했어요.",
         getErrorMessage(error) || "잠시 후 다시 시도해주세요."
       );
@@ -448,7 +447,7 @@ const registerAutoUpdater = () => {
     }
 
     if (requestSource === "startup") {
-      blockAppEntryWithUpdateError(
+      void continueAppLaunchAfterStartupUpdateError(
         "업데이트를 진행하지 못했어요.",
         getErrorMessage(error) || "잠시 후 다시 시도해주세요."
       );
@@ -479,6 +478,7 @@ configureCertificateHandling();
 registerQuitHandlers({ getAppMonitor });
 registerDeepLinkEvents(getMainWindow, createWindow);
 app.whenReady().then(() => {
+  bootstrapMainProcess({ createWindow, getMainWindow, getAppMonitor });
   createStartupGateWindow();
   registerAutoUpdater();
   registerApplicationMenu({
@@ -486,4 +486,3 @@ app.whenReady().then(() => {
   });
   registerTray({ getMainWindow });
 });
-bootstrapMainProcess({ createWindow, getMainWindow, getAppMonitor });
