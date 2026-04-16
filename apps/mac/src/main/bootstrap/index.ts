@@ -81,21 +81,18 @@ export const bootstrapMainProcess = ({
   getMainWindow,
   getAppMonitor,
 }: BootstrapMainProcessParams) => {
-  app.whenReady().then(() => {
-    registerAppProtocol();
-    registerProtocol();
-    electronApp.setAppUserModelId(APP_RUNTIME_PROFILE.appUserModelId);
+  registerAppProtocol();
+  registerProtocol();
+  electronApp.setAppUserModelId(APP_RUNTIME_PROFILE.appUserModelId);
 
-    // CSP 설정
-    registerCspHeaders();
+  // CSP 설정
+  registerCspHeaders();
 
-    // 환경별 단축키 동작 등록
-    registerWindowShortcuts();
+  // 환경별 단축키 동작 등록
+  registerWindowShortcuts();
 
-    // 앱 모니터 관련 IPC 등록
-    registerIpcHandlers(getAppMonitor);
+  // 앱 모니터 관련 IPC 등록
+  registerIpcHandlers(getAppMonitor);
 
-    createWindow();
-    registerActivateHandler(createWindow, getMainWindow);
-  });
+  registerActivateHandler(createWindow, getMainWindow);
 };
