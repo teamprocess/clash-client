@@ -10,9 +10,11 @@ import { useSignOut } from "@/features/auth";
 
 interface TopbarProps {
   onToggleSidebar: () => void;
+  onOpenAttendance: () => void;
+  isAttendancePending: boolean;
 }
 
-export const Topbar = ({ onToggleSidebar }: TopbarProps) => {
+export const Topbar = ({ onToggleSidebar, onOpenAttendance, isAttendancePending }: TopbarProps) => {
   const { data: user } = useGetMyProfile();
   const { signOut } = useSignOut();
   const navigate = useNavigate();
@@ -62,6 +64,15 @@ export const Topbar = ({ onToggleSidebar }: TopbarProps) => {
           <span>{formatPrice(user?.totalCookie || 0)}</span>
           <QuestionTooltip position="bottom" content={cookieTooltipContent} />
         </S.GoodsBox>
+
+        <S.AttendanceButton
+          type="button"
+          onClick={onOpenAttendance}
+          $isPending={isAttendancePending}
+          aria-label="출석 현황 열기"
+        >
+          <S.AttendanceIcon />
+        </S.AttendanceButton>
 
         <TopbarNotice />
 

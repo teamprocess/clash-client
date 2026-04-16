@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef } from "react";
+import { attendanceQueryKeys } from "@/entities/attendance";
 import { groupQueryKeys } from "@/entities/group";
 import { recordQueryKeys } from "@/entities/record";
 import { queryClient } from "@/shared/lib";
@@ -22,6 +23,7 @@ const getMillisecondsUntilNextKstRefresh = (nowMs = Date.now()) => {
 
 const refreshKstDailyQueries = async () => {
   await Promise.all([
+    queryClient.invalidateQueries({ queryKey: attendanceQueryKeys.all }),
     queryClient.invalidateQueries({ queryKey: recordQueryKeys.today }),
     queryClient.invalidateQueries({ queryKey: recordQueryKeys.subjects }),
     queryClient.invalidateQueries({ queryKey: recordQueryKeys.tasks }),

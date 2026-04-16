@@ -1,3 +1,4 @@
+import { attendanceQueryKeys } from "@/entities/attendance";
 import { announcementQueryKeys } from "@/entities/announcement";
 import { groupQueryKeys } from "@/entities/group";
 import { noticeQueryKeys } from "@/entities/notice";
@@ -6,6 +7,10 @@ import { queryClient } from "@/shared/lib";
 
 const invalidateAnnouncementQueries = async () => {
   await queryClient.invalidateQueries({ queryKey: announcementQueryKeys.all });
+};
+
+const invalidateAttendanceQueries = async () => {
+  await queryClient.invalidateQueries({ queryKey: attendanceQueryKeys.all });
 };
 
 const invalidateGroupQueries = async () => {
@@ -51,6 +56,7 @@ const invalidateRecordQueries = async () => {
 
 export const invalidateRealtimeQueries = async () => {
   await Promise.all([
+    invalidateAttendanceQueries(),
     invalidateAnnouncementQueries(),
     invalidateRecordQueries(),
     invalidateGroupQueries(),
@@ -82,5 +88,10 @@ export const invalidateByDomain = async (domain?: string) => {
 
   if (domain === "ANNOUNCEMENT") {
     await invalidateAnnouncementQueries();
+    return;
+  }
+
+  if (domain === "ATTENDANCE") {
+    await invalidateAttendanceQueries();
   }
 };
