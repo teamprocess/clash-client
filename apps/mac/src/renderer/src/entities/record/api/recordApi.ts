@@ -40,7 +40,12 @@ export type MonitoredApp =
   | "RIDER"
   | "ANDROID_STUDIO"
   | "XCODE"
-  | "UNITY";
+  | "UNITY"
+  | "BLENDER"
+  | "DATAGRIP"
+  | "NOTION"
+  | "FIGMA"
+  | "ROBLOX_STUDIO";
 
 export interface TaskRecordSession {
   id: number;

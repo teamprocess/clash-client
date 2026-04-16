@@ -13,6 +13,11 @@ const MONITORED_APP_LABELS: Record<MonitoredApp, string> = {
   ANDROID_STUDIO: "Android Studio",
   XCODE: "Xcode",
   UNITY: "Unity",
+  BLENDER: "Blender",
+  DATAGRIP: "DataGrip",
+  NOTION: "Notion",
+  FIGMA: "Figma",
+  ROBLOX_STUDIO: "Roblox Studio",
 };
 
 const MONITORED_APP_ALIASES: Record<MonitoredApp, string[]> = {
@@ -28,6 +33,11 @@ const MONITORED_APP_ALIASES: Record<MonitoredApp, string[]> = {
   ANDROID_STUDIO: ["Android Studio"],
   XCODE: ["Xcode"],
   UNITY: ["Unity"],
+  BLENDER: ["Blender"],
+  DATAGRIP: ["DataGrip"],
+  NOTION: ["Notion"],
+  FIGMA: ["Figma"],
+  ROBLOX_STUDIO: ["Roblox Studio", "RobloxStudio"],
 };
 
 const normalize = (value: string) => value.toLowerCase().replace(/[^a-z0-9]/g, "");
