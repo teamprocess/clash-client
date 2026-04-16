@@ -1,4 +1,4 @@
-import { ipcMain, screen, session, shell } from "electron";
+import { app, ipcMain, screen, session, shell } from "electron";
 import type { AppMonitor } from "../services";
 
 // AppMonitor 및 외부 URL 열기 관련 IPC를 등록합니다.
@@ -49,6 +49,9 @@ export const registerIpcHandlers = (getAppMonitor: () => AppMonitor | null) => {
   );
   ipcMain.handle("open-external-url", async (_, url: string) => {
     await shell.openExternal(url);
+  });
+  ipcMain.handle("app:set-badge-count", async (_, count: number): Promise<boolean> => {
+    return app.setBadgeCount(Math.max(0, count));
   });
 
   // 인증 세션(쿠키) 정리
