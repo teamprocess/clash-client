@@ -2,6 +2,8 @@ import { Button, Dialog } from "@/shared/ui";
 import { isAttended, type WeeklyAttendanceResponse } from "@/entities/attendance";
 import * as S from "./AttendanceDialog.style";
 
+const WEEKDAY_LABELS = ["일요일", "월요일", "화요일", "수요일", "목요일", "금요일", "토요일"] as const;
+
 interface AttendanceDialogProps {
   weeklyAttendance: WeeklyAttendanceResponse | null;
   isOpen: boolean;
@@ -45,7 +47,7 @@ export const AttendanceDialog = ({
               <S.DayItem key={day.date}>
                 {isAttended(day.attendanceStatus) ? <S.AttendedIcon /> : <S.NotAttendedIcon />}
                 <S.DayLabel $isAttended={isAttended(day.attendanceStatus)}>
-                  {index + 1}일차
+                  {WEEKDAY_LABELS[index] ?? ""}
                 </S.DayLabel>
               </S.DayItem>
             ))}
