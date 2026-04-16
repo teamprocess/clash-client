@@ -54,7 +54,6 @@ const getPreviewState = (mode: StartupPreviewMode | null): StartupUpdateState | 
       phase: "ready",
       version: null,
       progressPercent: null,
-      message: "오용준의 마음을 불러오고 있어요",
     };
   }
 
