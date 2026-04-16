@@ -1,8 +1,8 @@
 import styled from "styled-components";
 import { font } from "@clash/design-tokens/font";
-import Close from "@/features/shop/assets/no.svg";
 import Cookie from "@/features/shop/assets/cookie.svg";
 import Money from "@/features/shop/assets/money.png";
+import { Button } from "@/shared/ui/button";
 
 export const CookieIcon = styled(Cookie)`
   margin-left: -0.25rem;
@@ -15,76 +15,29 @@ export const MoneyIcon = styled.img.attrs({
   height: 6rem;
 `;
 
-export const Overlay = styled.div`
-  position: fixed;
-  inset: 0;
-  z-index: 2000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(0, 0, 0, 0.5);
-`;
-
-export const Container = styled.div`
-  width: 28rem;
-  min-height: 22rem;
-  border-radius: 1.25rem;
-  background: ${({ theme }) => theme.fill.neutral};
-  box-shadow: ${({ theme }) => theme.line.normal};
-  padding: 1.5rem;
-  position: relative;
+export const Content = styled.div`
   display: flex;
   flex-direction: column;
+  gap: 1rem;
+  height: 100%;
+  padding-top: 0.5rem;
 `;
 
-export const Header = styled.div`
+export const ContentBody = styled.div`
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 1rem;
-`;
-
-export const Title = styled.div`
-  color: ${({ theme }) => theme.label.normal};
-  ${font.title2.medium};
-`;
-
-export const CloseIcon = styled(Close)`
-  width: 2rem;
-  height: 2rem;
-
-  color: ${({ theme }) => theme.label.assistive};
-`;
-
-export const CloseButton = styled.button`
-  width: 2.25rem;
-  height: 2.25rem;
-  border-radius: 0.75rem;
-  border: none;
-  background: transparent;
-  padding: 0;
-  cursor: pointer;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  &:hover {
-    opacity: 0.85;
-  }
+  flex-direction: column;
+  gap: 1.5rem;
 `;
 
 export const SectionTitle = styled.div`
   color: ${({ theme }) => theme.label.normal};
   ${font.body.medium};
-  margin-bottom: 0.5rem;
 `;
 
 export const ReceiptBox = styled.div`
   background: ${({ theme }) => theme.fill.alternative};
   border-radius: 0.75rem;
   padding: 1rem;
-  margin-bottom: 1rem;
 `;
 
 export const Row = styled.div`
@@ -113,19 +66,23 @@ export const Price = styled.div`
 export const Divider = styled.div`
   width: 100%;
   height: 0.1rem;
-  margin: 1.5rem 0;
+  margin: 1rem 0;
   background: ${({ theme }) => theme.line.normal};
 `;
 
 export const ConfirmText = styled.div`
-  margin-top: 0.75rem;
   color: ${({ theme }) => theme.label.normal};
   ${font.body.medium};
   text-align: center;
 `;
 
+export const PurchaseBox = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+`;
+
 export const SubText = styled.div`
-  margin-top: 0.35rem;
   color: ${({ theme }) => theme.label.assistive};
   ${font.label.medium};
   display: flex;
@@ -136,16 +93,18 @@ export const SubText = styled.div`
   text-align: center;
 `;
 
-export const PrimaryButton = styled.button`
+export const ConfirmTextBox = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
   margin-top: 1.5rem;
-  width: 100%;
-  height: 3.5rem;
-  border: none;
-  border-radius: 0.75rem;
-  background: ${({ theme }) => theme.primary.normal};
+`;
+
+export const PrimaryButton = styled(Button)`
+  margin-top: auto;
+  background-color: ${({ theme }) => theme.primary.normal};
   color: ${({ theme }) => theme.label.normal};
-  ${font.headline2.bold};
-  cursor: pointer;
+  ${font.body.bold};
 
   &:disabled {
     opacity: 0.6;
@@ -169,6 +128,6 @@ export const SuccessTitle = styled.div`
 `;
 
 export const ErrorText = styled.p`
-  margin-top: 12px;
+  margin-top: 0.75rem;
   text-align: center;
 `;

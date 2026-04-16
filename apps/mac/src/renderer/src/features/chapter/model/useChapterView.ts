@@ -5,6 +5,7 @@ import { useDragScroll } from "@/shared/lib/useDragScroll";
 type UseChapterViewParams = {
   loading: boolean;
   sectionId: number;
+  sectionCompleted: boolean;
 };
 
 const createInitialViewState = (sectionId: number) => ({
@@ -14,11 +15,58 @@ const createInitialViewState = (sectionId: number) => ({
   missionModalOpen: false,
 });
 
-export const useChapterView = ({ loading, sectionId }: UseChapterViewParams) => {
+const clamp = (value: number, min: number, max: number) => Math.min(Math.max(value, min), max);
+
+const getNodeOrderIndex = (node: SVGGElement) => {
+  const value = Number(node.dataset.roadmapNodeOrderIndex);
+
+  return Number.isFinite(value) ? value : Number.NEGATIVE_INFINITY;
+};
+
+const getLastRoadmapNode = (container: HTMLDivElement) => {
+  const nodes = Array.from(
+    container.querySelectorAll<SVGGElement>("[data-roadmap-node-order-index]")
+  );
+
+  if (nodes.length === 0) {
+    return null;
+  }
+
+  return nodes.reduce((latestNode, candidate) =>
+    getNodeOrderIndex(candidate) > getNodeOrderIndex(latestNode) ? candidate : latestNode
+  );
+};
+
+const scrollNodeIntoView = (container: HTMLDivElement, targetNode: SVGGElement) => {
+  const containerRect = container.getBoundingClientRect();
+  const nodeRect = targetNode.getBoundingClientRect();
+  const nodeCenterX = nodeRect.left - containerRect.left + container.scrollLeft + nodeRect.width / 2;
+  const nodeCenterY = nodeRect.top - containerRect.top + container.scrollTop + nodeRect.height / 2;
+
+  const targetLeft = clamp(
+    nodeCenterX - container.clientWidth * 0.62,
+    0,
+    Math.max(container.scrollWidth - container.clientWidth, 0)
+  );
+  const targetTop = clamp(
+    nodeCenterY - container.clientHeight * 0.72,
+    0,
+    Math.max(container.scrollHeight - container.clientHeight, 0)
+  );
+
+  container.scrollTo({
+    left: targetLeft,
+    top: targetTop,
+  });
+};
+
+export const useChapterView = ({
+  loading,
+  sectionId,
+  sectionCompleted,
+}: UseChapterViewParams) => {
   const chapterRef = useRef<HTMLDivElement>(null);
   const chapterScrollProps = useDragScroll<HTMLDivElement>();
-
-  const clamp = (value: number, min: number, max: number) => Math.min(Math.max(value, min), max);
 
   const [viewState, setViewState] = useState(() => createInitialViewState(sectionId));
 
@@ -79,11 +127,10 @@ export const useChapterView = ({ loading, sectionId }: UseChapterViewParams) => 
         if (!chapterRef.current) return;
 
         const container = chapterRef.current;
-        const currentNode = container.querySelector<SVGGElement>(
-          '[data-roadmap-node-status="current"]'
-        );
+        const currentNode = container.querySelector<SVGGElement>('[data-roadmap-node-status="current"]');
+        const targetNode = currentNode ?? (sectionCompleted ? getLastRoadmapNode(container) : null);
 
-        if (!currentNode) {
+        if (!targetNode) {
           container.scrollTo({
             left: container.scrollWidth,
             top: container.scrollHeight,
@@ -91,28 +138,7 @@ export const useChapterView = ({ loading, sectionId }: UseChapterViewParams) => 
           return;
         }
 
-        const containerRect = container.getBoundingClientRect();
-        const nodeRect = currentNode.getBoundingClientRect();
-        const nodeCenterX =
-          nodeRect.left - containerRect.left + container.scrollLeft + nodeRect.width / 2;
-        const nodeCenterY =
-          nodeRect.top - containerRect.top + container.scrollTop + nodeRect.height / 2;
-
-        const targetLeft = clamp(
-          nodeCenterX - container.clientWidth * 0.62,
-          0,
-          Math.max(container.scrollWidth - container.clientWidth, 0)
-        );
-        const targetTop = clamp(
-          nodeCenterY - container.clientHeight * 0.72,
-          0,
-          Math.max(container.scrollHeight - container.clientHeight, 0)
-        );
-
-        container.scrollTo({
-          left: targetLeft,
-          top: targetTop,
-        });
+        scrollNodeIntoView(container, targetNode);
       });
     });
 
@@ -120,7 +146,7 @@ export const useChapterView = ({ loading, sectionId }: UseChapterViewParams) => 
       window.cancelAnimationFrame(frame);
       window.cancelAnimationFrame(secondFrame);
     };
-  }, [loading, sectionId]);
+  }, [loading, sectionCompleted, sectionId]);
 
   return {
     chapterRef,

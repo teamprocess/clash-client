@@ -12,6 +12,7 @@ export interface SectionChapter {
 export interface GetSectionDetailsResponse {
   sectionId: number;
   sectionTitle: string;
+  completed: true;
   totalChapters: number;
   currentChapterId: number | null;
   currentOrderIndex: number | null;

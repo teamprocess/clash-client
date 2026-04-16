@@ -58,6 +58,7 @@ export const useGroup = (currentGroupId: number | null) => {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [joinPassword, setJoinPassword] = useState<string>("");
   const [isJoining, setIsJoining] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
   const [groupDetailTargetId, setGroupDetailTargetId] = useState<number | null>(null);
   const [editTargetGroupId, setEditTargetGroupId] = useState<number | null>(null);
   const [deleteTargetGroupId, setDeleteTargetGroupId] = useState<number | null>(null);
@@ -188,15 +189,21 @@ export const useGroup = (currentGroupId: number | null) => {
   };
 
   const handleCancelDelete = () => {
+    if (isDeleting) {
+      return;
+    }
+
     setIsDeleteModalOpen(false);
     setDeleteTargetGroupId(null);
   };
 
   const handleConfirmDelete = async () => {
-    if (!deleteTargetGroupId) {
+    if (!deleteTargetGroupId || isDeleting) {
       console.error("처리할 그룹 ID가 없습니다.");
       return;
     }
+
+    setIsDeleting(true);
 
     try {
       const isDelete = deleteAction === "delete";
@@ -220,6 +227,8 @@ export const useGroup = (currentGroupId: number | null) => {
       const actionLabel = deleteAction === "delete" ? "삭제" : "탈퇴";
       const errorMessage = getErrorMessage(error, `그룹 ${actionLabel} 중 오류가 발생했습니다.`);
       console.error(`그룹 ${actionLabel} 실패:`, errorMessage, error);
+    } finally {
+      setIsDeleting(false);
     }
   };
 
@@ -371,6 +380,7 @@ export const useGroup = (currentGroupId: number | null) => {
     isOpen: isDeleteModalOpen,
     onClose: handleCancelDelete,
     onConfirm: handleConfirmDelete,
+    isConfirming: isDeleting,
     action: deleteAction,
   };
 

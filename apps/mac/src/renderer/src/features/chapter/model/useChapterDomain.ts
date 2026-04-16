@@ -192,6 +192,7 @@ export const useChapterDomain = (sectionId: number) => {
     currentStageId,
     setCurrentStageId,
     currentStage,
+    sectionCompleted: Boolean(sectionDetails?.completed),
     sectionTitle: sectionDetails?.sectionTitle ?? "",
     completedChapters,
     totalChapters,

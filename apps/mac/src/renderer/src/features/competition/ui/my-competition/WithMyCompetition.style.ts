@@ -16,7 +16,7 @@ const flexCol = css`
 
 export const GrowthControlBox = styled.div`
   ${flexRow};
-  gap: 1rem;
+  gap: 0.625rem;
 `;
 
 export const ContentArea = styled.div`

@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { ClashLoadingIcon } from "./ClashLoadingIcon";
+import { ClashLoadingIcon } from "@/shared/ui";
 import { font, palette } from "@clash/design-tokens";
 
 export const OfflineContainer = styled.main`

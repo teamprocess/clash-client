@@ -3,7 +3,7 @@ import { ChangeEvent, useRef } from "react";
 import { useGetMyProfile } from "@/entities/user";
 import { useUploadProfileImageMutation } from "@/entities/profile/api/query/useUserProfileImage.query";
 import { resolveProfileDecorations } from "@/shared/lib";
-import { RankTier } from "@/shared/ui";
+import { DefaultProfileIcon, RankTier } from "@/shared/ui";
 
 const ACCEPTED_IMAGE_TYPES = ["image/png", "image/jpeg", "image/webp", "image/gif"];
 
@@ -47,7 +47,7 @@ export const TopProfile = () => {
               <S.ProfileAvatarWrap
                 profileImage={user?.profileImage}
                 badgeImage={badgeImage}
-                fallbackSrc={S.FallbackProfileImage}
+                fallbackIcon={<DefaultProfileIcon />}
                 alt="프로필"
               >
                 {user?.profileImage ? (

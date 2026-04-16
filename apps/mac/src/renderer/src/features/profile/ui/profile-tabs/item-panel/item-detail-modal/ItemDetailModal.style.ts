@@ -3,10 +3,11 @@ import { font } from "@clash/design-tokens/font";
 import { palette } from "@clash/design-tokens/theme";
 import {
   createNameplateOverlayTuningCss,
-  defaultProfileImageDark,
   nameplateFrameCss,
 } from "@/shared/lib";
+import { defaultProfileImageDark } from "@/shared/ui";
 import Cookie from "@/shared/ui/assets/cookie.svg";
+import { Button } from "@/shared/ui/button";
 import { ProfileAvatar } from "@/shared/ui/profile-avatar";
 
 const previewImageCss = css<{ $image?: string }>`
@@ -581,16 +582,14 @@ export const ErrorText = styled.p`
   margin: 0;
 `;
 
-export const PrimaryButton = styled.button`
+export const PrimaryButton = styled(Button)`
   margin-top: auto;
   height: 2.75rem;
   padding: 0 1.4rem;
-  border: none;
   border-radius: 0.875rem;
   background: ${({ theme }) => theme.primary.normal};
   color: ${({ theme }) => theme.label.normal};
   ${font.body.bold}
-  cursor: pointer;
 
   &:disabled {
     opacity: 0.55;

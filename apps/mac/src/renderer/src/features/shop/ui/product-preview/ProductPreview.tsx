@@ -1,6 +1,6 @@
 import * as S from "./ProductPreview.style";
 import { ProductCategory } from "@/entities/product";
-import { defaultProfileImageDark } from "@/shared/lib";
+import { defaultProfileImageDark } from "@/shared/ui";
 
 interface ProductPreviewProps {
   category: ProductCategory;

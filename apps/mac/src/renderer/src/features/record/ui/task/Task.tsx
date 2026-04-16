@@ -17,9 +17,11 @@ export const Task = ({ selectedDate }: TaskProps) => {
     taskNameInputMaxLength,
     taskNameErrorMessage,
     isTaskNameInvalid,
+    isSavingTask,
     shouldShowTaskNameTooltip,
     openMenuTaskId,
     deleteTargetId,
+    isDeletingTask,
     isDeletingActiveTask,
     activitySwitchTargetTaskId,
     isSwitchingFromActivity,
@@ -55,6 +57,7 @@ export const Task = ({ selectedDate }: TaskProps) => {
         placeholder="과목명을 입력하세요."
         value={subjectName}
         maxLength={taskNameInputMaxLength}
+        disabled={isSavingTask}
         aria-invalid={isTaskNameInvalid}
         onChange={handleTaskNameChange}
         onKeyDown={handleTaskNameKeyDown}
@@ -78,11 +81,21 @@ export const Task = ({ selectedDate }: TaskProps) => {
                   <S.TaskInputBox>{renderTaskNameInput()}</S.TaskInputBox>
                   <S.TaskRightBox>
                     <S.ButtonBox>
-                      <Button variant="secondary" size="sm" onClick={handleCancelEdit}>
+                      <Button
+                        variant="secondary"
+                        size="sm"
+                        disabled={isSavingTask}
+                        onClick={handleCancelEdit}
+                      >
                         취소
                       </Button>
-                      <Button variant="primary" size="sm" onClick={handleSaveClick}>
-                        저장
+                      <Button
+                        variant="primary"
+                        size="sm"
+                        isLoading={isSavingTask}
+                        onClick={handleSaveClick}
+                      >
+                        {isSavingTask ? "저장 중..." : "저장"}
                       </Button>
                     </S.ButtonBox>
                   </S.TaskRightBox>
@@ -124,17 +137,29 @@ export const Task = ({ selectedDate }: TaskProps) => {
               <S.TaskInputBox>{renderTaskNameInput()}</S.TaskInputBox>
               <S.TaskRightBox>
                 <S.ButtonBox>
-                  <Button variant="secondary" size="sm" onClick={handleCancelEdit}>
+                  <Button
+                    variant="secondary"
+                    size="sm"
+                    disabled={isSavingTask}
+                    onClick={handleCancelEdit}
+                  >
                     취소
                   </Button>
-                  <Button variant="primary" size="sm" onClick={handleSaveClick}>
-                    저장
+                  <Button
+                    variant="primary"
+                    size="sm"
+                    isLoading={isSavingTask}
+                    onClick={handleSaveClick}
+                  >
+                    {isSavingTask ? "저장 중..." : "저장"}
                   </Button>
                 </S.ButtonBox>
               </S.TaskRightBox>
             </S.TaskItem>
           )}
-          <S.AddTaskButton onClick={handleAddClick}>+ 과목 추가</S.AddTaskButton>
+          <S.AddTaskButton disabled={isSavingTask} onClick={handleAddClick}>
+            + 과목 추가
+          </S.AddTaskButton>
         </S.TaskBox>
       </S.TaskContainer>
       <ConfirmDialog
@@ -154,6 +179,7 @@ export const Task = ({ selectedDate }: TaskProps) => {
         confirmMessage="삭제 시 해당 과목의 데이터가 모두 삭제됩니다"
         confirmLabel={isDeletingActiveTask ? "종료 후 삭제" : "삭제"}
         confirmVariant="primary"
+        isConfirming={isDeletingTask}
         onClose={handleCancelDelete}
         onConfirm={handleConfirmDelete}
       />

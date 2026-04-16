@@ -1,5 +1,8 @@
 import * as S from "./ItemDetailModal.style";
-import type { OwnedItem, OwnedItemDisplayCategory } from "@/entities/profile/model/ownedItems.types";
+import type {
+  OwnedItem,
+  OwnedItemDisplayCategory,
+} from "@/entities/profile/model/ownedItems.types";
 import type { getMyProfileResponse } from "@/entities/user";
 import { formatPrice, resolveProfileDecorations } from "@/shared/lib";
 import { Dialog } from "@/shared/ui";
@@ -41,7 +44,9 @@ export const ItemDetailModal = ({
   onClose,
   onEquip,
 }: ItemDetailModalProps) => {
-  const { bannerImage, badgeImage, nameplateImage } = resolveProfileDecorations(user?.equippedItems);
+  const { bannerImage, badgeImage, nameplateImage } = resolveProfileDecorations(
+    user?.equippedItems
+  );
   const previewProfileImage = user?.profileImage || S.FallbackProfileImage;
   const previewName = buildInfoValue(user?.name || user?.username);
   const previewBannerImage = category === "BANNER" ? item.image : bannerImage;
@@ -203,8 +208,9 @@ export const ItemDetailModal = ({
 
             <S.PrimaryButton
               type="button"
+              variant="primary"
               onClick={onEquip}
-              disabled={isSubmitting}
+              isLoading={isSubmitting}
             >
               {submitLabel}
             </S.PrimaryButton>

@@ -109,20 +109,9 @@ export const GrassWrapper = styled.div`
 
 export const ChartWrapper = styled.div`
   width: 100%;
-  min-width: 0;
-  min-height: 0;
-  max-height: 8rem;
   position: relative;
-  flex: 1;
-  height: 100%;
-
-  @media (max-height: 56.25rem) {
-    height: clamp(0rem, 24vh, 6.5rem);
-  }
-
-  @media (max-height: 48rem) {
-    height: clamp(9rem, 22vh, 12rem);
-  }
+  min-height: 0;
+  height: 82%;
 `;
 
 export const PortalTooltip = styled.div<{ $top: number; $left: number }>`
