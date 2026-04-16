@@ -19,6 +19,9 @@ const api = {
   openExternalUrl: (url: string) => ipcRenderer.invoke("open-external-url", url),
   clearAuthSession: () => ipcRenderer.invoke("auth:clear-session"),
   checkForUpdates: () => ipcRenderer.invoke("app:check-for-updates"),
+  getStartupUpdateStateSync: () => ipcRenderer.sendSync("app:get-startup-update-state-sync"),
+  getStartupUpdateState: () => ipcRenderer.invoke("app:get-startup-update-state"),
+  retryStartupUpdate: () => ipcRenderer.invoke("app:retry-startup-update"),
 
   onAppChanged: callback => {
     const subscription = (_, app) => callback(app);
@@ -36,6 +39,12 @@ const api = {
     const subscription = (_, payload) => callback(payload);
     ipcRenderer.on("deep-link-auth", subscription);
     return () => ipcRenderer.removeListener("deep-link-auth", subscription);
+  },
+
+  onStartupUpdateStateChanged: callback => {
+    const subscription = (_, state) => callback(state);
+    ipcRenderer.on("app:startup-update-state-changed", subscription);
+    return () => ipcRenderer.removeListener("app:startup-update-state-changed", subscription);
   },
 };
 
