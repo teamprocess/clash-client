@@ -11,7 +11,17 @@ const titleByPhase: Record<StartupUpdateState["phase"], string> = {
   ready: "시작 중",
 };
 
-const getDescription = (state: StartupUpdateState) => {
+const loadingMessages = [
+  "오용준의 마음을 불러오고 있어요...",
+  "정빈이의 입술이 거대해지고 있어요...",
+  "조상철이 늙어가고 있어요...",
+];
+
+const getLoadingMessage = () => {
+  return loadingMessages[Math.floor(Math.random() * loadingMessages.length)];
+};
+
+const getDescription = (state: StartupUpdateState, loadingMessage: string) => {
   switch (state.phase) {
     case "checking":
       return state.message ?? "최신 버전인지 확인하는 중이에요...";
@@ -22,7 +32,7 @@ const getDescription = (state: StartupUpdateState) => {
     case "error":
       return state.detail ?? state.message ?? "업데이트를 완료해야 앱을 사용할 수 있어요.";
     case "ready":
-      return "오용준의 마음을 불러오고 있어요.";
+      return state.message ?? loadingMessage;
   }
 };
 
@@ -32,6 +42,7 @@ const getProgress = (progressPercent: StartupUpdateState["progressPercent"]) => 
 
 export const useStartupGate = (state: StartupUpdateState, onRetry?: RetryHandler) => {
   const [isRetrying, setIsRetrying] = useState(false);
+  const [loadingMessage] = useState(getLoadingMessage);
 
   const retry = async () => {
     if (!onRetry || isRetrying) {
@@ -49,7 +60,7 @@ export const useStartupGate = (state: StartupUpdateState, onRetry?: RetryHandler
 
   return {
     title: titleByPhase[state.phase],
-    description: getDescription(state),
+    description: getDescription(state, loadingMessage),
     isReady: state.phase === "ready",
     isDownloading: state.phase === "downloading",
     isError: state.phase === "error",
