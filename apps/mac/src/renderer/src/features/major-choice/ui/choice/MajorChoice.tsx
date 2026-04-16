@@ -43,16 +43,12 @@ export const MajorChoice = ({
           <Button
             variant="primary"
             size="lg"
-            disabled={!isValid || isSubmittingMajor}
+            disabled={!isValid}
+            isLoading={isSubmittingMajor}
             onClick={onSubmit}
             fullWidth={true}
-            aria-busy={isSubmittingMajor}
           >
-            {isSubmittingMajor ? (
-              <S.SubmitLoading>선택 중...</S.SubmitLoading>
-            ) : (
-              "선택하기"
-            )}
+            {isSubmittingMajor ? <S.SubmitLoading>선택 중...</S.SubmitLoading> : "선택하기"}
           </Button>
         </S.ChoiceContents>
       </S.ChoiceContainer>

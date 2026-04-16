@@ -13,9 +13,7 @@ export const JUDGE_UPPER_HAND_MAP = {
   [MATCHVALUE.WON]: "승리",
   [MATCHVALUE.DRAWING]: "동률",
   [MATCHVALUE.DRAWN]: "무승부",
-  [MATCHVALUE.CANCELED]: "취소된 배틀",
-  [MATCHVALUE.PENDING]: "수락 대기중",
-  [MATCHVALUE.NOT_STARTED]: "시작 전",
+  [MATCHVALUE.PENDING]: "대기 중",
 } as const;
 
 export const PERIOD_OPTIONS: PeriodDay[] = [3, 5, 7];

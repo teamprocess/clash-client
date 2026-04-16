@@ -5,7 +5,7 @@ import { cookieTooltipContent, expTooltipContent } from "./Topbar.constants";
 import { useGetMyProfile } from "@/entities/user";
 import { TopbarNotice } from "@/features/notice";
 import { formatPrice, resolveProfileDecorations } from "@/shared/lib";
-import { Popover, QuestionTooltip } from "@/shared/ui";
+import { DefaultProfileIcon, Popover, QuestionTooltip } from "@/shared/ui";
 import { useSignOut } from "@/features/auth";
 
 interface TopbarProps {
@@ -75,7 +75,7 @@ export const Topbar = ({ onToggleSidebar }: TopbarProps) => {
             <S.ProfileAvatarWrap
               profileImage={user?.profileImage}
               badgeImage={badgeImage}
-              fallbackSrc={S.FallbackProfileIcon}
+              fallbackIcon={<DefaultProfileIcon />}
               alt="프로필 이미지"
             />
             <S.NameBox>

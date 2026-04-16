@@ -24,7 +24,8 @@ export { MyCompetitionLineChart } from "./my-compete-chart/MyCompetitionLineChar
 export { SidePanel } from "./side-panel";
 export type { SidePanelProps } from "./side-panel";
 export { RankTier } from "@/shared/ui/rank-tier/RankTier";
-export { ProfileAvatar } from "./profile-avatar";
+export { DefaultProfileIcon, defaultProfileImageDark, ProfileAvatar } from "./profile-avatar";
 export type { ProfileAvatarProps } from "./profile-avatar";
 export { NameTag } from "./name-tag";
 export type { NameTagProps, NameTagSize, NameTagTextAlign, NameTagWidth } from "./name-tag";
+export { ClashLoadingIcon } from "./clash-loading-icon/ClashLoadingIcon";

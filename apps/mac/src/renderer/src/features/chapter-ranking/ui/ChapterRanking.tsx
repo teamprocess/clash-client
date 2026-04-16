@@ -1,9 +1,8 @@
 import * as S from "./ChapterRanking.style";
-import Profile from "../assets/profile.svg?url";
 import { useChapterRanking } from "@/features/chapter-ranking/model/useChapterRanking";
 import { RankingPageEnum } from "./ChapterRanking.style";
 import { QuestionTooltip } from "@/shared/ui";
-import { chapterRankingTooltipContent } from "./ChapterRanking.constants";
+import { chapterRankingTooltipContent } from "../constants/chapterRanking.constants";
 
 interface ChapterRankingProps {
   page: RankingPageEnum;
@@ -70,7 +69,7 @@ export const ChapterRanking = ({ page }: ChapterRankingProps) => {
         <S.RankingLabel>
           <S.LabelGroup>
             챕터 랭킹
-            <QuestionTooltip content="해당 전공 챕터를 클리어하면서 순위권에 들고 쿠키도 얻어보세요" />
+            <QuestionTooltip content={chapterRankingTooltipContent} />
           </S.LabelGroup>
         </S.RankingLabel>
         <div>랭킹을 불러오는데 실패했습니다.</div>
@@ -85,7 +84,7 @@ export const ChapterRanking = ({ page }: ChapterRankingProps) => {
         <S.RankingLabel>
           <S.LabelGroup>
             챕터 랭킹
-            <QuestionTooltip content="해당 전공 챕터를 클리어하면서 순위권에 들고 쿠키도 얻어보세요" />
+            <QuestionTooltip content={chapterRankingTooltipContent} />
           </S.LabelGroup>
         </S.RankingLabel>
         <div>랭킹 데이터가 없습니다.</div>
@@ -96,11 +95,11 @@ export const ChapterRanking = ({ page }: ChapterRankingProps) => {
   return (
     <S.RankingContainer $page={page}>
       <S.RankingLabel>
-          <S.LabelGroup>
-            챕터 랭킹
-            <QuestionTooltip content="해당 전공 챕터를 클리어하면서 순위권에 들고 쿠키도 얻어보세요" />
-          </S.LabelGroup>
-        </S.RankingLabel>
+        <S.LabelGroup>
+          챕터 랭킹
+          <QuestionTooltip content={chapterRankingTooltipContent} />
+        </S.LabelGroup>
+      </S.RankingLabel>
       <S.RankingBox>
         <S.RankingTop3Box>
           {allRankers
@@ -115,10 +114,11 @@ export const ChapterRanking = ({ page }: ChapterRankingProps) => {
                   {user.rank === 1 && <S.FirstFrame />}
                   {user.rank === 2 && <S.SecondFrame />}
                   {user.rank === 3 && <S.ThirdFrame />}
-                  <S.Top3ProfileImage
-                    src={user.profileImage || Profile}
-                    $isFirst={user.rank === 1}
-                  />
+                  {user.profileImage ? (
+                    <S.Top3ProfileImage src={user.profileImage} $isFirst={user.rank === 1} />
+                  ) : (
+                    <S.Top3ProfileFallback $isFirst={user.rank === 1} />
+                  )}
                 </S.RankFrameWrapper>
                 <S.RankerBottom>
                   <S.RankerName>{user.name}</S.RankerName>
@@ -142,7 +142,11 @@ export const ChapterRanking = ({ page }: ChapterRankingProps) => {
                   <S.ItemLeft>
                     <S.Ranking>{user.rank}</S.Ranking>
                     <S.UserBox>
-                      <S.RankingUserProfile src={user.profileImage || Profile} />
+                      {user.profileImage ? (
+                        <S.RankingUserProfile src={user.profileImage} />
+                      ) : (
+                        <S.RankingUserProfileFallback />
+                      )}
                       <S.RankingUsername>{user.name}</S.RankingUsername>
                     </S.UserBox>
                   </S.ItemLeft>
@@ -157,7 +161,11 @@ export const ChapterRanking = ({ page }: ChapterRankingProps) => {
               <S.ItemLeft>
                 <S.Ranking>{myData.rank}</S.Ranking>
                 <S.UserBox>
-                  <S.RankingUserProfile src={myData.profileImage || Profile} />
+                  {myData.profileImage ? (
+                    <S.RankingUserProfile src={myData.profileImage} />
+                  ) : (
+                    <S.RankingUserProfileFallback />
+                  )}
                   <S.RankingUsername>{myData.name}</S.RankingUsername>
                 </S.UserBox>
               </S.ItemLeft>

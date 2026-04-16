@@ -1,8 +1,9 @@
-import { Product } from "@/entities/product";
-import * as S from "./PurchaseModal.style";
 import { usePurchaseModal } from "@/features/shop/model/usePurchaseModal";
+import { Dialog } from "@/shared/ui";
+import { Product } from "@/entities/product";
 import { formatPrice } from "@/shared/lib";
 import { useGetMyProfile } from "@/entities/user/model/useGetMyProfile";
+import * as S from "./PurchaseModal.style";
 
 interface PurchaseModalProps {
   isOpen: boolean;
@@ -38,49 +39,55 @@ export const PurchaseModal = ({ isOpen, product, onClose, onPurchase }: Purchase
   const MoneyIcon = <S.CookieIcon aria-hidden />;
 
   return (
-    <S.Overlay>
-      <S.Container>
-        <S.Header>
-          <S.Title>결제</S.Title>
-          <S.CloseButton onClick={handleClose} aria-label="닫기">
-            <S.CloseIcon aria-hidden />
-          </S.CloseButton>
-        </S.Header>
-
+    <Dialog title="결제" width={26} height={28} isOpen={isOpen} onClose={handleClose} gap={0}>
+      <S.Content>
         {step === "confirm" ? (
           <>
-            <S.SectionTitle>구매 내역</S.SectionTitle>
+            <S.ContentBody>
+              <S.PurchaseBox>
+                <S.SectionTitle>구매 내역</S.SectionTitle>
 
-            <S.ReceiptBox>
-              <S.Row>
-                <S.ItemName>{product.title}</S.ItemName>
-                <S.Price>
-                  {MoneyIcon}
-                  {formatPrice(discountedPrice)}
-                </S.Price>
-              </S.Row>
+                <S.ReceiptBox>
+                  <S.Row>
+                    <S.ItemName>{product.title}</S.ItemName>
+                    <S.Price>
+                      {MoneyIcon}
+                      {formatPrice(discountedPrice)}
+                    </S.Price>
+                  </S.Row>
 
-              <S.Divider />
+                  <S.Divider />
 
-              <S.Row>
-                <S.ItemName>합계</S.ItemName>
-                <S.Price>
-                  {MoneyIcon}
-                  {formatPrice(discountedPrice)}
-                </S.Price>
-              </S.Row>
-            </S.ReceiptBox>
+                  <S.Row>
+                    <S.ItemName>합계</S.ItemName>
+                    <S.Price>
+                      {MoneyIcon}
+                      {formatPrice(discountedPrice)}
+                    </S.Price>
+                  </S.Row>
+                </S.ReceiptBox>
+              </S.PurchaseBox>
 
-            <S.ConfirmText>정말 이 상품을 구매하시겠습니까?</S.ConfirmText>
+              <S.ConfirmTextBox>
+                <S.ConfirmText>정말 위 상품을 구매하시겠습니까?</S.ConfirmText>
 
-            <S.SubText>
-              결제 후 잔액은 {MoneyIcon}
-              {formatPrice(afterBalance)} 입니다.
-            </S.SubText>
+                <S.SubText>
+                  결제 후 잔액은 {MoneyIcon}
+                  {formatPrice(afterBalance)} 입니다.
+                </S.SubText>
+              </S.ConfirmTextBox>
 
-            {errorMessage && <S.ErrorText>{errorMessage}</S.ErrorText>}
+              {errorMessage && <S.ErrorText role="alert">{errorMessage}</S.ErrorText>}
+            </S.ContentBody>
 
-            <S.PrimaryButton disabled={isSubmitting || !canPurchase} onClick={handlePurchase}>
+            <S.PrimaryButton
+              variant="primary"
+              size="lg"
+              fullWidth
+              disabled={!canPurchase}
+              isLoading={isSubmitting}
+              onClick={() => void handlePurchase()}
+            >
               {isSubmitting ? "처리 중" : !canPurchase ? "잔액 부족" : "구매하기"}
             </S.PrimaryButton>
           </>
@@ -96,10 +103,12 @@ export const PurchaseModal = ({ isOpen, product, onClose, onPurchase }: Purchase
               </S.SubText>
             </S.SuccessBox>
 
-            <S.PrimaryButton onClick={handleClose}>확인</S.PrimaryButton>
+            <S.PrimaryButton variant="primary" size="lg" fullWidth onClick={handleClose}>
+              확인
+            </S.PrimaryButton>
           </>
         )}
-      </S.Container>
-    </S.Overlay>
+      </S.Content>
+    </Dialog>
   );
 };

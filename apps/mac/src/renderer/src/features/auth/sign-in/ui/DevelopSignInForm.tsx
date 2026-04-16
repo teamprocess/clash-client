@@ -43,7 +43,7 @@ export const DevelopSignInForm = () => {
         </S.Field>
       </S.FieldGroup>
       <S.ButtonWrapper>
-        <Button type="submit" variant="primary" size="lg" fullWidth disabled={isStarting}>
+        <Button type="submit" variant="primary" size="lg" fullWidth isLoading={isStarting}>
           {isStarting ? "로그인 중..." : "로그인"}
         </Button>
         {error && <S.ErrorText>{error}</S.ErrorText>}

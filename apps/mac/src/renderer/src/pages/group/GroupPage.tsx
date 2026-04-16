@@ -13,13 +13,17 @@ export const GroupPage = () => {
   const [selectedGroupId, setSelectedGroupId] = useState<number | null>(null);
   const todayRecordDate = useTodayRecordDate();
   const [selectedDate, setSelectedDate] = useState<string | undefined>(undefined);
+
   const normalizedSelectedDate = selectedDate === todayRecordDate ? undefined : selectedDate;
   const displayDate = normalizedSelectedDate ?? todayRecordDate;
+
   const { data: myGroupsResponse } = useMyGroupsQuery(1, 20);
+
   const groups = useMemo<GroupEntity[]>(
     () => myGroupsResponse?.data?.groups ?? [],
     [myGroupsResponse]
   );
+
   const currentGroup = useMemo(
     () => groups.find(group => group.id === selectedGroupId) ?? groups[0] ?? null,
     [groups, selectedGroupId]

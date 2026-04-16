@@ -28,6 +28,17 @@ export const Image = styled.img`
   display: block;
 `;
 
+export const FallbackIcon = styled.div`
+  width: 100%;
+  height: 100%;
+
+  > svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+`;
+
 export const Placeholder = styled.div`
   position: relative;
   width: 100%;

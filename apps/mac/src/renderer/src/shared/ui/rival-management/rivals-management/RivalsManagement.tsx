@@ -31,25 +31,18 @@ export const RivalsManagementDialog = ({ isOpen, onClose, rival }: AddRivalsDial
   const [activeTab, setActiveTab] = useState<"rivals-management" | "rivalList">(
     "rivals-management"
   );
-  const [createSuccessMessage, setCreateSuccessMessage] = useState<string | null>(null);
 
   const handleTabChange = (tab: "rivals-management" | "rivalList") => {
     setActiveTab(tab);
-
-    if (tab === "rivals-management") return;
-
-    setCreateSuccessMessage(null);
   };
 
   const handleCreateSubmit = async () => {
     const ok = await rival.handleRivalCreate();
 
     if (ok) {
-      setCreateSuccessMessage("라이벌 신청을 보냈습니다.");
+      handleClose();
       return;
     }
-
-    setCreateSuccessMessage(null);
   };
 
   return (
@@ -113,9 +106,7 @@ export const RivalsManagementDialog = ({ isOpen, onClose, rival }: AddRivalsDial
 
             <S.BottomRow>
               <S.ButtonBox>
-                {createSuccessMessage ? (
-                  <S.SuccessText>{createSuccessMessage}</S.SuccessText>
-                ) : rival.createError ? (
+                {rival.createError ? (
                   <S.ErrorText>
                     {isMaxRivalError
                       ? `최대 라이벌 수는 4명입니다. 신청 목록을 확인해주세요!`
@@ -126,7 +117,7 @@ export const RivalsManagementDialog = ({ isOpen, onClose, rival }: AddRivalsDial
                   size="sm"
                   variant="primary"
                   onClick={() => void handleCreateSubmit()}
-                  disabled={rival.isSubmitting}
+                  isLoading={rival.isSubmitting}
                 >
                   {rival.isSubmitting ? "신청 중" : "신청"}
                 </Button>
@@ -205,9 +196,15 @@ export const RivalsManagementDialog = ({ isOpen, onClose, rival }: AddRivalsDial
                             <Button
                               size="sm"
                               variant="primary"
-                              onClick={() => rival.handleRivalSignCancel(user.rivalId)}
+                              onClick={() => void rival.handleRivalSignCancel(user.rivalId)}
+                              isLoading={
+                                rival.isCancelingSign && rival.cancelingRivalId === user.rivalId
+                              }
+                              disabled={rival.isCancelingSign}
                             >
-                              취소
+                              {rival.isCancelingSign && rival.cancelingRivalId === user.rivalId
+                                ? "취소 중"
+                                : "취소"}
                             </Button>
                           ) : null}
                         </S.ProfileContent>

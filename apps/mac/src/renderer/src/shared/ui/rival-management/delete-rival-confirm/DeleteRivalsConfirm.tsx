@@ -33,9 +33,9 @@ export const DeleteRivalsConfirmDialog = ({
             variant="primary"
             fullWidth
             onClick={handleConfirm}
-            disabled={rival.isDeleteSubmitting}
+            isLoading={rival.isDeleteSubmitting}
           >
-            삭제
+            {rival.isDeleteSubmitting ? "삭제 중..." : "삭제"}
           </Button>
         </S.ButtonBox>
       </S.DialogBody>

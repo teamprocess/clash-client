@@ -116,6 +116,7 @@ export const GroupFormPanel = ({
                               type="button"
                               onClick={() => void handleJoinGroup(group)}
                               disabled={isJoining || group.isMember}
+                              isLoading={isCurrentJoining}
                               $isMember={group.isMember}
                             >
                               {group.isMember ? "가입됨" : isCurrentJoining ? "가입 중..." : "가입"}
@@ -177,7 +178,7 @@ export const GroupFormPanel = ({
                 />
               </S.FormFieldsArea>
               <S.CreateActionRow>
-                <Button type="submit" variant="primary" size="sm" disabled={isCreating}>
+                <Button type="submit" variant="primary" size="sm" isLoading={isCreating}>
                   {isCreating ? "생성 중..." : "생성"}
                 </Button>
               </S.CreateActionRow>

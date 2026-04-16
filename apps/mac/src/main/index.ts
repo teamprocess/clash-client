@@ -1,7 +1,7 @@
-import { app, BrowserWindow, dialog } from "electron";
+import { app, BrowserWindow, dialog, ipcMain } from "electron";
 import { autoUpdater } from "electron-updater";
 import { AppMonitor } from "./services";
-import { createMainWindow } from "./window";
+import { createMainWindow, createStartupWindow } from "./window";
 import { configureCertificateHandling } from "./security";
 import { registerQuitHandlers } from "./lifecycle";
 import { consumePendingDeepLink, registerDeepLinkEvents } from "./deeplink";
@@ -12,15 +12,82 @@ import { markUpdateInstallInProgress } from "./updateInstallState";
 import { configureAppRuntime } from "./runtimeProfile";
 
 let mainWindow: BrowserWindow | null = null;
+let startupWindow: BrowserWindow | null = null;
 let appMonitor: AppMonitor | null = null;
 let isCheckingForUpdates = false;
-let isManualUpdateCheck = false;
 let isInstallPromptOpen = false;
 let downloadedUpdateVersion: string | null = null;
+let isStartupWindowClosingForAppLaunch = false;
+let startupWindowOpenedAt: number | null = null;
+let startupWindowShownPromise: Promise<void> | null = null;
+let resolveStartupWindowShown: (() => void) | null = null;
+let launchMainApplicationPromise: Promise<void> | null = null;
+
+type UpdateCheckSource = "startup" | "auto" | "manual";
+type StartupUpdatePhase = "checking" | "downloading" | "installing" | "ready" | "error";
+
+interface StartupUpdateState {
+  phase: StartupUpdatePhase;
+  version: string | null;
+  progressPercent: number | null;
+  message?: string;
+  detail?: string;
+}
+
+let activeUpdateCheckSource: UpdateCheckSource | null = null;
+let startupUpdateState: StartupUpdateState = {
+  phase: "checking",
+  version: null,
+  progressPercent: null,
+};
 
 const AUTO_UPDATE_CHECK_INTERVAL_MS = 30 * 60 * 1000;
+const MIN_STARTUP_WINDOW_VISIBLE_MS = 2200;
 
 const isUpdateSupported = () => app.isPackaged && process.platform === "darwin";
+const wait = (milliseconds: number) =>
+  new Promise<void>(resolve => {
+    setTimeout(resolve, milliseconds);
+  });
+
+const getErrorMessage = (error: unknown) => {
+  if (error instanceof Error) {
+    return error.message;
+  }
+
+  return `${error}`;
+};
+
+const hideDockForStartupWindow = () => {
+  if (process.platform !== "darwin" || !app.dock) {
+    return;
+  }
+
+  app.dock.hide();
+};
+
+const showDockForMainWindow = () => {
+  if (process.platform !== "darwin" || !app.dock) {
+    return;
+  }
+
+  void app.dock.show();
+};
+
+const broadcastStartupUpdateState = () => {
+  BrowserWindow.getAllWindows().forEach(window => {
+    if (window.isDestroyed()) {
+      return;
+    }
+
+    window.webContents.send("app:startup-update-state-changed", startupUpdateState);
+  });
+};
+
+const setStartupUpdateState = (nextState: StartupUpdateState) => {
+  startupUpdateState = nextState;
+  broadcastStartupUpdateState();
+};
 
 const showUpdateMessage = async (message: string, detail?: string) => {
   const options = {
@@ -40,28 +107,62 @@ const showUpdateMessage = async (message: string, detail?: string) => {
   await dialog.showMessageBox(options);
 };
 
-const confirmInstallUpdate = async (version: string | undefined) => {
-  const options = {
-    type: "info" as const,
-    buttons: ["나중에", "재시작"],
-    defaultId: 1,
-    cancelId: 0,
-    title: "업데이트 설치",
-    message: "업데이트 다운로드가 완료되었습니다.",
-    detail: version
-      ? `${version} 버전을 설치하려면 앱을 재시작해야 합니다. 지금 재시작할까요?`
-      : "업데이트를 설치하려면 앱을 재시작해야 합니다. 지금 재시작할까요?",
-  };
-  const targetWindow = BrowserWindow.getFocusedWindow() ?? mainWindow;
-  const result = targetWindow
-    ? await dialog.showMessageBox(targetWindow, options)
-    : await dialog.showMessageBox(options);
-
-  return result.response === 1;
+const blockAppEntryWithUpdateError = (message: string, detail?: string) => {
+  setStartupUpdateState({
+    phase: "error",
+    version: null,
+    progressPercent: null,
+    message,
+    detail,
+  });
 };
 
-const checkForUpdates = async (source: "auto" | "manual") => {
+const installDownloadedUpdate = async (
+  version: string | null,
+  source: UpdateCheckSource | null
+) => {
+  if (isInstallPromptOpen) {
+    return;
+  }
+
+  isInstallPromptOpen = true;
+
+  try {
+    if (source === "startup") {
+      setStartupUpdateState({
+        phase: "installing",
+        version,
+        progressPercent: 100,
+        message: "앱을 다시 시작하고 있어요.",
+      });
+      await wait(900);
+    } else {
+      await showUpdateMessage(
+        "업데이트 다운로드가 완료되었습니다.",
+        version
+          ? `${version} 버전을 설치하기 위해 앱을 재시작합니다.`
+          : "업데이트를 설치하기 위해 앱을 재시작합니다."
+      );
+    }
+
+    downloadedUpdateVersion = null;
+    markUpdateInstallInProgress();
+    autoUpdater.quitAndInstall();
+  } finally {
+    isInstallPromptOpen = false;
+  }
+};
+
+const checkForUpdates = async (source: UpdateCheckSource) => {
   if (!isUpdateSupported()) {
+    if (source === "startup") {
+      setStartupUpdateState({
+        phase: "ready",
+        version: null,
+        progressPercent: null,
+      });
+    }
+
     if (source === "manual") {
       await showUpdateMessage("업데이트 확인은 배포된 macOS 앱에서만 지원됩니다.");
     }
@@ -69,14 +170,7 @@ const checkForUpdates = async (source: "auto" | "manual") => {
   }
 
   if (downloadedUpdateVersion) {
-    if (source === "manual" && !isInstallPromptOpen) {
-      const shouldInstallNow = await confirmInstallUpdate(downloadedUpdateVersion);
-      if (shouldInstallNow) {
-        downloadedUpdateVersion = null;
-        markUpdateInstallInProgress();
-        autoUpdater.quitAndInstall();
-      }
-    }
+    await installDownloadedUpdate(downloadedUpdateVersion, source);
     return;
   }
 
@@ -88,124 +182,304 @@ const checkForUpdates = async (source: "auto" | "manual") => {
   }
 
   isCheckingForUpdates = true;
-  isManualUpdateCheck = source === "manual";
+  activeUpdateCheckSource = source;
+
+  if (source === "startup") {
+    setStartupUpdateState({
+      phase: "checking",
+      version: null,
+      progressPercent: null,
+      message: "최신 버전인지 확인하고 있어요.",
+    });
+  }
 
   try {
     const result = await autoUpdater.checkForUpdates();
 
     if (!result) {
       isCheckingForUpdates = false;
-      if (isManualUpdateCheck) {
-        isManualUpdateCheck = false;
+      const requestSource = activeUpdateCheckSource;
+      activeUpdateCheckSource = null;
+
+      if (requestSource === "manual") {
         await showUpdateMessage(
           "업데이트 확인 요청을 처리하지 못했습니다. 잠시 후 다시 시도해주세요."
+        );
+      }
+
+      if (requestSource === "startup") {
+        blockAppEntryWithUpdateError(
+          "업데이트 확인을 완료하지 못했어요.",
+          "네트워크 상태를 확인한 뒤 다시 시도해주세요."
         );
       }
     }
   } catch (error) {
     isCheckingForUpdates = false;
-    const isManualRequest = isManualUpdateCheck;
-    isManualUpdateCheck = false;
+    const requestSource = activeUpdateCheckSource;
+    activeUpdateCheckSource = null;
 
     console.error("자동 업데이트 확인 중 오류가 발생했습니다:", error);
 
-    if (isManualRequest) {
+    if (requestSource === "manual") {
       await showUpdateMessage("업데이트 확인 중 오류가 발생했습니다.", `${error}`);
+    }
+
+    if (requestSource === "startup") {
+      blockAppEntryWithUpdateError(
+        "업데이트 확인에 실패했어요.",
+        getErrorMessage(error) || "잠시 후 다시 시도해주세요."
+      );
     }
   }
 };
 
-// 현재 메인 윈도우 조회
 const getMainWindow = () => mainWindow;
 
-// 현재 앱 모니터 조회
 const getAppMonitor = () => appMonitor;
 
-// 메인 윈도우 + AppMonitor 초기화
-const createWindow = () => {
-  mainWindow = createMainWindow();
+const closeStartupWindow = () => {
+  const currentStartupWindow = startupWindow;
+  if (!currentStartupWindow || currentStartupWindow.isDestroyed()) {
+    startupWindow = null;
+    startupWindowOpenedAt = null;
+    startupWindowShownPromise = null;
+    resolveStartupWindowShown = null;
+    return;
+  }
 
-  // 윈도우 준비 후 앱 모니터 연결
-  appMonitor = new AppMonitor(mainWindow);
-
-  consumePendingDeepLink(getMainWindow);
+  isStartupWindowClosingForAppLaunch = true;
+  currentStartupWindow.close();
 };
 
-// 패키지 앱에서 자동 업데이트를 확인
+const createAppWindow = (options?: { appLaunch?: boolean }) => {
+  if (mainWindow && !mainWindow.isDestroyed()) {
+    return mainWindow;
+  }
+
+  showDockForMainWindow();
+  mainWindow = createMainWindow(options);
+  appMonitor = new AppMonitor(mainWindow);
+  consumePendingDeepLink(getMainWindow);
+
+  mainWindow.once("show", () => {
+    closeStartupWindow();
+    setStartupUpdateState({
+      phase: "ready",
+      version: null,
+      progressPercent: null,
+    });
+  });
+
+  mainWindow.on("closed", () => {
+    mainWindow = null;
+    appMonitor = null;
+  });
+
+  return mainWindow;
+};
+
+const createStartupGateWindow = () => {
+  if (startupWindow && !startupWindow.isDestroyed()) {
+    return startupWindow;
+  }
+
+  hideDockForStartupWindow();
+  startupWindowShownPromise = new Promise(resolve => {
+    resolveStartupWindowShown = resolve;
+  });
+  startupWindow = createStartupWindow();
+
+  startupWindow.once("show", () => {
+    startupWindowOpenedAt = Date.now();
+    resolveStartupWindowShown?.();
+    resolveStartupWindowShown = null;
+  });
+
+  startupWindow.on("closed", () => {
+    startupWindow = null;
+    startupWindowOpenedAt = null;
+    resolveStartupWindowShown?.();
+    resolveStartupWindowShown = null;
+    startupWindowShownPromise = null;
+
+    if (isStartupWindowClosingForAppLaunch) {
+      isStartupWindowClosingForAppLaunch = false;
+      return;
+    }
+
+    if (!mainWindow || mainWindow.isDestroyed()) {
+      app.quit();
+    }
+  });
+
+  return startupWindow;
+};
+
+const waitForMinimumStartupWindowDuration = async () => {
+  if (startupWindowShownPromise) {
+    await startupWindowShownPromise;
+  }
+
+  if (!startupWindowOpenedAt) {
+    return;
+  }
+
+  const elapsed = Date.now() - startupWindowOpenedAt;
+  const remaining = MIN_STARTUP_WINDOW_VISIBLE_MS - elapsed;
+
+  if (remaining > 0) {
+    await wait(remaining);
+  }
+};
+
+const createWindow = () => {
+  if (startupUpdateState.phase === "ready") {
+    return createAppWindow();
+  }
+
+  return createStartupGateWindow();
+};
+
+const launchMainApplication = async () => {
+  if (launchMainApplicationPromise) {
+    await launchMainApplicationPromise;
+    return;
+  }
+
+  launchMainApplicationPromise = (async () => {
+    await waitForMinimumStartupWindowDuration();
+
+    if (mainWindow && !mainWindow.isDestroyed()) {
+      closeStartupWindow();
+      setStartupUpdateState({
+        phase: "ready",
+        version: null,
+        progressPercent: null,
+      });
+      return;
+    }
+
+    createAppWindow({ appLaunch: true });
+  })();
+
+  try {
+    await launchMainApplicationPromise;
+  } finally {
+    launchMainApplicationPromise = null;
+  }
+};
+
 const registerAutoUpdater = () => {
   if (!isUpdateSupported()) {
+    void launchMainApplication();
     return;
   }
 
   autoUpdater.allowPrerelease = true;
+  autoUpdater.autoDownload = true;
 
   autoUpdater.on("update-available", info => {
     console.log(`업데이트 있음: ${info.version}`);
-    if (isManualUpdateCheck) {
+    if (activeUpdateCheckSource === "startup") {
+      setStartupUpdateState({
+        phase: "downloading",
+        version: info.version ?? null,
+        progressPercent: 0,
+        message: "필수 업데이트를 준비하고 있어요.",
+      });
+    }
+
+    if (activeUpdateCheckSource === "manual") {
       void showUpdateMessage(
         "새 업데이트를 찾았습니다.",
         `${info.version} 버전을 다운로드하고 있습니다.`
       );
-      isManualUpdateCheck = false;
     }
   });
 
-  autoUpdater.on("update-not-available", () => {
-    if (isManualUpdateCheck) {
-      void showUpdateMessage("현재 최신 버전을 사용 중입니다.");
-      isManualUpdateCheck = false;
+  autoUpdater.on("download-progress", progress => {
+    if (activeUpdateCheckSource !== "startup") {
+      return;
     }
+
+    setStartupUpdateState({
+      phase: "downloading",
+      version: startupUpdateState.version,
+      progressPercent: progress.percent,
+      message: "필수 업데이트를 다운로드하고 있어요.",
+    });
+  });
+
+  autoUpdater.on("update-not-available", () => {
+    const requestSource = activeUpdateCheckSource;
+
+    if (requestSource === "manual") {
+      void showUpdateMessage("현재 최신 버전을 사용 중입니다.");
+    }
+
+    if (requestSource === "startup") {
+      void launchMainApplication();
+    }
+
+    activeUpdateCheckSource = null;
     isCheckingForUpdates = false;
   });
 
   autoUpdater.on("update-downloaded", info => {
+    const requestSource = activeUpdateCheckSource;
+
     isCheckingForUpdates = false;
+    activeUpdateCheckSource = null;
     downloadedUpdateVersion = info.version ?? null;
-    if (isInstallPromptOpen) {
-      return;
-    }
-
-    isInstallPromptOpen = true;
-
-    void (async () => {
-      try {
-        const shouldInstallNow = await confirmInstallUpdate(info.version);
-        if (!shouldInstallNow) {
-          return;
-        }
-
-        downloadedUpdateVersion = null;
-        markUpdateInstallInProgress();
-        autoUpdater.quitAndInstall();
-      } finally {
-        isInstallPromptOpen = false;
-      }
-    })();
+    void installDownloadedUpdate(downloadedUpdateVersion, requestSource);
   });
 
   autoUpdater.on("error", error => {
+    const requestSource = activeUpdateCheckSource;
+
     isCheckingForUpdates = false;
-    const isManualRequest = isManualUpdateCheck;
-    isManualUpdateCheck = false;
+    activeUpdateCheckSource = null;
 
     console.error("자동 업데이트 처리 중 오류가 발생했습니다:", error);
 
-    if (isManualRequest) {
+    if (requestSource === "manual") {
       void showUpdateMessage("업데이트 처리 중 오류가 발생했습니다.", `${error}`);
+    }
+
+    if (requestSource === "startup") {
+      blockAppEntryWithUpdateError(
+        "업데이트를 진행하지 못했어요.",
+        getErrorMessage(error) || "잠시 후 다시 시도해주세요."
+      );
     }
   });
 
-  void checkForUpdates("auto");
+  void checkForUpdates("startup");
   setInterval(() => {
     void checkForUpdates("auto");
   }, AUTO_UPDATE_CHECK_INTERVAL_MS);
 };
+
+ipcMain.handle("app:get-startup-update-state", () => startupUpdateState);
+ipcMain.on("app:get-startup-update-state-sync", event => {
+  event.returnValue = startupUpdateState;
+});
+ipcMain.handle("app:retry-startup-update", async () => {
+  await checkForUpdates("startup");
+  return startupUpdateState;
+});
+
+ipcMain.handle("app:check-for-updates", async () => {
+  await checkForUpdates("manual");
+});
 
 configureAppRuntime();
 configureCertificateHandling();
 registerQuitHandlers({ getAppMonitor });
 registerDeepLinkEvents(getMainWindow, createWindow);
 app.whenReady().then(() => {
+  createStartupGateWindow();
   registerAutoUpdater();
   registerApplicationMenu({
     onCheckForUpdates: () => checkForUpdates("manual"),

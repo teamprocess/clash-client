@@ -39,6 +39,7 @@ export const useRival = () => {
   const [rivalSelectedId, setRivalSelectedId] = useState<number[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isDeleteSubmitting, setIsDeleteSubmitting] = useState(false);
+  const [cancelingRivalId, setCancelingRivalId] = useState<number | null>(null);
 
   const clearAllErrors = () => {
     setCreateError(null);
@@ -189,32 +190,13 @@ export const useRival = () => {
   const cancelRivalSignMutation = useMutation({
     mutationFn: (rivalId: number) => rivalsApi.postRivalCancel({ id: rivalId }),
 
-    onMutate: async (rivalId: number) => {
+    onMutate: async () => {
       setSignListError(null);
-
-      await queryClient.cancelQueries({ queryKey: RIVAL_SIGN_ALL_KEY });
-
-      const previous = queryClient.getQueryData<RivalSignAllResponse | null>(RIVAL_SIGN_ALL_KEY);
-
-      queryClient.setQueryData<RivalSignAllResponse | null>(RIVAL_SIGN_ALL_KEY, old => {
-        if (!old) return old;
-
-        return {
-          ...old,
-          rivals: (old.rivals ?? []).filter(u => u.rivalId !== rivalId),
-        };
-      });
-
-      return { previous };
     },
 
-    onError: (error, _rivalId: number, context) => {
+    onError: error => {
       console.error("라이벌 신청 취소 실패:", error);
       setSignListError(getErrorMessage(error, "라이벌 신청 취소 중 오류가 발생했습니다."));
-
-      if (context?.previous !== undefined) {
-        queryClient.setQueryData(RIVAL_SIGN_ALL_KEY, context.previous);
-      }
     },
 
     onSettled: async () => {
@@ -224,16 +206,19 @@ export const useRival = () => {
   });
 
   const handleRivalSignCancel = async (rivalId: number) => {
-    if (!rivalId) return false;
+    if (!rivalId || cancelRivalSignMutation.isPending) return false;
 
     try {
       setSignListError(null);
+      setCancelingRivalId(rivalId);
       await cancelRivalSignMutation.mutateAsync(rivalId);
       return true;
     } catch (error: unknown) {
       console.error("라이벌 신청 취소 실패:", error);
       setSignListError(getErrorMessage(error, "라이벌 신청 취소 중 오류가 발생했습니다."));
       return false;
+    } finally {
+      setCancelingRivalId(null);
     }
   };
 
@@ -301,6 +286,8 @@ export const useRival = () => {
     setPendingDeleteId,
     handleRivalSignCancel,
     isDeleteSubmitting,
+    isCancelingSign: cancelRivalSignMutation.isPending,
+    cancelingRivalId,
 
     // search
     searchText,

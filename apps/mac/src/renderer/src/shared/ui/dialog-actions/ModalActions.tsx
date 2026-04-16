@@ -8,6 +8,7 @@ export interface ModalActionsProps {
   cancelDisabled?: boolean;
   onConfirm?: () => void;
   confirmLabel: string;
+  confirmLoading?: boolean;
   confirmDisabled?: boolean;
   confirmType?: "button" | "submit";
   confirmVariant?: ButtonVariant;
@@ -20,6 +21,7 @@ export const ModalActions = ({
   cancelDisabled = false,
   onConfirm,
   confirmLabel,
+  confirmLoading = false,
   confirmDisabled = false,
   confirmType = "button",
   confirmVariant = "primary",
@@ -42,6 +44,7 @@ export const ModalActions = ({
         size={size}
         onClick={onConfirm}
         disabled={confirmDisabled}
+        isLoading={confirmLoading}
       >
         {confirmLabel}
       </Button>

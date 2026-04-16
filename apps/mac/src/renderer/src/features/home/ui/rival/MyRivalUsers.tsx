@@ -1,6 +1,11 @@
 import * as S from "./Rival.style";
 import { MyRivalsRequest, USER_STATUS_LABELS } from "@/entities/competition";
-import { formatTime, resolveUsingApp, useRealtimeRivalActiveTime } from "@/shared/lib";
+import {
+  formatTime,
+  resolveUsingApp,
+  useRealtimeRivalActiveTime,
+} from "@/shared/lib";
+import { DefaultProfileIcon } from "@/shared/ui";
 import { IdeIcons } from "@/shared/ui/assets/ide-img";
 import { Tooltip } from "@/shared/ui/tooltip";
 
@@ -20,7 +25,10 @@ export const MyRivalUsers = ({ user }: MyRivalUsersProps) => {
     <S.ProfileContainer>
       <S.ProfileBox>
         <S.ProfileContent>
-          <S.RivalProfileAvatar profileImage={user.profileImage} />
+          <S.RivalProfileAvatar
+            profileImage={user.profileImage}
+            fallbackIcon={<DefaultProfileIcon />}
+          />
 
           <S.NameBox>
             <S.ProfileName>{user.name}</S.ProfileName>
