@@ -73,35 +73,44 @@ export const RivalsManagementDialog = ({ isOpen, onClose, rival }: AddRivalsDial
                 />
               </S.SearchInputBox>
 
-              <S.UserChoiceContainer $uiStatus={"create"}>
-                {users.map(user => {
-                  const isSelected = rival.rivalSelectedId.includes(user.id);
+              {rival.rivalsData?.myRivals.length === 4 ? (
+                <S.EmptyStateBox>
+                  <S.EmptyTitle>라이벌이 가득 찼습니다!</S.EmptyTitle>
+                  <S.EmptyDescription>
+                    새로운 라이벌을 추가하려면 정리가 필요합니다.
+                  </S.EmptyDescription>
+                </S.EmptyStateBox>
+              ) : (
+                <S.UserChoiceContainer $uiStatus={"create"}>
+                  {users.map(user => {
+                    const isSelected = rival.rivalSelectedId.includes(user.id);
 
-                  return (
-                    <S.UserChoiceBox
-                      key={user.id}
-                      $isSelected={isSelected}
-                      onClick={() => rival.handleUserSelect(user.id)}
-                    >
-                      <S.ProfileContent $height="3rem">
-                        <S.ProfileBox>
-                          {user.profileImage ? (
-                            <S.ProfileImg src={user.profileImage} />
-                          ) : (
-                            <S.DefaultProfileImg />
-                          )}
-                          <S.ProfileTagBox>
-                            <S.ProfileName>{user.name}</S.ProfileName>
-                            <S.ProfileMention>@{user.username}</S.ProfileMention>
-                          </S.ProfileTagBox>
-                        </S.ProfileBox>
-                      </S.ProfileContent>
+                    return (
+                      <S.UserChoiceBox
+                        key={user.id}
+                        $isSelected={isSelected}
+                        onClick={() => rival.handleUserSelect(user.id)}
+                      >
+                        <S.ProfileContent $height="3rem">
+                          <S.ProfileBox>
+                            {user.profileImage ? (
+                              <S.ProfileImg src={user.profileImage} />
+                            ) : (
+                              <S.DefaultProfileImg />
+                            )}
+                            <S.ProfileTagBox>
+                              <S.ProfileName>{user.name}</S.ProfileName>
+                              <S.ProfileMention>@{user.username}</S.ProfileMention>
+                            </S.ProfileTagBox>
+                          </S.ProfileBox>
+                        </S.ProfileContent>
 
-                      {isSelected ? <S.CheckedIcon /> : <S.UncheckedBox />}
-                    </S.UserChoiceBox>
-                  );
-                })}
-              </S.UserChoiceContainer>
+                        {isSelected ? <S.CheckedIcon /> : <S.UncheckedBox />}
+                      </S.UserChoiceBox>
+                    );
+                  })}
+                </S.UserChoiceContainer>
+              )}
             </S.TopSection>
 
             <S.BottomRow>
