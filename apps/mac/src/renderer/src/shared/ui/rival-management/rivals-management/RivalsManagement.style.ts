@@ -204,6 +204,7 @@ export const EmptyStateBox = styled.div`
   justify-content: center;
   width: 100%;
   min-height: 10rem;
+  height: 70%;
   margin-top: 1rem;
   border: 1px dashed ${({ theme }) => theme.line.alternative};
   border-radius: 0.75rem;
