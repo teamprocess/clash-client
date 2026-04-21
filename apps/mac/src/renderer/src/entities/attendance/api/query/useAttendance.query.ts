@@ -14,6 +14,7 @@ export const useWeeklyAttendanceQuery = (enabled = true) => {
       return response.data;
     },
     enabled,
+    placeholderData: previousData => previousData,
     staleTime: 0,
     refetchOnMount: "always",
     retry: false,
