@@ -6,8 +6,11 @@ const WEEKDAY_LABELS = ["일요일", "월요일", "화요일", "수요일", "목
 
 interface AttendanceDialogProps {
   weeklyAttendance: WeeklyAttendanceResponse | null;
+  optimisticAttendedDate: string | null;
+  animatedAttendanceDate: string | null;
   isOpen: boolean;
   isSubmitting: boolean;
+  isCompletingAttendance: boolean;
   errorMessage: string;
   onClose: () => void;
   onConfirm: () => Promise<void>;
@@ -15,8 +18,11 @@ interface AttendanceDialogProps {
 
 export const AttendanceDialog = ({
   weeklyAttendance,
+  optimisticAttendedDate,
+  animatedAttendanceDate,
   isOpen,
   isSubmitting,
+  isCompletingAttendance,
   errorMessage,
   onClose,
   onConfirm,
@@ -25,15 +31,28 @@ export const AttendanceDialog = ({
     return null;
   }
 
+  const isDialogLocked = isSubmitting || isCompletingAttendance;
   const headline =
-    weeklyAttendance.currentStreak > 0
+    isCompletingAttendance
+      ? "출석 완료!"
+      : weeklyAttendance.currentStreak > 0
       ? `${weeklyAttendance.currentStreak}일 연속 공부 중`
       : "오늘도 공부해 볼까요?";
 
-  const description = `${weeklyAttendance.weekNumber}주째 출석 중이에요!`;
+  const description = isCompletingAttendance
+    ? "오늘의 출석이 반영됐어요."
+    : `${weeklyAttendance.weekNumber}주째 출석 중이에요!`;
 
   return (
-    <Dialog title="출석" width={26} height={33} isOpen={isOpen} onClose={onClose}>
+    <Dialog
+      title="출석"
+      width={26}
+      height={33}
+      isOpen={isOpen}
+      onClose={onClose}
+      closeOnOverlayClick={!isDialogLocked}
+      showClose={!isDialogLocked}
+    >
       <S.Body>
         <S.Hero>
           <S.GiftIcon />
@@ -43,14 +62,21 @@ export const AttendanceDialog = ({
 
         <S.Board>
           <S.DayGrid>
-            {weeklyAttendance.days.map((day, index) => (
-              <S.DayItem key={day.date}>
-                {isAttended(day.attendanceStatus) ? <S.AttendedIcon /> : <S.NotAttendedIcon />}
-                <S.DayLabel $isAttended={isAttended(day.attendanceStatus)}>
-                  {WEEKDAY_LABELS[index] ?? ""}
-                </S.DayLabel>
-              </S.DayItem>
-            ))}
+            {weeklyAttendance.days.map((day, index) => {
+              const isDisplayedAttended =
+                isAttended(day.attendanceStatus) || day.date === optimisticAttendedDate;
+
+              return (
+                <S.DayItem key={day.date}>
+                  <S.DayIconFrame $isAnimated={day.date === animatedAttendanceDate}>
+                    {isDisplayedAttended ? <S.AttendedIcon /> : <S.NotAttendedIcon />}
+                  </S.DayIconFrame>
+                  <S.DayLabel $isAttended={isDisplayedAttended}>
+                    {WEEKDAY_LABELS[index] ?? ""}
+                  </S.DayLabel>
+                </S.DayItem>
+              );
+            })}
           </S.DayGrid>
         </S.Board>
 
@@ -61,9 +87,9 @@ export const AttendanceDialog = ({
           size="lg"
           fullWidth
           onClick={() => void onConfirm()}
-          isLoading={isSubmitting}
+          isLoading={isDialogLocked}
         >
-          확인
+          {isCompletingAttendance ? "출석 완료" : isSubmitting ? "출석 처리 중..." : "확인"}
         </Button>
       </S.Body>
     </Dialog>
