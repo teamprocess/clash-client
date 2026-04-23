@@ -1,16 +1,18 @@
 import axios from "axios";
-import type { ApiResponse } from "@/shared/api";
+import type { ApiResponse, ErrorResponse } from "@/shared/api";
 
 export interface ApiErrorDetails {
   code?: string;
   status?: number;
   message: string;
+  details?: ErrorResponse["details"];
 }
 
 export const getApiError = (error: unknown, fallbackMessage: string): ApiErrorDetails => {
   if (axios.isAxiosError<ApiResponse<null>>(error)) {
     const code = error.response?.data?.error?.code;
     const status = error.response?.status;
+    const details = error.response?.data?.error?.details;
     const responseMessage = error.response?.data?.error?.message ?? error.response?.data?.message;
 
     if (typeof responseMessage === "string" && responseMessage.trim().length > 0) {
@@ -18,6 +20,7 @@ export const getApiError = (error: unknown, fallbackMessage: string): ApiErrorDe
         code,
         status,
         message: responseMessage,
+        details,
       };
     }
 
@@ -26,6 +29,7 @@ export const getApiError = (error: unknown, fallbackMessage: string): ApiErrorDe
         code,
         status,
         message: error.message,
+        details,
       };
     }
 
@@ -33,6 +37,7 @@ export const getApiError = (error: unknown, fallbackMessage: string): ApiErrorDe
       code,
       status,
       message: fallbackMessage,
+      details,
     };
   }
 
