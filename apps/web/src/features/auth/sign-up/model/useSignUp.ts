@@ -55,6 +55,7 @@ const signUpSchema = z.object({
 });
 
 export type SignUpFormData = z.infer<typeof signUpSchema>;
+const SIGN_UP_FIELD_NAMES: Array<keyof SignUpFormData> = ["username", "name", "email", "password"];
 
 // EmailVerify Schema
 const emailVerifySchema = z.object({
@@ -180,6 +181,8 @@ export const useSignUp = () => {
       return;
     }
 
+    signUpForm.clearErrors();
+
     try {
       if (!executeRecaptcha) {
         signUpForm.setError("root", {
@@ -214,7 +217,7 @@ export const useSignUp = () => {
     } catch (error: unknown) {
       console.error("회원가입에 실패했습니다.", error);
 
-      const { code, status, message } = getApiError(error, "회원가입에 실패했습니다.");
+      const { code, status, message, details } = getApiError(error, "회원가입에 실패했습니다.");
 
       if (code === "EMAIL_ALREADY_EXIST" || status === 409) {
         signUpForm.setError("email", {
@@ -222,6 +225,33 @@ export const useSignUp = () => {
           message: "이미 등록된 이메일입니다.",
         });
         return;
+      }
+
+      if (code === "INVALID_ARGUMENT" && details) {
+        let hasFieldError = false;
+
+        for (const fieldName of SIGN_UP_FIELD_NAMES) {
+          const fieldMessage = details[fieldName];
+
+          if (!fieldMessage) {
+            continue;
+          }
+
+          hasFieldError = true;
+          signUpForm.setError(fieldName, {
+            type: "manual",
+            message: fieldMessage,
+          });
+        }
+
+        if (details.username) {
+          setCheckedUsername("");
+          setUsernameAvailable(false);
+        }
+
+        if (hasFieldError) {
+          return;
+        }
       }
 
       signUpForm.setError("root", {

@@ -37,7 +37,7 @@ export const SignUp = ({
             </S.VerifyButton>
           </S.InputWrapper>
           {errors.username && <S.ErrorText>{errors.username.message}</S.ErrorText>}
-          {usernameChecked && usernameAvailable && (
+          {!errors.username && usernameChecked && usernameAvailable && (
             <S.SuccessMessage>사용 가능한 아이디입니다.</S.SuccessMessage>
           )}
           {!errors.username && usernameChecked && !usernameAvailable && (
