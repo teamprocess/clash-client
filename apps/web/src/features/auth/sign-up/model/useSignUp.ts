@@ -2,6 +2,7 @@ import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { z } from "zod";
+import axios from "axios";
 import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
 import { authApi } from "@/entities/user";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -55,7 +56,24 @@ const signUpSchema = z.object({
 });
 
 export type SignUpFormData = z.infer<typeof signUpSchema>;
-const SIGN_UP_FIELD_NAMES: Array<keyof SignUpFormData> = ["username", "name", "email", "password"];
+
+interface SignUpErrorResponse {
+  error?: {
+    details?: Partial<Record<keyof SignUpFormData, string>>;
+  };
+}
+
+const getSignUpFieldErrorMessage = (error: unknown, fieldName: keyof SignUpFormData) => {
+  if (!axios.isAxiosError<SignUpErrorResponse>(error)) {
+    return null;
+  }
+
+  const fieldMessage = error.response?.data?.error?.details?.[fieldName];
+
+  return typeof fieldMessage === "string" && fieldMessage.trim().length > 0
+    ? fieldMessage
+    : null;
+};
 
 // EmailVerify Schema
 const emailVerifySchema = z.object({
@@ -181,8 +199,6 @@ export const useSignUp = () => {
       return;
     }
 
-    signUpForm.clearErrors();
-
     try {
       if (!executeRecaptcha) {
         signUpForm.setError("root", {
@@ -217,7 +233,7 @@ export const useSignUp = () => {
     } catch (error: unknown) {
       console.error("회원가입에 실패했습니다.", error);
 
-      const { code, status, message, details } = getApiError(error, "회원가입에 실패했습니다.");
+      const { code, status, message } = getApiError(error, "회원가입에 실패했습니다.");
 
       if (code === "EMAIL_ALREADY_EXIST" || status === 409) {
         signUpForm.setError("email", {
@@ -227,31 +243,14 @@ export const useSignUp = () => {
         return;
       }
 
-      if (code === "INVALID_ARGUMENT" && details) {
-        let hasFieldError = false;
+      const passwordErrorMessage = getSignUpFieldErrorMessage(error, "password");
 
-        for (const fieldName of SIGN_UP_FIELD_NAMES) {
-          const fieldMessage = details[fieldName];
-
-          if (!fieldMessage) {
-            continue;
-          }
-
-          hasFieldError = true;
-          signUpForm.setError(fieldName, {
-            type: "manual",
-            message: fieldMessage,
-          });
-        }
-
-        if (details.username) {
-          setCheckedUsername("");
-          setUsernameAvailable(false);
-        }
-
-        if (hasFieldError) {
-          return;
-        }
+      if (code === "INVALID_ARGUMENT" && passwordErrorMessage) {
+        signUpForm.setError("password", {
+          type: "manual",
+          message: passwordErrorMessage,
+        });
+        return;
       }
 
       signUpForm.setError("root", {
