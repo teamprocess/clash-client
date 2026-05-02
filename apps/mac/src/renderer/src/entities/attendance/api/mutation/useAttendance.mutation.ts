@@ -10,11 +10,11 @@ export const useMarkAttendanceMutation = () => {
       const response = await attendanceApi.markAttendance();
       return response.data;
     },
-    onSettled: async (_data, error) => {
-      await queryClient.invalidateQueries({ queryKey: attendanceQueryKeys.all });
+    onSettled: (_data, error) => {
+      void queryClient.invalidateQueries({ queryKey: attendanceQueryKeys.all });
 
       if (!error) {
-        await queryClient.invalidateQueries({ queryKey: ["user"] });
+        void queryClient.invalidateQueries({ queryKey: ["user"] });
       }
     },
   });

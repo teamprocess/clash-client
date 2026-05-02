@@ -1,9 +1,42 @@
-import styled, { css } from "styled-components";
+import styled, { css, keyframes } from "styled-components";
 import { font } from "@clash/design-tokens/font";
 import { palette } from "@clash/design-tokens/theme";
 import AttendedSvg from "./assets/attended.svg";
 import NotAttendedSvg from "./assets/not-attended.svg";
 import CalendarSvg from "@/shared/ui/assets/calendar.svg";
+
+const stampIn = keyframes`
+  0% {
+    opacity: 0;
+    transform: scale(0.7) rotate(-12deg);
+  }
+
+  58% {
+    opacity: 1;
+    transform: scale(1.08) rotate(4deg);
+  }
+
+  100% {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+  }
+`;
+
+const stampFlash = keyframes`
+  0% {
+    opacity: 0;
+    transform: scale(0.7);
+  }
+
+  45% {
+    opacity: 0.18;
+  }
+
+  100% {
+    opacity: 0;
+    transform: scale(1.2);
+  }
+`;
 
 export const Body = styled.div`
   display: flex;
@@ -66,6 +99,8 @@ export const DayItem = styled.div`
 const dayStatusIconStyle = css`
   width: 3.85rem;
   height: 3.85rem;
+  position: relative;
+  z-index: 1;
 `;
 
 export const AttendedIcon = styled(AttendedSvg)`
@@ -74,6 +109,40 @@ export const AttendedIcon = styled(AttendedSvg)`
 
 export const NotAttendedIcon = styled(NotAttendedSvg)`
   ${dayStatusIconStyle}
+`;
+
+export const DayIconFrame = styled.div<{ $isAnimated: boolean }>`
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 3.85rem;
+  height: 3.85rem;
+
+  ${({ $isAnimated, theme }) =>
+    $isAnimated &&
+    css`
+      animation: ${stampIn} 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+
+      &::after {
+        content: "";
+        position: absolute;
+        inset: 0.35rem;
+        z-index: 0;
+        border-radius: 999px;
+        background-color: ${theme.primary.normal};
+        animation: ${stampFlash} 0.5s ease-out both;
+      }
+    `}
+
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+
+    &::after {
+      animation: none;
+      opacity: 0;
+    }
+  }
 `;
 
 export const DayLabel = styled.span<{ $isAttended: boolean }>`
