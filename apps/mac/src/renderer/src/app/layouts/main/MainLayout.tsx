@@ -41,8 +41,12 @@ export const MainLayout = () => {
       </S.ContentWrapper>
       <AttendanceDialog
         weeklyAttendance={attendanceDialog.weeklyAttendance}
+        optimisticAttendedDate={attendanceDialog.optimisticAttendedDate}
+        animatedAttendanceDate={attendanceDialog.animatedAttendanceDate}
         isOpen={attendanceDialog.isOpen}
         isSubmitting={attendanceDialog.isSubmitting}
+        isTodayAttended={attendanceDialog.isTodayAttended}
+        isCompletingAttendance={attendanceDialog.isCompletingAttendance}
         errorMessage={attendanceDialog.errorMessage}
         onClose={attendanceDialog.close}
         onConfirm={attendanceDialog.confirm}

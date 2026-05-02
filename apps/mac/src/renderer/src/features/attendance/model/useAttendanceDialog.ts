@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   isAttended,
   useMarkAttendanceMutation,
@@ -9,6 +9,7 @@ import { getErrorMessage } from "@/shared/lib";
 
 const KST_OFFSET_MS = 9 * 60 * 60 * 1000;
 const ATTENDANCE_RESET_HOUR_MS = 6 * 60 * 60 * 1000;
+const ATTENDANCE_STAMP_DURATION_MS = 1000;
 
 const getCurrentAttendanceDate = (nowMs = Date.now()) => {
   const shiftedDate = new Date(nowMs + KST_OFFSET_MS - ATTENDANCE_RESET_HOUR_MS);
@@ -36,15 +37,40 @@ export const useAttendanceDialog = () => {
   const { mutateAsync: markAttendance, isPending: isSubmitting } = useMarkAttendanceMutation();
   const [isManuallyOpen, setIsManuallyOpen] = useState(false);
   const [dismissedAttendanceDate, setDismissedAttendanceDate] = useState<string | null>(null);
+  const [optimisticAttendedDate, setOptimisticAttendedDate] = useState<string | null>(null);
+  const [animatedAttendanceDate, setAnimatedAttendanceDate] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState("");
+  const closeTimeoutRef = useRef<number | null>(null);
+
+  const clearCloseTimeout = () => {
+    if (closeTimeoutRef.current === null) {
+      return;
+    }
+
+    window.clearTimeout(closeTimeoutRef.current);
+    closeTimeoutRef.current = null;
+  };
+
+  useEffect(() => {
+    return () => {
+      clearCloseTimeout();
+    };
+  }, []);
 
   const isTodayAttended = useMemo(() => {
-    return getIsTodayAttended(weeklyAttendance, currentAttendanceDate);
-  }, [currentAttendanceDate, weeklyAttendance]);
+    return (
+      getIsTodayAttended(weeklyAttendance, currentAttendanceDate) ||
+      optimisticAttendedDate === currentAttendanceDate
+    );
+  }, [currentAttendanceDate, optimisticAttendedDate, weeklyAttendance]);
+
+  const isCompletingAttendance = animatedAttendanceDate !== null;
 
   const isOpen = Boolean(
     weeklyAttendance &&
-      (isManuallyOpen || (!isTodayAttended && dismissedAttendanceDate !== currentAttendanceDate))
+      (isCompletingAttendance ||
+        isManuallyOpen ||
+        (!isTodayAttended && dismissedAttendanceDate !== currentAttendanceDate))
   );
 
   const open = () => {
@@ -54,6 +80,10 @@ export const useAttendanceDialog = () => {
   };
 
   const close = () => {
+    if (isSubmitting || isCompletingAttendance) {
+      return;
+    }
+
     setErrorMessage("");
     setIsManuallyOpen(false);
 
@@ -76,8 +106,15 @@ export const useAttendanceDialog = () => {
 
     try {
       await markAttendance();
+      clearCloseTimeout();
+      setOptimisticAttendedDate(currentAttendanceDate);
+      setAnimatedAttendanceDate(currentAttendanceDate);
       setDismissedAttendanceDate(currentAttendanceDate);
-      setIsManuallyOpen(false);
+      closeTimeoutRef.current = window.setTimeout(() => {
+        setAnimatedAttendanceDate(null);
+        setIsManuallyOpen(false);
+        closeTimeoutRef.current = null;
+      }, ATTENDANCE_STAMP_DURATION_MS);
     } catch (error) {
       setErrorMessage(getErrorMessage(error, "출석에 실패했습니다."));
     }
@@ -89,6 +126,9 @@ export const useAttendanceDialog = () => {
     isSubmitting,
     isTodayAttended,
     isAttendancePending: Boolean(weeklyAttendance && !isTodayAttended),
+    optimisticAttendedDate,
+    animatedAttendanceDate,
+    isCompletingAttendance,
     errorMessage,
     open,
     close,
