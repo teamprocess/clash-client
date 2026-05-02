@@ -45,6 +45,7 @@ export const MainLayout = () => {
         animatedAttendanceDate={attendanceDialog.animatedAttendanceDate}
         isOpen={attendanceDialog.isOpen}
         isSubmitting={attendanceDialog.isSubmitting}
+        isTodayAttended={attendanceDialog.isTodayAttended}
         isCompletingAttendance={attendanceDialog.isCompletingAttendance}
         errorMessage={attendanceDialog.errorMessage}
         onClose={attendanceDialog.close}
