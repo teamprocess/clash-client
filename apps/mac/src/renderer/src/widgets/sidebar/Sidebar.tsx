@@ -1,5 +1,6 @@
 import * as S from "./Sidebar.style";
-import { useLocation } from "react-router-dom";
+import { useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import type { MonitoredApp } from "@/entities/record";
 import { useSidebarMonitor } from "@/features/app-monitor";
 import { IdeIcons } from "@/shared/ui/assets/ide-img";
@@ -17,14 +18,56 @@ const menuItems = [
   { icon: <S.RoadMapIcon />, label: "로드맵", to: "/roadmap" },
 ];
 
+const isEditableElement = (target: EventTarget | null) => {
+  if (!(target instanceof HTMLElement)) {
+    return false;
+  }
+
+  return (
+    target.isContentEditable ||
+    target.tagName === "INPUT" ||
+    target.tagName === "TEXTAREA" ||
+    target.tagName === "SELECT"
+  );
+};
+
 export const Sidebar = ({ isOpen }: SidebarProps) => {
   const location = useLocation();
+  const navigate = useNavigate();
   const { isElectron, activeSession, displayTime } = useSidebarMonitor();
   const hasIdeIcon = (appId: MonitoredApp | null): appId is keyof typeof IdeIcons => {
     return !!appId && appId in IdeIcons;
   };
   const activeSessionAppId = activeSession?.appId ?? null;
   const SessionIdeIcon = hasIdeIcon(activeSessionAppId) ? IdeIcons[activeSessionAppId] : null;
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (!event.metaKey || event.ctrlKey || event.altKey || event.shiftKey) {
+        return;
+      }
+
+      if (isEditableElement(event.target)) {
+        return;
+      }
+
+      const menuIndex = Number(event.key) - 1;
+      const menuItem = menuItems[menuIndex];
+
+      if (!menuItem) {
+        return;
+      }
+
+      event.preventDefault();
+      navigate(menuItem.to);
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [navigate]);
 
   return (
     <S.SidebarContainer $isOpen={isOpen}>
