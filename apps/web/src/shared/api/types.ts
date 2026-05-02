@@ -8,6 +8,4 @@ export interface ApiResponse<T = unknown> {
 export interface ErrorResponse {
   message: string;
   code?: string;
-  timestamp?: string;
-  details?: Record<string, string>;
 }
