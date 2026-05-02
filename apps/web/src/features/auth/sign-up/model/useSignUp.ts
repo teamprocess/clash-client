@@ -2,6 +2,7 @@ import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { z } from "zod";
+import axios from "axios";
 import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
 import { authApi } from "@/entities/user";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -55,6 +56,24 @@ const signUpSchema = z.object({
 });
 
 export type SignUpFormData = z.infer<typeof signUpSchema>;
+
+interface SignUpErrorResponse {
+  error?: {
+    details?: Partial<Record<keyof SignUpFormData, string>>;
+  };
+}
+
+const getSignUpFieldErrorMessage = (error: unknown, fieldName: keyof SignUpFormData) => {
+  if (!axios.isAxiosError<SignUpErrorResponse>(error)) {
+    return null;
+  }
+
+  const fieldMessage = error.response?.data?.error?.details?.[fieldName];
+
+  return typeof fieldMessage === "string" && fieldMessage.trim().length > 0
+    ? fieldMessage
+    : null;
+};
 
 // EmailVerify Schema
 const emailVerifySchema = z.object({
@@ -220,6 +239,16 @@ export const useSignUp = () => {
         signUpForm.setError("email", {
           type: "manual",
           message: "이미 등록된 이메일입니다.",
+        });
+        return;
+      }
+
+      const passwordErrorMessage = getSignUpFieldErrorMessage(error, "password");
+
+      if (code === "INVALID_ARGUMENT" && passwordErrorMessage) {
+        signUpForm.setError("password", {
+          type: "manual",
+          message: passwordErrorMessage,
         });
         return;
       }

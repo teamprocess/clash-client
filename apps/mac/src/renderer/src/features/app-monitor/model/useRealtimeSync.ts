@@ -68,7 +68,6 @@ export const useRealtimeSync = () => {
   const reconnectTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const reconnectAttemptsRef = useRef(0);
   const isMountedRef = useRef(true);
-  const hasConnectedRef = useRef(false);
   const currentPresenceRef = useRef<PresenceStatus>(presenceStatus);
   const sentPresenceRef = useRef<PresenceStatus | null>(null);
 
@@ -135,7 +134,6 @@ export const useRealtimeSync = () => {
       }
 
       if (reconnectAttemptsRef.current >= MAX_RECONNECT_ATTEMPTS) {
-        markServiceUnavailable();
         return;
       }
 
@@ -175,7 +173,6 @@ export const useRealtimeSync = () => {
         socket.on("connect", () => {
           const reconnected = reconnectAttemptsRef.current > 0;
 
-          hasConnectedRef.current = true;
           clearReconnectTimer();
           clearServiceUnavailable();
           resetReconnectAttempts();
@@ -211,7 +208,7 @@ export const useRealtimeSync = () => {
             return;
           }
 
-          if (isServiceUnavailableError(error) || !hasConnectedRef.current) {
+          if (isServiceUnavailableError(error)) {
             clearReconnectTimer();
             markServiceUnavailable();
             return;
@@ -244,7 +241,6 @@ export const useRealtimeSync = () => {
 
     return () => {
       isMountedRef.current = false;
-      hasConnectedRef.current = false;
       clearReconnectTimer();
       resetReconnectAttempts();
       disconnect(true);
