@@ -1,153 +1,90 @@
-# Clash Client
+<p>
+  <img src="./docs/clash-background.svg" width="100%" alt="Clash" />
+</p>
 
-학습 기록 기반 경쟁 서비스 **Clash**의 Electron 데스크톱 클라이언트입니다.
+<h1>
+  <img src="./docs/assets/readme-title.svg" alt="Clash" />
+</h1>
 
-## 목차
+**학습 기록 기반 경쟁 애플리케이션, Clash**
 
-1. 프로젝트 개요
-2. 기술 스택
-3. 아키텍처
-4. 디렉토리 구조
-5. 시작하기
-6. 환경변수
-7. 주요 스크립트
-8. 개발 규칙
-9. 커밋 컨벤션
+Clash는 IDE 사용 시간과 GitHub 활동을 기반으로 개발 학습을 기록하고, 라이벌·그룹·로드맵을 통해 꾸준한 성장을 돕는 애플리케이션입니다.
 
-## 프로젝트 개요
+이 저장소는 Clash의 macOS 데스크톱 앱과 온보딩/인증 웹을 함께 관리하는 모노레포입니다.
 
-- **Architecture**: Electron + Renderer FSD
-- **License**: AGPL-3.0-with-Commons-Clause
-- **주요 기능**:
-    - 학습/경쟁 데이터 시각화
-    - GitHub/Electron OAuth 딥링크 로그인
-    - Socket.IO 기반 실시간 기능
-    - IDE 사용시간 모니터링
+## Service
 
-## 기술 스택
+- **학습 기록**: 날짜별 개발 시간, 할 일, GitHub 활동을 모아 학습 기록을 보여줍니다.
+- **로드맵**: 로드맵과 챕터 진행률을 통해 다음 학습 목표를 확인할 수 있습니다.
+- **경쟁**: 라이벌, 그룹, 랭킹을 통해 개인 학습 기록을 비교 가능한 지표로 보여줍니다.
+- **보상**: 학습 활동으로 얻은 재화를 상점과 프로필 꾸미기에 사용할 수 있습니다.
 
-### Core
+## Product Surface
 
-- Electron 39
-- React 19
-- TypeScript
-- react-router-dom 7
+| 영역 | 설명                                        |
+| --- |-------------------------------------------|
+| `apps/mac` | Electron 기반 macOS 데스크톱 클라이언트              |
+| `apps/web` | 온보딩, 다운로드, 인증을 담당하는 웹                     |
+| `packages/*` | 앱 공통 상수, 디자인 토큰, ESLint 설정, TypeScript 설정 |
 
-### Data & State
+## Features
 
-- React Query
-- Zustand
-- Axios
-- Socket.IO
-- react-hook-form
-- zod
+- **Home**: 오늘의 학습 현황, 주요 활동, 성장 상태 요약
+- **Record**: 날짜별 학습 기록과 할 일 관리
+- **Roadmap**: 전공/섹션/챕터 기반 학습 진행률 확인
+- **Competition**: 라이벌 등록 및 학습 기록 비교
+- **Group**: 그룹 단위 학습 기록 조회
+- **Shop**: 활동 보상 기반 상품 구매와 프로필 꾸미기
+- **Notification**: 서비스 공지와 사용자 알림
+- **App Monitor**: IDE 사용 시간 측정
 
-### UI
+## Tech Stack
 
-- styled-components
-- Chart.js + react-chartjs-2
+| 분류 | 기술                                  |
+| --- |-------------------------------------|
+| Desktop | Electron                            |
+| Frontend | React, TypeScript                   |
+| Server State | React Query, Axios                  |
+| Client State | Zustand                             |
+| Realtime | Socket.IO                           |
+| Form & Validation | react-hook-form, zod                |
+| UI | styled-components                   |
+| Workspace | pnpm, Turborepo                     |
 
-### Tooling
+## Architecture
 
-- electron-vite
-- electron-builder
-- ESLint + Prettier
-
-## 아키텍처
-
-```text
-Main Process (src/main)
-  └─ BrowserWindow, IPC, deep-link(clashapp://), AppMonitor
-       ↓ IPC
-Preload (src/preload)
-  └─ contextBridge로 window.api 노출
-       ↓
-Renderer (src/renderer/src)
-  └─ React + FSD + Router + React Query
-```
-
-### 프로세스 역할
-
-- `src/main`: 앱 생명주기/윈도우/IPC 핸들러 관리
-- `src/preload`: Renderer에 안전한 브릿지 API 제공
-- `src/renderer/src`: 화면 렌더링, 상태관리, API 호출
-
-### 핵심 흐름
-
-- **로그인**:
-    - 개발: 앱 내부 로그인 폼에서 인증 요청
-    - 프로덕션: 외부 브라우저 인증 후 `clashapp://` 딥링크로 앱 복귀
-- **AppMonitor**:
-    - 2초 주기 체크
-    - 5분 비활성 시 세션 종료
-
-## 디렉토리 구조
+Clash macOS 앱은 Electron의 `main`, `preload`, `renderer` 프로세스를 분리하고, Renderer는 FSD 구조로 관리합니다.
 
 ```text
-src/
-├── main/                # 윈도우, IPC, 딥링크, AppMonitor
-├── preload/             # contextBridge API (window.api)
-└── renderer/src/
-    ├── app/             # 앱 초기화, 전역 Provider, 라우팅/레이아웃
-    ├── pages/           # URL 기준 페이지 단위 화면 조합
-    ├── widgets/         # 페이지에서 재사용되는 큰 UI 블록
-    ├── features/        # 사용자 액션 중심 기능
-    ├── entities/        # 도메인 모델과 도메인 API 단위
-    └── shared/          # 공통 UI, 유틸, 설정, API 인프라
+apps/mac/src
+├── main                  # 앱 생명주기, BrowserWindow, IPC, 딥링크, 트레이, 업데이트
+├── preload               # contextBridge 기반 window.api 노출
+└── renderer/src
+    ├── app               # 앱 초기화, Provider, 전역 스타일, 레이아웃
+    ├── pages             # 라우트 단위 화면
+    ├── widgets           # 여러 페이지에서 재사용되는 큰 UI 블록
+    ├── features          # 사용자 액션 중심 기능
+    ├── entities          # 도메인 모델, 타입, API
+    └── shared            # 공통 UI, 유틸, API 인프라, 훅
 ```
 
-- FSD 의존성 방향: `app -> pages -> widgets -> features -> entities -> shared`
-- 하위 레이어는 상위 레이어를 import하지 않습니다.
-- 코드 배치 기준:
-    - 특정 페이지에서만 쓰는 조합이면 `pages`
-    - 여러 페이지에서 재사용되는 상호작용이면 `features`
-    - 비즈니스 도메인 데이터/타입/API면 `entities`
-    - 도메인과 무관한 범용 코드는 `shared`
-
-## 시작하기
-
-```bash
-pnpm install
-pnpm dev
-```
-
-개발 실행 시 `apps/mac/.env.development`를 사용하고, 프로덕션 빌드 시 `apps/mac/.env.production`를 사용합니다.
-필수 키 목록은 `apps/mac/.env.example`을 기준으로 맞추면 됩니다.
-
-개발 서버는 `https://local.clash.kr:5173`을 사용합니다.
-필요 시 `/etc/hosts`에 아래를 추가하세요.
+Renderer 레이어 의존성은 아래 방향을 유지합니다.
 
 ```text
-127.0.0.1 local.clash.kr
+app -> pages -> widgets -> features -> entities -> shared
 ```
 
-## 주요 스크립트
+## Repository Structure
 
-```bash
-# 개발 서버 실행
-pnpm dev
-
-# 정적 검사
-pnpm lint
-pnpm typecheck
-
-# 로컬 테스트 빌드
-pnpm build
+```text
+clash-client
+├── apps
+│   ├── mac               # macOS Electron 앱
+│   └── web               # 온보딩/인증 웹 앱
+├── packages
+│   ├── constants         # 런타임 공통 상수
+│   ├── design-tokens     # 테마, 팔레트, 폰트 토큰
+│   ├── eslint-config     # 공유 ESLint 설정
+│   └── tsconfig          # 공유 TypeScript 설정
+└── docs/assets           # README 전용 에셋
 ```
-
-## 개발 규칙
-
-- Renderer import는 `@/` alias 사용 (`@/* -> src/renderer/src/*`)
-- FSD 의존성 방향 유지: `app -> pages -> widgets -> features -> entities -> shared`
-- 스타일은 `styled-components` + theme token 우선
-- API 호출은 `src/renderer/src/shared/api/axios.ts` 인스턴스 사용
-- 401 응답 기본 동작은 `#/sign-in` 리다이렉트(인증 시작/교환 API 예외)
-
-## 커밋 컨벤션
-
-형식: `{type}: {subject}`
-
-허용 type:
-`feat`, `fix`, `hotfix`, `docs`, `style`, `refactor`, `test`, `chore`, `revert`, `delete`
-
-**마지막 업데이트**: 2026-03-21
