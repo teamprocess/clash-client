@@ -27,7 +27,7 @@ export const ProductDetailPanel = ({
 }: ProductDetailPanelProps) => {
   const originalPrice = selectedProduct.price.toLocaleString();
   const discountedPrice = calculateDiscountedPrice(selectedProduct.price, selectedProduct.discount);
-  const isPurchaseLimited = !selectedProduct.isAblePurchase;
+  const isPurchaseLimited = selectedProduct.isAblePurchase === false;
   const isPurchaseDisabled = selectedProduct.isBought || isPurchaseLimited;
   const purchaseButtonLabel = selectedProduct.isBought
     ? "이미 소유한 상품입니다."
