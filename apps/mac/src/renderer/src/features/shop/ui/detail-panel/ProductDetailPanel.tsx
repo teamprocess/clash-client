@@ -27,6 +27,18 @@ export const ProductDetailPanel = ({
 }: ProductDetailPanelProps) => {
   const originalPrice = selectedProduct.price.toLocaleString();
   const discountedPrice = calculateDiscountedPrice(selectedProduct.price, selectedProduct.discount);
+  const isPurchaseLimited = selectedProduct.isAblePurchase === false;
+  const isPurchaseDisabled = selectedProduct.isBought || isPurchaseLimited;
+  const purchaseButtonLabel = (() => {
+    switch (true) {
+      case selectedProduct.isBought:
+        return "이미 소유한 상품입니다.";
+      case isPurchaseLimited:
+        return "구매 제한 상품";
+      default:
+        return `${discountedPrice}에 구매하기`;
+    }
+  })();
 
   return (
     <S.DetailPanel>
@@ -61,9 +73,9 @@ export const ProductDetailPanel = ({
           </S.MajorInfoWrapper>
         </S.InfoContainer>
 
-        <S.PurchaseBtn $isBought={selectedProduct.isBought} onClick={handleOpenPurchase}>
-          {!selectedProduct.isBought && <S.CookieIcon />}
-          {selectedProduct.isBought ? "이미 소유한 상품입니다." : `${discountedPrice}에 구매하기`}
+        <S.PurchaseBtn $isDisabled={isPurchaseDisabled} onClick={handleOpenPurchase}>
+          {!isPurchaseDisabled && <S.CookieIcon />}
+          {purchaseButtonLabel}
         </S.PurchaseBtn>
       </S.DetailPanelSticky>
     </S.DetailPanel>

@@ -24,6 +24,7 @@ export interface Product {
   popularity: number;
   seasonName: string;
   isSeasonal: boolean;
+  isAblePurchase: boolean;
   createdAt: string;
   isBought: boolean;
 }
