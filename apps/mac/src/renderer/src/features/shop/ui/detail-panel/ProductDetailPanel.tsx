@@ -29,11 +29,16 @@ export const ProductDetailPanel = ({
   const discountedPrice = calculateDiscountedPrice(selectedProduct.price, selectedProduct.discount);
   const isPurchaseLimited = selectedProduct.isAblePurchase === false;
   const isPurchaseDisabled = selectedProduct.isBought || isPurchaseLimited;
-  const purchaseButtonLabel = selectedProduct.isBought
-    ? "이미 소유한 상품입니다."
-    : isPurchaseLimited
-      ? "구매 제한 상품"
-      : `${discountedPrice}에 구매하기`;
+  const purchaseButtonLabel = (() => {
+    switch (true) {
+      case selectedProduct.isBought:
+        return "이미 소유한 상품입니다.";
+      case isPurchaseLimited:
+        return "구매 제한 상품";
+      default:
+        return `${discountedPrice}에 구매하기`;
+    }
+  })();
 
   return (
     <S.DetailPanel>
