@@ -236,7 +236,7 @@ export const DescriptionTitle = styled.h3`
   ${font.body.medium};
 `;
 
-export const PurchaseBtn = styled.div<{ $isBought?: boolean }>`
+export const PurchaseBtn = styled.div<{ $isDisabled?: boolean }>`
   display: flex;
   height: 3rem;
   width: 100%;
@@ -245,9 +245,9 @@ export const PurchaseBtn = styled.div<{ $isBought?: boolean }>`
   justify-content: center;
   align-items: center;
   border-radius: 0.5rem;
-  background-color: ${({ theme, $isBought }) =>
-    $isBought ? theme.fill.neutral : theme.primary.normal};
+  background-color: ${({ theme, $isDisabled }) =>
+    $isDisabled ? theme.fill.neutral : theme.primary.normal};
   ${font.headline2.medium};
-  cursor: ${({ $isBought }) => ($isBought ? "default" : "pointer")};
-  pointer-events: ${({ $isBought }) => ($isBought ? "none" : "auto")};
+  cursor: ${({ $isDisabled }) => ($isDisabled ? "default" : "pointer")};
+  pointer-events: ${({ $isDisabled }) => ($isDisabled ? "none" : "auto")};
 `;
