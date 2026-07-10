@@ -1,11 +1,11 @@
-import React, { RefObject, useLayoutEffect, useMemo, useState } from "react";
+import { useLayoutEffect, useMemo, useState, type MouseEvent, type RefObject } from "react";
 import type { ActiveResponse, CategoryType } from "@/entities/competition";
 import { buildPaddedStreak } from "@/shared/lib";
 
 type GrassLevel = 0 | 1 | 2 | 3 | 4;
 
-const activeDropDownValue: { key: CategoryType; label: string }[] = [
-  { key: "GITHUB", label: "Github" },
+const activeDropdownOptions: { key: CategoryType; label: string }[] = [
+  { key: "GITHUB", label: "GitHub" },
   { key: "EXP", label: "EXP" },
   { key: "ACTIVE_TIME", label: "총 학습 시간" },
 ];
@@ -51,7 +51,7 @@ export const useActive = (
     value: 0,
   });
 
-  const showTooltip = (e: React.MouseEvent<HTMLDivElement>, date: string, value: number) => {
+  const showTooltip = (e: MouseEvent<HTMLDivElement>, date: string, value: number) => {
     const rect = e.currentTarget.getBoundingClientRect();
     setTooltip({ visible: true, x: rect.left + rect.width / 2, y: rect.top, date, value });
   };
@@ -68,7 +68,7 @@ export const useActive = (
   };
 
   return {
-    activeDropDownValue,
+    activeDropdownOptions,
     paddedStreaks,
     variations,
     getLevel,

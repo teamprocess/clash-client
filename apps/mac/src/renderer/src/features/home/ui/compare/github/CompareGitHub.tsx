@@ -1,4 +1,4 @@
-import * as S from "./CompareGithub.style";
+import * as S from "./CompareGitHub.style";
 import { GrowthRate, Tooltip } from "@/shared/ui";
 import type { CompareResponse } from "@/entities/competition";
 import { getCountLabel } from "@/shared/lib";
@@ -21,7 +21,7 @@ const renderRepositoryName = (
   );
 };
 
-export const Github = ({ today, yesterday }: CompareResponse) => {
+export const GitHub = ({ today, yesterday }: CompareResponse) => {
   const yesterdayCommitCount = yesterday?.commit.count ?? 0;
   const yesterdayPullRequestCount = yesterday?.pullRequest.count ?? 0;
   const yesterdayIssueCount = yesterday?.issue.count ?? 0;
@@ -46,7 +46,7 @@ export const Github = ({ today, yesterday }: CompareResponse) => {
           <S.InfoContent>
             <S.InfoTitle>커밋 수</S.InfoTitle>
             <S.CalculateBox>
-              <S.GithubInfoBox>
+              <S.GitHubInfoBox>
                 <S.GitCommitIcon />
                 <S.InfoSubtitleBox>
                   <S.CountText>{yesterdayCommitCount}</S.CountText>
@@ -54,7 +54,7 @@ export const Github = ({ today, yesterday }: CompareResponse) => {
                     {getCountLabel(yesterdayCommitCount, "Commit", "Commits")}
                   </S.InfoSubtitle>
                 </S.InfoSubtitleBox>
-              </S.GithubInfoBox>
+              </S.GitHubInfoBox>
               <S.CalculateContainer>
                 <S.CalculateInfoBox>
                   <S.FireIcon />
@@ -89,7 +89,7 @@ export const Github = ({ today, yesterday }: CompareResponse) => {
           <S.InfoContent $mb="1rem">
             <S.InfoTitle>PR 수</S.InfoTitle>
             <S.CalculateBox>
-              <S.GithubInfoBox>
+              <S.GitHubInfoBox>
                 <S.GitPRIcon />
                 <S.InfoSubtitleBox>
                   <S.CountText>{yesterdayPullRequestCount}</S.CountText>
@@ -97,7 +97,7 @@ export const Github = ({ today, yesterday }: CompareResponse) => {
                     {getCountLabel(yesterdayPullRequestCount, "Pull Request", "Pull Requests")}
                   </S.InfoSubtitle>
                 </S.InfoSubtitleBox>
-              </S.GithubInfoBox>
+              </S.GitHubInfoBox>
               <S.CalculateContainer>
                 <S.CalculateInfoBox>
                   <S.FireIcon />
@@ -160,7 +160,7 @@ export const Github = ({ today, yesterday }: CompareResponse) => {
             <S.CalculateBox>
               <S.GrowthBox>
                 <S.RateBox>
-                  <S.GithubInfoBox>
+                  <S.GitHubInfoBox>
                     <S.GitCommitIcon />
                     <S.InfoSubtitleBox>
                       <S.CountText>{todayCommitCount}</S.CountText>
@@ -168,7 +168,7 @@ export const Github = ({ today, yesterday }: CompareResponse) => {
                         {getCountLabel(todayCommitCount, "Commit", "Commits")}
                       </S.InfoSubtitle>
                     </S.InfoSubtitleBox>
-                  </S.GithubInfoBox>
+                  </S.GitHubInfoBox>
                   <GrowthRate yesterday={yesterdayCommitCount} today={todayCommitCount} />
                 </S.RateBox>
               </S.GrowthBox>
@@ -207,7 +207,7 @@ export const Github = ({ today, yesterday }: CompareResponse) => {
             <S.CalculateBox>
               <S.GrowthBox>
                 <S.RateBox>
-                  <S.GithubInfoBox>
+                  <S.GitHubInfoBox>
                     <S.GitPRIcon />
                     <S.InfoSubtitleBox>
                       <S.CountText>{todayPullRequestCount}</S.CountText>
@@ -215,7 +215,7 @@ export const Github = ({ today, yesterday }: CompareResponse) => {
                         {getCountLabel(todayPullRequestCount, "Pull Request", "Pull Requests")}
                       </S.InfoSubtitle>
                     </S.InfoSubtitleBox>
-                  </S.GithubInfoBox>
+                  </S.GitHubInfoBox>
                   <GrowthRate yesterday={yesterdayPullRequestCount} today={todayPullRequestCount} />
                 </S.RateBox>
               </S.GrowthBox>

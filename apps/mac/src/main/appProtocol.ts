@@ -29,8 +29,7 @@ protocol.registerSchemesAsPrivileged([
 
 const getRendererDistPath = () => join(__dirname, "../renderer");
 
-const getRendererIndexUrl = () =>
-  `${APP_PROTOCOL_SCHEME}://${APP_PROTOCOL_HOST}/${APP_INDEX_PATH}`;
+const getRendererIndexUrl = () => `${APP_PROTOCOL_SCHEME}://${APP_PROTOCOL_HOST}/${APP_INDEX_PATH}`;
 const getRendererIndexPath = () => join(getRendererDistPath(), APP_INDEX_PATH);
 const getContentType = (filePath: string) =>
   CONTENT_TYPES[extname(filePath)] ?? "application/octet-stream";
@@ -40,7 +39,9 @@ const resolveRendererAssetPath = (requestUrl: string) => {
   const url = new URL(requestUrl);
   const requestedPath = decodeURIComponent(url.pathname);
   const relativePath =
-    requestedPath === "/" || requestedPath === "" ? APP_INDEX_PATH : requestedPath.replace(/^\/+/, "");
+    requestedPath === "/" || requestedPath === ""
+      ? APP_INDEX_PATH
+      : requestedPath.replace(/^\/+/, "");
   const rendererDistPath = getRendererDistPath();
   const resolvedPath = normalize(join(rendererDistPath, relativePath));
   const rendererDistPrefix = `${rendererDistPath}${sep}`;

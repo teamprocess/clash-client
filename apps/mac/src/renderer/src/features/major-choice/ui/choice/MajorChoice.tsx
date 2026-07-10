@@ -1,5 +1,5 @@
 import * as S from "./MajorChoice.style";
-import { MajorProps } from "@/features/major-choice/model/useMajorChoice";
+import type { MajorProps } from "@/features/major-choice/model/useMajorChoice";
 import { Button } from "@/shared/ui/button";
 import { ChoiceBox } from "@/features/major-choice/ui/choice-box/ChoiceBox";
 import { Major } from "@/entities/major";

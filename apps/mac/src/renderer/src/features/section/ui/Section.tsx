@@ -2,7 +2,11 @@ import * as S from "./Section.style";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState, type ReactNode } from "react";
 import { PreviewModal } from "@/features/section/components/PreviewModal";
-import { MajorEnum, useMajorSectionQuery, type section } from "@/entities/roadmap";
+import {
+  MajorEnum,
+  useMajorSectionQuery,
+  type Section as RoadmapSection,
+} from "@/entities/roadmap";
 import { useGetMyProfile } from "@/entities/user";
 import { SectionItemBox } from "../components/SectionItemBox";
 import { useDragScroll } from "@/shared/lib/useDragScroll";
@@ -37,7 +41,7 @@ export const Section = ({ children }: SectionProps) => {
     navigate("/roadmap/major-choice");
   };
 
-  const handleClick = (item: section) => {
+  const handleClick = (item: RoadmapSection) => {
     setSelectedSectionId(item.id);
     setIsSelectedSectionLocked(item.locked);
     setIsTutorialModalOpen(true);

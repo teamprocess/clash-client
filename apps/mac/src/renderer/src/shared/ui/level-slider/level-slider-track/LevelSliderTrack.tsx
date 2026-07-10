@@ -1,17 +1,22 @@
 import * as S from "./LevelSliderTrack.style";
 import { LevelSliderField } from "@/shared/ui/level-slider/level-slider-field/LevelSliderField";
 import { DEFAULT_LEVELS } from "@/shared/ui/level-slider/constants";
-import { LEVEL_ENUM } from "@/shared/ui/level-slider/types";
-import { Dispatch, SetStateAction } from "react";
+import type { LevelSliderValue } from "@/shared/ui/level-slider/types";
+import type { Dispatch, SetStateAction } from "react";
 
 interface LevelSliderTrackProps {
-  selectedLevel?: LEVEL_ENUM;
-  hoverLevel?: LEVEL_ENUM;
-  setHoverLevel: Dispatch<SetStateAction<LEVEL_ENUM | undefined>>;
-  onSelectLevel: (value?: LEVEL_ENUM) => void;
+  selectedLevel?: LevelSliderValue;
+  hoverLevel?: LevelSliderValue;
+  setHoverLevel: Dispatch<SetStateAction<LevelSliderValue | undefined>>;
+  onSelectLevel: (value?: LevelSliderValue) => void;
 }
 
-export const LevelSliderTrack = ({ selectedLevel, hoverLevel, setHoverLevel, onSelectLevel }: LevelSliderTrackProps) => {
+export const LevelSliderTrack = ({
+  selectedLevel,
+  hoverLevel,
+  setHoverLevel,
+  onSelectLevel,
+}: LevelSliderTrackProps) => {
   return (
     <S.LevelSliderTrackWrapper>
       {DEFAULT_LEVELS.map((level, idx) => (

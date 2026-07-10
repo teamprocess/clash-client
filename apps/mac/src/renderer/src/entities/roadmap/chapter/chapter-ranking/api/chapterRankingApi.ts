@@ -1,5 +1,6 @@
-import { api, ApiResponse } from "@/shared/api";
-import { GetChapterRankingsResponse } from "../model/chapterRanking.types";
+import type { ApiResponse } from "@/shared/api";
+import { api } from "@/shared/api";
+import type { GetChapterRankingsResponse } from "../model/chapterRanking.types";
 
 export const rankingApi = {
   // 챕터 랭킹 조회

@@ -1,4 +1,5 @@
-import { useRef, type ChangeEvent, type KeyboardEvent, type ClipboardEvent } from "react";
+import { useRef } from "react";
+import type { ChangeEvent, ClipboardEvent, KeyboardEvent } from "react";
 import { useController } from "react-hook-form";
 import { useLocation } from "react-router-dom";
 import * as S from "./EmailVerify.style";

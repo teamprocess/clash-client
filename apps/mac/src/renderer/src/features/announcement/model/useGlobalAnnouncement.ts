@@ -21,7 +21,8 @@ export const useGlobalAnnouncement = () => {
     return (
       sortAnnouncements(announcements).find(
         announcement =>
-          !dismissedAnnouncementIds.includes(announcement.id) && !isAnnouncementHidden(announcement.id)
+          !dismissedAnnouncementIds.includes(announcement.id) &&
+          !isAnnouncementHidden(announcement.id)
       ) ?? null
     );
   }, [announcements, dismissedAnnouncementIds]);

@@ -1,4 +1,4 @@
-import * as S from "./MiniGame.styles";
+import * as S from "./MiniGame.style";
 import { useMiniGame } from "../model/useMiniGame";
 
 export const MiniGame = () => {

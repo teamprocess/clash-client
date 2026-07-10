@@ -1,4 +1,4 @@
-export const expTooltipContent = `Github (1시간 간격으로 반영)
+export const expTooltipContent = `GitHub (1시간 간격으로 반영)
 
 커밋: 1개당 50점 (최대 50개)
 리뷰: 1개당 100점 (최대 5개)

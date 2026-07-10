@@ -1,14 +1,17 @@
-import { LEVEL_ENUM } from "@/shared/ui/level-slider/types";
+import type { LevelSliderValue } from "@/shared/ui/level-slider/types";
 
 interface Thumb {
   step: number;
   isActive: boolean;
 }
-type FieldLevelToThumbsFunction = (level: LEVEL_ENUM, selectedLevel?: LEVEL_ENUM) => Thumb[];
+type FieldLevelToThumbsFunction = (
+  level: LevelSliderValue,
+  selectedLevel?: LevelSliderValue
+) => Thumb[];
 
 export const fieldLevelToThumbs: FieldLevelToThumbsFunction = (
-  level: LEVEL_ENUM,
-  selectedLevel?: LEVEL_ENUM
+  level: LevelSliderValue,
+  selectedLevel?: LevelSliderValue
 ) => {
   // 특정 field에 포함되는 thumbs 3개의 각 step을 저장
   let thumbs: Thumb[] = [];

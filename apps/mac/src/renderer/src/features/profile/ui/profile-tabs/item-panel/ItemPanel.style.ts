@@ -1,9 +1,6 @@
 import styled from "styled-components";
 import { font, palette } from "@clash/design-tokens";
-import {
-  createNameplateOverlayTuningCss,
-  nameplateFrameCss,
-} from "@/shared/lib";
+import { createNameplateOverlayTuningCss, nameplateFrameCss } from "@/shared/lib";
 import { defaultProfileImageDark } from "@/shared/ui";
 
 const itemCardNameplateTuningCss = createNameplateOverlayTuningCss({

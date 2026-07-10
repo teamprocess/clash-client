@@ -2,18 +2,18 @@ import * as S from "./LevelSlider.style";
 import { LevelSliderTrack } from "@/shared/ui/level-slider/level-slider-track/LevelSliderTrack";
 import { LevelSliderLabels } from "@/shared/ui/level-slider/level-slider-labels/LevelSliderLabels";
 import { useState } from "react";
-import { LEVEL_ENUM } from "@/shared/ui/level-slider/types";
+import type { LevelSliderValue } from "@/shared/ui/level-slider/types";
 
 interface LevelSliderProps {
   labels: string[];
-  selectedLevel?: LEVEL_ENUM;
-  onChange?: (value?: LEVEL_ENUM) => void;
+  selectedLevel?: LevelSliderValue;
+  onChange?: (value?: LevelSliderValue) => void;
 }
 
 export const LevelSlider = ({ labels, selectedLevel, onChange }: LevelSliderProps) => {
-  const [hoverLevel, setHoverLevel] = useState<LEVEL_ENUM | undefined>(undefined);
+  const [hoverLevel, setHoverLevel] = useState<LevelSliderValue | undefined>(undefined);
 
-  const handleSelectLevel = (value?: LEVEL_ENUM) => {
+  const handleSelectLevel = (value?: LevelSliderValue) => {
     onChange?.(value);
   };
 

@@ -1,4 +1,5 @@
-import { app, BrowserWindow } from "electron";
+import type { BrowserWindow } from "electron";
+import { app } from "electron";
 import { resolve } from "path";
 import { APP_RUNTIME_PROFILE } from "../runtimeProfile";
 

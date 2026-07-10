@@ -1,8 +1,4 @@
-import {
-  useRankingDomain,
-  rankingDropDownValue,
-  rankingPeriodDropDownValue,
-} from "./useRankingDomain";
+import { useRankingDomain, rankingDropdownOptions, rankingPeriodOptions } from "./useRankingDomain";
 import { useRankingView } from "./useRankingView";
 import type { CategoryType } from "@/entities/ranking";
 import { formatTime } from "@/shared/lib";
@@ -18,10 +14,10 @@ export const useRanking = () => {
   const domain = useRankingDomain();
   const view = useRankingView({ rankings: domain.userList.rankings });
 
-  const unit = unitMap[domain.RankingDropdown];
+  const unit = unitMap[domain.rankingCategory];
 
   const formatActiveRankingPoint = (value: number) => {
-    if (domain.RankingDropdown === "ACTIVE_TIME") {
+    if (domain.rankingCategory === "ACTIVE_TIME") {
       return formatTime(value);
     }
     return value.toLocaleString();
@@ -32,15 +28,15 @@ export const useRanking = () => {
     currentUserRef: view.currentUserRef,
 
     options: {
-      rankingDropDownValue,
-      rankingPeriodDropDownValue,
+      rankingDropdownOptions,
+      rankingPeriodOptions,
     },
 
     filters: {
-      RankingDropdown: domain.RankingDropdown,
-      setRankingDropdown: domain.setRankingDropdown,
-      RankingPeriodDropdown: domain.RankingPeriodDropdown,
-      setRankingPeriodDropdown: domain.setRankingPeriodDropdown,
+      rankingCategory: domain.rankingCategory,
+      setRankingCategory: domain.setRankingCategory,
+      rankingPeriod: domain.rankingPeriod,
+      setRankingPeriod: domain.setRankingPeriod,
     },
 
     domain: {

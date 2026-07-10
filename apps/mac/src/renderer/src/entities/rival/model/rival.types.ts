@@ -1,4 +1,4 @@
-type UserType = {
+type RivalUser = {
   id: number;
   username: string;
   name: string;
@@ -7,7 +7,7 @@ type UserType = {
 };
 
 export type RivalUsersResponse = {
-  users: UserType[];
+  users: RivalUser[];
 };
 
 export type RivalSignAllResponse = {
@@ -20,10 +20,10 @@ export type RivalSignAllResponse = {
   }[];
 };
 
-export type IdType = {
+export type RivalId = {
   id: number;
 };
 
 export type RivalApplyRequest = {
-  ids: IdType[];
+  ids: RivalId[];
 };

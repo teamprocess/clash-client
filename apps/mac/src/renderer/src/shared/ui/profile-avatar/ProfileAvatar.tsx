@@ -1,4 +1,5 @@
-import { ReactNode, SyntheticEvent, useEffect, useState } from "react";
+import type { ReactNode, SyntheticEvent } from "react";
+import { useEffect, useState } from "react";
 import * as S from "./ProfileAvatar.style";
 
 export interface ProfileAvatarProps {

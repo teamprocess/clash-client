@@ -17,7 +17,7 @@ export const BannerImage = styled.div`
   aspect-ratio: 2384 / 480;
   border-radius: 1rem;
   background-color: ${({ theme }) => theme.fill.neutral};
-  background-image: url('https://cdn.clash.kr/shop/season/banner.png');
+  background-image: url("https://cdn.clash.kr/shop/season/banner.png");
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;

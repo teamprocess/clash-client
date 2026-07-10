@@ -1,4 +1,5 @@
-import { api, ApiResponse } from "@/shared/api";
+import type { ApiResponse } from "@/shared/api";
+import { api } from "@/shared/api";
 import type {
   GetChapterResultResponse,
   GetChapterDetailsRequest,

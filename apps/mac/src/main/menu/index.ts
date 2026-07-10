@@ -13,7 +13,9 @@ const createViewMenu = (): MenuItemConstructorOptions => ({
   submenu: [
     { role: "reload" },
     { role: "forceReload" },
-    ...(IS_DEV_CHANNEL ? ([{ role: "toggleDevTools" }] satisfies MenuItemConstructorOptions[]) : []),
+    ...(IS_DEV_CHANNEL
+      ? ([{ role: "toggleDevTools" }] satisfies MenuItemConstructorOptions[])
+      : []),
     { type: "separator" },
     {
       label: "100%",

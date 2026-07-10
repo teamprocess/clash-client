@@ -1,10 +1,7 @@
 import styled from "styled-components";
 import AddProfileImg from "../../assets/add-profile-img-icon.svg";
 import ChangeProfileImg from "../../assets/change-profile-img-icon.svg";
-import {
-  createNameplateOverlayTuningCss,
-  nameplateFrameCss,
-} from "@/shared/lib";
+import { createNameplateOverlayTuningCss, nameplateFrameCss } from "@/shared/lib";
 import { ProfileAvatar } from "@/shared/ui/profile-avatar";
 import { font } from "@clash/design-tokens";
 

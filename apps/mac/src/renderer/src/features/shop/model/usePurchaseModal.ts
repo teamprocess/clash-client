@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import axios from "axios";
 
-import { Product } from "@/entities/product";
+import type { Product } from "@/entities/product";
 import { calculateDiscountedPrice } from "@/features/shop/lib/calculateDiscountedPrice";
 
 type Step = "confirm" | "success";

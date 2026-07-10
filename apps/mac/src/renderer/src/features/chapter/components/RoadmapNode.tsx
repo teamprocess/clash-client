@@ -1,5 +1,5 @@
 import * as S from "../components/RoadmapNode.style";
-import { Node } from "@/features/chapter/roadmapData";
+import type { Node } from "@/features/chapter/roadmapData";
 
 interface RoadmapNodeProps {
   node: Node;

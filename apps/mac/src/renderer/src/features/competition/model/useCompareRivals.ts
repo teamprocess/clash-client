@@ -1,37 +1,35 @@
 import { useState, useMemo } from "react";
 import {
-  CategoryType,
-  PeriodType,
-  RivalCompeteUser,
   useCompareRivalsQuery,
   CATEGORY,
   PERIOD,
+  type CategoryType,
+  type PeriodType,
+  type RivalCompeteUser,
 } from "@/entities/competition";
 import { useGetMyProfile } from "@/entities/user";
 
 export const colorsOfMultiLine: string[] = ["#FFF", "#0081CC", "#C60608", "#15B756", "#FFCC01"];
 
-const competitionDropDownValue: { key: CategoryType; label: string }[] = [
+const competitionDropdownOptions: { key: CategoryType; label: string }[] = [
   { key: "EXP", label: "EXP" },
-  { key: "GITHUB", label: "Github" },
+  { key: "GITHUB", label: "GitHub" },
   { key: "ACTIVE_TIME", label: "총 학습 시간" },
 ];
 
-const competitionPeriodDropDownValue: { key: PeriodType; label: string }[] = [
+const competitionPeriodOptions: { key: PeriodType; label: string }[] = [
   { key: "DAY", label: "일별" },
   { key: "WEEK", label: "주별" },
   { key: "MONTH", label: "월별" },
 ];
 
-export const useCompareRival = () => {
+export const useCompareRivals = () => {
   const [competitionDropdown, setCompetitionDropdown] = useState<CategoryType>(CATEGORY.EXP);
-  const [competitionPeriodDropDown, setCompetitionPeriodDropDown] = useState<PeriodType>(
-    PERIOD.DAY
-  );
+  const [competitionPeriod, setCompetitionPeriod] = useState<PeriodType>(PERIOD.DAY);
 
   const { data: compareRivalsResponse, isLoading } = useCompareRivalsQuery(
     competitionDropdown,
-    competitionPeriodDropDown
+    competitionPeriod
   );
 
   const { data: myProfile } = useGetMyProfile();
@@ -124,10 +122,10 @@ export const useCompareRival = () => {
     isLoading,
     competitionDropdown,
     setCompetitionDropdown,
-    competitionPeriodDropDown,
-    setCompetitionPeriodDropDown,
-    competitionDropDownValue,
-    competitionPeriodDropDownValue,
+    competitionPeriod,
+    setCompetitionPeriod,
+    competitionDropdownOptions,
+    competitionPeriodOptions,
     buildMultiLineData,
   };
 };

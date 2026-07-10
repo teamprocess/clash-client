@@ -1,6 +1,6 @@
 import * as S from "./ChapterRanking.style";
 import { useChapterRanking } from "@/features/chapter-ranking/model/useChapterRanking";
-import { RankingPageEnum } from "./ChapterRanking.style";
+import type { RankingPageEnum } from "./ChapterRanking.style";
 import { QuestionTooltip } from "@/shared/ui";
 import { chapterRankingTooltipContent } from "../constants/chapterRanking.constants";
 

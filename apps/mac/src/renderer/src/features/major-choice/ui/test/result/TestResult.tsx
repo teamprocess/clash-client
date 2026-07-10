@@ -1,5 +1,5 @@
 import * as S from "./TestResult.style";
-import { ResultProps } from "@/features/major-choice/model/useMajorChoice";
+import type { ResultProps } from "@/features/major-choice/model/useMajorChoice";
 import { Button } from "@/shared/ui/button";
 import { Major } from "@/entities/major";
 

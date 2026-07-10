@@ -6,7 +6,7 @@ import Competition from "./assets/competition.svg";
 import Record from "./assets/record.svg";
 import Group from "./assets/group.svg";
 import Shop from "./assets/shop.svg";
-import RoadMap from "./assets/roadmap.svg";
+import Roadmap from "./assets/roadmap.svg";
 import { Link } from "react-router-dom";
 
 export const SidebarContainer = styled.aside<{ $isOpen: boolean }>`
@@ -130,4 +130,4 @@ export const CompetitionIcon = styled(Competition)``;
 export const RecordIcon = styled(Record)``;
 export const GroupIcon = styled(Group)``;
 export const ShopIcon = styled(Shop)``;
-export const RoadMapIcon = styled(RoadMap)``;
+export const RoadmapIcon = styled(Roadmap)``;

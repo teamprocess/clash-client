@@ -1,9 +1,9 @@
 import { useMemo } from "react";
-import { GithubInfo } from "@/features/profile/ui/profile-tabs/github-info/GithubInfo";
-import { GithubStreak } from "@/features/profile/ui/profile-tabs/github-streak/GithubStreak";
-import { useProfileGithubDetailQuery } from "@/entities/profile";
-import { useProfileGithubStreak } from "@/features/profile/model/useProfileTabs";
-import * as S from "./GithubActivityPanel.style";
+import { GitHubInfo } from "@/features/profile/ui/profile-tabs/github-info/GitHubInfo";
+import { GitHubStreak } from "@/features/profile/ui/profile-tabs/github-streak/GitHubStreak";
+import { useProfileGitHubDetailQuery } from "@/entities/profile";
+import { useProfileGitHubStreak } from "@/features/profile/model/useProfileTabs";
+import * as S from "./GitHubActivityPanel.style";
 
 const formatKoreanDate = (ymd: string) => {
   const [y, m, d] = ymd.split("-");
@@ -11,15 +11,15 @@ const formatKoreanDate = (ymd: string) => {
   return `${Number(y)}년 ${Number(m)}월 ${Number(d)}일`;
 };
 
-export const GithubActivityPanel = () => {
+export const GitHubActivityPanel = () => {
   const { paddedDaysForView, getLevel, selectedId, selectedDay, handleGrassClick } =
-    useProfileGithubStreak();
+    useProfileGitHubStreak();
 
   const selectedDate = typeof selectedDay?.id === "string" ? selectedDay.id : null;
   const hasSelection = Boolean(selectedDate);
   const fallbackCount = selectedDay?.count ?? 0;
 
-  const detailQuery = useProfileGithubDetailQuery(selectedDate);
+  const detailQuery = useProfileGitHubDetailQuery(selectedDate);
   const detail = detailQuery.data?.data;
   const matchedDetail = detail?.date === selectedDate ? detail : null;
   const displayDetail = matchedDetail ?? (detailQuery.isPlaceholderData && detail ? detail : null);
@@ -58,13 +58,13 @@ export const GithubActivityPanel = () => {
     : detailQuery.isError
       ? "잠시 후 다시 시도해보세요."
       : detailQuery.isFetching || detailQuery.isLoading
-        ? "선택한 날짜의 Github 활동 정보를 가져오고 있어요."
-        : "선택한 날짜의 상세 Github 활동 정보가 아직 없습니다.";
+        ? "선택한 날짜의 GitHub 활동 정보를 가져오고 있어요."
+        : "선택한 날짜의 상세 GitHub 활동 정보가 아직 없습니다.";
 
   return (
     <S.Panel>
       <S.StreakSection>
-        <GithubStreak
+        <GitHubStreak
           paddedDaysForView={paddedDaysForView}
           getLevel={getLevel}
           selectedId={selectedId}
@@ -73,7 +73,7 @@ export const GithubActivityPanel = () => {
       </S.StreakSection>
 
       <S.InfoSection>
-        <GithubInfo
+        <GitHubInfo
           {...infoProps}
           showSummary={hasSelection}
           hasDetail={Boolean(selectedDate && displayDetail)}

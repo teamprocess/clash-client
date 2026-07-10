@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import * as S from "./ProductCard.style";
 import { calculateDiscountedPrice } from "@/features/shop/lib/calculateDiscountedPrice";
-import { ProductCategory } from "@/entities/product";
+import type { ProductCategory } from "@/entities/product";
 import { ProductPreview } from "../product-preview/ProductPreview";
 
 interface ProductCardProps {

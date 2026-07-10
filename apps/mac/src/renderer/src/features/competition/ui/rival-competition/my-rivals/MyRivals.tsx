@@ -1,8 +1,9 @@
 import * as S from "./MyRivals.style";
 import { formatTime, resolveUsingApp, useRealtimeRivalActiveTime } from "@/shared/lib";
-import { MyRivalsRequest, MyRivalsResponse, USER_STATUS_LABELS } from "@/entities/rival";
+import type { MyRivalsRequest, MyRivalsResponse } from "@/entities/rival";
+import { USER_STATUS_LABELS } from "@/entities/rival";
 import { DefaultProfileIcon, QuestionTooltip, RankTier, Tooltip } from "@/shared/ui";
-import { IdeIcons } from "@/shared/ui/assets/ide-img";
+import { IDEIcons } from "@/shared/ui/assets/ide-img";
 
 interface MyRivalsProps {
   data: MyRivalsResponse;
@@ -15,7 +16,7 @@ const RivalRow = ({ user }: { user: MyRivalsRequest }) => {
     isStudying: user.isStudying,
   });
   const resolvedApp = user.status === "ONLINE" ? resolveUsingApp(user.usingApp) : null;
-  const Icon = resolvedApp ? IdeIcons[resolvedApp.id as keyof typeof IdeIcons] : null;
+  const Icon = resolvedApp ? IDEIcons[resolvedApp.id as keyof typeof IDEIcons] : null;
 
   return (
     <S.ProfileContainer>

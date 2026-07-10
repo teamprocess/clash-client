@@ -6,9 +6,9 @@ export {
   MajorEnum,
 } from "./section";
 export type {
-  getAllSectionsResponse,
-  getMajorSectionRequest,
-  section,
+  GetAllSectionsResponse,
+  GetMajorSectionRequest,
+  Section,
   GetSectionPreviewResponse,
   PreviewChapter,
   PreviewData,

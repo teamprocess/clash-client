@@ -1,13 +1,13 @@
 import { useState } from "react";
 import {
-  CompareStandard,
-  GrowthRateStandard,
   useMyCompareQuery,
   useMyGrowthRateQuery,
+  type AnalyzeCategory,
+  type CompareStandard,
+  type GrowthRateStandard,
 } from "@/entities/competition";
-import type { AnalyzeCategory } from "@/entities/competition";
 
-const competitionDropDownValue: { key: CompareStandard; label: string }[] = [
+const competitionDropdownOptions: { key: CompareStandard; label: string }[] = [
   { key: "YESTERDAY", label: "어제" },
   { key: "LAST_WEEK", label: "최근 일주일 평균" },
   { key: "LAST_MONTH", label: "최근 한 달 평균" },
@@ -21,7 +21,7 @@ const growthRatePeriodOptions: { key: GrowthRateStandard; label: string }[] = [
 
 const growthRateCategoryOptions: { key: AnalyzeCategory; label: string }[] = [
   { key: "EXP", label: "EXP" },
-  { key: "GITHUB", label: "Github" },
+  { key: "GITHUB", label: "GitHub" },
   { key: "ACTIVE_TIME", label: "학습 시간" },
 ];
 
@@ -51,7 +51,7 @@ export const useMyCompetition = () => {
 
     competitionDropdown,
     setCompetitionDropdown,
-    competitionDropDownValue,
+    competitionDropdownOptions,
 
     growthRatePeriod,
     setGrowthRatePeriod,
