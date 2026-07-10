@@ -16,7 +16,9 @@
     "start": "pnpm --filter @clash/mac start",
     "start:mac": "pnpm --filter @clash/mac start",
     "start:web": "pnpm --filter @clash/web start",
-    "lint": "turbo run lint",
+    "lint": "pnpm run lint:fsd && turbo run lint",
+    "lint:fsd": "node scripts/check-fsd-boundaries.mjs",
+    "lint:fsd:report": "node scripts/check-fsd-boundaries.mjs --report",
     "typecheck": "turbo run typecheck",
     "test": "turbo run test"
   },
