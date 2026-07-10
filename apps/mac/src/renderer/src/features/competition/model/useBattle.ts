@@ -1,4 +1,13 @@
 import { useState, useRef } from "react";
+import type {
+  BattleResponse,
+  BattleDetailResponse,
+  AnalyzeBattleResponse,
+  AnalyzeCategory,
+  BattleListResponse,
+  PeriodDay,
+  MATCH_VALUE,
+} from "@/entities/competition";
 import {
   battleApi,
   battleQueryKeys,
@@ -6,13 +15,6 @@ import {
   useBattleDetailQuery,
   useAnalyzeBattleQuery,
   useBattleListQuery,
-  BattleResponse,
-  BattleDetailResponse,
-  AnalyzeBattleResponse,
-  AnalyzeCategory,
-  BattleListResponse,
-  PeriodDay,
-  MATCHVALUE,
 } from "@/entities/competition";
 import { getErrorMessage, queryClient } from "@/shared/lib";
 import { useBattleApplyListQuery } from "@/entities/competition";
@@ -79,7 +81,7 @@ export const useBattle = () => {
   const isRivalHigher =
     myAnalyzeRate !== null && rivalAnalyzeRate !== null ? rivalAnalyzeRate > myAnalyzeRate : false;
 
-  const judgeUpperHand = (result: (typeof MATCHVALUE)[keyof typeof MATCHVALUE]): string => {
+  const judgeUpperHand = (result: (typeof MATCH_VALUE)[keyof typeof MATCH_VALUE]): string => {
     return JUDGE_UPPER_HAND_MAP[result] ?? "대기 중";
   };
 

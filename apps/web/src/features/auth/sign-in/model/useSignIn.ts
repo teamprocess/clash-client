@@ -12,7 +12,7 @@ const signInSchema = z.object({
   password: z.string().min(8, "비밀번호를 입력하세요."),
 });
 
-type SignInForm = z.infer<typeof signInSchema>;
+type SignInFormData = z.infer<typeof signInSchema>;
 
 export const useSignIn = () => {
   const { executeRecaptcha } = useGoogleReCaptcha();
@@ -25,7 +25,7 @@ export const useSignIn = () => {
     handleSubmit,
     formState: { errors, isSubmitting },
     setError,
-  } = useForm<SignInForm>({
+  } = useForm<SignInFormData>({
     resolver: zodResolver(signInSchema),
   });
 
@@ -38,7 +38,7 @@ export const useSignIn = () => {
     }
   }, [state, redirectUri, setError]);
 
-  const onSubmit = async (data: SignInForm) => {
+  const onSubmit = async (data: SignInFormData) => {
     try {
       if (!state || !redirectUri) {
         setError("root", {

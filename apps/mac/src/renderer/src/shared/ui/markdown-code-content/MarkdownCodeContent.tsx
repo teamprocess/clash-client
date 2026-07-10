@@ -1,4 +1,4 @@
-import { CSSProperties, ReactNode } from "react";
+import type { CSSProperties, ReactNode } from "react";
 import { font } from "@clash/design-tokens/font";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { oneDark, oneLight } from "react-syntax-highlighter/dist/esm/styles/prism";
@@ -236,11 +236,7 @@ export const MarkdownCodeContent = ({
         }
 
         renderedNodes.push(
-          <TextBlock
-            key={`text-${segmentIndex}-${paragraphIndex}`}
-            $variant={variant}
-            $size={size}
-          >
+          <TextBlock key={`text-${segmentIndex}-${paragraphIndex}`} $variant={variant} $size={size}>
             {shouldRenderPrefix ? <PrefixSlot>{prefix}</PrefixSlot> : null}
             {paragraph}
           </TextBlock>

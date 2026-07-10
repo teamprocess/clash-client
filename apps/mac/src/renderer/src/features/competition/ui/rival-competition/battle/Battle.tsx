@@ -1,7 +1,8 @@
 import { useState } from "react";
 import * as S from "./Battle.style";
 import { Button, DefaultProfileIcon, Dialog, Select, SlideSelector } from "@/shared/ui";
-import { AnalyzeCategory, MATCHVALUE } from "@/entities/competition";
+import type { AnalyzeCategory } from "@/entities/competition";
+import { MATCH_VALUE } from "@/entities/competition";
 import { useBattle } from "@/features/competition/model/useBattle";
 import { useGetMyProfile } from "@/entities/user";
 import { formatTime, resolveProfileDecorations } from "@/shared/lib";
@@ -58,7 +59,7 @@ export const Battle = () => {
                   {battles.map(battleItem => {
                     const judge = battle.judgeUpperHand(battleItem.result);
 
-                    const cannotOpen = battleItem.result === MATCHVALUE.PENDING;
+                    const cannotOpen = battleItem.result === MATCH_VALUE.PENDING;
 
                     return (
                       <S.BattleProfileBox
@@ -84,9 +85,9 @@ export const Battle = () => {
 
                         <S.DetailBox>
                           <S.DetailButton $disabled={cannotOpen}>
-                            {battleItem.result === MATCHVALUE.WON ||
-                            battleItem.result === MATCHVALUE.LOST ||
-                            battleItem.result === MATCHVALUE.DRAWN
+                            {battleItem.result === MATCH_VALUE.WON ||
+                            battleItem.result === MATCH_VALUE.LOST ||
+                            battleItem.result === MATCH_VALUE.DRAWN
                               ? "결과 보기"
                               : "상세 내용 보기"}
                           </S.DetailButton>
@@ -151,14 +152,14 @@ export const Battle = () => {
                     <S.DetailAnalyzeContainer>
                       <S.TitleBox>
                         <S.AnalyzeText>세부 분석</S.AnalyzeText>
-                        <S.DropDownBox>
+                        <S.DropdownBox>
                           <Select<AnalyzeCategory>
                             value={battle.category}
                             options={battle.ANALYZE_CATEGORY_OPTIONS}
                             onChange={battle.setCategory}
                             width={8}
                           />
-                        </S.DropDownBox>
+                        </S.DropdownBox>
                       </S.TitleBox>
 
                       <S.AnalyzeBox>

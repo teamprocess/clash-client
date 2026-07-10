@@ -5,7 +5,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { userQueryKeys, useGetMyProfile } from "@/entities/user";
 
 export type FeatureItem = "TEST" | "CHOICE" | null;
-export type StepType = "FEATURE" | "TEST" | "LOADING" | "RESULT" | "CHOICE";
+export type MajorChoiceStep = "FEATURE" | "TEST" | "LOADING" | "RESULT" | "CHOICE";
 
 type MajorScoreKey = "web" | "server";
 
@@ -13,7 +13,7 @@ export const useMajorChoice = () => {
   const queryClient = useQueryClient();
 
   // 로드맵 페이지 컴포넌트 step useState
-  const [step, setStep] = useState<StepType>("FEATURE");
+  const [step, setStep] = useState<MajorChoiceStep>("FEATURE");
 
   const { data: myProfile } = useGetMyProfile();
   const username = myProfile?.name ?? "";
@@ -173,8 +173,8 @@ export const useMajorChoice = () => {
 };
 
 // 타입 불일치 방지 & 코드 중복 제거를 위해 ReturnType을 활용한 타입 추출
-export type UseRoadMapReturn = ReturnType<typeof useMajorChoice>;
-export type FeatureProps = UseRoadMapReturn["feature"];
-export type MajorProps = UseRoadMapReturn["major"];
-export type TestProps = UseRoadMapReturn["test"];
-export type ResultProps = UseRoadMapReturn["result"];
+export type UseRoadmapReturn = ReturnType<typeof useMajorChoice>;
+export type FeatureProps = UseRoadmapReturn["feature"];
+export type MajorProps = UseRoadmapReturn["major"];
+export type TestProps = UseRoadmapReturn["test"];
+export type ResultProps = UseRoadmapReturn["result"];

@@ -11,12 +11,12 @@ const passwordResetRequestSchema = z.object({
   email: z.email("유효한 이메일 주소를 입력하세요."),
 });
 
-const passwordResetSchema = z.object({
+const passwordResetConfirmSchema = z.object({
   password: z.string().min(8, "비밀번호는 최소 8자 이상이어야 합니다."),
 });
 
 type PasswordResetRequestFormData = z.infer<typeof passwordResetRequestSchema>;
-type PasswordResetFormData = z.infer<typeof passwordResetSchema>;
+type PasswordResetConfirmFormData = z.infer<typeof passwordResetConfirmSchema>;
 
 type ResetPasswordView =
   | "REQUEST"
@@ -97,8 +97,8 @@ export const useResetPassword = () => {
     resolver: zodResolver(passwordResetRequestSchema),
   });
 
-  const resetForm = useForm<PasswordResetFormData>({
-    resolver: zodResolver(passwordResetSchema),
+  const resetForm = useForm<PasswordResetConfirmFormData>({
+    resolver: zodResolver(passwordResetConfirmSchema),
   });
 
   useEffect(() => {
@@ -190,7 +190,7 @@ export const useResetPassword = () => {
     }
   };
 
-  const handleResetSubmit = async (data: PasswordResetFormData) => {
+  const handleResetSubmit = async (data: PasswordResetConfirmFormData) => {
     try {
       setMessage("");
 
@@ -261,9 +261,10 @@ export const useResetPassword = () => {
   return {
     view,
     message,
-    authSearch: resetState || resetRedirectUri
-      ? getAuthSearchWithOverrides(location.search, resetState, resetRedirectUri)
-      : defaultAuthSearch,
+    authSearch:
+      resetState || resetRedirectUri
+        ? getAuthSearchWithOverrides(location.search, resetState, resetRedirectUri)
+        : defaultAuthSearch,
     moveToRequestView,
     request: {
       register: requestForm.register,

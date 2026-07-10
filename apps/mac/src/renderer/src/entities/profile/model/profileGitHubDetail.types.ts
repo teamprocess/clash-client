@@ -1,8 +1,8 @@
-export type ProfileGithubDetailRequest = {
+export type ProfileGitHubDetailRequest = {
   date: string;
 };
 
-export type ProfileGithubDetailData = {
+export type ProfileGitHubDetailData = {
   date: string;
   contributionCount: number;
   contributionLevel: number;
@@ -15,4 +15,4 @@ export type ProfileGithubDetailData = {
   topCommitRepo: string;
 };
 
-export type ProfileGithubDetailResponse = ProfileGithubDetailData;
+export type ProfileGitHubDetailResponse = ProfileGitHubDetailData;

@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { itemEquipApi } from "../itemEquipApi";
-import { ownedItemsQueryKeys } from "./useOwnedItems.query";
+import { ownedItemsQueryKeys } from "../query/useOwnedItems.query";
 
 interface ItemEquipMutationRequest {
   productId: number;

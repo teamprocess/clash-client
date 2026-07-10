@@ -2,7 +2,7 @@ import { useEffect, useMemo } from "react";
 import * as S from "./Products.style";
 import { ProductCard } from "@/features/shop/ui/card/ProductCard";
 import { Filter } from "@/features/shop/ui/filter/Filter";
-import { Product, ProductCategory, ProductSort } from "@/entities/product";
+import type { Product, ProductCategory, ProductSort } from "@/entities/product";
 import { PurchaseModal } from "@/features/shop/ui/purchase/PurchaseModal";
 import { resolveSelectedProduct } from "@/features/shop/model/productDetailState";
 import { useProductDetailState } from "@/features/shop/model/useProductDetailState";

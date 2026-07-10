@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import * as S from "./Redirect.style.ts";
+import * as S from "./Redirect.style";
 
 type RedirectLocationState = {
   redirectUrl?: string;

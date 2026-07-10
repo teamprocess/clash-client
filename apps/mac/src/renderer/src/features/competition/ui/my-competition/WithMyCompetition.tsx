@@ -1,7 +1,7 @@
 import * as S from "./WithMyCompetition.style";
 import { GrowthRate, Select } from "@/shared/ui";
 import { useMyCompetition } from "@/features/competition/model/useMyCompetition";
-import { CompareStandard, GrowthRateStandard, AnalyzeCategory } from "@/entities/competition";
+import type { AnalyzeCategory, CompareStandard, GrowthRateStandard } from "@/entities/competition";
 import { formatTime } from "@/shared/lib";
 import { MyCompetitionLineChart } from "./MyCompetitionLineChart";
 import { toLineChartData } from "./formatMyCompeteChartData";
@@ -13,7 +13,7 @@ export const WithMyCompetition = () => {
     compareData,
     competitionDropdown,
     setCompetitionDropdown,
-    competitionDropDownValue,
+    competitionDropdownOptions,
     growthRatePeriod,
     setGrowthRatePeriod,
     growthRatePeriodOptions,
@@ -64,7 +64,7 @@ export const WithMyCompetition = () => {
               <Select<CompareStandard>
                 width={10}
                 value={competitionDropdown}
-                options={competitionDropDownValue}
+                options={competitionDropdownOptions}
                 onChange={setCompetitionDropdown}
               />
             </S.TextBox>
@@ -94,8 +94,8 @@ export const WithMyCompetition = () => {
             <S.GridBox>
               <S.DataBoxing>
                 <S.ImpressiveBox>
-                  <S.GithubIcon />
-                  <S.ExplainText>Github</S.ExplainText>
+                  <S.GitHubIcon />
+                  <S.ExplainText>GitHub</S.ExplainText>
                 </S.ImpressiveBox>
                 <S.GrowthRateBox $direction="row" $gap="2rem">
                   <S.DataText>
@@ -155,12 +155,12 @@ export const WithMyCompetition = () => {
             <S.GridBox>
               <S.DataBoxing>
                 <S.ImpressiveBox>
-                  <S.GithubIcon />
-                  <S.ExplainText>Github</S.ExplainText>
+                  <S.GitHubIcon />
+                  <S.ExplainText>GitHub</S.ExplainText>
                 </S.ImpressiveBox>
 
                 <S.GrowthRateBox $direction="row" $gap="2rem">
-                  <S.GithubCompareBox>
+                  <S.GitHubCompareBox>
                     <S.SubText>Commit</S.SubText>
                     <S.StatCompareRow>
                       <S.DataText>{roundOneDecimal(todayData?.commitCount)}개</S.DataText>
@@ -169,9 +169,9 @@ export const WithMyCompetition = () => {
                         today={roundOneDecimal(todayData?.commitCount)}
                       />
                     </S.StatCompareRow>
-                  </S.GithubCompareBox>
+                  </S.GitHubCompareBox>
 
-                  <S.GithubCompareBox>
+                  <S.GitHubCompareBox>
                     <S.SubText>Contribution</S.SubText>
                     <S.StatCompareRow>
                       <S.DataText>{roundOneDecimal(todayData?.gitHubAttribution)}개</S.DataText>
@@ -180,7 +180,7 @@ export const WithMyCompetition = () => {
                         today={roundOneDecimal(todayData?.gitHubAttribution)}
                       />
                     </S.StatCompareRow>
-                  </S.GithubCompareBox>
+                  </S.GitHubCompareBox>
                 </S.GrowthRateBox>
               </S.DataBoxing>
             </S.GridBox>

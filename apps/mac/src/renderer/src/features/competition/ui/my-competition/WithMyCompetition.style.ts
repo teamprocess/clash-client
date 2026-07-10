@@ -2,7 +2,7 @@ import styled, { css } from "styled-components";
 import { font } from "@clash/design-tokens/font";
 import EXP from "@/features/competition/assets/exp.svg";
 import Record from "@/features/competition/assets/record.svg";
-import Github from "@/shared/ui/assets/github.svg";
+import GitHub from "@/shared/ui/assets/github.svg";
 
 const flexRow = css`
   display: flex;
@@ -167,7 +167,7 @@ export const ChartWrapper = styled.div`
   min-height: 6rem;
 `;
 
-export const GithubCompareBox = styled.div`
+export const GitHubCompareBox = styled.div`
   ${flexCol};
   align-items: start;
   gap: 0.25rem;
@@ -180,5 +180,5 @@ export const StatCompareRow = styled.div`
 `;
 
 export const EXPIcon = styled(EXP)``;
-export const GithubIcon = styled(Github)``;
+export const GitHubIcon = styled(GitHub)``;
 export const RecordIcon = styled(Record)``;

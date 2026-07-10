@@ -1,10 +1,7 @@
 import styled, { css } from "styled-components";
 import { font } from "@clash/design-tokens/font";
 import { palette } from "@clash/design-tokens/theme";
-import {
-  createNameplateOverlayTuningCss,
-  nameplateFrameCss,
-} from "@/shared/lib";
+import { createNameplateOverlayTuningCss, nameplateFrameCss } from "@/shared/lib";
 import { defaultProfileImageDark } from "@/shared/ui";
 import Cookie from "@/shared/ui/assets/cookie.svg";
 import { Button } from "@/shared/ui/button";

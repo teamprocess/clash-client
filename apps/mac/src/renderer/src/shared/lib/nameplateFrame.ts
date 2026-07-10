@@ -59,11 +59,9 @@ export const nameplateFrameCss = css<NameplateFrameProps>`
             pointer-events: none;
             z-index: 1;
             transform-origin: var(--nameplate-image-origin, center bottom);
-            transform:
-              translateX(var(--nameplate-image-shift-x, 0rem))
+            transform: translateX(var(--nameplate-image-shift-x, 0rem))
               translateY(var(--nameplate-image-shift-y, 0rem))
-              scaleX(var(--nameplate-image-scale-x, 1))
-              scaleY(var(--nameplate-image-scale-y, 1));
+              scaleX(var(--nameplate-image-scale-x, 1)) scaleY(var(--nameplate-image-scale-y, 1));
           }
         `
       : ""}

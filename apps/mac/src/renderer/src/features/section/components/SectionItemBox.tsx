@@ -1,12 +1,12 @@
 import type { SyntheticEvent } from "react";
 import * as S from "./SectionItemBox.style";
-import type { section } from "@/entities/roadmap";
+import type { Section } from "@/entities/roadmap";
 import RoadmapIcon from "@/shared/ui/assets/roadmap.svg?url";
 
 interface SectionItemBoxProps {
   category: number;
-  sections: section[];
-  onItemClick: (item: section) => void;
+  sections: Section[];
+  onItemClick: (item: Section) => void;
 }
 
 export const SectionItemBox = ({ category, sections, onItemClick }: SectionItemBoxProps) => {

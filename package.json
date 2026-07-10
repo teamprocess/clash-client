@@ -19,6 +19,8 @@
     "lint": "pnpm run lint:fsd && turbo run lint",
     "lint:fsd": "node scripts/check-fsd-boundaries.mjs",
     "lint:fsd:report": "node scripts/check-fsd-boundaries.mjs --report",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
     "typecheck": "turbo run typecheck",
     "test": "turbo run test"
   },

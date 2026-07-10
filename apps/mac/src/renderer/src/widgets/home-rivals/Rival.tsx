@@ -17,12 +17,12 @@ export const Rival = () => {
           <QuestionTooltip content="최대 라이벌 수는 4명입니다." label="라이벌 최대 인원 안내" />
         </S.TitleLeft>
 
-        <S.RightSIde>
+        <S.RightSide>
           <S.ArrowBox onClick={rival.handleOpen}>
             라이벌 관리
             <S.DetailArrowIcon />
           </S.ArrowBox>
-        </S.RightSIde>
+        </S.RightSide>
       </S.TitleBox>
 
       <S.RivalBox>

@@ -1,6 +1,7 @@
 import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRef, useState, type ChangeEvent } from "react";
+import { useRef, useState } from "react";
+import type { ChangeEvent } from "react";
 import { z } from "zod";
 import axios from "axios";
 import { useGoogleReCaptcha } from "react-google-recaptcha-v3";

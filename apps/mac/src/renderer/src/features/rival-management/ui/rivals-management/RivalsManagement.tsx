@@ -1,12 +1,12 @@
+import { useState, type ChangeEvent } from "react";
 import * as S from "./RivalsManagement.style";
 import { Button } from "@/shared/ui/button";
 import { Dialog } from "@/shared/ui/dialog";
 import { SearchInput } from "@/shared/ui/search-input";
 import { SlideSelector } from "@/shared/ui/slide-selector";
-import { useRival } from "../../model/useRival";
-import React, { useState } from "react";
+import type { useRival } from "../../model/useRival";
 import { DeleteRivalsConfirmDialog } from "../delete-rival-confirm/DeleteRivalsConfirm";
-import { RivalLinkingStatusButton } from "./rivals-managemet-status/StatusOfRivalsManagement";
+import { RivalLinkingStatusButton } from "./rivals-management-status/StatusOfRivalsManagement";
 
 interface AddRivalsDialogProps {
   isOpen: boolean;
@@ -70,7 +70,7 @@ export const RivalsManagementDialog = ({ isOpen, onClose, rival }: AddRivalsDial
                   variant={"light"}
                   fullWidth={true}
                   value={rival.searchText}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                  onChange={(e: ChangeEvent<HTMLInputElement>) =>
                     rival.setSearchText(e.target.value)
                   }
                 />
