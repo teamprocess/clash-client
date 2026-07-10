@@ -6,11 +6,6 @@ export {
   useTransitionQuery,
 } from "./api/my-competition/api/query/useTransition.query";
 export {
-  myCompetitionQueryKeys,
-  useMyGrowthRateQuery,
-  useMyCompareQuery,
-} from "./api/my-competition/api/useMyCompetition.query";
-export {
   battleQueryKeys,
   useAnalyzeBattleQuery,
   useBattleDetailQuery,
@@ -28,15 +23,6 @@ export type {
   VariationItem,
 } from "./model/my-competition/active.types";
 export type { CompareResponse } from "./model/my-competition/compare.types";
-export type {
-  MyDataPoint,
-  MyCompareRequest,
-  MyGrowthRateResponse,
-  MyGrowthRateRequest,
-  MyCompareResponse,
-  CompareStandard,
-  GrowthRateStandard,
-} from "./model/my-competition/myCompetition.types";
 export type { TransitionResponse } from "./model/my-competition/transition.types";
 export type {
   BattleResponse,
