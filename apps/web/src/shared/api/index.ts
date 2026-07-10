@@ -1,2 +1,2 @@
-export { api } from "./axios.ts";
+export { api } from "./axios";
 export type * from "./types";

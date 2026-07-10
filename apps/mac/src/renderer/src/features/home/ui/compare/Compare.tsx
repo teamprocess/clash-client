@@ -1,6 +1,6 @@
 import * as S from "./Compare.style";
 import { Link } from "react-router-dom";
-import { Github } from "./github/CompareGithub";
+import { GitHub } from "./github/CompareGitHub";
 import { useCompare } from "@/features/home/model/useCompare";
 
 export const Compare = () => {
@@ -18,7 +18,7 @@ export const Compare = () => {
             <S.Title>어제와 비교</S.Title>
           </S.TitleBox>
         </S.TopPositionBox>
-        <Github
+        <GitHub
           yesterday={getCompareData.compareData?.yesterday ?? null}
           today={getCompareData.compareData?.today ?? null}
         />

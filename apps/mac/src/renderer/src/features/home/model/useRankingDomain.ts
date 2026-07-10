@@ -7,13 +7,13 @@ import {
 } from "@/entities/ranking";
 import { useGetMyProfile } from "@/entities/user";
 
-export const rankingDropDownValue: { key: CategoryType; label: string }[] = [
+export const rankingDropdownOptions: { key: CategoryType; label: string }[] = [
   { key: "EXP", label: "EXP" },
-  { key: "GITHUB", label: "Github" },
+  { key: "GITHUB", label: "GitHub" },
   { key: "ACTIVE_TIME", label: "총 학습 시간" },
 ];
 
-export const rankingPeriodDropDownValue: { key: PeriodType; label: string }[] = [
+export const rankingPeriodOptions: { key: PeriodType; label: string }[] = [
   { key: "DAY", label: "오늘" },
   { key: "WEEK", label: "이번 주" },
   { key: "MONTH", label: "이번 달" },
@@ -21,14 +21,14 @@ export const rankingPeriodDropDownValue: { key: PeriodType; label: string }[] = 
 ];
 
 export const useRankingDomain = () => {
-  const [RankingDropdown, setRankingDropdown] = useState<CategoryType>("EXP");
-  const [RankingPeriodDropdown, setRankingPeriodDropdown] = useState<PeriodType>("DAY");
+  const [rankingCategory, setRankingCategory] = useState<CategoryType>("EXP");
+  const [rankingPeriod, setRankingPeriod] = useState<PeriodType>("DAY");
 
-  const { data: rankingResponse } = useRankingQuery(RankingDropdown, RankingPeriodDropdown);
+  const { data: rankingResponse } = useRankingQuery(rankingCategory, rankingPeriod);
 
   const userList: RankingsResponse = rankingResponse?.data ?? {
-    category: RankingDropdown,
-    period: RankingPeriodDropdown,
+    category: rankingCategory,
+    period: rankingPeriod,
     rankings: [],
   };
 
@@ -40,10 +40,10 @@ export const useRankingDomain = () => {
   const currentUserRank = currentUserIndex !== -1 ? currentUserIndex + 1 : null;
 
   return {
-    RankingDropdown,
-    setRankingDropdown,
-    RankingPeriodDropdown,
-    setRankingPeriodDropdown,
+    rankingCategory,
+    setRankingCategory,
+    rankingPeriod,
+    setRankingPeriod,
     userList,
     currentUser,
     currentUserRank,

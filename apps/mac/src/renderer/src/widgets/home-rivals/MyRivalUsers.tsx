@@ -2,7 +2,7 @@ import * as S from "./Rival.style";
 import { USER_STATUS_LABELS, type MyRivalsRequest } from "@/entities/rival";
 import { formatTime, resolveUsingApp, useRealtimeRivalActiveTime } from "@/shared/lib";
 import { DefaultProfileIcon } from "@/shared/ui";
-import { IdeIcons } from "@/shared/ui/assets/ide-img";
+import { IDEIcons } from "@/shared/ui/assets/ide-img";
 import { Tooltip } from "@/shared/ui/tooltip";
 
 interface MyRivalUsersProps {
@@ -15,7 +15,7 @@ export const MyRivalUsers = ({ user }: MyRivalUsersProps) => {
     isStudying: user.isStudying,
   });
   const resolvedApp = user.status === "ONLINE" ? resolveUsingApp(user.usingApp) : null;
-  const Icon = resolvedApp ? IdeIcons[resolvedApp.id as keyof typeof IdeIcons] : null;
+  const Icon = resolvedApp ? IDEIcons[resolvedApp.id as keyof typeof IDEIcons] : null;
 
   return (
     <S.ProfileContainer>

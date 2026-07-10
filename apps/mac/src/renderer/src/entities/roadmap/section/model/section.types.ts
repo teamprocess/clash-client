@@ -1,4 +1,4 @@
-export interface section {
+export interface Section {
   id: number;
   title: string;
   categoryId: number;
@@ -16,12 +16,12 @@ export enum MajorEnum {
   NONE = "NONE",
 }
 
-export interface getMajorSectionRequest {
+export interface GetMajorSectionRequest {
   major: MajorEnum;
 }
 
-export interface getAllSectionsResponse {
-  sections: section[];
+export interface GetAllSectionsResponse {
+  sections: Section[];
   categories: number[];
   completedSections: number;
   totalSections: number;

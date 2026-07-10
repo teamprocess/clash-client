@@ -137,7 +137,7 @@ export const TotalText = styled.p`
   ${font.caption.medium}
 `;
 
-export const GithubBox = styled.div`
+export const GitHubBox = styled.div`
   width: 100%;
   flex: 1 1 auto;
   min-height: 6.625rem;
@@ -158,7 +158,7 @@ export const GithubBox = styled.div`
   }
 `;
 
-export const Github = styled.div`
+export const GitHub = styled.div`
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   grid-auto-rows: minmax(0, 1fr);

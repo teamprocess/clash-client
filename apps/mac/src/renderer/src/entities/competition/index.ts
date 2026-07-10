@@ -9,7 +9,7 @@ export {
   myCompetitionQueryKeys,
   useMyGrowthRateQuery,
   useMyCompareQuery,
-} from "./api/my-competition/api/useMyCompetitionQuery.query";
+} from "./api/my-competition/api/useMyCompetition.query";
 export {
   battleQueryKeys,
   useAnalyzeBattleQuery,
@@ -56,5 +56,5 @@ export type {
   CompareRivalsResponse,
   GetCompareRivalsRequest,
 } from "./model/rival-competition/compareRivals.types";
-export { MATCHVALUE } from "./model/rival-competition/battle.types";
+export { MATCH_VALUE } from "./model/rival-competition/battle.types";
 export { CATEGORY, PERIOD } from "./model/rival-competition/compareRivals.types";

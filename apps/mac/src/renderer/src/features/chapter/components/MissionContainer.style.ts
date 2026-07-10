@@ -3,7 +3,7 @@ import { font } from "@clash/design-tokens/font";
 import { palette } from "@clash/design-tokens/theme";
 import Close from "@/shared/ui/assets/close.svg";
 import Correct from "../assets/correct.svg?url";
-import InCorrect from "../assets/in-correct.svg?url";
+import Incorrect from "../assets/incorrect.svg?url";
 import Clear from "../assets/clear.svg";
 import Fail from "../assets/fail.svg";
 import { Button } from "@/shared/ui/button/Button";
@@ -382,7 +382,7 @@ export const CorrectIcon = styled.img.attrs({
 `;
 
 export const IncorrectIcon = styled.img.attrs({
-  src: InCorrect,
+  src: Incorrect,
   alt: "",
   "aria-hidden": true,
 })`

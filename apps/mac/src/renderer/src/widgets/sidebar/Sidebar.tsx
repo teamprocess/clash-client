@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import type { MonitoredApp } from "@/entities/record";
 import type { UseAppMonitorResult } from "@/features/app-monitor";
-import { IdeIcons } from "@/shared/ui/assets/ide-img";
+import { IDEIcons } from "@/shared/ui/assets/ide-img";
 import { useSidebarMonitor } from "./model/useSidebarMonitor";
 
 interface SidebarProps {
@@ -17,7 +17,7 @@ const menuItems = [
   { icon: <S.RecordIcon />, label: "기록", to: "/record" },
   { icon: <S.GroupIcon />, label: "그룹", to: "/group" },
   { icon: <S.ShopIcon />, label: "상점", to: "/shop" },
-  { icon: <S.RoadMapIcon />, label: "로드맵", to: "/roadmap" },
+  { icon: <S.RoadmapIcon />, label: "로드맵", to: "/roadmap" },
 ];
 
 const isEditableElement = (target: EventTarget | null) => {
@@ -37,11 +37,11 @@ export const Sidebar = ({ isOpen, appMonitor }: SidebarProps) => {
   const location = useLocation();
   const navigate = useNavigate();
   const { isElectron, activeSession, displayTime } = useSidebarMonitor(appMonitor);
-  const hasIdeIcon = (appId: MonitoredApp | null): appId is keyof typeof IdeIcons => {
-    return !!appId && appId in IdeIcons;
+  const hasIDEIcon = (appId: MonitoredApp | null): appId is keyof typeof IDEIcons => {
+    return !!appId && appId in IDEIcons;
   };
   const activeSessionAppId = activeSession?.appId ?? null;
-  const SessionIdeIcon = hasIdeIcon(activeSessionAppId) ? IdeIcons[activeSessionAppId] : null;
+  const SessionIDEIcon = hasIDEIcon(activeSessionAppId) ? IDEIcons[activeSessionAppId] : null;
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -83,7 +83,7 @@ export const Sidebar = ({ isOpen, appMonitor }: SidebarProps) => {
         ) : activeSession ? (
           <S.ActiveSessionBox>
             <S.SessionNameRow>
-              {SessionIdeIcon ? <SessionIdeIcon /> : null}
+              {SessionIDEIcon ? <SessionIDEIcon /> : null}
               <S.SessionNameText>{activeSession.appName}</S.SessionNameText>
             </S.SessionNameRow>
             <S.TimeText>{displayTime}</S.TimeText>

@@ -1,1 +1,1 @@
-export { RedirectPage } from "./Redirect.tsx";
+export { RedirectPage } from "./Redirect";

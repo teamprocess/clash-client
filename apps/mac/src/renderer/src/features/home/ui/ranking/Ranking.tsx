@@ -16,7 +16,7 @@ export const Ranking = () => {
     unit,
     formatActiveRankingPoint,
   } = useRanking();
-  const isGithubRanking = filters.RankingDropdown === "GITHUB";
+  const isGitHubRanking = filters.rankingCategory === "GITHUB";
 
   if (!domain.userList) return null;
 
@@ -27,20 +27,20 @@ export const Ranking = () => {
           <S.Title>우리 학교 랭킹</S.Title>
           <QuestionTooltip content={rankingRewardTooltipContent} />
         </S.TitleRow>
-        <S.DropDown>
+        <S.Dropdown>
           <Select<CategoryType>
-            value={filters.RankingDropdown}
-            options={options.rankingDropDownValue}
-            onChange={filters.setRankingDropdown}
+            value={filters.rankingCategory}
+            options={options.rankingDropdownOptions}
+            onChange={filters.setRankingCategory}
             width={10}
           />
           <Select<PeriodType>
-            value={filters.RankingPeriodDropdown}
-            options={options.rankingPeriodDropDownValue}
-            onChange={filters.setRankingPeriodDropdown}
+            value={filters.rankingPeriod}
+            options={options.rankingPeriodOptions}
+            onChange={filters.setRankingPeriod}
             width={9}
           />
-        </S.DropDown>
+        </S.Dropdown>
       </S.TitleBox>
 
       <S.Line />
@@ -62,7 +62,7 @@ export const Ranking = () => {
                 unit={unit}
                 formatValue={formatActiveRankingPoint}
                 isRival={user.userId !== domain.currentUser?.userId && user.isRival}
-                enableGithubProfileLink={isGithubRanking}
+                enableGitHubProfileLink={isGitHubRanking}
                 ref={user.userId === domain.currentUser?.userId ? currentUserRef : null}
               />
             ))
@@ -79,7 +79,7 @@ export const Ranking = () => {
             isSticky
             unit={unit}
             formatValue={formatActiveRankingPoint}
-            enableGithubProfileLink={isGithubRanking}
+            enableGitHubProfileLink={isGitHubRanking}
           />
         </S.StickyUser>
       )}

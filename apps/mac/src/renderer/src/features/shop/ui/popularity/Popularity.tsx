@@ -1,6 +1,6 @@
 import * as S from "./Popularity.style";
 import { ProductCard } from "@/features/shop/ui/card/ProductCard";
-import { Product } from "@/entities/product";
+import type { Product } from "@/entities/product";
 
 interface PopularityProps {
   products: Product[];

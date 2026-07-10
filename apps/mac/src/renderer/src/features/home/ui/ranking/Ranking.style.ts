@@ -45,7 +45,7 @@ export const Title = styled.div`
   }
 `;
 
-export const DropDown = styled.div`
+export const Dropdown = styled.div`
   width: min(15rem, 100%);
   min-width: 0;
   height: auto;

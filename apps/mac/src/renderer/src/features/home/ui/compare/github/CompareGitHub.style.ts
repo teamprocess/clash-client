@@ -103,7 +103,7 @@ export const InfoTitle = styled.p`
   width: 100%;
 `;
 
-export const GithubInfoBox = styled(TitleBox)`
+export const GitHubInfoBox = styled(TitleBox)`
   align-items: center;
   width: 100%;
   height: 100%;

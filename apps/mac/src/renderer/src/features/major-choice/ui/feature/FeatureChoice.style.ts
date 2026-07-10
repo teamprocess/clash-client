@@ -21,7 +21,7 @@ export const ChoiceIcon = styled.img.attrs({
   width: 5rem;
 `;
 
-export const RoadMapContainer = styled.div`
+export const RoadmapContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -32,7 +32,7 @@ export const RoadMapContainer = styled.div`
   border-radius: 1rem;
 `;
 
-export const RoadMapContents = styled.div`
+export const RoadmapContents = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -41,7 +41,7 @@ export const RoadMapContents = styled.div`
   width: 30rem;
 `;
 
-export const RoadMapTop = styled.div`
+export const RoadmapTop = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -49,12 +49,12 @@ export const RoadMapTop = styled.div`
   width: 100%;
 `;
 
-export const RoadMapTitle = styled.h1`
+export const RoadmapTitle = styled.h1`
   ${font.display1.bold};
   color: ${({ theme }) => theme.label.normal};
 `;
 
-export const RoadMapDescription = styled.span`
+export const RoadmapDescription = styled.span`
   display: flex;
   justify-content: center;
   align-items: center;

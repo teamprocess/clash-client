@@ -1,19 +1,24 @@
 import * as S from "./LevelSliderLabels.style";
-import { LEVEL_ENUM } from "@/shared/ui/level-slider/types";
-import { Dispatch, SetStateAction } from "react";
+import type { LevelSliderValue } from "@/shared/ui/level-slider/types";
+import type { Dispatch, SetStateAction } from "react";
 
 interface LevelSliderLabelsProps {
   labels: string[];
-  selectedLevel?: LEVEL_ENUM;
-  setHoverLevel: Dispatch<SetStateAction<LEVEL_ENUM | undefined>>;
-  onSelectLevel: (value?: LEVEL_ENUM) => void;
+  selectedLevel?: LevelSliderValue;
+  setHoverLevel: Dispatch<SetStateAction<LevelSliderValue | undefined>>;
+  onSelectLevel: (value?: LevelSliderValue) => void;
 }
 
-export const LevelSliderLabels = ({ labels, selectedLevel, setHoverLevel, onSelectLevel }: LevelSliderLabelsProps) => {
+export const LevelSliderLabels = ({
+  labels,
+  selectedLevel,
+  setHoverLevel,
+  onSelectLevel,
+}: LevelSliderLabelsProps) => {
   return (
     <S.LevelSliderLabelsList>
       {labels.map((label, idx) => {
-        const level = (idx - 2) as LEVEL_ENUM;
+        const level = (idx - 2) as LevelSliderValue;
         return (
           // idx에 2를 빼 0~4를 -2~2 범위로 조정하여 selectedLevel과 비교한다.
           <S.LevelSliderLabelsItem

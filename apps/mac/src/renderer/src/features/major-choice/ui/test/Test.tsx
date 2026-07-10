@@ -1,18 +1,18 @@
 import * as S from "./Test.style";
-import { TestProps } from "@/features/major-choice/model/useMajorChoice";
+import type { TestProps } from "@/features/major-choice/model/useMajorChoice";
 import { Button } from "@/shared/ui/button";
 import { AGREEMENT_LABELS, LevelSlider } from "@/shared/ui/level-slider";
-import { LEVEL_ENUM } from "@/shared/ui/level-slider/types";
+import type { LevelSliderValue } from "@/shared/ui/level-slider/types";
 
-const answerToLevel = (answer?: number | null): LEVEL_ENUM | undefined => {
+const answerToLevel = (answer?: number | null): LevelSliderValue | undefined => {
   if (answer == null) {
     return undefined;
   }
 
-  return (answer - 3) as LEVEL_ENUM;
+  return (answer - 3) as LevelSliderValue;
 };
 
-const levelToAnswer = (level?: LEVEL_ENUM): number | null => {
+const levelToAnswer = (level?: LevelSliderValue): number | null => {
   if (level == null) {
     return null;
   }

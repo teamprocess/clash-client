@@ -1,7 +1,7 @@
 import { createRoot } from "react-dom/client";
-import { ThemeProvider } from "./app/providers/ThemeProvider.tsx";
-import { GlobalStyle } from "./app/styles/GlobalStyle.ts";
-import App from "./app/App.tsx";
+import { ThemeProvider } from "./app/providers/ThemeProvider";
+import { GlobalStyle } from "./app/styles/GlobalStyle";
+import App from "./app/App";
 
 createRoot(document.getElementById("root")!).render(
   <ThemeProvider>

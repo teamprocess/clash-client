@@ -1,7 +1,7 @@
 import * as S from "./RivalCard.style";
 import { formatTime, resolveUsingApp, useRealtimeRivalActiveTime } from "@/shared/lib";
 import { USER_STATUS_LABELS, type UserStatus } from "@/entities/rival";
-import { IdeIcons } from "@/shared/ui/assets/ide-img";
+import { IDEIcons } from "@/shared/ui/assets/ide-img";
 import { DefaultProfileIcon, RankTier } from "@/shared/ui";
 
 interface RivalCardProps {
@@ -31,7 +31,7 @@ export function RivalCard({
   });
   const formattedDisplayTime = formatTime(displayActiveTime);
   const resolvedApp = status === "ONLINE" ? resolveUsingApp(usingApp) : null;
-  const Icon = resolvedApp ? IdeIcons[resolvedApp.id as keyof typeof IdeIcons] : null;
+  const Icon = resolvedApp ? IDEIcons[resolvedApp.id as keyof typeof IDEIcons] : null;
 
   return (
     <S.RivalBox>

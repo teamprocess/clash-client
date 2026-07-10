@@ -1,7 +1,7 @@
 import * as S from "./MainProducts.style";
 import { Recommend } from "@/features/shop/ui/recommend/Recommend";
 import { Popularity } from "@/features/shop/ui/popularity/Popularity";
-import { Product } from "@/entities/product";
+import type { Product } from "@/entities/product";
 import { PurchaseModal } from "@/features/shop/ui/purchase/PurchaseModal";
 import { useEffect, useMemo } from "react";
 import { resolveSelectedProduct } from "@/features/shop/model/productDetailState";
