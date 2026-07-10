@@ -1,4 +1,4 @@
-import { Product } from "@/entities/product";
+import type { Product } from "@/entities/product";
 
 export const sortOwnedProductsLast = (products: Product[]) => {
   return [...products].sort((left, right) => {

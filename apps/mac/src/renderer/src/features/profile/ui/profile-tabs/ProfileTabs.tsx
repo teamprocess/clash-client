@@ -1,7 +1,7 @@
 import { useState, type ReactNode } from "react";
 import * as S from "./ProfileTabs.style";
 import { ItemPanel } from "./item-panel/ItemPanel";
-import { GithubActivityPanel } from "./github-activity-panel/GithubAcivityPanel";
+import { GitHubActivityPanel } from "./github-activity-panel/GitHubActivityPanel";
 
 export type TabKey = "github" | "item";
 
@@ -29,7 +29,7 @@ export const ProfileTabs = ({ rivalSection }: ProfileTabsProps) => {
       <S.RivalSection>{rivalSection}</S.RivalSection>
 
       <S.Background>
-        {active === "github" && <GithubActivityPanel />}
+        {active === "github" && <GitHubActivityPanel />}
         {active === "item" && <ItemPanel />}
       </S.Background>
     </S.Banner>

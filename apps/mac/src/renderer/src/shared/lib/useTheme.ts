@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
-import { lightTheme, darkTheme, Theme } from "@clash/design-tokens/theme";
+import type { Theme } from "@clash/design-tokens/theme";
+import { lightTheme, darkTheme } from "@clash/design-tokens/theme";
 
 type ClashTheme = "light" | "dark";
 

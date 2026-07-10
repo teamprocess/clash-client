@@ -1,8 +1,8 @@
 import { useEffect, useRef } from "react";
-import * as S from "./GithubStreak.style";
+import * as S from "./GitHubStreak.style";
 import type { Level } from "@/features/profile/model/useProfileTabs";
 
-interface GithubStreakProps {
+interface GitHubStreakProps {
   paddedDaysForView: Array<{
     date: string;
     detailedInfo: number;
@@ -14,12 +14,12 @@ interface GithubStreakProps {
   onGrassClick: (date: string) => void;
 }
 
-export const GithubStreak = ({
+export const GitHubStreak = ({
   paddedDaysForView,
   getLevel,
   selectedId,
   onGrassClick,
-}: GithubStreakProps) => {
+}: GitHubStreakProps) => {
   const grassRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {

@@ -1,4 +1,4 @@
-import { kstDate } from "./kstData";
+import { kstDate } from "./kstDate";
 
 export type StreakItem = {
   date: string;

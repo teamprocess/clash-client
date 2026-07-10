@@ -1,5 +1,5 @@
 import styled, { css } from "styled-components";
-import { ProductCategory } from "@/entities/product";
+import type { ProductCategory } from "@/entities/product";
 import { createNameplateOverlayTuningCss, nameplateFrameCss } from "@/shared/lib";
 import { ProfileAvatar } from "@/shared/ui";
 

@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { MajorEnum, type getAllSectionsResponse } from "../../model/section.types";
+import { MajorEnum, type GetAllSectionsResponse } from "../../model/section.types";
 import { sectionApi } from "../sectionApi";
 
 export const sectionQueryKeys = {
@@ -10,7 +10,7 @@ export const sectionQueryKeys = {
 export const useMajorSectionQuery = (major: MajorEnum) => {
   return useQuery({
     queryKey: sectionQueryKeys.major(major),
-    queryFn: async (): Promise<getAllSectionsResponse> => {
+    queryFn: async (): Promise<GetAllSectionsResponse> => {
       const response = await sectionApi.getMajorSection({ major: major! });
 
       if (!response.success || !response.data) {

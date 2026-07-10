@@ -1,5 +1,5 @@
 import { exec } from "child_process";
-import { BrowserWindow } from "electron";
+import type { BrowserWindow } from "electron";
 import { promisify } from "util";
 import type { ActiveApp, MonitoringSession, TrackedApp } from "./types";
 import { resolveMonitoredAppName } from "./monitoredApps";

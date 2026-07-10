@@ -1,9 +1,11 @@
 import { api, type ApiResponse } from "@/shared/api";
+import type {
+  MarkAttendanceResponse,
+  WeeklyAttendanceResponse,
+} from "@/entities/attendance/model/attendance.types";
 import {
   ATTENDANCE_STATUS,
   type AttendanceStatus,
-  MarkAttendanceResponse,
-  WeeklyAttendanceResponse,
 } from "@/entities/attendance/model/attendance.types";
 
 type AttendanceStatusApiValue = AttendanceStatus | "attendanced" | "not-attendanced";
@@ -51,7 +53,9 @@ const normalizeWeeklyAttendance = (
 
 export const attendanceApi = {
   getWeeklyAttendance: async () => {
-    const result = await api.get<ApiResponse<WeeklyAttendanceApiResponse>>("/users/me/attendance/weekly");
+    const result = await api.get<ApiResponse<WeeklyAttendanceApiResponse>>(
+      "/users/me/attendance/weekly"
+    );
 
     return {
       ...result.data,

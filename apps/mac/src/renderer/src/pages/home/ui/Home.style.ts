@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import Github from "@/shared/ui/assets/github.svg";
+import GitHub from "@/shared/ui/assets/github.svg";
 import { palette } from "@clash/design-tokens/theme";
 import { font } from "@clash/design-tokens/font";
 
@@ -13,7 +13,7 @@ export const ConnectingContainer = styled.div`
   gap: 1rem;
 `;
 
-export const GithubIcon = styled(Github)`
+export const GitHubIcon = styled(GitHub)`
   width: 5rem;
   height: 5rem;
   color: ${palette.neutral[99]};

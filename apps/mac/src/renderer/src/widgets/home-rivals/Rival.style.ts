@@ -260,7 +260,7 @@ export const ActiveTime = styled.p<StatusProps>`
   }};
 `;
 
-export const RightSIde = styled.div`
+export const RightSide = styled.div`
   display: flex;
   flex-direction: row;
   gap: 1rem;

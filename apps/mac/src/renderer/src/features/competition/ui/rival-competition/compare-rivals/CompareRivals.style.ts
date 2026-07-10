@@ -58,7 +58,7 @@ export const RivalCompareWrapper = styled.div`
   min-height: 0;
 `;
 
-export const DropDownBox = styled.div`
+export const DropdownBox = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;

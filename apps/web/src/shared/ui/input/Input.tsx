@@ -1,4 +1,5 @@
-import { forwardRef, type InputHTMLAttributes } from "react";
+import { forwardRef } from "react";
+import type { InputHTMLAttributes } from "react";
 import styled from "styled-components";
 import { font } from "@clash/design-tokens/font";
 import { palette } from "@clash/design-tokens/theme";
@@ -7,16 +8,14 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   error?: string;
 }
 
-export const Input = forwardRef<HTMLInputElement, InputProps>(
-  ({ error, ...props }, ref) => {
-    return (
-      <Container>
-        <StyledInput ref={ref} {...props} />
-        {error && <ErrorText>{error}</ErrorText>}
-      </Container>
-    );
-  }
-);
+export const Input = forwardRef<HTMLInputElement, InputProps>(({ error, ...props }, ref) => {
+  return (
+    <Container>
+      <StyledInput ref={ref} {...props} />
+      {error && <ErrorText>{error}</ErrorText>}
+    </Container>
+  );
+});
 
 Input.displayName = "Input";
 

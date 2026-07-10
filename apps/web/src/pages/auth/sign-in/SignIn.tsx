@@ -4,10 +4,10 @@ import { SignInForm } from "@/features/auth";
 export const SignInPage = () => {
   return (
     <S.SignInContainer>
-      <S.SignInformWrapper>
+      <S.SignInFormWrapper>
         <S.ClashLogo />
         <SignInForm />
-      </S.SignInformWrapper>
+      </S.SignInFormWrapper>
     </S.SignInContainer>
   );
 };

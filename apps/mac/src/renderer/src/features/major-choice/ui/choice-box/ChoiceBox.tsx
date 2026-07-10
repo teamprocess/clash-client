@@ -1,6 +1,6 @@
 import type { HTMLAttributes, ReactNode } from "react";
-import * as S from "./ChocieBox.style";
-import type { ChoiceBoxSize } from "./ChocieBox.style";
+import * as S from "./ChoiceBox.style";
+import type { ChoiceBoxSize } from "./ChoiceBox.style";
 
 export interface ChoiceBoxProps extends HTMLAttributes<HTMLDivElement> {
   selected?: boolean;

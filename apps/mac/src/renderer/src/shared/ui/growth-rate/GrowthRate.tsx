@@ -1,4 +1,4 @@
-import * as S from "@/shared/ui/growth-rate/GrowRate.style";
+import * as S from "@/shared/ui/growth-rate/GrowthRate.style";
 import { getGrowthInfo } from "@/shared/lib";
 import { formatTime } from "@/shared/lib";
 

@@ -1,6 +1,6 @@
 import * as S from "./TabLayout.style";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
-import { Tab } from "./TabLayout.types";
+import type { Tab } from "./TabLayout.types";
 
 interface TabLayoutProps {
   tabs: Tab[];

@@ -49,7 +49,7 @@ export const Home = () => {
   const { data: user } = useGetMyProfile();
 
   const isChecking = transitionQuery.isPending || activeQuery.isPending;
-  const isGithubNotLinked = Boolean(user && !user.githubLinked);
+  const isGitHubNotLinked = Boolean(user && !user.githubLinked);
   const shouldSyncProfile = isProfileSyncing();
   const activeStreakCount = activeQuery.data?.data?.streaks?.length ?? 0;
   const hasTransitionData = Boolean(transitionQuery.data?.success && transitionQuery.data.data);
@@ -66,8 +66,8 @@ export const Home = () => {
   const isTransitionNotReady = transitionQuery.isError && isNotFound(transitionQuery.error);
   const isActiveNotReady = activeQuery.isError && isNotFound(activeQuery.error);
   const isSyncingWithoutData = shouldSyncProfile && !hasHomeData;
-  const isGithubNotReady = isTransitionNotReady || isActiveNotReady || isSyncingWithoutData;
-  const shouldPollGithubData = !isChecking && !isGithubNotLinked && isGithubNotReady;
+  const isGitHubNotReady = isTransitionNotReady || isActiveNotReady || isSyncingWithoutData;
+  const shouldPollGitHubData = !isChecking && !isGitHubNotLinked && isGitHubNotReady;
 
   useEffect(() => {
     if (!shouldSyncProfile) {
@@ -84,7 +84,7 @@ export const Home = () => {
   }, [queryClient, shouldSyncProfile]);
 
   useEffect(() => {
-    if (!shouldPollGithubData) {
+    if (!shouldPollGitHubData) {
       return;
     }
 
@@ -98,7 +98,7 @@ export const Home = () => {
     return () => {
       clearInterval(interval);
     };
-  }, [queryClient, shouldPollGithubData]);
+  }, [queryClient, shouldPollGitHubData]);
 
   if (isChecking) {
     return (
@@ -111,17 +111,17 @@ export const Home = () => {
     );
   }
 
-  if (isGithubNotReady) {
+  if (isGitHubNotReady) {
     return (
       <>
         <Skeleton />
         <Skeleton />
         <Skeleton />
         <Skeleton />
-        {!isGithubNotLinked && (
+        {!isGitHubNotLinked && (
           <Dialog width={21.5} height={21.5} isOpen={true}>
             <S.ConnectingContainer>
-              <S.GithubIcon />
+              <S.GitHubIcon />
               <S.FontBox>
                 <S.HugeFont>깃허브 계정을 연동 중입니다</S.HugeFont>
                 <S.TinyFont>최대 3분 정도 소요될 수 있습니다.</S.TinyFont>

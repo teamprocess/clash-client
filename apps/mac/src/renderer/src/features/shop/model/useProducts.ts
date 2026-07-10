@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { ProductCategory, ProductSort, useProductsQuery } from "@/entities/product";
+import type { ProductCategory } from "@/entities/product";
+import { ProductSort, useProductsQuery } from "@/entities/product";
 import { sortOwnedProductsLast } from "@/features/shop/lib/sortOwnedProductsLast";
 
 export const useProducts = () => {

@@ -1,5 +1,6 @@
-import { api, ApiResponse } from "@/shared/api";
-import { GetSectionPreviewResponse } from "../model/preview.types";
+import type { ApiResponse } from "@/shared/api";
+import { api } from "@/shared/api";
+import type { GetSectionPreviewResponse } from "../model/preview.types";
 
 export const previewApi = {
   // 로드맵 미리보기 조회

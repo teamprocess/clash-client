@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { productApi } from "../productApi";
-import { ProductCategory, ProductSort } from "../../model/product.types";
+import type { ProductCategory, ProductSort } from "../../model/product.types";
 
 export const productQueryKeys = {
   all: ["shop"] as const,

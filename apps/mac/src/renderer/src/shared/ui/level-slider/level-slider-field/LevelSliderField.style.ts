@@ -19,8 +19,8 @@ export const LevelSliderFieldWrapper = styled.div<{
     scale: 1.15;
     opacity: 0.2;
     z-index: -1;
-    background: ${({$isActive, theme}) => $isActive ? theme.primary.normal : 'none'};
-    transition: background .2s ease-in-out;
+    background: ${({ $isActive, theme }) => ($isActive ? theme.primary.normal : "none")};
+    transition: background 0.2s ease-in-out;
     border-radius: 15px;
   }
 `;

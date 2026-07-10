@@ -64,7 +64,11 @@ export const useDragScroll = <T extends HTMLElement>() => {
       const deltaX = clientX - dragState.x;
       const deltaY = clientY - dragState.y;
 
-      if (!dragState.moved && Math.abs(deltaX) < DRAG_THRESHOLD_PX && Math.abs(deltaY) < DRAG_THRESHOLD_PX) {
+      if (
+        !dragState.moved &&
+        Math.abs(deltaX) < DRAG_THRESHOLD_PX &&
+        Math.abs(deltaY) < DRAG_THRESHOLD_PX
+      ) {
         return;
       }
 

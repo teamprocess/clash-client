@@ -1,7 +1,7 @@
 import { Button } from "@/shared/ui/button";
 import { Dialog } from "@/shared/ui/dialog";
 import * as S from "./DeleteRivalsConfirm.style";
-import { useRival } from "../../model/useRival";
+import type { useRival } from "../../model/useRival";
 
 interface DeleteRivalsDialogProps {
   isOpen: boolean;

@@ -12,17 +12,17 @@ interface UserRankingProps {
   isSticky?: boolean;
   unit: string;
   formatValue: (value: number) => string | number;
-  enableGithubProfileLink?: boolean;
+  enableGitHubProfileLink?: boolean;
 }
 
 export const UserRanking = forwardRef<HTMLDivElement, UserRankingProps>(
-  ({ user, isRival, rank, isSticky, unit, formatValue, enableGithubProfileLink = false }, ref) => {
+  ({ user, isRival, rank, isSticky, unit, formatValue, enableGitHubProfileLink = false }, ref) => {
     const { badgeImage, nameplateImage } = resolveProfileDecorations(user.equippedItems);
     const githubHandle = user.linkedId.trim().replace(/^@+/, "");
     const githubProfileUrl = githubHandle
       ? `https://github.com/${encodeURIComponent(githubHandle)}`
       : null;
-    const handleOpenGithubProfile = async () => {
+    const handleOpenGitHubProfile = async () => {
       if (!githubProfileUrl) return;
 
       try {
@@ -34,10 +34,10 @@ export const UserRanking = forwardRef<HTMLDivElement, UserRankingProps>(
     const identity = (
       <S.NameBox>
         <S.ProfileName>{user.name}</S.ProfileName>
-        {enableGithubProfileLink && githubProfileUrl ? (
+        {enableGitHubProfileLink && githubProfileUrl ? (
           <S.ProfileHandleButton
             type="button"
-            onClick={handleOpenGithubProfile}
+            onClick={handleOpenGitHubProfile}
             title={`@${githubHandle} 깃허브 프로필 열기`}
             aria-label={`@${githubHandle} 깃허브 프로필 열기`}
           >

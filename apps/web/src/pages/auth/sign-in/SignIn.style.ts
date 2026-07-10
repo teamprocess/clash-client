@@ -10,7 +10,7 @@ export const SignInContainer = styled.div`
   background-color: ${({ theme }) => theme.background.alternative};
 `;
 
-export const SignInformWrapper = styled.div`
+export const SignInFormWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;

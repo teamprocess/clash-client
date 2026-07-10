@@ -1,9 +1,9 @@
 import { useMemo } from "react";
-import * as S from "./GithubInfo.style";
+import * as S from "./GitHubInfo.style";
 import { Tooltip } from "@/shared/ui";
 import { getCountLabel } from "@/shared/lib";
 
-export type GithubInfoProps = {
+export type GitHubInfoProps = {
   dateText?: string | null;
   totalContributions?: number | null;
   commits: number;
@@ -19,7 +19,7 @@ export type GithubInfoProps = {
   emptyDescription?: string;
 };
 
-export const GithubInfo = ({
+export const GitHubInfo = ({
   dateText,
   totalContributions,
   commits,
@@ -33,7 +33,7 @@ export const GithubInfo = ({
   hasDetail = true,
   emptyTitle = "잔디를 눌러 상세정보를 확인해보세요",
   emptyDescription = "스트릭(잔디)에서 날짜를 선택하면 커밋/이슈/PR 등의 상세 활동이 표시돼요.",
-}: GithubInfoProps) => {
+}: GitHubInfoProps) => {
   const stats = useMemo(
     () =>
       [
@@ -112,8 +112,8 @@ export const GithubInfo = ({
         </S.Title>
       )}
 
-      <S.GithubBox>
-        <S.Github>
+      <S.GitHubBox>
+        <S.GitHub>
           {stats.map(item => (
             <S.Stat key={item.key}>
               <item.Icon />
@@ -123,7 +123,7 @@ export const GithubInfo = ({
               </S.StatTextGroup>
             </S.Stat>
           ))}
-        </S.Github>
+        </S.GitHub>
 
         <S.Info>
           <S.MetaRow>
@@ -155,7 +155,7 @@ export const GithubInfo = ({
             </S.MetaText>
           </S.MetaRow>
         </S.Info>
-      </S.GithubBox>
+      </S.GitHubBox>
     </S.ActiveContainer>
   );
 };

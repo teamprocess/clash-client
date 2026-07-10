@@ -91,7 +91,7 @@ export const ProfileName = styled.span`
   color: ${({ theme }) => theme.label.normal};
 `;
 
-export const DropDownBox = styled.div`
+export const DropdownBox = styled.div`
   ${flexRow};
   align-items: center;
   gap: 0.75rem;
