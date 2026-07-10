@@ -1,5 +1,4 @@
-import { Products } from "@/features/shop/ui/products/Products";
-import { useProducts } from "@/features/shop/model/useProducts";
+import { Products, useProducts } from "@/features/shop";
 import { getErrorMessage } from "@/shared/lib";
 
 export const ProductsPage = () => {

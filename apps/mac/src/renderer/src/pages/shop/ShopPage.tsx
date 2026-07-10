@@ -1,5 +1,4 @@
-import { MainProducts } from "@/features/shop/ui/main/MainProducts";
-import { useShop } from "@/features/shop/model/useShop";
+import { MainProducts, useShop } from "@/features/shop";
 import { getErrorMessage } from "@/shared/lib";
 
 export const ShopPage = () => {
