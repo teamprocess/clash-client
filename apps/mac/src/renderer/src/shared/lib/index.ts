@@ -3,6 +3,7 @@ export { getPageNumbers } from "./pagination";
 export { formatPrice } from "./formatPrice";
 export { useTheme } from "./useTheme";
 export { useNetworkStatus } from "./useNetworkStatus";
+export { useModalFocus } from "./useModalFocus";
 export {
   clearServiceUnavailable,
   markServiceUnavailable,

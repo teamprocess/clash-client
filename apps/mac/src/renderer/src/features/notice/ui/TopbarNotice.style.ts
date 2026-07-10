@@ -63,6 +63,46 @@ export const NoticeHeader = styled.div`
   gap: 1rem;
 `;
 
+export const TabPanel = styled.div`
+  display: flex;
+  flex: 1;
+  min-height: 0;
+  flex-direction: column;
+`;
+
+export const NoticeState = styled.div`
+  ${font.label.medium};
+  display: flex;
+  flex: 1;
+  min-height: 10rem;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  color: ${({ theme }) => theme.label.alternative};
+  text-align: center;
+`;
+
+export const ActionError = styled.p`
+  ${font.caption.medium};
+  margin: 0.5rem 0;
+  color: ${({ theme }) => theme.feedback.danger};
+  text-align: center;
+`;
+
+export const BackgroundErrorNotice = styled.div`
+  ${font.caption.medium};
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin: 0.5rem 0;
+  padding: 0.5rem;
+  border: 1px solid ${({ theme }) => theme.line.alternative};
+  border-radius: 0.5rem;
+  color: ${({ theme }) => theme.label.alternative};
+`;
+
 export const NoticeTitle = styled.p`
   ${font.title2.medium}
 `;

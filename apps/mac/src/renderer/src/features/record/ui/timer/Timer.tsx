@@ -37,6 +37,7 @@ export const Timer = ({
     activeSessionType !== null && !shouldHideStopButton ? (
       <S.PlayButton
         type="button"
+        aria-label="진행 중인 기록 중지"
         disabled={isStopButtonDisabled}
         onClick={() => {
           if (isStopButtonDisabled) {
@@ -45,7 +46,7 @@ export const Timer = ({
           void stop();
         }}
       >
-        <S.PauseIcon $disabled={isStopButtonDisabled} />
+        <S.PauseIcon aria-hidden="true" focusable="false" $disabled={isStopButtonDisabled} />
       </S.PlayButton>
     ) : null;
 
@@ -69,21 +70,41 @@ export const Timer = ({
           onClick={onPreviousDate}
           disabled={!isPreviousDateEnabled}
         >
-          <S.ArrowIcon rotate="LEFT" $disabled={!isPreviousDateEnabled} />
+          <S.ArrowIcon
+            aria-hidden="true"
+            focusable="false"
+            rotate="LEFT"
+            $disabled={!isPreviousDateEnabled}
+          />
         </S.ArrowButton>
-        <S.Date $muted={!isTodaySelected}>{date}</S.Date>
+        <S.Date aria-live="polite" $muted={!isTodaySelected}>
+          {date}
+        </S.Date>
         <S.ArrowButton
           type="button"
           aria-label="다음 날짜 조회"
           onClick={onNextDate}
           disabled={!isNextDateEnabled}
         >
-          <S.ArrowIcon rotate="RIGHT" $disabled={!isNextDateEnabled} />
+          <S.ArrowIcon
+            aria-hidden="true"
+            focusable="false"
+            rotate="RIGHT"
+            $disabled={!isNextDateEnabled}
+          />
         </S.ArrowButton>
       </S.DateBox>
       <S.TimeBox>
         {stopButtonPosition === "LEFT" && stopButton}
-        <S.Time $loading={isLoading}>{displayTime}</S.Time>
+        <S.Time
+          role="timer"
+          aria-live="off"
+          aria-busy={isLoading}
+          aria-label={isLoading ? "총 학습 시간을 불러오는 중" : `총 학습 시간 ${displayTime}`}
+          $loading={isLoading}
+        >
+          {displayTime}
+        </S.Time>
         {stopButtonPosition === "RIGHT" && stopButton}
       </S.TimeBox>
     </>

@@ -9,7 +9,7 @@ interface RivalButtonProps {
   $variant: RivalButtonVariant;
 }
 
-export const RivalStatusButton = styled.button<RivalButtonProps>`
+export const RivalStatusBadge = styled.span<RivalButtonProps>`
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -40,9 +40,4 @@ export const RivalStatusButton = styled.button<RivalButtonProps>`
 
     return backgrounds[$variant];
   }};
-
-  &:disabled {
-    cursor: not-allowed;
-    opacity: 0.45;
-  }
 `;

@@ -75,6 +75,10 @@ export const Button = styled.button<ButtonProps>`
     cursor: not-allowed;
     opacity: 0.45;
   }
+
+  &:active:not(:disabled) {
+    transform: translateY(1px);
+  }
 `;
 
 export const Label = styled.span`

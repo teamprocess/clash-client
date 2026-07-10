@@ -31,7 +31,7 @@ export const ProductCard = ({
   isActive = false,
   onClick,
 }: ProductCardProps) => {
-  const cardRef = useRef<HTMLDivElement>(null);
+  const cardRef = useRef<HTMLButtonElement>(null);
   const discounted = calculateDiscountedPrice(price, discount);
   const originalPrice = price.toLocaleString();
   const isOwned = showOwnedBadge && isBought;
@@ -47,8 +47,10 @@ export const ProductCard = ({
   return (
     <S.CardContainer
       ref={cardRef}
+      type="button"
       $isBought={isOwned}
       $isActive={isActive}
+      aria-pressed={isActive}
       data-product-id={id}
       data-product-key={selectionKey ?? String(id)}
       onClick={onClick}
@@ -60,7 +62,7 @@ export const ProductCard = ({
       <S.ProductInfoBox>
         <S.ProductTitle>{title}</S.ProductTitle>
         <S.PriceBox>
-          <S.CookieIcon />
+          <S.CookieIcon aria-hidden />
           <S.PriceText>{discounted}</S.PriceText>
           {discount !== 0 && (
             <>

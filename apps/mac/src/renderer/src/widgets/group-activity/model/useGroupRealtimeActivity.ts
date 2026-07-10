@@ -7,11 +7,8 @@ export const useGroupRealtimeActivity = (groupId: number | null, selectedDate?: 
   const { data: myProfile } = useGetMyProfile();
   const myUserId = myProfile?.id ?? null;
   const { totalStudyTime, isLoading, isStudying } = useLiveRecordStudyTime(selectedDate);
-  const { groupMembers, activeStudyingCount, incrementStudyingMembers } = useGroupMembersActivity(
-    groupId,
-    myUserId,
-    selectedDate
-  );
+  const { groupMembers, activeStudyingCount, incrementStudyingMembers, activityQuery } =
+    useGroupMembersActivity(groupId, myUserId, selectedDate);
 
   useEffect(() => {
     const interval = window.setInterval(() => {
@@ -27,5 +24,6 @@ export const useGroupRealtimeActivity = (groupId: number | null, selectedDate?: 
     isStudying,
     groupMembers,
     activeStudyingCount,
+    activityQuery,
   };
 };

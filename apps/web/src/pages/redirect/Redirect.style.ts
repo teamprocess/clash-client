@@ -34,7 +34,8 @@ export const SubMessage = styled.p`
   color: ${({ theme }) => theme.label.assistive};
 `;
 
-export const SubLinkMessage = styled.span`
+export const SubLinkMessage = styled.a`
+  color: inherit;
   text-decoration: underline;
   cursor: pointer;
 `;

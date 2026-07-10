@@ -1,4 +1,5 @@
 import styled, { css } from "styled-components";
+import { font } from "@clash/design-tokens/font";
 
 import Plus from "@/shared/ui/assets/plus.svg";
 
@@ -19,6 +20,19 @@ export const Wrapper = styled.div`
   overflow: hidden;
 `;
 
+export const RefreshNotice = styled.div`
+  ${font.caption.medium};
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid ${({ theme }) => theme.line.alternative};
+  border-radius: 0.75rem;
+  color: ${({ theme }) => theme.label.alternative};
+`;
+
 export const Container = styled.div`
   display: grid;
   grid-template-rows: repeat(4, minmax(clamp(4.35rem, 8.2vh, 5.25rem), 1fr));
@@ -34,6 +48,22 @@ export const Container = styled.div`
   &::-webkit-scrollbar {
     display: none;
   }
+`;
+
+export const State = styled.div`
+  ${font.label.medium};
+  display: flex;
+  grid-row: 1 / -1;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  min-height: 5rem;
+  padding: 1rem;
+  border: 1px dashed ${({ theme }) => theme.line.alternative};
+  border-radius: 0.75rem;
+  color: ${({ theme }) => theme.label.alternative};
+  text-align: center;
 `;
 
 export const AddRivalButton = styled.button`

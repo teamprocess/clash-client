@@ -78,6 +78,11 @@ export const GlobalStyle = createGlobalStyle`
     color: inherit;
   }
 
+  :where(button, a, input, textarea, select, [role="button"], [tabindex]):focus-visible {
+    outline: 2px solid ${({ theme }) => theme.interaction.selectionBorder} !important;
+    outline-offset: 2px !important;
+  }
+
   *::-webkit-scrollbar {
     width: 0.5rem;
     height: 0.5rem;
@@ -100,6 +105,15 @@ export const GlobalStyle = createGlobalStyle`
 
   *::-webkit-scrollbar-corner {
     background: transparent;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      scroll-behavior: auto !important;
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
   }
 
 `;

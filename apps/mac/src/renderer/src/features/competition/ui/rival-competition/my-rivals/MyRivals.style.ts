@@ -58,7 +58,7 @@ export const ProfileWrapper = styled.div`
   gap: 0.5rem;
 `;
 
-export const ProfileContainer = styled.button`
+export const ProfileContainer = styled.div`
   display: flex;
   align-items: center;
   width: 100%;
@@ -97,7 +97,6 @@ export const ProfileName = styled.span`
 export const ProfileMention = styled.span`
   ${font.label.regular}
   color: ${({ theme }) => theme.label.alternative};
-  cursor: pointer;
 
   display: block;
   min-width: 0;

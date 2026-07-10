@@ -73,8 +73,13 @@ export const ProductDetailPanel = ({
           </S.MajorInfoWrapper>
         </S.InfoContainer>
 
-        <S.PurchaseBtn $isDisabled={isPurchaseDisabled} onClick={handleOpenPurchase}>
-          {!isPurchaseDisabled && <S.CookieIcon />}
+        <S.PurchaseBtn
+          type="button"
+          $isDisabled={isPurchaseDisabled}
+          disabled={isPurchaseDisabled}
+          onClick={handleOpenPurchase}
+        >
+          {!isPurchaseDisabled && <S.CookieIcon aria-hidden />}
           {purchaseButtonLabel}
         </S.PurchaseBtn>
       </S.DetailPanelSticky>

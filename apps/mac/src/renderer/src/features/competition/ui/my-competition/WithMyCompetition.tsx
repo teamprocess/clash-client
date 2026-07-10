@@ -32,11 +32,13 @@ export const WithMyCompetition = () => {
           <S.AnalyzeTitle>내 성장도 분석</S.AnalyzeTitle>
           <S.GrowthControlBox>
             <Select<AnalyzeCategory>
+              aria-label="성장도 분석 항목"
               value={growthRateCategory}
               options={growthRateCategoryOptions}
               onChange={setGrowthRateCategory}
             />
             <Select<GrowthRateStandard>
+              aria-label="성장도 분석 기간"
               value={growthRatePeriod}
               options={growthRatePeriodOptions}
               onChange={setGrowthRatePeriod}
@@ -62,6 +64,7 @@ export const WithMyCompetition = () => {
             <S.TextBox>
               <S.CompareBoxTitle>이전의 활동량</S.CompareBoxTitle>
               <Select<CompareStandard>
+                aria-label="기록 비교 기간"
                 width={10}
                 value={competitionDropdown}
                 options={competitionDropdownOptions}

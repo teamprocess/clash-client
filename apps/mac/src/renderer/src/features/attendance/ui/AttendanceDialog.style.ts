@@ -46,6 +46,18 @@ export const Body = styled.div`
   margin-top: 0.25rem;
 `;
 
+export const LoadState = styled.div`
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 2rem 1rem;
+  text-align: center;
+  box-sizing: border-box;
+`;
+
 export const Hero = styled.div`
   display: flex;
   flex-direction: column;
