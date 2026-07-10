@@ -1,7 +1,4 @@
-import {
-  usePopularProductsQuery,
-  useRecommendedProductsQuery,
-} from "@/entities/shop/api/query/useShop.query";
+import { usePopularProductsQuery, useRecommendedProductsQuery } from "@/entities/shop";
 import { sortOwnedProductsLast } from "@/features/shop/lib/sortOwnedProductsLast";
 
 export const useShop = () => {
@@ -11,9 +8,7 @@ export const useShop = () => {
   const recommendedProducts = sortOwnedProductsLast(
     recommendedProductsQuery.data?.data?.products ?? []
   );
-  const popularProducts = sortOwnedProductsLast(
-    popularProductsQuery.data?.data?.products ?? []
-  );
+  const popularProducts = sortOwnedProductsLast(popularProductsQuery.data?.data?.products ?? []);
   const error = recommendedProductsQuery.error ?? popularProductsQuery.error ?? null;
 
   const refetch = async () => {
