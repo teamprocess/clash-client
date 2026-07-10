@@ -29,8 +29,9 @@ export const Select = styled.select<{ $width: number }>`
   background-position: right 0.5rem center;
   background-size: 0.75rem;
 
-  &:focus {
-    outline: none;
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.55;
   }
 `;
 

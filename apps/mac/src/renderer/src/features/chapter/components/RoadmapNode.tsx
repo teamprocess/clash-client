@@ -1,3 +1,4 @@
+import type { KeyboardEvent } from "react";
 import * as S from "../components/RoadmapNode.style";
 import type { Node } from "@/features/chapter/roadmapData";
 
@@ -19,6 +20,7 @@ const STAR_CENTER_OFFSETS = {
 } as const;
 
 export const RoadmapNode = ({ node, onClick }: RoadmapNodeProps) => {
+  const isLocked = node.status === "locked";
   const StarIcon =
     node.stars === 1
       ? S.Star1Icon
@@ -32,10 +34,28 @@ export const RoadmapNode = ({ node, onClick }: RoadmapNodeProps) => {
       ? STAR_CENTER_OFFSETS[node.stars as keyof typeof STAR_CENTER_OFFSETS]
       : 0;
   const starCenterOffset = (starOffsetInViewBox * STAR_WIDTH) / STAR_VIEWBOX_WIDTH;
+  const statusLabel =
+    node.status === "completed" ? "완료" : node.status === "current" ? "진행 가능" : "잠김";
+  const starLabel = node.stars ? `, 별 ${node.stars}개` : "";
+
+  const handleKeyDown = (event: KeyboardEvent<SVGGElement>) => {
+    if (isLocked || (event.key !== "Enter" && event.key !== " ")) {
+      return;
+    }
+
+    event.preventDefault();
+    onClick();
+  };
 
   return (
     <S.NodeGroup
-      onClick={onClick}
+      role="button"
+      tabIndex={isLocked ? -1 : 0}
+      aria-disabled={isLocked}
+      aria-label={`${node.orderIndex + 1}단계, ${statusLabel}${starLabel}`}
+      onClick={isLocked ? undefined : onClick}
+      onKeyDown={handleKeyDown}
+      $disabled={isLocked}
       data-roadmap-node-id={node.id}
       data-roadmap-node-order-index={node.orderIndex}
       data-roadmap-node-status={node.status}
@@ -44,6 +64,7 @@ export const RoadmapNode = ({ node, onClick }: RoadmapNodeProps) => {
 
       {node.status === "completed" && (
         <S.CheckIcon
+          aria-hidden="true"
           x={node.x - CHECK_SIZE / 2}
           y={node.y - CHECK_SIZE / 2}
           width={CHECK_SIZE}
@@ -60,6 +81,7 @@ export const RoadmapNode = ({ node, onClick }: RoadmapNodeProps) => {
 
       {node.status === "locked" && (
         <S.LockIcon
+          aria-hidden="true"
           x={node.x - LOCK_SIZE / 2}
           y={node.y - LOCK_SIZE / 2}
           width={LOCK_SIZE}
@@ -70,6 +92,7 @@ export const RoadmapNode = ({ node, onClick }: RoadmapNodeProps) => {
 
       {node.stars && node.stars > 0 && StarIcon && (
         <StarIcon
+          aria-hidden="true"
           x={node.x - STAR_WIDTH / 2 + starCenterOffset}
           y={node.y - NODE_RADIUS - STAR_HEIGHT - 10}
           width={STAR_WIDTH}

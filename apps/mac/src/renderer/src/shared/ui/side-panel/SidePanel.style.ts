@@ -44,7 +44,10 @@ const slideOut = keyframes`
   }
 `;
 
-export const Overlay = styled.div<{ $closing: boolean; $position: "absolute" | "fixed" }>`
+export const Overlay = styled.div<{
+  $closing: boolean;
+  $position: "absolute" | "fixed";
+}>`
   position: ${({ $position }) => $position};
   inset: 0;
   display: flex;
@@ -53,7 +56,7 @@ export const Overlay = styled.div<{ $closing: boolean; $position: "absolute" | "
   height: 100dvh;
   background-color: rgba(0, 0, 0, 0.52);
   backdrop-filter: blur(4px);
-  z-index: 1200;
+  z-index: 1300;
   animation: ${({ $closing }) => ($closing ? fadeOut : fadeIn)} 0.22s ease forwards;
 `;
 

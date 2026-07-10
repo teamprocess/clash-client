@@ -24,7 +24,8 @@ const getTaskNameErrorMessage = (name: string) => {
 
 export const useTaskList = (selectedDate?: string) => {
   const isTodaySelected = selectedDate === undefined;
-  const { data: subjectsResponse } = useRecordSubjectsQuery(selectedDate);
+  const subjectsQuery = useRecordSubjectsQuery(selectedDate);
+  const { data: subjectsResponse } = subjectsQuery;
   const subjects = subjectsResponse?.data?.subjects ?? EMPTY_SUBJECTS;
   const {
     activeSessionType,
@@ -316,5 +317,6 @@ export const useTaskList = (selectedDate?: string) => {
     handleCancelEdit,
     handleCancelDelete,
     handleConfirmDelete,
+    subjectsQuery,
   };
 };

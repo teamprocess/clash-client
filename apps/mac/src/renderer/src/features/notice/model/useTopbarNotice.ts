@@ -180,18 +180,21 @@ export const useTopbarNotice = () => {
   const [activeTab, setActiveTab] = useState<NoticeFilterTab>("UNREAD");
   const [searchKeyword, setSearchKeyword] = useState("");
   const [processingNoticeId, setProcessingNoticeId] = useState<number | null>(null);
+  const [actionError, setActionError] = useState<string | null>(null);
   const wasOpenRef = useRef(false);
   const isAllTab = activeTab === "ALL";
-  const { data: unreadNotices = [], isLoading: isUnreadNoticesLoading } = useMyUnreadNoticesQuery();
-  const { data: allNotices = [], isLoading: isAllNoticesLoading } = useMyAllNoticesQuery(
-    isOpen && isAllTab
-  );
+  const unreadNoticesQuery = useMyUnreadNoticesQuery();
+  const allNoticesQuery = useMyAllNoticesQuery(isOpen && isAllTab);
+  const { data: unreadNotices = [], isLoading: isUnreadNoticesLoading } = unreadNoticesQuery;
+  const { data: allNotices = [], isLoading: isAllNoticesLoading } = allNoticesQuery;
 
   const notices = useMemo(
     () => (isAllTab ? allNotices : unreadNotices),
     [allNotices, isAllTab, unreadNotices]
   );
   const isLoading = isAllTab ? isAllNoticesLoading : isUnreadNoticesLoading;
+  const activeQuery = isAllTab ? allNoticesQuery : unreadNoticesQuery;
+  const hasQueryData = activeQuery.data !== undefined;
 
   const unreadCount = useMemo(
     () => unreadNotices.filter(notice => !notice.isRead).length,
@@ -231,6 +234,7 @@ export const useTopbarNotice = () => {
       const next = !prev;
       if (next) {
         setActiveTab("UNREAD");
+        setActionError(null);
       }
       return next;
     });
@@ -238,6 +242,7 @@ export const useTopbarNotice = () => {
 
   const close = () => {
     setActiveTab("UNREAD");
+    setActionError(null);
     setIsOpen(false);
   };
 
@@ -287,12 +292,14 @@ export const useTopbarNotice = () => {
     }
 
     setProcessingNoticeId(notice.id);
+    setActionError(null);
     const previousNotices = await applyReadNoticeOptimisticUpdate([notice.id]);
     try {
       await readNoticeAndRefresh(notice);
     } catch (error) {
       rollbackNoticeOptimisticUpdate(previousNotices, [notice.id]);
       const errorMessage = getErrorMessage(error, "알림 읽음 처리에 실패했습니다.");
+      setActionError(errorMessage);
       console.error("알림 읽음 처리 실패:", errorMessage, error);
     } finally {
       setProcessingNoticeId(null);
@@ -305,6 +312,7 @@ export const useTopbarNotice = () => {
     }
 
     setProcessingNoticeId(notice.id);
+    setActionError(null);
     const previousNotices = await applyReadNoticeOptimisticUpdate([notice.id]);
     try {
       await runNoticeAction(notice, "accept");
@@ -313,6 +321,7 @@ export const useTopbarNotice = () => {
     } catch (error) {
       rollbackNoticeOptimisticUpdate(previousNotices, [notice.id]);
       const errorMessage = getErrorMessage(error, "알림 수락 처리에 실패했습니다.");
+      setActionError(errorMessage);
       console.error("알림 수락 처리 실패:", errorMessage, error);
     } finally {
       setProcessingNoticeId(null);
@@ -325,6 +334,7 @@ export const useTopbarNotice = () => {
     }
 
     setProcessingNoticeId(notice.id);
+    setActionError(null);
     const previousNotices = await applyReadNoticeOptimisticUpdate([notice.id]);
     try {
       await runNoticeAction(notice, "reject");
@@ -333,6 +343,7 @@ export const useTopbarNotice = () => {
     } catch (error) {
       rollbackNoticeOptimisticUpdate(previousNotices, [notice.id]);
       const errorMessage = getErrorMessage(error, "알림 거절 처리에 실패했습니다.");
+      setActionError(errorMessage);
       console.error("알림 거절 처리 실패:", errorMessage, error);
     } finally {
       setProcessingNoticeId(null);
@@ -349,6 +360,11 @@ export const useTopbarNotice = () => {
     filteredNotices,
     emptyMessage,
     processingNoticeId,
+    isError: activeQuery.isError,
+    hasQueryData,
+    error: activeQuery.error,
+    refetch: activeQuery.refetch,
+    actionError,
     setActiveTab,
     setSearchKeyword,
     toggle,

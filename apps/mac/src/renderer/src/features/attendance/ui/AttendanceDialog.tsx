@@ -21,8 +21,11 @@ interface AttendanceDialogProps {
   isTodayAttended: boolean;
   isCompletingAttendance: boolean;
   errorMessage: string;
+  isLoading: boolean;
+  loadErrorMessage: string;
   onClose: () => void;
   onConfirm: () => Promise<void>;
+  onRetry: () => void;
 }
 
 export const AttendanceDialog = ({
@@ -34,11 +37,42 @@ export const AttendanceDialog = ({
   isCompletingAttendance,
   isTodayAttended,
   errorMessage,
+  isLoading,
+  loadErrorMessage,
   onClose,
   onConfirm,
+  onRetry,
 }: AttendanceDialogProps) => {
   if (!weeklyAttendance) {
-    return null;
+    const hasLoadError = Boolean(loadErrorMessage);
+
+    return (
+      <Dialog title="출석" width={26} height={33} isOpen={isOpen} onClose={onClose}>
+        <S.LoadState
+          role={hasLoadError ? "alert" : "status"}
+          aria-live={hasLoadError ? "assertive" : "polite"}
+        >
+          <S.GiftIcon aria-hidden />
+          <S.Headline>
+            {isLoading
+              ? "출석 현황을 불러오는 중이에요."
+              : hasLoadError
+                ? "출석 현황을 불러오지 못했어요."
+                : "표시할 출석 현황이 없어요."}
+          </S.Headline>
+          <S.Description>
+            {isLoading
+              ? "잠시만 기다려 주세요."
+              : loadErrorMessage || "잠시 후 다시 확인해 주세요."}
+          </S.Description>
+          {!isLoading && (
+            <Button variant="primary" size="md" onClick={onRetry}>
+              다시 시도
+            </Button>
+          )}
+        </S.LoadState>
+      </Dialog>
+    );
   }
 
   const isDialogLocked = isSubmitting || isCompletingAttendance;
@@ -60,6 +94,7 @@ export const AttendanceDialog = ({
       isOpen={isOpen}
       onClose={onClose}
       closeOnOverlayClick={!isDialogLocked}
+      closeOnEscape={!isDialogLocked}
       showClose={!isDialogLocked}
     >
       <S.Body>

@@ -43,7 +43,7 @@ export const Grid = styled.div`
 
 const GRASS_COLORS = ["", "#3DCD5F40", "#3DCD5F80", "#3DCD5FBF", "#3DCD5FFF"] as const;
 
-export const Grass = styled.div<{
+export const Grass = styled.button<{
   $level: 0 | 1 | 2 | 3 | 4;
   $dimmed?: boolean;
   $selected?: boolean;
@@ -51,7 +51,10 @@ export const Grass = styled.div<{
 }>`
   width: ${CELL}rem;
   height: ${CELL}rem;
+  padding: 0;
+  border: 0;
   border-radius: ${RADIUS}rem;
+  cursor: ${({ $hidden }) => ($hidden ? "default" : "pointer")};
 
   opacity: ${({ $dimmed, $hidden }) => {
     if ($hidden) return 0;

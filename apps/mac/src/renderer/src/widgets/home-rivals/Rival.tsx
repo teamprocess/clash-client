@@ -1,7 +1,8 @@
 import * as S from "./Rival.style";
 import { RivalsManagementDialog, useRival } from "@/features/rival-management";
-import { QuestionTooltip } from "@/shared/ui";
+import { Button, QuestionTooltip } from "@/shared/ui";
 import { MyRivalUsers } from "./MyRivalUsers";
+import { getErrorMessage } from "@/shared/lib";
 
 export const Rival = () => {
   const rival = useRival();
@@ -18,25 +19,66 @@ export const Rival = () => {
         </S.TitleLeft>
 
         <S.RightSide>
-          <S.ArrowBox onClick={rival.handleOpen}>
+          <S.ArrowBox
+            type="button"
+            disabled={rival.queries.myRivals.isPending || rival.queries.myRivals.isError}
+            onClick={rival.handleOpen}
+          >
             라이벌 관리
-            <S.DetailArrowIcon />
+            <S.DetailArrowIcon aria-hidden />
           </S.ArrowBox>
         </S.RightSide>
       </S.TitleBox>
 
-      <S.RivalBox>
-        {rivals.map(user => (
-          <MyRivalUsers key={user.username} user={user} />
-        ))}
+      {rival.queries.myRivals.isError && rival.rivalsData && (
+        <S.RefreshWarning role="alert">
+          <span>새 라이벌 정보를 불러오지 못해 이전 결과를 표시해요.</span>
+          <Button
+            type="button"
+            size="sm"
+            variant="secondary"
+            onClick={() => void rival.queries.myRivals.refetch()}
+          >
+            다시 시도
+          </Button>
+        </S.RefreshWarning>
+      )}
 
-        {canAddMore && (
-          <S.AddRivalButton type="button" onClick={rival.handleOpen}>
-            <S.AddRivalBox>
-              <S.PlusIcon />
-              <S.AddRivalText>버튼을 눌러 라이벌을 추가할 수 있어요.</S.AddRivalText>
-            </S.AddRivalBox>
-          </S.AddRivalButton>
+      <S.RivalBox aria-busy={rival.queries.myRivals.isFetching || undefined}>
+        {rival.queries.myRivals.isPending ? (
+          <S.RivalState role="status" aria-live="polite">
+            <S.RivalStateTitle>라이벌을 불러오는 중이에요.</S.RivalStateTitle>
+          </S.RivalState>
+        ) : rival.queries.myRivals.isError && !rival.rivalsData ? (
+          <S.RivalState role="alert">
+            <S.RivalStateTitle>라이벌을 불러오지 못했어요.</S.RivalStateTitle>
+            <S.RivalStateDescription>
+              {getErrorMessage(rival.queries.myRivals.error, "잠시 후 다시 시도해 주세요.")}
+            </S.RivalStateDescription>
+            <Button
+              type="button"
+              size="sm"
+              variant="primary"
+              onClick={() => void rival.queries.myRivals.refetch()}
+            >
+              다시 시도
+            </Button>
+          </S.RivalState>
+        ) : (
+          <>
+            {rivals.map(user => (
+              <MyRivalUsers key={user.username} user={user} />
+            ))}
+
+            {canAddMore && (
+              <S.AddRivalButton type="button" onClick={rival.handleOpen}>
+                <S.AddRivalBox>
+                  <S.PlusIcon aria-hidden />
+                  <S.AddRivalText>버튼을 눌러 라이벌을 추가할 수 있어요.</S.AddRivalText>
+                </S.AddRivalBox>
+              </S.AddRivalButton>
+            )}
+          </>
         )}
       </S.RivalBox>
 

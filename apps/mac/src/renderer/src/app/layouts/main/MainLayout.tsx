@@ -31,6 +31,7 @@ export const MainLayout = () => {
     <S.LayoutContainer>
       <Topbar
         onToggleSidebar={toggleSidebar}
+        isSidebarOpen={isSidebarOpen}
         onOpenAttendance={attendanceDialog.open}
         isAttendancePending={attendanceDialog.isAttendancePending}
       />
@@ -49,8 +50,11 @@ export const MainLayout = () => {
         isTodayAttended={attendanceDialog.isTodayAttended}
         isCompletingAttendance={attendanceDialog.isCompletingAttendance}
         errorMessage={attendanceDialog.errorMessage}
+        isLoading={attendanceDialog.isAttendanceLoading}
+        loadErrorMessage={attendanceDialog.attendanceLoadErrorMessage}
         onClose={attendanceDialog.close}
         onConfirm={attendanceDialog.confirm}
+        onRetry={attendanceDialog.retryAttendance}
       />
       <GlobalAnnouncementDialog />
       <GitHubGuard />

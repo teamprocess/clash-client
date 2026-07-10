@@ -171,6 +171,31 @@ export const MemberActivitySection = styled.div`
   margin-top: 1rem;
 `;
 
+export const ActivityState = styled.div`
+  display: flex;
+  flex: 1;
+  min-height: 8rem;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 1.5rem;
+  border: 1px dashed ${({ theme }) => theme.line.alternative};
+  border-radius: 0.75rem;
+  background-color: ${({ theme }) => theme.fill.normal};
+  text-align: center;
+`;
+
+export const ActivityStateTitle = styled.p`
+  ${font.headline2.medium};
+  color: ${({ theme }) => theme.label.normal};
+`;
+
+export const ActivityStateDescription = styled.p`
+  ${font.label.medium};
+  color: ${({ theme }) => theme.label.alternative};
+`;
+
 export const MemberGrid = styled.div`
   display: grid;
   grid-template-columns: repeat(5, minmax(0, 1fr));

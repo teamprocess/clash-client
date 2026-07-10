@@ -82,6 +82,13 @@ export const ButtonGroup = styled.div`
   gap: 1rem;
 `;
 
+export const ErrorText = styled.p`
+  ${font.label.medium};
+  margin: -1.5rem 0;
+  color: ${({ theme }) => theme.feedback.danger};
+  text-align: center;
+`;
+
 export const Button = styled.button<{ $buttonType: "retry" | "start" }>`
   display: flex;
   justify-content: center;

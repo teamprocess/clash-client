@@ -32,8 +32,10 @@ const getTodoNameErrorMessage = (name: string) => {
 
 export const useTodoList = (selectedDate?: string) => {
   const isTodaySelected = selectedDate === undefined;
-  const { data: subjectsResponse } = useRecordSubjectsQuery(selectedDate);
-  const { data: tasksResponse } = useRecordTasksQuery(selectedDate);
+  const subjectsQuery = useRecordSubjectsQuery(selectedDate);
+  const tasksQuery = useRecordTasksQuery(selectedDate);
+  const { data: subjectsResponse } = subjectsQuery;
+  const { data: tasksResponse } = tasksQuery;
   const subjects = subjectsResponse?.data?.subjects ?? EMPTY_SUBJECTS;
   const tasks = tasksResponse?.data?.tasks ?? EMPTY_TASKS;
   const {
@@ -295,5 +297,7 @@ export const useTodoList = (selectedDate?: string) => {
     handleCompleteClick,
     handleDeleteClick,
     getParentTaskName,
+    subjectsQuery,
+    tasksQuery,
   };
 };

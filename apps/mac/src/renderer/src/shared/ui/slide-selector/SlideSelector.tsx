@@ -1,4 +1,11 @@
-import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
+import {
+  type KeyboardEvent,
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
 import * as S from "./SlideSelector.style";
 
 interface SlideSelectorOption<T extends string> {
@@ -12,6 +19,7 @@ export interface SlideSelectorProps<T extends string> {
   value: T;
   options: SlideSelectorOption<T>[];
   onChange: (value: T) => void;
+  ariaLabel?: string;
 }
 
 export const SlideSelector = <T extends string>({
@@ -20,6 +28,7 @@ export const SlideSelector = <T extends string>({
   value,
   options,
   onChange,
+  ariaLabel = "보기 선택",
 }: SlideSelectorProps<T>) => {
   const activeIndex = Math.max(
     0,
@@ -68,9 +77,34 @@ export const SlideSelector = <T extends string>({
     return () => observer.disconnect();
   }, [options, updateRailIndicator]);
 
+  const handleKeyDown = (event: KeyboardEvent<HTMLButtonElement>, index: number) => {
+    if (
+      options.length === 0 ||
+      !["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown", "Home", "End"].includes(event.key)
+    ) {
+      return;
+    }
+
+    event.preventDefault();
+    const lastIndex = options.length - 1;
+    const nextIndex =
+      event.key === "Home"
+        ? 0
+        : event.key === "End"
+          ? lastIndex
+          : event.key === "ArrowRight" || event.key === "ArrowDown"
+            ? (index + 1) % options.length
+            : (index - 1 + options.length) % options.length;
+    const nextOption = options[nextIndex];
+    if (!nextOption) return;
+
+    onChange(nextOption.key);
+    buttonRefs.current[nextIndex]?.focus();
+  };
+
   return (
     <S.SlideSelectorRoot id={id} className={className}>
-      <S.SlideSelectorTabs ref={tabsRef}>
+      <S.SlideSelectorTabs ref={tabsRef} role="radiogroup" aria-label={ariaLabel}>
         {options.map((option, index) => (
           <S.SlideButton
             key={option.key}
@@ -78,15 +112,19 @@ export const SlideSelector = <T extends string>({
               buttonRefs.current[index] = element;
             }}
             type="button"
+            role="radio"
+            aria-checked={option.key === value}
+            tabIndex={option.key === value ? 0 : -1}
             $isActive={option.key === value}
             onClick={() => onChange(option.key)}
+            onKeyDown={event => handleKeyDown(event, index)}
           >
             {option.label}
           </S.SlideButton>
         ))}
       </S.SlideSelectorTabs>
 
-      <S.RailTrack>
+      <S.RailTrack aria-hidden>
         <S.RailActiveIndicator $left={railIndicator.left} $width={railIndicator.width} />
       </S.RailTrack>
     </S.SlideSelectorRoot>

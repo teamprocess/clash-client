@@ -41,6 +41,32 @@ export const TodoBox = styled.div`
   flex-direction: column;
 `;
 
+export const ListState = styled.div`
+  ${font.label.medium};
+  display: flex;
+  min-height: 6rem;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 1.25rem;
+  color: ${({ theme }) => theme.label.alternative};
+  text-align: center;
+`;
+
+export const SourceNotice = styled.div`
+  ${font.caption.medium};
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin: 0.75rem 1rem 0;
+  padding: 0.75rem;
+  border: 1px solid ${({ theme }) => theme.line.alternative};
+  border-radius: 0.75rem;
+  color: ${({ theme }) => theme.label.alternative};
+`;
+
 export const TodoItem = styled.div<{ $isMenuOpen?: boolean }>`
   display: flex;
   align-items: center;

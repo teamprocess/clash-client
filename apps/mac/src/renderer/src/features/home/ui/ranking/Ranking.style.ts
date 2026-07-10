@@ -146,3 +146,25 @@ export const DefaultBattleText = styled.p`
   word-break: keep-all;
   padding: 0 0.5rem;
 `;
+
+export const ErrorNotice = styled.div`
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+  padding: 0.75rem 1rem;
+  border: 1px solid ${({ theme }) => theme.line.alternative};
+  border-radius: 0.75rem;
+  background-color: ${({ theme }) => theme.fill.neutral};
+  box-sizing: border-box;
+`;
+
+export const ErrorNoticeText = styled.p`
+  ${font.label.medium};
+  min-width: 0;
+  margin: 0;
+  color: ${({ theme }) => theme.label.normal};
+  word-break: keep-all;
+`;

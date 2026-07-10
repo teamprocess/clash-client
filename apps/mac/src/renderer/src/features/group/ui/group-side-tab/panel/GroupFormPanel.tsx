@@ -52,6 +52,7 @@ export const GroupFormPanel = ({
       {isOpen && (
         <S.PanelContent>
           <SlideSelector
+            ariaLabel="그룹 찾기 보기"
             value={activeTab}
             options={[
               { key: "join", label: "그룹 참여" },

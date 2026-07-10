@@ -22,6 +22,19 @@ export const TaskBox = styled.div`
   flex-direction: column;
 `;
 
+export const ListState = styled.div`
+  ${font.label.medium};
+  display: flex;
+  min-height: 6rem;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 1.25rem;
+  color: ${({ theme }) => theme.label.alternative};
+  text-align: center;
+`;
+
 export const TaskItem = styled.div`
   display: flex;
   align-items: center;
@@ -135,4 +148,9 @@ export const AddTaskButton = styled.button`
   background-color: ${({ theme }) => theme.line.neutral};
   ${font.headline2.medium};
   cursor: pointer;
+
+  &:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
 `;

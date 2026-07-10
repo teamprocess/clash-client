@@ -324,6 +324,19 @@ export const AnalyzeBox = styled.div`
   height: 100%;
 `;
 
+export const AnalyzeState = styled.div`
+  ${font.label.medium};
+  display: flex;
+  flex: 1;
+  min-height: 6rem;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  color: ${({ theme }) => theme.label.alternative};
+  text-align: center;
+`;
+
 export const AnalyzeRow = styled.div`
   ${flexRow};
   align-items: center;
@@ -446,6 +459,27 @@ export const UserChoiceBox = styled.div<{ $isSelected?: boolean; $isRival?: bool
     `}
 `;
 
+export const SelectableUserButton = styled.button<{ $isSelected: boolean }>`
+  ${flexRow};
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  border-bottom: 1px solid ${({ theme }) => theme.line.alternative};
+  background-color: ${({ $isSelected, theme }) =>
+    $isSelected ? theme.fill.alternative : "transparent"};
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: 0.1s ease-in-out;
+
+  &:hover {
+    padding: 0.5rem 1rem;
+    border-radius: 0.75rem;
+    background-color: ${({ theme }) => theme.fill.alternative};
+  }
+`;
+
 export const CheckedIcon = styled(Checked)``;
 
 export const UncheckedBox = styled.div`
@@ -547,7 +581,7 @@ export const DataBox = styled.div`
 `;
 
 export const ProfileSubText = styled.div`
-  color: #8a8f98;
+  color: ${({ theme }) => theme.label.assistive};
   font-size: 0.75rem;
   font-weight: 400;
   line-height: 1.2;
@@ -581,4 +615,16 @@ export const ErrorText = styled.p`
   ${font.label.medium};
   color: ${({ theme }) => theme.feedback.danger};
   width: 100%;
+`;
+
+export const QueryNotice = styled.div`
+  ${font.caption.medium};
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid ${({ theme }) => theme.line.alternative};
+  border-radius: 0.75rem;
+  color: ${({ theme }) => theme.label.alternative};
 `;

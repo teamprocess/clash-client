@@ -47,8 +47,15 @@ export const Filter = ({
   return (
     <S.FilterContainer>
       <S.FilterBox>
-        <Select<ProductSort> value={sort} options={sortOptions} onChange={onSortChange} width={8} />
+        <Select<ProductSort>
+          aria-label="상품 정렬"
+          value={sort}
+          options={sortOptions}
+          onChange={onSortChange}
+          width={8}
+        />
         <Select<ProductCategory | "">
+          aria-label="상품 카테고리"
           value={category}
           options={categoryOptions}
           onChange={onCategoryChange}

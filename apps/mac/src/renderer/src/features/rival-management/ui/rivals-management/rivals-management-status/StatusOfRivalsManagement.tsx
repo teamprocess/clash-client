@@ -6,8 +6,6 @@ type RivalLinkingStatus = "ACCEPTED" | "REJECTED" | "PENDING" | "CANCELED";
 
 interface ButtonOfRivalsManagementProps {
   status: RivalLinkingStatus;
-  onClick?: () => void;
-  size?: "sm" | "md" | "lg";
   className?: string;
 }
 
@@ -40,8 +38,8 @@ export const RivalLinkingStatusButton = ({ status, className }: ButtonOfRivalsMa
   const ui = STATUS_UI[status];
 
   return (
-    <S.RivalStatusButton type="button" $variant={ui.variant} className={className}>
+    <S.RivalStatusBadge $variant={ui.variant} className={className}>
       {ui.title}
-    </S.RivalStatusButton>
+    </S.RivalStatusBadge>
   );
 };
