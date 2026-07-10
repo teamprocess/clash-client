@@ -1,6 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { purchaseProduct, type PurchaseRequest } from "@/entities/shop/api/purchaseApi";
-import { shopQueryKeys } from "@/entities/shop/api/query/useShop.query";
+import { purchaseProduct, shopQueryKeys, type PurchaseRequest } from "@/entities/shop";
 
 export const usePurchaseProduct = () => {
   const queryClient = useQueryClient();

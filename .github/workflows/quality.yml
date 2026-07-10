@@ -4,6 +4,7 @@ on:
   pull_request:
     branches:
       - main
+      - develop
     paths:
       - "apps/**"
       - "packages/**"
@@ -67,6 +68,9 @@ jobs:
 
       - name: Typecheck
         run: pnpm turbo run typecheck --filter=@clash/mac
+
+      - name: Test
+        run: pnpm turbo run test --filter=@clash/mac
 
       - name: Build
         run: pnpm turbo run build --filter=@clash/mac
