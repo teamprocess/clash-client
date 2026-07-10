@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import Clash from "../assets/clash-logo.svg";
+import { ClashLogo as SharedClashLogo } from "@clash/ui";
 
 export const SignInContainer = styled.div`
   display: flex;
@@ -18,7 +18,7 @@ export const LeftContainer = styled.div`
   gap: 3rem;
 `;
 
-export const ClashLogo = styled(Clash)`
+export const ClashLogo = styled(SharedClashLogo)`
   width: 14rem;
   height: 3rem;
 `;

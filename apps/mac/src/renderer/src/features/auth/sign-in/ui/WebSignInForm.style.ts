@@ -29,13 +29,6 @@ export const Description = styled.p`
   text-align: center;
 `;
 
-export const ErrorText = styled.span`
-  ${font.caption.medium};
-  color: ${({ theme }) => theme.feedback.danger};
-  margin-top: 0.5rem;
-  display: block;
-`;
-
 export const ButtonWrapper = styled.div`
   display: flex;
   flex-direction: column;

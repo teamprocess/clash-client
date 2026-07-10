@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { font } from "@clash/design-tokens/font";
+import { FeedbackState } from "@clash/ui";
 import Fire from "../assets/fire.svg";
 import Cry from "../assets/cry.svg";
 
@@ -171,19 +172,11 @@ export const MemberActivitySection = styled.div`
   margin-top: 1rem;
 `;
 
-export const ActivityState = styled.div`
-  display: flex;
+export const ActivityState = styled(FeedbackState).attrs({ appearance: "dashed" })`
   flex: 1;
   min-height: 8rem;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
   gap: 0.5rem;
   padding: 1.5rem;
-  border: 1px dashed ${({ theme }) => theme.line.alternative};
-  border-radius: 0.75rem;
-  background-color: ${({ theme }) => theme.fill.normal};
-  text-align: center;
 `;
 
 export const ActivityStateTitle = styled.p`

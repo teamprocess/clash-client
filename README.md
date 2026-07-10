@@ -21,11 +21,11 @@ Clash는 IDE 사용 시간과 GitHub 활동을 기반으로 개발 학습을 기
 
 ## Product Surface
 
-| 영역         | 설명                                                    |
-| ------------ | ------------------------------------------------------- |
-| `apps/mac`   | Electron 기반 macOS 데스크톱 클라이언트                 |
-| `apps/web`   | 온보딩, 다운로드, 인증을 담당하는 웹                    |
-| `packages/*` | 앱 공통 상수, 디자인 토큰, ESLint 설정, TypeScript 설정 |
+| 영역         | 설명                                                |
+| ------------ | --------------------------------------------------- |
+| `apps/mac`   | Electron 기반 macOS 데스크톱 클라이언트             |
+| `apps/web`   | 온보딩, 다운로드, 인증을 담당하는 웹                |
+| `packages/*` | 앱 공통 UI primitive, 디자인 토큰, 상수와 개발 설정 |
 
 ## Features
 
@@ -40,16 +40,16 @@ Clash는 IDE 사용 시간과 GitHub 활동을 기반으로 개발 학습을 기
 
 ## Tech Stack
 
-| 분류              | 기술                 |
-| ----------------- | -------------------- |
-| Desktop           | Electron             |
-| Frontend          | React, TypeScript    |
-| Server State      | React Query, Axios   |
-| Client State      | Zustand              |
-| Realtime          | Socket.IO            |
-| Form & Validation | react-hook-form, zod |
-| UI                | styled-components    |
-| Workspace         | pnpm, Turborepo      |
+| 분류              | 기술                         |
+| ----------------- | ---------------------------- |
+| Desktop           | Electron                     |
+| Frontend          | React, TypeScript            |
+| Server State      | React Query, Axios           |
+| Client State      | Zustand                      |
+| Realtime          | Socket.IO                    |
+| Form & Validation | react-hook-form, zod         |
+| UI                | styled-components, @clash/ui |
+| Workspace         | pnpm, Turborepo              |
 
 ## Architecture
 
@@ -85,6 +85,7 @@ clash-client
 │   ├── constants         # 런타임 공통 상수
 │   ├── design-tokens     # 테마, 팔레트, 폰트 토큰
 │   ├── eslint-config     # 공유 ESLint 설정
-│   └── tsconfig          # 공유 TypeScript 설정
+│   ├── tsconfig          # 공유 TypeScript 설정
+│   └── ui                # Mac/Web 공통 UI primitive와 variant
 └── docs/assets           # README 전용 에셋
 ```

@@ -1,4 +1,5 @@
 import * as S from "../../ResetPassword.style";
+import { Button, FieldMessage, TextField } from "@clash/ui";
 import type { ResetPasswordRequestProps } from "../../model/useResetPassword";
 
 export const ResetPasswordRequestStep = ({
@@ -16,15 +17,27 @@ export const ResetPasswordRequestStep = ({
       </S.Content>
       <S.InputBox>
         <div>
-          <S.Input placeholder="이메일 주소를 입력하세요." {...register("email")} />
-          {errors.email && <S.ErrorText>{errors.email.message}</S.ErrorText>}
+          <TextField
+            inputSize="lg"
+            placeholder="이메일 주소를 입력하세요."
+            invalid={!!errors.email}
+            {...register("email")}
+          />
+          {errors.email && <FieldMessage role="alert">{errors.email.message}</FieldMessage>}
         </div>
       </S.InputBox>
       <S.ButtonWrapper>
-        <S.SubmitButton type="submit" disabled={isSubmitting}>
+        <Button
+          type="submit"
+          variant="primary"
+          size="xl"
+          interaction="responsive"
+          fullWidth
+          isLoading={isSubmitting}
+        >
           {isSubmitting ? "이메일 전송 중..." : "이메일 전송"}
-        </S.SubmitButton>
-        {errors.root && <S.ErrorText>{errors.root.message}</S.ErrorText>}
+        </Button>
+        {errors.root && <FieldMessage role="alert">{errors.root.message}</FieldMessage>}
       </S.ButtonWrapper>
     </S.FormContainer>
   );

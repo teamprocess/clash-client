@@ -1,6 +1,22 @@
 export { Select } from "./select";
 export { Button } from "./button";
-export type { ButtonProps, ButtonSize, ButtonVariant } from "./button";
+export type { ButtonInteraction, ButtonProps, ButtonSize, ButtonVariant } from "./button";
+export {
+  ClashLogo,
+  FeedbackState,
+  FieldMessage,
+  IconButton,
+  InlineNotice,
+  TextField,
+} from "@clash/ui";
+export type {
+  ClashLogoProps,
+  FeedbackStateProps,
+  FieldMessageProps,
+  IconButtonProps,
+  InlineNoticeProps,
+  TextFieldProps,
+} from "@clash/ui";
 export { ConfirmDialog } from "./confirm-dialog";
 export type { ConfirmDialogProps } from "./confirm-dialog";
 export { Dialog } from "./dialog";

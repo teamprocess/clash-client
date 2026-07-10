@@ -1,6 +1,6 @@
 import styled, { keyframes } from "styled-components";
 import { font } from "@clash/design-tokens/font";
-import Clash from "./assets/clash-logo.svg";
+import { ClashLogo as SharedClashLogo } from "@clash/ui";
 import Apple from "./assets/apple.svg";
 
 const fadeInUp = keyframes`
@@ -76,7 +76,7 @@ export const Content = styled.div`
   animation: ${fadeInUp} 0.7s ease-out both;
 `;
 
-export const ClashLogo = styled(Clash)`
+export const ClashLogo = styled(SharedClashLogo)`
   width: 10.5rem;
   height: auto;
 `;

@@ -1,8 +1,25 @@
-import { createGlobalStyle } from "styled-components";
+import { createGlobalStyle, css } from "styled-components";
+import type { RuleSet } from "styled-components";
 import { font } from "@clash/design-tokens/font";
-import "pretendard/dist/web/static/pretendard.css";
 
-export const GlobalStyle = createGlobalStyle`
+export type BaseGlobalStyleVariant = "web-document" | "desktop-shell";
+export type GlobalStyleOverrides = RuleSet<object>;
+
+export interface BaseGlobalStyleProps {
+  variant: BaseGlobalStyleVariant;
+  overrides?: GlobalStyleOverrides;
+}
+
+const variantStyleMap: Record<BaseGlobalStyleVariant, RuleSet<object>> = {
+  "web-document": css`
+    * {
+      scrollbar-gutter: stable;
+    }
+  `,
+  "desktop-shell": css``,
+};
+
+export const BaseGlobalStyle = createGlobalStyle<BaseGlobalStyleProps>`
   * {
     margin: 0;
     padding: 0;
@@ -106,10 +123,6 @@ export const GlobalStyle = createGlobalStyle`
     background: transparent;
   }
 
-  .grecaptcha-badge {
-    visibility: hidden !important;
-  }
-
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after {
       scroll-behavior: auto !important;
@@ -118,4 +131,7 @@ export const GlobalStyle = createGlobalStyle`
       transition-duration: 0.01ms !important;
     }
   }
+
+  ${({ variant }) => variantStyleMap[variant]}
+  ${({ overrides }) => overrides}
 `;
