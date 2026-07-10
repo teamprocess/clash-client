@@ -1,3 +1,4 @@
+import { useEffect, useRef } from "react";
 import * as S from "./ProductCard.style";
 import { calculateDiscountedPrice } from "@/features/shop/lib/calculateDiscountedPrice";
 import { ProductCategory } from "@/entities/product";
@@ -13,6 +14,7 @@ interface ProductCardProps {
   isBought?: boolean;
   showOwnedBadge?: boolean;
   selectionKey?: string;
+  isActive?: boolean;
   onClick?: () => void;
 }
 
@@ -26,15 +28,27 @@ export const ProductCard = ({
   isBought,
   showOwnedBadge,
   selectionKey,
+  isActive = false,
   onClick,
 }: ProductCardProps) => {
+  const cardRef = useRef<HTMLDivElement>(null);
   const discounted = calculateDiscountedPrice(price, discount);
   const originalPrice = price.toLocaleString();
   const isOwned = showOwnedBadge && isBought;
 
+  useEffect(() => {
+    if (!isActive) {
+      return;
+    }
+
+    cardRef.current?.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "nearest" });
+  }, [isActive]);
+
   return (
     <S.CardContainer
+      ref={cardRef}
       $isBought={isOwned}
+      $isActive={isActive}
       data-product-id={id}
       data-product-key={selectionKey ?? String(id)}
       onClick={onClick}

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { ProductCategory, ProductSort } from "@/entities/product";
-import { useShopProductsQuery } from "@/entities/shop/api/query/useShop.query";
+import { useShopProductsQuery } from "@/entities/shop";
 import { sortOwnedProductsLast } from "@/features/shop/lib/sortOwnedProductsLast";
 
 export const useProducts = () => {

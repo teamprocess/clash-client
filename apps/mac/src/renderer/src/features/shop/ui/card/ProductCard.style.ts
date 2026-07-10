@@ -3,7 +3,7 @@ import { font } from "@clash/design-tokens/font";
 import Cookie from "@/features/shop/assets/cookie.svg";
 import { palette } from "@clash/design-tokens/theme";
 
-export const CardContainer = styled.div<{ $isBought?: boolean }>`
+export const CardContainer = styled.div<{ $isBought?: boolean; $isActive?: boolean }>`
   position: relative;
   display: flex;
   flex-direction: column;
@@ -14,7 +14,10 @@ export const CardContainer = styled.div<{ $isBought?: boolean }>`
   min-height: 18rem;
   box-sizing: border-box;
   background-color: ${({ theme }) => theme.fill.neutral};
-  border: 1px solid ${({ theme }) => theme.line.alternative};
+  border: 1px solid
+    ${({ theme, $isActive }) => ($isActive ? theme.primary.normal : theme.line.alternative)};
+  box-shadow: ${({ theme, $isActive }) =>
+    $isActive ? `inset 0 0 0 1px ${theme.primary.normal}` : "none"};
   border-radius: 1rem;
   overflow: hidden;
   cursor: pointer;
@@ -28,11 +31,6 @@ export const CardContainer = styled.div<{ $isBought?: boolean }>`
     background: rgba(0, 0, 0, 0.25);
     pointer-events: none;
     z-index: 1;
-  }
-
-  &.active {
-    border-color: ${({ theme }) => theme.primary.normal};
-    box-shadow: inset 0 0 0 1px ${({ theme }) => theme.primary.normal};
   }
 `;
 

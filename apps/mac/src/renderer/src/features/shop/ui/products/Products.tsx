@@ -1,11 +1,12 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo } from "react";
 import * as S from "./Products.style";
 import { ProductCard } from "@/features/shop/ui/card/ProductCard";
 import { Filter } from "@/features/shop/ui/filter/Filter";
 import { Product, ProductCategory, ProductSort } from "@/entities/product";
 import { PurchaseModal } from "@/features/shop/ui/purchase/PurchaseModal";
-import { usePurchaseProduct } from "@/entities/shop/model/usePurchaseProduct";
-import { useProductDetailStore } from "@/entities/shop/model/productDetailStore";
+import { resolveSelectedProduct } from "@/features/shop/model/productDetailState";
+import { useProductDetailState } from "@/features/shop/model/useProductDetailState";
+import { usePurchaseProduct } from "@/features/shop/model/usePurchaseProduct";
 import { ProductDetailPanel } from "@/features/shop/ui/detail-panel/ProductDetailPanel";
 import { ShopLoading } from "@/features/shop/ui/loading/ShopLoading";
 
@@ -36,34 +37,29 @@ export const Products = ({
   category,
   onCategoryChange,
 }: ProductsProps) => {
-  const selectedId = useProductDetailStore(s => s.selectedProductId);
-  const selectedProductKey = useProductDetailStore(s => s.selectedProductKey);
-  const pendingProduct = useProductDetailStore(s => s.pendingProduct);
-  const toggle = useProductDetailStore(s => s.toggle);
-  const close = useProductDetailStore(s => s.close);
-
-  const [isPurchaseOpen, setIsPurchaseOpen] = useState(false);
+  const {
+    selection,
+    isPurchaseOpen,
+    toggleSelection,
+    clearSelection,
+    openPurchase,
+    closePurchase,
+  } = useProductDetailState();
+  const selectedProductKey = selection?.key ?? null;
 
   const selectedProduct = useMemo(() => {
-    if (selectedId == null) return null;
-    return (
-      products.find(product => String(product.id) === String(selectedId)) ?? pendingProduct ?? null
-    );
-  }, [products, selectedId, pendingProduct]);
+    return resolveSelectedProduct(selection, products);
+  }, [products, selection]);
 
-  const isPanelOpen = selectedProductKey !== null;
+  const isPanelOpen = selectedProduct !== null;
 
   const handleCardClick = (product: Product) => {
-    toggle(product.id, product);
+    toggleSelection(product);
   };
 
   const handleOpenPurchase = () => {
     if (!selectedProduct) return;
-    setIsPurchaseOpen(true);
-  };
-
-  const handleClosePurchase = () => {
-    setIsPurchaseOpen(false);
+    openPurchase();
   };
 
   const purchaseMutation = usePurchaseProduct();
@@ -81,38 +77,14 @@ export const Products = ({
   }, [isPanelOpen, isPurchaseOpen]);
 
   useEffect(() => {
-    const activeDiv = document.querySelector("div.active");
-    activeDiv?.classList.remove("active");
+    clearSelection();
+  }, [category, clearSelection, keyword, sort]);
 
-    if (!selectedProductKey) {
-      return;
+  useEffect(() => {
+    if (!isLoading && selection && !selectedProduct) {
+      clearSelection();
     }
-
-    const productDiv = document.querySelector(`div[data-product-key="${selectedProductKey}"]`);
-    if (productDiv == null) return;
-    productDiv.classList.add("active");
-
-    productDiv.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "nearest" });
-  }, [selectedProductKey]);
-
-  useEffect(() => {
-    if (selectedId == null) return;
-    if (isLoading) return;
-    if (pendingProduct !== null) return;
-    const exists = products.some(p => String(p.id) === String(selectedId));
-    if (!exists) close();
-  }, [products, selectedId, close, isLoading, pendingProduct]);
-
-  useEffect(() => {
-    close();
-    return () => {
-      close();
-    };
-  }, [close]);
-
-  useEffect(() => {
-    close();
-  }, [category, close, keyword, sort]);
+  }, [clearSelection, isLoading, selectedProduct, selection]);
 
   if (isLoading) {
     return (
@@ -184,6 +156,7 @@ export const Products = ({
                 discount={product.discount}
                 isBought={product.isBought}
                 showOwnedBadge
+                isActive={selectedProductKey === String(product.id)}
                 onClick={() => handleCardClick(product)}
               />
             ))}
@@ -198,12 +171,15 @@ export const Products = ({
         />
       )}
 
-      <PurchaseModal
-        isOpen={isPurchaseOpen}
-        product={selectedProduct ?? null}
-        onClose={handleClosePurchase}
-        onPurchase={handlePurchase}
-      />
+      {isPurchaseOpen && selectedProduct && (
+        <PurchaseModal
+          key={selectedProduct.id}
+          isOpen
+          product={selectedProduct}
+          onClose={closePurchase}
+          onPurchase={handlePurchase}
+        />
+      )}
     </S.MainContainer>
   );
 };

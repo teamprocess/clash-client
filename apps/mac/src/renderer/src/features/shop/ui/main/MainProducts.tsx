@@ -1,11 +1,12 @@
-import { Recommend } from "@/features/shop";
 import * as S from "./MainProducts.style";
+import { Recommend } from "@/features/shop/ui/recommend/Recommend";
 import { Popularity } from "@/features/shop/ui/popularity/Popularity";
 import { Product } from "@/entities/product";
 import { PurchaseModal } from "@/features/shop/ui/purchase/PurchaseModal";
-import { useEffect, useMemo, useState } from "react";
-import { useProductDetailStore } from "@/entities/shop/model/productDetailStore";
-import { usePurchaseProduct } from "@/entities/shop/model/usePurchaseProduct";
+import { useEffect, useMemo } from "react";
+import { resolveSelectedProduct } from "@/features/shop/model/productDetailState";
+import { useProductDetailState } from "@/features/shop/model/useProductDetailState";
+import { usePurchaseProduct } from "@/features/shop/model/usePurchaseProduct";
 import { ProductDetailPanel } from "@/features/shop/ui/detail-panel/ProductDetailPanel";
 import { ShopLoading } from "@/features/shop/ui/loading/ShopLoading";
 
@@ -26,49 +27,46 @@ export const MainProducts = ({
   errorMessage,
   onRetry,
 }: MainProductsProps) => {
-  const products: Product[] = recommendedProducts.concat(popularProducts);
+  const products = useMemo(
+    () => recommendedProducts.concat(popularProducts),
+    [popularProducts, recommendedProducts]
+  );
   const hasRecommendedProducts = recommendedProducts.length > 0;
   const hasProducts = products.length > 0;
 
-  const selectedId = useProductDetailStore(s => s.selectedProductId);
-  const selectedProductKey = useProductDetailStore(s => s.selectedProductKey);
-  const pendingProduct = useProductDetailStore(s => s.pendingProduct);
-  const close = useProductDetailStore(s => s.close);
-
-  const [isPurchaseOpen, setIsPurchaseOpen] = useState(false);
-  const isPanelOpen = selectedProductKey !== null;
+  const {
+    selection,
+    isPurchaseOpen,
+    toggleSelection,
+    clearSelection,
+    openPurchase,
+    closePurchase,
+  } = useProductDetailState();
+  const selectedProductKey = selection?.key ?? null;
 
   const selectedProduct = useMemo(() => {
-    if (selectedId == null) return null;
-
     if (selectedProductKey?.startsWith("recommended:")) {
-      return (
-        recommendedProducts.find(product => `recommended:${product.id}` === selectedProductKey) ??
-        pendingProduct ??
-        null
-      );
+      return resolveSelectedProduct(selection, recommendedProducts);
     }
 
     if (selectedProductKey?.startsWith("popular:")) {
-      return (
-        popularProducts.find(product => `popular:${product.id}` === selectedProductKey) ??
-        pendingProduct ??
-        null
-      );
+      return resolveSelectedProduct(selection, popularProducts);
     }
 
-    return (
-      products.find(product => String(product.id) === String(selectedId)) ?? pendingProduct ?? null
-    );
-  }, [popularProducts, products, recommendedProducts, selectedId, selectedProductKey, pendingProduct]);
+    return resolveSelectedProduct(selection, products);
+  }, [popularProducts, products, recommendedProducts, selectedProductKey, selection]);
+
+  const isPanelOpen = selectedProduct !== null;
+
+  useEffect(() => {
+    if (!isLoading && selection && !selectedProduct) {
+      clearSelection();
+    }
+  }, [clearSelection, isLoading, selectedProduct, selection]);
 
   const handleOpenPurchase = () => {
     if (!selectedProduct) return;
-    setIsPurchaseOpen(true);
-  };
-
-  const handleClosePurchase = () => {
-    setIsPurchaseOpen(false);
+    openPurchase();
   };
 
   const purchaseMutation = usePurchaseProduct();
@@ -76,27 +74,6 @@ export const MainProducts = ({
   const handlePurchase = async (product: Product) => {
     await purchaseMutation.mutateAsync({ productId: Number(product.id) });
   };
-
-  useEffect(() => {
-    const activeDiv = document.querySelector("div.active");
-    activeDiv?.classList.remove("active");
-
-    if (!selectedProductKey) {
-      return;
-    }
-
-    const productDiv = document.querySelector(`div[data-product-key="${selectedProductKey}"]`);
-    if (productDiv == null) return;
-    productDiv.classList.add("active");
-
-    productDiv.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "nearest" });
-  }, [selectedProductKey]);
-
-  useEffect(() => {
-    return () => {
-      close();
-    };
-  }, [close]);
 
   if (isLoading) {
     return (
@@ -112,9 +89,7 @@ export const MainProducts = ({
         <S.ContentWrapper>
           <S.StateBox role="alert">
             <S.StateTitle>상점 상품을 불러오지 못했어요.</S.StateTitle>
-            <S.StateDescription>
-              {errorMessage ?? "잠시 후 다시 시도해 주세요."}
-            </S.StateDescription>
+            <S.StateDescription>{errorMessage ?? "잠시 후 다시 시도해 주세요."}</S.StateDescription>
             {onRetry && <S.RetryButton onClick={onRetry}>다시 시도</S.RetryButton>}
           </S.StateBox>
         </S.ContentWrapper>
@@ -134,8 +109,18 @@ export const MainProducts = ({
           </S.ErrorNotice>
         )}
         <S.BannerImage aria-hidden />
-        {hasRecommendedProducts && <Recommend products={recommendedProducts} />}
-        <Popularity products={popularProducts} />
+        {hasRecommendedProducts && (
+          <Recommend
+            products={recommendedProducts}
+            activeSelectionKey={selectedProductKey}
+            onProductSelect={toggleSelection}
+          />
+        )}
+        <Popularity
+          products={popularProducts}
+          activeSelectionKey={selectedProductKey}
+          onProductSelect={toggleSelection}
+        />
       </S.ContentWrapper>
       {isPanelOpen && selectedProduct && (
         <ProductDetailPanel
@@ -143,12 +128,15 @@ export const MainProducts = ({
           handleOpenPurchase={handleOpenPurchase}
         />
       )}
-      <PurchaseModal
-        isOpen={isPurchaseOpen}
-        product={selectedProduct ?? null}
-        onClose={handleClosePurchase}
-        onPurchase={handlePurchase}
-      />
+      {isPurchaseOpen && selectedProduct && (
+        <PurchaseModal
+          key={selectedProduct.id}
+          isOpen
+          product={selectedProduct}
+          onClose={closePurchase}
+          onPurchase={handlePurchase}
+        />
+      )}
     </S.MainContainer>
   );
 };
