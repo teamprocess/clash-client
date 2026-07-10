@@ -12,6 +12,7 @@ import {
 import { sortEquippedItemsFirst } from "@/features/profile/lib/sortEquippedItemsFirst";
 import { useGetMyProfile, userQueryKeys } from "@/entities/user";
 import { getErrorMessage } from "@/shared/lib";
+import { Button } from "@/shared/ui";
 
 const FILTER_OPTIONS = [
   { key: OwnedItemCategory.ALL, label: "전체" },
@@ -30,7 +31,7 @@ export const ItemPanel = () => {
   const queryClient = useQueryClient();
   const [filter, setFilter] = useState<OwnedItemCategory>(OwnedItemCategory.ALL);
   const [selectedItem, setSelectedItem] = useState<OwnedItem | null>(null);
-  const { data, isLoading, isFetching, error } = useOwnedItemsQuery(filter);
+  const { data, isLoading, isFetching, error, refetch } = useOwnedItemsQuery(filter);
   const { data: user } = useGetMyProfile();
   const equipItemMutation = useEquipItemMutation();
 
@@ -98,6 +99,7 @@ export const ItemPanel = () => {
                 key={option.key}
                 $active={filter === option.key}
                 type="button"
+                aria-pressed={filter === option.key}
                 onClick={() => handleFilterChange(option.key)}
               >
                 {option.label}
@@ -106,13 +108,25 @@ export const ItemPanel = () => {
           </S.FilterRow>
         </S.Header>
 
-        {error ? (
-          <S.StateBox>
+        {error && items.length > 0 && (
+          <S.RefreshWarning role="alert">
+            <span>새 아이템 정보를 불러오지 못해 이전 결과를 표시해요.</span>
+            <Button type="button" variant="secondary" size="sm" onClick={() => void refetch()}>
+              다시 시도
+            </Button>
+          </S.RefreshWarning>
+        )}
+
+        {error && items.length === 0 ? (
+          <S.StateBox role="alert">
             <S.StateTitle>아이템을 불러오지 못했어요.</S.StateTitle>
             <S.StateDescription>잠시 후 다시 시도해 주세요.</S.StateDescription>
+            <Button type="button" variant="primary" size="sm" onClick={() => void refetch()}>
+              다시 시도
+            </Button>
           </S.StateBox>
         ) : isLoading ? (
-          <S.StateBox aria-busy="true">
+          <S.StateBox role="status" aria-live="polite" aria-busy="true">
             <S.StateTitle>아이템을 불러오는 중...</S.StateTitle>
             <S.StateDescription>잠시만 기다려 주세요.</S.StateDescription>
           </S.StateBox>
@@ -132,6 +146,8 @@ export const ItemPanel = () => {
                     key={item.id}
                     type="button"
                     $equipped={isEquippedItem(category, item.id)}
+                    aria-label={`${item.title}, ${CATEGORY_LABEL[category]}${isEquippedItem(category, item.id) ? ", 장착 중" : ""}`}
+                    aria-pressed={isEquippedItem(category, item.id)}
                     onClick={() => setSelectedItem(item)}
                   >
                     <S.CardPreview>

@@ -365,6 +365,7 @@ export const MissionContainer = ({
       onClose={handleRequestClose}
       width="min(100vw, 46rem)"
       position="fixed"
+      ariaLabel={`${displayStageTitle} 챕터`}
     >
       <S.PanelContent>
         <S.PanelHeader $showTitle={!currentMission}>

@@ -9,6 +9,7 @@ export const TestResult = ({
   setStep,
   isSubmittingMajor,
   handleSelectAnalyzedMajor,
+  submitError,
 }: ResultProps) => {
   const MajorIcon = analyzedMajor === Major.SERVER ? S.ServerIcon : S.WebIcon;
   const majorLabel = analyzedMajor === Major.SERVER ? "서버" : "웹";
@@ -29,6 +30,8 @@ export const TestResult = ({
           <MajorIcon />
           <S.ResultMajor>{majorLabel}</S.ResultMajor>
         </S.ResultCard>
+
+        {submitError && <S.ErrorText role="alert">{submitError}</S.ErrorText>}
 
         <S.ButtonGroup>
           <Button

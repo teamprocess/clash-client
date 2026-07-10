@@ -8,7 +8,15 @@ export const useGroupMembersActivity = (
   selectedDate?: string
 ) => {
   const isTodaySelected = selectedDate === undefined;
-  const { data: activityResponse, dataUpdatedAt } = useGroupActivityQuery(groupId, selectedDate);
+  const {
+    data: activityResponse,
+    dataUpdatedAt,
+    isPending,
+    isFetching,
+    isError,
+    error,
+    refetch,
+  } = useGroupActivityQuery(groupId, selectedDate);
   const { totalStudyTime: myTotalStudyTime, isStudying: isMyStudying } =
     useLiveRecordStudyTime(selectedDate);
   const [now, setNow] = useState(() => Date.now());
@@ -56,5 +64,12 @@ export const useGroupMembersActivity = (
     groupMembers,
     activeStudyingCount,
     incrementStudyingMembers,
+    activityQuery: {
+      isPending: isPending && activityResponse === undefined,
+      isFetching,
+      isError: isError && activityResponse === undefined,
+      error,
+      refetch,
+    },
   };
 };

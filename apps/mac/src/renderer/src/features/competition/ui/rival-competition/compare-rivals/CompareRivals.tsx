@@ -31,11 +31,13 @@ export const RivalCompare = () => {
           <S.Title>라이벌과 비교</S.Title>
           <S.DropdownBox>
             <Select<PeriodType>
+              aria-label="라이벌 비교 기간"
               value={competitionPeriod}
               options={competitionPeriodOptions}
               onChange={setCompetitionPeriod}
             />
             <Select<CategoryType>
+              aria-label="라이벌 비교 항목"
               value={competitionDropdown}
               options={competitionDropdownOptions}
               onChange={setCompetitionDropdown}

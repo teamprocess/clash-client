@@ -15,9 +15,14 @@ import { useMutation } from "@tanstack/react-query";
 import { getErrorMessage, queryClient } from "@/shared/lib";
 
 export const useRival = () => {
-  const { data: myRivalsRes } = useMyRivalsQuery();
-  const { data: rivalSignAllRes } = useRivalSignAllQuery();
-  const { data: rivalListRes } = useRivalListQuery();
+  const [modalOpen, setModalOpen] = useState(false);
+  const myRivalsQuery = useMyRivalsQuery();
+  const rivalSignAllQuery = useRivalSignAllQuery(modalOpen);
+  const rivalListQuery = useRivalListQuery(modalOpen);
+
+  const { data: myRivalsRes } = myRivalsQuery;
+  const { data: rivalSignAllRes } = rivalSignAllQuery;
+  const { data: rivalListRes } = rivalListQuery;
 
   const [createError, setCreateError] = useState<string | null>(null);
   const [signListError, setSignListError] = useState<string | null>(null);
@@ -26,8 +31,6 @@ export const useRival = () => {
   const rivalsData: MyRivalsResponse | null = myRivalsRes?.data ?? null;
   const userList: RivalUsersResponse | null = rivalListRes?.data ?? null;
   const rivalSignAll: RivalSignAllResponse | null = rivalSignAllRes?.data ?? null;
-
-  const [modalOpen, setModalOpen] = useState(false);
 
   const [searchText, setSearchText] = useState("");
   const [rivalSelectedId, setRivalSelectedId] = useState<number[]>([]);
@@ -76,6 +79,11 @@ export const useRival = () => {
   };
 
   const handleUserSelect = (id: number) => {
+    if (!rivalsData || myRivalsQuery.isPending || myRivalsQuery.isError) {
+      setCreateError("현재 라이벌 정보를 확인한 뒤 다시 시도해 주세요.");
+      return;
+    }
+
     const currentRivalCount = rivalsData?.myRivals.length ?? 0;
     const maxAvailableSlots = 4 - currentRivalCount;
 
@@ -102,6 +110,10 @@ export const useRival = () => {
   const handleRivalCreate = async () => {
     if (isSubmitting) return false;
     if (rivalSelectedId.length === 0) return false;
+    if (!rivalsData || myRivalsQuery.isPending || myRivalsQuery.isError) {
+      setCreateError("현재 라이벌 정보를 확인한 뒤 다시 시도해 주세요.");
+      return false;
+    }
 
     const payload: RivalApplyRequest = {
       ids: rivalSelectedId.map(id => ({ id })),
@@ -295,5 +307,11 @@ export const useRival = () => {
     createError,
     signListError,
     deleteError,
+
+    queries: {
+      myRivals: myRivalsQuery,
+      available: rivalListQuery,
+      requests: rivalSignAllQuery,
+    },
   };
 };

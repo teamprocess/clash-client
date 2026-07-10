@@ -7,6 +7,7 @@ import { SlideSelector } from "@/shared/ui/slide-selector";
 import type { useRival } from "../../model/useRival";
 import { DeleteRivalsConfirmDialog } from "../delete-rival-confirm/DeleteRivalsConfirm";
 import { RivalLinkingStatusButton } from "./rivals-management-status/StatusOfRivalsManagement";
+import { getErrorMessage } from "@/shared/lib";
 
 interface AddRivalsDialogProps {
   isOpen: boolean;
@@ -49,9 +50,10 @@ export const RivalsManagementDialog = ({ isOpen, onClose, rival }: AddRivalsDial
   };
 
   return (
-    <Dialog width={43} height={40} isOpen={isOpen} onClose={handleClose}>
+    <Dialog width={43} height={40} isOpen={isOpen} onClose={handleClose} ariaLabel="라이벌 관리">
       <S.DialogLayout>
         <SlideSelector
+          ariaLabel="라이벌 관리 보기"
           value={activeTab}
           options={[
             { key: "rivals-management", label: "라이벌 추가" },
@@ -66,6 +68,7 @@ export const RivalsManagementDialog = ({ isOpen, onClose, rival }: AddRivalsDial
               <S.SearchInputBox>
                 <SearchInput
                   placeholder={"이름 또는 아이디 검색"}
+                  aria-label="라이벌 검색"
                   inputSize={"md"}
                   variant={"light"}
                   fullWidth={true}
@@ -76,7 +79,45 @@ export const RivalsManagementDialog = ({ isOpen, onClose, rival }: AddRivalsDial
                 />
               </S.SearchInputBox>
 
-              {rival.rivalsData?.myRivals.length === 4 ? (
+              {rival.queries.myRivals.isPending ? (
+                <S.EmptyStateBox role="status" aria-live="polite">
+                  <S.EmptyTitle>현재 라이벌 정보를 확인하는 중이에요.</S.EmptyTitle>
+                </S.EmptyStateBox>
+              ) : rival.queries.myRivals.isError ? (
+                <S.EmptyStateBox role="alert">
+                  <S.EmptyTitle>현재 라이벌 정보를 확인하지 못했어요.</S.EmptyTitle>
+                  <S.EmptyDescription>
+                    추가 가능한 인원을 확인하려면 다시 시도해 주세요.
+                  </S.EmptyDescription>
+                  <Button
+                    type="button"
+                    size="sm"
+                    variant="secondary"
+                    onClick={() => void rival.queries.myRivals.refetch()}
+                  >
+                    다시 시도
+                  </Button>
+                </S.EmptyStateBox>
+              ) : rival.queries.available.isPending ? (
+                <S.EmptyStateBox role="status" aria-live="polite">
+                  <S.EmptyTitle>추가할 수 있는 라이벌을 불러오는 중이에요.</S.EmptyTitle>
+                </S.EmptyStateBox>
+              ) : rival.queries.available.isError ? (
+                <S.EmptyStateBox role="alert">
+                  <S.EmptyTitle>라이벌 목록을 불러오지 못했어요.</S.EmptyTitle>
+                  <S.EmptyDescription>
+                    {getErrorMessage(rival.queries.available.error, "잠시 후 다시 시도해 주세요.")}
+                  </S.EmptyDescription>
+                  <Button
+                    type="button"
+                    size="sm"
+                    variant="secondary"
+                    onClick={() => void rival.queries.available.refetch()}
+                  >
+                    다시 시도
+                  </Button>
+                </S.EmptyStateBox>
+              ) : rival.rivalsData?.myRivals.length === 4 ? (
                 <S.EmptyStateBox>
                   <S.EmptyTitle>라이벌이 가득 찼습니다!</S.EmptyTitle>
                   <S.EmptyDescription>
@@ -85,33 +126,46 @@ export const RivalsManagementDialog = ({ isOpen, onClose, rival }: AddRivalsDial
                 </S.EmptyStateBox>
               ) : (
                 <S.UserChoiceContainer $uiStatus={"create"}>
-                  {users.map(user => {
-                    const isSelected = rival.rivalSelectedId.includes(user.id);
+                  {users.length === 0 ? (
+                    <S.EmptyStateBox>
+                      <S.EmptyTitle>검색 결과가 없습니다.</S.EmptyTitle>
+                      <S.EmptyDescription>다른 이름이나 아이디로 검색해 보세요.</S.EmptyDescription>
+                    </S.EmptyStateBox>
+                  ) : (
+                    users.map(user => {
+                      const isSelected = rival.rivalSelectedId.includes(user.id);
 
-                    return (
-                      <S.UserChoiceBox
-                        key={user.id}
-                        $isSelected={isSelected}
-                        onClick={() => rival.handleUserSelect(user.id)}
-                      >
-                        <S.ProfileContent $height="3rem">
-                          <S.ProfileBox>
-                            {user.profileImage ? (
-                              <S.ProfileImg src={user.profileImage} />
-                            ) : (
-                              <S.DefaultProfileImg />
-                            )}
-                            <S.ProfileTagBox>
-                              <S.ProfileName>{user.name}</S.ProfileName>
-                              <S.ProfileMention>@{user.username}</S.ProfileMention>
-                            </S.ProfileTagBox>
-                          </S.ProfileBox>
-                        </S.ProfileContent>
+                      return (
+                        <S.SelectableUserButton
+                          key={user.id}
+                          type="button"
+                          $isSelected={isSelected}
+                          aria-pressed={isSelected}
+                          onClick={() => rival.handleUserSelect(user.id)}
+                        >
+                          <S.ProfileContent $height="3rem">
+                            <S.ProfileBox>
+                              {user.profileImage ? (
+                                <S.ProfileImg src={user.profileImage} alt="" />
+                              ) : (
+                                <S.DefaultProfileImg aria-hidden />
+                              )}
+                              <S.ProfileTagBox>
+                                <S.ProfileName>{user.name}</S.ProfileName>
+                                <S.ProfileMention>@{user.username}</S.ProfileMention>
+                              </S.ProfileTagBox>
+                            </S.ProfileBox>
+                          </S.ProfileContent>
 
-                        {isSelected ? <S.CheckedIcon /> : <S.UncheckedBox />}
-                      </S.UserChoiceBox>
-                    );
-                  })}
+                          {isSelected ? (
+                            <S.CheckedIcon aria-hidden />
+                          ) : (
+                            <S.UncheckedBox aria-hidden />
+                          )}
+                        </S.SelectableUserButton>
+                      );
+                    })
+                  )}
                 </S.UserChoiceContainer>
               )}
             </S.TopSection>
@@ -130,6 +184,13 @@ export const RivalsManagementDialog = ({ isOpen, onClose, rival }: AddRivalsDial
                   variant="primary"
                   onClick={() => void handleCreateSubmit()}
                   isLoading={rival.isSubmitting}
+                  disabled={
+                    rival.isSubmitting ||
+                    rival.rivalSelectedId.length === 0 ||
+                    rival.queries.myRivals.isPending ||
+                    rival.queries.myRivals.isError ||
+                    rival.queries.available.isError
+                  }
                 >
                   {rival.isSubmitting ? "신청 중" : "신청"}
                 </Button>
@@ -142,15 +203,34 @@ export const RivalsManagementDialog = ({ isOpen, onClose, rival }: AddRivalsDial
               <S.DetermineTitle>현재 라이벌</S.DetermineTitle>
 
               <S.UserChoiceContainer>
-                {hasCurrentRivals ? (
+                {rival.queries.myRivals.isPending ? (
+                  <S.EmptyStateBox role="status" aria-live="polite">
+                    <S.EmptyTitle>현재 라이벌을 불러오는 중이에요.</S.EmptyTitle>
+                  </S.EmptyStateBox>
+                ) : rival.queries.myRivals.isError && !rival.rivalsData ? (
+                  <S.EmptyStateBox role="alert">
+                    <S.EmptyTitle>현재 라이벌을 불러오지 못했어요.</S.EmptyTitle>
+                    <S.EmptyDescription>
+                      {getErrorMessage(rival.queries.myRivals.error, "잠시 후 다시 시도해 주세요.")}
+                    </S.EmptyDescription>
+                    <Button
+                      type="button"
+                      size="sm"
+                      variant="secondary"
+                      onClick={() => void rival.queries.myRivals.refetch()}
+                    >
+                      다시 시도
+                    </Button>
+                  </S.EmptyStateBox>
+                ) : hasCurrentRivals ? (
                   currentRivals.map(user => (
                     <S.UserChoiceBox key={user.rivalId ?? user.id} $isRival={true}>
                       <S.ProfileContent $height="3rem">
                         <S.ProfileBox>
                           {user.profileImage ? (
-                            <S.ProfileImg src={user.profileImage} />
+                            <S.ProfileImg src={user.profileImage} alt="" />
                           ) : (
-                            <S.DefaultProfileImg />
+                            <S.DefaultProfileImg aria-hidden />
                           )}
                           <S.ProfileTagBox>
                             <S.ProfileName>{user.name}</S.ProfileName>
@@ -187,15 +267,37 @@ export const RivalsManagementDialog = ({ isOpen, onClose, rival }: AddRivalsDial
               {rival.signListError && <S.ErrorText>{rival.signListError}</S.ErrorText>}
               <S.DetermineList>
                 <S.UserChoiceContainer>
-                  {hasSignRivals ? (
+                  {rival.queries.requests.isPending ? (
+                    <S.EmptyStateBox role="status" aria-live="polite">
+                      <S.EmptyTitle>라이벌 신청 목록을 불러오는 중이에요.</S.EmptyTitle>
+                    </S.EmptyStateBox>
+                  ) : rival.queries.requests.isError && !rival.rivalSignAll ? (
+                    <S.EmptyStateBox role="alert">
+                      <S.EmptyTitle>라이벌 신청 목록을 불러오지 못했어요.</S.EmptyTitle>
+                      <S.EmptyDescription>
+                        {getErrorMessage(
+                          rival.queries.requests.error,
+                          "잠시 후 다시 시도해 주세요."
+                        )}
+                      </S.EmptyDescription>
+                      <Button
+                        type="button"
+                        size="sm"
+                        variant="secondary"
+                        onClick={() => void rival.queries.requests.refetch()}
+                      >
+                        다시 시도
+                      </Button>
+                    </S.EmptyStateBox>
+                  ) : hasSignRivals ? (
                     signRivals.map(user => (
                       <S.UserChoiceBox key={user.rivalId} $isRival={true}>
                         <S.ProfileContent $height="3rem">
                           <S.ProfileBox>
                             {user.profileImage ? (
-                              <S.ProfileImg src={user.profileImage} />
+                              <S.ProfileImg src={user.profileImage} alt="" />
                             ) : (
-                              <S.DefaultProfileImg />
+                              <S.DefaultProfileImg aria-hidden />
                             )}
                             <S.ProfileTagBox>
                               <S.ProfileName>{user.name}</S.ProfileName>

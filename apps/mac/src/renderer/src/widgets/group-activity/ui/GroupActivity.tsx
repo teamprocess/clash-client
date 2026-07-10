@@ -3,6 +3,8 @@ import { type Group as GroupEntity } from "@/entities/group";
 import { formatTime } from "@/shared/lib";
 import { useGroupRealtimeActivity } from "../model/useGroupRealtimeActivity";
 import { Timer } from "@/features/record";
+import { Button } from "@/shared/ui";
+import { getErrorMessage } from "@/shared/lib";
 
 interface GroupProps {
   currentGroup: GroupEntity | null;
@@ -23,8 +25,14 @@ export const GroupActivity = ({
   onResetToToday,
   canGoNextDate,
 }: GroupProps) => {
-  const { totalStudyTime, isLoading, isStudying, groupMembers, activeStudyingCount } =
-    useGroupRealtimeActivity(currentGroup?.id ?? null, selectedDate);
+  const {
+    totalStudyTime,
+    isLoading,
+    isStudying,
+    groupMembers,
+    activeStudyingCount,
+    activityQuery,
+  } = useGroupRealtimeActivity(currentGroup?.id ?? null, selectedDate);
   const displayStudyTime = isLoading ? "--:--:--" : formatTime(totalStudyTime);
 
   return (
@@ -77,18 +85,45 @@ export const GroupActivity = ({
                     </S.MemberCapacityText>
                   </S.GroupStats>
                 </S.GroupInfoRow>
-                <S.MemberActivitySection>
-                  <S.MemberGrid>
-                    {groupMembers.map(member => (
-                      <S.MemberBox key={member.id} $isActive={member.isStudying}>
-                        <S.FireIcon />
-                        <S.MemberInfoBox>
-                          <S.MemberName>{member.name}</S.MemberName>
-                          <S.MemberStudyTime>{formatTime(member.studyTime)}</S.MemberStudyTime>
-                        </S.MemberInfoBox>
-                      </S.MemberBox>
-                    ))}
-                  </S.MemberGrid>
+                <S.MemberActivitySection aria-busy={activityQuery.isFetching || undefined}>
+                  {activityQuery.isError ? (
+                    <S.ActivityState role="alert">
+                      <S.ActivityStateTitle>그룹 활동을 불러오지 못했어요.</S.ActivityStateTitle>
+                      <S.ActivityStateDescription>
+                        {getErrorMessage(activityQuery.error, "잠시 후 다시 시도해 주세요.")}
+                      </S.ActivityStateDescription>
+                      <Button
+                        variant="primary"
+                        size="sm"
+                        onClick={() => void activityQuery.refetch()}
+                      >
+                        다시 시도
+                      </Button>
+                    </S.ActivityState>
+                  ) : activityQuery.isPending ? (
+                    <S.ActivityState role="status" aria-live="polite">
+                      <S.ActivityStateTitle>그룹 활동을 불러오는 중이에요.</S.ActivityStateTitle>
+                    </S.ActivityState>
+                  ) : groupMembers.length === 0 ? (
+                    <S.ActivityState>
+                      <S.ActivityStateTitle>표시할 그룹 활동이 아직 없어요.</S.ActivityStateTitle>
+                      <S.ActivityStateDescription>
+                        멤버가 학습을 시작하면 이곳에 활동이 표시됩니다.
+                      </S.ActivityStateDescription>
+                    </S.ActivityState>
+                  ) : (
+                    <S.MemberGrid>
+                      {groupMembers.map(member => (
+                        <S.MemberBox key={member.id} $isActive={member.isStudying}>
+                          <S.FireIcon />
+                          <S.MemberInfoBox>
+                            <S.MemberName>{member.name}</S.MemberName>
+                            <S.MemberStudyTime>{formatTime(member.studyTime)}</S.MemberStudyTime>
+                          </S.MemberInfoBox>
+                        </S.MemberBox>
+                      ))}
+                    </S.MemberGrid>
+                  )}
                 </S.MemberActivitySection>
               </S.GroupBodySection>
             </S.GroupContent>

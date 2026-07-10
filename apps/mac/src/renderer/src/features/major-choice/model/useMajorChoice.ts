@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Major, majorApi, useMajorQuestionsQuery } from "@/entities/major";
 import { useQueryClient } from "@tanstack/react-query";
 import { userQueryKeys, useGetMyProfile } from "@/entities/user";
+import { getErrorMessage } from "@/shared/lib";
 
 export type FeatureItem = "TEST" | "CHOICE" | null;
 export type MajorChoiceStep = "FEATURE" | "TEST" | "LOADING" | "RESULT" | "CHOICE";
@@ -11,6 +12,16 @@ type MajorScoreKey = "web" | "server";
 
 export const useMajorChoice = () => {
   const queryClient = useQueryClient();
+  const resultTimerRef = useRef<number | null>(null);
+
+  useEffect(
+    () => () => {
+      if (resultTimerRef.current !== null) {
+        window.clearTimeout(resultTimerRef.current);
+      }
+    },
+    []
+  );
 
   // 로드맵 페이지 컴포넌트 step useState
   const [step, setStep] = useState<MajorChoiceStep>("FEATURE");
@@ -26,7 +37,8 @@ export const useMajorChoice = () => {
 
   const { postMyMajor } = majorApi;
 
-  const { data: questionsResponse } = useMajorQuestionsQuery();
+  const questionsQuery = useMajorQuestionsQuery();
+  const { data: questionsResponse } = questionsQuery;
   const questionData = questionsResponse?.data?.majorQuestions ?? [];
 
   // 전공이 없을 경우 전공 성향 검사 및 전공 선택 중 선택하고 결과를 전달하는 함수
@@ -43,8 +55,12 @@ export const useMajorChoice = () => {
 
   const [major, setMajor] = useState<Major | null>(null);
   const [isSubmittingMajor, setIsSubmittingMajor] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
 
-  const selectedMajor = (path: Major | null) => setMajor(prev => (prev === path ? null : path));
+  const selectedMajor = (path: Major | null) => {
+    setSubmitError(null);
+    setMajor(prev => (prev === path ? null : path));
+  };
 
   // Test 컴포넌트
   const [analyzedMajor, setAnalyzedMajor] = useState<Major | null>(null);
@@ -86,8 +102,12 @@ export const useMajorChoice = () => {
     setAnalyzedMajor(finalMajor);
     // 임시로 2초 로딩
     setStep("LOADING");
-    setTimeout(() => {
+    if (resultTimerRef.current !== null) {
+      window.clearTimeout(resultTimerRef.current);
+    }
+    resultTimerRef.current = window.setTimeout(() => {
       setStep("RESULT");
+      resultTimerRef.current = null;
     }, 2000);
 
     setAnswers(Array(questionData.length).fill(null));
@@ -95,6 +115,7 @@ export const useMajorChoice = () => {
 
   const submitMajor = async (major: Major) => {
     setIsSubmittingMajor(true);
+    setSubmitError(null);
 
     try {
       await postMyMajor({
@@ -108,6 +129,9 @@ export const useMajorChoice = () => {
       navigate("/roadmap");
     } catch (error) {
       console.error("Failed to submit major", error);
+      setSubmitError(
+        getErrorMessage(error, "전공을 저장하지 못했습니다. 잠시 후 다시 시도해 주세요.")
+      );
     } finally {
       setIsSubmittingMajor(false);
     }
@@ -150,6 +174,7 @@ export const useMajorChoice = () => {
       major,
       username,
       onSubmit,
+      submitError,
     },
     test: {
       answers,
@@ -161,6 +186,9 @@ export const useMajorChoice = () => {
       getTestQuestion,
       totalCount: questionData.length,
       answeredCount: answers.filter(a => a != null).length,
+      isQuestionsLoading: questionsQuery.isPending,
+      questionsError: questionsQuery.error,
+      retryQuestions: questionsQuery.refetch,
     },
     result: {
       analyzedMajor,
@@ -168,6 +196,7 @@ export const useMajorChoice = () => {
       setStep,
       isSubmittingMajor,
       handleSelectAnalyzedMajor,
+      submitError,
     },
   };
 };

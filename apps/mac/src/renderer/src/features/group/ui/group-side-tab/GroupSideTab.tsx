@@ -57,9 +57,13 @@ export const GroupSideTab = ({
 
               return (
                 <S.GroupListItem key={group.id} $isSelected={isSelected}>
-                  <S.GroupSelectButton type="button" onClick={() => onSelectGroup(group.id)}>
+                  <S.GroupSelectButton
+                    type="button"
+                    aria-pressed={isSelected}
+                    onClick={() => onSelectGroup(group.id)}
+                  >
                     <S.GroupListLeft>
-                      <S.SelectionDot $isSelected={isSelected} />
+                      <S.SelectionDot $isSelected={isSelected} aria-hidden />
                       <S.GroupListName>{group.name}</S.GroupListName>
                     </S.GroupListLeft>
                   </S.GroupSelectButton>
@@ -68,25 +72,30 @@ export const GroupSideTab = ({
                     <S.MoreIconWrapper ref={isMenuOpen ? menuRef : null}>
                       <S.IconButton
                         type="button"
-                        aria-label="그룹 메뉴 열기"
+                        aria-label={`${group.name} 그룹 메뉴`}
+                        aria-haspopup="menu"
+                        aria-expanded={isMenuOpen}
                         onClick={event => {
                           event.stopPropagation();
                           handleMoreClick(group.id);
                         }}
                       >
-                        <S.MoreIcon />
+                        <S.MoreIcon aria-hidden />
                       </S.IconButton>
                       <Popover
                         isOpen={isMenuOpen}
                         onClose={handleCloseMenu}
                         anchorRef={menuRef}
                         minWidth="max-content"
+                        role="menu"
+                        ariaLabel={`${group.name} 그룹 메뉴`}
                       >
                         <S.MenuList>
                           {isOwner ? (
                             <>
                               <S.MenuItem
                                 type="button"
+                                role="menuitem"
                                 onClick={() => {
                                   handleCloseMenu();
                                   onEditGroup(group.id);
@@ -96,6 +105,7 @@ export const GroupSideTab = ({
                               </S.MenuItem>
                               <S.MenuItem
                                 type="button"
+                                role="menuitem"
                                 onClick={() => {
                                   handleCloseMenu();
                                   onDeleteGroup(group.id);
@@ -107,6 +117,7 @@ export const GroupSideTab = ({
                           ) : (
                             <S.MenuItem
                               type="button"
+                              role="menuitem"
                               onClick={() => {
                                 handleCloseMenu();
                                 onQuitGroup(group.id);
@@ -137,7 +148,7 @@ export const GroupSideTab = ({
           onOpenFormPanel();
         }}
       >
-        <S.PlusIcon $isOpen={formPanel.isOpen} />
+        <S.PlusIcon $isOpen={formPanel.isOpen} aria-hidden />
       </S.PlusIconWrapper>
     </S.GroupSideTabContainer>
   );

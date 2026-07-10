@@ -224,7 +224,7 @@ export const DescriptionTitle = styled.h3`
   ${font.body.medium};
 `;
 
-export const PurchaseBtn = styled.div<{ $isDisabled?: boolean }>`
+export const PurchaseBtn = styled.button<{ $isDisabled?: boolean }>`
   display: flex;
   height: 3rem;
   width: 100%;
@@ -239,5 +239,4 @@ export const PurchaseBtn = styled.div<{ $isDisabled?: boolean }>`
     $isDisabled ? theme.label.assistive : theme.action.primary.foreground};
   ${font.headline2.medium};
   cursor: ${({ $isDisabled }) => ($isDisabled ? "default" : "pointer")};
-  pointer-events: ${({ $isDisabled }) => ($isDisabled ? "none" : "auto")};
 `;

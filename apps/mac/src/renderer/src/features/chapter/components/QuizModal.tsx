@@ -40,7 +40,14 @@ export const QuizModal = ({
 
   if (state.view === "final") {
     return (
-      <Dialog width={25} height={34} isOpen={isOpen} onClose={handleClose} gap={6.5}>
+      <Dialog
+        width={25}
+        height={34}
+        isOpen={isOpen}
+        onClose={handleClose}
+        gap={6.5}
+        ariaLabel="퀴즈 최종 결과"
+      >
         <QuizResult
           isFinal
           isPassed={
@@ -58,7 +65,14 @@ export const QuizModal = ({
 
   if (state.view === "result") {
     return (
-      <Dialog width={25} height={34} isOpen={isOpen} onClose={handleClose} gap={3}>
+      <Dialog
+        width={25}
+        height={34}
+        isOpen={isOpen}
+        onClose={handleClose}
+        gap={3}
+        ariaLabel="퀴즈 채점 결과"
+      >
         <QuizResult
           isFinal={false}
           isCorrect={state.lastResult === true}
@@ -73,7 +87,14 @@ export const QuizModal = ({
 
   if (!currentQuestion || questions.length === 0) {
     return (
-      <Dialog width={25} height={20} isOpen={isOpen} onClose={handleClose} gap={3}>
+      <Dialog
+        width={25}
+        height={20}
+        isOpen={isOpen}
+        onClose={handleClose}
+        gap={3}
+        ariaLabel="퀴즈 오류"
+      >
         <S.ModalBody>
           <S.ErrorMessage>문제 정보를 불러오지 못했습니다.</S.ErrorMessage>
         </S.ModalBody>
@@ -82,7 +103,14 @@ export const QuizModal = ({
   }
 
   return (
-    <Dialog width={25} height={34} isOpen={isOpen} onClose={handleClose} gap={3}>
+    <Dialog
+      width={25}
+      height={34}
+      isOpen={isOpen}
+      onClose={handleClose}
+      gap={3}
+      ariaLabel="퀴즈 문제"
+    >
       <S.ModalTop>
         <S.ProgressBarWrapper>
           <S.BarBackground>

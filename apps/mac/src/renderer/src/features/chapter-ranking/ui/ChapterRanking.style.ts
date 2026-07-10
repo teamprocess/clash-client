@@ -72,6 +72,44 @@ export const RankingBox = styled.div`
   width: 100%;
 `;
 
+export const StateBox = styled.div`
+  min-height: 10rem;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  text-align: center;
+`;
+
+export const StateTitle = styled.p`
+  ${font.headline2.medium};
+  margin: 0;
+  color: ${({ theme }) => theme.label.normal};
+  word-break: keep-all;
+`;
+
+export const StateDescription = styled.p`
+  ${font.caption.regular};
+  margin: 0 0 0.5rem;
+  color: ${({ theme }) => theme.label.assistive};
+  word-break: keep-all;
+`;
+
+export const RefreshWarning = styled.div`
+  ${font.caption.medium};
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin: 0.5rem 0;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid ${({ theme }) => theme.line.alternative};
+  border-radius: 0.75rem;
+  color: ${({ theme }) => theme.label.alternative};
+`;
+
 export const RankingTop3Box = styled.div`
   display: flex;
   justify-content: center;

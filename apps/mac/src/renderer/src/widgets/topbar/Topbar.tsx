@@ -10,11 +10,17 @@ import { useSignOut } from "@/features/auth";
 
 interface TopbarProps {
   onToggleSidebar: () => void;
+  isSidebarOpen: boolean;
   onOpenAttendance: () => void;
   isAttendancePending: boolean;
 }
 
-export const Topbar = ({ onToggleSidebar, onOpenAttendance, isAttendancePending }: TopbarProps) => {
+export const Topbar = ({
+  onToggleSidebar,
+  isSidebarOpen,
+  onOpenAttendance,
+  isAttendancePending,
+}: TopbarProps) => {
   const { data: user } = useGetMyProfile();
   const { signOut } = useSignOut();
   const navigate = useNavigate();
@@ -44,23 +50,29 @@ export const Topbar = ({ onToggleSidebar, onOpenAttendance, isAttendancePending 
   return (
     <S.TopbarContainer>
       <S.LeftMenu>
-        <S.MenuButton onClick={onToggleSidebar}>
-          <S.MenuIcon />
+        <S.MenuButton
+          type="button"
+          onClick={onToggleSidebar}
+          aria-label={isSidebarOpen ? "사이드바 닫기" : "사이드바 열기"}
+          aria-expanded={isSidebarOpen}
+          aria-controls="main-sidebar"
+        >
+          <S.MenuIcon aria-hidden />
         </S.MenuButton>
-        <S.LogoWrapper to="/">
-          <S.Logo />
+        <S.LogoWrapper to="/" aria-label="홈으로 이동">
+          <S.Logo aria-hidden />
         </S.LogoWrapper>
       </S.LeftMenu>
 
       <S.RightMenu>
         <S.GoodsBox>
-          <S.EXPIcon />
+          <S.EXPIcon aria-hidden />
           <span>{formatPrice(user?.totalExp || 0)}</span>
           <QuestionTooltip position="bottom" content={expTooltipContent} />
         </S.GoodsBox>
 
         <S.GoodsBox>
-          <S.CookieIcon />
+          <S.CookieIcon aria-hidden />
           <span>{formatPrice(user?.totalCookie || 0)}</span>
           <QuestionTooltip position="bottom" content={cookieTooltipContent} />
         </S.GoodsBox>
@@ -71,7 +83,7 @@ export const Topbar = ({ onToggleSidebar, onOpenAttendance, isAttendancePending 
           $isPending={isAttendancePending}
           aria-label="출석 현황 열기"
         >
-          <S.AttendanceIcon />
+          <S.AttendanceIcon aria-hidden />
         </S.AttendanceButton>
 
         <TopbarNotice />
@@ -79,9 +91,11 @@ export const Topbar = ({ onToggleSidebar, onOpenAttendance, isAttendancePending 
         <S.ProfileMenuWrapper>
           <S.ProfileButton
             ref={profileMenuRef}
+            type="button"
             onClick={handleToggleProfileMenu}
             aria-haspopup="menu"
             aria-expanded={isProfileMenuOpen}
+            aria-label={`${user?.name ?? "사용자"} 프로필 메뉴`}
           >
             <S.ProfileAvatarWrap
               profileImage={user?.profileImage}
@@ -101,12 +115,19 @@ export const Topbar = ({ onToggleSidebar, onOpenAttendance, isAttendancePending 
             anchorRef={profileMenuRef}
             align="end"
             offset={10}
+            role="menu"
+            ariaLabel="프로필 메뉴"
           >
             <S.MenuList>
-              <S.MenuItem $isLogout={false} onClick={handleMoveProfile}>
+              <S.MenuItem
+                type="button"
+                role="menuitem"
+                $isLogout={false}
+                onClick={handleMoveProfile}
+              >
                 내 프로필
               </S.MenuItem>
-              <S.MenuItem $isLogout onClick={handleLogout}>
+              <S.MenuItem type="button" role="menuitem" $isLogout onClick={handleLogout}>
                 로그아웃
               </S.MenuItem>
             </S.MenuList>

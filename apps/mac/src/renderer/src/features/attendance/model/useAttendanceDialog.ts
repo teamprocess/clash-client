@@ -36,7 +36,14 @@ const getIsTodayAttended = (
 export const useAttendanceDialog = () => {
   const queryClient = useQueryClient();
   const currentAttendanceDate = getCurrentAttendanceDate();
-  const { data: weeklyAttendance = null } = useWeeklyAttendanceQuery();
+  const {
+    data: weeklyAttendance = null,
+    isLoading: isAttendanceLoading,
+    isFetching: isAttendanceFetching,
+    isError: isAttendanceError,
+    error: attendanceError,
+    refetch: refetchAttendance,
+  } = useWeeklyAttendanceQuery();
   const { mutateAsync: markAttendance, isPending: isSubmitting } = useMarkAttendanceMutation();
   const [isManuallyOpen, setIsManuallyOpen] = useState(false);
   const [dismissedAttendanceDate, setDismissedAttendanceDate] = useState<string | null>(null);
@@ -70,10 +77,10 @@ export const useAttendanceDialog = () => {
   const isCompletingAttendance = animatedAttendanceDate !== null;
 
   const isOpen = Boolean(
-    weeklyAttendance &&
-    (isCompletingAttendance ||
-      isManuallyOpen ||
-      (!isTodayAttended && dismissedAttendanceDate !== currentAttendanceDate))
+    isManuallyOpen ||
+    (weeklyAttendance &&
+      (isCompletingAttendance ||
+        (!isTodayAttended && dismissedAttendanceDate !== currentAttendanceDate)))
   );
 
   const open = () => {
@@ -134,6 +141,13 @@ export const useAttendanceDialog = () => {
     animatedAttendanceDate,
     isCompletingAttendance,
     errorMessage,
+    isAttendanceLoading: isAttendanceLoading || (isAttendanceFetching && weeklyAttendance === null),
+    attendanceLoadErrorMessage: isAttendanceError
+      ? getErrorMessage(attendanceError, "출석 현황을 불러오지 못했습니다.")
+      : "",
+    retryAttendance: () => {
+      void refetchAttendance();
+    },
     open,
     close,
     confirm,
