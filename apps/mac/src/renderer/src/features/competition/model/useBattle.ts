@@ -182,7 +182,7 @@ export const useBattle = () => {
       await Promise.all([
         queryClient.invalidateQueries({ queryKey: battleQueryKeys.applications }),
         queryClient.invalidateQueries({ queryKey: battleQueryKeys.list }),
-        queryClient.invalidateQueries({ queryKey: battleQueryKeys.all }),
+        queryClient.invalidateQueries({ queryKey: battleQueryKeys.info }),
       ]);
     },
   });

@@ -1,11 +1,5 @@
-import {
-  useRef,
-  useState,
-  useEffect,
-  type ChangeEvent,
-  type KeyboardEvent,
-  type ClipboardEvent,
-} from "react";
+import { useRef, type ChangeEvent, type KeyboardEvent, type ClipboardEvent } from "react";
+import { useController } from "react-hook-form";
 import { useLocation } from "react-router-dom";
 import * as S from "./EmailVerify.style";
 import * as CommonS from "../SignUpForm.style";
@@ -13,7 +7,7 @@ import type { EmailVerifyProps } from "@/features/auth/sign-up/model/useSignUp";
 
 export const EmailVerify = ({
   handleSubmit,
-  setValue,
+  control,
   errors,
   email,
   isSubmitting,
@@ -21,13 +15,13 @@ export const EmailVerify = ({
 }: EmailVerifyProps) => {
   const location = useLocation();
   const search = location.search;
-  const [code, setCode] = useState<string[]>(["", "", "", "", "", ""]);
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
-
-  // code가 변경될 때마다 react hook form의 emailCode 값 업데이트
-  useEffect(() => {
-    setValue("verificationCode", code.join(""));
-  }, [code, setValue]);
+  const {
+    field: { onChange: setCode, value: code },
+  } = useController({
+    control,
+    name: "verificationCode",
+  });
 
   const handleChange = (index: number, e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;

@@ -3,7 +3,6 @@ import { battleApi } from "../battleApi";
 import type { AnalyzeBattleRequest } from "../../../../model/rival-competition/battle.types";
 
 export const battleQueryKeys = {
-  all: ["battle"] as const,
   info: ["battleInfo"] as const,
   details: ["battleDetail"] as const,
   detail: (id: number) => [...battleQueryKeys.details, id] as const,

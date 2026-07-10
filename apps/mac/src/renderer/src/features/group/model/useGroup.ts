@@ -290,6 +290,7 @@ export const useGroup = (currentGroupId: number | null) => {
           queryClient.invalidateQueries({ queryKey: groupQueryKeys.myGroups }),
           queryClient.invalidateQueries({ queryKey: groupQueryKeys.allGroups }),
           queryClient.invalidateQueries({ queryKey: groupQueryKeys.groupActivity }),
+          queryClient.invalidateQueries({ queryKey: groupQueryKeys.groupDetail }),
         ]);
         return true;
       } else {

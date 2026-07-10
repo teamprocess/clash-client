@@ -1,7 +1,6 @@
 import * as S from "./Record.style";
 import { Task } from "./task/Task";
 import { Timer } from "./timer/Timer";
-import { useRecord } from "../model/useRecord";
 
 interface RecordProps {
   selectedDate?: string;
@@ -20,8 +19,6 @@ export const Record = ({
   onResetToToday,
   canGoNextDate,
 }: RecordProps) => {
-  useRecord(selectedDate);
-
   return (
     <S.RecordContainer>
       <S.TopContainer>

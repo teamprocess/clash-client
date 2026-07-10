@@ -24,7 +24,8 @@ export const Timer = ({
   stopButtonPosition = "LEFT",
   nonTodayStopBehavior = "disable",
 }: TimerProps) => {
-  const { activeSessionType, stop } = useRecordStore();
+  const activeSessionType = useRecordStore(state => state.activeSessionType);
+  const stop = useRecordStore(state => state.stop);
   const { totalStudyTime, isLoading } = useLiveRecordStudyTime(selectedDate);
   const isTodaySelected = selectedDate === undefined;
   const isPreviousDateEnabled = typeof onPreviousDate === "function";

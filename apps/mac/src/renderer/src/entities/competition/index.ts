@@ -6,6 +6,7 @@ export {
   useTransitionQuery,
 } from "./api/my-competition/api/query/useTransition.query";
 export {
+  myCompetitionQueryKeys,
   useMyGrowthRateQuery,
   useMyCompareQuery,
 } from "./api/my-competition/api/useMyCompetitionQuery.query";
