@@ -143,15 +143,15 @@ export const CategoryButton = styled.button<{ $isActive?: boolean }>`
   min-width: 3.25rem;
   border-radius: 1rem;
   background-color: ${({ theme, $isActive }) =>
-    $isActive ? theme.interaction.selected.background : theme.fill.alternative};
+    $isActive ? theme.action.primary.background : theme.fill.alternative};
   color: ${({ theme, $isActive }) =>
-    $isActive ? theme.interaction.selected.foreground : theme.label.alternative};
+    $isActive ? theme.action.primary.foreground : theme.label.alternative};
   border: none;
   cursor: pointer;
 
   &:hover {
-    color: ${({ theme }) => theme.interaction.selected.foreground};
-    background-color: ${({ theme }) => theme.interaction.selected.background};
+    color: ${({ theme }) => theme.action.primary.foreground};
+    background-color: ${({ theme }) => theme.action.primary.background};
   }
 `;
 
@@ -219,15 +219,15 @@ export const PageButton = styled.button<{ $isActive?: boolean }>`
   padding: 0.25rem 0.625rem;
   border-radius: 0.5rem;
   background-color: ${({ theme, $isActive }) =>
-    $isActive ? theme.interaction.selected.background : "transparent"};
+    $isActive ? theme.action.primary.background : "transparent"};
   color: ${({ theme, $isActive }) =>
-    $isActive ? theme.interaction.selected.foreground : theme.label.normal};
+    $isActive ? theme.action.primary.foreground : theme.label.normal};
   border: none;
   cursor: pointer;
 
   &:hover {
     background-color: ${({ theme, $isActive }) =>
-      $isActive ? theme.interaction.selected.background : theme.line.normal};
+      $isActive ? theme.action.primary.background : theme.line.normal};
   }
 
   &:disabled {

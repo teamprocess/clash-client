@@ -6,10 +6,6 @@ export const lightTheme: Theme = {
   },
   action: {
     primary: {
-      background: "#0c0c0d",
-      foreground: "#fcfcfc",
-    },
-    danger: {
       background: "#c60608",
       foreground: "#fcfcfc",
     },
@@ -22,17 +18,9 @@ export const lightTheme: Theme = {
       background: "#c60608",
       foreground: "#fcfcfc",
     },
-    danger: {
-      background: "#c60608",
-      foreground: "#fcfcfc",
-    },
   },
   interaction: {
     selectionBorder: "#c60608",
-    selected: {
-      background: "#c60608",
-      foreground: "#fcfcfc",
-    },
   },
   feedback: {
     danger: "#c60608",

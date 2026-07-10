@@ -243,9 +243,9 @@ export const StepCircle = styled.div<{ $active?: boolean }>`
   height: 2.25rem;
   border-radius: 50%;
   background-color: ${({ $active, theme }) =>
-    $active ? theme.interaction.selected.background : theme.line.neutral};
+    $active ? theme.badge.primary.background : theme.line.neutral};
   color: ${({ $active, theme }) =>
-    $active ? theme.interaction.selected.foreground : theme.label.alternative};
+    $active ? theme.badge.primary.foreground : theme.label.alternative};
   ${font.title2.medium};
   display: flex;
   align-items: center;
@@ -337,19 +337,19 @@ export const RoadmapNumberBox = styled.div`
   align-items: center;
   width: 2.8rem;
   height: 2.8rem;
-  background-color: ${({ theme }) => theme.badge.primary.background};
+  background-color: ${({ theme }) => theme.action.primary.background};
   border-radius: 0.5rem;
   flex-shrink: 0;
 `;
 
 export const StepTitle = styled.span`
   ${font.caption.regular}
-  color: ${({ theme }) => theme.badge.primary.foreground};
+  color: ${({ theme }) => theme.action.primary.foreground};
 `;
 
 export const RoadmapNumber = styled.span`
   ${font.title2.medium}
-  color: ${({ theme }) => theme.badge.primary.foreground};
+  color: ${({ theme }) => theme.action.primary.foreground};
 `;
 
 export const RoadmapDescription = styled.span`
