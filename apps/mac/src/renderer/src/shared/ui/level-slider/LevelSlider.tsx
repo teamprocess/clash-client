@@ -1,6 +1,5 @@
 import * as S from "./LevelSlider.style";
 import { LevelSliderTrack } from "@/shared/ui/level-slider/level-slider-track/LevelSliderTrack";
-import { LevelSliderLabels } from "@/shared/ui/level-slider/level-slider-labels/LevelSliderLabels";
 import { useState } from "react";
 import type { LevelSliderValue } from "@/shared/ui/level-slider/types";
 
@@ -20,16 +19,11 @@ export const LevelSlider = ({ labels, selectedLevel, onChange }: LevelSliderProp
   return (
     <S.LevelSliderWrapper onMouseLeave={() => setHoverLevel(undefined)}>
       <LevelSliderTrack
+        labels={labels}
         hoverLevel={hoverLevel}
         setHoverLevel={setHoverLevel}
         selectedLevel={selectedLevel}
         onSelectLevel={handleSelectLevel}
-      />
-      <LevelSliderLabels
-        setHoverLevel={setHoverLevel}
-        selectedLevel={selectedLevel}
-        onSelectLevel={handleSelectLevel}
-        labels={labels}
       />
     </S.LevelSliderWrapper>
   );

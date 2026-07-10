@@ -24,7 +24,14 @@ export const useRankingDomain = () => {
   const [rankingCategory, setRankingCategory] = useState<CategoryType>("EXP");
   const [rankingPeriod, setRankingPeriod] = useState<PeriodType>("DAY");
 
-  const { data: rankingResponse } = useRankingQuery(rankingCategory, rankingPeriod);
+  const {
+    data: rankingResponse,
+    isLoading,
+    isFetching,
+    isPlaceholderData,
+    isError,
+    refetch,
+  } = useRankingQuery(rankingCategory, rankingPeriod);
 
   const userList: RankingsResponse = rankingResponse?.data ?? {
     category: rankingCategory,
@@ -45,7 +52,13 @@ export const useRankingDomain = () => {
     rankingPeriod,
     setRankingPeriod,
     userList,
+    displayCategory: userList.category,
     currentUser,
     currentUserRank,
+    isLoading,
+    isFetching,
+    isPlaceholderData,
+    isError,
+    refetch,
   };
 };

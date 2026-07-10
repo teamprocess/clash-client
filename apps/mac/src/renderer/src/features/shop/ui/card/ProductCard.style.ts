@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { font } from "@clash/design-tokens/font";
 import Cookie from "@/features/shop/assets/cookie.svg";
 
-export const CardContainer = styled.div<{ $isBought?: boolean; $isActive?: boolean }>`
+export const CardContainer = styled.button<{ $isBought?: boolean; $isActive?: boolean }>`
   position: relative;
   display: flex;
   flex-direction: column;
@@ -12,6 +12,10 @@ export const CardContainer = styled.div<{ $isBought?: boolean; $isActive?: boole
   width: 100%;
   min-height: 18rem;
   box-sizing: border-box;
+  padding: 0;
+  color: inherit;
+  font: inherit;
+  text-align: left;
   background-color: ${({ theme }) => theme.fill.neutral};
   border: 1px solid
     ${({ theme, $isActive }) =>

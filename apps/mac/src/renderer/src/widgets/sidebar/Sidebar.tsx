@@ -72,7 +72,7 @@ export const Sidebar = ({ isOpen, appMonitor }: SidebarProps) => {
   }, [navigate]);
 
   return (
-    <S.SidebarContainer $isOpen={isOpen}>
+    <S.SidebarContainer id="main-sidebar" $isOpen={isOpen} aria-hidden={!isOpen} inert={!isOpen}>
       {/* 현재 기록 세션 트래커 */}
       <S.TimeTracker>
         {!isElectron ? (
@@ -98,13 +98,23 @@ export const Sidebar = ({ isOpen, appMonitor }: SidebarProps) => {
       </S.TimeTracker>
 
       {/* 사이드바 메뉴 아이템*/}
-      <S.MenuList>
+      <S.MenuList aria-label="주요 메뉴">
         {menuItems.map(item => (
           <S.MenuItem
             key={item.label}
             to={item.to}
             $active={
               item.to === "/" ? location.pathname === "/" : location.pathname.startsWith(item.to)
+            }
+            tabIndex={isOpen ? 0 : -1}
+            aria-current={
+              item.to === "/"
+                ? location.pathname === "/"
+                  ? "page"
+                  : undefined
+                : location.pathname.startsWith(item.to)
+                  ? "page"
+                  : undefined
             }
           >
             {item.icon} {item.label}

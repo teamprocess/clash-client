@@ -9,7 +9,7 @@ export const SectionProgressContainer = styled.div`
   gap: 2rem;
   width: auto;
   max-width: calc(100% - 6rem);
-  height: 3rem;
+  min-height: 3rem;
   padding: 0.75rem 3rem;
   box-sizing: border-box;
   background-color: ${({ theme }) => theme.background.alternative};
@@ -19,6 +19,24 @@ export const SectionProgressContainer = styled.div`
   left: 3rem;
   right: 3rem;
   z-index: 110;
+`;
+
+export const StateContent = styled.div`
+  width: 100%;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  text-align: center;
+`;
+
+export const StateMessage = styled.p`
+  ${font.label.medium};
+  min-width: 0;
+  margin: 0;
+  color: ${({ theme }) => theme.label.assistive};
+  word-break: keep-all;
 `;
 
 export const ProgressInfoBox = styled.div`
@@ -74,4 +92,11 @@ export const PercentText = styled.span`
   ${font.headline1.medium}
   flex-shrink: 0;
   color: ${({ theme }) => theme.label.assistive};
+`;
+
+export const EmptyMessage = styled.span`
+  ${font.label.medium};
+  width: 100%;
+  color: ${({ theme }) => theme.label.assistive};
+  text-align: center;
 `;

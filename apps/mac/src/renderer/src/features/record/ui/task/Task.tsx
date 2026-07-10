@@ -1,5 +1,5 @@
 import * as S from "./Task.style";
-import { formatTime } from "@/shared/lib";
+import { formatTime, getErrorMessage } from "@/shared/lib";
 import { useTaskList } from "../../model/useTaskList";
 import { Button, ConfirmDialog, Popover, Tooltip } from "@/shared/ui";
 
@@ -42,7 +42,10 @@ export const Task = ({ selectedDate }: TaskProps) => {
     handleCancelEdit,
     handleCancelDelete,
     handleConfirmDelete,
+    subjectsQuery,
   } = useTaskList(selectedDate);
+
+  const hasInitialLoadError = subjectsQuery.isError && subjectsQuery.data === undefined;
 
   const renderTaskNameInput = () => (
     <Tooltip
@@ -54,6 +57,7 @@ export const Task = ({ selectedDate }: TaskProps) => {
     >
       <S.TaskTextInput
         ref={subjectNameInputRef}
+        aria-label="과목명"
         placeholder="과목명을 입력하세요."
         value={subjectName}
         maxLength={taskNameInputMaxLength}
@@ -68,7 +72,26 @@ export const Task = ({ selectedDate }: TaskProps) => {
   return (
     <>
       <S.TaskContainer>
-        <S.TaskBox>
+        <S.TaskBox aria-busy={subjectsQuery.isFetching || undefined}>
+          {subjectsQuery.isPending ? (
+            <S.ListState role="status" aria-live="polite">
+              과목을 불러오는 중이에요.
+            </S.ListState>
+          ) : hasInitialLoadError ? (
+            <S.ListState role="alert">
+              <span>{getErrorMessage(subjectsQuery.error, "과목을 불러오지 못했어요.")}</span>
+              <Button
+                type="button"
+                variant="primary"
+                size="sm"
+                onClick={() => void subjectsQuery.refetch()}
+              >
+                다시 시도
+              </Button>
+            </S.ListState>
+          ) : subjects.length === 0 && editMode !== "ADD" ? (
+            <S.ListState>등록된 과목이 없어요. 새 과목을 추가해 보세요.</S.ListState>
+          ) : null}
           {subjects.map(subject => {
             const isActive = isTaskActive(subject.id);
             const studyTime = getTaskStudyTime(subject.id);
@@ -106,23 +129,52 @@ export const Task = ({ selectedDate }: TaskProps) => {
             return (
               <S.TaskItem key={subject.id}>
                 <S.TaskLeftBox>
-                  <S.IconButton onClick={() => handlePlayPauseClick(subject.id)}>
-                    {isActive ? <S.PauseIcon /> : <S.PlayIcon />}
+                  <S.IconButton
+                    type="button"
+                    aria-label={`${subject.name} ${isActive ? "학습 일시정지" : "학습 시작"}`}
+                    onClick={() => handlePlayPauseClick(subject.id)}
+                  >
+                    {isActive ? (
+                      <S.PauseIcon aria-hidden="true" focusable="false" />
+                    ) : (
+                      <S.PlayIcon aria-hidden="true" focusable="false" />
+                    )}
                   </S.IconButton>
                   <S.TaskText>{subject.name}</S.TaskText>
                 </S.TaskLeftBox>
                 <S.TaskRightBox>
                   <S.TaskText>{formatTime(studyTime)}</S.TaskText>
                   <S.MoreIconWrapper ref={isMenuOpen ? menuRef : null}>
-                    <S.IconButton onClick={() => handleMoreClick(subject.id)}>
-                      <S.MoreIcon />
+                    <S.IconButton
+                      type="button"
+                      aria-label={`${subject.name} 메뉴 ${isMenuOpen ? "닫기" : "열기"}`}
+                      aria-haspopup="menu"
+                      aria-expanded={isMenuOpen}
+                      aria-controls={`task-menu-${subject.id}`}
+                      onClick={() => handleMoreClick(subject.id)}
+                    >
+                      <S.MoreIcon aria-hidden="true" focusable="false" />
                     </S.IconButton>
-                    <Popover isOpen={isMenuOpen} onClose={handleCloseMenu} anchorRef={menuRef}>
-                      <S.MenuList>
-                        <S.MenuItem onClick={() => handleEditClick(subject.id)}>
+                    <Popover
+                      isOpen={isMenuOpen}
+                      onClose={handleCloseMenu}
+                      anchorRef={menuRef}
+                      role="menu"
+                      ariaLabel={`${subject.name} 과목 메뉴`}
+                    >
+                      <S.MenuList id={`task-menu-${subject.id}`} role="presentation">
+                        <S.MenuItem
+                          type="button"
+                          role="menuitem"
+                          onClick={() => handleEditClick(subject.id)}
+                        >
                           과목 수정
                         </S.MenuItem>
-                        <S.MenuItem onClick={() => handleDeleteRequest(subject.id)}>
+                        <S.MenuItem
+                          type="button"
+                          role="menuitem"
+                          onClick={() => handleDeleteRequest(subject.id)}
+                        >
                           과목 삭제
                         </S.MenuItem>
                       </S.MenuList>
@@ -157,7 +209,11 @@ export const Task = ({ selectedDate }: TaskProps) => {
               </S.TaskRightBox>
             </S.TaskItem>
           )}
-          <S.AddTaskButton disabled={isSavingTask} onClick={handleAddClick}>
+          <S.AddTaskButton
+            type="button"
+            disabled={isSavingTask || subjectsQuery.isPending || hasInitialLoadError}
+            onClick={handleAddClick}
+          >
             + 과목 추가
           </S.AddTaskButton>
         </S.TaskBox>

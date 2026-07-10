@@ -20,7 +20,7 @@ const sizeMap = {
   },
 };
 
-export const ChoiceBox = styled.div<{
+export const ChoiceBox = styled.button<{
   $isSelected: boolean;
   $size: ChoiceBoxSize;
 }>`
@@ -30,7 +30,11 @@ export const ChoiceBox = styled.div<{
   position: relative;
 
   background-color: ${({ theme }) => theme.background.normal};
+  border: 0;
   border-radius: 0.75rem;
+  padding: 0;
+  color: inherit;
+  font: inherit;
 
   box-shadow: 0 0 6px 0
     ${({ $isSelected, theme }) =>
@@ -40,9 +44,14 @@ export const ChoiceBox = styled.div<{
   height: ${({ $size }) => sizeMap[$size].height};
 
   cursor: pointer;
+
+  &:disabled {
+    cursor: default;
+    opacity: 0.55;
+  }
 `;
 
-export const ChoiceItem = styled.div`
+export const ChoiceItem = styled.span`
   display: flex;
   flex-direction: column;
   align-items: center;

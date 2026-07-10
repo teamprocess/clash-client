@@ -119,7 +119,7 @@ export const Home = () => {
         <Skeleton />
         <Skeleton />
         {!isGitHubNotLinked && (
-          <Dialog width={21.5} height={21.5} isOpen={true}>
+          <Dialog width={21.5} height={21.5} isOpen={true} ariaLabel="GitHub 계정 연동 중">
             <S.ConnectingContainer>
               <S.GitHubIcon />
               <S.FontBox>

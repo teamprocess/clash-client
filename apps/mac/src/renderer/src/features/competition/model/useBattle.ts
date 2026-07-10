@@ -41,11 +41,17 @@ export const useBattle = () => {
   const [isCanceling, setIsCanceling] = useState(false);
   const [cancelingId, setCancelingId] = useState<number | null>(null);
 
-  const { data: battleInfoRes } = useBattleInfoQuery();
-  const { data: battleDetailRes } = useBattleDetailQuery(battleTargetId ?? 0);
-  const { data: analyzeRes } = useAnalyzeBattleQuery(battleDetailRes?.data?.id ?? 0, category);
-  const { data: battleListRes } = useBattleListQuery();
-  const { data: battleApplyList } = useBattleApplyListQuery();
+  const battleInfoQuery = useBattleInfoQuery();
+  const battleDetailQuery = useBattleDetailQuery(battleTargetId ?? 0);
+  const analyzeQuery = useAnalyzeBattleQuery(battleDetailQuery.data?.data?.id ?? 0, category);
+  const battleListQuery = useBattleListQuery(isModalOpen);
+  const battleApplyListQuery = useBattleApplyListQuery(isModalOpen);
+
+  const { data: battleInfoRes } = battleInfoQuery;
+  const { data: battleDetailRes } = battleDetailQuery;
+  const { data: analyzeRes } = analyzeQuery;
+  const { data: battleListRes } = battleListQuery;
+  const { data: battleApplyList } = battleApplyListQuery;
 
   const battleData: BattleResponse | null = battleInfoRes?.data ?? null;
   const battleDetailData: BattleDetailResponse | null = battleDetailRes?.data ?? null;
@@ -258,5 +264,13 @@ export const useBattle = () => {
     cancelingId,
 
     error,
+
+    queries: {
+      info: battleInfoQuery,
+      detail: battleDetailQuery,
+      analyze: analyzeQuery,
+      rivals: battleListQuery,
+      applications: battleApplyListQuery,
+    },
   };
 };

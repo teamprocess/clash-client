@@ -14,10 +14,10 @@ export const useRanking = () => {
   const domain = useRankingDomain();
   const view = useRankingView({ rankings: domain.userList.rankings });
 
-  const unit = unitMap[domain.rankingCategory];
+  const unit = unitMap[domain.displayCategory];
 
   const formatActiveRankingPoint = (value: number) => {
-    if (domain.rankingCategory === "ACTIVE_TIME") {
+    if (domain.displayCategory === "ACTIVE_TIME") {
       return formatTime(value);
     }
     return value.toLocaleString();
@@ -41,8 +41,14 @@ export const useRanking = () => {
 
     domain: {
       userList: domain.userList,
+      displayCategory: domain.displayCategory,
       currentUser: domain.currentUser,
       currentUserRank: domain.currentUserRank,
+      isLoading: domain.isLoading,
+      isFetching: domain.isFetching,
+      isPlaceholderData: domain.isPlaceholderData,
+      isError: domain.isError,
+      refetch: domain.refetch,
     },
 
     view: {

@@ -24,14 +24,19 @@ export const SectionItemBox = ({ category, sections, onItemClick }: SectionItemB
         .filter(item => item.categoryId === category)
         .map(item => (
           <S.SectionItem key={item.id} style={{ opacity: item.locked ? 0.5 : 1 }}>
-            <S.SectionIconWrapper onClick={() => onItemClick(item)}>
+            <S.SectionIconWrapper
+              type="button"
+              aria-label={`${item.title}${item.completed ? ", 완료" : ""}${item.locked ? ", 잠김" : ""}`}
+              disabled={item.locked}
+              onClick={() => onItemClick(item)}
+            >
               <S.SectionIcon
                 src={item.categoryImageUrl || RoadmapIcon}
                 alt=""
                 onError={handleIconError}
               />
-              {item.completed && <S.SectionComplete />}
-              {item.locked && <S.SectionLock />}
+              {item.completed && <S.SectionComplete aria-hidden="true" focusable="false" />}
+              {item.locked && <S.SectionLock aria-hidden="true" focusable="false" />}
             </S.SectionIconWrapper>
             <S.SectionTitle>{item.title}</S.SectionTitle>
           </S.SectionItem>

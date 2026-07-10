@@ -45,6 +45,26 @@ export const QuestionWrapper = styled.div`
   width: 100%;
 `;
 
+export const StateBox = styled.div`
+  display: flex;
+  min-height: 16rem;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  text-align: center;
+`;
+
+export const StateTitle = styled.p`
+  ${font.title2.medium};
+  color: ${({ theme }) => theme.label.normal};
+`;
+
+export const StateDescription = styled.p`
+  ${font.body.regular};
+  color: ${({ theme }) => theme.label.alternative};
+`;
+
 export const QuestionBox = styled.div`
   display: flex;
   flex-direction: column;

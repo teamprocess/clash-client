@@ -74,6 +74,9 @@ export const OverviewBody = styled.div`
   gap: 1.35rem;
   min-height: 0;
   margin-top: 2rem;
+  padding-right: 0.25rem;
+  overflow-y: auto;
+  overscroll-behavior: contain;
 `;
 
 export const SectionCard = styled.section`

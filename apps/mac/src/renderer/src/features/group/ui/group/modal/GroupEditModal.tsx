@@ -17,7 +17,7 @@ export const GroupEditModal = ({
   showPasswordChangeButton,
 }: GroupEditModalProps) => {
   return (
-    <Dialog width={64} height={42} isOpen={isOpen} onClose={onClose} gap={3}>
+    <Dialog width={64} height={42} isOpen={isOpen} onClose={onClose} gap={3} ariaLabel="그룹 수정">
       <S.ModalContent>
         <S.Tabs>
           <S.Tab $isActive={true}>그룹 수정</S.Tab>

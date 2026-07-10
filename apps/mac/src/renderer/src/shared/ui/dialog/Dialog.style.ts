@@ -11,7 +11,7 @@ export const DialogWrapper = styled.div`
   width: 100%;
   height: 100%;
   padding: 1rem;
-  z-index: 1000;
+  z-index: 1300;
 `;
 
 export const DialogOverlay = styled.div`
@@ -56,7 +56,7 @@ export const DialogContainer = styled.div<{
     `}
 `;
 
-export const DialogTitle = styled.p`
+export const DialogTitle = styled.h2`
   ${font.title2.medium}
   margin: 0;
   padding-right: 2rem;

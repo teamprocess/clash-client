@@ -38,16 +38,18 @@ export const useAnalyzeBattleQuery = (id: number, category: AnalyzeBattleRequest
   });
 };
 
-export const useBattleListQuery = () => {
+export const useBattleListQuery = (enabled = true) => {
   return useQuery({
     queryKey: battleQueryKeys.list,
     queryFn: battleApi.getBattleList,
+    enabled,
   });
 };
 
-export const useBattleApplyListQuery = () => {
+export const useBattleApplyListQuery = (enabled = true) => {
   return useQuery({
     queryKey: battleQueryKeys.applications,
     queryFn: battleApi.getBattleApplyList,
+    enabled,
   });
 };

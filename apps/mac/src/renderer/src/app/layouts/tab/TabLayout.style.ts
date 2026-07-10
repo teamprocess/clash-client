@@ -10,7 +10,7 @@ export const Wrapper = styled.div`
   gap: 1rem;
 `;
 
-export const TabContainer = styled.div`
+export const TabContainer = styled.nav`
   position: relative;
   display: flex;
   flex-direction: row;

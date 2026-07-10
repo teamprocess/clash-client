@@ -22,7 +22,7 @@ export const FeatureChoice = ({
           </S.RoadmapDescription>
         </S.RoadmapTop>
 
-        <S.ChoiceWrapper>
+        <S.ChoiceWrapper role="group" aria-label="로드맵 진행 방식">
           <ChoiceBox
             size="md"
             selected={selected === "TEST"}

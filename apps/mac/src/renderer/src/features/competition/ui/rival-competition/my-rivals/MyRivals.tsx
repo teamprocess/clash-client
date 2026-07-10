@@ -52,7 +52,7 @@ const RivalRow = ({ user }: { user: MyRivalsRequest }) => {
         {resolvedApp && (
           <>
             <S.UsingBox>
-              {Icon ? <Icon /> : null}
+              {Icon ? <Icon aria-hidden /> : null}
               <S.UsingAppText>{resolvedApp.name}</S.UsingAppText>
             </S.UsingBox>
             <S.Point>·</S.Point>
@@ -80,9 +80,9 @@ export const MyRivals = ({ data, onManageRivals }: MyRivalsProps) => {
                 label="라이벌 최대 인원 안내"
               />
             </S.TitleGroup>
-            <S.ArrowBox onClick={onManageRivals}>
+            <S.ArrowBox type="button" onClick={onManageRivals}>
               라이벌 관리
-              <S.DetailArrowIcon />
+              <S.DetailArrowIcon aria-hidden />
             </S.ArrowBox>
           </S.TitleBox>
 
@@ -95,7 +95,7 @@ export const MyRivals = ({ data, onManageRivals }: MyRivalsProps) => {
               <S.DetailWrapper>
                 <S.DefaultBattleBox>
                   <S.DefaultBattleText>
-                    위 배틀을 선택하여 배틀의 상세 내용을 확인해보세요!
+                    등록된 라이벌이 없습니다. 라이벌을 추가해 보세요.
                   </S.DefaultBattleText>
                 </S.DefaultBattleBox>
               </S.DetailWrapper>

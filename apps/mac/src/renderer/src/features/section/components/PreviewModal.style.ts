@@ -274,9 +274,13 @@ export const RoadmapSteps = styled.div`
   }
 `;
 
-export const StepWrapper = styled.div`
+export const StepWrapper = styled.button`
   position: relative;
   z-index: 1;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
   cursor: pointer;
 `;
 
@@ -326,7 +330,7 @@ export const RoadmapDescriptionBox = styled.div`
   min-width: 0;
 `;
 
-export const RoadmapNumberBox = styled.button`
+export const RoadmapNumberBox = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -473,7 +477,6 @@ export const ArrowButton = styled.button<{ $disabled: boolean }>`
   justify-content: center;
   opacity: ${({ $disabled }) => ($disabled ? 0.3 : 1)};
   cursor: ${({ $disabled }) => ($disabled ? "not-allowed" : "pointer")};
-  pointer-events: ${({ $disabled }) => ($disabled ? "none" : "auto")};
   transition: opacity 0.2s ease;
 
   &:hover:not([disabled]) {

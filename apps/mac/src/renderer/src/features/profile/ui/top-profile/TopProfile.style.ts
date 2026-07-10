@@ -200,6 +200,15 @@ export const HiddenFileInput = styled.input`
   display: none;
 `;
 
+export const UploadError = styled.p`
+  ${font.caption.medium};
+  position: absolute;
+  right: 1.5rem;
+  bottom: 1rem;
+  margin: 0;
+  color: ${({ theme }) => theme.feedback.danger};
+`;
+
 export const AddProfileImageIcon = styled(AddProfileImg)`
   width: 100%;
   height: 100%;

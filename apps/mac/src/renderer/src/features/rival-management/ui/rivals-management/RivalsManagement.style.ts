@@ -131,6 +131,27 @@ export const UserChoiceBox = styled.div<{ $isSelected?: boolean; $isRival?: bool
     `}
 `;
 
+export const SelectableUserButton = styled.button<{ $isSelected: boolean }>`
+  ${flexRow};
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  border-bottom: 1px solid ${({ theme }) => theme.line.alternative};
+  background-color: ${({ $isSelected, theme }) =>
+    $isSelected ? theme.fill.alternative : "transparent"};
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: 0.1s ease-in-out;
+
+  &:hover {
+    padding: 0.5rem 1.25rem;
+    border-radius: 0.75rem;
+    background-color: ${({ theme }) => theme.fill.alternative};
+  }
+`;
+
 export const ButtonBox = styled.div`
   width: 100%;
   ${flexRow};

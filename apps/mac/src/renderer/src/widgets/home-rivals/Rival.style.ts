@@ -48,6 +48,18 @@ export const TitleBox = styled.div`
   }
 `;
 
+export const RefreshWarning = styled.div`
+  ${font.caption.medium};
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid ${({ theme }) => theme.line.alternative};
+  border-radius: 0.75rem;
+  color: ${({ theme }) => theme.label.alternative};
+`;
+
 export const TitleLeft = styled.div`
   ${flexRow};
   align-items: center;
@@ -70,6 +82,11 @@ export const ArrowBox = styled.button`
   cursor: pointer;
   flex-shrink: 0;
   white-space: nowrap;
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
 `;
 
 export const DetailArrowIcon = styled(DetailArrow)`
@@ -103,6 +120,32 @@ export const RivalBox = styled.div`
     height: auto;
     flex: unset;
   }
+`;
+
+export const RivalState = styled.div`
+  grid-column: 1 / -1;
+  grid-row: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 9rem;
+  padding: 1.5rem;
+  border: 1px dashed ${({ theme }) => theme.line.alternative};
+  border-radius: 0.75rem;
+  background-color: ${({ theme }) => theme.fill.normal};
+  text-align: center;
+`;
+
+export const RivalStateTitle = styled.p`
+  ${font.headline2.medium};
+  color: ${({ theme }) => theme.label.normal};
+`;
+
+export const RivalStateDescription = styled.p`
+  ${font.caption.medium};
+  color: ${({ theme }) => theme.label.alternative};
 `;
 
 export const ProfileContainer = styled.div`
@@ -170,7 +213,6 @@ export const ProfileName = styled.p`
 export const ProfileMention = styled.p`
   ${font.label.regular};
   color: ${({ theme }) => theme.label.alternative};
-  cursor: pointer;
   display: block;
   min-width: 0;
   overflow: hidden;
