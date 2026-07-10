@@ -1,6 +1,7 @@
 import { Line } from "react-chartjs-2";
 import "chart.js/auto";
 import type { TooltipItem } from "chart.js";
+import { useTheme } from "styled-components";
 
 interface ActiveLineChartProps {
   data: {
@@ -10,6 +11,7 @@ interface ActiveLineChartProps {
 }
 
 export const ActiveLineChart = ({ data }: ActiveLineChartProps) => {
+  const theme = useTheme();
   const labels = data.labels.map(v => `${v}월`);
   const values = data.values.map(v => v);
 
@@ -20,12 +22,12 @@ export const ActiveLineChart = ({ data }: ActiveLineChartProps) => {
         datasets: [
           {
             data: values,
-            borderColor: "#747678",
-            backgroundColor: "#DCDDDE",
+            borderColor: theme.dataVisualization.series[0],
+            backgroundColor: theme.dataVisualization.series[0],
             borderWidth: 2.5,
             pointRadius: 8,
             pointHoverRadius: 9,
-            pointBackgroundColor: "#DCDDDE",
+            pointBackgroundColor: theme.dataVisualization.series[0],
             tension: 0,
             fill: false,
           },
@@ -39,8 +41,10 @@ export const ActiveLineChart = ({ data }: ActiveLineChartProps) => {
             display: false,
           },
           tooltip: {
-            backgroundColor: "#2A2B2C",
-            borderColor: "#747678",
+            backgroundColor: theme.dataVisualization.tooltip.background,
+            borderColor: theme.dataVisualization.tooltip.border,
+            bodyColor: theme.dataVisualization.tooltip.label,
+            titleColor: theme.dataVisualization.tooltip.label,
             borderWidth: 1,
             displayColors: false,
             callbacks: {
@@ -57,12 +61,12 @@ export const ActiveLineChart = ({ data }: ActiveLineChartProps) => {
           x: {
             grid: { display: false },
             ticks: {
-              color: "#A1A1A1",
+              color: theme.dataVisualization.axisLabel,
             },
           },
           y: {
             display: false,
-            grid: { display: false, color: "#3A3A3C" },
+            grid: { display: false, color: theme.line.alternative },
           },
         },
       }}

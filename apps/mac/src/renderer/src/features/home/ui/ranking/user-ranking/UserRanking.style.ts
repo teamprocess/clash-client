@@ -110,10 +110,10 @@ export const ProfileHandleButton = styled.button`
 
 export const RivalMention = styled.div`
   ${font.caption.medium}
-  color: ${palette.neutral[97]};
+  color: ${({ theme }) => theme.badge.primary.foreground};
   padding: 0.125rem 0.5rem;
   border-radius: 0.25rem;
-  background-color: ${({ theme }) => theme.primary.normal};
+  background-color: ${({ theme }) => theme.badge.primary.background};
   flex: 0 0 auto;
 `;
 
@@ -157,7 +157,7 @@ export const Rank = styled.div<{ $rank: number }>`
         : $rank === 3
           ? palette.yellow[30]
           : "transparent"};
-  color: ${({ $rank, theme }) => ($rank <= 3 ? theme.background.normal : theme.label.normal)};
+  color: ${({ $rank, theme }) => ($rank <= 3 ? palette.neutral[5] : theme.label.normal)};
   border: ${({ $rank, theme }) =>
     $rank <= 3 ? `1px solid ${theme.line.neutral}` : `1px solid transparent`};
 `;

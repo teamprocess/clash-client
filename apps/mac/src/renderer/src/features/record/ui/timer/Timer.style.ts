@@ -66,7 +66,7 @@ export const TodayButton = styled.button<{ $visible: boolean }>`
   pointer-events: ${({ $visible }) => ($visible ? "auto" : "none")};
 
   &:hover {
-    background-color: ${({ theme }) => theme.label.disable};
+    background-color: ${({ theme }) => theme.fill.alternative};
   }
 `;
 

@@ -32,7 +32,7 @@ export const SectionIconWrapper = styled.button`
   cursor: pointer;
 
   &:hover {
-    background: ${({ theme }) => theme.label.disable};
+    background: ${({ theme }) => theme.fill.alternative};
   }
 `;
 

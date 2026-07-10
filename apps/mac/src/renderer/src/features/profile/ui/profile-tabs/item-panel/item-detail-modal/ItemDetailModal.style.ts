@@ -55,6 +55,12 @@ export const DialogLayout = styled.div`
   display: grid;
   grid-template-columns: minmax(0, 1.4fr) minmax(18rem, 0.9fr);
   gap: 1.5rem;
+
+  @media (max-width: 48rem) {
+    grid-template-columns: minmax(0, 1fr);
+    min-width: 0;
+    height: auto;
+  }
 `;
 
 export const PreviewSection = styled.section`
@@ -511,9 +517,9 @@ export const MetaPill = styled.span<{ $accent?: "primary" | "neutral" }>`
   padding: 0.24rem 0.6rem;
   border-radius: 999px;
   background: ${({ $accent, theme }) =>
-    $accent === "primary" ? theme.primary.normal : theme.fill.alternative};
+    $accent === "primary" ? theme.badge.primary.background : theme.fill.alternative};
   color: ${({ $accent, theme }) =>
-    $accent === "primary" ? theme.label.normal : theme.label.assistive};
+    $accent === "primary" ? theme.badge.primary.foreground : theme.label.assistive};
   ${font.caption.medium}
 `;
 
@@ -575,7 +581,7 @@ export const CookieIcon = styled(Cookie)`
 
 export const ErrorText = styled.p`
   ${font.label.medium}
-  color: ${palette.red[70]};
+  color: ${({ theme }) => theme.feedback.danger};
   margin: 0;
 `;
 
@@ -584,8 +590,8 @@ export const PrimaryButton = styled(Button)`
   height: 2.75rem;
   padding: 0 1.4rem;
   border-radius: 0.875rem;
-  background: ${({ theme }) => theme.primary.normal};
-  color: ${({ theme }) => theme.label.normal};
+  background: ${({ theme }) => theme.action.primary.background};
+  color: ${({ theme }) => theme.action.primary.foreground};
   ${font.body.bold}
 
   &:disabled {

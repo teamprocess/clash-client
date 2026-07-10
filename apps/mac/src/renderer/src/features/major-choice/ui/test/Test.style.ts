@@ -77,7 +77,7 @@ export const ProgressBarWrapper = styled.div`
 export const ProgressTrack = styled.div`
   width: 10rem;
   height: 0.4rem;
-  background-color: ${({ theme }) => theme.label.disable};
+  background-color: ${({ theme }) => theme.fill.neutral};
   border-radius: 9999px;
   overflow: hidden;
 `;

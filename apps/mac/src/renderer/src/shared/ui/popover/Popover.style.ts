@@ -16,7 +16,7 @@ export const PopoverContainer = styled.div<{
       ? `right: ${resolveOffsetValue($alignOffset)};`
       : `left: ${resolveOffsetValue($alignOffset)};`}
   min-width: ${({ $minWidth }) => resolveOffsetValue($minWidth)};
-  background-color: ${({ theme }) => theme.label.disable};
+  background-color: ${({ theme }) => theme.background.normal};
   border-radius: 0.5rem;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   overflow: hidden;

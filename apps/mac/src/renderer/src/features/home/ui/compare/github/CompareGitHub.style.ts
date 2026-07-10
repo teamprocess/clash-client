@@ -9,7 +9,6 @@ import Status from "@/features/home/assets/home/status.svg";
 import Review from "@/features/home/assets/home/review.svg";
 import GitIssue from "@/features/home/assets/home/git-issue.svg";
 import { font } from "@clash/design-tokens/font";
-import { palette } from "@clash/design-tokens/theme";
 import { Line } from "@/features/home/ui/active/Active.style";
 
 const flexRow = css`
@@ -171,11 +170,11 @@ export const CodeGap = styled.div`
 `;
 
 export const PlusText = styled.span`
-  color: ${palette.green[40]};
+  color: ${({ theme }) => theme.feedback.success};
 `;
 
 export const MinusText = styled.span`
-  color: ${palette.red[60]};
+  color: ${({ theme }) => theme.feedback.danger};
 `;
 
 export const TimeText = styled.span`

@@ -4,6 +4,38 @@ export const lightTheme: Theme = {
   primary: {
     normal: "#f1070a",
   },
+  action: {
+    primary: {
+      background: "#c60608",
+      foreground: "#fcfcfc",
+    },
+  },
+  content: {
+    accent: "#c60608",
+  },
+  badge: {
+    primary: {
+      background: "#c60608",
+      foreground: "#fcfcfc",
+    },
+  },
+  interaction: {
+    selectionBorder: "#c60608",
+  },
+  feedback: {
+    danger: "#c60608",
+    success: "#0a5c2b",
+  },
+  dataVisualization: {
+    axisLabel: "#5a5c5d",
+    onSeries: "#fcfcfc",
+    series: ["#5a5c5d", "#006199", "#c60608", "#0a5c2b", "#665200"],
+    tooltip: {
+      background: "#2a2b2c",
+      border: "#747678",
+      label: "#f5f5f5",
+    },
+  },
   label: {
     normal: "#0c0c0d",
     strong: "#000000",

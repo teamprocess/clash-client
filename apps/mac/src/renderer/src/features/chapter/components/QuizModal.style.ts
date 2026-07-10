@@ -51,7 +51,7 @@ export const ProgressLabelBox = styled.div`
 
 export const CurrentProgress = styled.span`
   ${font.headline2.medium}
-  color: ${({ theme }) => theme.primary.normal};
+  color: ${({ theme }) => theme.content.accent};
 `;
 
 export const TotalQuestions = styled.span`
@@ -78,7 +78,7 @@ export const QuestionTitle = styled.div`
 
 export const QuestionPrefix = styled.span`
   ${font.headline1.medium}
-  color: ${({ theme }) => theme.primary.normal};
+  color: ${({ theme }) => theme.content.accent};
 `;
 
 export const ModalBody = styled.div`
@@ -112,7 +112,8 @@ export const AnswerOption = styled.button<{ $selected: boolean }>`
   color: ${palette.neutral["30"]};
   border-radius: 0.75rem;
   cursor: pointer;
-  border: 3px solid ${({ $selected, theme }) => ($selected ? theme.primary.normal : "transparent")};
+  border: 3px solid
+    ${({ $selected, theme }) => ($selected ? theme.interaction.selectionBorder : "transparent")};
 `;
 
 export const ConfirmButton = styled.button`
@@ -121,9 +122,9 @@ export const ConfirmButton = styled.button`
   justify-content: center;
   width: 16.25rem;
   height: 2.75rem;
-  background-color: ${({ theme }) => theme.primary.normal};
+  background-color: ${({ theme }) => theme.action.primary.background};
   ${font.label.medium};
-  color: ${palette.neutral["97"]};
+  color: ${({ theme }) => theme.action.primary.foreground};
   border-radius: 0.75rem;
   cursor: pointer;
 `;
@@ -216,7 +217,9 @@ export const ResultButton = styled.button<ResultButtonType>`
   align-items: center;
   ${font.label.medium}
   background-color: ${({ theme, $buttonType }) =>
-    $buttonType === "restart" ? theme.line.normal : theme.primary.normal};
+    $buttonType === "restart" ? theme.line.normal : theme.action.primary.background};
+  color: ${({ theme, $buttonType }) =>
+    $buttonType === "restart" ? theme.label.strong : theme.action.primary.foreground};
   border-radius: 0.75rem;
   width: 8rem;
   height: 3rem;
@@ -238,7 +241,7 @@ export const LastResultSubTitle = styled.span`
 
 export const ErrorMessage = styled.p`
   ${font.caption.regular}
-  color: ${palette.red[50]};
+  color: ${({ theme }) => theme.feedback.danger};
   text-align: center;
   margin: 0;
 `;

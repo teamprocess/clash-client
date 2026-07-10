@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import { palette } from "@clash/design-tokens/theme";
 import { font } from "@clash/design-tokens/font";
 
 export const FormContainer = styled.form`
@@ -36,12 +35,12 @@ export const Input = styled.input`
   border: none;
   outline: none;
   border-radius: 0.5rem;
-  background-color: ${({ theme }) => theme.label.disable};
+  background-color: ${({ theme }) => theme.fill.neutral};
   color: ${({ theme }) => theme.label.normal};
   ${font.body.medium};
 
   &::placeholder {
-    color: ${({ theme }) => theme.label.assistive};
+    color: ${({ theme }) => theme.label.alternative};
   }
 `;
 
@@ -60,7 +59,7 @@ export const Description = styled.p`
 
 export const ErrorText = styled.span`
   ${font.caption.medium};
-  color: ${palette.red[60]};
+  color: ${({ theme }) => theme.feedback.danger};
   margin-top: 0.5rem;
   display: block;
 `;

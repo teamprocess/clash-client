@@ -50,7 +50,7 @@ export const NoticePanel = styled.div`
   max-height: 32rem;
   overflow-y: auto;
   scrollbar-gutter: stable;
-  background-color: ${({ theme }) => theme.label.disable};
+  background-color: ${({ theme }) => theme.fill.neutral};
 `;
 
 export const NoticeHeader = styled.div`
@@ -144,7 +144,7 @@ export const SearchUsers = styled.input`
   color: ${({ theme }) => theme.label.neutral};
 
   &::placeholder {
-    color: ${({ theme }) => theme.label.assistive};
+    color: ${({ theme }) => theme.label.alternative};
   }
 
   &:focus {

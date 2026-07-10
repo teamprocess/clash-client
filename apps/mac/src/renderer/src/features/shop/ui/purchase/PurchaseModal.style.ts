@@ -102,8 +102,8 @@ export const ConfirmTextBox = styled.div`
 
 export const PrimaryButton = styled(Button)`
   margin-top: auto;
-  background-color: ${({ theme }) => theme.primary.normal};
-  color: ${({ theme }) => theme.label.normal};
+  background-color: ${({ theme }) => theme.action.primary.background};
+  color: ${({ theme }) => theme.action.primary.foreground};
   ${font.body.bold};
 
   &:disabled {
