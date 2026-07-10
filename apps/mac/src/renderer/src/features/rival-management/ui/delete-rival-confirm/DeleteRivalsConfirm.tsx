@@ -31,7 +31,7 @@ export const DeleteRivalsConfirmDialog = ({
           </Button>
           <Button
             size="sm"
-            variant="primary"
+            variant="danger"
             fullWidth
             onClick={handleConfirm}
             isLoading={rival.isDeleteSubmitting}

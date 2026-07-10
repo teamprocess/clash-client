@@ -1,6 +1,5 @@
 import * as S from "./StatusOfRivalsManagement.style";
-
-import type { ButtonVariant } from "@/shared/ui/button";
+import type { RivalStatusVariant } from "./StatusOfRivalsManagement.style";
 
 type RivalLinkingStatus = "ACCEPTED" | "REJECTED" | "PENDING" | "CANCELED";
 
@@ -13,16 +12,16 @@ const STATUS_UI: Record<
   RivalLinkingStatus,
   {
     title: string;
-    variant: ButtonVariant;
+    variant: RivalStatusVariant;
   }
 > = {
   ACCEPTED: {
     title: "수락됨",
-    variant: "accept",
+    variant: "accepted",
   },
   REJECTED: {
     title: "거절됨",
-    variant: "primary",
+    variant: "rejected",
   },
   PENDING: {
     title: "대기중",
@@ -30,7 +29,7 @@ const STATUS_UI: Record<
   },
   CANCELED: {
     title: "취소됨",
-    variant: "secondary",
+    variant: "canceled",
   },
 };
 

@@ -3,13 +3,13 @@ import styled from "styled-components";
 import { font } from "@clash/design-tokens/font";
 import { palette } from "@clash/design-tokens/theme";
 
-export type RivalButtonVariant = "accept" | "primary" | "pending" | "secondary";
+export type RivalStatusVariant = "accepted" | "rejected" | "pending" | "canceled";
 
-interface RivalButtonProps {
-  $variant: RivalButtonVariant;
+interface RivalStatusBadgeProps {
+  $variant: RivalStatusVariant;
 }
 
-export const RivalStatusBadge = styled.span<RivalButtonProps>`
+export const RivalStatusBadge = styled.span<RivalStatusBadgeProps>`
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -20,22 +20,22 @@ export const RivalStatusBadge = styled.span<RivalButtonProps>`
   border-radius: 0.625rem;
 
   color: ${({ theme, $variant }) => {
-    const foregrounds: Record<RivalButtonVariant, string> = {
-      primary: theme.action.primary.foreground,
-      secondary: theme.label.strong,
-      accept: palette.neutral[5],
+    const foregrounds: Record<RivalStatusVariant, string> = {
+      accepted: palette.neutral[5],
+      rejected: theme.badge.danger.foreground,
       pending: palette.neutral[5],
+      canceled: theme.label.strong,
     };
 
     return foregrounds[$variant];
   }};
 
   background-color: ${({ theme, $variant }) => {
-    const backgrounds: Record<RivalButtonVariant, string> = {
-      primary: theme.action.primary.background,
-      secondary: theme.line.normal,
-      accept: palette.green[50],
+    const backgrounds: Record<RivalStatusVariant, string> = {
+      accepted: palette.green[50],
+      rejected: theme.badge.danger.background,
       pending: palette.yellow[50],
+      canceled: theme.line.normal,
     };
 
     return backgrounds[$variant];

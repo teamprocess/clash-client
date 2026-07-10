@@ -7,6 +7,10 @@ export interface Theme {
       background: string;
       foreground: string;
     };
+    danger: {
+      background: string;
+      foreground: string;
+    };
   };
   content: {
     accent: string;
@@ -16,9 +20,17 @@ export interface Theme {
       background: string;
       foreground: string;
     };
+    danger: {
+      background: string;
+      foreground: string;
+    };
   };
   interaction: {
     selectionBorder: string;
+    selected: {
+      background: string;
+      foreground: string;
+    };
   };
   feedback: {
     danger: string;
