@@ -1,4 +1,4 @@
-import { VariationItem } from "@/entities/home";
+import type { VariationItem } from "@/entities/competition";
 
 export const toLineChartData = (variations: VariationItem[]) => ({
   data: {

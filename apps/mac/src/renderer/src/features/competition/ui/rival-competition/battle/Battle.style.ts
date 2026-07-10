@@ -1,10 +1,10 @@
 import styled, { css } from "styled-components";
 import { font } from "@clash/design-tokens/font";
 import { palette } from "@clash/design-tokens/theme";
-import Date from "@/features/home/assets/home/date.svg";
-import BackArrow from "@/features/home/assets/home/back.svg";
-import Fire from "@/features/home/assets/home/fire.svg";
-import Checked from "@/features/home/assets/home/check-box.svg";
+import Date from "@/shared/ui/assets/date.svg";
+import BackArrow from "@/shared/ui/assets/back.svg";
+import Fire from "@/shared/ui/assets/fire.svg";
+import Checked from "@/shared/ui/assets/check-box.svg";
 import { ProfileAvatar } from "@/shared/ui/profile-avatar";
 
 const flexRow = css`
@@ -91,7 +91,7 @@ export const ProfileName = styled.span`
   color: ${({ theme }) => theme.label.normal};
 `;
 
-export const DropDownBox = styled.div`
+export const DropdownBox = styled.div`
   ${flexRow};
   align-items: center;
   gap: 0.75rem;
@@ -125,24 +125,24 @@ export const BattleListContainer = styled.div`
 export const UpperHandJudge = styled.div<{ $type: string }>`
   padding: 0.25rem 0.625rem;
 
-  ${({ $type, theme }) => {
+  ${({ $type }) => {
     if ($type === "우세" || $type === "승리") {
       return css`
         background-color: ${palette.blue[50]};
-        color: ${theme.fill.normal};
+        color: ${palette.neutral[5]};
       `;
     }
 
     if ($type === "열세" || $type === "패배") {
       return css`
         background-color: ${palette.red[50]};
-        color: ${theme.label.normal};
+        color: ${palette.neutral[5]};
       `;
     }
 
     return css`
       background-color: ${palette.neutral[60]};
-      color: ${theme.fill.normal};
+      color: ${palette.neutral[5]};
     `;
   }}
 
@@ -283,21 +283,20 @@ export const UpperHandBar = styled.div<{
   ${({ $isRival, theme }) =>
     $isRival
       ? `
-        background-color: ${theme.primary.normal};
+        background-color: ${theme.dataVisualization.series[2]};
         border-radius: 0.75rem 0 0 0.75rem;
       `
       : `
-        background-color: ${palette.blue[50]};
+        background-color: ${theme.dataVisualization.series[1]};
         border-radius: 0 0.75rem 0.75rem 0;
       `}
 `;
 
 export const PercentText = styled.p<{ $isRival: boolean }>`
   ${font.title2.bold}
-  ${palette.neutral[99]}
+  color: ${({ theme }) => theme.dataVisualization.onSeries};
   position: absolute;
   z-index: 2;
-  opacity: 0.6;
   padding-left: ${({ $isRival }) => ($isRival ? "0.5rem" : "0")};
   padding-right: ${({ $isRival }) => ($isRival ? "0" : "0.5rem")};
 `;
@@ -323,6 +322,19 @@ export const AnalyzeBox = styled.div`
   gap: 2rem;
   width: 100%;
   height: 100%;
+`;
+
+export const AnalyzeState = styled.div`
+  ${font.label.medium};
+  display: flex;
+  flex: 1;
+  min-height: 6rem;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  color: ${({ theme }) => theme.label.alternative};
+  text-align: center;
 `;
 
 export const AnalyzeRow = styled.div`
@@ -353,10 +365,10 @@ export const AnalyzeBar = styled.div<{ $width: number; $isRival: boolean }>`
   ${({ $isRival, theme }) =>
     $isRival
       ? `
-        background-color: ${theme.primary.normal};
+        background-color: ${theme.dataVisualization.series[2]};
       `
       : `
-        background-color: ${palette.blue[50]};
+        background-color: ${theme.dataVisualization.series[1]};
       `};
 
   border-radius: 0.625rem;
@@ -372,7 +384,7 @@ export const DefaultBattleBox = styled.div`
 `;
 
 export const AnalyzeLabel = styled.div`
-  color: ${palette.neutral[99]};
+  color: ${({ theme }) => theme.dataVisualization.onSeries};
   width: 100%;
   min-height: 1rem;
   ${flexRow};
@@ -447,6 +459,27 @@ export const UserChoiceBox = styled.div<{ $isSelected?: boolean; $isRival?: bool
     `}
 `;
 
+export const SelectableUserButton = styled.button<{ $isSelected: boolean }>`
+  ${flexRow};
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  border-bottom: 1px solid ${({ theme }) => theme.line.alternative};
+  background-color: ${({ $isSelected, theme }) =>
+    $isSelected ? theme.fill.alternative : "transparent"};
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: 0.1s ease-in-out;
+
+  &:hover {
+    padding: 0.5rem 1rem;
+    border-radius: 0.75rem;
+    background-color: ${({ theme }) => theme.fill.alternative};
+  }
+`;
+
 export const CheckedIcon = styled(Checked)``;
 
 export const UncheckedBox = styled.div`
@@ -484,7 +517,7 @@ export const WarPeriodText = styled.p`
 
 export const CompareDiff = styled.span`
   ${font.caption.bold}
-  color: ${palette.neutral[99]};
+  color: ${({ theme }) => theme.dataVisualization.onSeries};
   white-space: nowrap;
 `;
 
@@ -522,8 +555,10 @@ export const DateChoiceBox = styled.button<{ $active: boolean }>`
   width: 30%;
   border-radius: 0.5rem;
   border: 2px solid ${({ theme }) => theme.line.alternative};
-  background-color: ${({ $active, theme }) => ($active ? theme.primary.normal : theme.fill.normal)};
-  color: ${({ theme }) => theme.label.normal};
+  background-color: ${({ $active, theme }) =>
+    $active ? theme.action.primary.background : theme.fill.normal};
+  color: ${({ $active, theme }) =>
+    $active ? theme.action.primary.foreground : theme.label.normal};
   ${font.headline2.medium}
   cursor: pointer;
   ${flexRow};
@@ -533,7 +568,7 @@ export const DateChoiceBox = styled.button<{ $active: boolean }>`
 
   &:hover {
     background-color: ${({ theme, $active }) =>
-      $active ? theme.primary.normal : theme.fill.neutral};
+      $active ? theme.action.primary.background : theme.fill.neutral};
   }
 `;
 
@@ -546,7 +581,7 @@ export const DataBox = styled.div`
 `;
 
 export const ProfileSubText = styled.div`
-  color: #8a8f98;
+  color: ${({ theme }) => theme.label.assistive};
   font-size: 0.75rem;
   font-weight: 400;
   line-height: 1.2;
@@ -578,6 +613,8 @@ export const EmptyDescription = styled.p`
 export const ErrorText = styled.p`
   padding-top: 1.425rem;
   ${font.label.medium};
-  color: ${palette.red[60]};
+  color: ${({ theme }) => theme.feedback.danger};
   width: 100%;
 `;
+
+export { InlineNotice as QueryNotice } from "@clash/ui";

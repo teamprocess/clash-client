@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { font } from "@clash/design-tokens/font";
+import { ClashLogo } from "@clash/ui";
 import { Link } from "react-router-dom";
-import ClashLogo from "@/widgets/topbar/assets/clash-logo.svg";
 import Menu from "@/widgets/topbar/assets/menu.svg";
 import EXP from "@/widgets/topbar/assets/exp.svg";
 import Cookie from "@/widgets/topbar/assets/cookie.svg";
@@ -154,7 +154,7 @@ export const MenuItem = styled.button<{ $isLogout: boolean }>`
   background: none;
   border: none;
   ${font.body.regular};
-  color: ${({ theme, $isLogout }) => ($isLogout ? theme.primary.normal : theme.label.normal)};
+  color: ${({ theme, $isLogout }) => ($isLogout ? theme.content.accent : theme.label.normal)};
   cursor: pointer;
 
   &:hover {

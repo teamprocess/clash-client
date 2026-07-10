@@ -1,8 +1,17 @@
 import { attendanceQueryKeys } from "@/entities/attendance";
 import { announcementQueryKeys } from "@/entities/announcement";
+import {
+  activeQueryKeys,
+  battleQueryKeys,
+  compareQueryKeys,
+  compareRivalsQueryKeys,
+  transitionQueryKeys,
+} from "@/entities/competition";
 import { groupQueryKeys } from "@/entities/group";
 import { noticeQueryKeys } from "@/entities/notice";
 import { recordQueryKeys } from "@/entities/record";
+import { rivalQueryKeys } from "@/entities/rival";
+import { userQueryKeys } from "@/entities/user";
 import { queryClient } from "@/shared/lib";
 
 const invalidateAnnouncementQueries = async () => {
@@ -24,24 +33,24 @@ const invalidateGroupQueries = async () => {
 
 const invalidateCompeteQueries = async () => {
   await Promise.all([
-    queryClient.invalidateQueries({ queryKey: ["myRivals"] }),
-    queryClient.invalidateQueries({ queryKey: ["compareRivals"] }),
-    queryClient.invalidateQueries({ queryKey: ["battleInfo"] }),
-    queryClient.invalidateQueries({ queryKey: ["battleDetail"] }),
-    queryClient.invalidateQueries({ queryKey: ["battleAnalyze"] }),
-    queryClient.invalidateQueries({ queryKey: ["battleList"] }),
-    queryClient.invalidateQueries({ queryKey: ["active"] }),
-    queryClient.invalidateQueries({ queryKey: ["compare"] }),
-    queryClient.invalidateQueries({ queryKey: ["transition"] }),
-    queryClient.invalidateQueries({ queryKey: ["myCompare"] }),
-    queryClient.invalidateQueries({ queryKey: ["myGrowthRate"] }),
-    queryClient.invalidateQueries({ queryKey: ["rivalList"] }),
+    queryClient.invalidateQueries({ queryKey: rivalQueryKeys.myRivals }),
+    queryClient.invalidateQueries({ queryKey: rivalQueryKeys.available }),
+    queryClient.invalidateQueries({ queryKey: rivalQueryKeys.requests }),
+    queryClient.invalidateQueries({ queryKey: compareRivalsQueryKeys.all }),
+    queryClient.invalidateQueries({ queryKey: battleQueryKeys.info }),
+    queryClient.invalidateQueries({ queryKey: battleQueryKeys.details }),
+    queryClient.invalidateQueries({ queryKey: battleQueryKeys.analyses }),
+    queryClient.invalidateQueries({ queryKey: battleQueryKeys.list }),
+    queryClient.invalidateQueries({ queryKey: battleQueryKeys.applications }),
+    queryClient.invalidateQueries({ queryKey: activeQueryKeys.all }),
+    queryClient.invalidateQueries({ queryKey: compareQueryKeys.all }),
+    queryClient.invalidateQueries({ queryKey: transitionQueryKeys.all }),
   ]);
 };
 
 const invalidateUserQueries = async () => {
   await Promise.all([
-    queryClient.invalidateQueries({ queryKey: ["user"] }),
+    queryClient.invalidateQueries({ queryKey: userQueryKeys.all }),
     queryClient.invalidateQueries({ queryKey: noticeQueryKeys.all }),
   ]);
 };

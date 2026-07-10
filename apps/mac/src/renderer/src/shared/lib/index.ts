@@ -3,14 +3,20 @@ export { getPageNumbers } from "./pagination";
 export { formatPrice } from "./formatPrice";
 export { useTheme } from "./useTheme";
 export { useNetworkStatus } from "./useNetworkStatus";
+export { useModalFocus } from "./useModalFocus";
 export {
   clearServiceUnavailable,
   markServiceUnavailable,
   useServiceUnavailable,
 } from "./useServiceUnavailable";
 export { queryClient } from "./queryClient";
+export {
+  captureSessionEpoch,
+  isSessionEpochCurrent,
+  registerSessionResetHandler,
+  resetSession,
+} from "./sessionReset";
 export { getErrorMessage } from "./error";
-export { useRival } from "./useRival";
 export { buildPaddedStreak } from "./buildPaddedStreaks";
 export { getGrowthInfo } from "./getGrowthInfo";
 export { getCountLabel } from "./getCountLabel";

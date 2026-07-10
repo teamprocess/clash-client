@@ -1,20 +1,21 @@
 import * as S from "./CompareRivals.style";
-import { useCompareRival } from "@/features/competition/model/useCompareRivals";
-import { CategoryType, PeriodType } from "@/entities/competition";
-import { RivalCompetitionLineChart, Select } from "@/shared/ui";
+import { useCompareRivals } from "@/features/competition/model/useCompareRivals";
+import type { CategoryType, PeriodType } from "@/entities/competition";
+import { Select } from "@/shared/ui";
 import { formatTime } from "@/shared/lib";
+import { RivalCompetitionLineChart } from "./RivalCompeteLineChart";
 
 export const RivalCompare = () => {
   const {
     compareRivals,
     competitionDropdown,
     setCompetitionDropdown,
-    competitionPeriodDropDown,
-    setCompetitionPeriodDropDown,
-    competitionDropDownValue,
-    competitionPeriodDropDownValue,
+    competitionPeriod,
+    setCompetitionPeriod,
+    competitionDropdownOptions,
+    competitionPeriodOptions,
     buildMultiLineData,
-  } = useCompareRival();
+  } = useCompareRivals();
 
   const totalData = compareRivals?.totalData ?? [];
   const chartData = buildMultiLineData(compareRivals?.totalData ?? []);
@@ -28,18 +29,20 @@ export const RivalCompare = () => {
       <S.RivalCompareWrapper>
         <S.TitleBox>
           <S.Title>라이벌과 비교</S.Title>
-          <S.DropDownBox>
+          <S.DropdownBox>
             <Select<PeriodType>
-              value={competitionPeriodDropDown}
-              options={competitionPeriodDropDownValue}
-              onChange={setCompetitionPeriodDropDown}
+              aria-label="라이벌 비교 기간"
+              value={competitionPeriod}
+              options={competitionPeriodOptions}
+              onChange={setCompetitionPeriod}
             />
             <Select<CategoryType>
+              aria-label="라이벌 비교 항목"
               value={competitionDropdown}
-              options={competitionDropDownValue}
+              options={competitionDropdownOptions}
               onChange={setCompetitionDropdown}
             />
-          </S.DropDownBox>
+          </S.DropdownBox>
         </S.TitleBox>
 
         <S.GaroLine />

@@ -1,13 +1,13 @@
 import { useEffect, useEffectEvent, useRef, useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import type { Mission } from "@/features/chapter/model/chapter.types";
-import type { GetChapterDetailsResponse } from "@/entities/roadmap/chapter/model/chapter.types";
-import { chapterQueryKeys } from "@/entities/roadmap/chapter/api/query/chapterQueryKeys";
 import {
+  chapterQueryKeys,
   useChapterResultMutation,
   useResetChapterMutation,
   useSubmitAnswerMutation,
-} from "@/entities/roadmap/chapter";
+  type GetChapterDetailsResponse,
+} from "@/entities/roadmap";
 import { getErrorMessage } from "@/shared/lib";
 
 type QuizState = {

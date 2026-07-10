@@ -1,7 +1,7 @@
 import * as S from "./ChapterRanking.style";
 import { useChapterRanking } from "@/features/chapter-ranking/model/useChapterRanking";
-import { RankingPageEnum } from "./ChapterRanking.style";
-import { QuestionTooltip } from "@/shared/ui";
+import type { RankingPageEnum } from "./ChapterRanking.style";
+import { Button, QuestionTooltip } from "@/shared/ui";
 import { chapterRankingTooltipContent } from "../constants/chapterRanking.constants";
 
 interface ChapterRankingProps {
@@ -18,9 +18,9 @@ export const ChapterRanking = ({ page }: ChapterRankingProps) => {
     myRankRef,
     isLoading,
     error,
+    refetch,
   } = useChapterRanking();
 
-  // 로딩 상태 처리
   if (isLoading) {
     return (
       <S.RankingContainer $page={page}>
@@ -30,7 +30,7 @@ export const ChapterRanking = ({ page }: ChapterRankingProps) => {
             <QuestionTooltip content={chapterRankingTooltipContent} />
           </S.LabelGroup>
         </S.RankingLabel>
-        <S.RankingBox>
+        <S.RankingBox role="status" aria-label="챕터 랭킹을 불러오는 중">
           <S.RankingLoadingTop3Box>
             <S.RankingLoadingPodium>
               <S.RankingLoadingBlock $width="3.4rem" $height="3.4rem" $radius="999px" />
@@ -62,8 +62,7 @@ export const ChapterRanking = ({ page }: ChapterRankingProps) => {
     );
   }
 
-  // 에러 상태 처리
-  if (error) {
+  if (error && allRankers.length === 0) {
     return (
       <S.RankingContainer $page={page}>
         <S.RankingLabel>
@@ -72,13 +71,20 @@ export const ChapterRanking = ({ page }: ChapterRankingProps) => {
             <QuestionTooltip content={chapterRankingTooltipContent} />
           </S.LabelGroup>
         </S.RankingLabel>
-        <div>랭킹을 불러오는데 실패했습니다.</div>
+        <S.RankingBox>
+          <S.StateBox role="alert">
+            <S.StateTitle>챕터 랭킹을 불러오지 못했어요.</S.StateTitle>
+            <S.StateDescription>잠시 후 다시 시도해 주세요.</S.StateDescription>
+            <Button variant="primary" size="sm" onClick={() => void refetch()}>
+              다시 시도
+            </Button>
+          </S.StateBox>
+        </S.RankingBox>
       </S.RankingContainer>
     );
   }
 
-  // 데이터가 없는 경우 처리
-  if (!myData || !allRankers.length) {
+  if (!allRankers.length) {
     return (
       <S.RankingContainer $page={page}>
         <S.RankingLabel>
@@ -87,7 +93,12 @@ export const ChapterRanking = ({ page }: ChapterRankingProps) => {
             <QuestionTooltip content={chapterRankingTooltipContent} />
           </S.LabelGroup>
         </S.RankingLabel>
-        <div>랭킹 데이터가 없습니다.</div>
+        <S.RankingBox>
+          <S.StateBox>
+            <S.StateTitle>아직 챕터 랭킹이 없어요.</S.StateTitle>
+            <S.StateDescription>챕터를 완료하면 랭킹에 기록돼요.</S.StateDescription>
+          </S.StateBox>
+        </S.RankingBox>
       </S.RankingContainer>
     );
   }
@@ -100,6 +111,14 @@ export const ChapterRanking = ({ page }: ChapterRankingProps) => {
           <QuestionTooltip content={chapterRankingTooltipContent} />
         </S.LabelGroup>
       </S.RankingLabel>
+      {error && (
+        <S.RefreshWarning role="alert">
+          <span>새 랭킹을 불러오지 못해 이전 결과를 표시해요.</span>
+          <Button variant="secondary" size="sm" onClick={() => void refetch()}>
+            다시 시도
+          </Button>
+        </S.RefreshWarning>
+      )}
       <S.RankingBox>
         <S.RankingTop3Box>
           {allRankers
@@ -115,7 +134,11 @@ export const ChapterRanking = ({ page }: ChapterRankingProps) => {
                   {user.rank === 2 && <S.SecondFrame />}
                   {user.rank === 3 && <S.ThirdFrame />}
                   {user.profileImage ? (
-                    <S.Top3ProfileImage src={user.profileImage} $isFirst={user.rank === 1} />
+                    <S.Top3ProfileImage
+                      src={user.profileImage}
+                      alt={`${user.name} 프로필`}
+                      $isFirst={user.rank === 1}
+                    />
                   ) : (
                     <S.Top3ProfileFallback $isFirst={user.rank === 1} />
                   )}
@@ -136,14 +159,14 @@ export const ChapterRanking = ({ page }: ChapterRankingProps) => {
           {allRankers
             .filter(user => user.rank > 3)
             .map(user => {
-              const isMe = user.id === myData.id;
+              const isMe = myData ? user.id === myData.id : false;
               return (
                 <S.RankingItem key={user.id} ref={isMe ? myRankRef : null} $isMe={isMe}>
                   <S.ItemLeft>
                     <S.Ranking>{user.rank}</S.Ranking>
                     <S.UserBox>
                       {user.profileImage ? (
-                        <S.RankingUserProfile src={user.profileImage} />
+                        <S.RankingUserProfile src={user.profileImage} alt={`${user.name} 프로필`} />
                       ) : (
                         <S.RankingUserProfileFallback />
                       )}
@@ -156,13 +179,13 @@ export const ChapterRanking = ({ page }: ChapterRankingProps) => {
                 </S.RankingItem>
               );
             })}
-          {!isMyRankVisible && (
+          {!isMyRankVisible && myData && (
             <S.MyRankingItem $position={stickyPosition} $page={page}>
               <S.ItemLeft>
                 <S.Ranking>{myData.rank}</S.Ranking>
                 <S.UserBox>
                   {myData.profileImage ? (
-                    <S.RankingUserProfile src={myData.profileImage} />
+                    <S.RankingUserProfile src={myData.profileImage} alt="내 프로필" />
                   ) : (
                     <S.RankingUserProfileFallback />
                   )}

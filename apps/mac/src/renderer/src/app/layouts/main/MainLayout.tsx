@@ -1,10 +1,10 @@
 import { useRef, useEffect, useState } from "react";
 import { Outlet, useLocation } from "react-router-dom";
 import { AttendanceDialog, useAttendanceDialog } from "@/features/attendance";
-import { useDailyRefresh, useRealtimeSync } from "@/features/app-monitor";
+import { useAppMonitor, useDailyRefresh, useRealtimeSync } from "@/features/app-monitor";
 import { GlobalAnnouncementDialog } from "@/features/announcement";
-import { GitHubGuard } from "@/features/github";
 import { useNoticePushNotification } from "@/features/notice";
+import { GitHubGuard } from "@/widgets/github-guard";
 import { Topbar } from "@/widgets/topbar";
 import { Sidebar } from "@/widgets/sidebar";
 import * as S from "./MainLayout.style";
@@ -14,7 +14,8 @@ export const MainLayout = () => {
   const mainContentRef = useRef<HTMLElement>(null);
   const { pathname } = useLocation();
   const attendanceDialog = useAttendanceDialog();
-  useRealtimeSync();
+  const appMonitor = useAppMonitor();
+  useRealtimeSync(appMonitor.frontmostMonitoredApp !== null);
   useDailyRefresh();
   useNoticePushNotification();
 
@@ -30,11 +31,12 @@ export const MainLayout = () => {
     <S.LayoutContainer>
       <Topbar
         onToggleSidebar={toggleSidebar}
+        isSidebarOpen={isSidebarOpen}
         onOpenAttendance={attendanceDialog.open}
         isAttendancePending={attendanceDialog.isAttendancePending}
       />
       <S.ContentWrapper>
-        <Sidebar isOpen={isSidebarOpen} />
+        <Sidebar isOpen={isSidebarOpen} appMonitor={appMonitor} />
         <S.MainContent ref={mainContentRef}>
           <Outlet />
         </S.MainContent>
@@ -48,8 +50,11 @@ export const MainLayout = () => {
         isTodayAttended={attendanceDialog.isTodayAttended}
         isCompletingAttendance={attendanceDialog.isCompletingAttendance}
         errorMessage={attendanceDialog.errorMessage}
+        isLoading={attendanceDialog.isAttendanceLoading}
+        loadErrorMessage={attendanceDialog.attendanceLoadErrorMessage}
         onClose={attendanceDialog.close}
         onConfirm={attendanceDialog.confirm}
+        onRetry={attendanceDialog.retryAttendance}
       />
       <GlobalAnnouncementDialog />
       <GitHubGuard />

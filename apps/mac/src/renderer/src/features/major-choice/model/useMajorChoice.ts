@@ -1,21 +1,30 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { majorApi } from "@/entities/major/api/majorApi";
-import { useMajorQuestionsQuery } from "@/entities/major/api/query/useMajorQuestions.query";
-import { Major } from "@/entities/major/model/major.types";
+import { Major, majorApi, useMajorQuestionsQuery } from "@/entities/major";
 import { useQueryClient } from "@tanstack/react-query";
-import { useGetMyProfile } from "@/entities/user";
+import { userQueryKeys, useGetMyProfile } from "@/entities/user";
+import { getErrorMessage } from "@/shared/lib";
 
 export type FeatureItem = "TEST" | "CHOICE" | null;
-export type StepType = "FEATURE" | "TEST" | "LOADING" | "RESULT" | "CHOICE";
+export type MajorChoiceStep = "FEATURE" | "TEST" | "LOADING" | "RESULT" | "CHOICE";
 
 type MajorScoreKey = "web" | "server";
 
 export const useMajorChoice = () => {
   const queryClient = useQueryClient();
+  const resultTimerRef = useRef<number | null>(null);
+
+  useEffect(
+    () => () => {
+      if (resultTimerRef.current !== null) {
+        window.clearTimeout(resultTimerRef.current);
+      }
+    },
+    []
+  );
 
   // 로드맵 페이지 컴포넌트 step useState
-  const [step, setStep] = useState<StepType>("FEATURE");
+  const [step, setStep] = useState<MajorChoiceStep>("FEATURE");
 
   const { data: myProfile } = useGetMyProfile();
   const username = myProfile?.name ?? "";
@@ -28,7 +37,8 @@ export const useMajorChoice = () => {
 
   const { postMyMajor } = majorApi;
 
-  const { data: questionsResponse } = useMajorQuestionsQuery();
+  const questionsQuery = useMajorQuestionsQuery();
+  const { data: questionsResponse } = questionsQuery;
   const questionData = questionsResponse?.data?.majorQuestions ?? [];
 
   // 전공이 없을 경우 전공 성향 검사 및 전공 선택 중 선택하고 결과를 전달하는 함수
@@ -45,8 +55,12 @@ export const useMajorChoice = () => {
 
   const [major, setMajor] = useState<Major | null>(null);
   const [isSubmittingMajor, setIsSubmittingMajor] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
 
-  const selectedMajor = (path: Major | null) => setMajor(prev => (prev === path ? null : path));
+  const selectedMajor = (path: Major | null) => {
+    setSubmitError(null);
+    setMajor(prev => (prev === path ? null : path));
+  };
 
   // Test 컴포넌트
   const [analyzedMajor, setAnalyzedMajor] = useState<Major | null>(null);
@@ -58,7 +72,10 @@ export const useMajorChoice = () => {
   // 전공 성향 검사에서 답을 선택받는 함수
   const handleSelect = (questionId: number, answerId: number | null) => {
     setAnswers(prevAnswers => {
-      const nextAnswers = Array.from({ length: questionData.length }, (_, idx) => prevAnswers[idx] ?? null);
+      const nextAnswers = Array.from(
+        { length: questionData.length },
+        (_, idx) => prevAnswers[idx] ?? null
+      );
       nextAnswers[questionId] = answerId;
       return nextAnswers;
     });
@@ -85,8 +102,12 @@ export const useMajorChoice = () => {
     setAnalyzedMajor(finalMajor);
     // 임시로 2초 로딩
     setStep("LOADING");
-    setTimeout(() => {
+    if (resultTimerRef.current !== null) {
+      window.clearTimeout(resultTimerRef.current);
+    }
+    resultTimerRef.current = window.setTimeout(() => {
       setStep("RESULT");
+      resultTimerRef.current = null;
     }, 2000);
 
     setAnswers(Array(questionData.length).fill(null));
@@ -94,6 +115,7 @@ export const useMajorChoice = () => {
 
   const submitMajor = async (major: Major) => {
     setIsSubmittingMajor(true);
+    setSubmitError(null);
 
     try {
       await postMyMajor({
@@ -101,12 +123,15 @@ export const useMajorChoice = () => {
       });
 
       await queryClient.invalidateQueries({
-        queryKey: ["user"],
+        queryKey: userQueryKeys.all,
       });
 
       navigate("/roadmap");
     } catch (error) {
       console.error("Failed to submit major", error);
+      setSubmitError(
+        getErrorMessage(error, "전공을 저장하지 못했습니다. 잠시 후 다시 시도해 주세요.")
+      );
     } finally {
       setIsSubmittingMajor(false);
     }
@@ -149,6 +174,7 @@ export const useMajorChoice = () => {
       major,
       username,
       onSubmit,
+      submitError,
     },
     test: {
       answers,
@@ -160,6 +186,9 @@ export const useMajorChoice = () => {
       getTestQuestion,
       totalCount: questionData.length,
       answeredCount: answers.filter(a => a != null).length,
+      isQuestionsLoading: questionsQuery.isPending,
+      questionsError: questionsQuery.error,
+      retryQuestions: questionsQuery.refetch,
     },
     result: {
       analyzedMajor,
@@ -167,13 +196,14 @@ export const useMajorChoice = () => {
       setStep,
       isSubmittingMajor,
       handleSelectAnalyzedMajor,
+      submitError,
     },
   };
 };
 
 // 타입 불일치 방지 & 코드 중복 제거를 위해 ReturnType을 활용한 타입 추출
-export type UseRoadMapReturn = ReturnType<typeof useMajorChoice>;
-export type FeatureProps = UseRoadMapReturn["feature"];
-export type MajorProps = UseRoadMapReturn["major"];
-export type TestProps = UseRoadMapReturn["test"];
-export type ResultProps = UseRoadMapReturn["result"];
+export type UseRoadmapReturn = ReturnType<typeof useMajorChoice>;
+export type FeatureProps = UseRoadmapReturn["feature"];
+export type MajorProps = UseRoadmapReturn["major"];
+export type TestProps = UseRoadmapReturn["test"];
+export type ResultProps = UseRoadmapReturn["result"];

@@ -1,6 +1,5 @@
 import Cookie from "@/features/shop/assets/cookie.svg";
-import { palette } from "@clash/design-tokens/theme";
-import styled, { css } from "styled-components";
+import styled from "styled-components";
 import { font } from "@clash/design-tokens/font";
 
 export const CookieIcon = styled(Cookie)`
@@ -20,10 +19,6 @@ export const MainContainer = styled.div`
   overflow: hidden;
 `;
 
-interface LayoutProps {
-  $isPanelOpen?: boolean;
-}
-
 export const ListPane = styled.div`
   display: flex;
   flex-direction: column;
@@ -33,7 +28,7 @@ export const ListPane = styled.div`
   height: 100%;
 `;
 
-export const ContentWrapper = styled.div<LayoutProps>`
+export const ContentWrapper = styled.div`
   display: flex;
   align-items: stretch;
   width: 100%;
@@ -42,14 +37,14 @@ export const ContentWrapper = styled.div<LayoutProps>`
   min-height: 0;
 `;
 
-export const CardContainer = styled.div<LayoutProps>`
+export const CardContainer = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(12.75rem, 1fr));
   grid-auto-rows: max-content;
   align-content: start;
   align-items: start;
   gap: 1rem;
-  padding: 1.25rem ${({ $isPanelOpen }) => ($isPanelOpen ? "0" : "1.5rem")} 2rem 1.5rem;
+  padding: 1.25rem 1.5rem 2rem;
   flex: 1 1 auto;
   min-width: 0;
   overflow-y: auto;
@@ -71,11 +66,6 @@ export const CardContainer = styled.div<LayoutProps>`
   &::-webkit-scrollbar-track {
     background-color: transparent;
   }
-  ${({ $isPanelOpen }) =>
-    $isPanelOpen &&
-    css`
-      padding-right: 1.5rem;
-    `}
 `;
 
 export const StateBox = styled.div`
@@ -111,16 +101,14 @@ export const RetryButton = styled.button`
   padding: 0 1rem;
   border: none;
   border-radius: 0.625rem;
-  background-color: ${({ theme }) => theme.primary.normal};
-  color: ${({ theme }) => theme.label.normal};
+  background-color: ${({ theme }) => theme.action.primary.background};
+  color: ${({ theme }) => theme.action.primary.foreground};
   ${font.headline2.bold};
   cursor: pointer;
 `;
 
 export const DetailPanel = styled.div`
   display: flex;
-  width: 32rem;
-  min-width: 23rem;
   height: 100%;
   min-height: 100%;
   border-left: 1px solid ${({ theme }) => theme.line.alternative};
@@ -216,7 +204,7 @@ export const OriginalPriceTextDetail = styled.p`
 `;
 
 export const DiscountTextDetail = styled.p`
-  color: ${palette.green[40]};
+  color: ${({ theme }) => theme.feedback.success};
   ${font.headline1.bold};
   margin-left: 0.25rem;
 `;
@@ -236,7 +224,7 @@ export const DescriptionTitle = styled.h3`
   ${font.body.medium};
 `;
 
-export const PurchaseBtn = styled.div<{ $isDisabled?: boolean }>`
+export const PurchaseBtn = styled.button<{ $isDisabled?: boolean }>`
   display: flex;
   height: 3rem;
   width: 100%;
@@ -246,8 +234,9 @@ export const PurchaseBtn = styled.div<{ $isDisabled?: boolean }>`
   align-items: center;
   border-radius: 0.5rem;
   background-color: ${({ theme, $isDisabled }) =>
-    $isDisabled ? theme.fill.neutral : theme.primary.normal};
+    $isDisabled ? theme.fill.neutral : theme.action.primary.background};
+  color: ${({ theme, $isDisabled }) =>
+    $isDisabled ? theme.label.assistive : theme.action.primary.foreground};
   ${font.headline2.medium};
   cursor: ${({ $isDisabled }) => ($isDisabled ? "default" : "pointer")};
-  pointer-events: ${({ $isDisabled }) => ($isDisabled ? "none" : "auto")};
 `;

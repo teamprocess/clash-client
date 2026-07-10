@@ -1,5 +1,5 @@
 import styled, { keyframes } from "styled-components";
-import Loading from "../../../assets/loding.svg";
+import Loading from "../../../assets/loading.svg";
 import { font } from "@clash/design-tokens/font";
 
 export const LoadingContainer = styled.div`

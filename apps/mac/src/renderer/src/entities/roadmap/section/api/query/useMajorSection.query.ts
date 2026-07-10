@@ -1,15 +1,16 @@
 import { useQuery } from "@tanstack/react-query";
-import { getAllSectionsResponse, MajorEnum } from "@/entities/roadmap/section/model/section.types";
-import { sectionApi } from "@/entities/roadmap/section/api/sectionApi";
+import { MajorEnum, type GetAllSectionsResponse } from "../../model/section.types";
+import { sectionApi } from "../sectionApi";
 
 export const sectionQueryKeys = {
-  major: (major: MajorEnum) => ["sections", "major", major] as const,
+  all: ["sections"] as const,
+  major: (major: MajorEnum) => [...sectionQueryKeys.all, "major", major] as const,
 };
 
 export const useMajorSectionQuery = (major: MajorEnum) => {
   return useQuery({
     queryKey: sectionQueryKeys.major(major),
-    queryFn: async (): Promise<getAllSectionsResponse> => {
+    queryFn: async (): Promise<GetAllSectionsResponse> => {
       const response = await sectionApi.getMajorSection({ major: major! });
 
       if (!response.success || !response.data) {

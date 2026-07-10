@@ -2,11 +2,13 @@ import * as S from "./Sidebar.style";
 import { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import type { MonitoredApp } from "@/entities/record";
-import { useSidebarMonitor } from "@/features/app-monitor";
-import { IdeIcons } from "@/shared/ui/assets/ide-img";
+import type { UseAppMonitorResult } from "@/features/app-monitor";
+import { IDEIcons } from "@/shared/ui/assets/ide-img";
+import { useSidebarMonitor } from "./model/useSidebarMonitor";
 
 interface SidebarProps {
   isOpen: boolean;
+  appMonitor: UseAppMonitorResult;
 }
 
 const menuItems = [
@@ -15,7 +17,7 @@ const menuItems = [
   { icon: <S.RecordIcon />, label: "기록", to: "/record" },
   { icon: <S.GroupIcon />, label: "그룹", to: "/group" },
   { icon: <S.ShopIcon />, label: "상점", to: "/shop" },
-  { icon: <S.RoadMapIcon />, label: "로드맵", to: "/roadmap" },
+  { icon: <S.RoadmapIcon />, label: "로드맵", to: "/roadmap" },
 ];
 
 const isEditableElement = (target: EventTarget | null) => {
@@ -31,15 +33,15 @@ const isEditableElement = (target: EventTarget | null) => {
   );
 };
 
-export const Sidebar = ({ isOpen }: SidebarProps) => {
+export const Sidebar = ({ isOpen, appMonitor }: SidebarProps) => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { isElectron, activeSession, displayTime } = useSidebarMonitor();
-  const hasIdeIcon = (appId: MonitoredApp | null): appId is keyof typeof IdeIcons => {
-    return !!appId && appId in IdeIcons;
+  const { isElectron, activeSession, displayTime } = useSidebarMonitor(appMonitor);
+  const hasIDEIcon = (appId: MonitoredApp | null): appId is keyof typeof IDEIcons => {
+    return !!appId && appId in IDEIcons;
   };
   const activeSessionAppId = activeSession?.appId ?? null;
-  const SessionIdeIcon = hasIdeIcon(activeSessionAppId) ? IdeIcons[activeSessionAppId] : null;
+  const SessionIDEIcon = hasIDEIcon(activeSessionAppId) ? IDEIcons[activeSessionAppId] : null;
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -70,7 +72,7 @@ export const Sidebar = ({ isOpen }: SidebarProps) => {
   }, [navigate]);
 
   return (
-    <S.SidebarContainer $isOpen={isOpen}>
+    <S.SidebarContainer id="main-sidebar" $isOpen={isOpen} aria-hidden={!isOpen} inert={!isOpen}>
       {/* 현재 기록 세션 트래커 */}
       <S.TimeTracker>
         {!isElectron ? (
@@ -81,7 +83,7 @@ export const Sidebar = ({ isOpen }: SidebarProps) => {
         ) : activeSession ? (
           <S.ActiveSessionBox>
             <S.SessionNameRow>
-              {SessionIdeIcon ? <SessionIdeIcon /> : null}
+              {SessionIDEIcon ? <SessionIDEIcon /> : null}
               <S.SessionNameText>{activeSession.appName}</S.SessionNameText>
             </S.SessionNameRow>
             <S.TimeText>{displayTime}</S.TimeText>
@@ -96,13 +98,23 @@ export const Sidebar = ({ isOpen }: SidebarProps) => {
       </S.TimeTracker>
 
       {/* 사이드바 메뉴 아이템*/}
-      <S.MenuList>
+      <S.MenuList aria-label="주요 메뉴">
         {menuItems.map(item => (
           <S.MenuItem
             key={item.label}
             to={item.to}
             $active={
               item.to === "/" ? location.pathname === "/" : location.pathname.startsWith(item.to)
+            }
+            tabIndex={isOpen ? 0 : -1}
+            aria-current={
+              item.to === "/"
+                ? location.pathname === "/"
+                  ? "page"
+                  : undefined
+                : location.pathname.startsWith(item.to)
+                  ? "page"
+                  : undefined
             }
           >
             {item.icon} {item.label}

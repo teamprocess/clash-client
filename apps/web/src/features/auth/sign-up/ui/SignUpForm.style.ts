@@ -1,38 +1,24 @@
 import styled from "styled-components";
-import { palette } from "@clash/design-tokens/theme";
 import { font } from "@clash/design-tokens/font";
-import { Link } from "react-router-dom";
+import {
+  AuthActionGroup,
+  AuthFieldGroup,
+  AuthForm,
+  AuthHelpLink,
+  AuthHelpLinks,
+} from "@/features/auth/ui/form-layout/AuthFormLayout.style";
 
-export const FormContainer = styled.form`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
-  gap: 5rem;
-`;
-
-export const InputBox = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1rem;
-`;
+export const FormContainer = styled(AuthForm).attrs({ $spacing: "responsive" })``;
+export const InputBox = AuthFieldGroup;
 
 export const InputWrapper = styled.div`
   position: relative;
-  width: 24rem;
-`;
+  width: 100%;
+  max-width: 24rem;
 
-export const Input = styled.input`
-  border-radius: 1rem;
-  width: 24rem;
-  height: 3.5rem;
-  padding: 0 1.5rem;
-  ${font.body.medium}
-  color: ${({ theme }) => theme.label.neutral};
-  background-color: ${({ theme }) => theme.background.alternative};
-  border: none;
-  outline: none;
+  > input {
+    padding-right: 7rem;
+  }
 `;
 
 export const VerifyButton = styled.button`
@@ -44,8 +30,8 @@ export const VerifyButton = styled.button`
   border-radius: 0.5rem;
   border: none;
   ${font.caption.medium};
-  color: ${palette.neutral[97]};
-  background-color: ${({ theme }) => theme.primary.normal};
+  color: ${({ theme }) => theme.action.primary.foreground};
+  background-color: ${({ theme }) => theme.action.primary.background};
   cursor: pointer;
 
   &:hover {
@@ -58,51 +44,6 @@ export const VerifyButton = styled.button`
   }
 `;
 
-export const SuccessMessage = styled.span`
-  ${font.caption.medium};
-  color: ${palette.green[60]};
-  margin-top: 0.5rem;
-  display: block;
-`;
-
-export const ErrorText = styled.span`
-  ${font.caption.medium};
-  color: ${palette.red[60]};
-  margin-top: 0.5rem;
-  display: block;
-`;
-
-export const ButtonWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1rem;
-`;
-
-export const SubmitButton = styled.button`
-  width: 24rem;
-  padding: 1rem 0;
-  border-radius: 1rem;
-  border: none;
-  color: ${palette.neutral[97]};
-  background-color: ${({ theme }) => theme.primary.normal};
-  ${font.headline2.medium};
-  cursor: pointer;
-
-  &:disabled {
-    opacity: 0.7;
-    cursor: not-allowed;
-  }
-`;
-
-export const HelpTextContainer = styled.div`
-  display: flex;
-  gap: 1rem;
-`;
-
-export const HelpText = styled(Link)`
-  ${font.caption.medium};
-  text-decoration: underline;
-  color: ${({ theme }) => theme.label.neutral};
-  cursor: pointer;
-`;
+export const ButtonWrapper = AuthActionGroup;
+export const HelpTextContainer = AuthHelpLinks;
+export const HelpText = AuthHelpLink;

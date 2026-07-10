@@ -1,8 +1,7 @@
 import * as S from "./TopProfile.style";
-import { ChangeEvent, useRef } from "react";
-import { useGetMyProfile } from "@/entities/user";
-import { useUploadProfileImageMutation } from "@/entities/profile/api/query/useUserProfileImage.query";
-import { resolveProfileDecorations } from "@/shared/lib";
+import { useRef, type ChangeEvent } from "react";
+import { useGetMyProfile, useUploadProfileImageMutation } from "@/entities/user";
+import { getErrorMessage, resolveProfileDecorations } from "@/shared/lib";
 import { DefaultProfileIcon, RankTier } from "@/shared/ui";
 
 const ACCEPTED_IMAGE_TYPES = ["image/png", "image/jpeg", "image/webp", "image/gif"];
@@ -11,7 +10,9 @@ export const TopProfile = () => {
   const { data: user } = useGetMyProfile();
   const uploadProfileImageMutation = useUploadProfileImageMutation();
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const { bannerImage, badgeImage, nameplateImage } = resolveProfileDecorations(user?.equippedItems);
+  const { bannerImage, badgeImage, nameplateImage } = resolveProfileDecorations(
+    user?.equippedItems
+  );
   const displayName = user?.name || user?.username || "이름 없음";
   const displayNameNode = <S.DisplayName>{displayName}</S.DisplayName>;
 
@@ -40,6 +41,7 @@ export const TopProfile = () => {
           <S.ProfileImgContainer>
             <S.ProfileImageButton
               type="button"
+              aria-label={user?.profileImage ? "프로필 이미지 변경" : "프로필 이미지 추가"}
               onClick={handleSelectProfileImage}
               disabled={uploadProfileImageMutation.isPending}
               $hasImage={Boolean(user?.profileImage)}
@@ -52,11 +54,11 @@ export const TopProfile = () => {
               >
                 {user?.profileImage ? (
                   <S.ChangeProfileImageIconWrap>
-                    <S.ChangeProfileImageIcon />
+                    <S.ChangeProfileImageIcon aria-hidden />
                   </S.ChangeProfileImageIconWrap>
                 ) : (
                   <S.AddProfileImageIconWrap>
-                    <S.AddProfileImageIcon />
+                    <S.AddProfileImageIcon aria-hidden />
                   </S.AddProfileImageIconWrap>
                 )}
               </S.ProfileAvatarWrap>
@@ -77,6 +79,15 @@ export const TopProfile = () => {
           </S.UserInfo>
         </S.ProfileImgWrapper>
       </S.ProfileCard>
+
+      {uploadProfileImageMutation.isError && (
+        <S.UploadError role="alert">
+          {getErrorMessage(
+            uploadProfileImageMutation.error,
+            "프로필 이미지를 업로드하지 못했어요."
+          )}
+        </S.UploadError>
+      )}
 
       <S.Button>
         <S.HiddenFileInput

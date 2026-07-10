@@ -24,7 +24,7 @@ export const PreviewModal = ({
   const [currentStep, setCurrentStep] = useState(1);
   const [prevSectionId, setPrevSectionId] = useState(sectionId);
   const stepsContainerRef = useRef<HTMLDivElement>(null);
-  const stepRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const stepRefs = useRef<(HTMLButtonElement | null)[]>([]);
 
   if (prevSectionId !== sectionId) {
     setPrevSectionId(sectionId);
@@ -73,6 +73,7 @@ export const PreviewModal = ({
         isOpen={isOpen}
         onClose={onClose}
         closeOnOverlayClick={true}
+        ariaLabel="섹션 미리보기"
       >
         <S.PreviewModalWrapper>
           <S.LoadingState aria-hidden>
@@ -162,6 +163,7 @@ export const PreviewModal = ({
         isOpen={isOpen}
         onClose={onClose}
         closeOnOverlayClick={true}
+        ariaLabel="섹션 미리보기"
       >
         <S.PreviewModalWrapper>
           <div>데이터를 불러올 수 없습니다.</div>
@@ -173,7 +175,14 @@ export const PreviewModal = ({
   const hasSteps = previewData.steps.length > 0;
 
   return (
-    <Dialog width={74} height={48} isOpen={isOpen} onClose={onClose} closeOnOverlayClick={true}>
+    <Dialog
+      width={74}
+      height={48}
+      isOpen={isOpen}
+      onClose={onClose}
+      closeOnOverlayClick={true}
+      ariaLabel="섹션 미리보기"
+    >
       <S.PreviewModalWrapper>
         <S.PreviewModalTop>
           <S.PreviewModalIntro>
@@ -218,6 +227,9 @@ export const PreviewModal = ({
                         return (
                           <S.StepWrapper
                             key={step.id}
+                            type="button"
+                            aria-label={`${step.id}단계, ${step.tooltip}`}
+                            aria-pressed={step.id === currentStep}
                             ref={el => {
                               stepRefs.current[index] = el;
                             }}
@@ -260,14 +272,26 @@ export const PreviewModal = ({
                 <S.RoadmapStepBox>
                   {hasSteps ? (
                     <>
-                      <S.ArrowButton onClick={handlePrev} $disabled={currentStep === 1}>
+                      <S.ArrowButton
+                        type="button"
+                        onClick={handlePrev}
+                        $disabled={currentStep === 1}
+                        disabled={currentStep === 1}
+                        aria-label="이전 챕터"
+                      >
                         <S.ArrowIcon $direction="left" />
                       </S.ArrowButton>
                       <S.StepLabel>
                         <S.CurrentStepLabel>{currentStep}</S.CurrentStepLabel>/
                         <S.TotalStepLabel>{totalSteps}</S.TotalStepLabel>
                       </S.StepLabel>
-                      <S.ArrowButton onClick={handleNext} $disabled={currentStep === totalSteps}>
+                      <S.ArrowButton
+                        type="button"
+                        onClick={handleNext}
+                        $disabled={currentStep === totalSteps}
+                        disabled={currentStep === totalSteps}
+                        aria-label="다음 챕터"
+                      >
                         <S.ArrowIcon $direction="right" />
                       </S.ArrowButton>
                     </>

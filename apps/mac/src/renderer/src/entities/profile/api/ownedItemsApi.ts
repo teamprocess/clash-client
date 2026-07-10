@@ -1,5 +1,5 @@
-import { api, ApiResponse } from "@/shared/api";
-import { OwnedItemRequest, OwnedItemResponse } from "@/entities/profile/model/ownedItems.types";
+import { api, type ApiResponse } from "@/shared/api";
+import type { OwnedItemRequest, OwnedItemResponse } from "../model/ownedItems.types";
 
 export const ownedItemsApi = {
   getOwnedItems: async (data: OwnedItemRequest) => {

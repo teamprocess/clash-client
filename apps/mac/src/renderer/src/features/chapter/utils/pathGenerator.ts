@@ -1,4 +1,4 @@
-import { Node } from "../roadmapData";
+import type { Node } from "../roadmapData";
 
 export const generatePath = (nodes: Node[]): string => {
   if (nodes.length < 2) return "";

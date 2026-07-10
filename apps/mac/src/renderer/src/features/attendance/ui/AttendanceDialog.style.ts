@@ -1,6 +1,5 @@
 import styled, { css, keyframes } from "styled-components";
 import { font } from "@clash/design-tokens/font";
-import { palette } from "@clash/design-tokens/theme";
 import AttendedSvg from "./assets/attended.svg";
 import NotAttendedSvg from "./assets/not-attended.svg";
 import CalendarSvg from "@/shared/ui/assets/calendar.svg";
@@ -45,6 +44,18 @@ export const Body = styled.div`
   min-height: 0;
   gap: 2rem;
   margin-top: 0.25rem;
+`;
+
+export const LoadState = styled.div`
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 2rem 1rem;
+  text-align: center;
+  box-sizing: border-box;
 `;
 
 export const Hero = styled.div`
@@ -154,6 +165,6 @@ export const DayLabel = styled.span<{ $isAttended: boolean }>`
 export const ErrorText = styled.p`
   ${font.label.medium}
   margin: 0.75rem 0 0;
-  color: ${palette.red[60]};
+  color: ${({ theme }) => theme.feedback.danger};
   text-align: center;
 `;

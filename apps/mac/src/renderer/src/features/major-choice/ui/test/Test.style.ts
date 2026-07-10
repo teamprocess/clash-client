@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { font } from "@clash/design-tokens/font";
-import Previous from "@/pages/roadmap/chapter/assets/previous.svg";
+import Previous from "@/shared/ui/assets/previous.svg";
 
 export const TestContainer = styled.div`
   display: flex;
@@ -45,6 +45,26 @@ export const QuestionWrapper = styled.div`
   width: 100%;
 `;
 
+export const StateBox = styled.div`
+  display: flex;
+  min-height: 16rem;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  text-align: center;
+`;
+
+export const StateTitle = styled.p`
+  ${font.title2.medium};
+  color: ${({ theme }) => theme.label.normal};
+`;
+
+export const StateDescription = styled.p`
+  ${font.body.regular};
+  color: ${({ theme }) => theme.label.alternative};
+`;
+
 export const QuestionBox = styled.div`
   display: flex;
   flex-direction: column;
@@ -77,7 +97,7 @@ export const ProgressBarWrapper = styled.div`
 export const ProgressTrack = styled.div`
   width: 10rem;
   height: 0.4rem;
-  background-color: ${({ theme }) => theme.label.disable};
+  background-color: ${({ theme }) => theme.fill.neutral};
   border-radius: 9999px;
   overflow: hidden;
 `;

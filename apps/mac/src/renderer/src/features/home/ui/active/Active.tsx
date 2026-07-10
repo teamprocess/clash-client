@@ -3,7 +3,7 @@ import { ActiveLineChart } from "@/features/home/model/ActiveChart";
 import { toLineChartData } from "@/features/home/model/lineChartData";
 import { useMemo, useRef } from "react";
 import { createPortal } from "react-dom";
-import { ActiveResponse } from "@/entities/home";
+import type { ActiveResponse } from "@/entities/competition";
 import { useActive } from "@/features/home/model/useActive";
 import { QuestionTooltip } from "@/shared/ui";
 import { activeDataTooltipContent } from "@/features/home/ui/active/Active.constants";

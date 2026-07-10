@@ -1,8 +1,8 @@
 import { usePurchaseModal } from "@/features/shop/model/usePurchaseModal";
 import { Dialog } from "@/shared/ui";
-import { Product } from "@/entities/product";
+import type { Product } from "@/entities/product";
 import { formatPrice } from "@/shared/lib";
-import { useGetMyProfile } from "@/entities/user/model/useGetMyProfile";
+import { useGetMyProfile } from "@/entities/user";
 import * as S from "./PurchaseModal.style";
 
 interface PurchaseModalProps {

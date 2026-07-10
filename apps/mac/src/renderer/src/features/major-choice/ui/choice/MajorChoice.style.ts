@@ -77,3 +77,10 @@ export const SubmitLoading = styled.span`
   align-items: center;
   justify-content: center;
 `;
+
+export const ErrorText = styled.p`
+  ${font.label.medium};
+  margin: -1.5rem 0;
+  color: ${({ theme }) => theme.feedback.danger};
+  text-align: center;
+`;

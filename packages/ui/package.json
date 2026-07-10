@@ -1,0 +1,39 @@
+{
+  "name": "@clash/ui",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./base-global-style": "./src/base-global-style/index.ts",
+    "./button": "./src/button/index.ts",
+    "./feedback-state": "./src/feedback-state/index.ts",
+    "./field-message": "./src/field-message/index.ts",
+    "./icon-button": "./src/icon-button/index.ts",
+    "./inline-notice": "./src/inline-notice/index.ts",
+    "./logo": "./src/logo/index.ts",
+    "./text-field": "./src/text-field/index.ts",
+    "./viewport-column": "./src/viewport-column/index.ts"
+  },
+  "scripts": {
+    "build": "tsc --noEmit",
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@clash/design-tokens": "workspace:*"
+  },
+  "peerDependencies": {
+    "react": "^19.2.0",
+    "styled-components": "^6.1.19"
+  },
+  "devDependencies": {
+    "@clash/eslint-config": "workspace:*",
+    "@clash/tsconfig": "workspace:*",
+    "@types/react": "^19.2.7",
+    "eslint": "^9.39.1",
+    "react": "^19.2.1",
+    "styled-components": "^6.1.19",
+    "typescript": "^5.9.3"
+  }
+}

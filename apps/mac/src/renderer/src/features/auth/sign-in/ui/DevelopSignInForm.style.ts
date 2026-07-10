@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import { palette } from "@clash/design-tokens/theme";
 import { font } from "@clash/design-tokens/font";
 
 export const FormContainer = styled.form`
@@ -29,22 +28,6 @@ export const Label = styled.label`
   color: ${({ theme }) => theme.label.normal};
 `;
 
-export const Input = styled.input`
-  width: 100%;
-  height: 3rem;
-  padding: 1rem;
-  border: none;
-  outline: none;
-  border-radius: 0.5rem;
-  background-color: ${({ theme }) => theme.label.disable};
-  color: ${({ theme }) => theme.label.normal};
-  ${font.body.medium};
-
-  &::placeholder {
-    color: ${({ theme }) => theme.label.assistive};
-  }
-`;
-
 export const Title = styled.h1`
   ${font.title1.medium};
   color: ${({ theme }) => theme.label.neutral};
@@ -56,13 +39,6 @@ export const Description = styled.p`
   color: ${({ theme }) => theme.label.alternative};
   margin: 0;
   text-align: center;
-`;
-
-export const ErrorText = styled.span`
-  ${font.caption.medium};
-  color: ${palette.red[60]};
-  margin-top: 0.5rem;
-  display: block;
 `;
 
 export const ButtonWrapper = styled.div`

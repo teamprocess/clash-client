@@ -4,6 +4,7 @@ import { font } from "@clash/design-tokens/font";
 export const EmailVerifyBox = styled.div`
   display: flex;
   flex-direction: column;
+  width: 100%;
   gap: 0.5rem;
 `;
 
@@ -23,13 +24,16 @@ export const UserEmail = styled.span`
 `;
 
 export const CodeInputContainer = styled.div`
-  display: flex;
-  gap: 0.75rem;
-  justify-content: center;
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  width: 100%;
+  max-width: 24rem;
+  gap: clamp(0.25rem, 2vw, 0.75rem);
 `;
 
 export const CodeInput = styled.input`
-  width: 3.25rem;
+  width: 100%;
+  min-width: 0;
   height: 4rem;
   border-radius: 0.75rem;
   border: 2px solid ${({ theme }) => theme.line.normal};
@@ -41,7 +45,7 @@ export const CodeInput = styled.input`
   ${font.title1.bold};
 
   &:focus {
-    border-color: ${({ theme }) => theme.primary.normal};
+    border-color: ${({ theme }) => theme.interaction.selectionBorder};
     background-color: ${({ theme }) => theme.background.normal};
   }
 

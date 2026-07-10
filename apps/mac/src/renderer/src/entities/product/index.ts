@@ -1,4 +1,9 @@
-export { productApi } from "./api/productApi";
+export {
+  productQueryKeys,
+  usePopularProductsQuery,
+  useProductsQuery,
+  useRecommendedProductsQuery,
+} from "./api/query/useProduct.query";
 export {
   ProductSort,
   ProductCategory,

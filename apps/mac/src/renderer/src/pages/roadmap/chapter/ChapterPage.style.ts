@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { font } from "@clash/design-tokens/font";
-import Previous from "./assets/previous.svg";
+import Previous from "@/shared/ui/assets/previous.svg";
 import Arrow from "./assets/arrow.svg";
 
 export const ChapterContainer = styled.div`
@@ -12,7 +12,7 @@ export const ChapterContainer = styled.div`
 export const ChapterScrollable = styled.div`
   width: 100%;
   height: 100%;
-  min-height: 42rem;
+  min-height: 0;
   background-color: ${({ theme }) => theme.background.normal};
   border: 1px solid ${({ theme }) => theme.line.alternative};
   border-radius: 1rem;
@@ -32,9 +32,11 @@ export const ChapterScrollable = styled.div`
 export const ChapterCanvas = styled.div`
   position: relative;
   width: max-content;
+  height: 100%;
   min-width: 100%;
   min-height: 100%;
   padding: 10rem 10rem 10rem 22rem;
+  box-sizing: border-box;
   background-color: ${({ theme }) => theme.background.normal};
   background-image:
     linear-gradient(to right, ${({ theme }) => theme.line.alternative} 1px, transparent 1px),
@@ -49,6 +51,7 @@ export const RoadmapStageArea = styled.div`
   justify-content: flex-end;
   align-items: flex-start;
   width: max-content;
+  height: 100%;
   min-width: 100%;
   min-height: 100%;
 `;
@@ -78,9 +81,9 @@ export const EmptyRoadmapMessage = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  width: calc(100vw - 31rem);
-  min-width: 48rem;
-  min-height: 48rem;
+  width: 100%;
+  min-width: 100%;
+  min-height: 100%;
   margin-left: auto;
   text-align: center;
   ${font.headline1.medium}

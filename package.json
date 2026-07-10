@@ -17,6 +17,8 @@
     "start:mac": "pnpm --filter @clash/mac start",
     "start:web": "pnpm --filter @clash/web start",
     "lint": "turbo run lint",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
     "typecheck": "turbo run typecheck",
     "test": "turbo run test"
   },

@@ -1,0 +1,278 @@
+import styled, { css } from "styled-components";
+import Date from "@/shared/ui/assets/date.svg";
+import GitCommits from "@/features/home/assets/home/git-commit.svg";
+import Fire from "@/shared/ui/assets/fire.svg";
+import Code from "@/features/home/assets/home/code.svg";
+import Time from "@/features/home/assets/home/time.svg";
+import GitPR from "@/features/home/assets/home/git-pr.svg";
+import Status from "@/features/home/assets/home/status.svg";
+import Review from "@/features/home/assets/home/review.svg";
+import GitIssue from "@/features/home/assets/home/git-issue.svg";
+import { font } from "@clash/design-tokens/font";
+import { Line } from "@/features/home/ui/active/Active.style";
+
+const flexRow = css`
+  display: flex;
+  flex-direction: row;
+`;
+
+const flexCol = css`
+  display: flex;
+  flex-direction: column;
+`;
+
+export const TitleBox = styled.div`
+  ${flexRow};
+  gap: 0.75rem;
+  width: 100%;
+  align-items: center;
+`;
+
+export const ContentBox = styled.div`
+  ${flexRow};
+  justify-content: space-between;
+  width: 100%;
+  flex: 1;
+  gap: 1.25rem;
+`;
+
+export const Content = styled.div`
+  ${flexCol};
+  width: 100%;
+  height: 100%;
+  flex: 1;
+  background-color: ${({ theme }) => theme.background.alternative};
+  border-radius: 0.75rem;
+  gap: 0.625rem;
+  min-height: 0;
+`;
+
+export const SubtitleBox = styled.div`
+  ${flexRow};
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0.625rem 1.5rem;
+  background-color: ${({ theme }) => theme.fill.neutral};
+  border-top-right-radius: 0.75rem;
+  border-top-left-radius: 0.75rem;
+`;
+
+export const Subtitle = styled.p`
+  ${font.title2.bold};
+  color: ${({ theme }) => theme.label.normal};
+`;
+
+export const DateBox = styled.div`
+  ${flexRow};
+  align-items: center;
+  gap: 0.25rem;
+`;
+
+export const DateIcon = styled(Date)``;
+
+export const DateText = styled.p`
+  ${font.body.medium}
+  color: ${({ theme }) => theme.label.assistive};
+`;
+
+export const InfoContainer = styled.div`
+  ${flexCol};
+  padding: 0.75rem;
+  gap: 0.625rem;
+  height: 100%;
+  flex: 1;
+  min-height: 0;
+`;
+
+export const InfoContent = styled.div<{ $mb?: string }>`
+  ${flexCol};
+  padding: 0.75rem;
+  justify-content: center;
+  gap: 0.625rem;
+  border-bottom: 1px solid ${({ theme }) => theme.line.neutral};
+  margin-bottom: ${({ $mb }) => $mb ?? 0};
+  flex: 1;
+  min-height: 0;
+`;
+
+export const InfoTitle = styled.p`
+  ${font.headline1.bold};
+  color: ${({ theme }) => theme.label.normal};
+  width: 100%;
+`;
+
+export const GitHubInfoBox = styled(TitleBox)`
+  align-items: center;
+  width: 100%;
+  height: 100%;
+`;
+
+export const InfoSubtitleBox = styled.div`
+  ${flexRow};
+  align-items: center;
+  gap: 0.5rem;
+`;
+
+export const CountText = styled.p`
+  ${font.display1.bold};
+`;
+
+export const InfoSubtitle = styled.p`
+  ${font.headline1.medium}
+`;
+
+export const CalculateBox = styled.div`
+  ${flexRow};
+  align-items: center;
+  justify-content: center;
+`;
+
+export const CalculateContainer = styled.div`
+  ${flexCol};
+  width: 100%;
+`;
+
+export const CalculateInfoBox = styled.div`
+  ${flexRow};
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.625rem;
+`;
+
+export const ExplainText = styled.p<{ $fitContent?: boolean }>`
+  ${font.label.regular};
+  width: ${({ $fitContent }) => ($fitContent ? "auto" : "100%")};
+  flex-shrink: ${({ $fitContent }) => ($fitContent ? 0 : 1)};
+  color: ${({ theme }) => theme.label.alternative};
+`;
+
+export const RepositoryName = styled.p`
+  ${font.label.bold};
+  color: ${({ theme }) => theme.label.alternative};
+  display: block;
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  cursor: default;
+  width: 100%;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+`;
+
+export const CodeGap = styled.div`
+  ${font.label.bold};
+  color: ${({ theme }) => theme.label.alternative};
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.15rem;
+`;
+
+export const PlusText = styled.span`
+  color: ${({ theme }) => theme.feedback.success};
+`;
+
+export const MinusText = styled.span`
+  color: ${({ theme }) => theme.feedback.danger};
+`;
+
+export const TimeText = styled.span`
+  ${font.label.bold};
+`;
+
+export const GridFooter = styled.div`
+  ${flexRow};
+  width: 100%;
+  height: 100%;
+
+  flex: 1;
+  min-height: 0;
+`;
+
+export const FooterItem = styled.div`
+  ${flexCol};
+  flex: 1;
+  height: 100%;
+  padding: 0.75rem;
+  gap: 0.625rem;
+  min-height: 0;
+`;
+
+export const FooterCenter = styled.div`
+  ${flexRow};
+  align-items: center;
+  height: 100%;
+  flex: 1;
+  min-height: 0;
+`;
+
+export const GroupTitle = styled.p`
+  ${font.headline1.bold};
+  color: ${({ theme }) => theme.label.normal};
+  width: 100%;
+`;
+
+export const MainStat = styled.div`
+  ${flexRow};
+  align-items: center;
+  gap: 0.5rem;
+  height: 100%;
+
+  .count {
+    ${font.display1.bold};
+    color: ${({ theme }) => theme.label.normal};
+  }
+
+  .unit {
+    ${font.headline1.medium};
+    color: ${({ theme }) => theme.label.normal};
+  }
+`;
+
+export const WidthLine = styled(Line)`
+  margin: 0;
+`;
+
+export const HeightLine = styled.div`
+  width: 1px;
+  height: 100%;
+  background-color: ${({ theme }) => theme.line.neutral};
+`;
+
+export const GrowthBox = styled.div`
+  ${flexCol};
+  align-items: flex-start;
+  width: 100%;
+`;
+
+export const RateBox = styled.div`
+  ${flexCol};
+  align-items: flex-end;
+`;
+
+export const GitCommitIcon = styled(GitCommits)``;
+
+export const FireIcon = styled(Fire)`
+  color: ${({ theme }) => theme.label.alternative};
+  width: 1.25rem;
+  height: 1.25rem;
+`;
+
+export const CodeIcon = styled(Code)``;
+
+export const TimeIcon = styled(Time)`
+  width: 1.25rem;
+  height: 1.25rem;
+`;
+
+export const GitPRIcon = styled(GitPR)``;
+
+export const StatusIcon = styled(Status)``;
+
+export const ReviewIcon = styled(Review)<{ $width: number }>`
+  width: ${({ $width }) => ($width ? `${$width}rem` : "1rem")};
+  height: ${({ $width }) => ($width ? `${$width}rem` : "1rem")};
+`;
+
+export const GitIssueIcon = styled(GitIssue)``;

@@ -22,6 +22,8 @@ export const TaskBox = styled.div`
   flex-direction: column;
 `;
 
+export { FeedbackState as ListState } from "@clash/ui";
+
 export const TaskItem = styled.div`
   display: flex;
   align-items: center;
@@ -40,15 +42,7 @@ export const PauseIcon = styled(Pause)`
   cursor: pointer;
 `;
 
-export const IconButton = styled.button`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 0;
-`;
+export { IconButton } from "@clash/ui";
 
 export const TaskLeftBox = styled.div`
   display: flex;
@@ -113,7 +107,7 @@ export const TaskTextInput = styled.input`
   outline: none;
 
   &::placeholder {
-    color: ${({ theme }) => theme.label.assistive};
+    color: ${({ theme }) => theme.label.alternative};
   }
 `;
 
@@ -135,4 +129,9 @@ export const AddTaskButton = styled.button`
   background-color: ${({ theme }) => theme.line.neutral};
   ${font.headline2.medium};
   cursor: pointer;
+
+  &:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
 `;

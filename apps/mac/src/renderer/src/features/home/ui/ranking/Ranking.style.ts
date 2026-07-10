@@ -45,7 +45,7 @@ export const Title = styled.div`
   }
 `;
 
-export const DropDown = styled.div`
+export const Dropdown = styled.div`
   width: min(15rem, 100%);
   min-width: 0;
   height: auto;
@@ -88,7 +88,6 @@ export const UserContainer = styled.div`
   gap: 0.5rem;
   overflow-y: auto;
   scrollbar-width: none;
-  -ms-overflow-style: none;
 
   &::-webkit-scrollbar {
     display: none;
@@ -146,4 +145,26 @@ export const DefaultBattleText = styled.p`
   color: ${({ theme }) => theme.label.assistive};
   word-break: keep-all;
   padding: 0 0.5rem;
+`;
+
+export const ErrorNotice = styled.div`
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+  padding: 0.75rem 1rem;
+  border: 1px solid ${({ theme }) => theme.line.alternative};
+  border-radius: 0.75rem;
+  background-color: ${({ theme }) => theme.fill.neutral};
+  box-sizing: border-box;
+`;
+
+export const ErrorNoticeText = styled.p`
+  ${font.label.medium};
+  min-width: 0;
+  margin: 0;
+  color: ${({ theme }) => theme.label.normal};
+  word-break: keep-all;
 `;

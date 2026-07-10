@@ -1,9 +1,8 @@
 import styled from "styled-components";
 import { font } from "@clash/design-tokens/font";
 import Cookie from "@/features/shop/assets/cookie.svg";
-import { palette } from "@clash/design-tokens/theme";
 
-export const CardContainer = styled.div<{ $isBought?: boolean }>`
+export const CardContainer = styled.button<{ $isBought?: boolean; $isActive?: boolean }>`
   position: relative;
   display: flex;
   flex-direction: column;
@@ -13,8 +12,16 @@ export const CardContainer = styled.div<{ $isBought?: boolean }>`
   width: 100%;
   min-height: 18rem;
   box-sizing: border-box;
+  padding: 0;
+  color: inherit;
+  font: inherit;
+  text-align: left;
   background-color: ${({ theme }) => theme.fill.neutral};
-  border: 1px solid ${({ theme }) => theme.line.alternative};
+  border: 1px solid
+    ${({ theme, $isActive }) =>
+      $isActive ? theme.interaction.selectionBorder : theme.line.alternative};
+  box-shadow: ${({ theme, $isActive }) =>
+    $isActive ? `inset 0 0 0 1px ${theme.interaction.selectionBorder}` : "none"};
   border-radius: 1rem;
   overflow: hidden;
   cursor: pointer;
@@ -28,11 +35,6 @@ export const CardContainer = styled.div<{ $isBought?: boolean }>`
     background: rgba(0, 0, 0, 0.25);
     pointer-events: none;
     z-index: 1;
-  }
-
-  &.active {
-    border-color: ${({ theme }) => theme.primary.normal};
-    box-shadow: inset 0 0 0 1px ${({ theme }) => theme.primary.normal};
   }
 `;
 
@@ -61,8 +63,8 @@ export const OwnedBadge = styled.span`
   z-index: 2;
   padding: 0.22rem 0.6rem;
   border-radius: 999px;
-  background: ${({ theme }) => theme.primary.normal};
-  color: ${palette.neutral[95]};
+  background: ${({ theme }) => theme.badge.primary.background};
+  color: ${({ theme }) => theme.badge.primary.foreground};
   ${font.caption.medium};
 `;
 
@@ -109,7 +111,7 @@ export const OriginalPriceText = styled.p`
 `;
 
 export const DiscountText = styled.p`
-  color: ${palette.green[40]};
+  color: ${({ theme }) => theme.feedback.success};
   ${font.body.bold};
   margin: 0 0 0 0.25rem;
 `;

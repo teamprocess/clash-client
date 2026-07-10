@@ -1,6 +1,6 @@
 import * as S from "@/features/shop/ui/products/Products.style";
 import { calculateDiscountedPrice } from "@/features/shop/lib/calculateDiscountedPrice";
-import { Product } from "@/entities/product";
+import type { Product } from "@/entities/product";
 import { ProductPreview } from "../product-preview/ProductPreview";
 
 const getCategoryLabel = (category: Product["category"]) => {
@@ -73,8 +73,13 @@ export const ProductDetailPanel = ({
           </S.MajorInfoWrapper>
         </S.InfoContainer>
 
-        <S.PurchaseBtn $isDisabled={isPurchaseDisabled} onClick={handleOpenPurchase}>
-          {!isPurchaseDisabled && <S.CookieIcon />}
+        <S.PurchaseBtn
+          type="button"
+          $isDisabled={isPurchaseDisabled}
+          disabled={isPurchaseDisabled}
+          onClick={handleOpenPurchase}
+        >
+          {!isPurchaseDisabled && <S.CookieIcon aria-hidden />}
           {purchaseButtonLabel}
         </S.PurchaseBtn>
       </S.DetailPanelSticky>

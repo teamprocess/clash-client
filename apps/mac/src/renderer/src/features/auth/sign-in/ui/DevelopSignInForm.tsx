@@ -1,5 +1,6 @@
 import * as S from "./DevelopSignInForm.style";
-import { useDevelopSignIn } from "@/features/auth/sign-in/model/useDevelopSignIn";
+import { FieldMessage, TextField } from "@clash/ui";
+import { useDevelopSignIn } from "../model/useDevelopSignIn";
 import { Button } from "@/shared/ui";
 
 export const DevelopSignInForm = () => {
@@ -19,8 +20,10 @@ export const DevelopSignInForm = () => {
       <S.FieldGroup>
         <S.Field>
           <S.Label htmlFor="username">아이디</S.Label>
-          <S.Input
+          <TextField
             id="username"
+            inputSize="md"
+            surface="neutral"
             type="text"
             value={username}
             onChange={handleUsernameChange}
@@ -31,8 +34,10 @@ export const DevelopSignInForm = () => {
         </S.Field>
         <S.Field>
           <S.Label htmlFor="password">비밀번호</S.Label>
-          <S.Input
+          <TextField
             id="password"
+            inputSize="md"
+            surface="neutral"
             type="password"
             value={password}
             onChange={handlePasswordChange}
@@ -46,7 +51,7 @@ export const DevelopSignInForm = () => {
         <Button type="submit" variant="primary" size="lg" fullWidth isLoading={isStarting}>
           {isStarting ? "로그인 중..." : "로그인"}
         </Button>
-        {error && <S.ErrorText>{error}</S.ErrorText>}
+        {error && <FieldMessage role="alert">{error}</FieldMessage>}
       </S.ButtonWrapper>
     </S.FormContainer>
   );

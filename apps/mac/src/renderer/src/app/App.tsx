@@ -4,25 +4,18 @@ import { HashRouter, Navigate, Route, Routes } from "react-router-dom";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { GoogleReCaptchaProvider } from "react-google-recaptcha-v3";
-import { queryClient } from "@/shared/lib/queryClient";
 import { GlobalStyle } from "./styles/GlobalStyle";
-import {
-  useNetworkStatus,
-  useServiceUnavailable,
-  useTheme,
-} from "@/shared/lib";
+import { queryClient, useNetworkStatus, useServiceUnavailable, useTheme } from "@/shared/lib";
 import { useStartupUpdateState } from "@/features/startup-update";
 import { MainLayout } from "@/app/layouts/main";
-import { HomePage } from "@/pages/home";
+import { ComparePage, HomePage } from "@/pages/home";
 import { RecordPage } from "@/pages/record";
 import { GroupPage } from "@/pages/group";
-import { ChapterPage, RoadmapMajorChoicePage } from "@/pages/roadmap";
+import { ChapterPage, RoadmapMajorChoicePage, RoadmapPage } from "@/pages/roadmap";
 import { ProductsPage, ShopPage } from "@/pages/shop";
 import { AuthLayout } from "@/app/layouts/auth";
 import { SignInPage } from "@/pages/auth";
-import { NotFoundPage } from "@/pages/not-found/NotFoundPage";
-import { RoadmapPage } from "@/pages/roadmap/section/RoadmapPage";
-import { ComparePage } from "@/pages/home/compare/ComparePage";
+import { NotFoundPage } from "@/pages/not-found";
 import { ProfilePage } from "@/pages/profile";
 import { OfflinePage } from "@/pages/offline";
 import { ServiceUnavailablePage } from "@/pages/service-unavailable";

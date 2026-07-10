@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import BackArrow from "../../assets/home/back.svg";
+import BackArrow from "@/shared/ui/assets/back.svg";
 import Arrow from "@/shared/ui/assets/arrow.svg";
 import { font } from "@clash/design-tokens/font";
 

@@ -1,9 +1,9 @@
 import { useMemo } from "react";
 import {
+  useSectionPreviewQuery,
   type PreviewData,
   type GetSectionPreviewResponse,
-} from "@/entities/roadmap/section/preview/model/preview.types";
-import { useSectionPreviewQuery } from "@/entities/roadmap/section";
+} from "@/entities/roadmap";
 
 const transformPreviewData = (serverData: GetSectionPreviewResponse): PreviewData => {
   const sortedChapters = [...serverData.chapters].sort((a, b) => a.orderIndex - b.orderIndex);

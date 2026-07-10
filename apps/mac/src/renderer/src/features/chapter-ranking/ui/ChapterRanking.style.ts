@@ -1,5 +1,6 @@
 import styled, { css, keyframes } from "styled-components";
 import { font } from "@clash/design-tokens/font";
+import { InlineNotice } from "@clash/ui";
 import FirstFrameIcon from "../assets/first-frame.svg";
 import SecondFrameIcon from "../assets/second-frame.svg";
 import ThirdFrameIcon from "../assets/third-frame.svg";
@@ -22,9 +23,9 @@ const skeletonWave = keyframes`
 const skeletonBase = css`
   background: linear-gradient(
     90deg,
-    rgba(255, 255, 255, 0.05) 0%,
-    rgba(255, 255, 255, 0.12) 50%,
-    rgba(255, 255, 255, 0.05) 100%
+    ${({ theme }) => theme.fill.normal} 0%,
+    ${({ theme }) => theme.fill.alternative} 50%,
+    ${({ theme }) => theme.fill.normal} 100%
   );
   background-size: 200% 100%;
   animation: ${skeletonWave} 1.6s ease-in-out infinite;
@@ -70,6 +71,35 @@ export const RankingBox = styled.div`
   align-items: center;
   gap: 2rem;
   width: 100%;
+`;
+
+export const StateBox = styled.div`
+  min-height: 10rem;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  text-align: center;
+`;
+
+export const StateTitle = styled.p`
+  ${font.headline2.medium};
+  margin: 0;
+  color: ${({ theme }) => theme.label.normal};
+  word-break: keep-all;
+`;
+
+export const StateDescription = styled.p`
+  ${font.caption.regular};
+  margin: 0 0 0.5rem;
+  color: ${({ theme }) => theme.label.assistive};
+  word-break: keep-all;
+`;
+
+export const RefreshWarning = styled(InlineNotice)`
+  margin: 0.5rem 0;
 `;
 
 export const RankingTop3Box = styled.div`
@@ -233,12 +263,12 @@ export const RankingUserProfileFallback = styled(DefaultProfileIcon)`
 export const RankingUsername = styled.span`
   ${font.label.medium};
   color: ${({ theme }) => theme.label.alternative};
-  )text-align: center;
+  text-align: center;
 `;
 
 export const RankingChapter = styled.span`
   ${font.label.medium};
-  color: ${({ theme }) => theme.primary.normal};
+  color: ${({ theme }) => theme.content.accent};
   text-align: center;
 `;
 

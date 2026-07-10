@@ -1,6 +1,6 @@
 import styled, { css } from "styled-components";
 import VSCode from "./ide-vscode.svg";
-import InteliJ from "./ide-intellij-idea.svg";
+import IntelliJ from "./ide-intellij-idea.svg";
 import WebStorm from "./ide-webstorm.svg";
 import PyCharm from "./ide-pycharm.svg";
 import GOLand from "./ide-goland.svg";
@@ -23,8 +23,8 @@ const ideIconStyle = css`
   flex-shrink: 0;
 `;
 
-export const IdeIcons = {
-  INTELLIJ_IDEA: styled(InteliJ)`
+export const IDEIcons = {
+  INTELLIJ_IDEA: styled(IntelliJ)`
     ${ideIconStyle}
   `,
   WEBSTORM: styled(WebStorm)`

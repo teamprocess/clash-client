@@ -1,13 +1,11 @@
 import * as S from "./GroupPage.style";
-import { Group } from "@/features/record/ui/group/Group";
-import { GroupSideTab } from "@/features/record/ui/group-side-tab/GroupSideTab";
 import { useMemo, useState } from "react";
 import { type Group as GroupEntity, useMyGroupsQuery } from "@/entities/group";
-import { useGroup } from "@/features/record/model/useGroup";
-import { GroupDeleteModal } from "@/features/record/ui/group/modal/GroupDeleteModal";
-import { GroupEditModal } from "@/features/record/ui/group/modal/GroupEditModal";
-import { shiftRecordDate } from "@/features/record/model/recordDate";
-import { useTodayRecordDate } from "@/features/record/model/useTodayRecordDate";
+import { GroupDeleteModal, GroupEditModal, GroupSideTab, useGroup } from "@/features/group";
+import { shiftRecordDate, useTodayRecordDate } from "@/features/record";
+import { GroupActivity } from "@/widgets/group-activity";
+import { Button } from "@/shared/ui";
+import { getErrorMessage } from "@/shared/lib";
 
 export const GroupPage = () => {
   const [selectedGroupId, setSelectedGroupId] = useState<number | null>(null);
@@ -17,7 +15,13 @@ export const GroupPage = () => {
   const normalizedSelectedDate = selectedDate === todayRecordDate ? undefined : selectedDate;
   const displayDate = normalizedSelectedDate ?? todayRecordDate;
 
-  const { data: myGroupsResponse } = useMyGroupsQuery(1, 20);
+  const {
+    data: myGroupsResponse,
+    isPending: isGroupsPending,
+    isError: isGroupsError,
+    error: groupsError,
+    refetch: refetchGroups,
+  } = useMyGroupsQuery(1, 20);
 
   const groups = useMemo<GroupEntity[]>(
     () => myGroupsResponse?.data?.groups ?? [],
@@ -31,10 +35,37 @@ export const GroupPage = () => {
 
   const groupControls = useGroup(currentGroup?.id ?? null);
 
+  if (isGroupsPending && !myGroupsResponse) {
+    return (
+      <S.GroupPageContainer>
+        <S.PageState role="status" aria-live="polite" aria-busy="true">
+          <S.PageStateTitle>그룹을 불러오는 중이에요.</S.PageStateTitle>
+          <S.PageStateDescription>잠시만 기다려 주세요.</S.PageStateDescription>
+        </S.PageState>
+      </S.GroupPageContainer>
+    );
+  }
+
+  if (isGroupsError && !myGroupsResponse) {
+    return (
+      <S.GroupPageContainer>
+        <S.PageState role="alert">
+          <S.PageStateTitle>그룹을 불러오지 못했어요.</S.PageStateTitle>
+          <S.PageStateDescription>
+            {getErrorMessage(groupsError, "잠시 후 다시 시도해 주세요.")}
+          </S.PageStateDescription>
+          <Button variant="primary" size="sm" onClick={() => void refetchGroups()}>
+            다시 시도
+          </Button>
+        </S.PageState>
+      </S.GroupPageContainer>
+    );
+  }
+
   return (
     <S.GroupPageContainer>
       <S.Content>
-        <Group
+        <GroupActivity
           currentGroup={currentGroup}
           selectedDate={normalizedSelectedDate}
           displayDate={displayDate}

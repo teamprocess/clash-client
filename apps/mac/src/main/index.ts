@@ -9,7 +9,7 @@ import { bootstrapMainProcess } from "./bootstrap";
 import { registerApplicationMenu } from "./menu";
 import { registerTray } from "./tray";
 import { markUpdateInstallInProgress } from "./updateInstallState";
-import { configureAppRuntime } from "./runtimeProfile";
+import { configureAppRuntime, IS_DEV_CHANNEL } from "./runtimeProfile";
 
 let mainWindow: BrowserWindow | null = null;
 let startupWindow: BrowserWindow | null = null;
@@ -44,7 +44,7 @@ let startupUpdateState: StartupUpdateState = {
 const AUTO_UPDATE_CHECK_INTERVAL_MS = 30 * 60 * 1000;
 const MIN_STARTUP_WINDOW_VISIBLE_MS = 2200;
 
-const isUpdateSupported = () => app.isPackaged && process.platform === "darwin";
+const isUpdateSupported = () => !IS_DEV_CHANNEL && app.isPackaged && process.platform === "darwin";
 const wait = (milliseconds: number) =>
   new Promise<void>(resolve => {
     setTimeout(resolve, milliseconds);
@@ -371,7 +371,6 @@ const launchMainApplication = async () => {
 
 const registerAutoUpdater = () => {
   if (!isUpdateSupported()) {
-    void launchMainApplication();
     return;
   }
 
@@ -470,6 +469,10 @@ ipcMain.handle("app:retry-startup-update", async () => {
 });
 
 ipcMain.handle("app:check-for-updates", async () => {
+  if (!isUpdateSupported()) {
+    return;
+  }
+
   await checkForUpdates("manual");
 });
 
@@ -479,8 +482,14 @@ registerQuitHandlers({ getAppMonitor });
 registerDeepLinkEvents(getMainWindow, createWindow);
 app.whenReady().then(() => {
   bootstrapMainProcess({ createWindow, getMainWindow, getAppMonitor });
-  createStartupGateWindow();
-  registerAutoUpdater();
+
+  if (isUpdateSupported()) {
+    createStartupGateWindow();
+    registerAutoUpdater();
+  } else {
+    createAppWindow();
+  }
+
   registerApplicationMenu({
     onCheckForUpdates: () => checkForUpdates("manual"),
   });

@@ -1,4 +1,4 @@
-import { ElectronAPI } from "@electron-toolkit/preload";
+import type { ElectronAPI } from "@electron-toolkit/preload";
 
 interface ActiveApp {
   appName: string;
@@ -49,6 +49,7 @@ interface AppMonitorAPI {
   openExternalUrl: (url: string) => Promise<void>;
   setBadgeCount: (count: number) => Promise<boolean>;
   clearAuthSession: () => Promise<void>;
+  persistDevAuthSession: () => Promise<void>;
   checkForUpdates: () => Promise<void>;
   getStartupUpdateStateSync: () => StartupUpdateState;
   getStartupUpdateState: () => Promise<StartupUpdateState>;

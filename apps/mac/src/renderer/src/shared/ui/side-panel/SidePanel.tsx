@@ -1,7 +1,7 @@
-import { useEffect } from "react";
 import type { ReactNode } from "react";
 import { createPortal } from "react-dom";
 import * as S from "./SidePanel.style";
+import { useModalFocus } from "@/shared/lib";
 
 export interface SidePanelProps {
   isOpen: boolean;
@@ -10,6 +10,7 @@ export interface SidePanelProps {
   width?: string;
   position?: "absolute" | "fixed";
   children: ReactNode;
+  ariaLabel?: string;
 }
 
 export const SidePanel = ({
@@ -19,21 +20,9 @@ export const SidePanel = ({
   width = "min(100%, 36rem)",
   position = "fixed",
   children,
+  ariaLabel = "사이드 패널",
 }: SidePanelProps) => {
-  useEffect(() => {
-    if (!isOpen) return;
-
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") {
-        onClose();
-      }
-    };
-
-    window.addEventListener("keydown", handleKeyDown);
-    return () => {
-      window.removeEventListener("keydown", handleKeyDown);
-    };
-  }, [isOpen, onClose]);
+  const { containerRef: panelRef, layerRef } = useModalFocus({ isOpen, onClose });
 
   if (!isOpen) {
     return null;
@@ -44,13 +33,22 @@ export const SidePanel = ({
   }
 
   return createPortal(
-    <S.Overlay $closing={isClosing} $position={position} onClick={onClose} aria-hidden={!isOpen}>
+    <S.Overlay
+      ref={layerRef}
+      $closing={isClosing}
+      $position={position}
+      onClick={onClose}
+      aria-hidden={!isOpen}
+    >
       <S.Panel
+        ref={panelRef}
         $closing={isClosing}
         $width={width}
         onClick={event => event.stopPropagation()}
         role="dialog"
         aria-modal="true"
+        aria-label={ariaLabel}
+        tabIndex={-1}
       >
         {children}
       </S.Panel>

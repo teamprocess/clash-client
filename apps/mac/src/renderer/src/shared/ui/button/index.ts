@@ -1,3 +1,2 @@
-export type { ButtonProps } from "./Button";
-export { Button } from "./Button";
-export type { ButtonSize, ButtonVariant } from "./Button.style";
+export { Button } from "@clash/ui/button";
+export type { ButtonInteraction, ButtonProps, ButtonSize, ButtonVariant } from "@clash/ui/button";

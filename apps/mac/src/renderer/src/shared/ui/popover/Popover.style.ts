@@ -4,21 +4,24 @@ const resolveOffsetValue = (value: number | string) =>
   typeof value === "number" ? `${value}px` : value;
 
 export const PopoverContainer = styled.div<{
-  $align: "start" | "end";
-  $offset: number;
-  $alignOffset: number | string;
   $minWidth: number | string;
 }>`
-  position: absolute;
-  top: calc(100% + ${({ $offset }) => $offset}px);
-  ${({ $align, $alignOffset }) =>
-    $align === "end"
-      ? `right: ${resolveOffsetValue($alignOffset)};`
-      : `left: ${resolveOffsetValue($alignOffset)};`}
+  position: fixed;
+  top: 0;
+  left: 0;
   min-width: ${({ $minWidth }) => resolveOffsetValue($minWidth)};
-  background-color: ${({ theme }) => theme.label.disable};
+  max-width: calc(100vw - 1rem);
+  max-height: 0;
+  visibility: hidden;
+  overflow-x: hidden;
+  overflow-y: auto;
+  background-color: ${({ theme }) => theme.background.normal};
+  border: 1px solid ${({ theme }) => theme.line.alternative};
   border-radius: 0.5rem;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
-  z-index: 10;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.16);
+  z-index: 900;
+
+  & > * {
+    max-width: 100%;
+  }
 `;

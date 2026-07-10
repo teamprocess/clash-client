@@ -1,20 +1,23 @@
 import { useState, useRef } from "react";
-import {
-  battleApi,
-  useBattleInfoQuery,
-  useBattleDetailQuery,
-  useAnalyzeBattleQuery,
-  useBattleListQuery,
+import type {
   BattleResponse,
   BattleDetailResponse,
   AnalyzeBattleResponse,
   AnalyzeCategory,
   BattleListResponse,
   PeriodDay,
-  MATCHVALUE,
+  MATCH_VALUE,
+} from "@/entities/competition";
+import {
+  battleApi,
+  battleQueryKeys,
+  useBattleInfoQuery,
+  useBattleDetailQuery,
+  useAnalyzeBattleQuery,
+  useBattleListQuery,
 } from "@/entities/competition";
 import { getErrorMessage, queryClient } from "@/shared/lib";
-import { useBattleApplyListQuery } from "@/entities/competition/api/rival-competition/api/query/useBattle.query";
+import { useBattleApplyListQuery } from "@/entities/competition";
 import { useMutation } from "@tanstack/react-query";
 import {
   ANALYZE_CATEGORY_OPTIONS,
@@ -38,11 +41,17 @@ export const useBattle = () => {
   const [isCanceling, setIsCanceling] = useState(false);
   const [cancelingId, setCancelingId] = useState<number | null>(null);
 
-  const { data: battleInfoRes } = useBattleInfoQuery();
-  const { data: battleDetailRes } = useBattleDetailQuery(battleTargetId ?? 0);
-  const { data: analyzeRes } = useAnalyzeBattleQuery(battleDetailRes?.data?.id ?? 0, category);
-  const { data: battleListRes } = useBattleListQuery();
-  const { data: battleApplyList } = useBattleApplyListQuery();
+  const battleInfoQuery = useBattleInfoQuery();
+  const battleDetailQuery = useBattleDetailQuery(battleTargetId ?? 0);
+  const analyzeQuery = useAnalyzeBattleQuery(battleDetailQuery.data?.data?.id ?? 0, category);
+  const battleListQuery = useBattleListQuery(isModalOpen);
+  const battleApplyListQuery = useBattleApplyListQuery(isModalOpen);
+
+  const { data: battleInfoRes } = battleInfoQuery;
+  const { data: battleDetailRes } = battleDetailQuery;
+  const { data: analyzeRes } = analyzeQuery;
+  const { data: battleListRes } = battleListQuery;
+  const { data: battleApplyList } = battleApplyListQuery;
 
   const battleData: BattleResponse | null = battleInfoRes?.data ?? null;
   const battleDetailData: BattleDetailResponse | null = battleDetailRes?.data ?? null;
@@ -78,7 +87,7 @@ export const useBattle = () => {
   const isRivalHigher =
     myAnalyzeRate !== null && rivalAnalyzeRate !== null ? rivalAnalyzeRate > myAnalyzeRate : false;
 
-  const judgeUpperHand = (result: (typeof MATCHVALUE)[keyof typeof MATCHVALUE]): string => {
+  const judgeUpperHand = (result: (typeof MATCH_VALUE)[keyof typeof MATCH_VALUE]): string => {
     return JUDGE_UPPER_HAND_MAP[result] ?? "대기 중";
   };
 
@@ -159,9 +168,9 @@ export const useBattle = () => {
       });
 
       await Promise.all([
-        queryClient.invalidateQueries({ queryKey: ["battleInfo"] }),
-        queryClient.invalidateQueries({ queryKey: ["battleList"] }),
-        queryClient.invalidateQueries({ queryKey: ["battleApplyList"] }),
+        queryClient.invalidateQueries({ queryKey: battleQueryKeys.info }),
+        queryClient.invalidateQueries({ queryKey: battleQueryKeys.list }),
+        queryClient.invalidateQueries({ queryKey: battleQueryKeys.applications }),
       ]);
 
       closeModal();
@@ -179,9 +188,9 @@ export const useBattle = () => {
     mutationFn: battleApi.postCancelBattle,
     onSuccess: async () => {
       await Promise.all([
-        queryClient.invalidateQueries({ queryKey: ["battleApplyList"] }),
-        queryClient.invalidateQueries({ queryKey: ["battleList"] }),
-        queryClient.invalidateQueries({ queryKey: ["battle"] }),
+        queryClient.invalidateQueries({ queryKey: battleQueryKeys.applications }),
+        queryClient.invalidateQueries({ queryKey: battleQueryKeys.list }),
+        queryClient.invalidateQueries({ queryKey: battleQueryKeys.info }),
       ]);
     },
   });
@@ -255,5 +264,13 @@ export const useBattle = () => {
     cancelingId,
 
     error,
+
+    queries: {
+      info: battleInfoQuery,
+      detail: battleDetailQuery,
+      analyze: analyzeQuery,
+      rivals: battleListQuery,
+      applications: battleApplyListQuery,
+    },
   };
 };

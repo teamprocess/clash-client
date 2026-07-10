@@ -27,12 +27,18 @@ export const SectionIconWrapper = styled.button`
   width: 8rem;
   height: 8rem;
   background: ${({ theme }) => theme.line.neutral};
+  border: 0;
+  padding: 0;
   border-radius: 50%;
   position: relative;
   cursor: pointer;
 
+  &:disabled {
+    cursor: not-allowed;
+  }
+
   &:hover {
-    background: ${({ theme }) => theme.label.disable};
+    background: ${({ theme }) => theme.fill.alternative};
   }
 `;
 

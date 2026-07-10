@@ -9,6 +9,8 @@ export const Wrapper = styled.div`
   gap: 1rem;
 `;
 
+export { InlineNotice as RefreshNotice } from "@clash/ui";
+
 export const EmptyState = styled.div`
   width: 100%;
   height: 100%;

@@ -11,9 +11,14 @@ interface NodeCircleProps {
   $status: "completed" | "current" | "locked";
 }
 
-export const NodeGroup = styled.g`
-  cursor: pointer;
+export const NodeGroup = styled.g<{ $disabled: boolean }>`
+  cursor: ${({ $disabled }) => ($disabled ? "default" : "pointer")};
   transition: transform 0.2s;
+
+  &:focus-visible circle {
+    stroke: ${({ theme }) => theme.interaction.selectionBorder};
+    stroke-width: 7;
+  }
 `;
 
 export const NodeCircle = styled.circle<NodeCircleProps>`
@@ -21,14 +26,14 @@ export const NodeCircle = styled.circle<NodeCircleProps>`
     $status === "completed"
       ? theme.label.assistive
       : $status === "current"
-        ? theme.primary.normal
+        ? theme.badge.primary.background
         : theme.background.neutral};
 
   stroke: ${({ $status, theme }) =>
     $status === "completed"
       ? theme.line.normal
       : $status === "current"
-        ? theme.primary.normal
+        ? theme.interaction.selectionBorder
         : theme.line.neutral};
 
   stroke-width: 5;

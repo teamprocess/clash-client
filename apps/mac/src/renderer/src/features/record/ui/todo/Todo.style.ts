@@ -1,10 +1,11 @@
 import styled from "styled-components";
 import { font } from "@clash/design-tokens";
+import { InlineNotice } from "@clash/ui";
 import More from "../../assets/more.svg";
 import Play from "../../assets/play.svg";
 import Pause from "../../assets/pause.svg";
-import Close from "@/features/profile/assets/close.svg";
-import Check from "@/features/section/assets/check.svg";
+import Close from "@/shared/ui/assets/close.svg";
+import Check from "@/shared/ui/assets/check.svg";
 
 export const TodoContainer = styled.div`
   display: flex;
@@ -41,6 +42,12 @@ export const TodoBox = styled.div`
   flex-direction: column;
 `;
 
+export { FeedbackState as ListState } from "@clash/ui";
+
+export const SourceNotice = styled(InlineNotice).attrs({ density: "regular" })`
+  margin: 0.75rem 1rem 0;
+`;
+
 export const TodoItem = styled.div<{ $isMenuOpen?: boolean }>`
   display: flex;
   align-items: center;
@@ -75,15 +82,7 @@ export const PauseIcon = styled(Pause)`
   cursor: pointer;
 `;
 
-export const IconButton = styled.button`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 0;
-`;
+export { IconButton } from "@clash/ui";
 
 export const TodoText = styled.span<{ $completed?: boolean }>`
   ${font.headline1.medium};
@@ -116,7 +115,7 @@ export const TodoTextInput = styled.input`
   outline: none;
 
   &::placeholder {
-    color: ${({ theme }) => theme.label.assistive};
+    color: ${({ theme }) => theme.label.alternative};
   }
 
   &:disabled {

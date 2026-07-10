@@ -2,13 +2,10 @@ import * as S from "./ChapterPage.style";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { ChapterRanking } from "@/features/chapter-ranking";
 import { SectionProgress } from "@/features/section-progress";
-import { Roadmap } from "@/features/chapter/components/Roadmap";
-import { useChapter } from "@/features/chapter/model/useChapter";
-import { MajorEnum } from "@/entities/roadmap/section/model/section.types";
+import { MissionContainer, Roadmap, useChapter } from "@/features/chapter";
+import { MajorEnum, useMajorSectionQuery } from "@/entities/roadmap";
 import { useEffect, useMemo } from "react";
 import { useGetMyProfile } from "@/entities/user";
-import { useMajorSectionQuery } from "@/entities/roadmap/section/api/query/useMajorSection.query";
-import { MissionContainer } from "@/features/chapter/components/MissionContainer";
 
 export const ChapterPage = () => {
   const { sectionId } = useParams<{ sectionId: string }>();
@@ -112,7 +109,9 @@ export const ChapterPage = () => {
 
       <ChapterRanking page="chapter" />
       <SectionProgress
-        completed={domain.sectionCompleted ? domain.completedChapters + 1 : domain.completedChapters}
+        completed={
+          domain.sectionCompleted ? domain.completedChapters + 1 : domain.completedChapters
+        }
         total={domain.totalChapters}
       />
 

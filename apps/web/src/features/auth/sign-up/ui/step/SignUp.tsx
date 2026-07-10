@@ -1,9 +1,11 @@
 import * as S from "../SignUpForm.style";
+import { Button, FieldMessage, TextField } from "@clash/ui";
 import { useLocation } from "react-router-dom";
 import type { SignUpProps } from "@/features/auth/sign-up/model/useSignUp";
 
 export const SignUp = ({
   register,
+  usernameRegister,
   handleSubmit,
   errors,
   onSubmit,
@@ -11,6 +13,7 @@ export const SignUp = ({
   isCheckingUsername,
   usernameChecked,
   usernameAvailable,
+  handleUsernameChange,
   handleUsernameCheck,
 }: SignUpProps) => {
   const location = useLocation();
@@ -21,7 +24,13 @@ export const SignUp = ({
       <S.InputBox>
         <div>
           <S.InputWrapper>
-            <S.Input placeholder="아이디를 입력하세요." {...register("username")} />
+            <TextField
+              inputSize="lg"
+              placeholder="아이디를 입력하세요."
+              invalid={!!errors.username || (usernameChecked && !usernameAvailable)}
+              {...usernameRegister}
+              onChange={handleUsernameChange}
+            />
             <S.VerifyButton
               type="button"
               onClick={handleUsernameCheck}
@@ -36,32 +45,57 @@ export const SignUp = ({
                   : "중복확인"}
             </S.VerifyButton>
           </S.InputWrapper>
-          {errors.username && <S.ErrorText>{errors.username.message}</S.ErrorText>}
+          {errors.username && <FieldMessage role="alert">{errors.username.message}</FieldMessage>}
           {usernameChecked && usernameAvailable && (
-            <S.SuccessMessage>사용 가능한 아이디입니다.</S.SuccessMessage>
+            <FieldMessage tone="success" role="status">
+              사용 가능한 아이디입니다.
+            </FieldMessage>
           )}
           {!errors.username && usernameChecked && !usernameAvailable && (
-            <S.ErrorText>이미 사용 중인 아이디입니다.</S.ErrorText>
+            <FieldMessage role="alert">이미 사용 중인 아이디입니다.</FieldMessage>
           )}
         </div>
         <div>
-          <S.Input placeholder="이름을 입력하세요." {...register("name")} />
-          {errors.name && <S.ErrorText>{errors.name.message}</S.ErrorText>}
+          <TextField
+            inputSize="lg"
+            placeholder="이름을 입력하세요."
+            invalid={!!errors.name}
+            {...register("name")}
+          />
+          {errors.name && <FieldMessage role="alert">{errors.name.message}</FieldMessage>}
         </div>
         <div>
-          <S.Input placeholder="이메일 주소를 입력하세요." {...register("email")} />
-          {errors.email && <S.ErrorText>{errors.email.message}</S.ErrorText>}
+          <TextField
+            inputSize="lg"
+            placeholder="이메일 주소를 입력하세요."
+            invalid={!!errors.email}
+            {...register("email")}
+          />
+          {errors.email && <FieldMessage role="alert">{errors.email.message}</FieldMessage>}
         </div>
         <div>
-          <S.Input placeholder="비밀번호를 입력하세요." {...register("password")} type="password" />
-          {errors.password && <S.ErrorText>{errors.password.message}</S.ErrorText>}
+          <TextField
+            inputSize="lg"
+            placeholder="비밀번호를 입력하세요."
+            type="password"
+            invalid={!!errors.password}
+            {...register("password")}
+          />
+          {errors.password && <FieldMessage role="alert">{errors.password.message}</FieldMessage>}
         </div>
-        {errors.root && <S.ErrorText>{errors.root.message}</S.ErrorText>}
+        {errors.root && <FieldMessage role="alert">{errors.root.message}</FieldMessage>}
       </S.InputBox>
       <S.ButtonWrapper>
-        <S.SubmitButton type="submit" disabled={isSubmitting || isCheckingUsername}>
+        <Button
+          type="submit"
+          variant="primary"
+          size="xl"
+          interaction="responsive"
+          fullWidth
+          isLoading={isSubmitting || isCheckingUsername}
+        >
           {isSubmitting ? "회원가입 진행 중..." : "다음"}
-        </S.SubmitButton>
+        </Button>
         <S.HelpTextContainer>
           <S.HelpText to={{ pathname: "/sign-in", search }}>로그인</S.HelpText>
         </S.HelpTextContainer>

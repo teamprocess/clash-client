@@ -50,7 +50,7 @@ export const NoticePanel = styled.div`
   max-height: 32rem;
   overflow-y: auto;
   scrollbar-gutter: stable;
-  background-color: ${({ theme }) => theme.label.disable};
+  background-color: ${({ theme }) => theme.fill.neutral};
 `;
 
 export const NoticeHeader = styled.div`
@@ -61,6 +61,46 @@ export const NoticeHeader = styled.div`
   width: 100%;
   flex-shrink: 0;
   gap: 1rem;
+`;
+
+export const TabPanel = styled.div`
+  display: flex;
+  flex: 1;
+  min-height: 0;
+  flex-direction: column;
+`;
+
+export const NoticeState = styled.div`
+  ${font.label.medium};
+  display: flex;
+  flex: 1;
+  min-height: 10rem;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  color: ${({ theme }) => theme.label.alternative};
+  text-align: center;
+`;
+
+export const ActionError = styled.p`
+  ${font.caption.medium};
+  margin: 0.5rem 0;
+  color: ${({ theme }) => theme.feedback.danger};
+  text-align: center;
+`;
+
+export const BackgroundErrorNotice = styled.div`
+  ${font.caption.medium};
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin: 0.5rem 0;
+  padding: 0.5rem;
+  border: 1px solid ${({ theme }) => theme.line.alternative};
+  border-radius: 0.5rem;
+  color: ${({ theme }) => theme.label.alternative};
 `;
 
 export const NoticeTitle = styled.p`
@@ -144,7 +184,7 @@ export const SearchUsers = styled.input`
   color: ${({ theme }) => theme.label.neutral};
 
   &::placeholder {
-    color: ${({ theme }) => theme.label.assistive};
+    color: ${({ theme }) => theme.label.alternative};
   }
 
   &:focus {

@@ -1,18 +1,23 @@
 import * as S from "./Section.style";
-import { ChapterRanking } from "@/features/chapter-ranking";
 import { useNavigate } from "react-router-dom";
-import { SectionProgress } from "@/features/section-progress";
-import { useEffect, useState } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import { PreviewModal } from "@/features/section/components/PreviewModal";
-import { useMajorSectionQuery } from "@/entities/roadmap/section/api/query/useMajorSection.query";
-import { MajorEnum, section } from "@/entities/roadmap/section/model/section.types";
+import {
+  MajorEnum,
+  useMajorSectionQuery,
+  type Section as RoadmapSection,
+} from "@/entities/roadmap";
 import { useGetMyProfile } from "@/entities/user";
 import { SectionItemBox } from "../components/SectionItemBox";
 import { useDragScroll } from "@/shared/lib/useDragScroll";
 import { Tooltip } from "@/shared/ui";
 import { changeMajorTooltipContent } from "./Section.constants";
 
-export const Section = () => {
+interface SectionProps {
+  children?: ReactNode;
+}
+
+export const Section = ({ children }: SectionProps) => {
   const navigate = useNavigate();
   const roadmapScrollProps = useDragScroll<HTMLDivElement>();
 
@@ -36,7 +41,7 @@ export const Section = () => {
     navigate("/roadmap/major-choice");
   };
 
-  const handleClick = (item: section) => {
+  const handleClick = (item: RoadmapSection) => {
     setSelectedSectionId(item.id);
     setIsSelectedSectionLocked(item.locked);
     setIsTutorialModalOpen(true);
@@ -83,8 +88,8 @@ export const Section = () => {
           </S.ChangeButton>
         </Tooltip>
       </S.RoadmapTitleBox>
-      <ChapterRanking page="chapter" />
-      <SectionProgress />
+
+      {children}
 
       {selectedSectionId !== null && (
         <PreviewModal

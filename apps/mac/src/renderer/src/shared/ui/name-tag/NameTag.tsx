@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import type { ReactNode } from "react";
 import * as S from "./NameTag.style";
 import type { NameTagSize, NameTagTextAlign, NameTagWidth } from "./NameTag.style";
 

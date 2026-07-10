@@ -1,4 +1,11 @@
 import { useEffect, useRef, useState, type ChangeEvent, type KeyboardEvent } from "react";
+import { useShallow } from "zustand/react/shallow";
+import {
+  useRecordSubjectsQuery,
+  useRecordTasksQuery,
+  type Subject,
+  type Task,
+} from "@/entities/record";
 import { useRecordStore } from "./recordStore";
 
 type EditMode = "NONE" | "ADD" | "EDIT";
@@ -6,6 +13,8 @@ const NO_PARENT_SUBJECT = "NONE";
 
 const MAX_TODO_NAME_LENGTH = 13;
 const TODO_NAME_INPUT_MAX_LENGTH = 14;
+const EMPTY_SUBJECTS: Subject[] = [];
+const EMPTY_TASKS: Task[] = [];
 
 const getTodoNameErrorMessage = (name: string) => {
   const trimmedLength = name.trim().length;
@@ -22,9 +31,14 @@ const getTodoNameErrorMessage = (name: string) => {
 };
 
 export const useTodoList = (selectedDate?: string) => {
+  const isTodaySelected = selectedDate === undefined;
+  const subjectsQuery = useRecordSubjectsQuery(selectedDate);
+  const tasksQuery = useRecordTasksQuery(selectedDate);
+  const { data: subjectsResponse } = subjectsQuery;
+  const { data: tasksResponse } = tasksQuery;
+  const subjects = subjectsResponse?.data?.subjects ?? EMPTY_SUBJECTS;
+  const tasks = tasksResponse?.data?.tasks ?? EMPTY_TASKS;
   const {
-    subjects,
-    tasks,
     activeSessionType,
     activeTaskId,
     startTask,
@@ -33,8 +47,18 @@ export const useTodoList = (selectedDate?: string) => {
     updateTask,
     deleteTask,
     updateTaskCompletion,
-  } = useRecordStore();
-  const isTodaySelected = selectedDate === undefined;
+  } = useRecordStore(
+    useShallow(state => ({
+      activeSessionType: state.activeSessionType,
+      activeTaskId: state.activeTaskId,
+      startTask: state.startTask,
+      stop: state.stop,
+      addTask: state.addTask,
+      updateTask: state.updateTask,
+      deleteTask: state.deleteTask,
+      updateTaskCompletion: state.updateTaskCompletion,
+    }))
+  );
   const [editMode, setEditMode] = useState<EditMode>("NONE");
   const [editingTodoId, setEditingTodoId] = useState<number | null>(null);
   const [todoName, setTodoName] = useState("");
@@ -203,7 +227,7 @@ export const useTodoList = (selectedDate?: string) => {
       }
     }
 
-    await startTask(todoId);
+    await startTask(todoId, todo.subjectId);
   };
 
   const handleCompleteClick = async (todoId: number, nextCompleted: boolean) => {
@@ -236,7 +260,7 @@ export const useTodoList = (selectedDate?: string) => {
 
   return {
     todos: tasks.map(task => {
-      const isActive = activeSessionType === "TASK" && activeTaskId === task.id;
+      const isActive = isTodaySelected && activeSessionType === "TASK" && activeTaskId === task.id;
 
       return {
         id: task.id,
@@ -273,5 +297,7 @@ export const useTodoList = (selectedDate?: string) => {
     handleCompleteClick,
     handleDeleteClick,
     getParentTaskName,
+    subjectsQuery,
+    tasksQuery,
   };
 };

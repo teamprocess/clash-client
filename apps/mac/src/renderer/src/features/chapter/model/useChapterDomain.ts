@@ -2,11 +2,11 @@ import { useMemo, useState } from "react";
 import type { Stage, StageStatus } from "@/features/chapter/model/chapter.types";
 import type { NodeStatus } from "@/features/chapter/roadmapData";
 import { roadmapNodes as initialRoadmapNodes } from "@/features/chapter/roadmapData";
-import type {
-  GetSectionDetailsResponse,
-  SectionChapter,
-} from "@/entities/roadmap/chapter/model/chapter.types";
-import { useSectionDetailsQuery } from "@/entities/roadmap/chapter/api/query/useSectionDetails.query";
+import {
+  useSectionDetailsQuery,
+  type GetSectionDetailsResponse,
+  type SectionChapter,
+} from "@/entities/roadmap";
 
 type NormalizedSectionChapter = {
   stageId: number;

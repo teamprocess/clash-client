@@ -1,4 +1,4 @@
-export const MATCHVALUE = {
+export const MATCH_VALUE = {
   WON: "WON",
   LOST: "LOST",
   WINNING: "WINNING",
@@ -8,7 +8,7 @@ export const MATCHVALUE = {
   DRAWN: "DRAWN",
 } as const;
 
-export type MatchValueType = (typeof MATCHVALUE)[keyof typeof MATCHVALUE];
+export type MatchValue = (typeof MATCH_VALUE)[keyof typeof MATCH_VALUE];
 
 type Enemy = {
   id: number;
@@ -20,7 +20,7 @@ type BattlesRequest = {
   id: number;
   enemy: Enemy;
   expireDate: string;
-  result: MatchValueType;
+  result: MatchValue;
 };
 
 export type BattleResponse = {

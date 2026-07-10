@@ -1,5 +1,5 @@
 import * as S from "./FeatureChoice.style";
-import { FeatureProps } from "@/features/major-choice/model/useMajorChoice";
+import type { FeatureProps } from "@/features/major-choice/model/useMajorChoice";
 import { Button } from "@/shared/ui/button";
 import { ChoiceBox } from "../choice-box/ChoiceBox";
 
@@ -11,18 +11,18 @@ export const FeatureChoice = ({
   handleFeatureChoiceSubmit,
 }: FeatureProps) => {
   return (
-    <S.RoadMapContainer>
-      <S.RoadMapContents>
-        <S.RoadMapTop>
-          <S.RoadMapTitle>원하는 기능을 선택해주세요!</S.RoadMapTitle>
-          <S.RoadMapDescription>
+    <S.RoadmapContainer>
+      <S.RoadmapContents>
+        <S.RoadmapTop>
+          <S.RoadmapTitle>원하는 기능을 선택해주세요!</S.RoadmapTitle>
+          <S.RoadmapDescription>
             안녕하세요. {username}님. 원하는 기능을 선택하여 주세요.
             <br />
             선택한 기능에 따라 전공을 검사하거나 나의 전공을 선택할 수 있습니다.
-          </S.RoadMapDescription>
-        </S.RoadMapTop>
+          </S.RoadmapDescription>
+        </S.RoadmapTop>
 
-        <S.ChoiceWrapper>
+        <S.ChoiceWrapper role="group" aria-label="로드맵 진행 방식">
           <ChoiceBox
             size="md"
             selected={selected === "TEST"}
@@ -47,7 +47,7 @@ export const FeatureChoice = ({
         >
           선택하기
         </Button>
-      </S.RoadMapContents>
-    </S.RoadMapContainer>
+      </S.RoadmapContents>
+    </S.RoadmapContainer>
   );
 };

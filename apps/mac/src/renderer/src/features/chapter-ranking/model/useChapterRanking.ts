@@ -1,9 +1,9 @@
 import { useRef, useState, useEffect } from "react";
-import { useChapterRankingQuery } from "@/entities/roadmap/chapter/chapter-ranking/api/query/useChapterRanking.query";
-import type {
-  GetChapterRankingsResponse,
-  RankingUser,
-} from "@/entities/roadmap/chapter/chapter-ranking/model/chapterRanking.types";
+import {
+  useChapterRankingQuery,
+  type GetChapterRankingsResponse,
+  type RankingUser,
+} from "@/entities/roadmap";
 
 export const useChapterRanking = () => {
   const [isMyRankVisible, setIsMyRankVisible] = useState(true);
@@ -11,7 +11,7 @@ export const useChapterRanking = () => {
   const myRankRef = useRef<HTMLDivElement>(null);
   const listRef = useRef<HTMLDivElement>(null);
 
-  const { data: rankingResponse, isLoading, error } = useChapterRankingQuery();
+  const { data: rankingResponse, isLoading, error, refetch } = useChapterRankingQuery();
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -39,14 +39,15 @@ export const useChapterRanking = () => {
       observer.observe(myRankRef.current);
     }
     return () => observer.disconnect();
-  }, []);
+  }, [rankingResponse?.data?.myRank?.id]);
 
   const computeRankers = (data?: GetChapterRankingsResponse | null) => {
     if (!data) return { myData: undefined, allRankers: [] as RankingUser[] };
 
-    const myId = data.myRank?.id;
+    const myRank = data.myRank;
+    const myId = myRank?.id;
     const base = data.allRankers ?? [];
-    const withMe = myId != null && base.some(u => u.id === myId) ? base : [...base, data.myRank];
+    const withMe = myRank && !base.some(user => user.id === myId) ? [...base, myRank] : base;
 
     const sorted = [...withMe].sort((a, b) => {
       if (b.completedChaptersCount !== a.completedChaptersCount) {
@@ -72,5 +73,6 @@ export const useChapterRanking = () => {
     myRankRef,
     isLoading,
     error,
+    refetch,
   };
 };

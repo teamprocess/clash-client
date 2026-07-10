@@ -1,5 +1,8 @@
-import { ReactNode, useEffect } from "react";
+import type { ReactNode } from "react";
+import { useId } from "react";
+import { createPortal } from "react-dom";
 import * as S from "./Dialog.style";
+import { useModalFocus } from "@/shared/lib";
 
 export interface DialogProps {
   title?: string;
@@ -8,11 +11,13 @@ export interface DialogProps {
   isOpen: boolean;
   onClose?: () => void;
   closeOnOverlayClick?: boolean;
+  closeOnEscape?: boolean;
   showClose?: boolean;
   children?: ReactNode;
   gap?: number;
   fullWidth?: boolean;
   fullHeight?: boolean;
+  ariaLabel?: string;
 }
 
 export const Dialog = ({
@@ -24,49 +29,49 @@ export const Dialog = ({
   children,
   gap = 0,
   closeOnOverlayClick = true,
+  closeOnEscape = true,
   showClose = true,
   fullWidth = false,
   fullHeight = false,
+  ariaLabel,
 }: DialogProps) => {
-  useEffect(() => {
-    if (!isOpen || !onClose || !closeOnOverlayClick) {
-      return;
-    }
+  const titleId = useId();
+  const { containerRef: dialogRef, layerRef } = useModalFocus({
+    isOpen,
+    onClose,
+    closeOnEscape,
+  });
 
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") {
-        onClose();
-      }
-    };
+  if (!isOpen || typeof document === "undefined") return null;
 
-    window.addEventListener("keydown", handleKeyDown);
-
-    return () => {
-      window.removeEventListener("keydown", handleKeyDown);
-    };
-  }, [closeOnOverlayClick, isOpen, onClose]);
-
-  if (!isOpen) return null;
-
-  return (
-    <S.DialogWrapper>
+  return createPortal(
+    <S.DialogWrapper ref={layerRef}>
       <S.DialogOverlay onClick={closeOnOverlayClick ? onClose : undefined} aria-hidden />
       <S.DialogContainer
+        ref={dialogRef}
         $width={width}
         $height={height}
         $fullWidth={fullWidth}
         $fullHeight={fullHeight}
         role="dialog"
         aria-modal="true"
+        aria-labelledby={title ? titleId : undefined}
+        aria-label={title ? undefined : (ariaLabel ?? "대화상자")}
+        tabIndex={-1}
       >
-        {title && <S.DialogTitle>{title}</S.DialogTitle>}
+        {title && (
+          <S.DialogTitle id={titleId} tabIndex={-1}>
+            {title}
+          </S.DialogTitle>
+        )}
         {showClose && onClose && (
-          <S.CloseButton type="button" onClick={onClose} aria-label="닫기">
+          <S.CloseButton type="button" onClick={onClose} aria-label="닫기" data-modal-close>
             <S.CloseIcon aria-hidden />
           </S.CloseButton>
         )}
         <S.DialogContent $gap={gap}>{children}</S.DialogContent>
       </S.DialogContainer>
-    </S.DialogWrapper>
+    </S.DialogWrapper>,
+    document.body
   );
 };

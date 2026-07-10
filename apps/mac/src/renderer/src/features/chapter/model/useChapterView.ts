@@ -40,7 +40,8 @@ const getLastRoadmapNode = (container: HTMLDivElement) => {
 const scrollNodeIntoView = (container: HTMLDivElement, targetNode: SVGGElement) => {
   const containerRect = container.getBoundingClientRect();
   const nodeRect = targetNode.getBoundingClientRect();
-  const nodeCenterX = nodeRect.left - containerRect.left + container.scrollLeft + nodeRect.width / 2;
+  const nodeCenterX =
+    nodeRect.left - containerRect.left + container.scrollLeft + nodeRect.width / 2;
   const nodeCenterY = nodeRect.top - containerRect.top + container.scrollTop + nodeRect.height / 2;
 
   const targetLeft = clamp(
@@ -60,17 +61,14 @@ const scrollNodeIntoView = (container: HTMLDivElement, targetNode: SVGGElement) 
   });
 };
 
-export const useChapterView = ({
-  loading,
-  sectionId,
-  sectionCompleted,
-}: UseChapterViewParams) => {
+export const useChapterView = ({ loading, sectionId, sectionCompleted }: UseChapterViewParams) => {
   const chapterRef = useRef<HTMLDivElement>(null);
   const chapterScrollProps = useDragScroll<HTMLDivElement>();
 
   const [viewState, setViewState] = useState(() => createInitialViewState(sectionId));
 
-  const resolvedViewState = viewState.sectionId === sectionId ? viewState : createInitialViewState(sectionId);
+  const resolvedViewState =
+    viewState.sectionId === sectionId ? viewState : createInitialViewState(sectionId);
 
   const setSectionScopedState = useCallback(
     <T extends "currentMission" | "currentMissionStageTitle" | "missionModalOpen">(
@@ -127,7 +125,9 @@ export const useChapterView = ({
         if (!chapterRef.current) return;
 
         const container = chapterRef.current;
-        const currentNode = container.querySelector<SVGGElement>('[data-roadmap-node-status="current"]');
+        const currentNode = container.querySelector<SVGGElement>(
+          '[data-roadmap-node-status="current"]'
+        );
         const targetNode = currentNode ?? (sectionCompleted ? getLastRoadmapNode(container) : null);
 
         if (!targetNode) {

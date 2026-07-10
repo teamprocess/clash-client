@@ -1,28 +1,29 @@
-export { myCompetitionApi } from "./api/my-competition/api/myCompetitionApi";
 export { battleApi } from "./api/rival-competition/api/battleApi";
-export { compareRivalsApi } from "./api/rival-competition/api/compareRivalsApi";
-export { myRivalsApi } from "./api/rival-competition/api/myRivalsApi";
+export { activeQueryKeys, useActiveQuery } from "./api/my-competition/api/query/useActive.query";
+export { compareQueryKeys, useCompareQuery } from "./api/my-competition/api/query/useCompare.query";
 export {
-  useMyGrowthRateQuery,
-  useMyCompareQuery,
-} from "./api/my-competition/api/useMyCompetitionQuery.query";
+  transitionQueryKeys,
+  useTransitionQuery,
+} from "./api/my-competition/api/query/useTransition.query";
 export {
+  battleQueryKeys,
   useAnalyzeBattleQuery,
   useBattleDetailQuery,
   useBattleInfoQuery,
   useBattleListQuery,
+  useBattleApplyListQuery,
 } from "./api/rival-competition/api/query/useBattle.query";
-export { useMyRivalsQuery } from "./api/rival-competition/api/query/useMyRivals.query";
-export { useCompareRivalsQuery } from "./api/rival-competition/api/query/useCompareRivals.query";
+export {
+  compareRivalsQueryKeys,
+  useCompareRivalsQuery,
+} from "./api/rival-competition/api/query/useCompareRivals.query";
 export type {
-  MyDataPoint,
-  MyCompareRequest,
-  MyGrowthRateResponse,
-  MyGrowthRateRequest,
-  MyCompareResponse,
-  CompareStandard,
-  GrowthRateStandard,
-} from "./model/my-competition/myCompetition.types";
+  ActiveResponse,
+  StreakItem,
+  VariationItem,
+} from "./model/my-competition/active.types";
+export type { CompareResponse } from "./model/my-competition/compare.types";
+export type { TransitionResponse } from "./model/my-competition/transition.types";
 export type {
   BattleResponse,
   BattleDetailResponse,
@@ -33,9 +34,6 @@ export type {
   PeriodDay,
   PostBattleRequest,
 } from "./model/rival-competition/battle.types";
-export type { MyRivalsRequest, MyRivalsResponse } from "./model/rival-competition/myRivals.types";
-export { USER_STATUS_LABELS } from "./model/rival-competition/userStatus";
-export type { UserStatus } from "./model/rival-competition/userStatus";
 export type {
   CategoryType,
   PeriodType,
@@ -44,5 +42,5 @@ export type {
   CompareRivalsResponse,
   GetCompareRivalsRequest,
 } from "./model/rival-competition/compareRivals.types";
-export { MATCHVALUE } from "./model/rival-competition/battle.types";
+export { MATCH_VALUE } from "./model/rival-competition/battle.types";
 export { CATEGORY, PERIOD } from "./model/rival-competition/compareRivals.types";

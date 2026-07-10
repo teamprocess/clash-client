@@ -1,6 +1,6 @@
 import * as S from "./TabLayout.style";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
-import { Tab } from "./TabLayout.types";
+import type { Tab } from "./TabLayout.types";
 
 interface TabLayoutProps {
   tabs: Tab[];
@@ -33,14 +33,15 @@ export const TabLayout = ({ tabs }: TabLayoutProps) => {
 
   return (
     <S.Wrapper>
-      <S.TabContainer>
-        <S.TabActiveIndicator $activeIndex={activeIndex} $count={tabs.length} />
-        {tabs.map((tab, idx) => (
+      <S.TabContainer aria-label="페이지 탭">
+        <S.TabActiveIndicator $activeIndex={activeIndex} $count={tabs.length} aria-hidden />
+        {tabs.map(tab => (
           <S.TabItem
-            key={idx}
+            key={tab.url}
             type="button"
             $isActive={tab.url === currentTab.url}
             onClick={() => handleTabClick(tab)}
+            aria-current={tab.url === currentTab.url ? "page" : undefined}
           >
             {tab.name}
           </S.TabItem>

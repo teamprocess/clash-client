@@ -1,10 +1,12 @@
 import { useEffect, useRef, useState, type ChangeEvent, type KeyboardEvent } from "react";
+import { useShallow } from "zustand/react/shallow";
 import { useRecordStore } from "./recordStore";
-import { useRecordTodayQuery } from "@/entities/record";
+import { useRecordSubjectsQuery, useRecordTodayQuery, type Subject } from "@/entities/record";
 
 type EditMode = "NONE" | "ADD" | "EDIT";
 const MAX_TASK_NAME_LENGTH = 13;
 const TASK_NAME_INPUT_MAX_LENGTH = 14;
+const EMPTY_SUBJECTS: Subject[] = [];
 
 const getTaskNameErrorMessage = (name: string) => {
   const trimmedLength = name.trim().length;
@@ -21,8 +23,11 @@ const getTaskNameErrorMessage = (name: string) => {
 };
 
 export const useTaskList = (selectedDate?: string) => {
+  const isTodaySelected = selectedDate === undefined;
+  const subjectsQuery = useRecordSubjectsQuery(selectedDate);
+  const { data: subjectsResponse } = subjectsQuery;
+  const subjects = subjectsResponse?.data?.subjects ?? EMPTY_SUBJECTS;
   const {
-    subjects,
     activeSessionType,
     activeSubjectId,
     currentStudyTime,
@@ -31,8 +36,21 @@ export const useTaskList = (selectedDate?: string) => {
     addSubject,
     updateSubject,
     deleteSubject,
-  } = useRecordStore();
-  const isTodaySelected = selectedDate === undefined;
+  } = useRecordStore(
+    useShallow(state => ({
+      activeSessionType: state.activeSessionType,
+      activeSubjectId: state.activeSubjectId,
+      currentStudyTime:
+        isTodaySelected && state.activeSessionType === "TASK" && state.activeSubjectId !== null
+          ? state.currentStudyTime
+          : 0,
+      startSubject: state.startSubject,
+      stop: state.stop,
+      addSubject: state.addSubject,
+      updateSubject: state.updateSubject,
+      deleteSubject: state.deleteSubject,
+    }))
+  );
   const { data: todayResponse } = useRecordTodayQuery(selectedDate);
 
   const [editMode, setEditMode] = useState<EditMode>("NONE");
@@ -257,7 +275,7 @@ export const useTaskList = (selectedDate?: string) => {
   };
 
   const isSubjectActive = (subjectId: number) =>
-    activeSessionType === "TASK" && activeSubjectId === subjectId;
+    isTodaySelected && activeSessionType === "TASK" && activeSubjectId === subjectId;
 
   const getSubjectStudyTime = (subjectId: number) => {
     const subject = subjects.find(item => item.id === subjectId);
@@ -299,5 +317,6 @@ export const useTaskList = (selectedDate?: string) => {
     handleCancelEdit,
     handleCancelDelete,
     handleConfirmDelete,
+    subjectsQuery,
   };
 };

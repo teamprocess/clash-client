@@ -1,5 +1,9 @@
-import { api, ApiResponse } from "@/shared/api";
-import { MajorQuestionsResponse, PostMyMajorRequest } from "@/entities/major/model/major.types";
+import type { ApiResponse } from "@/shared/api";
+import { api } from "@/shared/api";
+import type {
+  MajorQuestionsResponse,
+  PostMyMajorRequest,
+} from "@/entities/major/model/major.types";
 
 export const majorApi = {
   // 전공 질문 조회

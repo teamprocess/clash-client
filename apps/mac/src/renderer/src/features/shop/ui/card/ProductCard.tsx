@@ -1,6 +1,7 @@
+import { useEffect, useRef } from "react";
 import * as S from "./ProductCard.style";
 import { calculateDiscountedPrice } from "@/features/shop/lib/calculateDiscountedPrice";
-import { ProductCategory } from "@/entities/product";
+import type { ProductCategory } from "@/entities/product";
 import { ProductPreview } from "../product-preview/ProductPreview";
 
 interface ProductCardProps {
@@ -13,6 +14,7 @@ interface ProductCardProps {
   isBought?: boolean;
   showOwnedBadge?: boolean;
   selectionKey?: string;
+  isActive?: boolean;
   onClick?: () => void;
 }
 
@@ -26,15 +28,29 @@ export const ProductCard = ({
   isBought,
   showOwnedBadge,
   selectionKey,
+  isActive = false,
   onClick,
 }: ProductCardProps) => {
+  const cardRef = useRef<HTMLButtonElement>(null);
   const discounted = calculateDiscountedPrice(price, discount);
   const originalPrice = price.toLocaleString();
   const isOwned = showOwnedBadge && isBought;
 
+  useEffect(() => {
+    if (!isActive) {
+      return;
+    }
+
+    cardRef.current?.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "nearest" });
+  }, [isActive]);
+
   return (
     <S.CardContainer
+      ref={cardRef}
+      type="button"
       $isBought={isOwned}
+      $isActive={isActive}
+      aria-pressed={isActive}
       data-product-id={id}
       data-product-key={selectionKey ?? String(id)}
       onClick={onClick}
@@ -46,7 +62,7 @@ export const ProductCard = ({
       <S.ProductInfoBox>
         <S.ProductTitle>{title}</S.ProductTitle>
         <S.PriceBox>
-          <S.CookieIcon />
+          <S.CookieIcon aria-hidden />
           <S.PriceText>{discounted}</S.PriceText>
           {discount !== 0 && (
             <>

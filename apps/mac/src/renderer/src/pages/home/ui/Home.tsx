@@ -1,12 +1,23 @@
 import { useEffect } from "react";
-import { Active, Ranking, Rival, Transition } from "@/features/home";
+import { Active, Ranking, Transition } from "@/features/home";
+import { Rival } from "@/widgets/home-rivals";
 import { useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { Dialog } from "@/shared/ui";
-import { Skeleton } from "@/shared/ui/skeleton/Skeleton";
+import { Skeleton } from "@/shared/ui/skeleton";
 import * as S from "./Home.style";
-import { useActiveQuery, useTransitionQuery } from "@/entities/home";
-import { PROFILE_SYNC_INTERVAL_MS, PROFILE_SYNC_UNTIL_KEY, useGetMyProfile } from "@/entities/user";
+import {
+  activeQueryKeys,
+  transitionQueryKeys,
+  useActiveQuery,
+  useTransitionQuery,
+} from "@/entities/competition";
+import {
+  PROFILE_SYNC_INTERVAL_MS,
+  PROFILE_SYNC_UNTIL_KEY,
+  userQueryKeys,
+  useGetMyProfile,
+} from "@/entities/user";
 
 const isNotFound = (error: unknown) => axios.isAxiosError(error) && error.response?.status === 404;
 
@@ -38,7 +49,7 @@ export const Home = () => {
   const { data: user } = useGetMyProfile();
 
   const isChecking = transitionQuery.isPending || activeQuery.isPending;
-  const isGithubNotLinked = Boolean(user && !user.githubLinked);
+  const isGitHubNotLinked = Boolean(user && !user.githubLinked);
   const shouldSyncProfile = isProfileSyncing();
   const activeStreakCount = activeQuery.data?.data?.streaks?.length ?? 0;
   const hasTransitionData = Boolean(transitionQuery.data?.success && transitionQuery.data.data);
@@ -55,8 +66,8 @@ export const Home = () => {
   const isTransitionNotReady = transitionQuery.isError && isNotFound(transitionQuery.error);
   const isActiveNotReady = activeQuery.isError && isNotFound(activeQuery.error);
   const isSyncingWithoutData = shouldSyncProfile && !hasHomeData;
-  const isGithubNotReady = isTransitionNotReady || isActiveNotReady || isSyncingWithoutData;
-  const shouldPollGithubData = !isChecking && !isGithubNotLinked && isGithubNotReady;
+  const isGitHubNotReady = isTransitionNotReady || isActiveNotReady || isSyncingWithoutData;
+  const shouldPollGitHubData = !isChecking && !isGitHubNotLinked && isGitHubNotReady;
 
   useEffect(() => {
     if (!shouldSyncProfile) {
@@ -64,7 +75,7 @@ export const Home = () => {
     }
 
     const interval = setInterval(() => {
-      void queryClient.invalidateQueries({ queryKey: ["user"] });
+      void queryClient.invalidateQueries({ queryKey: userQueryKeys.all });
     }, PROFILE_SYNC_INTERVAL_MS);
 
     return () => {
@@ -73,21 +84,21 @@ export const Home = () => {
   }, [queryClient, shouldSyncProfile]);
 
   useEffect(() => {
-    if (!shouldPollGithubData) {
+    if (!shouldPollGitHubData) {
       return;
     }
 
     const interval = setInterval(() => {
       void Promise.all([
-        queryClient.invalidateQueries({ queryKey: ["transition"] }),
-        queryClient.invalidateQueries({ queryKey: ["active", "GITHUB"] }),
+        queryClient.invalidateQueries({ queryKey: transitionQueryKeys.transition }),
+        queryClient.invalidateQueries({ queryKey: activeQueryKeys.active("GITHUB") }),
       ]);
     }, PROFILE_SYNC_INTERVAL_MS);
 
     return () => {
       clearInterval(interval);
     };
-  }, [queryClient, shouldPollGithubData]);
+  }, [queryClient, shouldPollGitHubData]);
 
   if (isChecking) {
     return (
@@ -100,17 +111,17 @@ export const Home = () => {
     );
   }
 
-  if (isGithubNotReady) {
+  if (isGitHubNotReady) {
     return (
       <>
         <Skeleton />
         <Skeleton />
         <Skeleton />
         <Skeleton />
-        {!isGithubNotLinked && (
-          <Dialog width={21.5} height={21.5} isOpen={true}>
+        {!isGitHubNotLinked && (
+          <Dialog width={21.5} height={21.5} isOpen={true} ariaLabel="GitHub 계정 연동 중">
             <S.ConnectingContainer>
-              <S.GithubIcon />
+              <S.GitHubIcon />
               <S.FontBox>
                 <S.HugeFont>깃허브 계정을 연동 중입니다</S.HugeFont>
                 <S.TinyFont>최대 3분 정도 소요될 수 있습니다.</S.TinyFont>

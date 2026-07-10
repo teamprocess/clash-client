@@ -1,12 +1,18 @@
 import { useRef, type Dispatch, type SetStateAction } from "react";
 import type { Stage, Mission, StageStatus } from "@/features/chapter/model/chapter.types";
 import { useQueryClient } from "@tanstack/react-query";
-import type { GetChapterDetailsResponse } from "@/entities/roadmap/chapter/model/chapter.types";
-import { chapterQueryKeys } from "@/entities/roadmap/chapter/api/query/chapterQueryKeys";
+import {
+  chapterQueryKeys,
+  chapterRankingQueryKeys,
+  previewQueryKeys,
+  sectionQueryKeys,
+  type GetChapterDetailsResponse,
+} from "@/entities/roadmap";
 
 type StageOverride = Partial<Pick<Stage, "status" | "currentProgress">>;
 
 type UseChapterHandlersParams = {
+  sectionId: number;
   stages: Stage[];
   setStageOverrides: Dispatch<SetStateAction<Record<number, StageOverride>>>;
   currentStageId: number;
@@ -19,6 +25,7 @@ type UseChapterHandlersParams = {
 };
 
 export const useChapterHandlers = ({
+  sectionId,
   stages,
   setStageOverrides,
   currentStageId,
@@ -85,6 +92,13 @@ export const useChapterHandlers = ({
         };
       }
     );
+
+    void Promise.all([
+      queryClient.invalidateQueries({ queryKey: chapterQueryKeys.sectionDetails(sectionId) }),
+      queryClient.invalidateQueries({ queryKey: previewQueryKeys.detail(sectionId) }),
+      queryClient.invalidateQueries({ queryKey: sectionQueryKeys.all }),
+      queryClient.invalidateQueries({ queryKey: chapterRankingQueryKeys.all }),
+    ]);
 
     const currentStageIndex = stages.findIndex(stage => stage.id === currentStageId);
     const currentStage = currentStageIndex >= 0 ? stages[currentStageIndex] : null;

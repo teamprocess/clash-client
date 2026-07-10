@@ -1,0 +1,155 @@
+import { useRef, useState } from "react";
+import * as S from "./GroupSideTab.style";
+import { type Group as GroupEntity, GROUP_CATEGORY_LABELS } from "@/entities/group";
+import { useGetMyProfile } from "@/entities/user";
+import { Popover } from "@/shared/ui";
+import type { GroupFormPanelProps } from "../../model/useGroup";
+import { GroupFormPanel } from "./panel/GroupFormPanel";
+
+interface GroupSideTabProps {
+  groups: GroupEntity[];
+  currentGroupId: number | null;
+  onSelectGroup: (groupId: number) => void;
+  onOpenFormPanel: () => void;
+  formPanel: GroupFormPanelProps;
+  onEditGroup: (groupId: number) => void;
+  onDeleteGroup: (groupId: number) => void;
+  onQuitGroup: (groupId: number) => void;
+}
+
+export const GroupSideTab = ({
+  groups,
+  currentGroupId,
+  onSelectGroup,
+  onOpenFormPanel,
+  formPanel,
+  onEditGroup,
+  onDeleteGroup,
+  onQuitGroup,
+}: GroupSideTabProps) => {
+  const { data: myProfile } = useGetMyProfile();
+  const myUserId = myProfile?.id ?? null;
+  const menuRef = useRef<HTMLDivElement>(null);
+  const [openMenuGroupId, setOpenMenuGroupId] = useState<number | null>(null);
+
+  const handleMoreClick = (groupId: number) => {
+    setOpenMenuGroupId(previousGroupId => (previousGroupId === groupId ? null : groupId));
+  };
+
+  const handleCloseMenu = () => {
+    setOpenMenuGroupId(null);
+  };
+
+  return (
+    <S.GroupSideTabContainer>
+      {formPanel.isOpen ? (
+        <S.FormPanelWrapper>
+          <GroupFormPanel {...formPanel} />
+        </S.FormPanelWrapper>
+      ) : (
+        <>
+          <S.Title>그룹 목록</S.Title>
+          <S.GroupList>
+            {groups.map(group => {
+              const isSelected = group.id === currentGroupId;
+              const isOwner = myUserId === group.owner.id;
+              const isMenuOpen = openMenuGroupId === group.id;
+
+              return (
+                <S.GroupListItem key={group.id} $isSelected={isSelected}>
+                  <S.GroupSelectButton
+                    type="button"
+                    aria-pressed={isSelected}
+                    onClick={() => onSelectGroup(group.id)}
+                  >
+                    <S.GroupListLeft>
+                      <S.SelectionDot $isSelected={isSelected} aria-hidden />
+                      <S.GroupListName>{group.name}</S.GroupListName>
+                    </S.GroupListLeft>
+                  </S.GroupSelectButton>
+                  <S.GroupListRight>
+                    <S.GroupCategory>{GROUP_CATEGORY_LABELS[group.category]}</S.GroupCategory>
+                    <S.MoreIconWrapper ref={isMenuOpen ? menuRef : null}>
+                      <S.IconButton
+                        type="button"
+                        aria-label={`${group.name} 그룹 메뉴`}
+                        aria-haspopup="menu"
+                        aria-expanded={isMenuOpen}
+                        onClick={event => {
+                          event.stopPropagation();
+                          handleMoreClick(group.id);
+                        }}
+                      >
+                        <S.MoreIcon aria-hidden />
+                      </S.IconButton>
+                      <Popover
+                        isOpen={isMenuOpen}
+                        onClose={handleCloseMenu}
+                        anchorRef={menuRef}
+                        minWidth="max-content"
+                        role="menu"
+                        ariaLabel={`${group.name} 그룹 메뉴`}
+                      >
+                        <S.MenuList>
+                          {isOwner ? (
+                            <>
+                              <S.MenuItem
+                                type="button"
+                                role="menuitem"
+                                onClick={() => {
+                                  handleCloseMenu();
+                                  onEditGroup(group.id);
+                                }}
+                              >
+                                그룹 수정
+                              </S.MenuItem>
+                              <S.MenuItem
+                                type="button"
+                                role="menuitem"
+                                onClick={() => {
+                                  handleCloseMenu();
+                                  onDeleteGroup(group.id);
+                                }}
+                              >
+                                그룹 삭제
+                              </S.MenuItem>
+                            </>
+                          ) : (
+                            <S.MenuItem
+                              type="button"
+                              role="menuitem"
+                              onClick={() => {
+                                handleCloseMenu();
+                                onQuitGroup(group.id);
+                              }}
+                            >
+                              그룹 탈퇴
+                            </S.MenuItem>
+                          )}
+                        </S.MenuList>
+                      </Popover>
+                    </S.MoreIconWrapper>
+                  </S.GroupListRight>
+                </S.GroupListItem>
+              );
+            })}
+          </S.GroupList>
+        </>
+      )}
+      <S.PlusIconWrapper
+        type="button"
+        aria-label={formPanel.isOpen ? "그룹 패널 닫기" : "그룹 패널 열기"}
+        onClick={() => {
+          handleCloseMenu();
+          if (formPanel.isOpen) {
+            formPanel.onClose();
+            return;
+          }
+          onOpenFormPanel();
+        }}
+      >
+        <S.PlusIcon $isOpen={formPanel.isOpen} aria-hidden />
+      </S.PlusIconWrapper>
+    </S.GroupSideTabContainer>
+  );
+};

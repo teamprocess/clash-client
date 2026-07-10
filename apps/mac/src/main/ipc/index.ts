@@ -1,5 +1,38 @@
 import { app, ipcMain, screen, session, shell } from "electron";
 import type { AppMonitor } from "../services";
+import { IS_DEV_CHANNEL } from "../runtimeProfile";
+
+const DEV_AUTH_SESSION_DURATION_SECONDS = 60 * 60 * 24 * 30;
+
+const persistDevAuthSession = async () => {
+  if (!IS_DEV_CHANNEL || !process.env.VITE_API_URL) {
+    return;
+  }
+
+  const apiUrl = new URL(process.env.VITE_API_URL);
+  const sessionCookies = await session.defaultSession.cookies.get({ url: apiUrl.origin });
+  const expirationDate = Math.floor(Date.now() / 1000) + DEV_AUTH_SESSION_DURATION_SECONDS;
+
+  await Promise.all(
+    sessionCookies
+      .filter(cookie => cookie.session)
+      .map(cookie =>
+        session.defaultSession.cookies.set({
+          url: apiUrl.origin,
+          name: cookie.name,
+          value: cookie.value,
+          domain: cookie.domain,
+          path: cookie.path,
+          secure: cookie.secure,
+          httpOnly: cookie.httpOnly,
+          sameSite: cookie.sameSite,
+          expirationDate,
+        })
+      )
+  );
+
+  await session.defaultSession.cookies.flushStore();
+};
 
 // AppMonitor 및 외부 URL 열기 관련 IPC를 등록합니다.
 export const registerIpcHandlers = (getAppMonitor: () => AppMonitor | null) => {
@@ -58,4 +91,5 @@ export const registerIpcHandlers = (getAppMonitor: () => AppMonitor | null) => {
   ipcMain.handle("auth:clear-session", async () => {
     await session.defaultSession.clearStorageData({ storages: ["cookies"] });
   });
+  ipcMain.handle("auth:persist-dev-session", persistDevAuthSession);
 };

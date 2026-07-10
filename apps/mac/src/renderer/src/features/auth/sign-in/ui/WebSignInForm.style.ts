@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import { palette } from "@clash/design-tokens/theme";
 import { font } from "@clash/design-tokens/font";
 
 export const PanelContainer = styled.div`
@@ -28,13 +27,6 @@ export const Description = styled.p`
   color: ${({ theme }) => theme.label.alternative};
   margin: 0;
   text-align: center;
-`;
-
-export const ErrorText = styled.span`
-  ${font.caption.medium};
-  color: ${palette.red[60]};
-  margin-top: 0.5rem;
-  display: block;
 `;
 
 export const ButtonWrapper = styled.div`

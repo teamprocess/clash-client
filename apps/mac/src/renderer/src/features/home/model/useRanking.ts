@@ -1,10 +1,6 @@
-import {
-  useRankingDomain,
-  rankingDropDownValue,
-  rankingPeriodDropDownValue,
-} from "./useRankingDomain";
+import { useRankingDomain, rankingDropdownOptions, rankingPeriodOptions } from "./useRankingDomain";
 import { useRankingView } from "./useRankingView";
-import { CategoryType } from "@/entities/home";
+import type { CategoryType } from "@/entities/ranking";
 import { formatTime } from "@/shared/lib";
 
 const unitMap: Record<CategoryType, string> = {
@@ -18,10 +14,10 @@ export const useRanking = () => {
   const domain = useRankingDomain();
   const view = useRankingView({ rankings: domain.userList.rankings });
 
-  const unit = unitMap[domain.RankingDropdown];
+  const unit = unitMap[domain.displayCategory];
 
   const formatActiveRankingPoint = (value: number) => {
-    if (domain.RankingDropdown === "ACTIVE_TIME") {
+    if (domain.displayCategory === "ACTIVE_TIME") {
       return formatTime(value);
     }
     return value.toLocaleString();
@@ -32,21 +28,27 @@ export const useRanking = () => {
     currentUserRef: view.currentUserRef,
 
     options: {
-      rankingDropDownValue,
-      rankingPeriodDropDownValue,
+      rankingDropdownOptions,
+      rankingPeriodOptions,
     },
 
     filters: {
-      RankingDropdown: domain.RankingDropdown,
-      setRankingDropdown: domain.setRankingDropdown,
-      RankingPeriodDropdown: domain.RankingPeriodDropdown,
-      setRankingPeriodDropdown: domain.setRankingPeriodDropdown,
+      rankingCategory: domain.rankingCategory,
+      setRankingCategory: domain.setRankingCategory,
+      rankingPeriod: domain.rankingPeriod,
+      setRankingPeriod: domain.setRankingPeriod,
     },
 
     domain: {
       userList: domain.userList,
+      displayCategory: domain.displayCategory,
       currentUser: domain.currentUser,
       currentUserRank: domain.currentUserRank,
+      isLoading: domain.isLoading,
+      isFetching: domain.isFetching,
+      isPlaceholderData: domain.isPlaceholderData,
+      isError: domain.isError,
+      refetch: domain.refetch,
     },
 
     view: {

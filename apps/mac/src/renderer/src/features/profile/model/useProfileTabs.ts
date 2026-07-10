@@ -1,13 +1,12 @@
 import { useMemo, useState } from "react";
-import { useActiveQuery } from "@/entities/home";
-import type { StreakItem } from "@/entities/home";
+import { useActiveQuery, type StreakItem } from "@/entities/competition";
 import { buildPaddedStreak } from "@/shared/lib";
 
 export type Level = 0 | 1 | 2 | 3 | 4;
 
 export type CommitDay = { id: number | string; count: number; ratio?: number };
 
-export interface GithubStreakProps {
+export interface GitHubStreakProps {
   commitDays?: CommitDay[];
   getLevel?: (count: number, ratio?: number) => Level;
 }
@@ -24,10 +23,10 @@ const ratioToLevel = (ratio?: number): Level => {
   return 4;
 };
 
-export const useGithubStreak = ({
+export const useGitHubStreak = ({
   commitDays = [],
   getLevel = (_count: number, ratio?: number) => ratioToLevel(ratio),
-}: GithubStreakProps = {}) => {
+}: GitHubStreakProps = {}) => {
   const daysForView = useMemo(() => commitDays, [commitDays]);
   const [selectedId, setSelectedId] = useState<string | number | null>(null);
 
@@ -71,21 +70,21 @@ const toCommitDays = (streaks?: StreakItem[]): CommitDay[] => {
   }));
 };
 
-export const useProfileGithubStreak = (props: GithubStreakProps = {}) => {
+export const useProfileGitHubStreak = (props: GitHubStreakProps = {}) => {
   const activeQuery = useActiveQuery("GITHUB");
 
   const streaks: StreakItem[] | undefined = activeQuery?.data?.data?.streaks;
 
   const commitDaysFromApi = useMemo(() => toCommitDays(streaks), [streaks]);
 
-  const mergedProps: GithubStreakProps = {
+  const mergedProps: GitHubStreakProps = {
     ...props,
     commitDays:
       props.commitDays && props.commitDays.length > 0 ? props.commitDays : commitDaysFromApi,
   };
 
   return {
-    ...useGithubStreak(mergedProps),
+    ...useGitHubStreak(mergedProps),
     isLoading: activeQuery?.isLoading,
     error: activeQuery?.error,
   };
