@@ -232,7 +232,7 @@ export const Task = ({ selectedDate }: TaskProps) => {
         }
         confirmMessage="삭제 시 해당 과목의 데이터가 모두 삭제됩니다"
         confirmLabel={isDeletingActiveTask ? "종료 후 삭제" : "삭제"}
-        confirmVariant="danger"
+        confirmVariant="primary"
         isConfirming={isDeletingTask}
         onClose={handleCancelDelete}
         onConfirm={handleConfirmDelete}

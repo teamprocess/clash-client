@@ -44,8 +44,6 @@ export const Content = styled.div`
   color: ${({ theme }) => theme.label.normal};
   overflow-wrap: anywhere;
   line-height: 1.6;
-  -webkit-user-select: text;
-  user-select: text;
 
   & > * {
     margin: 0;

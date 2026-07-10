@@ -20,7 +20,6 @@ export const InputBox = styled.div`
   flex-direction: column;
   gap: 0.5rem;
   flex: 1;
-  min-width: 0;
 `;
 
 export const Label = styled.label`
@@ -32,8 +31,7 @@ export const Input = styled.input`
   color: ${({ theme }) => theme.label.normal};
   background-color: ${({ theme }) => theme.fill.neutral};
   width: 100%;
-  min-width: 0;
-  padding: 0 1rem;
+  padding: 1rem;
   height: 3rem;
   ${font.body.medium};
   border: none;

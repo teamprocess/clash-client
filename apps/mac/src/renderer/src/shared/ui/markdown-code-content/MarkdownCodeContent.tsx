@@ -130,8 +130,6 @@ const ContentRoot = styled.div`
   width: 100%;
   gap: 0.9rem;
   min-width: 0;
-  -webkit-user-select: text;
-  user-select: text;
 `;
 
 const textVariantStyles = {

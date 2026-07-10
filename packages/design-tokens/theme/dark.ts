@@ -6,10 +6,6 @@ export const darkTheme: Theme = {
   },
   action: {
     primary: {
-      background: "#f5f5f5",
-      foreground: "#0d0d0d",
-    },
-    danger: {
       background: "#c60608",
       foreground: "#fcfcfc",
     },
@@ -22,17 +18,9 @@ export const darkTheme: Theme = {
       background: "#c60608",
       foreground: "#fcfcfc",
     },
-    danger: {
-      background: "#c60608",
-      foreground: "#fcfcfc",
-    },
   },
   interaction: {
     selectionBorder: "#fecdce",
-    selected: {
-      background: "#c60608",
-      foreground: "#fcfcfc",
-    },
   },
   feedback: {
     danger: "#fecdce",

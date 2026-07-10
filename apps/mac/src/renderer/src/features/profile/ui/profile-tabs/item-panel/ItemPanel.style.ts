@@ -62,9 +62,9 @@ export const FilterChip = styled.button<{ $active: boolean }>`
   border-radius: 999px;
   padding: 0.375rem 0.875rem;
   background: ${({ $active, theme }) =>
-    $active ? theme.interaction.selected.background : theme.fill.neutral};
+    $active ? theme.action.primary.background : theme.fill.neutral};
   color: ${({ $active, theme }) =>
-    $active ? theme.interaction.selected.foreground : theme.label.assistive};
+    $active ? theme.action.primary.foreground : theme.label.assistive};
   ${font.label.medium};
   cursor: pointer;
 `;

@@ -1,7 +1,8 @@
 import styled, { css } from "styled-components";
 import { font } from "@clash/design-tokens/font";
+import { palette } from "@clash/design-tokens/theme";
 
-export type ButtonVariant = "primary" | "secondary" | "danger";
+export type ButtonVariant = "primary" | "secondary" | "accept" | "pending";
 export type ButtonSize = "sm" | "md" | "lg" | "xl";
 export type ButtonInteraction = "static" | "responsive";
 
@@ -61,7 +62,8 @@ export const ButtonRoot = styled.button<ButtonStyleProps>`
     const backgrounds: Record<ButtonVariant, string> = {
       primary: theme.action.primary.background,
       secondary: theme.line.normal,
-      danger: theme.action.danger.background,
+      accept: palette.green[50],
+      pending: palette.yellow[50],
     };
 
     return backgrounds[$variant];
@@ -71,7 +73,8 @@ export const ButtonRoot = styled.button<ButtonStyleProps>`
     const foregrounds: Record<ButtonVariant, string> = {
       primary: theme.action.primary.foreground,
       secondary: theme.label.strong,
-      danger: theme.action.danger.foreground,
+      accept: palette.neutral[5],
+      pending: palette.neutral[5],
     };
 
     return foregrounds[$variant];

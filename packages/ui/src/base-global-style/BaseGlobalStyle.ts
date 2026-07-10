@@ -16,17 +16,7 @@ const variantStyleMap: Record<BaseGlobalStyleVariant, RuleSet<object>> = {
       scrollbar-gutter: stable;
     }
   `,
-  "desktop-shell": css`
-    body {
-      -webkit-user-select: none;
-      user-select: none;
-    }
-
-    :where(input, textarea, [contenteditable]:not([contenteditable="false"])) {
-      -webkit-user-select: text;
-      user-select: text;
-    }
-  `,
+  "desktop-shell": css``,
 };
 
 export const BaseGlobalStyle = createGlobalStyle<BaseGlobalStyleProps>`
