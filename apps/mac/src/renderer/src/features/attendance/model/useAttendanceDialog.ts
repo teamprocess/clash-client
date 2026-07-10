@@ -1,10 +1,12 @@
 import { useEffect, useMemo, useRef, useState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 import {
   isAttended,
   useMarkAttendanceMutation,
   useWeeklyAttendanceQuery,
   type WeeklyAttendanceResponse,
 } from "@/entities/attendance";
+import { userQueryKeys } from "@/entities/user";
 import { getErrorMessage } from "@/shared/lib";
 
 const KST_OFFSET_MS = 9 * 60 * 60 * 1000;
@@ -32,6 +34,7 @@ const getIsTodayAttended = (
 };
 
 export const useAttendanceDialog = () => {
+  const queryClient = useQueryClient();
   const currentAttendanceDate = getCurrentAttendanceDate();
   const { data: weeklyAttendance = null } = useWeeklyAttendanceQuery();
   const { mutateAsync: markAttendance, isPending: isSubmitting } = useMarkAttendanceMutation();
@@ -68,9 +71,9 @@ export const useAttendanceDialog = () => {
 
   const isOpen = Boolean(
     weeklyAttendance &&
-      (isCompletingAttendance ||
-        isManuallyOpen ||
-        (!isTodayAttended && dismissedAttendanceDate !== currentAttendanceDate))
+    (isCompletingAttendance ||
+      isManuallyOpen ||
+      (!isTodayAttended && dismissedAttendanceDate !== currentAttendanceDate))
   );
 
   const open = () => {
@@ -106,6 +109,7 @@ export const useAttendanceDialog = () => {
 
     try {
       await markAttendance();
+      void queryClient.invalidateQueries({ queryKey: userQueryKeys.all });
       clearCloseTimeout();
       setOptimisticAttendedDate(currentAttendanceDate);
       setAnimatedAttendanceDate(currentAttendanceDate);

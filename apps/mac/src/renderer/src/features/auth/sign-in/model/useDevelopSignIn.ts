@@ -2,7 +2,7 @@ import type { ChangeEvent, FormEvent } from "react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useQueryClient } from "@tanstack/react-query";
-import { authApi, startUserProfileSyncWindow } from "@/entities/user";
+import { authApi, startUserProfileSyncWindow, userQueryKeys } from "@/entities/user";
 import { getErrorMessage } from "@/shared/lib";
 import { useElectronAuthFlow } from "./useElectronAuthFlow";
 
@@ -52,7 +52,7 @@ export const useDevelopSignIn = () => {
       }
 
       startUserProfileSyncWindow();
-      await queryClient.invalidateQueries({ queryKey: ["user"] });
+      await queryClient.invalidateQueries({ queryKey: userQueryKeys.all });
       navigate("/");
     } catch (error: unknown) {
       console.error("Embedded sign in failed:", error);

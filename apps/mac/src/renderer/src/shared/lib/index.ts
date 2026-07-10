@@ -9,6 +9,12 @@ export {
   useServiceUnavailable,
 } from "./useServiceUnavailable";
 export { queryClient } from "./queryClient";
+export {
+  captureSessionEpoch,
+  isSessionEpochCurrent,
+  registerSessionResetHandler,
+  resetSession,
+} from "./sessionReset";
 export { getErrorMessage } from "./error";
 export { buildPaddedStreak } from "./buildPaddedStreaks";
 export { getGrowthInfo } from "./getGrowthInfo";

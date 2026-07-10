@@ -12,7 +12,12 @@ import {
   useActiveQuery,
   useTransitionQuery,
 } from "@/entities/competition";
-import { PROFILE_SYNC_INTERVAL_MS, PROFILE_SYNC_UNTIL_KEY, useGetMyProfile } from "@/entities/user";
+import {
+  PROFILE_SYNC_INTERVAL_MS,
+  PROFILE_SYNC_UNTIL_KEY,
+  userQueryKeys,
+  useGetMyProfile,
+} from "@/entities/user";
 
 const isNotFound = (error: unknown) => axios.isAxiosError(error) && error.response?.status === 404;
 
@@ -70,7 +75,7 @@ export const Home = () => {
     }
 
     const interval = setInterval(() => {
-      void queryClient.invalidateQueries({ queryKey: ["user"] });
+      void queryClient.invalidateQueries({ queryKey: userQueryKeys.all });
     }, PROFILE_SYNC_INTERVAL_MS);
 
     return () => {

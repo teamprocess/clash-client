@@ -2,11 +2,13 @@ import * as S from "./Sidebar.style";
 import { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import type { MonitoredApp } from "@/entities/record";
+import type { UseAppMonitorResult } from "@/features/app-monitor";
 import { IdeIcons } from "@/shared/ui/assets/ide-img";
 import { useSidebarMonitor } from "./model/useSidebarMonitor";
 
 interface SidebarProps {
   isOpen: boolean;
+  appMonitor: UseAppMonitorResult;
 }
 
 const menuItems = [
@@ -31,10 +33,10 @@ const isEditableElement = (target: EventTarget | null) => {
   );
 };
 
-export const Sidebar = ({ isOpen }: SidebarProps) => {
+export const Sidebar = ({ isOpen, appMonitor }: SidebarProps) => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { isElectron, activeSession, displayTime } = useSidebarMonitor();
+  const { isElectron, activeSession, displayTime } = useSidebarMonitor(appMonitor);
   const hasIdeIcon = (appId: MonitoredApp | null): appId is keyof typeof IdeIcons => {
     return !!appId && appId in IdeIcons;
   };

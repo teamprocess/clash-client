@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 import * as S from "./ItemPanel.style";
 import { ItemDetailModal } from "./item-detail-modal/ItemDetailModal";
 import {
@@ -9,7 +10,7 @@ import {
   type OwnedItemDisplayCategory,
 } from "@/entities/profile";
 import { sortEquippedItemsFirst } from "@/features/profile/lib/sortEquippedItemsFirst";
-import { useGetMyProfile } from "@/entities/user";
+import { useGetMyProfile, userQueryKeys } from "@/entities/user";
 import { getErrorMessage } from "@/shared/lib";
 
 const FILTER_OPTIONS = [
@@ -26,6 +27,7 @@ const CATEGORY_LABEL: Record<OwnedItemDisplayCategory, string> = {
 };
 
 export const ItemPanel = () => {
+  const queryClient = useQueryClient();
   const [filter, setFilter] = useState<OwnedItemCategory>(OwnedItemCategory.ALL);
   const [selectedItem, setSelectedItem] = useState<OwnedItem | null>(null);
   const { data, isLoading, isFetching, error } = useOwnedItemsQuery(filter);
@@ -77,6 +79,7 @@ export const ItemPanel = () => {
         productId: selectedItem.id,
         shouldUnequip: selectedCategory ? isEquippedItem(selectedCategory, selectedItem.id) : false,
       });
+      await queryClient.invalidateQueries({ queryKey: userQueryKeys.all });
       handleCloseModal();
     } catch {
       return;

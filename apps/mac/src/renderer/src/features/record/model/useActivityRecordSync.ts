@@ -6,7 +6,12 @@ import {
   recordApi,
   recordQueryKeys,
 } from "@/entities/record";
-import { getErrorMessage, queryClient } from "@/shared/lib";
+import {
+  captureSessionEpoch,
+  getErrorMessage,
+  isSessionEpochCurrent,
+  queryClient,
+} from "@/shared/lib";
 
 type ServerSessionState =
   | { type: "NONE"; appId: null }
@@ -38,14 +43,19 @@ export const useActivityRecordSync = (
   isFrontmostMonitoredApp: boolean,
   isReady: boolean
 ) => {
+  const sessionEpochRef = useRef(captureSessionEpoch());
   const pendingTargetsRef = useRef<Array<string | null>>([]);
   const monitoredAppsRef = useRef<MonitoredApp[] | null>(null);
   const serverSessionRef = useRef<ServerSessionState>({ type: "NONE", appId: null });
   const requiresFrontmostToRestartRef = useRef(false);
-  const initializedRef = useRef(false);
+  const initializedEpochRef = useRef<number | null>(null);
   const syncingRef = useRef(false);
 
   const enqueueTarget = useCallback((targetAppName: string | null) => {
+    if (!isSessionEpochCurrent(sessionEpochRef.current)) {
+      return;
+    }
+
     const queue = pendingTargetsRef.current;
     if (queue.length > 0 && queue[queue.length - 1] === targetAppName) {
       return;
@@ -54,44 +64,84 @@ export const useActivityRecordSync = (
     queue.push(targetAppName);
   }, []);
 
-  const invalidateToday = useCallback(async () => {
+  const invalidateToday = useCallback(async (epoch: number) => {
+    if (!isSessionEpochCurrent(epoch)) {
+      return false;
+    }
+
     await queryClient.invalidateQueries({ queryKey: recordQueryKeys.today });
+    return isSessionEpochCurrent(epoch);
   }, []);
 
-  const loadMonitoredApps = useCallback(async () => {
+  const loadMonitoredApps = useCallback(async (epoch: number) => {
+    if (!isSessionEpochCurrent(epoch)) {
+      return false;
+    }
+
     try {
       const response = await recordApi.getMonitoredApps();
+      if (!isSessionEpochCurrent(epoch)) {
+        return false;
+      }
+
       if (response.success && response.data?.apps) {
         monitoredAppsRef.current = response.data.apps;
-        return;
+        return true;
       }
     } catch (error) {
+      if (!isSessionEpochCurrent(epoch)) {
+        return false;
+      }
+
       const errorMessage = getErrorMessage(error, "활동 기록 가능 앱 목록 조회에 실패했습니다.");
       console.error("활동 기록 가능 앱 목록 조회 실패:", errorMessage, error);
     }
 
     monitoredAppsRef.current = [];
+    return true;
   }, []);
 
-  const loadCurrentSession = useCallback(async (): Promise<ServerSessionState> => {
-    try {
-      const response = await recordApi.getCurrentRecord();
-      if (!response.success) {
+  const loadCurrentSession = useCallback(
+    async (epoch: number): Promise<ServerSessionState | null> => {
+      if (!isSessionEpochCurrent(epoch)) {
+        return null;
+      }
+
+      try {
+        const response = await recordApi.getCurrentRecord();
+        if (!isSessionEpochCurrent(epoch)) {
+          return null;
+        }
+
+        if (!response.success) {
+          return { type: "NONE", appId: null };
+        }
+        return parseServerSession(response.data);
+      } catch (error) {
+        if (!isSessionEpochCurrent(epoch)) {
+          return null;
+        }
+
+        const errorMessage = getErrorMessage(error, "현재 기록 세션 조회에 실패했습니다.");
+        console.error("현재 기록 세션 조회 실패:", errorMessage, error);
         return { type: "NONE", appId: null };
       }
-      return parseServerSession(response.data);
-    } catch (error) {
-      const errorMessage = getErrorMessage(error, "현재 기록 세션 조회에 실패했습니다.");
-      console.error("현재 기록 세션 조회 실패:", errorMessage, error);
-      return { type: "NONE", appId: null };
-    }
-  }, []);
+    },
+    []
+  );
 
-  const refreshServerSession = useCallback(async (): Promise<ServerSessionState> => {
-    const latestSession = await loadCurrentSession();
-    serverSessionRef.current = latestSession;
-    return latestSession;
-  }, [loadCurrentSession]);
+  const refreshServerSession = useCallback(
+    async (epoch: number): Promise<ServerSessionState | null> => {
+      const latestSession = await loadCurrentSession(epoch);
+      if (!latestSession || !isSessionEpochCurrent(epoch)) {
+        return null;
+      }
+
+      serverSessionRef.current = latestSession;
+      return latestSession;
+    },
+    [loadCurrentSession]
+  );
 
   const normalizeTargetAppId = useCallback((rawAppName: string | null) => {
     if (!rawAppName) {
@@ -106,28 +156,60 @@ export const useActivityRecordSync = (
     return matchMonitoredApp(rawAppName, monitoredApps);
   }, []);
 
-  const stopDevelopSession = useCallback(async () => {
-    try {
-      const stopResponse = await recordApi.stopRecord();
-      if (!stopResponse.success) {
-        console.error("개발 기록 중지 API 실패 응답:", stopResponse.message);
-        await refreshServerSession();
+  const stopDevelopSession = useCallback(
+    async (epoch: number) => {
+      if (!isSessionEpochCurrent(epoch)) {
         return;
       }
 
-      serverSessionRef.current = { type: "NONE", appId: null };
-      await invalidateToday();
-    } catch (error) {
-      const errorMessage = getErrorMessage(error, "개발 기록 중지에 실패했습니다.");
-      console.error("개발 기록 중지 실패:", errorMessage, error);
-      await refreshServerSession();
-    }
-  }, [invalidateToday, refreshServerSession]);
+      try {
+        const stopResponse = await recordApi.stopRecord();
+        if (!isSessionEpochCurrent(epoch)) {
+          return;
+        }
+
+        if (!stopResponse.success) {
+          console.error("개발 기록 중지 API 실패 응답:", stopResponse.message);
+          await refreshServerSession(epoch);
+          if (!isSessionEpochCurrent(epoch)) {
+            return;
+          }
+          return;
+        }
+
+        serverSessionRef.current = { type: "NONE", appId: null };
+        await invalidateToday(epoch);
+        if (!isSessionEpochCurrent(epoch)) {
+          return;
+        }
+      } catch (error) {
+        if (!isSessionEpochCurrent(epoch)) {
+          return;
+        }
+
+        const errorMessage = getErrorMessage(error, "개발 기록 중지에 실패했습니다.");
+        console.error("개발 기록 중지 실패:", errorMessage, error);
+        await refreshServerSession(epoch);
+        if (!isSessionEpochCurrent(epoch)) {
+          return;
+        }
+      }
+    },
+    [invalidateToday, refreshServerSession]
+  );
 
   const switchDevelopSession = useCallback(
-    async (targetAppId: MonitoredApp) => {
+    async (targetAppId: MonitoredApp, epoch: number) => {
+      if (!isSessionEpochCurrent(epoch)) {
+        return;
+      }
+
       try {
         const switchResponse = await recordApi.switchDevelopApp({ appId: targetAppId });
+        if (!isSessionEpochCurrent(epoch)) {
+          return;
+        }
+
         const switchedSession = switchResponse.data?.session;
         if (
           !switchResponse.success ||
@@ -137,7 +219,10 @@ export const useActivityRecordSync = (
           if (!switchResponse.success) {
             console.error("개발 기록 전환 API 실패 응답:", switchResponse.message);
           }
-          await refreshServerSession();
+          await refreshServerSession(epoch);
+          if (!isSessionEpochCurrent(epoch)) {
+            return;
+          }
           return;
         }
 
@@ -145,18 +230,32 @@ export const useActivityRecordSync = (
           type: "DEVELOP",
           appId: switchedSession.develop.appId,
         };
-        await invalidateToday();
+        await invalidateToday(epoch);
+        if (!isSessionEpochCurrent(epoch)) {
+          return;
+        }
       } catch (error) {
+        if (!isSessionEpochCurrent(epoch)) {
+          return;
+        }
+
         const errorMessage = getErrorMessage(error, "개발 기록 전환에 실패했습니다.");
         console.error("개발 기록 전환 실패:", errorMessage, error);
-        await refreshServerSession();
+        await refreshServerSession(epoch);
+        if (!isSessionEpochCurrent(epoch)) {
+          return;
+        }
       }
     },
     [invalidateToday, refreshServerSession]
   );
 
   const startDevelopSession = useCallback(
-    async (targetAppId: MonitoredApp) => {
+    async (targetAppId: MonitoredApp, epoch: number) => {
+      if (!isSessionEpochCurrent(epoch)) {
+        return;
+      }
+
       try {
         const startResponse = await recordApi.startRecord({
           sessionType: "DEVELOP",
@@ -164,12 +263,19 @@ export const useActivityRecordSync = (
           taskId: null,
           appId: targetAppId,
         });
+        if (!isSessionEpochCurrent(epoch)) {
+          return;
+        }
+
         const startedSession = startResponse.data?.session;
         if (!startResponse.success || !startedSession || startedSession.sessionType !== "DEVELOP") {
           if (!startResponse.success) {
             console.error("개발 기록 시작 API 실패 응답:", startResponse.message);
           }
-          await refreshServerSession();
+          await refreshServerSession(epoch);
+          if (!isSessionEpochCurrent(epoch)) {
+            return;
+          }
           return;
         }
 
@@ -177,20 +283,37 @@ export const useActivityRecordSync = (
           type: "DEVELOP",
           appId: startedSession.develop.appId,
         };
-        await invalidateToday();
+        await invalidateToday(epoch);
+        if (!isSessionEpochCurrent(epoch)) {
+          return;
+        }
       } catch (error) {
+        if (!isSessionEpochCurrent(epoch)) {
+          return;
+        }
+
         const errorMessage = getErrorMessage(error, "개발 기록 시작에 실패했습니다.");
         console.error("개발 기록 시작 실패:", errorMessage, error);
-        await refreshServerSession();
+        await refreshServerSession(epoch);
+        if (!isSessionEpochCurrent(epoch)) {
+          return;
+        }
       }
     },
     [invalidateToday, refreshServerSession]
   );
 
   const syncServerSession = useCallback(
-    async (rawTargetAppName: string | null) => {
+    async (rawTargetAppName: string | null, epoch: number) => {
+      if (!isSessionEpochCurrent(epoch)) {
+        return;
+      }
+
       const targetAppId = normalizeTargetAppId(rawTargetAppName);
-      const serverSession = await refreshServerSession();
+      const serverSession = await refreshServerSession(epoch);
+      if (!serverSession || !isSessionEpochCurrent(epoch)) {
+        return;
+      }
 
       if (serverSession.type === "TASK") {
         requiresFrontmostToRestartRef.current = true;
@@ -208,7 +331,10 @@ export const useActivityRecordSync = (
           return;
         }
 
-        await stopDevelopSession();
+        await stopDevelopSession(epoch);
+        if (!isSessionEpochCurrent(epoch)) {
+          return;
+        }
         return;
       }
 
@@ -216,7 +342,10 @@ export const useActivityRecordSync = (
         if (serverSession.appId === targetAppId) {
           return;
         }
-        await switchDevelopSession(targetAppId);
+        await switchDevelopSession(targetAppId, epoch);
+        if (!isSessionEpochCurrent(epoch)) {
+          return;
+        }
         return;
       }
 
@@ -224,7 +353,11 @@ export const useActivityRecordSync = (
         return;
       }
 
-      await startDevelopSession(targetAppId);
+      await startDevelopSession(targetAppId, epoch);
+      if (!isSessionEpochCurrent(epoch)) {
+        return;
+      }
+
       requiresFrontmostToRestartRef.current = false;
     },
     [
@@ -238,6 +371,12 @@ export const useActivityRecordSync = (
   );
 
   const flushSync = useCallback(async () => {
+    const renderSessionEpoch = sessionEpochRef.current;
+    const epoch = captureSessionEpoch();
+    if (epoch !== renderSessionEpoch || !isSessionEpochCurrent(epoch)) {
+      return;
+    }
+
     if (syncingRef.current) {
       return;
     }
@@ -245,15 +384,39 @@ export const useActivityRecordSync = (
     syncingRef.current = true;
     try {
       while (pendingTargetsRef.current.length > 0) {
-        const targetAppName = pendingTargetsRef.current.shift() ?? null;
-
-        if (!initializedRef.current) {
-          await loadMonitoredApps();
-          serverSessionRef.current = await loadCurrentSession();
-          initializedRef.current = true;
+        if (!isSessionEpochCurrent(epoch)) {
+          pendingTargetsRef.current = [];
+          return;
         }
 
-        await syncServerSession(targetAppName);
+        const targetAppName = pendingTargetsRef.current.shift() ?? null;
+
+        if (initializedEpochRef.current !== epoch) {
+          monitoredAppsRef.current = null;
+          serverSessionRef.current = { type: "NONE", appId: null };
+          requiresFrontmostToRestartRef.current = false;
+
+          const monitoredAppsLoaded = await loadMonitoredApps(epoch);
+          if (!monitoredAppsLoaded || !isSessionEpochCurrent(epoch)) {
+            pendingTargetsRef.current = [];
+            return;
+          }
+
+          const currentSession = await loadCurrentSession(epoch);
+          if (!currentSession || !isSessionEpochCurrent(epoch)) {
+            pendingTargetsRef.current = [];
+            return;
+          }
+
+          serverSessionRef.current = currentSession;
+          initializedEpochRef.current = epoch;
+        }
+
+        await syncServerSession(targetAppName, epoch);
+        if (!isSessionEpochCurrent(epoch)) {
+          pendingTargetsRef.current = [];
+          return;
+        }
       }
     } finally {
       syncingRef.current = false;

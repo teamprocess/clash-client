@@ -209,6 +209,7 @@ export const useChapter = (sectionId: number) => {
     !hasCurrentStageDetails && (chapterDetailsQuery.isLoading || resetOnOpenState.isLoading);
 
   const handlers = useChapterHandlers({
+    sectionId,
     stages: domain.stages,
     setStageOverrides: domain.setStageOverrides,
     currentStageId,

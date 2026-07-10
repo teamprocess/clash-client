@@ -1,13 +1,14 @@
 import { useQuery } from "@tanstack/react-query";
 import { authApi } from "../api/authApi";
 import type { GetMyProfileResponse } from "../api/authApi";
+import { SESSION_STORAGE_KEYS } from "@/shared/config/sessionStorage";
 
 export const userQueryKeys = {
   all: ["user"] as const,
   profile: ["user"] as const,
 };
 
-export const PROFILE_SYNC_UNTIL_KEY = "clash:home-ranking-user:profile-sync-until";
+export const PROFILE_SYNC_UNTIL_KEY = SESSION_STORAGE_KEYS.profileSyncUntil;
 const PROFILE_SYNC_WINDOW_MS = 3 * 60 * 1000;
 export const PROFILE_SYNC_INTERVAL_MS = 3000;
 
