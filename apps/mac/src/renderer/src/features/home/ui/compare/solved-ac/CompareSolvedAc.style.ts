@@ -1,6 +1,6 @@
 // 현재 사용을 안하여 작동시키면 오류가 발생해 주석을 달았습니다.
 // import styled from "styled-components";
-// import Date from "@/features/home/assets/home/date.svg";
+// import Date from "@/shared/ui/assets/date.svg";
 // import SolvedAc from "@/features/home/assets/home/solved-logo.svg";
 // import { font } from "@clash/design-tokens/font";
 //

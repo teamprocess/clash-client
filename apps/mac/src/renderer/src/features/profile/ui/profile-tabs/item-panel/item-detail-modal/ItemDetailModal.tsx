@@ -1,9 +1,6 @@
 import * as S from "./ItemDetailModal.style";
-import type {
-  OwnedItem,
-  OwnedItemDisplayCategory,
-} from "@/entities/profile/model/ownedItems.types";
-import type { getMyProfileResponse } from "@/entities/user";
+import type { OwnedItem, OwnedItemDisplayCategory } from "@/entities/profile";
+import type { GetMyProfileResponse } from "@/entities/user";
 import { formatPrice, resolveProfileDecorations } from "@/shared/lib";
 import { Dialog } from "@/shared/ui";
 
@@ -11,7 +8,7 @@ interface ItemDetailModalProps {
   isOpen: boolean;
   item: OwnedItem;
   category: OwnedItemDisplayCategory;
-  user?: getMyProfileResponse | null;
+  user?: GetMyProfileResponse | null;
   isEquipped: boolean;
   isSubmitting: boolean;
   errorMessage?: string | null;

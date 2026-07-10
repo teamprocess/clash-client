@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
-import { previewApi } from "@/entities/roadmap/section/preview/api/previewApi";
-import type { GetSectionPreviewResponse } from "@/entities/roadmap/section/preview/model/preview.types";
+import { previewApi } from "../previewApi";
+import type { GetSectionPreviewResponse } from "../../model/preview.types";
 
 export const previewQueryKeys = {
   detail: (sectionId: number) => ["roadmap", "sectionPreview", sectionId] as const,

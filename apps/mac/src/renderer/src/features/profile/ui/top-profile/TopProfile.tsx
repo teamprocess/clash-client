@@ -1,7 +1,6 @@
 import * as S from "./TopProfile.style";
-import { ChangeEvent, useRef } from "react";
-import { useGetMyProfile } from "@/entities/user";
-import { useUploadProfileImageMutation } from "@/entities/profile/api/query/useUserProfileImage.query";
+import { useRef, type ChangeEvent } from "react";
+import { useGetMyProfile, useUploadProfileImageMutation } from "@/entities/user";
 import { resolveProfileDecorations } from "@/shared/lib";
 import { DefaultProfileIcon, RankTier } from "@/shared/ui";
 
@@ -11,7 +10,9 @@ export const TopProfile = () => {
   const { data: user } = useGetMyProfile();
   const uploadProfileImageMutation = useUploadProfileImageMutation();
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const { bannerImage, badgeImage, nameplateImage } = resolveProfileDecorations(user?.equippedItems);
+  const { bannerImage, badgeImage, nameplateImage } = resolveProfileDecorations(
+    user?.equippedItems
+  );
   const displayName = user?.name || user?.username || "이름 없음";
   const displayNameNode = <S.DisplayName>{displayName}</S.DisplayName>;
 

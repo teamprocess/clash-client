@@ -1,4 +1,10 @@
-export { sectionApi, previewApi, MajorEnum } from "./section";
+export {
+  sectionQueryKeys,
+  useMajorSectionQuery,
+  previewQueryKeys,
+  useSectionPreviewQuery,
+  MajorEnum,
+} from "./section";
 export type {
   getAllSectionsResponse,
   getMajorSectionRequest,
@@ -8,7 +14,16 @@ export type {
   PreviewData,
   PreviewStep,
 } from "./section";
-export { chapterApi, rankingApi, useChapterRankingQuery } from "./chapter";
+export {
+  chapterQueryKeys,
+  useChapterDetailsQuery,
+  useSectionDetailsQuery,
+  useResetChapterMutation,
+  useSubmitAnswerMutation,
+  useChapterResultMutation,
+  chapterRankingQueryKeys,
+  useChapterRankingQuery,
+} from "./chapter";
 export type {
   ChapterChoice,
   ChapterQuestion,

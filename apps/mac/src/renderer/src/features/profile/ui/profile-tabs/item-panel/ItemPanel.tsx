@@ -1,13 +1,13 @@
 import { useState } from "react";
 import * as S from "./ItemPanel.style";
 import { ItemDetailModal } from "./item-detail-modal/ItemDetailModal";
-import { useEquipItemMutation } from "@/entities/profile/api/query/useEquipItem.mutation";
-import { useOwnedItemsQuery } from "@/entities/profile/api/query/useOwnedItems.query";
 import {
   OwnedItemCategory,
+  useEquipItemMutation,
+  useOwnedItemsQuery,
   type OwnedItem,
   type OwnedItemDisplayCategory,
-} from "@/entities/profile/model/ownedItems.types";
+} from "@/entities/profile";
 import { sortEquippedItemsFirst } from "@/features/profile/lib/sortEquippedItemsFirst";
 import { useGetMyProfile } from "@/entities/user";
 import { getErrorMessage } from "@/shared/lib";

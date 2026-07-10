@@ -1,10 +1,10 @@
-import { api, ApiResponse } from "@/shared/api";
-import {
+import { api, type ApiResponse } from "@/shared/api";
+import type {
   MyCompareRequest,
   MyCompareResponse,
   MyGrowthRateRequest,
   MyGrowthRateResponse,
-} from "@/entities/competition/model/my-competition/myCompetition.types";
+} from "../../../model/my-competition/myCompetition.types";
 
 export const myCompetitionApi = {
   // 내 성장도 분석

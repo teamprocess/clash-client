@@ -1,5 +1,5 @@
 import * as S from "./ComparePage.style";
-import { Compare } from "@/features/home/ui/compare/Compare";
+import { Compare } from "@/features/home";
 
 export const ComparePage = () => {
   return (

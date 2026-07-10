@@ -1,5 +1,5 @@
 import { api, ApiResponse } from "@/shared/api";
-import {
+import type {
   GetChapterResultResponse,
   GetChapterDetailsRequest,
   GetChapterDetailsResponse,
@@ -8,7 +8,7 @@ import {
   ResetChapterRequest,
   SubmitAnswerRequest,
   SubmitAnswerResponse,
-} from "@/entities/roadmap";
+} from "../model/chapter.types";
 
 export const chapterApi = {
   // 로드맵 상세 조회

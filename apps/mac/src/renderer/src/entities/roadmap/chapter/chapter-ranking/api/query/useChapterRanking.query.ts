@@ -1,5 +1,5 @@
-import { rankingApi } from "@/entities/roadmap/chapter/chapter-ranking/api/chapterRankingApi";
 import { useQuery } from "@tanstack/react-query";
+import { rankingApi } from "../chapterRankingApi";
 
 export const chapterRankingQueryKeys = {
   list: ["chapterRankings"] as const,

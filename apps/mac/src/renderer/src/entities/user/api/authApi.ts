@@ -1,5 +1,4 @@
-import { api } from "@/shared/api/axios";
-import type { ApiResponse } from "@/shared/api/types";
+import { api, type ApiResponse } from "@/shared/api";
 
 interface RecaptchaOptions {
   recaptchaToken?: string;
@@ -80,7 +79,7 @@ export interface EquippedItemsResponse {
   banner: EquippedItemResponse | null;
 }
 
-export interface getMyProfileResponse {
+export interface GetMyProfileResponse {
   id: number;
   createdAt: string;
   updatedAt: string;
@@ -227,7 +226,7 @@ export const authApi = {
 
   // 내 정보 조회
   getMyProfile: async () => {
-    const result = await api.get<ApiResponse<getMyProfileResponse>>("/users/me");
+    const result = await api.get<ApiResponse<GetMyProfileResponse>>("/users/me");
     return result.data;
   },
 };

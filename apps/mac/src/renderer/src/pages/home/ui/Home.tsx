@@ -1,11 +1,17 @@
 import { useEffect } from "react";
-import { Active, Ranking, Rival, Transition } from "@/features/home";
+import { Active, Ranking, Transition } from "@/features/home";
+import { Rival } from "@/widgets/home-rivals";
 import { useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { Dialog } from "@/shared/ui";
-import { Skeleton } from "@/shared/ui/skeleton/Skeleton";
+import { Skeleton } from "@/shared/ui/skeleton";
 import * as S from "./Home.style";
-import { useActiveQuery, useTransitionQuery } from "@/entities/home";
+import {
+  activeQueryKeys,
+  transitionQueryKeys,
+  useActiveQuery,
+  useTransitionQuery,
+} from "@/entities/competition";
 import { PROFILE_SYNC_INTERVAL_MS, PROFILE_SYNC_UNTIL_KEY, useGetMyProfile } from "@/entities/user";
 
 const isNotFound = (error: unknown) => axios.isAxiosError(error) && error.response?.status === 404;
@@ -79,8 +85,8 @@ export const Home = () => {
 
     const interval = setInterval(() => {
       void Promise.all([
-        queryClient.invalidateQueries({ queryKey: ["transition"] }),
-        queryClient.invalidateQueries({ queryKey: ["active", "GITHUB"] }),
+        queryClient.invalidateQueries({ queryKey: transitionQueryKeys.transition }),
+        queryClient.invalidateQueries({ queryKey: activeQueryKeys.active("GITHUB") }),
       ]);
     }, PROFILE_SYNC_INTERVAL_MS);
 

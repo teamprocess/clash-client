@@ -1,5 +1,5 @@
-import { api, ApiResponse } from "@/shared/api";
-import {
+import { api, type ApiResponse } from "@/shared/api";
+import type {
   AnalyzeBattleRequest,
   AnalyzeBattleResponse,
   BattleApplyListResponse,
@@ -7,7 +7,7 @@ import {
   BattleListResponse,
   BattleResponse,
   PostBattleRequest,
-} from "@/entities/competition/model/rival-competition/battle.types";
+} from "../../../model/rival-competition/battle.types";
 
 interface ModifyBattleRequest {
   id: number;

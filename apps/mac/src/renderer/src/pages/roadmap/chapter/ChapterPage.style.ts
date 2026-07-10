@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { font } from "@clash/design-tokens/font";
-import Previous from "./assets/previous.svg";
+import Previous from "@/shared/ui/assets/previous.svg";
 import Arrow from "./assets/arrow.svg";
 
 export const ChapterContainer = styled.div`

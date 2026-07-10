@@ -1,8 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { majorApi } from "@/entities/major/api/majorApi";
-import { useMajorQuestionsQuery } from "@/entities/major/api/query/useMajorQuestions.query";
-import { Major } from "@/entities/major/model/major.types";
+import { Major, majorApi, useMajorQuestionsQuery } from "@/entities/major";
 import { useQueryClient } from "@tanstack/react-query";
 import { useGetMyProfile } from "@/entities/user";
 
@@ -58,7 +56,10 @@ export const useMajorChoice = () => {
   // 전공 성향 검사에서 답을 선택받는 함수
   const handleSelect = (questionId: number, answerId: number | null) => {
     setAnswers(prevAnswers => {
-      const nextAnswers = Array.from({ length: questionData.length }, (_, idx) => prevAnswers[idx] ?? null);
+      const nextAnswers = Array.from(
+        { length: questionData.length },
+        (_, idx) => prevAnswers[idx] ?? null
+      );
       nextAnswers[questionId] = answerId;
       return nextAnswers;
     });

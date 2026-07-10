@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
-import { ownedItemsApi } from "@/entities/profile/api/ownedItemsApi";
-import { OwnedItemCategory } from "@/entities/profile/model/ownedItems.types";
+import { ownedItemsApi } from "../ownedItemsApi";
+import { OwnedItemCategory } from "../../model/ownedItems.types";
 
 export const ownedItemsQueryKeys = {
   all: ["ownedItems"] as const,

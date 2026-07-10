@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { profileGithubDetailApi } from "@/entities/profile/api/profileGithubDetailApi";
+import { profileGithubDetailApi } from "../profileGithubDetailApi";
 
 export const useProfileGithubDetailQuery = (date: string | null) => {
   const { data, isError, isFetching, isLoading, isPlaceholderData } = useQuery({

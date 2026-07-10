@@ -1,3 +1,4 @@
+export { useMajorChoice } from "./model/useMajorChoice";
 export { FeatureChoice } from "./ui/feature/FeatureChoice";
 export { MajorChoice } from "./ui/choice/MajorChoice";
 export { Test } from "./ui/test/Test";

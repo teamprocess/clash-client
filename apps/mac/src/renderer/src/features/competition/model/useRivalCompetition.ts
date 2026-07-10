@@ -1,4 +1,4 @@
-import { useMyRivalsQuery } from "@/entities/competition";
+import { useMyRivalsQuery } from "@/entities/rival";
 
 export const useRivalCompetition = () => {
   const { data } = useMyRivalsQuery();
