@@ -57,17 +57,21 @@ const createMenuTemplate = ({
     { role: "editMenu" },
     createViewMenu(),
     { role: "windowMenu" },
-    {
-      role: "help",
-      submenu: [
-        {
-          label: "업데이트 확인...",
-          click: () => {
-            void onCheckForUpdates();
+    ...(IS_DEV_CHANNEL
+      ? []
+      : [
+          {
+            role: "help" as const,
+            submenu: [
+              {
+                label: "업데이트 확인...",
+                click: () => {
+                  void onCheckForUpdates();
+                },
+              },
+            ],
           },
-        },
-      ],
-    }
+        ])
   );
 
   return template;
