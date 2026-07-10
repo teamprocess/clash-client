@@ -1,6 +1,5 @@
 import styled, { css, keyframes } from "styled-components";
 import { font } from "@clash/design-tokens/font";
-import { palette } from "@clash/design-tokens/theme";
 import AttendedSvg from "./assets/attended.svg";
 import NotAttendedSvg from "./assets/not-attended.svg";
 import CalendarSvg from "@/shared/ui/assets/calendar.svg";
@@ -154,6 +153,6 @@ export const DayLabel = styled.span<{ $isAttended: boolean }>`
 export const ErrorText = styled.p`
   ${font.label.medium}
   margin: 0.75rem 0 0;
-  color: ${palette.red[60]};
+  color: ${({ theme }) => theme.feedback.danger};
   text-align: center;
 `;

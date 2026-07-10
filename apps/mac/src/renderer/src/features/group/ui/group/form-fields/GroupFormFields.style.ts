@@ -1,6 +1,5 @@
 import styled, { css } from "styled-components";
 import { font } from "@clash/design-tokens/font";
-import { palette } from "@clash/design-tokens/theme";
 
 export const FieldsContainer = styled.div<{ $variant: "default" | "createPanel" }>`
   display: flex;
@@ -30,7 +29,7 @@ export const Label = styled.label`
 
 export const Input = styled.input`
   color: ${({ theme }) => theme.label.normal};
-  background-color: ${({ theme }) => theme.label.disable};
+  background-color: ${({ theme }) => theme.fill.neutral};
   width: 100%;
   padding: 1rem;
   height: 3rem;
@@ -40,7 +39,7 @@ export const Input = styled.input`
   border-radius: 0.5rem;
 
   &::placeholder {
-    color: ${({ theme }) => theme.label.assistive};
+    color: ${({ theme }) => theme.label.alternative};
   }
 
   &[type="number"] {
@@ -78,8 +77,8 @@ export const PasswordChangeButtonInside = styled.button`
   top: 50%;
   transform: translateY(-50%);
   ${font.label.medium};
-  color: ${({ theme }) => theme.label.normal};
-  background: ${({ theme }) => theme.primary.normal};
+  color: ${({ theme }) => theme.action.primary.foreground};
+  background: ${({ theme }) => theme.action.primary.background};
   border: none;
   padding: 0.35rem 0.6rem;
   border-radius: 0.5rem;
@@ -89,7 +88,7 @@ export const PasswordChangeButtonInside = styled.button`
   &:disabled {
     cursor: default;
     background: ${({ theme }) => theme.line.normal};
-    color: ${({ theme }) => theme.label.assistive};
+    color: ${({ theme }) => theme.label.alternative};
   }
 `;
 
@@ -101,7 +100,7 @@ export const SlideButtonBox = styled.div`
   justify-content: stretch;
   padding: 0.25rem;
   height: 3rem;
-  background-color: ${({ theme }) => theme.label.disable};
+  background-color: ${({ theme }) => theme.fill.neutral};
   border-radius: 0.5rem;
 `;
 
@@ -137,7 +136,7 @@ export const SlideButton = styled.button<{ $isActive?: boolean }>`
 
 export const TextArea = styled.textarea`
   color: ${({ theme }) => theme.label.normal};
-  background-color: ${({ theme }) => theme.label.disable};
+  background-color: ${({ theme }) => theme.fill.neutral};
   width: 100%;
   padding: 1rem;
   ${font.body.medium};
@@ -148,7 +147,7 @@ export const TextArea = styled.textarea`
   min-height: 11rem;
 
   &::placeholder {
-    color: ${({ theme }) => theme.label.assistive};
+    color: ${({ theme }) => theme.label.alternative};
   }
 `;
 
@@ -159,6 +158,6 @@ export const NumberInputWrapper = styled.div`
 
 export const ErrorText = styled.p`
   ${font.label.medium};
-  color: ${palette.red[60]};
+  color: ${({ theme }) => theme.feedback.danger};
   margin-top: 0.25rem;
 `;

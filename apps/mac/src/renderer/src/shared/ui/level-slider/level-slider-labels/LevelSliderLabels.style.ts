@@ -11,7 +11,7 @@ export const LevelSliderLabelsItem = styled.li<{
 }>`
   ${({ $isActive }) => ($isActive ? font.body.bold : font.body.medium)};
   text-align: center;
-  color: ${({ theme, $isActive }) => ($isActive ? theme.primary.normal : theme.label.alternative)};
+  color: ${({ theme, $isActive }) => ($isActive ? theme.content.accent : theme.label.alternative)};
   transition: color 0.2s ease-in-out;
   cursor: pointer;
 `;

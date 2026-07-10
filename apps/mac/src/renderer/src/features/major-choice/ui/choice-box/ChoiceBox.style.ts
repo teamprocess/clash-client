@@ -33,7 +33,8 @@ export const ChoiceBox = styled.div<{
   border-radius: 0.75rem;
 
   box-shadow: 0 0 6px 0
-    ${({ $isSelected, theme }) => ($isSelected ? theme.primary.normal : theme.line.normal)};
+    ${({ $isSelected, theme }) =>
+      $isSelected ? theme.interaction.selectionBorder : theme.line.normal};
 
   width: ${({ $size }) => sizeMap[$size].width};
   height: ${({ $size }) => sizeMap[$size].height};

@@ -88,7 +88,6 @@ export const UserContainer = styled.div`
   gap: 0.5rem;
   overflow-y: auto;
   scrollbar-width: none;
-  -ms-overflow-style: none;
 
   &::-webkit-scrollbar {
     display: none;

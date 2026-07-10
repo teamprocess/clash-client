@@ -70,7 +70,8 @@ export const SelectionDot = styled.div<{ $isSelected: boolean }>`
   flex-shrink: 0;
   border-radius: 50%;
   border: 0.4rem solid
-    ${({ theme, $isSelected }) => ($isSelected ? theme.primary.normal : theme.line.normal)};
+    ${({ theme, $isSelected }) =>
+      $isSelected ? theme.interaction.selectionBorder : theme.line.normal};
 `;
 
 export const GroupListName = styled.span`

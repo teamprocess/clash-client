@@ -113,7 +113,7 @@ export const GroupMembers = styled.span`
   flex-shrink: 0;
 
   span {
-    color: ${({ theme }) => theme.primary.normal};
+    color: ${({ theme }) => theme.content.accent};
   }
 `;
 
@@ -123,8 +123,9 @@ export const GroupJoinButton = styled(Button)<{ $isMember?: boolean }>`
   padding: 0.375rem 0.25rem;
   border-radius: 0.75rem;
   background-color: ${({ theme, $isMember }) =>
-    $isMember ? theme.line.normal : theme.primary.normal};
-  color: ${({ theme }) => theme.label.normal};
+    $isMember ? theme.line.normal : theme.action.primary.background};
+  color: ${({ theme, $isMember }) =>
+    $isMember ? theme.label.strong : theme.action.primary.foreground};
   cursor: ${({ $isMember }) => ($isMember ? "default" : "pointer")};
 `;
 
@@ -142,13 +143,15 @@ export const CategoryButton = styled.button<{ $isActive?: boolean }>`
   min-width: 3.25rem;
   border-radius: 1rem;
   background-color: ${({ theme, $isActive }) =>
-    $isActive ? theme.primary.normal : theme.fill.alternative};
-  color: ${({ theme, $isActive }) => ($isActive ? theme.label.normal : theme.label.alternative)};
+    $isActive ? theme.action.primary.background : theme.fill.alternative};
+  color: ${({ theme, $isActive }) =>
+    $isActive ? theme.action.primary.foreground : theme.label.alternative};
   border: none;
   cursor: pointer;
 
   &:hover {
-    background-color: ${({ theme }) => theme.primary.normal};
+    color: ${({ theme }) => theme.action.primary.foreground};
+    background-color: ${({ theme }) => theme.action.primary.background};
   }
 `;
 
@@ -215,14 +218,16 @@ export const PageButton = styled.button<{ $isActive?: boolean }>`
   ${font.headline2.medium};
   padding: 0.25rem 0.625rem;
   border-radius: 0.5rem;
-  background-color: ${({ theme, $isActive }) => ($isActive ? theme.primary.normal : "transparent")};
-  color: ${({ theme }) => theme.label.normal};
+  background-color: ${({ theme, $isActive }) =>
+    $isActive ? theme.action.primary.background : "transparent"};
+  color: ${({ theme, $isActive }) =>
+    $isActive ? theme.action.primary.foreground : theme.label.normal};
   border: none;
   cursor: pointer;
 
   &:hover {
     background-color: ${({ theme, $isActive }) =>
-      $isActive ? theme.primary.normal : theme.line.normal};
+      $isActive ? theme.action.primary.background : theme.line.normal};
   }
 
   &:disabled {

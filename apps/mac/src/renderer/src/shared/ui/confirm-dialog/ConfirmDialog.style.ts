@@ -1,6 +1,5 @@
 import styled from "styled-components";
 import { font } from "@clash/design-tokens/font";
-import { palette } from "@clash/design-tokens/theme";
 
 export const Content = styled.div`
   display: flex;
@@ -25,5 +24,5 @@ export const Description = styled.p`
 
 export const ConfirmMessage = styled.p`
   ${font.body.medium};
-  color: ${palette.red[60]};
+  color: ${({ theme }) => theme.feedback.danger};
 `;

@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import { palette } from "@clash/design-tokens/theme";
 import { font } from "@clash/design-tokens/font";
 
 export const PanelContainer = styled.div`
@@ -32,7 +31,7 @@ export const Description = styled.p`
 
 export const ErrorText = styled.span`
   ${font.caption.medium};
-  color: ${palette.red[60]};
+  color: ${({ theme }) => theme.feedback.danger};
   margin-top: 0.5rem;
   display: block;
 `;

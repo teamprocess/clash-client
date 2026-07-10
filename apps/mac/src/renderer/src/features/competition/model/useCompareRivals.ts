@@ -9,8 +9,6 @@ import {
 } from "@/entities/competition";
 import { useGetMyProfile } from "@/entities/user";
 
-export const colorsOfMultiLine: string[] = ["#FFF", "#0081CC", "#C60608", "#15B756", "#FFCC01"];
-
 const competitionDropdownOptions: { key: CategoryType; label: string }[] = [
   { key: "EXP", label: "EXP" },
   { key: "GITHUB", label: "GitHub" },

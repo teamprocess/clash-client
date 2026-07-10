@@ -73,7 +73,7 @@ export const MyStudySummary = styled.div<{ $isActive: boolean }>`
   justify-content: center;
   gap: 0.875rem;
   margin-top: 1rem;
-  color: ${({ $isActive, theme }) => ($isActive ? theme.primary.normal : theme.line.normal)};
+  color: ${({ $isActive, theme }) => ($isActive ? theme.content.accent : theme.line.normal)};
 `;
 
 export const MyStudyFireIcon = styled(Fire)`
@@ -83,7 +83,7 @@ export const MyStudyFireIcon = styled(Fire)`
 
 export const MyStudyTime = styled.span<{ $isActive: boolean; $loading?: boolean }>`
   ${font.headline1.medium}
-  color: ${({ $isActive, theme }) => ($isActive ? theme.primary.normal : theme.label.assistive)};
+  color: ${({ $isActive, theme }) => ($isActive ? theme.content.accent : theme.label.assistive)};
   opacity: ${({ $loading }) => ($loading ? 0.48 : 1)};
 `;
 
@@ -104,7 +104,7 @@ export const MemberCapacityText = styled.p`
 `;
 
 export const CurrentMemberCount = styled.span`
-  color: ${({ theme }) => theme.primary.normal};
+  color: ${({ theme }) => theme.content.accent};
 `;
 
 export const GroupTitle = styled.span`
@@ -128,7 +128,7 @@ export const ActiveStudyingText = styled.p`
 `;
 
 export const ActiveStudyingCount = styled.span`
-  color: ${({ theme }) => theme.primary.normal};
+  color: ${({ theme }) => theme.content.accent};
 `;
 
 export const EmptyGroupState = styled.div`
@@ -198,10 +198,10 @@ export const MemberBox = styled.div<{ $isActive: boolean }>`
   align-items: center;
   justify-content: center;
   gap: 0.875rem;
-  color: ${({ $isActive, theme }) => ($isActive ? theme.primary.normal : theme.line.normal)};
+  color: ${({ $isActive, theme }) => ($isActive ? theme.content.accent : theme.line.normal)};
 
   ${MemberStudyTime} {
-    color: ${({ $isActive, theme }) => ($isActive ? theme.primary.normal : theme.label.assistive)};
+    color: ${({ $isActive, theme }) => ($isActive ? theme.content.accent : theme.label.assistive)};
   }
 
   ${MemberName} {

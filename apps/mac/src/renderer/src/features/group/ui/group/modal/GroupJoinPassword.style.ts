@@ -23,15 +23,15 @@ export const PasswordInput = styled.input`
   outline: none;
   ${font.body.medium};
   color: ${({ theme }) => theme.label.normal};
-  background-color: ${({ theme }) => theme.label.disable};
+  background-color: ${({ theme }) => theme.fill.neutral};
 
   &::placeholder {
-    color: ${({ theme }) => theme.label.assistive};
+    color: ${({ theme }) => theme.label.alternative};
   }
 `;
 
 export const PasswordErrorText = styled.p`
   margin-top: 0.5rem;
   ${font.label.medium};
-  color: ${({ theme }) => theme.primary.normal};
+  color: ${({ theme }) => theme.content.accent};
 `;

@@ -1,6 +1,5 @@
 import styled from "styled-components";
 import { font } from "@clash/design-tokens/font";
-import { palette } from "@clash/design-tokens/theme";
 import Web from "../../../assets/web.svg?url";
 import Server from "../../../assets/server.svg?url";
 
@@ -67,7 +66,7 @@ export const ResultCard = styled.div`
   justify-content: center;
   align-items: center;
   gap: 1.5rem;
-  box-shadow: 0 0 6px 0 ${({ theme }) => theme.primary.normal};
+  box-shadow: 0 0 6px 0 ${({ theme }) => theme.interaction.selectionBorder};
   width: 11.5rem;
   height: 13rem;
   border-radius: 0.875rem;
@@ -89,9 +88,9 @@ export const Button = styled.button<{ $buttonType: "retry" | "start" }>`
   align-items: center;
   ${font.headline1.medium};
   color: ${({ theme, $buttonType }) =>
-    $buttonType === "retry" ? theme.label.assistive : palette.neutral[97]};
+    $buttonType === "retry" ? theme.label.assistive : theme.action.primary.foreground};
   background-color: ${({ theme, $buttonType }) =>
-    $buttonType === "retry" ? theme.label.disable : theme.primary.normal};
+    $buttonType === "retry" ? theme.fill.neutral : theme.action.primary.background};
   width: 10rem;
   height: 3.5rem;
   border-radius: 1rem;

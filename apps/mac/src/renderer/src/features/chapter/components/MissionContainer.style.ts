@@ -8,17 +8,13 @@ import Clear from "../assets/clear.svg";
 import Fail from "../assets/fail.svg";
 import { Button } from "@/shared/ui/button/Button";
 
-const panelBackground = "#27282b";
-const neutralSurface = "rgba(255, 255, 255, 0.035)";
-const subtleBorder = "rgba(255, 255, 255, 0.08)";
-
 export const PanelContent = styled.div`
   display: flex;
   flex-direction: column;
   height: 100%;
   padding: 2rem 2.5rem 2rem;
   gap: 0.5rem;
-  background-color: ${panelBackground};
+  background-color: ${({ theme }) => theme.background.normal};
 `;
 
 export const PanelHeader = styled.div<{ $showTitle: boolean }>`
@@ -61,7 +57,7 @@ export const IconButton = styled.button`
     opacity 0.2s ease;
 
   &:hover {
-    background-color: ${neutralSurface};
+    background-color: ${({ theme }) => theme.fill.neutral};
     opacity: 0.9;
   }
 `;
@@ -90,7 +86,7 @@ export const SectionCard = styled.section`
 
   & + & {
     padding-top: 1.3rem;
-    border-top: 1px solid ${subtleBorder};
+    border-top: 1px solid ${({ theme }) => theme.line.alternative};
   }
 `;
 
@@ -116,7 +112,7 @@ export const InlineMessage = styled.p<{ $tone?: "error" | "neutral" }>`
   ${font.caption.regular}
   font-size: 0.85rem;
   color: ${({ theme, $tone = "neutral" }) =>
-    $tone === "error" ? palette.red[60] : theme.label.assistive};
+    $tone === "error" ? theme.feedback.danger : theme.label.assistive};
   line-height: 1.45;
 `;
 
@@ -132,9 +128,9 @@ export const PrimaryActionButton = styled(Button)`
   ${font.body.medium}
   min-height: 3.25rem;
   border-radius: 0.8rem;
-  background-color: ${({ theme }) => theme.primary.normal};
-  color: ${palette.neutral[99]};
-  border: 1px solid rgba(241, 7, 10, 0.5);
+  background-color: ${({ theme }) => theme.action.primary.background};
+  color: ${({ theme }) => theme.action.primary.foreground};
+  border: 1px solid ${({ theme }) => theme.action.primary.background};
   box-shadow: none;
 `;
 
@@ -144,7 +140,7 @@ export const SecondaryActionButton = styled(Button)`
   border-radius: 0.8rem;
   background-color: ${palette.neutral[97]};
   color: ${palette.neutral[20]};
-  border: 1px solid rgba(255, 255, 255, 0.14);
+  border: 1px solid ${({ theme }) => theme.line.alternative};
 `;
 
 export const QuizBody = styled.div`
@@ -188,7 +184,7 @@ export const QuizProgress = styled.div`
 export const QuizStep = styled.span`
   ${font.body.regular}
   font-size: 1.1rem;
-  color: ${({ theme }) => theme.primary.normal};
+  color: ${({ theme }) => theme.content.accent};
 `;
 
 export const QuizProgressTrack = styled.div`
@@ -196,7 +192,7 @@ export const QuizProgressTrack = styled.div`
   height: 0.45rem;
   border-radius: 999px;
   overflow: hidden;
-  background-color: rgba(255, 255, 255, 0.2);
+  background-color: ${({ theme }) => theme.fill.alternative};
 `;
 
 export const QuizCard = styled.section`
@@ -236,7 +232,7 @@ export const QuestionText = styled.div`
 
 export const QuestionPrefix = styled.span`
   ${font.title1.medium}
-  color: ${({ theme }) => theme.primary.normal};
+  color: ${({ theme }) => theme.content.accent};
 `;
 
 export const OptionList = styled.div`
@@ -292,8 +288,8 @@ export const ExplanationBox = styled.div`
   width: min(100%, 29rem);
   padding: 2rem 1.5rem;
   border-radius: 1.1rem;
-  background-color: ${neutralSurface};
-  border: 1px solid ${subtleBorder};
+  background-color: ${({ theme }) => theme.fill.neutral};
+  border: 1px solid ${({ theme }) => theme.line.alternative};
   align-self: center;
   max-height: 20rem;
   overflow: auto;
@@ -349,7 +345,7 @@ export const SummaryScore = styled.div`
   gap: 0.3rem;
   ${font.title1.medium}
   font-size: 1.85rem;
-  color: ${({ theme }) => theme.primary.normal};
+  color: ${({ theme }) => theme.content.accent};
 `;
 
 export const SummaryScoreTotal = styled.span`
