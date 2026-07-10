@@ -1,4 +1,5 @@
 import * as S from "../../ResetPassword.style";
+import { Button, FieldMessage, TextField } from "@clash/ui";
 import type { ResetPasswordConfirmProps } from "../../model/useResetPassword";
 
 export const ResetPasswordConfirmStep = ({
@@ -16,18 +17,27 @@ export const ResetPasswordConfirmStep = ({
         <S.Description>비밀번호는 8자 이상이어야 합니다.</S.Description>
       </S.Content>
       <S.InputBox>
-        <S.Input
+        <TextField
+          inputSize="lg"
           placeholder="새 비밀번호를 입력하세요."
           type="password"
+          invalid={!!errors.password}
           {...register("password")}
         />
-        {errors.password && <S.ErrorText>{errors.password.message}</S.ErrorText>}
+        {errors.password && <FieldMessage role="alert">{errors.password.message}</FieldMessage>}
       </S.InputBox>
       <S.ButtonWrapper>
-        <S.SubmitButton type="submit" disabled={isSubmitting}>
+        <Button
+          type="submit"
+          variant="primary"
+          size="xl"
+          interaction="responsive"
+          fullWidth
+          isLoading={isSubmitting}
+        >
           {isSubmitting ? "비밀번호 변경 중..." : "비밀번호 변경"}
-        </S.SubmitButton>
-        {errors.root && <S.ErrorText>{errors.root.message}</S.ErrorText>}
+        </Button>
+        {errors.root && <FieldMessage role="alert">{errors.root.message}</FieldMessage>}
         <S.HelpTextBox>
           <S.HelpText to={{ pathname: "/sign-in", search: authSearch }}>로그인</S.HelpText>
         </S.HelpTextBox>

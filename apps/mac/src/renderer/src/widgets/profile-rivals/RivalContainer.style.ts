@@ -1,5 +1,6 @@
 import styled, { css } from "styled-components";
 import { font } from "@clash/design-tokens/font";
+import { InlineNotice } from "@clash/ui";
 
 import Plus from "@/shared/ui/assets/plus.svg";
 
@@ -20,17 +21,9 @@ export const Wrapper = styled.div`
   overflow: hidden;
 `;
 
-export const RefreshNotice = styled.div`
-  ${font.caption.medium};
-  display: flex;
+export const RefreshNotice = styled(InlineNotice)`
   flex: 0 0 auto;
-  align-items: center;
-  justify-content: space-between;
   gap: 0.5rem;
-  padding: 0.5rem 0.75rem;
-  border: 1px solid ${({ theme }) => theme.line.alternative};
-  border-radius: 0.75rem;
-  color: ${({ theme }) => theme.label.alternative};
 `;
 
 export const Container = styled.div`

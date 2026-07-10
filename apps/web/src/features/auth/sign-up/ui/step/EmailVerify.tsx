@@ -2,6 +2,7 @@ import { useRef } from "react";
 import type { ChangeEvent, ClipboardEvent, KeyboardEvent } from "react";
 import { useController } from "react-hook-form";
 import { useLocation } from "react-router-dom";
+import { Button, FieldMessage } from "@clash/ui";
 import * as S from "./EmailVerify.style";
 import * as CommonS from "../SignUpForm.style";
 import type { EmailVerifyProps } from "@/features/auth/sign-up/model/useSignUp";
@@ -90,15 +91,22 @@ export const EmailVerify = ({
             ))}
           </S.CodeInputContainer>
           {errors.verificationCode && (
-            <CommonS.ErrorText>{errors.verificationCode.message}</CommonS.ErrorText>
+            <FieldMessage role="alert">{errors.verificationCode.message}</FieldMessage>
           )}
-          {errors.root && <CommonS.ErrorText>{errors.root.message}</CommonS.ErrorText>}
+          {errors.root && <FieldMessage role="alert">{errors.root.message}</FieldMessage>}
         </div>
       </CommonS.InputBox>
       <CommonS.ButtonWrapper>
-        <CommonS.SubmitButton type="submit" disabled={isSubmitting}>
+        <Button
+          type="submit"
+          variant="primary"
+          size="xl"
+          interaction="responsive"
+          fullWidth
+          isLoading={isSubmitting}
+        >
           {isSubmitting ? "이메일 인증 중..." : "이메일 인증"}
-        </CommonS.SubmitButton>
+        </Button>
         <CommonS.HelpTextContainer>
           <CommonS.HelpText to={{ pathname: "/sign-in", search }}>로그인</CommonS.HelpText>
         </CommonS.HelpTextContainer>

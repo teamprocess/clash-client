@@ -101,15 +101,7 @@ export const MoreIconWrapper = styled.div`
   align-items: center;
 `;
 
-export const IconButton = styled.button`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 0;
-`;
+export { IconButton } from "@clash/ui";
 
 export const MoreIcon = styled(More)`
   cursor: pointer;

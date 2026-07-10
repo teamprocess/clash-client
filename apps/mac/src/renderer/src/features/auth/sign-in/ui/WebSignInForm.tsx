@@ -1,4 +1,5 @@
 import * as S from "./WebSignInForm.style";
+import { FieldMessage } from "@clash/ui";
 import { useWebSignIn } from "../model/useWebSignIn";
 import { Button } from "@/shared/ui";
 
@@ -22,7 +23,7 @@ export const WebSignInForm = () => {
         >
           {isStarting ? "웹 페이지 여는 중..." : "웹에서 로그인"}
         </Button>
-        {error && <S.ErrorText>{error}</S.ErrorText>}
+        {error && <FieldMessage role="alert">{error}</FieldMessage>}
         <S.HelpTextBox>
           <S.HelpText type="button" onClick={startWebSignUp} disabled={isStarting}>
             회원가입

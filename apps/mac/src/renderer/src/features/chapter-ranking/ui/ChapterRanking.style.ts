@@ -1,5 +1,6 @@
 import styled, { css, keyframes } from "styled-components";
 import { font } from "@clash/design-tokens/font";
+import { InlineNotice } from "@clash/ui";
 import FirstFrameIcon from "../assets/first-frame.svg";
 import SecondFrameIcon from "../assets/second-frame.svg";
 import ThirdFrameIcon from "../assets/third-frame.svg";
@@ -97,17 +98,8 @@ export const StateDescription = styled.p`
   word-break: keep-all;
 `;
 
-export const RefreshWarning = styled.div`
-  ${font.caption.medium};
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.75rem;
+export const RefreshWarning = styled(InlineNotice)`
   margin: 0.5rem 0;
-  padding: 0.5rem 0.75rem;
-  border: 1px solid ${({ theme }) => theme.line.alternative};
-  border-radius: 0.75rem;
-  color: ${({ theme }) => theme.label.alternative};
 `;
 
 export const RankingTop3Box = styled.div`

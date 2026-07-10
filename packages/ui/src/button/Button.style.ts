@@ -3,12 +3,14 @@ import { font } from "@clash/design-tokens/font";
 import { palette } from "@clash/design-tokens/theme";
 
 export type ButtonVariant = "primary" | "secondary" | "accept" | "pending";
-export type ButtonSize = "sm" | "md" | "lg";
+export type ButtonSize = "sm" | "md" | "lg" | "xl";
+export type ButtonInteraction = "static" | "responsive";
 
-interface ButtonProps {
+interface ButtonStyleProps {
   $variant: ButtonVariant;
   $size: ButtonSize;
   $fullWidth: boolean;
+  $interaction: ButtonInteraction;
 }
 
 const sizeStyleMap = {
@@ -28,13 +30,20 @@ const sizeStyleMap = {
     padding: 0.875rem 1.5rem;
     border-radius: 0.75rem;
   `,
+  xl: css`
+    ${font.headline2.medium};
+    min-height: 3.5rem;
+    padding: 1rem 2rem;
+    border-radius: 1rem;
+  `,
 } as const;
 
-export const Button = styled.button<ButtonProps>`
+export const ButtonRoot = styled.button<ButtonStyleProps>`
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 0.25rem;
+  box-sizing: border-box;
   border: none;
   border-radius: 0.625rem;
   cursor: pointer;
@@ -71,17 +80,25 @@ export const Button = styled.button<ButtonProps>`
     return foregrounds[$variant];
   }};
 
-  &:disabled {
-    cursor: not-allowed;
-    opacity: 0.45;
-  }
+  ${({ $interaction }) =>
+    $interaction === "responsive" &&
+    css`
+      &:hover:not(:disabled) {
+        opacity: 0.9;
+      }
+    `}
 
   &:active:not(:disabled) {
     transform: translateY(1px);
   }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.45;
+  }
 `;
 
-export const Label = styled.span`
+export const ButtonLabel = styled.span`
   display: inline-flex;
   align-items: center;
   justify-content: center;
