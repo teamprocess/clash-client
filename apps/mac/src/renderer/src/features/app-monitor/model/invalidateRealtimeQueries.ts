@@ -5,7 +5,6 @@ import {
   battleQueryKeys,
   compareQueryKeys,
   compareRivalsQueryKeys,
-  myCompetitionQueryKeys,
   transitionQueryKeys,
 } from "@/entities/competition";
 import { groupQueryKeys } from "@/entities/group";
@@ -46,8 +45,6 @@ const invalidateCompeteQueries = async () => {
     queryClient.invalidateQueries({ queryKey: activeQueryKeys.all }),
     queryClient.invalidateQueries({ queryKey: compareQueryKeys.all }),
     queryClient.invalidateQueries({ queryKey: transitionQueryKeys.all }),
-    queryClient.invalidateQueries({ queryKey: myCompetitionQueryKeys.compares }),
-    queryClient.invalidateQueries({ queryKey: myCompetitionQueryKeys.growthRates }),
   ]);
 };
 

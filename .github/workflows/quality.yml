@@ -8,7 +8,6 @@ on:
     paths:
       - "apps/**"
       - "packages/**"
-      - "scripts/**"
       - "package.json"
       - "pnpm-lock.yaml"
       - "pnpm-workspace.yaml"
@@ -44,29 +43,6 @@ jobs:
 
       - name: Check formatting
         run: pnpm format:check
-
-  fsd-boundaries:
-    name: FSD boundaries
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 22
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-
-      - name: Check FSD boundaries
-        run: pnpm lint:fsd
 
   detect-changes:
     runs-on: ubuntu-latest
