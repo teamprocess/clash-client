@@ -3,7 +3,8 @@ import { previewApi } from "../previewApi";
 import type { GetSectionPreviewResponse } from "../../model/preview.types";
 
 export const previewQueryKeys = {
-  detail: (sectionId: number) => ["roadmap", "sectionPreview", sectionId] as const,
+  all: ["roadmap", "sectionPreview"] as const,
+  detail: (sectionId: number) => [...previewQueryKeys.all, sectionId] as const,
 };
 
 export const useSectionPreviewQuery = (sectionId: number) => {

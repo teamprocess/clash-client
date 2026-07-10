@@ -1,22 +1,29 @@
 import { useEffect, useMemo, useState } from "react";
-import { useAppMonitor } from "@/features/app-monitor";
+import type { UseAppMonitorResult } from "@/features/app-monitor";
 import { formatDuration } from "@/entities/app-monitor";
-import { getMonitoredAppLabel, useRecordTodayQuery } from "@/entities/record";
-import { useActivityRecordSync, useRecordStore, useRecordTicker } from "@/features/record";
+import { getMonitoredAppLabel } from "@/entities/record";
+import {
+  useActivityRecordSync,
+  useRecordSessionSync,
+  useRecordStore,
+  useRecordTicker,
+} from "@/features/record";
 import { formatTime } from "@/shared/lib";
 
-export const useSidebarMonitor = () => {
+export const useSidebarMonitor = (appMonitor: UseAppMonitorResult) => {
   // Electron 환경 체크
   const isElectron = !!(typeof window !== "undefined" && window.api);
 
+  const {
+    activeApp,
+    frontmostMonitoredApp,
+    hasInitialized: hasInitializedAppMonitor,
+    hasResolvedFrontmostMonitoredApp,
+  } = appMonitor;
+  const { data: todayResponse } = useRecordSessionSync();
   useRecordTicker();
-
-  const { activeApp, hasInitialized: hasInitializedAppMonitor } = useAppMonitor();
-  const { data: todayResponse } = useRecordTodayQuery();
   const activeSessionType = useRecordStore(state => state.activeSessionType);
   const currentStudyTime = useRecordStore(state => state.currentStudyTime);
-  const [frontmostMonitoredApp, setFrontmostMonitoredApp] = useState<string | null>(null);
-  const [hasResolvedFrontmostMonitoredApp, setHasResolvedFrontmostMonitoredApp] = useState(false);
   const [fallbackDisplayTime, setFallbackDisplayTime] = useState("00:00:00");
 
   const isTaskRecording = useMemo(
@@ -73,36 +80,6 @@ export const useSidebarMonitor = () => {
     isFrontmostMonitoredApp,
     isActivitySyncReady
   );
-
-  useEffect(() => {
-    if (!isElectron) {
-      return;
-    }
-
-    let cancelled = false;
-
-    const refreshFrontmostMonitoredApp = async () => {
-      try {
-        const appName = await window.api.getFrontmostMonitoredApp();
-        if (!cancelled) {
-          setFrontmostMonitoredApp(appName);
-          setHasResolvedFrontmostMonitoredApp(true);
-        }
-      } catch (error) {
-        console.error("전면 개발 앱 조회 실패:", error);
-      }
-    };
-
-    void refreshFrontmostMonitoredApp();
-    const interval = setInterval(() => {
-      void refreshFrontmostMonitoredApp();
-    }, 2000);
-
-    return () => {
-      cancelled = true;
-      clearInterval(interval);
-    };
-  }, [isElectron]);
 
   // 실시간 시간 업데이트
   useEffect(() => {

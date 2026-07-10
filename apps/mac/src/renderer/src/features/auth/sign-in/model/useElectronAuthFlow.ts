@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useQueryClient } from "@tanstack/react-query";
 import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
-import { authApi, startUserProfileSyncWindow } from "@/entities/user";
+import { authApi, startUserProfileSyncWindow, userQueryKeys } from "@/entities/user";
 import { appRuntimeProfile } from "@/shared/config/appRuntime";
 import { getErrorMessage } from "@/shared/lib";
 
@@ -56,7 +56,7 @@ export const useElectronAuthFlow = () => {
       }
 
       startUserProfileSyncWindow();
-      await queryClient.invalidateQueries({ queryKey: ["user"] });
+      await queryClient.invalidateQueries({ queryKey: userQueryKeys.all });
       setPendingAuth(null);
       navigate("/");
       return true;

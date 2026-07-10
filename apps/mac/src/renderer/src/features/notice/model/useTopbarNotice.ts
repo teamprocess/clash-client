@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { battleApi, battleQueryKeys, compareRivalsQueryKeys } from "@/entities/competition";
 import { rivalQueryKeys, rivalsApi } from "@/entities/rival";
+import { userQueryKeys } from "@/entities/user";
 import {
   noticeApi,
   type NoticeItem,
@@ -118,13 +119,15 @@ const invalidateNoticeQueries = async () => {
 const invalidateNoticeRelatedQueries = async () => {
   await Promise.all([
     invalidateNoticeQueries(),
-    queryClient.invalidateQueries({ queryKey: ["user"] }),
+    queryClient.invalidateQueries({ queryKey: userQueryKeys.all }),
     queryClient.invalidateQueries({ queryKey: rivalQueryKeys.myRivals }),
+    queryClient.invalidateQueries({ queryKey: rivalQueryKeys.requests }),
     queryClient.invalidateQueries({ queryKey: compareRivalsQueryKeys.all }),
     queryClient.invalidateQueries({ queryKey: battleQueryKeys.info }),
     queryClient.invalidateQueries({ queryKey: battleQueryKeys.details }),
     queryClient.invalidateQueries({ queryKey: battleQueryKeys.analyses }),
     queryClient.invalidateQueries({ queryKey: battleQueryKeys.list }),
+    queryClient.invalidateQueries({ queryKey: battleQueryKeys.applications }),
     queryClient.invalidateQueries({ queryKey: rivalQueryKeys.available }),
   ]);
 };

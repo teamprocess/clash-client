@@ -1,7 +1,7 @@
 import { useRef, useEffect, useState } from "react";
 import { Outlet, useLocation } from "react-router-dom";
 import { AttendanceDialog, useAttendanceDialog } from "@/features/attendance";
-import { useDailyRefresh, useRealtimeSync } from "@/features/app-monitor";
+import { useAppMonitor, useDailyRefresh, useRealtimeSync } from "@/features/app-monitor";
 import { GlobalAnnouncementDialog } from "@/features/announcement";
 import { useNoticePushNotification } from "@/features/notice";
 import { GitHubGuard } from "@/widgets/github-guard";
@@ -14,7 +14,8 @@ export const MainLayout = () => {
   const mainContentRef = useRef<HTMLElement>(null);
   const { pathname } = useLocation();
   const attendanceDialog = useAttendanceDialog();
-  useRealtimeSync();
+  const appMonitor = useAppMonitor();
+  useRealtimeSync(appMonitor.frontmostMonitoredApp !== null);
   useDailyRefresh();
   useNoticePushNotification();
 
@@ -34,7 +35,7 @@ export const MainLayout = () => {
         isAttendancePending={attendanceDialog.isAttendancePending}
       />
       <S.ContentWrapper>
-        <Sidebar isOpen={isSidebarOpen} />
+        <Sidebar isOpen={isSidebarOpen} appMonitor={appMonitor} />
         <S.MainContent ref={mainContentRef}>
           <Outlet />
         </S.MainContent>

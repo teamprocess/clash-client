@@ -1,37 +1,13 @@
-import { useState, useEffect, useCallback } from "react";
-import { ActiveApp, MonitoringSession } from "@/entities/app-monitor";
+import { useEffect, useState } from "react";
+import type { ActiveApp } from "@/entities/app-monitor";
+
+const FRONTMOST_APP_POLL_MS = 2000;
 
 export const useAppMonitor = () => {
   const [activeApp, setActiveApp] = useState<ActiveApp | null>(null);
-  const [sessions, setSessions] = useState<MonitoringSession[]>([]);
-  const [isMonitoring, setIsMonitoring] = useState(false);
   const [hasInitialized, setHasInitialized] = useState(false);
-
-  const startMonitoring = useCallback(async () => {
-    try {
-      await window.api.startMonitoring();
-      setIsMonitoring(true);
-
-      // 초기 상태 로드
-      const currentApp = await window.api.getActiveApp();
-      setActiveApp(currentApp);
-
-      const currentSessions = await window.api.getSessions();
-      setSessions(currentSessions);
-    } catch (error) {
-      console.error("모니터링을 시작하는데 실패했습니다:", error);
-    }
-  }, []);
-
-  const stopMonitoring = useCallback(async () => {
-    try {
-      await window.api.stopMonitoring();
-      setIsMonitoring(false);
-      setActiveApp(null);
-    } catch (error) {
-      console.error("모니터링을 중지하는데 실패했습니다:", error);
-    }
-  }, []);
+  const [frontmostMonitoredApp, setFrontmostMonitoredApp] = useState<string | null>(null);
+  const [hasResolvedFrontmostMonitoredApp, setHasResolvedFrontmostMonitoredApp] = useState(false);
 
   // 실시간 업데이트 리스너 및 자동 시작
   useEffect(() => {
@@ -48,11 +24,23 @@ export const useAppMonitor = () => {
       }
     });
 
-    const unsubscribeSessionUpdated = window.api.onSessionUpdated(session => {
-      if (!cancelled) {
-        setSessions(prev => [...prev, session]);
+    const refreshFrontmostMonitoredApp = async () => {
+      try {
+        const appName = await window.api.getFrontmostMonitoredApp();
+        if (!cancelled) {
+          setFrontmostMonitoredApp(appName);
+        }
+      } catch (error) {
+        if (!cancelled) {
+          setFrontmostMonitoredApp(null);
+          console.error("전면 개발 앱 조회 실패:", error);
+        }
+      } finally {
+        if (!cancelled) {
+          setHasResolvedFrontmostMonitoredApp(true);
+        }
       }
-    });
+    };
 
     // 비동기 시작 함수
     const initMonitoring = async () => {
@@ -62,8 +50,6 @@ export const useAppMonitor = () => {
           return;
         }
 
-        setIsMonitoring(true);
-
         // 초기 상태 로드
         const currentApp = await window.api.getActiveApp();
         if (cancelled) {
@@ -71,13 +57,6 @@ export const useAppMonitor = () => {
         }
 
         setActiveApp(currentApp);
-
-        const currentSessions = await window.api.getSessions();
-        if (cancelled) {
-          return;
-        }
-
-        setSessions(currentSessions);
       } catch (error) {
         console.error("모니터링을 시작하는데 실패했습니다:", error);
       } finally {
@@ -87,22 +66,26 @@ export const useAppMonitor = () => {
       }
     };
 
-    initMonitoring();
+    void initMonitoring();
+    void refreshFrontmostMonitoredApp();
+    const frontmostAppInterval = setInterval(() => {
+      void refreshFrontmostMonitoredApp();
+    }, FRONTMOST_APP_POLL_MS);
 
     // Cleanup
     return () => {
       cancelled = true;
+      clearInterval(frontmostAppInterval);
       unsubscribeAppChanged();
-      unsubscribeSessionUpdated();
     };
   }, []);
 
   return {
     activeApp,
-    sessions,
-    isMonitoring,
     hasInitialized,
-    startMonitoring,
-    stopMonitoring,
+    frontmostMonitoredApp,
+    hasResolvedFrontmostMonitoredApp,
   };
 };
+
+export type UseAppMonitorResult = ReturnType<typeof useAppMonitor>;

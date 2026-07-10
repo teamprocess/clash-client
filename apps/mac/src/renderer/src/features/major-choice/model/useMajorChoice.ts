@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Major, majorApi, useMajorQuestionsQuery } from "@/entities/major";
 import { useQueryClient } from "@tanstack/react-query";
-import { useGetMyProfile } from "@/entities/user";
+import { userQueryKeys, useGetMyProfile } from "@/entities/user";
 
 export type FeatureItem = "TEST" | "CHOICE" | null;
 export type StepType = "FEATURE" | "TEST" | "LOADING" | "RESULT" | "CHOICE";
@@ -102,7 +102,7 @@ export const useMajorChoice = () => {
       });
 
       await queryClient.invalidateQueries({
-        queryKey: ["user"],
+        queryKey: userQueryKeys.all,
       });
 
       navigate("/roadmap");

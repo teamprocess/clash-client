@@ -1,6 +1,8 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { productQueryKeys } from "@/entities/product";
+import { ownedItemsQueryKeys } from "@/entities/profile";
 import { purchaseProduct, type PurchaseRequest } from "@/entities/shop";
+import { userQueryKeys } from "@/entities/user";
 
 export const usePurchaseProduct = () => {
   const queryClient = useQueryClient();
@@ -10,7 +12,8 @@ export const usePurchaseProduct = () => {
 
     onSuccess: async () => {
       await Promise.all([
-        queryClient.invalidateQueries({ queryKey: ["user"] }),
+        queryClient.invalidateQueries({ queryKey: userQueryKeys.all }),
+        queryClient.invalidateQueries({ queryKey: ownedItemsQueryKeys.all }),
         queryClient.invalidateQueries({ queryKey: productQueryKeys.all }),
       ]);
     },

@@ -3,6 +3,7 @@ import { profileImageApi, uploadProfileImageToS3 } from "../profileImageApi";
 import type { GetMyProfileResponse } from "../authApi";
 import type { ApplyProfileImageRequest } from "../../model/profileImage.types";
 import { userQueryKeys } from "../../model/useGetMyProfile";
+import { captureSessionEpoch, isSessionEpochCurrent } from "@/shared/lib";
 
 export const useApplyProfileImageMutation = () => {
   return useMutation({
@@ -14,6 +15,7 @@ export const useUploadProfileImageMutation = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
+    onMutate: () => ({ sessionEpoch: captureSessionEpoch() }),
     mutationFn: async (file: File) => {
       const fileName = file.name.trim().length > 0 ? file.name : `profile-${Date.now()}`;
       const contentType = file.type || "application/octet-stream";
@@ -40,7 +42,11 @@ export const useUploadProfileImageMutation = () => {
 
       return applyResponse.data?.profileImageUrl ?? uploadMetadata.fileUrl;
     },
-    onSuccess: async profileImageUrl => {
+    onSuccess: async (profileImageUrl, _file, context) => {
+      if (!isSessionEpochCurrent(context.sessionEpoch)) {
+        return;
+      }
+
       queryClient.setQueryData<GetMyProfileResponse | undefined>(userQueryKeys.profile, previous =>
         previous
           ? {

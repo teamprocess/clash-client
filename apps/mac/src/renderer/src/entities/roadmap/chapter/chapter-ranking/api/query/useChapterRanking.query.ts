@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { rankingApi } from "../chapterRankingApi";
 
 export const chapterRankingQueryKeys = {
+  all: ["chapterRankings"] as const,
   list: ["chapterRankings"] as const,
 };
 

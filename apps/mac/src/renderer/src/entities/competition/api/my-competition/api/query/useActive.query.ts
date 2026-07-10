@@ -3,7 +3,8 @@ import { activeApi } from "../activeApi";
 import type { CategoryType } from "../../../../model/rival-competition/compareRivals.types";
 
 export const activeQueryKeys = {
-  active: (category: CategoryType) => ["active", category] as const,
+  all: ["active"] as const,
+  active: (category: CategoryType) => [...activeQueryKeys.all, category] as const,
 };
 
 export const useActiveQuery = (category: CategoryType) => {

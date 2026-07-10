@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { transitionApi } from "../transitionApi";
 
 export const transitionQueryKeys = {
+  all: ["transition"] as const,
   transition: ["transition"] as const,
 };
 
