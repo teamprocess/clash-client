@@ -556,9 +556,9 @@ export const DateChoiceBox = styled.button<{ $active: boolean }>`
   border-radius: 0.5rem;
   border: 2px solid ${({ theme }) => theme.line.alternative};
   background-color: ${({ $active, theme }) =>
-    $active ? theme.action.primary.background : theme.fill.normal};
+    $active ? theme.interaction.selected.background : theme.fill.normal};
   color: ${({ $active, theme }) =>
-    $active ? theme.action.primary.foreground : theme.label.normal};
+    $active ? theme.interaction.selected.foreground : theme.label.normal};
   ${font.headline2.medium}
   cursor: pointer;
   ${flexRow};
@@ -568,7 +568,7 @@ export const DateChoiceBox = styled.button<{ $active: boolean }>`
 
   &:hover {
     background-color: ${({ theme, $active }) =>
-      $active ? theme.action.primary.background : theme.fill.neutral};
+      $active ? theme.interaction.selected.background : theme.fill.neutral};
   }
 `;
 
