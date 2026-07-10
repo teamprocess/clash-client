@@ -6,7 +6,7 @@ export const lightTheme: Theme = {
   },
   action: {
     primary: {
-      background: "#c60608",
+      background: "#f1070a",
       foreground: "#fcfcfc",
     },
   },
