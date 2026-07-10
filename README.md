@@ -1,9 +1,9 @@
 <p>
-  <img src="./docs/clash-background.svg" width="100%" alt="Clash" />
+  <img src="./.github/clash-background.svg" width="100%" alt="Clash" />
 </p>
 
 <h1>
-  <img src="./docs/assets/readme-title.svg" alt="Clash" />
+  <img src="./.github/assets/readme-title.svg" alt="Clash" />
 </h1>
 
 **학습 기록 기반 경쟁 애플리케이션, Clash**
@@ -87,5 +87,5 @@ clash-client
 │   ├── eslint-config     # 공유 ESLint 설정
 │   ├── tsconfig          # 공유 TypeScript 설정
 │   └── ui                # Mac/Web 공통 UI primitive와 variant
-└── docs/assets           # README 전용 에셋
+└── .github/assets        # README 전용 에셋
 ```
