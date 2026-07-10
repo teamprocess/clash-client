@@ -1,13 +1,13 @@
-import * as S from "./SignUp.style";
+import * as S from "../AuthPage.style";
 import { SignUpForm } from "@/features/auth";
 
 export const SignUpPage = () => {
   return (
-    <S.SignUpContainer>
-      <S.SignUpFormWrapper>
+    <S.PageContainer>
+      <S.FormWrapper>
         <S.ClashLogo />
         <SignUpForm />
-      </S.SignUpFormWrapper>
-    </S.SignUpContainer>
+      </S.FormWrapper>
+    </S.PageContainer>
   );
 };

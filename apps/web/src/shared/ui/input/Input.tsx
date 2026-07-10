@@ -2,7 +2,6 @@ import { forwardRef } from "react";
 import type { InputHTMLAttributes } from "react";
 import styled from "styled-components";
 import { font } from "@clash/design-tokens/font";
-import { palette } from "@clash/design-tokens/theme";
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   error?: string;
@@ -35,7 +34,7 @@ const StyledInput = styled.input`
   outline: none;
 
   &::placeholder {
-    color: ${({ theme }) => theme.label.assistive};
+    color: ${({ theme }) => theme.label.alternative};
   }
 
   &:focus {
@@ -50,7 +49,7 @@ const StyledInput = styled.input`
 
 const ErrorText = styled.span`
   ${font.caption.medium};
-  color: ${palette.red[60]};
+  color: ${({ theme }) => theme.feedback.danger};
   margin-top: 0.5rem;
   display: block;
 `;

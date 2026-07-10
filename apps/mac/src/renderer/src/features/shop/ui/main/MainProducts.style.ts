@@ -83,8 +83,8 @@ export const RetryButton = styled.button`
   padding: 0 1rem;
   border: none;
   border-radius: 0.625rem;
-  background-color: ${({ theme }) => theme.primary.normal};
-  color: ${({ theme }) => theme.label.normal};
+  background-color: ${({ theme }) => theme.action.primary.background};
+  color: ${({ theme }) => theme.action.primary.foreground};
   ${font.headline2.bold};
   cursor: pointer;
   flex: 0 0 auto;

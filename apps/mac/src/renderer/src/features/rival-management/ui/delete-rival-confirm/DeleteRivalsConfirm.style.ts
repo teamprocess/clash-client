@@ -1,7 +1,6 @@
 import styled, { css } from "styled-components";
 
 import { font } from "@clash/design-tokens/font";
-import { palette } from "@clash/design-tokens/theme";
 
 const flexRow = css`
   display: flex;
@@ -36,7 +35,7 @@ export const ButtonBox = styled.div`
 
 export const ErrorText = styled.span`
   ${font.caption.medium};
-  color: ${palette.red[60]};
+  color: ${({ theme }) => theme.feedback.danger};
   margin-top: 0.5rem;
   display: block;
 `;

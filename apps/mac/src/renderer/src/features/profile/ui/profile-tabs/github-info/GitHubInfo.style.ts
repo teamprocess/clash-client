@@ -1,6 +1,5 @@
 import styled from "styled-components";
 import { font } from "@clash/design-tokens/font";
-import { palette } from "@clash/design-tokens/theme";
 
 import CommitImg from "../../../assets/commit.svg?url";
 import IssueImg from "../../../assets/issue.svg?url";
@@ -143,7 +142,7 @@ export const GitHubBox = styled.div`
   min-height: 6.625rem;
   border-radius: 1.25rem;
   padding: 1rem 1.25rem;
-  background: ${({ theme }) => theme.label.disable};
+  background: ${({ theme }) => theme.fill.neutral};
   display: grid;
   grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
   align-items: stretch;
@@ -298,7 +297,7 @@ export const Lines = styled.div`
 
 export const Plus = styled.span`
   ${font.label.bold}
-  color: ${palette.green[40]};
+  color: ${({ theme }) => theme.feedback.success};
 
   ${largeDesktopQuery} {
     ${font.body.bold}
@@ -307,7 +306,7 @@ export const Plus = styled.span`
 
 export const Minus = styled.span`
   ${font.label.bold}
-  color: ${palette.red[60]};
+  color: ${({ theme }) => theme.feedback.danger};
 
   ${largeDesktopQuery} {
     ${font.body.bold}
@@ -334,7 +333,7 @@ export const EmptyBox = styled.div`
   min-height: 6.625rem;
   border-radius: 1.25rem;
   padding: 1.25rem;
-  background: ${({ theme }) => theme.label.disable};
+  background: ${({ theme }) => theme.fill.neutral};
   box-sizing: border-box;
   display: flex;
   flex-direction: column;

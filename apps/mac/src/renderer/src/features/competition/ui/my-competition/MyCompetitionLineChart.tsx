@@ -2,6 +2,7 @@ import { Line } from "react-chartjs-2";
 import "chart.js/auto";
 import { formatTime } from "@/shared/lib";
 import type { AnalyzeCategory } from "@/entities/competition";
+import { useTheme } from "styled-components";
 
 interface MyCompetitionLineChartProps {
   dataPoint: {
@@ -12,6 +13,7 @@ interface MyCompetitionLineChartProps {
 }
 
 export const MyCompetitionLineChart = ({ dataPoint, category }: MyCompetitionLineChartProps) => {
+  const theme = useTheme();
   const labels = dataPoint.labels.map(label => {
     const [month, day] = label.split("-");
     return `${Number(month)}월 ${Number(day)}일`;
@@ -39,11 +41,11 @@ export const MyCompetitionLineChart = ({ dataPoint, category }: MyCompetitionLin
           {
             data: values,
             borderWidth: 2,
-            borderColor: "#0081CC",
-            backgroundColor: "none",
+            borderColor: theme.dataVisualization.series[1],
+            backgroundColor: "transparent",
             pointRadius: 8,
             pointHoverRadius: 9,
-            pointBackgroundColor: "#0081CC",
+            pointBackgroundColor: theme.dataVisualization.series[1],
             tension: 0,
             fill: false,
           },
@@ -57,8 +59,10 @@ export const MyCompetitionLineChart = ({ dataPoint, category }: MyCompetitionLin
             display: false,
           },
           tooltip: {
-            backgroundColor: "#2A2B2C",
-            borderColor: "#747678",
+            backgroundColor: theme.dataVisualization.tooltip.background,
+            borderColor: theme.dataVisualization.tooltip.border,
+            bodyColor: theme.dataVisualization.tooltip.label,
+            titleColor: theme.dataVisualization.tooltip.label,
             borderWidth: 1,
             displayColors: false,
             callbacks: {
@@ -80,12 +84,12 @@ export const MyCompetitionLineChart = ({ dataPoint, category }: MyCompetitionLin
           x: {
             grid: { display: false },
             ticks: {
-              color: "#A1A1A1",
+              color: theme.dataVisualization.axisLabel,
             },
           },
           y: {
             display: false,
-            grid: { display: false, color: "#3A3A3C" },
+            grid: { display: false, color: theme.line.alternative },
           },
         },
       }}

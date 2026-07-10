@@ -21,14 +21,14 @@ export const NodeCircle = styled.circle<NodeCircleProps>`
     $status === "completed"
       ? theme.label.assistive
       : $status === "current"
-        ? theme.primary.normal
+        ? theme.badge.primary.background
         : theme.background.neutral};
 
   stroke: ${({ $status, theme }) =>
     $status === "completed"
       ? theme.line.normal
       : $status === "current"
-        ? theme.primary.normal
+        ? theme.interaction.selectionBorder
         : theme.line.neutral};
 
   stroke-width: 5;

@@ -116,7 +116,7 @@ export const TodoTextInput = styled.input`
   outline: none;
 
   &::placeholder {
-    color: ${({ theme }) => theme.label.assistive};
+    color: ${({ theme }) => theme.label.alternative};
   }
 
   &:disabled {

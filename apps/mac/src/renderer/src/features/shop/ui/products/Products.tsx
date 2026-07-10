@@ -98,7 +98,7 @@ export const Products = ({
             keyword={keyword}
             onKeywordChange={onKeywordChange}
           />
-          <S.ContentWrapper $isPanelOpen={false}>
+          <S.ContentWrapper>
             <ShopLoading variant="products" />
           </S.ContentWrapper>
         </S.ListPane>
@@ -118,7 +118,7 @@ export const Products = ({
             keyword={keyword}
             onKeywordChange={onKeywordChange}
           />
-          <S.ContentWrapper $isPanelOpen={false}>
+          <S.ContentWrapper>
             <S.StateBox role="alert">
               <S.StateTitle>상품 목록을 불러오지 못했어요.</S.StateTitle>
               <S.StateDescription>
@@ -143,8 +143,8 @@ export const Products = ({
           keyword={keyword}
           onKeywordChange={onKeywordChange}
         />
-        <S.ContentWrapper $isPanelOpen={isPanelOpen}>
-          <S.CardContainer $isPanelOpen={isPanelOpen}>
+        <S.ContentWrapper>
+          <S.CardContainer>
             {products.map(product => (
               <ProductCard
                 key={product.id}

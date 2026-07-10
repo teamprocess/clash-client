@@ -1,7 +1,6 @@
 import type { ButtonHTMLAttributes, ReactNode } from "react";
 import styled from "styled-components";
 import { font } from "@clash/design-tokens/font";
-import { palette } from "@clash/design-tokens/theme";
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   children: ReactNode;
@@ -35,8 +34,8 @@ const StyledButton = styled.button<{ variant: string; fullWidth: boolean }>`
   ${({ variant, theme }) =>
     variant === "primary"
       ? `
-    color: ${palette.neutral[97]};
-    background-color: ${theme.primary.normal};
+    color: ${theme.action.primary.foreground};
+    background-color: ${theme.action.primary.background};
 
     &:hover:not(:disabled) {
       opacity: 0.9;

@@ -27,7 +27,7 @@ export const SubDescription = styled.p`
 
 export const ErrorText = styled.p`
   ${font.caption.medium}
-  color: ${({ theme }) => theme.primary.normal};
+  color: ${({ theme }) => theme.content.accent};
 `;
 
 export const Actions = styled.div`

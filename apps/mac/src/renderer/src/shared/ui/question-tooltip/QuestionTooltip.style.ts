@@ -23,7 +23,7 @@ export const Trigger = styled.button`
   }
 
   &:focus-visible {
-    outline: 2px solid ${({ theme }) => theme.primary.normal};
+    outline: 2px solid ${({ theme }) => theme.interaction.selectionBorder};
     outline-offset: 2px;
   }
 `;

@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { font, palette } from "@clash/design-tokens";
+import { font } from "@clash/design-tokens";
 import { createNameplateOverlayTuningCss, nameplateFrameCss } from "@/shared/lib";
 import { defaultProfileImageDark } from "@/shared/ui";
 
@@ -61,8 +61,10 @@ export const FilterChip = styled.button<{ $active: boolean }>`
   border: none;
   border-radius: 999px;
   padding: 0.375rem 0.875rem;
-  background: ${({ $active, theme }) => ($active ? theme.primary.normal : theme.fill.neutral)};
-  color: ${({ $active, theme }) => ($active ? palette.neutral[95] : theme.label.assistive)};
+  background: ${({ $active, theme }) =>
+    $active ? theme.action.primary.background : theme.fill.neutral};
+  color: ${({ $active, theme }) =>
+    $active ? theme.action.primary.foreground : theme.label.assistive};
   ${font.label.medium};
   cursor: pointer;
 `;
@@ -99,7 +101,8 @@ export const CardButton = styled.button<{ $equipped: boolean }>`
   min-height: clamp(8.9rem, 17vh, 10.75rem);
   border-radius: 1.35rem;
   border: 1px solid
-    ${({ $equipped, theme }) => ($equipped ? theme.primary.normal : theme.line.alternative)};
+    ${({ $equipped, theme }) =>
+      $equipped ? theme.interaction.selectionBorder : theme.line.alternative};
   background: ${({ theme }) => theme.fill.neutral};
   padding: 0.875rem;
   display: flex;
@@ -270,8 +273,8 @@ export const CategoryPill = styled.span`
   flex: 0 0 auto;
   padding: 0.22rem 0.6rem;
   border-radius: 999px;
-  background: ${({ theme }) => theme.primary.normal};
-  color: ${palette.neutral[95]};
+  background: ${({ theme }) => theme.badge.primary.background};
+  color: ${({ theme }) => theme.badge.primary.foreground};
   ${font.caption.medium};
 `;
 

@@ -23,5 +23,5 @@ interface FontStyle {
 
 export const fontCommon = {
   lineHeight: "130%",
-  letterSpacing: "-2%",
+  letterSpacing: "-0.02em",
 } as const;

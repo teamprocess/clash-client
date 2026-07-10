@@ -19,22 +19,26 @@ export const RivalStatusButton = styled.button<RivalButtonProps>`
   padding: 0.325rem 0.9rem;
   border-radius: 0.625rem;
 
-  color: ${({ theme, $variant }) =>
-    $variant === "primary" ? palette.neutral[99] : theme.fill.normal};
+  color: ${({ theme, $variant }) => {
+    const foregrounds: Record<RivalButtonVariant, string> = {
+      primary: theme.action.primary.foreground,
+      secondary: theme.label.strong,
+      accept: palette.neutral[5],
+      pending: palette.neutral[5],
+    };
+
+    return foregrounds[$variant];
+  }};
 
   background-color: ${({ theme, $variant }) => {
-    switch ($variant) {
-      case "primary":
-        return theme.primary.normal;
-      case "secondary":
-        return theme.line.normal;
-      case "accept":
-        return palette.green[50];
-      case "pending":
-        return palette.yellow?.[50] ?? theme.line.alternative;
-      default:
-        return theme.line.normal;
-    }
+    const backgrounds: Record<RivalButtonVariant, string> = {
+      primary: theme.action.primary.background,
+      secondary: theme.line.normal,
+      accept: palette.green[50],
+      pending: palette.yellow[50],
+    };
+
+    return backgrounds[$variant];
   }};
 
   &:disabled {

@@ -40,6 +40,8 @@ export const DialogContainer = styled.div<{
 
   width: ${({ $width }) => $width}rem;
   height: ${({ $height }) => $height}rem;
+  max-width: calc(100vw - 2rem);
+  max-height: calc(100dvh - 2rem);
 
   ${({ $fullWidth }) =>
     $fullWidth &&
@@ -86,5 +88,6 @@ export const DialogContent = styled.div<{ $gap: number }>`
   width: 100%;
   flex: 1;
   min-height: 0;
+  overflow: auto;
   gap: ${({ $gap }) => $gap}rem;
 `;

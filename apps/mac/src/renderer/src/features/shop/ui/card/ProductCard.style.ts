@@ -1,7 +1,6 @@
 import styled from "styled-components";
 import { font } from "@clash/design-tokens/font";
 import Cookie from "@/features/shop/assets/cookie.svg";
-import { palette } from "@clash/design-tokens/theme";
 
 export const CardContainer = styled.div<{ $isBought?: boolean; $isActive?: boolean }>`
   position: relative;
@@ -15,9 +14,10 @@ export const CardContainer = styled.div<{ $isBought?: boolean; $isActive?: boole
   box-sizing: border-box;
   background-color: ${({ theme }) => theme.fill.neutral};
   border: 1px solid
-    ${({ theme, $isActive }) => ($isActive ? theme.primary.normal : theme.line.alternative)};
+    ${({ theme, $isActive }) =>
+      $isActive ? theme.interaction.selectionBorder : theme.line.alternative};
   box-shadow: ${({ theme, $isActive }) =>
-    $isActive ? `inset 0 0 0 1px ${theme.primary.normal}` : "none"};
+    $isActive ? `inset 0 0 0 1px ${theme.interaction.selectionBorder}` : "none"};
   border-radius: 1rem;
   overflow: hidden;
   cursor: pointer;
@@ -59,8 +59,8 @@ export const OwnedBadge = styled.span`
   z-index: 2;
   padding: 0.22rem 0.6rem;
   border-radius: 999px;
-  background: ${({ theme }) => theme.primary.normal};
-  color: ${palette.neutral[95]};
+  background: ${({ theme }) => theme.badge.primary.background};
+  color: ${({ theme }) => theme.badge.primary.foreground};
   ${font.caption.medium};
 `;
 
@@ -107,7 +107,7 @@ export const OriginalPriceText = styled.p`
 `;
 
 export const DiscountText = styled.p`
-  color: ${palette.green[40]};
+  color: ${({ theme }) => theme.feedback.success};
   ${font.body.bold};
   margin: 0 0 0 0.25rem;
 `;
