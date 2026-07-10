@@ -1,7 +1,7 @@
 import type { SyntheticEvent } from "react";
 import * as S from "./SectionItemBox.style";
-import { section } from "@/entities/roadmap/section/model/section.types";
-import RoadmapIcon from "../assets/roadmap.svg?url";
+import type { section } from "@/entities/roadmap";
+import RoadmapIcon from "@/shared/ui/assets/roadmap.svg?url";
 
 interface SectionItemBoxProps {
   category: number;

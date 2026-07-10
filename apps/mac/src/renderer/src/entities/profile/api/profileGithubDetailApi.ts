@@ -2,7 +2,7 @@ import { api, type ApiResponse } from "@/shared/api";
 import type {
   ProfileGithubDetailRequest,
   ProfileGithubDetailResponse,
-} from "@/entities/profile/model/profileGithubDetail.types";
+} from "../model/profileGithubDetail.types";
 
 export const profileGithubDetailApi = {
   getProfileGithubDetail: async ({ date }: ProfileGithubDetailRequest) => {

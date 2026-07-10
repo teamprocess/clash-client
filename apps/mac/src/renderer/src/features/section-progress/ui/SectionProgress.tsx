@@ -1,7 +1,6 @@
 import * as S from "./SectionProgress.style";
 import { useGetMyProfile } from "@/entities/user";
-import { MajorEnum } from "@/entities/roadmap/section/model/section.types";
-import { useMajorSectionQuery } from "@/entities/roadmap/section/api/query/useMajorSection.query";
+import { MajorEnum, useMajorSectionQuery } from "@/entities/roadmap";
 
 interface SectionProgressProps {
   completed?: number;

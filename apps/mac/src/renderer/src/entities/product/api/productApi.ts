@@ -1,11 +1,10 @@
-import { api } from "@/shared/api/axios";
-import { ApiResponse } from "@/shared/api/types";
-import {
+import { api, type ApiResponse } from "@/shared/api";
+import type {
   GetProductsRequest,
   ProductListData,
   ProductPaginationData,
   SearchProductsRequest,
-} from "@/entities/product/model/product.types";
+} from "../model/product.types";
 
 export const productApi = {
   // 전체 상품 목록 조회

@@ -1,4 +1,4 @@
-import { TransitionResponse } from "@/entities/home";
+import type { TransitionResponse } from "@/entities/competition";
 
 export const useTransition = (data: TransitionResponse | null) => {
   const maxActive = Math.max(

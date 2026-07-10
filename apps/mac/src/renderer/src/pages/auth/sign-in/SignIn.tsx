@@ -1,6 +1,5 @@
 import * as S from "./SignIn.style";
-import { DevelopSignInForm } from "@/features/auth/sign-in/ui/DevelopSignInForm";
-import { WebSignInForm } from "@/features/auth/sign-in/ui/WebSignInForm";
+import { DevelopSignInForm, WebSignInForm } from "@/features/auth";
 import { appRuntimeProfile } from "@/shared/config/appRuntime";
 
 export const SignInPage = () => {

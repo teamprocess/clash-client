@@ -1,6 +1,7 @@
 import { useState, useRef } from "react";
 import {
   battleApi,
+  battleQueryKeys,
   useBattleInfoQuery,
   useBattleDetailQuery,
   useAnalyzeBattleQuery,
@@ -14,7 +15,7 @@ import {
   MATCHVALUE,
 } from "@/entities/competition";
 import { getErrorMessage, queryClient } from "@/shared/lib";
-import { useBattleApplyListQuery } from "@/entities/competition/api/rival-competition/api/query/useBattle.query";
+import { useBattleApplyListQuery } from "@/entities/competition";
 import { useMutation } from "@tanstack/react-query";
 import {
   ANALYZE_CATEGORY_OPTIONS,
@@ -159,9 +160,9 @@ export const useBattle = () => {
       });
 
       await Promise.all([
-        queryClient.invalidateQueries({ queryKey: ["battleInfo"] }),
-        queryClient.invalidateQueries({ queryKey: ["battleList"] }),
-        queryClient.invalidateQueries({ queryKey: ["battleApplyList"] }),
+        queryClient.invalidateQueries({ queryKey: battleQueryKeys.info }),
+        queryClient.invalidateQueries({ queryKey: battleQueryKeys.list }),
+        queryClient.invalidateQueries({ queryKey: battleQueryKeys.applications }),
       ]);
 
       closeModal();
@@ -179,9 +180,9 @@ export const useBattle = () => {
     mutationFn: battleApi.postCancelBattle,
     onSuccess: async () => {
       await Promise.all([
-        queryClient.invalidateQueries({ queryKey: ["battleApplyList"] }),
-        queryClient.invalidateQueries({ queryKey: ["battleList"] }),
-        queryClient.invalidateQueries({ queryKey: ["battle"] }),
+        queryClient.invalidateQueries({ queryKey: battleQueryKeys.applications }),
+        queryClient.invalidateQueries({ queryKey: battleQueryKeys.list }),
+        queryClient.invalidateQueries({ queryKey: battleQueryKeys.all }),
       ]);
     },
   });

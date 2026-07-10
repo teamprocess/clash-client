@@ -1,6 +1,5 @@
 import { useMemo, useState } from "react";
-import { useActiveQuery } from "@/entities/home";
-import type { StreakItem } from "@/entities/home";
+import { useActiveQuery, type StreakItem } from "@/entities/competition";
 import { buildPaddedStreak } from "@/shared/lib";
 
 export type Level = 0 | 1 | 2 | 3 | 4;

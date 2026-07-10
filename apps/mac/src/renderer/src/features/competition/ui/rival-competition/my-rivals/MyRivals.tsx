@@ -1,26 +1,12 @@
 import * as S from "./MyRivals.style";
-import {
-  formatTime,
-  resolveUsingApp,
-  useRealtimeRivalActiveTime,
-  useRival,
-} from "@/shared/lib";
-import {
-  MyRivalsRequest,
-  MyRivalsResponse,
-  USER_STATUS_LABELS,
-} from "@/entities/competition";
-import {
-  DefaultProfileIcon,
-  QuestionTooltip,
-  RankTier,
-  RivalsManagementDialog,
-  Tooltip,
-} from "@/shared/ui";
+import { formatTime, resolveUsingApp, useRealtimeRivalActiveTime } from "@/shared/lib";
+import { MyRivalsRequest, MyRivalsResponse, USER_STATUS_LABELS } from "@/entities/rival";
+import { DefaultProfileIcon, QuestionTooltip, RankTier, Tooltip } from "@/shared/ui";
 import { IdeIcons } from "@/shared/ui/assets/ide-img";
 
 interface MyRivalsProps {
   data: MyRivalsResponse;
+  onManageRivals: () => void;
 }
 
 const RivalRow = ({ user }: { user: MyRivalsRequest }) => {
@@ -78,8 +64,7 @@ const RivalRow = ({ user }: { user: MyRivalsRequest }) => {
   );
 };
 
-export const MyRivals = ({ data }: MyRivalsProps) => {
-  const rival = useRival();
+export const MyRivals = ({ data, onManageRivals }: MyRivalsProps) => {
   const rivals = data.myRivals;
 
   return (
@@ -94,7 +79,7 @@ export const MyRivals = ({ data }: MyRivalsProps) => {
                 label="라이벌 최대 인원 안내"
               />
             </S.TitleGroup>
-            <S.ArrowBox onClick={rival.handleOpen}>
+            <S.ArrowBox onClick={onManageRivals}>
               라이벌 관리
               <S.DetailArrowIcon />
             </S.ArrowBox>
@@ -117,14 +102,6 @@ export const MyRivals = ({ data }: MyRivalsProps) => {
           </S.ProfileWrapper>
         </S.RivalList>
       </S.ListContent>
-
-      {rival.modalOpen && (
-        <RivalsManagementDialog
-          isOpen={rival.modalOpen}
-          onClose={rival.handleClose}
-          rival={rival}
-        />
-      )}
     </>
   );
 };

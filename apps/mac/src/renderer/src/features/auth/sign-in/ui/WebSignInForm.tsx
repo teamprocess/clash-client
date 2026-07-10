@@ -1,5 +1,5 @@
 import * as S from "./WebSignInForm.style";
-import { useWebSignIn } from "@/features/auth/sign-in/model/useWebSignIn";
+import { useWebSignIn } from "../model/useWebSignIn";
 import { Button } from "@/shared/ui";
 
 export const WebSignInForm = () => {

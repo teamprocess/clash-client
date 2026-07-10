@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { GithubInfo } from "@/features/profile/ui/profile-tabs/github-info/GithubInfo";
 import { GithubStreak } from "@/features/profile/ui/profile-tabs/github-streak/GithubStreak";
-import { useProfileGithubDetailQuery } from "@/entities/profile/api/query/useProfileGithubDetail.query";
+import { useProfileGithubDetailQuery } from "@/entities/profile";
 import { useProfileGithubStreak } from "@/features/profile/model/useProfileTabs";
 import * as S from "./GithubActivityPanel.style";
 
@@ -27,7 +27,7 @@ export const GithubActivityPanel = () => {
   const infoProps = useMemo(() => {
     const dateText = selectedDate ? formatKoreanDate(displayDetail?.date ?? selectedDate) : null;
     const totalContributions = selectedDate
-      ? displayDetail?.contributionCount ?? fallbackCount
+      ? (displayDetail?.contributionCount ?? fallbackCount)
       : null;
 
     return {

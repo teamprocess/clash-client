@@ -4,7 +4,7 @@ import {
   rankingPeriodDropDownValue,
 } from "./useRankingDomain";
 import { useRankingView } from "./useRankingView";
-import { CategoryType } from "@/entities/home";
+import type { CategoryType } from "@/entities/ranking";
 import { formatTime } from "@/shared/lib";
 
 const unitMap: Record<CategoryType, string> = {

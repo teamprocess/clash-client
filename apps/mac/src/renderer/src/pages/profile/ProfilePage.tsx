@@ -1,6 +1,6 @@
 import * as S from "./ProfilePage.style";
-import { TopProfile } from "@/features/profile/ui/top-profile/TopProfile";
-import { ProfileTabs } from "@/features/profile/ui/profile-tabs/ProfileTabs";
+import { ProfileTabs, TopProfile } from "@/features/profile";
+import { ProfileRivals } from "@/widgets/profile-rivals";
 
 export const ProfilePage = () => {
   return (
@@ -9,7 +9,7 @@ export const ProfilePage = () => {
         <TopProfile />
 
         <S.BodyRow>
-          <ProfileTabs />
+          <ProfileTabs rivalSection={<ProfileRivals />} />
         </S.BodyRow>
       </S.Background>
     </S.Wrapper>

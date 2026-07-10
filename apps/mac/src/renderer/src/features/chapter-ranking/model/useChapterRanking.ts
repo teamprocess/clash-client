@@ -1,9 +1,9 @@
 import { useRef, useState, useEffect } from "react";
-import { useChapterRankingQuery } from "@/entities/roadmap/chapter/chapter-ranking/api/query/useChapterRanking.query";
-import type {
-  GetChapterRankingsResponse,
-  RankingUser,
-} from "@/entities/roadmap/chapter/chapter-ranking/model/chapterRanking.types";
+import {
+  useChapterRankingQuery,
+  type GetChapterRankingsResponse,
+  type RankingUser,
+} from "@/entities/roadmap";
 
 export const useChapterRanking = () => {
   const [isMyRankVisible, setIsMyRankVisible] = useState(true);

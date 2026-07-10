@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
-import { chapterApi } from "@/entities/roadmap/chapter/api/chapterApi";
-import type { GetSectionDetailsResponse } from "@/entities/roadmap/chapter/model/chapter.types";
+import { chapterApi } from "../chapterApi";
+import type { GetSectionDetailsResponse } from "../../model/chapter.types";
 import { chapterQueryKeys } from "./chapterQueryKeys";
 
 export const useSectionDetailsQuery = (sectionId: number) => {

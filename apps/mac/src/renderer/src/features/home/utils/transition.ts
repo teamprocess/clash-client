@@ -1,5 +1,5 @@
 import { formatTime } from "@/shared/lib";
-import { TransitionResponse } from "@/entities/home";
+import type { TransitionResponse } from "@/entities/competition";
 
 export type Section = {
   title: string;

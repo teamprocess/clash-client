@@ -1,8 +1,5 @@
 import * as S from "./RecordPage.style";
-import { Record } from "@/features/record";
-import { Todo } from "@/features/record/ui/todo/Todo";
-import { shiftRecordDate } from "@/features/record/model/recordDate";
-import { useTodayRecordDate } from "@/features/record/model/useTodayRecordDate";
+import { Record, Todo, shiftRecordDate, useTodayRecordDate } from "@/features/record";
 import { useState } from "react";
 
 export const RecordPage = () => {

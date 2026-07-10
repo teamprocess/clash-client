@@ -1,5 +1,5 @@
 import React, { RefObject, useLayoutEffect, useMemo, useState } from "react";
-import { ActiveResponse, CategoryType } from "@/entities/home";
+import type { ActiveResponse, CategoryType } from "@/entities/competition";
 import { buildPaddedStreak } from "@/shared/lib";
 
 type GrassLevel = 0 | 1 | 2 | 3 | 4;

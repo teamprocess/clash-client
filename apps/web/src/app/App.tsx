@@ -1,9 +1,8 @@
 import { HashRouter, Navigate, Route, Routes, useLocation } from "react-router-dom";
 import { GoogleReCaptchaProvider } from "react-google-recaptcha-v3";
-import { SignInPage, SignUpPage } from "@/pages/auth";
+import { ResetPasswordPage, SignInPage, SignUpPage } from "@/pages/auth";
 import { AuthLayout } from "@/app/layouts/auth";
 import { OnboardingPage } from "@/pages/onboarding";
-import { ResetPasswordPage } from "@/pages/auth/reset-password/ResetPassword.tsx";
 import { RedirectPage } from "@/pages/redirect";
 
 const RootRoute = () => {

@@ -1,17 +1,29 @@
 import { useQuery } from "@tanstack/react-query";
 import { battleApi } from "../battleApi";
-import { AnalyzeBattleRequest } from "@/entities/competition/model/rival-competition/battle.types";
+import type { AnalyzeBattleRequest } from "../../../../model/rival-competition/battle.types";
+
+export const battleQueryKeys = {
+  all: ["battle"] as const,
+  info: ["battleInfo"] as const,
+  details: ["battleDetail"] as const,
+  detail: (id: number) => [...battleQueryKeys.details, id] as const,
+  analyses: ["battleAnalyze"] as const,
+  analyze: (id: number, category: AnalyzeBattleRequest["category"]) =>
+    [...battleQueryKeys.analyses, id, category] as const,
+  list: ["battleList"] as const,
+  applications: ["battleApplyList"] as const,
+};
 
 export const useBattleInfoQuery = () => {
   return useQuery({
-    queryKey: ["battleInfo"],
+    queryKey: battleQueryKeys.info,
     queryFn: battleApi.getBattleInfo,
   });
 };
 
 export const useBattleDetailQuery = (id: number) => {
   return useQuery({
-    queryKey: ["battleDetail", id],
+    queryKey: battleQueryKeys.detail(id),
     queryFn: () => battleApi.getBattleDetailInfo(id),
     enabled: !!id,
     placeholderData: previousData => previousData,
@@ -20,7 +32,7 @@ export const useBattleDetailQuery = (id: number) => {
 
 export const useAnalyzeBattleQuery = (id: number, category: AnalyzeBattleRequest["category"]) => {
   return useQuery({
-    queryKey: ["battleAnalyze", id, category],
+    queryKey: battleQueryKeys.analyze(id, category),
     queryFn: () => battleApi.getAnalyzeBattleData({ id, category }),
     enabled: !!id && !!category,
     placeholderData: previousData => previousData,
@@ -29,14 +41,14 @@ export const useAnalyzeBattleQuery = (id: number, category: AnalyzeBattleRequest
 
 export const useBattleListQuery = () => {
   return useQuery({
-    queryKey: ["battleList"],
+    queryKey: battleQueryKeys.list,
     queryFn: battleApi.getBattleList,
   });
 };
 
 export const useBattleApplyListQuery = () => {
   return useQuery({
-    queryKey: ["battleApplyList"],
+    queryKey: battleQueryKeys.applications,
     queryFn: battleApi.getBattleApplyList,
   });
 };

@@ -1,6 +1,6 @@
 import { useMutation } from "@tanstack/react-query";
-import { chapterApi } from "@/entities/roadmap/chapter/api/chapterApi";
-import type { SubmitAnswerRequest } from "@/entities/roadmap/chapter/model/chapter.types";
+import { chapterApi } from "../chapterApi";
+import type { SubmitAnswerRequest } from "../../model/chapter.types";
 
 export const useSubmitAnswerMutation = () => {
   return useMutation({

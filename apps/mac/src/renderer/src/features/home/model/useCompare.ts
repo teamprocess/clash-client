@@ -1,4 +1,4 @@
-import { useCompareQuery, CompareResponse } from "@/entities/home";
+import { useCompareQuery, type CompareResponse } from "@/entities/competition";
 
 export const useCompare = () => {
   const { data } = useCompareQuery();

@@ -1,8 +1,8 @@
-import { api, ApiResponse } from "@/shared/api";
-import {
+import { api, type ApiResponse } from "@/shared/api";
+import type {
   CompareRivalsResponse,
   GetCompareRivalsRequest,
-} from "@/entities/competition/model/rival-competition/compareRivals.types";
+} from "../../../model/rival-competition/compareRivals.types";
 
 export const compareRivalsApi = {
   getCompareRivals: async (data: GetCompareRivalsRequest) => {
