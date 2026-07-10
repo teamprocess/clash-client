@@ -74,11 +74,9 @@ export const Task = ({ selectedDate }: TaskProps) => {
       <S.TaskContainer>
         <S.TaskBox aria-busy={subjectsQuery.isFetching || undefined}>
           {subjectsQuery.isPending ? (
-            <S.ListState role="status" aria-live="polite">
-              과목을 불러오는 중이에요.
-            </S.ListState>
+            <S.ListState kind="loading">과목을 불러오는 중이에요.</S.ListState>
           ) : hasInitialLoadError ? (
-            <S.ListState role="alert">
+            <S.ListState kind="error">
               <span>{getErrorMessage(subjectsQuery.error, "과목을 불러오지 못했어요.")}</span>
               <Button
                 type="button"
@@ -90,7 +88,7 @@ export const Task = ({ selectedDate }: TaskProps) => {
               </Button>
             </S.ListState>
           ) : subjects.length === 0 && editMode !== "ADD" ? (
-            <S.ListState>등록된 과목이 없어요. 새 과목을 추가해 보세요.</S.ListState>
+            <S.ListState kind="empty">등록된 과목이 없어요. 새 과목을 추가해 보세요.</S.ListState>
           ) : null}
           {subjects.map(subject => {
             const isActive = isTaskActive(subject.id);

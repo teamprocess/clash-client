@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import Clash from "./assets/clash-logo.svg";
+import { ClashLogo as SharedClashLogo } from "@clash/ui";
 
 export const PageContainer = styled.div`
   display: flex;
@@ -30,7 +30,7 @@ export const FormWrapper = styled.div`
   background-color: ${({ theme }) => theme.background.normal};
 `;
 
-export const ClashLogo = styled(Clash)`
+export const ClashLogo = styled(SharedClashLogo)`
   width: min(14rem, 70%);
   height: auto;
 `;

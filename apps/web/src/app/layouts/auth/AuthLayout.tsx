@@ -1,10 +1,10 @@
 import { Outlet } from "react-router-dom";
-import * as S from "./AuthLayout.style";
+import { ViewportColumn } from "@clash/ui";
 
 export const AuthLayout = () => {
   return (
-    <S.LayoutContainer>
+    <ViewportColumn viewport="dynamic" overflowY="auto">
       <Outlet />
-    </S.LayoutContainer>
+    </ViewportColumn>
   );
 };

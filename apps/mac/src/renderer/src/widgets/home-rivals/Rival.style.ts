@@ -1,5 +1,6 @@
 import styled, { css } from "styled-components";
 import { font } from "@clash/design-tokens/font";
+import { FeedbackState } from "@clash/ui";
 import DetailArrow from "@/shared/ui/assets/front.svg";
 import { palette } from "@clash/design-tokens/theme";
 import type { UserStatus } from "@/entities/rival";
@@ -48,17 +49,7 @@ export const TitleBox = styled.div`
   }
 `;
 
-export const RefreshWarning = styled.div`
-  ${font.caption.medium};
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.75rem;
-  padding: 0.5rem 0.75rem;
-  border: 1px solid ${({ theme }) => theme.line.alternative};
-  border-radius: 0.75rem;
-  color: ${({ theme }) => theme.label.alternative};
-`;
+export { InlineNotice as RefreshWarning } from "@clash/ui";
 
 export const TitleLeft = styled.div`
   ${flexRow};
@@ -122,20 +113,12 @@ export const RivalBox = styled.div`
   }
 `;
 
-export const RivalState = styled.div`
+export const RivalState = styled(FeedbackState).attrs({ appearance: "dashed" })`
   grid-column: 1 / -1;
   grid-row: 1 / -1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
   gap: 0.5rem;
   min-height: 9rem;
   padding: 1.5rem;
-  border: 1px dashed ${({ theme }) => theme.line.alternative};
-  border-radius: 0.75rem;
-  background-color: ${({ theme }) => theme.fill.normal};
-  text-align: center;
 `;
 
 export const RivalStateTitle = styled.p`

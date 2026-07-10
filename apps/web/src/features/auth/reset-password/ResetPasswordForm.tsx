@@ -2,7 +2,7 @@ import * as S from "./ResetPassword.style";
 import { useResetPassword } from "./model/useResetPassword";
 import { ResetPasswordRequestStep } from "./ui/step/ResetPasswordRequestStep";
 import { ResetPasswordConfirmStep } from "./ui/step/ResetPasswordConfirmStep";
-import { Button } from "@/shared/ui/button";
+import { Button } from "@clash/ui";
 import { useNavigate } from "react-router-dom";
 
 export const ResetPasswordForm = () => {
@@ -73,6 +73,9 @@ export const ResetPasswordForm = () => {
         <S.ButtonWrapper>
           <Button
             type="button"
+            variant="primary"
+            size="xl"
+            interaction="responsive"
             fullWidth
             onClick={() => navigate({ pathname: "/sign-in", search: authSearch })}
           >
