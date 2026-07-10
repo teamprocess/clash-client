@@ -154,7 +154,7 @@ export const MenuItem = styled.button<{ $isLogout: boolean }>`
   background: none;
   border: none;
   ${font.body.regular};
-  color: ${({ theme, $isLogout }) => ($isLogout ? theme.primary.normal : theme.label.normal)};
+  color: ${({ theme, $isLogout }) => ($isLogout ? theme.content.accent : theme.label.normal)};
   cursor: pointer;
 
   &:hover {

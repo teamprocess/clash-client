@@ -20,9 +20,9 @@ const skeletonWave = keyframes`
 const skeletonBase = css`
   background: linear-gradient(
     90deg,
-    rgba(255, 255, 255, 0.05) 0%,
-    rgba(255, 255, 255, 0.12) 50%,
-    rgba(255, 255, 255, 0.05) 100%
+    ${({ theme }) => theme.fill.normal} 0%,
+    ${({ theme }) => theme.fill.alternative} 50%,
+    ${({ theme }) => theme.fill.normal} 100%
   );
   background-size: 200% 100%;
   animation: ${skeletonWave} 1.6s ease-in-out infinite;
@@ -80,7 +80,6 @@ export const PreviewModalAction = styled.div<{ $locked?: boolean }>`
 `;
 
 export const SectionDivider = styled.div<{ $type: string }>`
-  background-color: ${({ theme }) => theme.line.neutral};
   background-color: ${({ theme, $type }) =>
     $type === "Preview" ? theme.line.neutral : theme.line.normal};
   width: 100%;
@@ -119,6 +118,11 @@ export const PreviewModalBody = styled.div`
   align-items: stretch;
   width: 100%;
   gap: 1rem;
+
+  @media (max-width: 52rem) {
+    flex-direction: column;
+    min-width: 0;
+  }
 `;
 
 export const SkeletonBlock = styled.div<{
@@ -143,7 +147,7 @@ export const SkeletonCircle = styled.div<{ $size: string }>`
 
 export const RoadmapBox = styled.div`
   display: flex;
-  flex: 3;
+  flex: 1 1 42rem;
   flex-direction: column;
   justify-content: flex-start;
   align-items: stretch;
@@ -157,11 +161,17 @@ export const RoadmapBox = styled.div`
   min-width: 0;
   overflow: hidden;
   box-sizing: border-box;
+
+  @media (max-width: 52rem) {
+    flex: 0 0 auto;
+    width: 100%;
+    min-width: 0;
+  }
 `;
 
 export const TargetBox = styled.div`
   display: flex;
-  flex: 1;
+  flex: 0 0 17rem;
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
@@ -171,6 +181,11 @@ export const TargetBox = styled.div`
   border-radius: 1.25rem;
   padding: 1.5rem;
   gap: 2.5rem;
+
+  @media (max-width: 52rem) {
+    flex: 0 0 auto;
+    width: 100%;
+  }
 `;
 
 export const RoadmapTop = styled.div`
@@ -228,8 +243,9 @@ export const StepCircle = styled.div<{ $active?: boolean }>`
   height: 2.25rem;
   border-radius: 50%;
   background-color: ${({ $active, theme }) =>
-    $active ? theme.primary.normal : theme.line.neutral};
-  color: ${({ $active, theme }) => ($active ? palette.neutral["97"] : theme.label.alternative)};
+    $active ? theme.badge.primary.background : theme.line.neutral};
+  color: ${({ $active, theme }) =>
+    $active ? theme.badge.primary.foreground : theme.label.alternative};
   ${font.title2.medium};
   display: flex;
   align-items: center;
@@ -317,19 +333,19 @@ export const RoadmapNumberBox = styled.button`
   align-items: center;
   width: 2.8rem;
   height: 2.8rem;
-  background-color: ${({ theme }) => theme.primary.normal};
+  background-color: ${({ theme }) => theme.action.primary.background};
   border-radius: 0.5rem;
   flex-shrink: 0;
 `;
 
 export const StepTitle = styled.span`
   ${font.caption.regular}
-  color: ${palette.neutral["90"]};
+  color: ${({ theme }) => theme.action.primary.foreground};
 `;
 
 export const RoadmapNumber = styled.span`
   ${font.title2.medium}
-  color: ${palette.neutral["90"]};
+  color: ${({ theme }) => theme.action.primary.foreground};
 `;
 
 export const RoadmapDescription = styled.span`
@@ -361,7 +377,7 @@ export const ArrowIcon = styled(Arrow)<{ $direction: "left" | "right" }>`
 
 export const CurrentStepLabel = styled.span`
   ${font.title2.medium}
-  color: ${({ theme }) => theme.primary.normal};
+  color: ${({ theme }) => theme.content.accent};
 `;
 
 export const StepLabel = styled.div`
@@ -396,7 +412,7 @@ export const TargetLabel = styled.div`
   align-items: center;
   ${font.caption.medium}
   color: ${({ theme }) => theme.label.alternative};
-  background-color: ${({ theme }) => theme.label.disable};
+  background-color: ${({ theme }) => theme.fill.neutral};
   width: 6rem;
   height: 2rem;
   border-radius: 1rem;

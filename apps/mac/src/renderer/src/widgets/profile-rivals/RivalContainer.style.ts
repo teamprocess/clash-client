@@ -48,7 +48,7 @@ export const AddRivalButton = styled.button`
   min-height: clamp(4.35rem, 8.2vh, 5.25rem);
 
   &:focus-visible {
-    outline: 2px solid ${({ theme }) => theme.primary.normal};
+    outline: 2px solid ${({ theme }) => theme.interaction.selectionBorder};
     outline-offset: 2px;
   }
 `;

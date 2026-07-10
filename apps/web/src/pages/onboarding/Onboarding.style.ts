@@ -18,11 +18,13 @@ export const OnboardingContainer = styled.main`
   position: relative;
   width: 100%;
   min-height: 100vh;
+  min-height: 100dvh;
   padding: 2rem 1.5rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: auto;
   background:
     radial-gradient(
       circle at 15% 10%,
@@ -104,9 +106,9 @@ export const DownloadButton = styled.a`
   width: fit-content;
   padding: 0.95rem 1.5rem;
   border-radius: 2rem;
-  color: ${({ theme }) => theme.label.normal};
-  background-color: ${({ theme }) => theme.primary.normal};
-  border: 1px solid ${({ theme }) => theme.primary.normal};
+  color: ${({ theme }) => theme.action.primary.foreground};
+  background-color: ${({ theme }) => theme.action.primary.background};
+  border: 1px solid ${({ theme }) => theme.action.primary.background};
   transition:
     transform 0.2s ease,
     opacity 0.2s ease;

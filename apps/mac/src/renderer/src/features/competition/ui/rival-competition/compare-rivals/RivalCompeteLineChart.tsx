@@ -1,6 +1,6 @@
 import { Line } from "react-chartjs-2";
 import "chart.js/auto";
-import { colorsOfMultiLine } from "../../../model/useCompareRivals";
+import { useTheme } from "styled-components";
 
 interface RivalCompetitionLineChartProps {
   chartData: {
@@ -17,19 +17,26 @@ export const RivalCompetitionLineChart = ({
   chartData,
   valueFormatter,
 }: RivalCompetitionLineChartProps) => {
+  const theme = useTheme();
+
   return (
     <Line
       data={{
         labels: chartData.labels,
-        datasets: chartData.datasets.map((ds, idx) => ({
-          ...ds,
-          borderColor: colorsOfMultiLine[idx % colorsOfMultiLine.length],
-          backgroundColor: colorsOfMultiLine[idx % colorsOfMultiLine.length],
-          pointBackgroundColor: colorsOfMultiLine[idx % colorsOfMultiLine.length],
-          borderWidth: 2,
-          pointRadius: 6,
-          pointHoverRadius: 7,
-        })),
+        datasets: chartData.datasets.map((ds, idx) => {
+          const seriesColor =
+            theme.dataVisualization.series[idx % theme.dataVisualization.series.length];
+
+          return {
+            ...ds,
+            borderColor: seriesColor,
+            backgroundColor: seriesColor,
+            pointBackgroundColor: seriesColor,
+            borderWidth: 2,
+            pointRadius: 6,
+            pointHoverRadius: 7,
+          };
+        }),
       }}
       options={{
         responsive: true,
@@ -37,6 +44,9 @@ export const RivalCompetitionLineChart = ({
         plugins: {
           legend: {
             display: true,
+            labels: {
+              color: theme.label.normal,
+            },
             onClick: (_, legendItem, legend) => {
               const index = legendItem.datasetIndex;
               if (index === undefined) return;
@@ -82,8 +92,10 @@ export const RivalCompetitionLineChart = ({
             },
           },
           tooltip: {
-            backgroundColor: "#2A2B2C",
-            borderColor: "#747678",
+            backgroundColor: theme.dataVisualization.tooltip.background,
+            borderColor: theme.dataVisualization.tooltip.border,
+            bodyColor: theme.dataVisualization.tooltip.label,
+            titleColor: theme.dataVisualization.tooltip.label,
             borderWidth: 1,
             usePointStyle: true,
             boxPadding: 4,
@@ -101,7 +113,7 @@ export const RivalCompetitionLineChart = ({
         scales: {
           x: {
             grid: { display: false },
-            ticks: { color: "#A1A1A1" },
+            ticks: { color: theme.dataVisualization.axisLabel },
           },
           y: {
             display: false,

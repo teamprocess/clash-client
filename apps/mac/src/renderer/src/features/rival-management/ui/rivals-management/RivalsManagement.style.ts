@@ -1,6 +1,5 @@
 import styled, { css } from "styled-components";
 import { font } from "@clash/design-tokens/font";
-import { palette } from "@clash/design-tokens/theme";
 
 import Profile from "@/shared/ui/assets/default-profile.svg";
 import Checked from "@/shared/ui/assets/check-box.svg";
@@ -156,14 +155,14 @@ export const UncheckedBox = styled.div`
 
 export const ErrorText = styled.span`
   ${font.label.medium};
-  color: ${palette.red[60]};
+  color: ${({ theme }) => theme.feedback.danger};
   width: 100%;
   white-space: pre-line;
 `;
 
 export const SuccessText = styled.span`
   ${font.label.medium};
-  color: ${palette.green[40]};
+  color: ${({ theme }) => theme.feedback.success};
   width: 100%;
   white-space: pre-line;
 `;
@@ -186,7 +185,7 @@ export const ApplyContainer = styled.div`
 
 export const DetermineTitle = styled.p`
   ${font.title2.medium};
-  color: ${palette.neutral[97]};
+  color: ${({ theme }) => theme.label.normal};
   width: 100%;
 `;
 

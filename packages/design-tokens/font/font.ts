@@ -150,7 +150,7 @@ export const font = {
       letter-spacing: ${fontCommon.letterSpacing};
     `,
     medium: css`
-      font-size: 0.85rem;
+      font-size: 0.875rem;
       font-weight: 500;
       line-height: ${fontCommon.lineHeight};
       letter-spacing: ${fontCommon.letterSpacing};

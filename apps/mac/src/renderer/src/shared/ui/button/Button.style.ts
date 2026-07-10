@@ -50,20 +50,26 @@ export const Button = styled.button<ButtonProps>`
     `}
 
   background-color: ${({ theme, $variant }) => {
-    switch ($variant) {
-      case "primary":
-        return theme.primary.normal;
-      case "secondary":
-        return theme.line.normal;
-      case "accept":
-        return palette.green[50];
-      case "pending":
-        return palette.yellow?.[50];
-    }
+    const backgrounds: Record<ButtonVariant, string> = {
+      primary: theme.action.primary.background,
+      secondary: theme.line.normal,
+      accept: palette.green[50],
+      pending: palette.yellow[50],
+    };
+
+    return backgrounds[$variant];
   }};
 
-  color: ${({ theme, $variant }) =>
-    $variant === "primary" ? palette.neutral[99] : theme.label.normal};
+  color: ${({ theme, $variant }) => {
+    const foregrounds: Record<ButtonVariant, string> = {
+      primary: theme.action.primary.foreground,
+      secondary: theme.label.strong,
+      accept: palette.neutral[5],
+      pending: palette.neutral[5],
+    };
+
+    return foregrounds[$variant];
+  }};
 
   &:disabled {
     cursor: not-allowed;

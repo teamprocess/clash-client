@@ -22,9 +22,9 @@ const skeletonWave = keyframes`
 const skeletonBase = css`
   background: linear-gradient(
     90deg,
-    rgba(255, 255, 255, 0.05) 0%,
-    rgba(255, 255, 255, 0.12) 50%,
-    rgba(255, 255, 255, 0.05) 100%
+    ${({ theme }) => theme.fill.normal} 0%,
+    ${({ theme }) => theme.fill.alternative} 50%,
+    ${({ theme }) => theme.fill.normal} 100%
   );
   background-size: 200% 100%;
   animation: ${skeletonWave} 1.6s ease-in-out infinite;
@@ -233,12 +233,12 @@ export const RankingUserProfileFallback = styled(DefaultProfileIcon)`
 export const RankingUsername = styled.span`
   ${font.label.medium};
   color: ${({ theme }) => theme.label.alternative};
-  )text-align: center;
+  text-align: center;
 `;
 
 export const RankingChapter = styled.span`
   ${font.label.medium};
-  color: ${({ theme }) => theme.primary.normal};
+  color: ${({ theme }) => theme.content.accent};
   text-align: center;
 `;
 

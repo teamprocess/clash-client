@@ -4,6 +4,38 @@ export const darkTheme: Theme = {
   primary: {
     normal: "#f1070a",
   },
+  action: {
+    primary: {
+      background: "#c60608",
+      foreground: "#fcfcfc",
+    },
+  },
+  content: {
+    accent: "#fecdce",
+  },
+  badge: {
+    primary: {
+      background: "#c60608",
+      foreground: "#fcfcfc",
+    },
+  },
+  interaction: {
+    selectionBorder: "#fecdce",
+  },
+  feedback: {
+    danger: "#fecdce",
+    success: "#48ea89",
+  },
+  dataVisualization: {
+    axisLabel: "#c4c5c6",
+    onSeries: "#0d0d0d",
+    series: ["#f5f5f5", "#66c7ff", "#fc9c9d", "#48ea89", "#ffd633"],
+    tooltip: {
+      background: "#2a2b2c",
+      border: "#747678",
+      label: "#f5f5f5",
+    },
+  },
   label: {
     normal: "#f5f5f5",
     strong: "#ffffff",
