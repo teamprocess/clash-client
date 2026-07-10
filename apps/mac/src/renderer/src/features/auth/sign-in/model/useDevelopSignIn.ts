@@ -51,6 +51,12 @@ export const useDevelopSignIn = () => {
         return;
       }
 
+      try {
+        await window.api?.persistDevAuthSession();
+      } catch (error) {
+        console.warn("개발 로그인 세션을 저장하지 못했습니다:", error);
+      }
+
       startUserProfileSyncWindow();
       await queryClient.invalidateQueries({ queryKey: userQueryKeys.all });
       navigate("/");
