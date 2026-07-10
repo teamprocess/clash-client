@@ -4,6 +4,7 @@ import type { SignUpProps } from "@/features/auth/sign-up/model/useSignUp";
 
 export const SignUp = ({
   register,
+  usernameRegister,
   handleSubmit,
   errors,
   onSubmit,
@@ -11,6 +12,7 @@ export const SignUp = ({
   isCheckingUsername,
   usernameChecked,
   usernameAvailable,
+  handleUsernameChange,
   handleUsernameCheck,
 }: SignUpProps) => {
   const location = useLocation();
@@ -21,7 +23,11 @@ export const SignUp = ({
       <S.InputBox>
         <div>
           <S.InputWrapper>
-            <S.Input placeholder="아이디를 입력하세요." {...register("username")} />
+            <S.Input
+              placeholder="아이디를 입력하세요."
+              {...usernameRegister}
+              onChange={handleUsernameChange}
+            />
             <S.VerifyButton
               type="button"
               onClick={handleUsernameCheck}

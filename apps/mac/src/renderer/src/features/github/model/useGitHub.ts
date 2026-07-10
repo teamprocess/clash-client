@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
-import { githubApi, startUserProfileSyncWindow } from "@/entities/user";
+import { activeQueryKeys, compareQueryKeys, transitionQueryKeys } from "@/entities/competition";
+import { githubApi, startUserProfileSyncWindow, userQueryKeys } from "@/entities/user";
 import { appRuntimeProfile } from "@/shared/config/appRuntime";
+import { SESSION_STORAGE_KEYS } from "@/shared/config/sessionStorage";
 import { getErrorMessage } from "@/shared/lib";
 
 interface DeepLinkAuthPayload {
@@ -10,7 +12,7 @@ interface DeepLinkAuthPayload {
   url: string;
 }
 
-const PENDING_GITHUB_STATE_KEY = "clash:github:pending-state";
+const PENDING_GITHUB_STATE_KEY = SESSION_STORAGE_KEYS.githubPendingState;
 const GITHUB_OAUTH_BASE_URL = "https://github.com";
 const GITHUB_OAUTH_REDIRECT_URI = appRuntimeProfile.githubRedirectUri;
 const GITHUB_OAUTH_SCOPE = "read:user user:email repo read:org";
@@ -103,10 +105,10 @@ export const useGitHub = () => {
           setError(null);
 
           await Promise.all([
-            queryClient.invalidateQueries({ queryKey: ["user"] }),
-            queryClient.invalidateQueries({ queryKey: ["compare"] }),
-            queryClient.invalidateQueries({ queryKey: ["transition"] }),
-            queryClient.invalidateQueries({ queryKey: ["active"] }),
+            queryClient.invalidateQueries({ queryKey: userQueryKeys.all }),
+            queryClient.invalidateQueries({ queryKey: compareQueryKeys.all }),
+            queryClient.invalidateQueries({ queryKey: transitionQueryKeys.all }),
+            queryClient.invalidateQueries({ queryKey: activeQueryKeys.all }),
           ]);
         } else {
           setError(result.message || "GitHub 계정 연동에 실패했습니다.");

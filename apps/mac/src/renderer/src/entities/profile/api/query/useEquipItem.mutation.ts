@@ -14,10 +14,7 @@ export const useEquipItemMutation = () => {
     mutationFn: ({ productId, shouldUnequip }: ItemEquipMutationRequest) =>
       shouldUnequip ? itemEquipApi.unequipItem(productId) : itemEquipApi.equipItem(productId),
     onSuccess: async () => {
-      await Promise.all([
-        queryClient.invalidateQueries({ queryKey: ["user"] }),
-        queryClient.invalidateQueries({ queryKey: ownedItemsQueryKeys.all }),
-      ]);
+      await queryClient.invalidateQueries({ queryKey: ownedItemsQueryKeys.all });
     },
   });
 };

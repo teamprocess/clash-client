@@ -1,6 +1,6 @@
 import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useState } from "react";
+import { useRef, useState, type ChangeEvent } from "react";
 import { z } from "zod";
 import axios from "axios";
 import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
@@ -70,17 +70,32 @@ const getSignUpFieldErrorMessage = (error: unknown, fieldName: keyof SignUpFormD
 
   const fieldMessage = error.response?.data?.error?.details?.[fieldName];
 
-  return typeof fieldMessage === "string" && fieldMessage.trim().length > 0
-    ? fieldMessage
-    : null;
+  return typeof fieldMessage === "string" && fieldMessage.trim().length > 0 ? fieldMessage : null;
 };
 
 // EmailVerify Schema
 const emailVerifySchema = z.object({
-  verificationCode: z.string("유효한 이메일 확인 코드를 입력하세요."),
+  verificationCode: z
+    .array(z.string())
+    .refine(
+      digits => digits.length === 6 && digits.every(digit => /^\d$/.test(digit)),
+      "6자리 이메일 확인 코드를 입력하세요."
+    ),
 });
 
 export type EmailVerifyFormData = z.infer<typeof emailVerifySchema>;
+
+type UsernameCheckStatus = "idle" | "checking" | "available" | "unavailable";
+
+interface UsernameCheckState {
+  status: UsernameCheckStatus;
+  username: string;
+}
+
+const INITIAL_USERNAME_CHECK_STATE: UsernameCheckState = {
+  status: "idle",
+  username: "",
+};
 
 export const useSignUp = () => {
   const navigate = useNavigate();
@@ -89,9 +104,10 @@ export const useSignUp = () => {
   const [step, setStep] = useState<"SIGNUP" | "EMAIL_VERIFY">("SIGNUP");
 
   // SignUp 상태
-  const [checkedUsername, setCheckedUsername] = useState<string>("");
-  const [usernameAvailable, setUsernameAvailable] = useState(false);
-  const [isCheckingUsername, setIsCheckingUsername] = useState(false);
+  const [usernameCheck, setUsernameCheck] = useState<UsernameCheckState>(
+    INITIAL_USERNAME_CHECK_STATE
+  );
+  const usernameCheckRequestId = useRef(0);
   const [email, setEmail] = useState<string>("");
 
   const signUpForm = useForm<SignUpFormData>({
@@ -100,24 +116,42 @@ export const useSignUp = () => {
 
   const emailVerifyForm = useForm<EmailVerifyFormData>({
     resolver: zodResolver(emailVerifySchema),
+    defaultValues: {
+      verificationCode: ["", "", "", "", "", ""],
+    },
   });
 
-  const username = useWatch({
-    control: signUpForm.control,
-    name: "username",
-  });
+  const username =
+    useWatch({
+      control: signUpForm.control,
+      name: "username",
+    }) ?? "";
+  const usernameRegister = signUpForm.register("username");
 
-  // username이 변경되면 자동으로 false
-  const usernameChecked = checkedUsername === username && checkedUsername !== "";
+  const handleUsernameChange = (event: ChangeEvent<HTMLInputElement>) => {
+    usernameCheckRequestId.current += 1;
+    setUsernameCheck(INITIAL_USERNAME_CHECK_STATE);
+    void usernameRegister.onChange(event);
+  };
+
+  const usernameCheckMatches = usernameCheck.username === username && username !== "";
+  const isCheckingUsername = usernameCheckMatches && usernameCheck.status === "checking";
+  const usernameChecked =
+    usernameCheckMatches &&
+    (usernameCheck.status === "available" || usernameCheck.status === "unavailable");
+  const usernameAvailable = usernameCheckMatches && usernameCheck.status === "available";
 
   // 아이디 중복 확인 API
   const handleUsernameCheck = async () => {
     const currentUsername = signUpForm.getValues("username");
+    const requestId = ++usernameCheckRequestId.current;
+    const isCurrentRequest = () =>
+      requestId === usernameCheckRequestId.current &&
+      signUpForm.getValues("username") === currentUsername;
     const validationResult = usernameSchema.safeParse(currentUsername);
 
     if (!validationResult.success) {
-      setCheckedUsername("");
-      setUsernameAvailable(false);
+      setUsernameCheck(INITIAL_USERNAME_CHECK_STATE);
       signUpForm.setError("username", {
         type: "manual",
         message: validationResult.error.issues[0]?.message ?? USERNAME_REQUIRED_MESSAGE,
@@ -125,19 +159,25 @@ export const useSignUp = () => {
       return;
     }
 
+    if (!executeRecaptcha) {
+      setUsernameCheck(INITIAL_USERNAME_CHECK_STATE);
+      signUpForm.setError("username", {
+        type: "manual",
+        message: "보안 인증을 불러오는 중입니다. 잠시 후 다시 시도해주세요.",
+      });
+      return;
+    }
+
     try {
-      setIsCheckingUsername(true);
+      setUsernameCheck({ status: "checking", username: currentUsername });
       signUpForm.clearErrors("username");
 
-      if (!executeRecaptcha) {
-        signUpForm.setError("username", {
-          type: "manual",
-          message: "보안 인증을 불러오는 중입니다. 잠시 후 다시 시도해주세요.",
-        });
+      const recaptchaToken = await executeRecaptcha("username_duplicate_check");
+
+      if (!isCurrentRequest()) {
         return;
       }
 
-      const recaptchaToken = await executeRecaptcha("username_duplicate_check");
       const result = await authApi.usernameDuplicateCheck(
         {
           username: currentUsername,
@@ -145,46 +185,47 @@ export const useSignUp = () => {
         { recaptchaToken }
       );
 
+      if (!isCurrentRequest()) {
+        return;
+      }
+
       if (result.data?.duplicated === false) {
-        setUsernameAvailable(true);
-        setCheckedUsername(currentUsername);
+        setUsernameCheck({ status: "available", username: currentUsername });
         signUpForm.clearErrors("username");
         return;
       }
 
       if (result.data?.duplicated === true) {
-        setUsernameAvailable(false);
-        setCheckedUsername(currentUsername);
+        setUsernameCheck({ status: "unavailable", username: currentUsername });
         signUpForm.clearErrors("username");
         return;
       }
 
-      setCheckedUsername("");
-      setUsernameAvailable(false);
+      setUsernameCheck(INITIAL_USERNAME_CHECK_STATE);
       signUpForm.setError("username", {
         type: "manual",
         message: result.message || USERNAME_CHECK_ERROR_MESSAGE,
       });
     } catch (error: unknown) {
+      if (!isCurrentRequest()) {
+        return;
+      }
+
       console.error("사용자 아이디 중복 검증에 실패했습니다.", error);
 
       const { code, status, message } = getApiError(error, USERNAME_CHECK_ERROR_MESSAGE);
 
       if (isUsernameDuplicateError(code, status)) {
-        setUsernameAvailable(false);
-        setCheckedUsername(currentUsername);
+        setUsernameCheck({ status: "unavailable", username: currentUsername });
         signUpForm.clearErrors("username");
         return;
       }
 
-      setCheckedUsername("");
-      setUsernameAvailable(false);
+      setUsernameCheck(INITIAL_USERNAME_CHECK_STATE);
       signUpForm.setError("username", {
         type: "manual",
         message,
       });
-    } finally {
-      setIsCheckingUsername(false);
     }
   };
 
@@ -274,7 +315,7 @@ export const useSignUp = () => {
 
       const result = await authApi.verifyEmail(
         {
-          verificationCode: data.verificationCode,
+          verificationCode: data.verificationCode.join(""),
         },
         { recaptchaToken }
       );
@@ -301,19 +342,20 @@ export const useSignUp = () => {
     step,
     signUp: {
       register: signUpForm.register,
+      usernameRegister,
       handleSubmit: signUpForm.handleSubmit,
       errors: signUpForm.formState.errors,
       isSubmitting: signUpForm.formState.isSubmitting,
       isCheckingUsername,
       usernameChecked,
       usernameAvailable,
+      handleUsernameChange,
       handleUsernameCheck,
       onSubmit: handleSignUp,
     },
     emailVerify: {
-      register: emailVerifyForm.register,
       handleSubmit: emailVerifyForm.handleSubmit,
-      setValue: emailVerifyForm.setValue,
+      control: emailVerifyForm.control,
       errors: emailVerifyForm.formState.errors,
       isSubmitting: emailVerifyForm.formState.isSubmitting,
       email,

@@ -3,7 +3,8 @@ import { MajorEnum, type getAllSectionsResponse } from "../../model/section.type
 import { sectionApi } from "../sectionApi";
 
 export const sectionQueryKeys = {
-  major: (major: MajorEnum) => ["sections", "major", major] as const,
+  all: ["sections"] as const,
+  major: (major: MajorEnum) => [...sectionQueryKeys.all, "major", major] as const,
 };
 
 export const useMajorSectionQuery = (major: MajorEnum) => {

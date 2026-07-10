@@ -62,8 +62,8 @@ const shouldRetrySocketToken = (error: unknown) => {
   return status >= 500;
 };
 
-export const useRealtimeSync = () => {
-  const presenceStatus = usePresenceStatus();
+export const useRealtimeSync = (isDeveloping: boolean) => {
+  const presenceStatus = usePresenceStatus(isDeveloping);
   const socketRef = useRef<Socket | null>(null);
   const reconnectTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const reconnectAttemptsRef = useRef(0);

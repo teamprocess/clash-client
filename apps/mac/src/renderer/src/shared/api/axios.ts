@@ -1,5 +1,6 @@
 import axios from "axios";
 import { appRuntimeProfile } from "@/shared/config/appRuntime";
+import { resetUnauthorizedSession } from "@/shared/lib/sessionReset";
 
 const BASE_URL = import.meta.env.VITE_API_URL;
 
@@ -40,7 +41,7 @@ api.interceptors.response.use(
         case 401:
           // Auth 관련 API는 리다이렉트 X
           if (!isPublicPath) {
-            window.location.href = "#/sign-in";
+            void resetUnauthorizedSession();
           }
           break;
         case 403:

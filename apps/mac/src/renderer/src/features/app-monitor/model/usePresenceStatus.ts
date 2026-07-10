@@ -4,10 +4,9 @@ import type { CursorScreenPoint, PresenceStatus } from "./realtimeSync.types";
 
 const AWAY_THRESHOLD_MS = 5 * 60 * 1000;
 const PRESENCE_CHECK_INTERVAL_MS = 5000;
-const FRONTMOST_APP_POLL_MS = 2000;
 const CURSOR_POLL_MS = 60 * 1000;
 
-export const usePresenceStatus = () => {
+export const usePresenceStatus = (isDeveloping: boolean) => {
   const { data: todayResponse } = useRecordTodayQuery();
   const hasActiveRecordSession =
     !!todayResponse?.success &&
@@ -17,8 +16,8 @@ export const usePresenceStatus = () => {
   const lastCursorMovedAtRef = useRef(0);
   const cursorPointRef = useRef<CursorScreenPoint | null>(null);
   const hasActiveRecordSessionRef = useRef(hasActiveRecordSession);
-  const isDevelopingRef = useRef(false);
-  const wasExemptFromAwayRef = useRef(hasActiveRecordSession);
+  const isDevelopingRef = useRef(isDeveloping);
+  const wasExemptFromAwayRef = useRef(hasActiveRecordSession || isDeveloping);
 
   const updatePresenceStatus = useCallback((nextStatus: PresenceStatus) => {
     setPresenceStatus(previousStatus =>
@@ -53,6 +52,7 @@ export const usePresenceStatus = () => {
 
   useEffect(() => {
     hasActiveRecordSessionRef.current = hasActiveRecordSession;
+    isDevelopingRef.current = isDeveloping;
 
     const timer = setTimeout(() => {
       syncPresence();
@@ -61,62 +61,7 @@ export const usePresenceStatus = () => {
     return () => {
       clearTimeout(timer);
     };
-  }, [hasActiveRecordSession, syncPresence]);
-
-  useEffect(() => {
-    if (typeof window === "undefined" || !window.api) {
-      return;
-    }
-
-    window.api.startMonitoring().catch(error => {
-      console.error("앱 모니터링을 시작하는데 실패했습니다:", error);
-    });
-  }, []);
-
-  useEffect(() => {
-    if (typeof window === "undefined" || !window.api) {
-      return;
-    }
-
-    let cancelled = false;
-
-    const refreshFrontmostMonitoredApp = async () => {
-      try {
-        const appName = await window.api.getFrontmostMonitoredApp();
-        if (cancelled) {
-          return;
-        }
-
-        const isDeveloping = appName !== null;
-        if (isDevelopingRef.current === isDeveloping) {
-          return;
-        }
-
-        isDevelopingRef.current = isDeveloping;
-        syncPresence();
-      } catch (error) {
-        if (cancelled) {
-          return;
-        }
-
-        if (isDevelopingRef.current) {
-          isDevelopingRef.current = false;
-          syncPresence();
-        }
-        console.error("전면 개발 앱 조회 실패:", error);
-      }
-    };
-
-    void refreshFrontmostMonitoredApp();
-    const interval = setInterval(() => {
-      void refreshFrontmostMonitoredApp();
-    }, FRONTMOST_APP_POLL_MS);
-
-    return () => {
-      cancelled = true;
-      clearInterval(interval);
-    };
-  }, [syncPresence]);
+  }, [hasActiveRecordSession, isDeveloping, syncPresence]);
 
   useEffect(() => {
     if (typeof window === "undefined" || !window.api) {
@@ -135,11 +80,7 @@ export const usePresenceStatus = () => {
         const previousPoint = cursorPointRef.current;
         cursorPointRef.current = point;
 
-        if (
-          previousPoint === null ||
-          previousPoint.x !== point.x ||
-          previousPoint.y !== point.y
-        ) {
+        if (previousPoint === null || previousPoint.x !== point.x || previousPoint.y !== point.y) {
           lastCursorMovedAtRef.current = Date.now();
           updatePresenceStatus("ONLINE");
         }
