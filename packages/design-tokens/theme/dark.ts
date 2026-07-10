@@ -23,7 +23,7 @@ export const darkTheme: Theme = {
     selectionBorder: "#fecdce",
   },
   feedback: {
-    danger: "#fecdce",
+    danger: "#f1070a",
     success: "#48ea89",
   },
   dataVisualization: {
