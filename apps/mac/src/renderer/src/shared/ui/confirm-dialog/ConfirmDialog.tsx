@@ -1,4 +1,4 @@
-import { Dialog } from "@/shared/ui";
+import { Dialog } from "@/shared/ui/dialog";
 import type { ButtonVariant } from "@/shared/ui/button";
 import { ModalActions } from "@/shared/ui/dialog-actions";
 import type { ReactNode } from "react";

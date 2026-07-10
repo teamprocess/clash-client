@@ -1,4 +1,4 @@
-import { usePopularProductsQuery, useRecommendedProductsQuery } from "@/entities/shop";
+import { usePopularProductsQuery, useRecommendedProductsQuery } from "@/entities/product";
 import { sortOwnedProductsLast } from "@/features/shop/lib/sortOwnedProductsLast";
 
 export const useShop = () => {

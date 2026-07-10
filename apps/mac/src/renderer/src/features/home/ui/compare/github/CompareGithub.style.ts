@@ -1,7 +1,7 @@
 import styled, { css } from "styled-components";
-import Date from "@/features/home/assets/home/date.svg";
+import Date from "@/shared/ui/assets/date.svg";
 import GitCommits from "@/features/home/assets/home/git-commit.svg";
-import Fire from "@/features/home/assets/home/fire.svg";
+import Fire from "@/shared/ui/assets/fire.svg";
 import Code from "@/features/home/assets/home/code.svg";
 import Time from "@/features/home/assets/home/time.svg";
 import GitPR from "@/features/home/assets/home/git-pr.svg";

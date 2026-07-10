@@ -1,5 +1,4 @@
-import { api } from "@/shared/api";
-import type { ApiResponse } from "@/shared/api/types";
+import { api, type ApiResponse } from "@/shared/api";
 
 interface RecaptchaOptions {
   recaptchaToken?: string;

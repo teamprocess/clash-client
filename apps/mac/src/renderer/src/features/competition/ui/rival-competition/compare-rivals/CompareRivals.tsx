@@ -1,8 +1,9 @@
 import * as S from "./CompareRivals.style";
 import { useCompareRival } from "@/features/competition/model/useCompareRivals";
 import { CategoryType, PeriodType } from "@/entities/competition";
-import { RivalCompetitionLineChart, Select } from "@/shared/ui";
+import { Select } from "@/shared/ui";
 import { formatTime } from "@/shared/lib";
+import { RivalCompetitionLineChart } from "./RivalCompeteLineChart";
 
 export const RivalCompare = () => {
   const {

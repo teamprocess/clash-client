@@ -1,12 +1,15 @@
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
 import * as S from "./ProfileTabs.style";
 import { ItemPanel } from "./item-panel/ItemPanel";
-import { RivalContainer } from "@/features/profile";
-import { GithubActivityPanel } from "@/features/profile/ui/profile-tabs/github-activity-panel/GithubAcivityPanel";
+import { GithubActivityPanel } from "./github-activity-panel/GithubAcivityPanel";
 
 export type TabKey = "github" | "item";
 
-export const ProfileTabs = () => {
+interface ProfileTabsProps {
+  rivalSection: ReactNode;
+}
+
+export const ProfileTabs = ({ rivalSection }: ProfileTabsProps) => {
   const [active, setActive] = useState<TabKey>("github");
 
   return (
@@ -23,9 +26,7 @@ export const ProfileTabs = () => {
         </S.Tabs>
       </S.TabHeader>
 
-      <S.RivalSection>
-        <RivalContainer />
-      </S.RivalSection>
+      <S.RivalSection>{rivalSection}</S.RivalSection>
 
       <S.Background>
         {active === "github" && <GithubActivityPanel />}

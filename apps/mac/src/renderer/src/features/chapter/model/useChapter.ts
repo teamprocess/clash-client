@@ -1,25 +1,23 @@
 import { useChapterDomain } from "./useChapterDomain";
 import { useChapterHandlers } from "./useChapterHandlers";
 import { useChapterView } from "./useChapterView";
-import { useChapterDetailsQuery } from "@/entities/roadmap/chapter/api/query/useChapterDetails.query";
 import type { Mission } from "@/features/chapter/model/chapter.types";
 import { useEffect, useEffectEvent, useMemo, useRef, useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
-import { chapterQueryKeys } from "@/entities/roadmap/chapter/api/query/chapterQueryKeys";
-import { useResetChapterMutation } from "@/entities/roadmap/chapter";
-import type {
-  GetChapterDetailsResponse,
-  GetSectionDetailsResponse,
-  SectionChapter,
-} from "@/entities/roadmap/chapter/model/chapter.types";
+import {
+  chapterQueryKeys,
+  useChapterDetailsQuery,
+  useResetChapterMutation,
+  type GetChapterDetailsResponse,
+  type GetSectionDetailsResponse,
+  type SectionChapter,
+} from "@/entities/roadmap";
 import { getErrorMessage } from "@/shared/lib";
 
 const isSameSectionChapter = (chapter: SectionChapter, chapterId: number) =>
   chapter.id === chapterId || chapter.chapterId === chapterId;
 
-const resetChapterDetails = (
-  chapter: GetChapterDetailsResponse
-): GetChapterDetailsResponse => ({
+const resetChapterDetails = (chapter: GetChapterDetailsResponse): GetChapterDetailsResponse => ({
   ...chapter,
   currentQuestionIndex: 0,
   correctCount: 0,

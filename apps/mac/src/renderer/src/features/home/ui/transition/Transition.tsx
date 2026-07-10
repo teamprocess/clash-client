@@ -1,9 +1,9 @@
 import * as S from "./Transition.style";
 import { Link } from "react-router-dom";
 import { Fragment } from "react";
-import { useTransition } from "@/features/home/model/useTransition";
-import { TransitionResponse } from "@/entities/home";
-import { createTransitionSections, Section } from "@/features/home";
+import { useTransition } from "../../model/useTransition";
+import type { TransitionResponse } from "@/entities/competition";
+import { createTransitionSections, type Section } from "../../utils/transition";
 
 interface TransitionProps {
   data: TransitionResponse | null;

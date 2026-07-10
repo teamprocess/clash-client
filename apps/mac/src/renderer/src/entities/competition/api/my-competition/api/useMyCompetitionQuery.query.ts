@@ -1,10 +1,10 @@
-import { myCompetitionApi } from "@/entities/competition/api/my-competition/api/myCompetitionApi";
 import { useQuery } from "@tanstack/react-query";
-import {
+import { myCompetitionApi } from "./myCompetitionApi";
+import type {
   AnalyzeCategory,
   GrowthRateStandard,
   MyCompareRequest,
-} from "@/entities/competition/model/my-competition/myCompetition.types";
+} from "../../../model/my-competition/myCompetition.types";
 
 export const useMyCompareQuery = (standard: MyCompareRequest["standard"]) => {
   return useQuery({

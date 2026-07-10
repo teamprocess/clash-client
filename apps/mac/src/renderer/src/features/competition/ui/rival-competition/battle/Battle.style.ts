@@ -1,10 +1,10 @@
 import styled, { css } from "styled-components";
 import { font } from "@clash/design-tokens/font";
 import { palette } from "@clash/design-tokens/theme";
-import Date from "@/features/home/assets/home/date.svg";
-import BackArrow from "@/features/home/assets/home/back.svg";
-import Fire from "@/features/home/assets/home/fire.svg";
-import Checked from "@/features/home/assets/home/check-box.svg";
+import Date from "@/shared/ui/assets/date.svg";
+import BackArrow from "@/shared/ui/assets/back.svg";
+import Fire from "@/shared/ui/assets/fire.svg";
+import Checked from "@/shared/ui/assets/check-box.svg";
 import { ProfileAvatar } from "@/shared/ui/profile-avatar";
 
 const flexRow = css`

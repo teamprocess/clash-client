@@ -1,8 +1,7 @@
 import * as S from "./RivalCompetitionPage.style";
-import { RivalCompetition } from "@/features/competition";
-import { useRivalCompetition } from "@/features/competition/model/useRivalCompetition";
-import { useRival } from "@/shared/lib";
-import { Button, RivalsManagementDialog } from "@/shared/ui";
+import { RivalCompetition, useRivalCompetition } from "@/features/competition";
+import { RivalsManagementDialog, useRival } from "@/features/rival-management";
+import { Button } from "@/shared/ui";
 
 export const RivalCompetitionPage = () => {
   const { myRivalsData } = useRivalCompetition();
@@ -21,7 +20,7 @@ export const RivalCompetitionPage = () => {
           </Button>
         </S.EmptyState>
       ) : myRivalsData?.data ? (
-        <RivalCompetition data={myRivalsData.data} />
+        <RivalCompetition data={myRivalsData.data} onManageRivals={rival.handleOpen} />
       ) : null}
 
       {rival.modalOpen && (

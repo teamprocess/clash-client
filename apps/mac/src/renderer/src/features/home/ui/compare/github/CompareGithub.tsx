@@ -1,6 +1,6 @@
 import * as S from "./CompareGithub.style";
 import { GrowthRate, Tooltip } from "@/shared/ui";
-import { CompareResponse } from "@/entities/home/model/useCompare.types";
+import type { CompareResponse } from "@/entities/competition";
 import { getCountLabel } from "@/shared/lib";
 
 const renderRepositoryName = (

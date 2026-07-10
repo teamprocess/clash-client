@@ -1,4 +1,4 @@
-import type { OwnedItem } from "@/entities/profile/model/ownedItems.types";
+import type { OwnedItem } from "@/entities/profile";
 
 export const sortEquippedItemsFirst = (
   items: OwnedItem[],

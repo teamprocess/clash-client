@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { font } from "@clash/design-tokens/font";
 import { palette } from "@clash/design-tokens/theme";
-import type { UserStatus } from "@/entities/competition";
+import type { UserStatus } from "@/entities/rival";
 import DetailArrow from "@/shared/ui/assets/front.svg";
 import { ProfileAvatar } from "@/shared/ui/profile-avatar";
 

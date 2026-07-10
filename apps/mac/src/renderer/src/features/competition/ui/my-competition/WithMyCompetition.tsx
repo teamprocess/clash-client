@@ -1,9 +1,10 @@
 import * as S from "./WithMyCompetition.style";
-import { GrowthRate, Select, MyCompetitionLineChart } from "@/shared/ui";
+import { GrowthRate, Select } from "@/shared/ui";
 import { useMyCompetition } from "@/features/competition/model/useMyCompetition";
-import { toLineChartData } from "@/shared/ui/my-compete-chart/formatMyCompeteChartData";
 import { CompareStandard, GrowthRateStandard, AnalyzeCategory } from "@/entities/competition";
 import { formatTime } from "@/shared/lib";
+import { MyCompetitionLineChart } from "./MyCompetitionLineChart";
+import { toLineChartData } from "./formatMyCompeteChartData";
 
 export const WithMyCompetition = () => {
   const {

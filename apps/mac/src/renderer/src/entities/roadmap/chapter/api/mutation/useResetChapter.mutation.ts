@@ -1,6 +1,6 @@
 import { useMutation } from "@tanstack/react-query";
-import { chapterApi } from "@/entities/roadmap/chapter/api/chapterApi";
-import type { ResetChapterRequest } from "@/entities/roadmap/chapter/model/chapter.types";
+import { chapterApi } from "../chapterApi";
+import type { ResetChapterRequest } from "../../model/chapter.types";
 
 export const useResetChapterMutation = () => {
   return useMutation({

@@ -1,5 +1,5 @@
 import * as S from "./DevelopSignInForm.style";
-import { useDevelopSignIn } from "@/features/auth/sign-in/model/useDevelopSignIn";
+import { useDevelopSignIn } from "../model/useDevelopSignIn";
 import { Button } from "@/shared/ui";
 
 export const DevelopSignInForm = () => {

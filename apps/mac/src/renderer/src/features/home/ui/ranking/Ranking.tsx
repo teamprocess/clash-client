@@ -1,8 +1,9 @@
 import * as S from "./Ranking.style";
 import { rankingRewardTooltipContent } from "./Ranking.constants";
 import { useRanking } from "@/features/home/model/useRanking";
-import { UserRanking, Select, QuestionTooltip } from "@/shared/ui";
-import { CategoryType, RankingItem, PeriodType } from "@/entities/home";
+import { Select, QuestionTooltip } from "@/shared/ui";
+import type { CategoryType, PeriodType, RankingItem } from "@/entities/ranking";
+import { UserRanking } from "./user-ranking/UserRanking";
 
 export const Ranking = () => {
   const {

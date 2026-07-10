@@ -1,8 +1,5 @@
 import { api, ApiResponse } from "@/shared/api";
-import {
-  getAllSectionsResponse,
-  getMajorSectionRequest,
-} from "@/entities/roadmap/section/model/section.types";
+import type { getAllSectionsResponse, getMajorSectionRequest } from "../model/section.types";
 
 export const sectionApi = {
   // 전공별 섹션 조회

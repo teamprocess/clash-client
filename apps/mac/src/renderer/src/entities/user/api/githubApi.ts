@@ -1,5 +1,4 @@
-import { api } from "@/shared/api/axios";
-import type { ApiResponse } from "@/shared/api/types";
+import { api, type ApiResponse } from "@/shared/api";
 
 export interface LinkGitHubOAuthRequest {
   code: string;

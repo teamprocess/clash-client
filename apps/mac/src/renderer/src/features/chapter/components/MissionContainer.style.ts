@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { font } from "@clash/design-tokens/font";
 import { palette } from "@clash/design-tokens/theme";
-import Close from "@/features/profile/assets/close.svg";
+import Close from "@/shared/ui/assets/close.svg";
 import Correct from "../assets/correct.svg?url";
 import InCorrect from "../assets/in-correct.svg?url";
 import Clear from "../assets/clear.svg";

@@ -1,5 +1,11 @@
-import { useMajorChoice } from "@/features/major-choice/model/useMajorChoice";
-import { FeatureChoice, Test, TestResult, MajorChoice, Loading } from "@/features/major-choice";
+import {
+  FeatureChoice,
+  Loading,
+  MajorChoice,
+  Test,
+  TestResult,
+  useMajorChoice,
+} from "@/features/major-choice";
 
 export const RoadmapMajorChoicePage = () => {
   const { step, setStep, feature, major, test, result } = useMajorChoice();
