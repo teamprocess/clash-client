@@ -84,11 +84,9 @@ export const Todo = ({ selectedDate }: TodoProps) => {
             </S.SourceNotice>
           )}
           {tasksQuery.isPending ? (
-            <S.ListState role="status" aria-live="polite">
-              할 일을 불러오는 중이에요.
-            </S.ListState>
+            <S.ListState kind="loading">할 일을 불러오는 중이에요.</S.ListState>
           ) : hasInitialTasksError ? (
-            <S.ListState role="alert">
+            <S.ListState kind="error">
               <span>{getErrorMessage(tasksQuery.error, "할 일을 불러오지 못했어요.")}</span>
               <Button
                 type="button"
@@ -100,7 +98,7 @@ export const Todo = ({ selectedDate }: TodoProps) => {
               </Button>
             </S.ListState>
           ) : todos.length === 0 && editMode !== "ADD" ? (
-            <S.ListState>등록된 할 일이 없어요. 새 할 일을 추가해 보세요.</S.ListState>
+            <S.ListState kind="empty">등록된 할 일이 없어요. 새 할 일을 추가해 보세요.</S.ListState>
           ) : null}
           {todos.map(todoItem => {
             const isMenuOpen = openMenuTodoId === todoItem.id;

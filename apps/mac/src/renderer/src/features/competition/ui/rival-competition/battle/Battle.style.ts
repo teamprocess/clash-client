@@ -617,14 +617,4 @@ export const ErrorText = styled.p`
   width: 100%;
 `;
 
-export const QueryNotice = styled.div`
-  ${font.caption.medium};
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.75rem;
-  padding: 0.5rem 0.75rem;
-  border: 1px solid ${({ theme }) => theme.line.alternative};
-  border-radius: 0.75rem;
-  color: ${({ theme }) => theme.label.alternative};
-`;
+export { InlineNotice as QueryNotice } from "@clash/ui";

@@ -87,7 +87,7 @@ export const GroupActivity = ({
                 </S.GroupInfoRow>
                 <S.MemberActivitySection aria-busy={activityQuery.isFetching || undefined}>
                   {activityQuery.isError ? (
-                    <S.ActivityState role="alert">
+                    <S.ActivityState kind="error">
                       <S.ActivityStateTitle>그룹 활동을 불러오지 못했어요.</S.ActivityStateTitle>
                       <S.ActivityStateDescription>
                         {getErrorMessage(activityQuery.error, "잠시 후 다시 시도해 주세요.")}
@@ -101,11 +101,11 @@ export const GroupActivity = ({
                       </Button>
                     </S.ActivityState>
                   ) : activityQuery.isPending ? (
-                    <S.ActivityState role="status" aria-live="polite">
+                    <S.ActivityState kind="loading">
                       <S.ActivityStateTitle>그룹 활동을 불러오는 중이에요.</S.ActivityStateTitle>
                     </S.ActivityState>
                   ) : groupMembers.length === 0 ? (
-                    <S.ActivityState>
+                    <S.ActivityState kind="empty">
                       <S.ActivityStateTitle>표시할 그룹 활동이 아직 없어요.</S.ActivityStateTitle>
                       <S.ActivityStateDescription>
                         멤버가 학습을 시작하면 이곳에 활동이 표시됩니다.

@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { font } from "@clash/design-tokens/font";
+import { ClashLogo } from "@clash/ui";
 import { Link } from "react-router-dom";
-import ClashLogo from "@/widgets/topbar/assets/clash-logo.svg";
 import Menu from "@/widgets/topbar/assets/menu.svg";
 import EXP from "@/widgets/topbar/assets/exp.svg";
 import Cookie from "@/widgets/topbar/assets/cookie.svg";

@@ -10,6 +10,7 @@ COPY apps/web/package.json ./apps/web/package.json
 COPY packages/design-tokens/package.json ./packages/design-tokens/package.json
 COPY packages/eslint-config/package.json ./packages/eslint-config/package.json
 COPY packages/tsconfig/package.json ./packages/tsconfig/package.json
+COPY packages/ui/package.json ./packages/ui/package.json
 
 RUN pnpm install --frozen-lockfile --filter @clash/web...
 
@@ -23,6 +24,7 @@ COPY apps/web ./apps/web
 COPY packages/design-tokens ./packages/design-tokens
 COPY packages/eslint-config ./packages/eslint-config
 COPY packages/tsconfig ./packages/tsconfig
+COPY packages/ui ./packages/ui
 
 RUN --mount=type=secret,id=frontend_env,target=/app/apps/web/.env \
     pnpm --filter @clash/web build
