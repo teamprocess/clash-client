@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
-import { getAllSectionsResponse, MajorEnum } from "@/entities/roadmap/section/model/section.types";
-import { sectionApi } from "@/entities/roadmap/section/api/sectionApi";
+import { MajorEnum, type getAllSectionsResponse } from "../../model/section.types";
+import { sectionApi } from "../sectionApi";
 
 export const sectionQueryKeys = {
   major: (major: MajorEnum) => ["sections", "major", major] as const,

@@ -1,7 +1,7 @@
 import { type InputHTMLAttributes, type MouseEvent, useRef } from "react";
 import * as S from "./SearchInput.style";
-import { SearchInputVariant } from "./SearchInput.style";
-import { ButtonSize } from "@/shared/ui";
+import type { SearchInputVariant } from "./SearchInput.style";
+import type { ButtonSize } from "@/shared/ui/button";
 
 export interface SearchInputProps extends InputHTMLAttributes<HTMLInputElement> {
   inputSize?: ButtonSize;

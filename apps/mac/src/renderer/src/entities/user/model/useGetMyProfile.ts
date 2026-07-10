@@ -1,6 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
 import { authApi } from "../api/authApi";
-import type { getMyProfileResponse } from "../api/authApi";
+import type { GetMyProfileResponse } from "../api/authApi";
+
+export const userQueryKeys = {
+  all: ["user"] as const,
+  profile: ["user"] as const,
+};
 
 export const PROFILE_SYNC_UNTIL_KEY = "clash:home-ranking-user:profile-sync-until";
 const PROFILE_SYNC_WINDOW_MS = 3 * 60 * 1000;
@@ -36,7 +41,7 @@ export const startUserProfileSyncWindow = (durationMs = PROFILE_SYNC_WINDOW_MS) 
 
 export const useGetMyProfile = () => {
   return useQuery({
-    queryKey: ["user"],
+    queryKey: userQueryKeys.profile,
     queryFn: async () => {
       const response = await authApi.getMyProfile();
       return response.data;
@@ -52,7 +57,7 @@ export const useGetMyProfile = () => {
         return false;
       }
 
-      const profile = query.state.data as getMyProfileResponse | null;
+      const profile = query.state.data as GetMyProfileResponse | null;
       if (profile?.githubLinked) {
         clearProfileSyncWindow();
         return false;

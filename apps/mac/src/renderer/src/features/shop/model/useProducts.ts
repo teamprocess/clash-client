@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
-import { ProductCategory, ProductSort } from "@/entities/product";
-import { useShopProductsQuery } from "@/entities/shop";
+import { ProductCategory, ProductSort, useProductsQuery } from "@/entities/product";
 import { sortOwnedProductsLast } from "@/features/shop/lib/sortOwnedProductsLast";
 
 export const useProducts = () => {
@@ -17,7 +16,7 @@ export const useProducts = () => {
     return () => clearTimeout(debounceTimer);
   }, [keyword]);
 
-  const productsQuery = useShopProductsQuery({
+  const productsQuery = useProductsQuery({
     keyword: debouncedKeyword,
     sort,
     category,

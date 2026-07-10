@@ -5,7 +5,7 @@ import {
   useMyCompareQuery,
   useMyGrowthRateQuery,
 } from "@/entities/competition";
-import { AnalyzeCategory } from "@/entities/competition/model/my-competition/myCompetition.types";
+import type { AnalyzeCategory } from "@/entities/competition";
 
 const competitionDropDownValue: { key: CompareStandard; label: string }[] = [
   { key: "YESTERDAY", label: "어제" },

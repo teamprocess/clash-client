@@ -1,4 +1,4 @@
-import { Pagination } from "@/shared/api/types";
+import type { Pagination } from "@/shared/api";
 
 export enum ProductSort {
   LATEST = "LATEST",

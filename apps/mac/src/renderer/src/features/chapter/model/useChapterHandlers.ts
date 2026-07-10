@@ -1,8 +1,7 @@
 import { useRef, type Dispatch, type SetStateAction } from "react";
 import type { Stage, Mission, StageStatus } from "@/features/chapter/model/chapter.types";
 import { useQueryClient } from "@tanstack/react-query";
-import type { GetChapterDetailsResponse } from "@/entities/roadmap/chapter/model/chapter.types";
-import { chapterQueryKeys } from "@/entities/roadmap/chapter/api/query/chapterQueryKeys";
+import { chapterQueryKeys, type GetChapterDetailsResponse } from "@/entities/roadmap";
 
 type StageOverride = Partial<Pick<Stage, "status" | "currentProgress">>;
 

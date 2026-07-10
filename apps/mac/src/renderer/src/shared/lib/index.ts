@@ -10,7 +10,6 @@ export {
 } from "./useServiceUnavailable";
 export { queryClient } from "./queryClient";
 export { getErrorMessage } from "./error";
-export { useRival } from "./useRival";
 export { buildPaddedStreak } from "./buildPaddedStreaks";
 export { getGrowthInfo } from "./getGrowthInfo";
 export { getCountLabel } from "./getCountLabel";

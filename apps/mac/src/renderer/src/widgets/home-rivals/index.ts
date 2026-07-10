@@ -1,0 +1,1 @@
+export { Rival } from "./Rival";

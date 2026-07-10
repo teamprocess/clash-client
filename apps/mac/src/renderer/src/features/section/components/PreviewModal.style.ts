@@ -1,8 +1,8 @@
 import styled, { css, keyframes } from "styled-components";
 import { font } from "@clash/design-tokens/font";
 import { palette } from "@clash/design-tokens/theme";
-import Check from "../assets/check.svg";
-import Roadmap from "../assets/roadmap.svg";
+import Check from "@/shared/ui/assets/check.svg";
+import Roadmap from "@/shared/ui/assets/roadmap.svg";
 import Flag from "../assets/flag.svg";
 import Arrow from "../assets/arrow.svg";
 import Star from "../assets/star.svg";

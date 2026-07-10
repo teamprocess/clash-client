@@ -1,4 +1,7 @@
 export { chapterApi } from "./api/chapterApi";
+export { chapterQueryKeys } from "./api/query/chapterQueryKeys";
+export { useChapterDetailsQuery } from "./api/query/useChapterDetails.query";
+export { useSectionDetailsQuery } from "./api/query/useSectionDetails.query";
 export { useResetChapterMutation } from "./api/mutation/useResetChapter.mutation";
 export { useSubmitAnswerMutation } from "./api/mutation/useSubmitAnswer.mutation";
 export { useChapterResultMutation } from "./api/mutation/useChapterResult.mutation";
@@ -17,5 +20,5 @@ export type {
   SubmitAnswerRequest,
   SubmitAnswerResponse,
 } from "./model/chapter.types";
-export { rankingApi, useChapterRankingQuery } from "./chapter-ranking";
+export { rankingApi, chapterRankingQueryKeys, useChapterRankingQuery } from "./chapter-ranking";
 export type { GetChapterRankingsResponse, RankingUser } from "./chapter-ranking";

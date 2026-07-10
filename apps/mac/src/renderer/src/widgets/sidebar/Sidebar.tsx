@@ -2,8 +2,8 @@ import * as S from "./Sidebar.style";
 import { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import type { MonitoredApp } from "@/entities/record";
-import { useSidebarMonitor } from "@/features/app-monitor";
 import { IdeIcons } from "@/shared/ui/assets/ide-img";
+import { useSidebarMonitor } from "./model/useSidebarMonitor";
 
 interface SidebarProps {
   isOpen: boolean;

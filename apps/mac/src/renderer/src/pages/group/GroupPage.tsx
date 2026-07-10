@@ -1,13 +1,9 @@
 import * as S from "./GroupPage.style";
-import { Group } from "@/features/record/ui/group/Group";
-import { GroupSideTab } from "@/features/record/ui/group-side-tab/GroupSideTab";
 import { useMemo, useState } from "react";
 import { type Group as GroupEntity, useMyGroupsQuery } from "@/entities/group";
-import { useGroup } from "@/features/record/model/useGroup";
-import { GroupDeleteModal } from "@/features/record/ui/group/modal/GroupDeleteModal";
-import { GroupEditModal } from "@/features/record/ui/group/modal/GroupEditModal";
-import { shiftRecordDate } from "@/features/record/model/recordDate";
-import { useTodayRecordDate } from "@/features/record/model/useTodayRecordDate";
+import { GroupDeleteModal, GroupEditModal, GroupSideTab, useGroup } from "@/features/group";
+import { shiftRecordDate, useTodayRecordDate } from "@/features/record";
+import { GroupActivity } from "@/widgets/group-activity";
 
 export const GroupPage = () => {
   const [selectedGroupId, setSelectedGroupId] = useState<number | null>(null);
@@ -34,7 +30,7 @@ export const GroupPage = () => {
   return (
     <S.GroupPageContainer>
       <S.Content>
-        <Group
+        <GroupActivity
           currentGroup={currentGroup}
           selectedDate={normalizedSelectedDate}
           displayDate={displayDate}

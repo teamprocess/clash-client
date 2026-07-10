@@ -1,0 +1,1 @@
+export { GitHubGuard } from "./GitHubGuard";

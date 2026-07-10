@@ -1,5 +1,5 @@
 import * as S from "./ResetPassword.style";
-import { ResetPasswordForm } from "@/features/auth/reset-password/ResetPasswordForm.tsx";
+import { ResetPasswordForm } from "@/features/auth";
 import { useLocation } from "react-router-dom";
 
 export const ResetPasswordPage = () => {

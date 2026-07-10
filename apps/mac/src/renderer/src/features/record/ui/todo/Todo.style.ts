@@ -3,8 +3,8 @@ import { font } from "@clash/design-tokens";
 import More from "../../assets/more.svg";
 import Play from "../../assets/play.svg";
 import Pause from "../../assets/pause.svg";
-import Close from "@/features/profile/assets/close.svg";
-import Check from "@/features/section/assets/check.svg";
+import Close from "@/shared/ui/assets/close.svg";
+import Check from "@/shared/ui/assets/check.svg";
 
 export const TodoContainer = styled.div`
   display: flex;

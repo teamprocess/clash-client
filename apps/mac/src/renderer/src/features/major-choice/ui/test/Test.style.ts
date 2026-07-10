@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { font } from "@clash/design-tokens/font";
-import Previous from "@/pages/roadmap/chapter/assets/previous.svg";
+import Previous from "@/shared/ui/assets/previous.svg";
 
 export const TestContainer = styled.div`
   display: flex;
