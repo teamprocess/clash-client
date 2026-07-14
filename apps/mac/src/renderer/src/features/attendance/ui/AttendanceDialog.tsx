@@ -47,7 +47,14 @@ export const AttendanceDialog = ({
     const hasLoadError = Boolean(loadErrorMessage);
 
     return (
-      <Dialog title="출석" width={26} height={33} isOpen={isOpen} onClose={onClose}>
+      <Dialog
+        title="출석"
+        width={26}
+        height={33}
+        isOpen={isOpen}
+        onClose={onClose}
+        contentOverflow="hidden"
+      >
         {isLoading ? (
           <SkeletonPanel ariaLabel="출석 현황을 불러오는 중" />
         ) : (
@@ -87,6 +94,7 @@ export const AttendanceDialog = ({
       closeOnOverlayClick={!isDialogLocked}
       closeOnEscape={!isDialogLocked}
       showClose={!isDialogLocked}
+      contentOverflow="hidden"
     >
       <S.Body>
         <S.Hero>

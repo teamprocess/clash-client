@@ -89,8 +89,8 @@ export const Popover = ({
         return;
       }
 
-      const dialogHost = anchorRef?.current?.closest<HTMLElement>("[role='dialog']");
-      setPortalHost(dialogHost ?? document.body);
+      const modalLayerHost = anchorRef?.current?.closest<HTMLElement>("[data-modal-layer]");
+      setPortalHost(modalLayerHost ?? document.body);
     });
 
     return () => {

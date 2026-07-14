@@ -31,9 +31,25 @@ export const Tooltip = ({
   const wrapperRef = useRef<HTMLSpanElement>(null);
   const bubbleRef = useRef<HTMLSpanElement>(null);
   const [isHovered, setIsHovered] = useState(false);
+  const [portalHost, setPortalHost] = useState<HTMLElement | null>(null);
   const isVisible = open || (triggerOnHover && isHovered);
   const normalizedContent =
     typeof content === "string" ? content.replace(/\\n/g, "\n").replace(/\\t/g, "\t") : content;
+
+  useLayoutEffect(() => {
+    let isActive = true;
+
+    queueMicrotask(() => {
+      if (!isActive || typeof document === "undefined") return;
+
+      const modalLayerHost = wrapperRef.current?.closest<HTMLElement>("[data-modal-layer]");
+      setPortalHost(modalLayerHost ?? document.body);
+    });
+
+    return () => {
+      isActive = false;
+    };
+  }, []);
 
   useLayoutEffect(() => {
     const bubbleElement = bubbleRef.current;
@@ -114,7 +130,7 @@ export const Tooltip = ({
       bubbleElement.style.visibility = "hidden";
       bubbleElement.style.opacity = "0";
     };
-  }, [isVisible, offset, position]);
+  }, [isVisible, offset, portalHost, position]);
 
   if (disabled) {
     return <>{children}</>;
@@ -131,13 +147,13 @@ export const Tooltip = ({
       onBlur={() => setIsHovered(false)}
     >
       {children}
-      {typeof document !== "undefined" &&
+      {portalHost &&
         createPortal(
           <S.TooltipBubble ref={bubbleRef} role="tooltip" $maxWidth={maxWidth}>
             {normalizedContent}
             <S.TooltipArrow $position={position} />
           </S.TooltipBubble>,
-          document.body
+          portalHost
         )}
     </S.TooltipWrapper>
   );
