@@ -6,6 +6,7 @@ import { shiftRecordDate, useTodayRecordDate } from "@/features/record";
 import { GroupActivity } from "@/widgets/group-activity";
 import { Button } from "@/shared/ui";
 import { getErrorMessage } from "@/shared/lib";
+import { GroupPageSkeleton } from "./GroupPageSkeleton";
 
 export const GroupPage = () => {
   const [selectedGroupId, setSelectedGroupId] = useState<number | null>(null);
@@ -38,10 +39,7 @@ export const GroupPage = () => {
   if (isGroupsPending && !myGroupsResponse) {
     return (
       <S.GroupPageContainer>
-        <S.PageState role="status" aria-live="polite" aria-busy="true">
-          <S.PageStateTitle>그룹을 불러오는 중이에요.</S.PageStateTitle>
-          <S.PageStateDescription>잠시만 기다려 주세요.</S.PageStateDescription>
-        </S.PageState>
+        <GroupPageSkeleton />
       </S.GroupPageContainer>
     );
   }

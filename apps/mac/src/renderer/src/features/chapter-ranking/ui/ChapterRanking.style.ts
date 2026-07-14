@@ -1,4 +1,4 @@
-import styled, { css, keyframes } from "styled-components";
+import styled, { css } from "styled-components";
 import { font } from "@clash/design-tokens/font";
 import { InlineNotice } from "@clash/ui";
 import FirstFrameIcon from "../assets/first-frame.svg";
@@ -10,25 +10,8 @@ import { DefaultProfileIcon } from "@/shared/ui";
 export type RankingPageEnum = "section" | "chapter";
 export type RankingPositionEnum = "top" | "bottom";
 
-const skeletonWave = keyframes`
-  0% {
-    background-position: 200% 0;
-  }
-
-  100% {
-    background-position: -200% 0;
-  }
-`;
-
 const skeletonBase = css`
-  background: linear-gradient(
-    90deg,
-    ${({ theme }) => theme.fill.normal} 0%,
-    ${({ theme }) => theme.fill.alternative} 50%,
-    ${({ theme }) => theme.fill.normal} 100%
-  );
-  background-size: 200% 100%;
-  animation: ${skeletonWave} 1.6s ease-in-out infinite;
+  background-color: ${({ theme }) => theme.fill.neutral};
 `;
 
 export const RankingContainer = styled.div<{ $page: RankingPageEnum }>`

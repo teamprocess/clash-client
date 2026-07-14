@@ -1,4 +1,4 @@
-import { Button, Dialog } from "@/shared/ui";
+import { Button, Dialog, SkeletonPanel } from "@/shared/ui";
 import { isAttended, type WeeklyAttendanceResponse } from "@/entities/attendance";
 import * as S from "./AttendanceDialog.style";
 
@@ -48,29 +48,20 @@ export const AttendanceDialog = ({
 
     return (
       <Dialog title="출석" width={26} height={33} isOpen={isOpen} onClose={onClose}>
-        <S.LoadState
-          role={hasLoadError ? "alert" : "status"}
-          aria-live={hasLoadError ? "assertive" : "polite"}
-        >
-          <S.GiftIcon aria-hidden />
-          <S.Headline>
-            {isLoading
-              ? "출석 현황을 불러오는 중이에요."
-              : hasLoadError
-                ? "출석 현황을 불러오지 못했어요."
-                : "표시할 출석 현황이 없어요."}
-          </S.Headline>
-          <S.Description>
-            {isLoading
-              ? "잠시만 기다려 주세요."
-              : loadErrorMessage || "잠시 후 다시 확인해 주세요."}
-          </S.Description>
-          {!isLoading && (
+        {isLoading ? (
+          <SkeletonPanel ariaLabel="출석 현황을 불러오는 중" />
+        ) : (
+          <S.LoadState role={hasLoadError ? "alert" : "status"} aria-live="assertive">
+            <S.GiftIcon aria-hidden />
+            <S.Headline>
+              {hasLoadError ? "출석 현황을 불러오지 못했어요." : "표시할 출석 현황이 없어요."}
+            </S.Headline>
+            <S.Description>{loadErrorMessage || "잠시 후 다시 확인해 주세요."}</S.Description>
             <Button variant="primary" size="md" onClick={onRetry}>
               다시 시도
             </Button>
-          )}
-        </S.LoadState>
+          </S.LoadState>
+        )}
       </Dialog>
     );
   }

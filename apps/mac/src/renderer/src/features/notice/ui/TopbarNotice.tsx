@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import type { KeyboardEvent } from "react";
 import { formatNoticeDate, useTopbarNotice } from "@/features/notice/model/useTopbarNotice";
-import { Button, Popover } from "@/shared/ui";
+import { Button, Popover, SkeletonRows } from "@/shared/ui";
 import * as S from "./TopbarNotice.style";
 import { getErrorMessage } from "@/shared/lib";
 
@@ -157,9 +157,7 @@ export const TopbarNotice = () => {
               </S.BackgroundErrorNotice>
             )}
             {isLoading ? (
-              <S.NoneNotice role="status" aria-live="polite">
-                알림을 불러오는 중입니다.
-              </S.NoneNotice>
+              <SkeletonRows ariaLabel="알림을 불러오는 중" rows={4} showTrailing compact />
             ) : isError && !hasQueryData ? (
               <S.NoticeState role="alert">
                 <span>{getErrorMessage(error, "알림을 불러오지 못했어요.")}</span>

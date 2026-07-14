@@ -1,4 +1,4 @@
-import { Button, Popover, Select, Tooltip } from "@/shared/ui";
+import { Button, Popover, Select, SkeletonRows, Tooltip } from "@/shared/ui";
 import * as S from "./Todo.style";
 import { useTodoList } from "../../model/useTodoList";
 import { getErrorMessage } from "@/shared/lib";
@@ -84,7 +84,7 @@ export const Todo = ({ selectedDate }: TodoProps) => {
             </S.SourceNotice>
           )}
           {tasksQuery.isPending ? (
-            <S.ListState kind="loading">할 일을 불러오는 중이에요.</S.ListState>
+            <SkeletonRows ariaLabel="할 일을 불러오는 중" rows={5} showAvatar={false} compact />
           ) : hasInitialTasksError ? (
             <S.ListState kind="error">
               <span>{getErrorMessage(tasksQuery.error, "할 일을 불러오지 못했어요.")}</span>

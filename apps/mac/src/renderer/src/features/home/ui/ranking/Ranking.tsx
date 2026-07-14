@@ -1,7 +1,7 @@
 import * as S from "./Ranking.style";
 import { rankingRewardTooltipContent } from "./Ranking.constants";
 import { useRanking } from "@/features/home/model/useRanking";
-import { Button, Select, QuestionTooltip } from "@/shared/ui";
+import { Button, Select, QuestionTooltip, SkeletonRows } from "@/shared/ui";
 import type { CategoryType, PeriodType, RankingItem } from "@/entities/ranking";
 import { UserRanking } from "./user-ranking/UserRanking";
 
@@ -58,15 +58,14 @@ export const Ranking = () => {
       <S.UserWrapper>
         <S.UserContainer ref={wrapperRef} aria-busy={domain.isFetching}>
           {domain.isLoading || domain.isPlaceholderData ? (
-            <S.DetailWrapper>
-              <S.DefaultBattleBox role="status" aria-live="polite">
-                <S.DefaultBattleText>
-                  {domain.isPlaceholderData
-                    ? "선택한 조건의 랭킹을 불러오는 중이에요."
-                    : "랭킹을 불러오는 중이에요."}
-                </S.DefaultBattleText>
-              </S.DefaultBattleBox>
-            </S.DetailWrapper>
+            <SkeletonRows
+              ariaLabel={
+                domain.isPlaceholderData ? "선택한 조건의 랭킹을 불러오는 중" : "랭킹을 불러오는 중"
+              }
+              rows={6}
+              surface
+              compact
+            />
           ) : domain.isError && !hasRankings ? (
             <S.DetailWrapper>
               <S.DefaultBattleBox role="alert">

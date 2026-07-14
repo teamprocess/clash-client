@@ -41,3 +41,11 @@ export type { ProfileAvatarProps } from "./profile-avatar";
 export { NameTag } from "./name-tag";
 export type { NameTagProps, NameTagSize, NameTagTextAlign, NameTagWidth } from "./name-tag";
 export { ClashLoadingIcon } from "./clash-loading-icon/ClashLoadingIcon";
+export {
+  DashboardCardSkeleton,
+  Skeleton,
+  SkeletonCards,
+  SkeletonPanel,
+  SkeletonRows,
+} from "./skeleton";
+export type { SkeletonProps } from "./skeleton";
