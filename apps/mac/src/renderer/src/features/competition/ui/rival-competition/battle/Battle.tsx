@@ -1,6 +1,14 @@
 import { useState } from "react";
 import * as S from "./Battle.style";
-import { Button, DefaultProfileIcon, Dialog, Select, SlideSelector } from "@/shared/ui";
+import {
+  Button,
+  DefaultProfileIcon,
+  Dialog,
+  Select,
+  SkeletonPanel,
+  SkeletonRows,
+  SlideSelector,
+} from "@/shared/ui";
 import type { AnalyzeCategory } from "@/entities/competition";
 import { MATCH_VALUE } from "@/entities/competition";
 import { useBattle } from "@/features/competition/model/useBattle";
@@ -69,11 +77,7 @@ export const Battle = () => {
             )}
 
             {battle.queries.info.isPending ? (
-              <S.DetailWrapper>
-                <S.DefaultBattleBox role="status" aria-live="polite">
-                  <S.DefaultBattleText>배틀 정보를 불러오는 중이에요.</S.DefaultBattleText>
-                </S.DefaultBattleBox>
-              </S.DetailWrapper>
+              <SkeletonPanel ariaLabel="배틀 정보를 불러오는 중" />
             ) : battle.queries.info.isError && !battle.battleData ? (
               <S.DetailWrapper>
                 <S.DefaultBattleBox role="alert">
@@ -139,13 +143,7 @@ export const Battle = () => {
 
                 {battle.isBattleSelected ? (
                   battle.queries.detail.isPending || battle.queries.detail.isPlaceholderData ? (
-                    <S.DetailWrapper>
-                      <S.DefaultBattleBox role="status" aria-live="polite">
-                        <S.DefaultBattleText>
-                          배틀 상세 정보를 불러오는 중이에요.
-                        </S.DefaultBattleText>
-                      </S.DefaultBattleBox>
-                    </S.DetailWrapper>
+                    <SkeletonPanel ariaLabel="배틀 상세 정보를 불러오는 중" />
                   ) : battle.queries.detail.isError && !battle.battleDetailData ? (
                     <S.DetailWrapper>
                       <S.DefaultBattleBox role="alert">
@@ -248,9 +246,7 @@ export const Battle = () => {
 
                         {battle.queries.analyze.isPending ||
                         battle.queries.analyze.isPlaceholderData ? (
-                          <S.AnalyzeState role="status" aria-live="polite">
-                            세부 분석을 불러오는 중이에요.
-                          </S.AnalyzeState>
+                          <SkeletonPanel ariaLabel="배틀 세부 분석을 불러오는 중" compact />
                         ) : battle.queries.analyze.isError &&
                           battle.queries.analyze.data === undefined ? (
                           <S.AnalyzeState role="alert">
@@ -379,9 +375,7 @@ export const Battle = () => {
               <S.ModalBody>
                 <S.UserChoiceContainer aria-busy={battle.queries.rivals.isFetching || undefined}>
                   {battle.queries.rivals.isPending ? (
-                    <S.EmptyStateBox role="status" aria-live="polite">
-                      <S.EmptyTitle>신청 가능한 라이벌을 불러오는 중이에요.</S.EmptyTitle>
-                    </S.EmptyStateBox>
+                    <SkeletonRows ariaLabel="신청 가능한 라이벌을 불러오는 중" rows={4} compact />
                   ) : battle.queries.rivals.isError && !battle.battleList ? (
                     <S.EmptyStateBox role="alert">
                       <S.EmptyTitle>신청 가능한 라이벌을 불러오지 못했어요.</S.EmptyTitle>
@@ -475,9 +469,7 @@ export const Battle = () => {
                 aria-busy={battle.queries.applications.isFetching || undefined}
               >
                 {battle.queries.applications.isPending ? (
-                  <S.EmptyStateBox role="status" aria-live="polite">
-                    <S.EmptyTitle>배틀 신청 목록을 불러오는 중이에요.</S.EmptyTitle>
-                  </S.EmptyStateBox>
+                  <SkeletonRows ariaLabel="배틀 신청 목록을 불러오는 중" rows={4} compact />
                 ) : battle.queries.applications.isError && !battle.battleApplyList ? (
                   <S.EmptyStateBox role="alert">
                     <S.EmptyTitle>배틀 신청 목록을 불러오지 못했어요.</S.EmptyTitle>

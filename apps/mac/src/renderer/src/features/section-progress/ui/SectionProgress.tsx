@@ -1,7 +1,7 @@
 import * as S from "./SectionProgress.style";
 import { useGetMyProfile } from "@/entities/user";
 import { MajorEnum, useMajorSectionQuery } from "@/entities/roadmap";
-import { Button } from "@/shared/ui";
+import { Button, SkeletonPanel } from "@/shared/ui";
 
 interface SectionProgressProps {
   completed?: number;
@@ -25,10 +25,8 @@ export const SectionProgress = ({
 
   if (needsRemoteCounts && (profileQuery.isLoading || sectionQuery.isLoading)) {
     return (
-      <S.SectionProgressContainer role="status" aria-live="polite">
-        <S.StateContent>
-          <S.StateMessage>진행률을 불러오는 중이에요.</S.StateMessage>
-        </S.StateContent>
+      <S.SectionProgressContainer>
+        <SkeletonPanel ariaLabel="로드맵 진행률을 불러오는 중" compact />
       </S.SectionProgressContainer>
     );
   }

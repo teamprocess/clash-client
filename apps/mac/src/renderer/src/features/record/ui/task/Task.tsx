@@ -1,7 +1,7 @@
 import * as S from "./Task.style";
 import { formatTime, getErrorMessage } from "@/shared/lib";
 import { useTaskList } from "../../model/useTaskList";
-import { Button, ConfirmDialog, Popover, Tooltip } from "@/shared/ui";
+import { Button, ConfirmDialog, Popover, SkeletonRows, Tooltip } from "@/shared/ui";
 
 interface TaskProps {
   selectedDate?: string;
@@ -74,7 +74,7 @@ export const Task = ({ selectedDate }: TaskProps) => {
       <S.TaskContainer>
         <S.TaskBox aria-busy={subjectsQuery.isFetching || undefined}>
           {subjectsQuery.isPending ? (
-            <S.ListState kind="loading">과목을 불러오는 중이에요.</S.ListState>
+            <SkeletonRows ariaLabel="과목을 불러오는 중" rows={5} showAvatar={false} compact />
           ) : hasInitialLoadError ? (
             <S.ListState kind="error">
               <span>{getErrorMessage(subjectsQuery.error, "과목을 불러오지 못했어요.")}</span>

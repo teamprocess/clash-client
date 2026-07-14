@@ -6,6 +6,7 @@ import { MissionContainer, Roadmap, useChapter } from "@/features/chapter";
 import { MajorEnum, useMajorSectionQuery } from "@/entities/roadmap";
 import { useEffect, useMemo } from "react";
 import { useGetMyProfile } from "@/entities/user";
+import { SkeletonPanel } from "@/shared/ui";
 
 export const ChapterPage = () => {
   const { sectionId } = useParams<{ sectionId: string }>();
@@ -76,7 +77,9 @@ export const ChapterPage = () => {
       <S.ChapterContainer>
         <S.ChapterScrollable ref={chapterRef} {...chapterScrollProps}>
           <S.ChapterCanvas />
-          <S.CenteredStatusMessage>로딩 중..</S.CenteredStatusMessage>
+          <S.CenteredStatusMessage>
+            <SkeletonPanel ariaLabel="챕터 로드맵을 불러오는 중" />
+          </S.CenteredStatusMessage>
         </S.ChapterScrollable>
       </S.ChapterContainer>
     );

@@ -1,6 +1,6 @@
 import { useState, type ChangeEvent } from "react";
 import * as S from "./RivalsManagement.style";
-import { Button } from "@/shared/ui/button";
+import { Button, SkeletonRows } from "@/shared/ui";
 import { Dialog } from "@/shared/ui/dialog";
 import { SearchInput } from "@/shared/ui/search-input";
 import { SlideSelector } from "@/shared/ui/slide-selector";
@@ -80,9 +80,7 @@ export const RivalsManagementDialog = ({ isOpen, onClose, rival }: AddRivalsDial
               </S.SearchInputBox>
 
               {rival.queries.myRivals.isPending ? (
-                <S.EmptyStateBox role="status" aria-live="polite">
-                  <S.EmptyTitle>현재 라이벌 정보를 확인하는 중이에요.</S.EmptyTitle>
-                </S.EmptyStateBox>
+                <SkeletonRows ariaLabel="현재 라이벌 정보를 확인하는 중" rows={4} compact />
               ) : rival.queries.myRivals.isError ? (
                 <S.EmptyStateBox role="alert">
                   <S.EmptyTitle>현재 라이벌 정보를 확인하지 못했어요.</S.EmptyTitle>
@@ -99,9 +97,7 @@ export const RivalsManagementDialog = ({ isOpen, onClose, rival }: AddRivalsDial
                   </Button>
                 </S.EmptyStateBox>
               ) : rival.queries.available.isPending ? (
-                <S.EmptyStateBox role="status" aria-live="polite">
-                  <S.EmptyTitle>추가할 수 있는 라이벌을 불러오는 중이에요.</S.EmptyTitle>
-                </S.EmptyStateBox>
+                <SkeletonRows ariaLabel="추가할 수 있는 라이벌을 불러오는 중" rows={4} compact />
               ) : rival.queries.available.isError ? (
                 <S.EmptyStateBox role="alert">
                   <S.EmptyTitle>라이벌 목록을 불러오지 못했어요.</S.EmptyTitle>
@@ -204,9 +200,7 @@ export const RivalsManagementDialog = ({ isOpen, onClose, rival }: AddRivalsDial
 
               <S.UserChoiceContainer>
                 {rival.queries.myRivals.isPending ? (
-                  <S.EmptyStateBox role="status" aria-live="polite">
-                    <S.EmptyTitle>현재 라이벌을 불러오는 중이에요.</S.EmptyTitle>
-                  </S.EmptyStateBox>
+                  <SkeletonRows ariaLabel="현재 라이벌을 불러오는 중" rows={4} compact />
                 ) : rival.queries.myRivals.isError && !rival.rivalsData ? (
                   <S.EmptyStateBox role="alert">
                     <S.EmptyTitle>현재 라이벌을 불러오지 못했어요.</S.EmptyTitle>
@@ -268,9 +262,7 @@ export const RivalsManagementDialog = ({ isOpen, onClose, rival }: AddRivalsDial
               <S.DetermineList>
                 <S.UserChoiceContainer>
                   {rival.queries.requests.isPending ? (
-                    <S.EmptyStateBox role="status" aria-live="polite">
-                      <S.EmptyTitle>라이벌 신청 목록을 불러오는 중이에요.</S.EmptyTitle>
-                    </S.EmptyStateBox>
+                    <SkeletonRows ariaLabel="라이벌 신청 목록을 불러오는 중" rows={4} compact />
                   ) : rival.queries.requests.isError && !rival.rivalSignAll ? (
                     <S.EmptyStateBox role="alert">
                       <S.EmptyTitle>라이벌 신청 목록을 불러오지 못했어요.</S.EmptyTitle>
