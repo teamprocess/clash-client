@@ -3,8 +3,7 @@ import { Active, Ranking, Transition } from "@/features/home";
 import { Rival } from "@/widgets/home-rivals";
 import { useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
-import { Dialog } from "@/shared/ui";
-import { Skeleton } from "@/shared/ui/skeleton";
+import { DashboardCardSkeleton, Dialog } from "@/shared/ui";
 import * as S from "./Home.style";
 import {
   activeQueryKeys,
@@ -103,10 +102,10 @@ export const Home = () => {
   if (isChecking) {
     return (
       <>
-        <Skeleton />
-        <Skeleton />
-        <Skeleton />
-        <Skeleton />
+        <DashboardCardSkeleton ariaLabel="홈 정보를 불러오는 중" />
+        <DashboardCardSkeleton />
+        <DashboardCardSkeleton />
+        <DashboardCardSkeleton />
       </>
     );
   }
@@ -114,10 +113,10 @@ export const Home = () => {
   if (isGitHubNotReady) {
     return (
       <>
-        <Skeleton />
-        <Skeleton />
-        <Skeleton />
-        <Skeleton />
+        <DashboardCardSkeleton ariaLabel="GitHub 활동 정보를 준비하는 중" />
+        <DashboardCardSkeleton />
+        <DashboardCardSkeleton />
+        <DashboardCardSkeleton />
         {!isGitHubNotLinked && (
           <Dialog width={21.5} height={21.5} isOpen={true} ariaLabel="GitHub 계정 연동 중">
             <S.ConnectingContainer>

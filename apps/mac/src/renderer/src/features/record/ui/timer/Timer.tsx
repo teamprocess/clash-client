@@ -2,6 +2,7 @@ import * as S from "./Timer.style";
 import { formatTime } from "@/shared/lib";
 import { useRecordStore } from "../../model/recordStore";
 import { useLiveRecordStudyTime } from "../../model/useLiveRecordStudyTime";
+import { Skeleton } from "@/shared/ui";
 
 interface TimerProps {
   date: string;
@@ -103,7 +104,7 @@ export const Timer = ({
           aria-label={isLoading ? "총 학습 시간을 불러오는 중" : `총 학습 시간 ${displayTime}`}
           $loading={isLoading}
         >
-          {displayTime}
+          {isLoading ? <Skeleton width="8ch" height="2.75rem" radius="0.5rem" /> : displayTime}
         </S.Time>
         {stopButtonPosition === "RIGHT" && stopButton}
       </S.TimeBox>

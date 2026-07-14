@@ -3,7 +3,7 @@ import { type Group as GroupEntity } from "@/entities/group";
 import { formatTime } from "@/shared/lib";
 import { useGroupRealtimeActivity } from "../model/useGroupRealtimeActivity";
 import { Timer } from "@/features/record";
-import { Button } from "@/shared/ui";
+import { Button, Skeleton, SkeletonRows } from "@/shared/ui";
 import { getErrorMessage } from "@/shared/lib";
 
 interface GroupProps {
@@ -67,7 +67,11 @@ export const GroupActivity = ({
                 <S.MyStudySummary $isActive={isStudying}>
                   <S.MyStudyFireIcon />
                   <S.MyStudyTime $isActive={isStudying} $loading={isLoading}>
-                    {displayStudyTime}
+                    {isLoading ? (
+                      <Skeleton width="8ch" height="1.5rem" radius="0.375rem" />
+                    ) : (
+                      displayStudyTime
+                    )}
                   </S.MyStudyTime>
                 </S.MyStudySummary>
               </S.HeaderTimer>
@@ -101,9 +105,13 @@ export const GroupActivity = ({
                       </Button>
                     </S.ActivityState>
                   ) : activityQuery.isPending ? (
-                    <S.ActivityState kind="loading">
-                      <S.ActivityStateTitle>그룹 활동을 불러오는 중이에요.</S.ActivityStateTitle>
-                    </S.ActivityState>
+                    <SkeletonRows
+                      ariaLabel="그룹 활동을 불러오는 중"
+                      rows={5}
+                      showTrailing={false}
+                      surface
+                      compact
+                    />
                   ) : groupMembers.length === 0 ? (
                     <S.ActivityState kind="empty">
                       <S.ActivityStateTitle>표시할 그룹 활동이 아직 없어요.</S.ActivityStateTitle>

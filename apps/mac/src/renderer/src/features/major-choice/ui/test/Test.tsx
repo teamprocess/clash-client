@@ -1,6 +1,7 @@
 import * as S from "./Test.style";
 import type { TestProps } from "@/features/major-choice/model/useMajorChoice";
 import { Button } from "@/shared/ui/button";
+import { SkeletonRows } from "@/shared/ui/skeleton";
 import { AGREEMENT_LABELS, LevelSlider } from "@/shared/ui/level-slider";
 import type { LevelSliderValue } from "@/shared/ui/level-slider/types";
 
@@ -61,9 +62,13 @@ export const Test = ({
         </S.StickyHeader>
         <S.QuestionWrapper>
           {isQuestionsLoading ? (
-            <S.StateBox role="status" aria-live="polite">
-              <S.StateTitle>검사 문항을 불러오는 중이에요.</S.StateTitle>
-            </S.StateBox>
+            <SkeletonRows
+              ariaLabel="검사 문항을 불러오는 중"
+              rows={4}
+              showAvatar={false}
+              showTrailing={false}
+              surface
+            />
           ) : questionsError && questionData.length === 0 ? (
             <S.StateBox role="alert">
               <S.StateTitle>검사 문항을 불러오지 못했어요.</S.StateTitle>

@@ -3,6 +3,7 @@ import { GitHubInfo } from "@/features/profile/ui/profile-tabs/github-info/GitHu
 import { GitHubStreak } from "@/features/profile/ui/profile-tabs/github-streak/GitHubStreak";
 import { useProfileGitHubDetailQuery } from "@/entities/profile";
 import { useProfileGitHubStreak } from "@/features/profile/model/useProfileTabs";
+import { SkeletonPanel } from "@/shared/ui";
 import * as S from "./GitHubActivityPanel.style";
 
 const formatKoreanDate = (ymd: string) => {
@@ -73,13 +74,17 @@ export const GitHubActivityPanel = () => {
       </S.StreakSection>
 
       <S.InfoSection>
-        <GitHubInfo
-          {...infoProps}
-          showSummary={hasSelection}
-          hasDetail={Boolean(selectedDate && displayDetail)}
-          emptyTitle={emptyTitle}
-          emptyDescription={emptyDescription}
-        />
+        {selectedDate && !displayDetail && (detailQuery.isFetching || detailQuery.isLoading) ? (
+          <SkeletonPanel ariaLabel="선택한 날짜의 GitHub 활동을 불러오는 중" />
+        ) : (
+          <GitHubInfo
+            {...infoProps}
+            showSummary={hasSelection}
+            hasDetail={Boolean(selectedDate && displayDetail)}
+            emptyTitle={emptyTitle}
+            emptyDescription={emptyDescription}
+          />
+        )}
       </S.InfoSection>
     </S.Panel>
   );

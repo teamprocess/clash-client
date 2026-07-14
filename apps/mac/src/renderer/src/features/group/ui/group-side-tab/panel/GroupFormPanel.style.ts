@@ -113,7 +113,7 @@ export const GroupMembers = styled.span`
   flex-shrink: 0;
 
   span {
-    color: ${({ theme }) => theme.content.accent};
+    color: ${({ theme }) => theme.primary.normal};
   }
 `;
 

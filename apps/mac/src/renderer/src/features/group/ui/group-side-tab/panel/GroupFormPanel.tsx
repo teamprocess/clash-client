@@ -1,4 +1,4 @@
-import { Button, SlideSelector } from "@/shared/ui";
+import { Button, SkeletonCards, SlideSelector } from "@/shared/ui";
 import { GROUP_CATEGORY_LABELS } from "@/entities/group";
 import type { GroupFormPanelProps } from "../../../model/useGroup";
 import { useGroupFormPanel } from "../../../model/useGroupFormPanel";
@@ -78,9 +78,11 @@ export const GroupFormPanel = ({
 
               <S.GroupsWrapper>
                 {isLoading ? (
-                  <S.EmptyState>
-                    <S.EmptyTitle>로딩 중...</S.EmptyTitle>
-                  </S.EmptyState>
+                  <SkeletonCards
+                    ariaLabel="참여할 수 있는 그룹을 불러오는 중"
+                    cards={4}
+                    columns={1}
+                  />
                 ) : groups.length === 0 ? (
                   <S.EmptyState>
                     <S.EmptyTextBox>

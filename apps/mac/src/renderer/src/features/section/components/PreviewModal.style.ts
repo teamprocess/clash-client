@@ -1,4 +1,4 @@
-import styled, { css, keyframes } from "styled-components";
+import styled, { css } from "styled-components";
 import { font } from "@clash/design-tokens/font";
 import { palette } from "@clash/design-tokens/theme";
 import Check from "@/shared/ui/assets/check.svg";
@@ -7,25 +7,8 @@ import Flag from "../assets/flag.svg";
 import Arrow from "../assets/arrow.svg";
 import Star from "../assets/star.svg";
 
-const skeletonWave = keyframes`
-  0% {
-    background-position: 200% 0;
-  }
-
-  100% {
-    background-position: -200% 0;
-  }
-`;
-
 const skeletonBase = css`
-  background: linear-gradient(
-    90deg,
-    ${({ theme }) => theme.fill.normal} 0%,
-    ${({ theme }) => theme.fill.alternative} 50%,
-    ${({ theme }) => theme.fill.normal} 100%
-  );
-  background-size: 200% 100%;
-  animation: ${skeletonWave} 1.6s ease-in-out infinite;
+  background-color: ${({ theme }) => theme.fill.neutral};
 `;
 
 export const PreviewModalWrapper = styled.div`
@@ -381,7 +364,7 @@ export const ArrowIcon = styled(Arrow)<{ $direction: "left" | "right" }>`
 
 export const CurrentStepLabel = styled.span`
   ${font.title2.medium}
-  color: ${({ theme }) => theme.content.accent};
+  color: ${({ theme }) => theme.primary.normal};
 `;
 
 export const StepLabel = styled.div`

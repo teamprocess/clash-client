@@ -1,6 +1,6 @@
 import * as S from "./MissionContainer.style";
 import { useEffect, useRef, useState } from "react";
-import { SidePanel } from "@/shared/ui";
+import { SidePanel, SkeletonPanel } from "@/shared/ui";
 import { getErrorMessage } from "@/shared/lib";
 import { MarkdownCodeContent } from "@/shared/ui/markdown-code-content/MarkdownCodeContent";
 import type { Mission } from "@/features/chapter/model/chapter.types";
@@ -344,9 +344,7 @@ export const MissionContainer = ({
     }
   };
 
-  const descriptionText = isLoading
-    ? "챕터 정보를 불러오는 중입니다."
-    : description?.trim() || "이 챕터에 대한 설명이 아직 준비되지 않았습니다.";
+  const descriptionText = description?.trim() || "이 챕터에 대한 설명이 아직 준비되지 않았습니다.";
   const isCompletedStage =
     isFinishedSection ||
     (currentStage.totalMissions > 0 && currentStage.currentProgress >= currentStage.totalMissions);
@@ -392,9 +390,13 @@ export const MissionContainer = ({
         ) : (
           <>
             <S.OverviewBody>
-              <S.SectionCard>
-                <S.DescriptionText>{descriptionText}</S.DescriptionText>
-              </S.SectionCard>
+              {isLoading ? (
+                <SkeletonPanel ariaLabel="챕터 정보를 불러오는 중" />
+              ) : (
+                <S.SectionCard>
+                  <S.DescriptionText>{descriptionText}</S.DescriptionText>
+                </S.SectionCard>
+              )}
             </S.OverviewBody>
 
             <S.FooterActions>

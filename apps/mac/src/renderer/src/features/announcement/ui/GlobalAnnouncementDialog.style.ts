@@ -161,7 +161,7 @@ export const Content = styled.div`
 `;
 
 export const ContentLink = styled.a`
-  color: ${({ theme }) => theme.content.accent};
+  color: ${({ theme }) => theme.primary.normal};
   text-decoration: underline;
   cursor: pointer;
 `;

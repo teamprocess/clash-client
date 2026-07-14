@@ -1,7 +1,7 @@
 import * as S from "./RivalCompetitionPage.style";
 import { RivalCompetition } from "@/features/competition";
 import { RivalsManagementDialog, useRival } from "@/features/rival-management";
-import { Button } from "@/shared/ui";
+import { Button, SkeletonPanel } from "@/shared/ui";
 import { getErrorMessage } from "@/shared/lib";
 
 export const RivalCompetitionPage = () => {
@@ -24,9 +24,7 @@ export const RivalCompetitionPage = () => {
         </S.RefreshNotice>
       )}
       {rival.queries.myRivals.isPending ? (
-        <S.EmptyState role="status" aria-live="polite">
-          <S.EmptyText>라이벌 경쟁 정보를 불러오는 중이에요.</S.EmptyText>
-        </S.EmptyState>
+        <SkeletonPanel ariaLabel="라이벌 경쟁 정보를 불러오는 중" />
       ) : rival.queries.myRivals.isError && !rival.rivalsData ? (
         <S.EmptyState role="alert">
           <S.EmptyText>

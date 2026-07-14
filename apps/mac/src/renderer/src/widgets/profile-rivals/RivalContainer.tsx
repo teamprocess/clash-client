@@ -1,7 +1,7 @@
 import * as S from "./RivalContainer.style";
 import { RivalCard } from "./rival-card/RivalCard";
 import { RivalsManagementDialog, useRival } from "@/features/rival-management";
-import { Button } from "@/shared/ui";
+import { Button, SkeletonRows } from "@/shared/ui";
 import { getErrorMessage } from "@/shared/lib";
 
 export const RivalContainer = () => {
@@ -26,9 +26,13 @@ export const RivalContainer = () => {
       )}
       <S.Container>
         {rival.queries.myRivals.isPending ? (
-          <S.State role="status" aria-live="polite">
-            라이벌을 불러오는 중이에요.
-          </S.State>
+          <SkeletonRows
+            ariaLabel="라이벌을 불러오는 중"
+            rows={4}
+            showTrailing={false}
+            surface
+            compact
+          />
         ) : rival.queries.myRivals.isError && !rival.rivalsData ? (
           <S.State role="alert">
             <span>

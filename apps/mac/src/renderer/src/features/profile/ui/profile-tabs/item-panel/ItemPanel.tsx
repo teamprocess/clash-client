@@ -12,7 +12,7 @@ import {
 import { sortEquippedItemsFirst } from "@/features/profile/lib/sortEquippedItemsFirst";
 import { useGetMyProfile, userQueryKeys } from "@/entities/user";
 import { getErrorMessage } from "@/shared/lib";
-import { Button } from "@/shared/ui";
+import { Button, SkeletonCards } from "@/shared/ui";
 
 const FILTER_OPTIONS = [
   { key: OwnedItemCategory.ALL, label: "전체" },
@@ -126,10 +126,7 @@ export const ItemPanel = () => {
             </Button>
           </S.StateBox>
         ) : isLoading ? (
-          <S.StateBox role="status" aria-live="polite" aria-busy="true">
-            <S.StateTitle>아이템을 불러오는 중...</S.StateTitle>
-            <S.StateDescription>잠시만 기다려 주세요.</S.StateDescription>
-          </S.StateBox>
+          <SkeletonCards ariaLabel="보유한 아이템을 불러오는 중" cards={8} columns={4} />
         ) : items.length === 0 ? (
           <S.StateBox>
             <S.StateTitle>보유한 아이템이 아직 없어요.</S.StateTitle>

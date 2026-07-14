@@ -17,6 +17,7 @@ export interface DialogProps {
   gap?: number;
   fullWidth?: boolean;
   fullHeight?: boolean;
+  contentOverflow?: "auto" | "hidden";
   ariaLabel?: string;
 }
 
@@ -33,6 +34,7 @@ export const Dialog = ({
   showClose = true,
   fullWidth = false,
   fullHeight = false,
+  contentOverflow = "auto",
   ariaLabel,
 }: DialogProps) => {
   const titleId = useId();
@@ -45,7 +47,7 @@ export const Dialog = ({
   if (!isOpen || typeof document === "undefined") return null;
 
   return createPortal(
-    <S.DialogWrapper ref={layerRef}>
+    <S.DialogWrapper ref={layerRef} data-modal-layer>
       <S.DialogOverlay onClick={closeOnOverlayClick ? onClose : undefined} aria-hidden />
       <S.DialogContainer
         ref={dialogRef}
@@ -69,7 +71,9 @@ export const Dialog = ({
             <S.CloseIcon aria-hidden />
           </S.CloseButton>
         )}
-        <S.DialogContent $gap={gap}>{children}</S.DialogContent>
+        <S.DialogContent $gap={gap} $overflow={contentOverflow}>
+          {children}
+        </S.DialogContent>
       </S.DialogContainer>
     </S.DialogWrapper>,
     document.body

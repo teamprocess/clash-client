@@ -187,7 +187,7 @@ export const QuizProgress = styled.div`
 export const QuizStep = styled.span`
   ${font.body.regular}
   font-size: 1.1rem;
-  color: ${({ theme }) => theme.content.accent};
+  color: ${({ theme }) => theme.primary.normal};
 `;
 
 export const QuizProgressTrack = styled.div`
@@ -235,7 +235,7 @@ export const QuestionText = styled.div`
 
 export const QuestionPrefix = styled.span`
   ${font.title1.medium}
-  color: ${({ theme }) => theme.content.accent};
+  color: ${({ theme }) => theme.primary.normal};
 `;
 
 export const OptionList = styled.div`
@@ -348,7 +348,7 @@ export const SummaryScore = styled.div`
   gap: 0.3rem;
   ${font.title1.medium}
   font-size: 1.85rem;
-  color: ${({ theme }) => theme.content.accent};
+  color: ${({ theme }) => theme.primary.normal};
 `;
 
 export const SummaryScoreTotal = styled.span`

@@ -1,6 +1,6 @@
 import * as S from "./Rival.style";
 import { RivalsManagementDialog, useRival } from "@/features/rival-management";
-import { Button, QuestionTooltip } from "@/shared/ui";
+import { Button, QuestionTooltip, SkeletonCards } from "@/shared/ui";
 import { MyRivalUsers } from "./MyRivalUsers";
 import { getErrorMessage } from "@/shared/lib";
 
@@ -46,9 +46,7 @@ export const Rival = () => {
 
       <S.RivalBox aria-busy={rival.queries.myRivals.isFetching || undefined}>
         {rival.queries.myRivals.isPending ? (
-          <S.RivalState kind="loading">
-            <S.RivalStateTitle>라이벌을 불러오는 중이에요.</S.RivalStateTitle>
-          </S.RivalState>
+          <SkeletonCards ariaLabel="라이벌을 불러오는 중" cards={4} />
         ) : rival.queries.myRivals.isError && !rival.rivalsData ? (
           <S.RivalState kind="error">
             <S.RivalStateTitle>라이벌을 불러오지 못했어요.</S.RivalStateTitle>
