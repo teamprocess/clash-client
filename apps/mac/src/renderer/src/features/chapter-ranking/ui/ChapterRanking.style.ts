@@ -251,7 +251,7 @@ export const RankingUsername = styled.span`
 
 export const RankingChapter = styled.span`
   ${font.label.medium};
-  color: ${({ theme }) => theme.content.accent};
+  color: ${({ theme }) => theme.primary.normal};
   text-align: center;
 `;
 
