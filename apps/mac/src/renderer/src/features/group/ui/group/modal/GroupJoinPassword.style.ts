@@ -33,5 +33,5 @@ export const PasswordInput = styled.input`
 export const PasswordErrorText = styled.p`
   margin-top: 0.5rem;
   ${font.label.medium};
-  color: ${({ theme }) => theme.content.accent};
+  color: ${({ theme }) => theme.primary.normal};
 `;

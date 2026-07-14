@@ -43,6 +43,6 @@ export const ThumbGrid = styled.span`
 
 export const FieldLabel = styled.span<{ $isActive: boolean }>`
   ${({ $isActive }) => ($isActive ? font.body.bold : font.body.medium)};
-  color: ${({ theme, $isActive }) => ($isActive ? theme.content.accent : theme.label.alternative)};
+  color: ${({ theme, $isActive }) => ($isActive ? theme.primary.normal : theme.label.alternative)};
   text-align: center;
 `;

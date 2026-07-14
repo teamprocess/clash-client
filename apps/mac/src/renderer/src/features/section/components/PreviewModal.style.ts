@@ -364,7 +364,7 @@ export const ArrowIcon = styled(Arrow)<{ $direction: "left" | "right" }>`
 
 export const CurrentStepLabel = styled.span`
   ${font.title2.medium}
-  color: ${({ theme }) => theme.content.accent};
+  color: ${({ theme }) => theme.primary.normal};
 `;
 
 export const StepLabel = styled.div`

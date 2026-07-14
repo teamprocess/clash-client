@@ -98,7 +98,7 @@ export const MenuItem = styled(Link)<{ $active?: boolean }>`
   gap: 0.625rem;
   ${font.headline2.medium}
   padding: 0.625rem 2rem;
-  color: ${({ $active, theme }) => ($active ? theme.label.strong : theme.label.normal)};
+  color: ${({ $active, theme }) => ($active ? theme.primary.normal : theme.label.normal)};
   cursor: pointer;
   transition: color 0.2s ease;
 

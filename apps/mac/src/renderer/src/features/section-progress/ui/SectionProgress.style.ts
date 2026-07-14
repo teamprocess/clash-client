@@ -57,7 +57,7 @@ export const StepCount = styled.span`
 `;
 
 export const CompletedCount = styled.span`
-  color: ${({ theme }) => theme.content.accent};
+  color: ${({ theme }) => theme.primary.normal};
 `;
 
 export const ProgressBarWrapper = styled.div`
