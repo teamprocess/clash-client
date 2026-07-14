@@ -82,12 +82,12 @@ export const CloseIcon = styled(ExitIconSvg)`
   height: 1rem;
 `;
 
-export const DialogContent = styled.div<{ $gap: number }>`
+export const DialogContent = styled.div<{ $gap: number; $overflow: "auto" | "hidden" }>`
   display: flex;
   flex-direction: column;
   width: 100%;
   flex: 1;
   min-height: 0;
-  overflow: auto;
+  overflow: ${({ $overflow }) => $overflow};
   gap: ${({ $gap }) => $gap}rem;
 `;

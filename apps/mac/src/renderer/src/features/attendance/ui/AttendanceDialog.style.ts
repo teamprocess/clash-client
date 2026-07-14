@@ -39,11 +39,11 @@ const stampFlash = keyframes`
 
 export const Body = styled.div`
   display: flex;
+  flex: 1;
   flex-direction: column;
-  height: 100%;
   min-height: 0;
   gap: 2rem;
-  margin-top: 0.25rem;
+  padding-top: 0.25rem;
 `;
 
 export const LoadState = styled.div`

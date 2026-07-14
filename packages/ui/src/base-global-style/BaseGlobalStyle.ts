@@ -96,7 +96,7 @@ export const BaseGlobalStyle = createGlobalStyle<BaseGlobalStyleProps>`
 
   :where(button, a, input, textarea, select, [role="button"], [tabindex]):focus-visible {
     outline: 2px solid ${({ theme }) => theme.interaction.selectionBorder} !important;
-    outline-offset: 2px !important;
+    outline-offset: -2px !important;
   }
 
   *::-webkit-scrollbar {

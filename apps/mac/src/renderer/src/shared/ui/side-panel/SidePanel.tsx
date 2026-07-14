@@ -35,6 +35,7 @@ export const SidePanel = ({
   return createPortal(
     <S.Overlay
       ref={layerRef}
+      data-modal-layer
       $closing={isClosing}
       $position={position}
       onClick={onClose}
