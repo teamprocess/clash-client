@@ -2,13 +2,14 @@ import * as S from "./ChapterRanking.style";
 import { useChapterRanking } from "@/features/chapter-ranking/model/useChapterRanking";
 import type { RankingPageEnum } from "./ChapterRanking.style";
 import { Button, QuestionTooltip } from "@/shared/ui";
-import { chapterRankingTooltipContent } from "../constants/chapterRanking.constants";
+import { useHelpContent } from "@/entities/help-content";
 
 interface ChapterRankingProps {
   page: RankingPageEnum;
 }
 
 export const ChapterRanking = ({ page }: ChapterRankingProps) => {
+  const chapterRankingTooltipContent = useHelpContent("chapter-ranking-tooltip");
   const {
     isMyRankVisible,
     stickyPosition,

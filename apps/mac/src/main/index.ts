@@ -1,6 +1,6 @@
 import { app, BrowserWindow, dialog, ipcMain } from "electron";
 import { autoUpdater } from "electron-updater";
-import { AppMonitor } from "./services";
+import { AppMonitor, HelpContentService } from "./services";
 import { createMainWindow, createStartupWindow } from "./window";
 import { configureCertificateHandling } from "./security";
 import { registerQuitHandlers } from "./lifecycle";
@@ -14,6 +14,7 @@ import { configureAppRuntime, IS_DEV_CHANNEL } from "./runtimeProfile";
 let mainWindow: BrowserWindow | null = null;
 let startupWindow: BrowserWindow | null = null;
 let appMonitor: AppMonitor | null = null;
+let helpContentService: HelpContentService | null = null;
 let isCheckingForUpdates = false;
 let isInstallPromptOpen = false;
 let downloadedUpdateVersion: string | null = null;
@@ -480,8 +481,11 @@ configureAppRuntime();
 configureCertificateHandling();
 registerQuitHandlers({ getAppMonitor });
 registerDeepLinkEvents(getMainWindow, createWindow);
-app.whenReady().then(() => {
-  bootstrapMainProcess({ createWindow, getMainWindow, getAppMonitor });
+app.whenReady().then(async () => {
+  helpContentService = new HelpContentService();
+  await helpContentService.initialize();
+  bootstrapMainProcess({ createWindow, getMainWindow, getAppMonitor, helpContentService });
+  void helpContentService.refreshAll();
 
   if (isUpdateSupported()) {
     createStartupGateWindow();

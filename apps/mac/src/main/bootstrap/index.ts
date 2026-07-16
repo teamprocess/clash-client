@@ -1,6 +1,6 @@
 import { app, BrowserWindow } from "electron";
 import { electronApp, is } from "@electron-toolkit/utils";
-import type { AppMonitor } from "../services";
+import type { AppMonitor, HelpContentService } from "../services";
 import { registerIpcHandlers } from "../ipc";
 import { registerCspHeaders } from "../security";
 import { registerAppProtocol } from "../appProtocol";
@@ -11,6 +11,7 @@ interface BootstrapMainProcessParams {
   createWindow: () => void;
   getMainWindow: () => BrowserWindow | null;
   getAppMonitor: () => AppMonitor | null;
+  helpContentService: HelpContentService;
 }
 
 // 앱 활성화 시 윈도우가 없으면 재생성
@@ -80,6 +81,7 @@ export const bootstrapMainProcess = ({
   createWindow,
   getMainWindow,
   getAppMonitor,
+  helpContentService,
 }: BootstrapMainProcessParams) => {
   registerAppProtocol();
   registerProtocol();
@@ -92,7 +94,7 @@ export const bootstrapMainProcess = ({
   registerWindowShortcuts();
 
   // 앱 모니터 관련 IPC 등록
-  registerIpcHandlers(getAppMonitor);
+  registerIpcHandlers(getAppMonitor, helpContentService);
 
   registerActivateHandler(createWindow, getMainWindow);
 };

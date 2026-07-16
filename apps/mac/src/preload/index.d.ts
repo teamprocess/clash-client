@@ -1,4 +1,5 @@
 import type { ElectronAPI } from "@electron-toolkit/preload";
+import type { HelpContentKey } from "../shared/helpContent";
 
 interface ActiveApp {
   appName: string;
@@ -34,6 +35,11 @@ interface StartupUpdateState {
   detail?: string;
 }
 
+interface HelpContentUpdatedPayload {
+  key: HelpContentKey;
+  content: string;
+}
+
 interface AppMonitorAPI {
   startMonitoring: () => Promise<void>;
   stopMonitoring: () => Promise<void>;
@@ -54,10 +60,12 @@ interface AppMonitorAPI {
   getStartupUpdateStateSync: () => StartupUpdateState;
   getStartupUpdateState: () => Promise<StartupUpdateState>;
   retryStartupUpdate: () => Promise<StartupUpdateState>;
+  getHelpContent: (key: HelpContentKey) => Promise<string>;
   onDeepLinkAuth: (callback: (payload: DeepLinkAuthPayload) => void) => () => void;
   onAppChanged: (callback: (app: ActiveApp | null) => void) => () => void;
   onSessionUpdated: (callback: (session: MonitoringSession) => void) => () => void;
   onStartupUpdateStateChanged: (callback: (state: StartupUpdateState) => void) => () => void;
+  onHelpContentUpdated: (callback: (payload: HelpContentUpdatedPayload) => void) => () => void;
 }
 
 declare global {

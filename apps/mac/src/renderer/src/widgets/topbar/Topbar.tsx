@@ -1,7 +1,7 @@
 import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import * as S from "./Topbar.style";
-import { cookieTooltipContent, expTooltipContent } from "./Topbar.constants";
+import { useHelpContent } from "@/entities/help-content";
 import { useGetMyProfile } from "@/entities/user";
 import { TopbarNotice } from "@/features/notice";
 import { formatPrice, resolveProfileDecorations } from "@/shared/lib";
@@ -25,6 +25,8 @@ export const Topbar = ({
   const { signOut } = useSignOut();
   const navigate = useNavigate();
   const { badgeImage } = resolveProfileDecorations(user?.equippedItems);
+  const expTooltipContent = useHelpContent("exp-tooltip");
+  const cookieTooltipContent = useHelpContent("cookie-tooltip");
 
   const profileMenuRef = useRef<HTMLButtonElement>(null);
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);

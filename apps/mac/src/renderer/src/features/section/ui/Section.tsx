@@ -11,13 +11,14 @@ import { useGetMyProfile } from "@/entities/user";
 import { SectionItemBox } from "../components/SectionItemBox";
 import { useDragScroll } from "@/shared/lib/useDragScroll";
 import { Tooltip } from "@/shared/ui";
-import { changeMajorTooltipContent } from "./Section.constants";
+import { useHelpContent } from "@/entities/help-content";
 
 interface SectionProps {
   children?: ReactNode;
 }
 
 export const Section = ({ children }: SectionProps) => {
+  const changeMajorTooltipContent = useHelpContent("major-change-tooltip");
   const navigate = useNavigate();
   const roadmapScrollProps = useDragScroll<HTMLDivElement>();
 
