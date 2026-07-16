@@ -3,6 +3,7 @@ import { formatTime, resolveUsingApp, useRealtimeRivalActiveTime } from "@/share
 import type { MyRivalsRequest, MyRivalsResponse } from "@/entities/rival";
 import { USER_STATUS_LABELS } from "@/entities/rival";
 import { DefaultProfileIcon, QuestionTooltip, RankTier, Tooltip } from "@/shared/ui";
+import { useHelpContent } from "@/entities/help-content";
 import { IDEIcons } from "@/shared/ui/assets/ide-img";
 
 interface MyRivalsProps {
@@ -67,6 +68,7 @@ const RivalRow = ({ user }: { user: MyRivalsRequest }) => {
 
 export const MyRivals = ({ data, onManageRivals }: MyRivalsProps) => {
   const rivals = data.myRivals;
+  const rivalLimitTooltipContent = useHelpContent("rival-limit-tooltip");
 
   return (
     <>
@@ -75,10 +77,7 @@ export const MyRivals = ({ data, onManageRivals }: MyRivalsProps) => {
           <S.TitleBox>
             <S.TitleGroup>
               <S.Title>내 라이벌</S.Title>
-              <QuestionTooltip
-                content="최대 라이벌 수는 4명입니다."
-                label="라이벌 최대 인원 안내"
-              />
+              <QuestionTooltip content={rivalLimitTooltipContent} label="라이벌 최대 인원 안내" />
             </S.TitleGroup>
             <S.ArrowBox type="button" onClick={onManageRivals}>
               라이벌 관리

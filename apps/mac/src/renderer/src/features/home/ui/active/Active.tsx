@@ -6,13 +6,14 @@ import { createPortal } from "react-dom";
 import type { ActiveResponse } from "@/entities/competition";
 import { useActive } from "@/features/home/model/useActive";
 import { QuestionTooltip } from "@/shared/ui";
-import { activeDataTooltipContent } from "@/features/home/ui/active/Active.constants";
+import { useHelpContent } from "@/entities/help-content";
 
 interface ActiveProps {
   activeData: ActiveResponse | null;
 }
 
 export const Active = ({ activeData }: ActiveProps) => {
+  const activeDataTooltipContent = useHelpContent("activity-analysis-tooltip");
   const grassRef = useRef<HTMLDivElement>(null);
   const active = useActive(grassRef, activeData);
 

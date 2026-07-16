@@ -1,11 +1,12 @@
 import * as S from "./Ranking.style";
-import { rankingRewardTooltipContent } from "./Ranking.constants";
+import { useHelpContent } from "@/entities/help-content";
 import { useRanking } from "@/features/home/model/useRanking";
 import { Button, Select, QuestionTooltip, SkeletonRows } from "@/shared/ui";
 import type { CategoryType, PeriodType, RankingItem } from "@/entities/ranking";
 import { UserRanking } from "./user-ranking/UserRanking";
 
 export const Ranking = () => {
+  const rankingRewardTooltipContent = useHelpContent("ranking-reward-tooltip");
   const {
     wrapperRef,
     currentUserRef,

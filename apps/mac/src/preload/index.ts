@@ -1,5 +1,6 @@
 import { contextBridge, ipcRenderer } from "electron";
 import { electronAPI } from "@electron-toolkit/preload";
+import type { HelpContentKey } from "../shared/helpContent";
 
 // 클라이언트 렌더링을 위한 커스텀 API
 const api = {
@@ -24,6 +25,7 @@ const api = {
   getStartupUpdateStateSync: () => ipcRenderer.sendSync("app:get-startup-update-state-sync"),
   getStartupUpdateState: () => ipcRenderer.invoke("app:get-startup-update-state"),
   retryStartupUpdate: () => ipcRenderer.invoke("app:retry-startup-update"),
+  getHelpContent: (key: HelpContentKey) => ipcRenderer.invoke("help-content:get", key),
 
   onAppChanged: callback => {
     const subscription = (_, app) => callback(app);
@@ -47,6 +49,12 @@ const api = {
     const subscription = (_, state) => callback(state);
     ipcRenderer.on("app:startup-update-state-changed", subscription);
     return () => ipcRenderer.removeListener("app:startup-update-state-changed", subscription);
+  },
+
+  onHelpContentUpdated: callback => {
+    const subscription = (_, content) => callback(content);
+    ipcRenderer.on("help-content:updated", subscription);
+    return () => ipcRenderer.removeListener("help-content:updated", subscription);
   },
 };
 

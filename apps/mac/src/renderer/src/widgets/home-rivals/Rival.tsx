@@ -3,9 +3,11 @@ import { RivalsManagementDialog, useRival } from "@/features/rival-management";
 import { Button, QuestionTooltip, SkeletonCards } from "@/shared/ui";
 import { MyRivalUsers } from "./MyRivalUsers";
 import { getErrorMessage } from "@/shared/lib";
+import { useHelpContent } from "@/entities/help-content";
 
 export const Rival = () => {
   const rival = useRival();
+  const rivalLimitTooltipContent = useHelpContent("rival-limit-tooltip");
 
   const rivals = rival.rivalsData?.myRivals ?? [];
   const canAddMore = rivals.length < 4;
@@ -15,7 +17,7 @@ export const Rival = () => {
       <S.TitleBox>
         <S.TitleLeft>
           <S.Title>내 라이벌</S.Title>
-          <QuestionTooltip content="최대 라이벌 수는 4명입니다." label="라이벌 최대 인원 안내" />
+          <QuestionTooltip content={rivalLimitTooltipContent} label="라이벌 최대 인원 안내" />
         </S.TitleLeft>
 
         <S.RightSide>

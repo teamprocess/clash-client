@@ -1,6 +1,7 @@
 import { app, ipcMain, screen, session, shell } from "electron";
-import type { AppMonitor } from "../services";
+import type { AppMonitor, HelpContentService } from "../services";
 import { IS_DEV_CHANNEL } from "../runtimeProfile";
+import { isHelpContentKey } from "../../shared/helpContent";
 
 const DEV_AUTH_SESSION_DURATION_SECONDS = 60 * 60 * 24 * 30;
 
@@ -35,7 +36,10 @@ const persistDevAuthSession = async () => {
 };
 
 // AppMonitor 및 외부 URL 열기 관련 IPC를 등록합니다.
-export const registerIpcHandlers = (getAppMonitor: () => AppMonitor | null) => {
+export const registerIpcHandlers = (
+  getAppMonitor: () => AppMonitor | null,
+  helpContentService: HelpContentService
+) => {
   // 앱 모니터링
   ipcMain.handle("app-monitor:start", async () => {
     await getAppMonitor()?.start();
@@ -53,6 +57,13 @@ export const registerIpcHandlers = (getAppMonitor: () => AppMonitor | null) => {
   });
   ipcMain.handle("app-monitor:get-frontmost-monitored-app", () => {
     return getAppMonitor()?.getFrontmostMonitoredAppName() ?? null;
+  });
+  ipcMain.handle("help-content:get", (_, key: unknown) => {
+    if (!isHelpContentKey(key)) {
+      throw new Error("지원하지 않는 도움말 키입니다.");
+    }
+
+    return helpContentService.getContent(key);
   });
   ipcMain.handle("system:get-cursor-screen-point", () => {
     return screen.getCursorScreenPoint();
