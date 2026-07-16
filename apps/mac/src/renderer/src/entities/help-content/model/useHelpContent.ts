@@ -12,11 +12,16 @@ export const useHelpContent = (key: HelpContentKey) => {
       }
     });
 
-    void window.api.getHelpContent(key).then(savedContent => {
-      if (isMounted) {
-        setContent(savedContent);
-      }
-    });
+    void window.api
+      .getHelpContent(key)
+      .then(savedContent => {
+        if (isMounted) {
+          setContent(savedContent);
+        }
+      })
+      .catch(error => {
+        console.warn(`도움말을 불러오지 못했습니다. key=${key}`, error);
+      });
 
     return () => {
       isMounted = false;

@@ -58,10 +58,19 @@ export class HelpContentService {
       return;
     }
 
+    const nextCache = { ...this.cache };
     changedContents.forEach(({ key, content }) => {
-      this.cache[key] = content;
+      nextCache[key] = content;
     });
-    await this.persistCache();
+
+    try {
+      await this.persistCache(nextCache);
+    } catch (error) {
+      console.warn("도움말 캐시를 저장하지 못했습니다.", error);
+      return;
+    }
+
+    this.cache = nextCache;
 
     changedContents.forEach(({ key, content }) => {
       BrowserWindow.getAllWindows().forEach(window => {
@@ -129,11 +138,11 @@ export class HelpContentService {
     }, {});
   }
 
-  private async persistCache() {
+  private async persistCache(contents: HelpContentCache) {
     const cachePath = this.getCachePath();
     const temporaryPath = `${cachePath}.tmp`;
     await mkdir(app.getPath("userData"), { recursive: true });
-    await writeFile(temporaryPath, JSON.stringify({ contents: this.cache }), "utf8");
+    await writeFile(temporaryPath, JSON.stringify({ contents }), "utf8");
     await rename(temporaryPath, cachePath);
   }
 }
