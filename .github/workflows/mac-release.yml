@@ -11,7 +11,7 @@ concurrency:
   cancel-in-progress: false
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   mac-release:
@@ -34,7 +34,6 @@ jobs:
       APPLE_API_ISSUER: ${{ secrets.APPLE_API_ISSUER }}
       S3_BUCKET: ${{ secrets.S3_BUCKET }}
       S3_UPDATES_PREFIX: ${{ vars.S3_UPDATES_PREFIX }}
-      S3_DOWNLOADS_PREFIX: ${{ vars.S3_DOWNLOADS_PREFIX }}
       CLOUDFRONT_DISTRIBUTION_ID: ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }}
     steps:
       - name: Checkout
@@ -94,21 +93,43 @@ jobs:
           pnpm --filter @clash/mac run build
           pnpm --filter @clash/mac exec electron-builder --mac --publish never --config.extraMetadata.version="${RELEASE_VERSION}"
 
+      - name: Create GitHub Release and upload DMG
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+
+          DMG_FILE="clash-client-${RELEASE_VERSION}.dmg"
+          DMG_ASSET_NAME="Clash.dmg"
+          RELEASE_OPTIONS=()
+
+          if [ "$UPDATE_CHANNEL" != "latest" ]; then
+            DMG_ASSET_NAME="Clash-beta.dmg"
+            RELEASE_OPTIONS+=(--prerelease)
+          fi
+
+          test -f "apps/mac/dist/${DMG_FILE}" || (echo "apps/mac/dist/${DMG_FILE} not found" && exit 1)
+
+          if ! gh release view "$GITHUB_REF_NAME" >/dev/null 2>&1; then
+            gh release create "$GITHUB_REF_NAME" \
+              --title "Clash Version ${RELEASE_VERSION}" \
+              --generate-notes \
+              "${RELEASE_OPTIONS[@]}"
+          fi
+
+          gh release upload "$GITHUB_REF_NAME" "apps/mac/dist/${DMG_FILE}#${DMG_ASSET_NAME}" --clobber
+
       - name: Upload artifacts to S3
         run: |
           set -euo pipefail
 
           UPDATES_PREFIX="${S3_UPDATES_PREFIX:-updates/mac}"
-          DOWNLOADS_PREFIX="${S3_DOWNLOADS_PREFIX:-downloads/mac}"
-
           ZIP_FILE="Clash-${RELEASE_VERSION}-arm64-mac.zip"
           BLOCKMAP_FILE="${ZIP_FILE}.blockmap"
-          DMG_FILE="clash-client-${RELEASE_VERSION}.dmg"
 
           test -f "apps/mac/dist/${UPDATE_CHANNEL_FILE}" || (echo "apps/mac/dist/${UPDATE_CHANNEL_FILE} not found" && exit 1)
           test -f "apps/mac/dist/${ZIP_FILE}" || (echo "apps/mac/dist/${ZIP_FILE} not found" && exit 1)
           test -f "apps/mac/dist/${BLOCKMAP_FILE}" || (echo "apps/mac/dist/${BLOCKMAP_FILE} not found" && exit 1)
-          test -f "apps/mac/dist/${DMG_FILE}" || (echo "apps/mac/dist/${DMG_FILE} not found" && exit 1)
 
           aws s3 cp "apps/mac/dist/${UPDATE_CHANNEL_FILE}" "s3://${S3_BUCKET}/${UPDATES_PREFIX}/${UPDATE_CHANNEL_FILE}" \
             --cache-control "public,max-age=60,must-revalidate"
@@ -116,17 +137,12 @@ jobs:
             --cache-control "public,max-age=31536000,immutable"
           aws s3 cp "apps/mac/dist/${BLOCKMAP_FILE}" "s3://${S3_BUCKET}/${UPDATES_PREFIX}/${BLOCKMAP_FILE}" \
             --cache-control "public,max-age=31536000,immutable"
-          aws s3 cp "apps/mac/dist/${DMG_FILE}" "s3://${S3_BUCKET}/${DOWNLOADS_PREFIX}/latest" \
-            --content-type "application/x-apple-diskimage" \
-            --content-disposition "attachment; filename=Clash.dmg" \
-            --cache-control "public,max-age=60,must-revalidate"
 
       - name: Invalidate CloudFront cache
         if: ${{ env.CLOUDFRONT_DISTRIBUTION_ID != '' }}
         run: |
           set -euo pipefail
           UPDATES_PREFIX="${S3_UPDATES_PREFIX:-updates/mac}"
-          DOWNLOADS_PREFIX="${S3_DOWNLOADS_PREFIX:-downloads/mac}"
           aws cloudfront create-invalidation \
             --distribution-id "$CLOUDFRONT_DISTRIBUTION_ID" \
-            --paths "/${UPDATES_PREFIX}/${UPDATE_CHANNEL_FILE}" "/${DOWNLOADS_PREFIX}/latest"
+            --paths "/${UPDATES_PREFIX}/${UPDATE_CHANNEL_FILE}"
